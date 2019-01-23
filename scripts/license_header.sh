@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
-echo "Checking helix source files license header..."
+echo "Checking methw source files license header..."
 pwd
 
 copyrightContent=$(cat ./docs/header.txt)
