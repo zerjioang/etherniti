@@ -1,0 +1,35 @@
+// Copyright MethW
+// SPDX-License-Identifier: Apache License 2.0
+
+package memory
+
+import (
+	"time"
+
+	"github.com/labstack/gommon/log"
+	"github.com/patrickmn/go-cache"
+)
+
+// in memory storage of accounts
+type InMemoryKeyStorage struct {
+	cache *cache.Cache
+}
+
+func (storage *InMemoryKeyStorage) Set(key string, value interface{}) {
+	log.Info("adding new account to memory based wallet")
+	storage.cache.Set(key, value, cache.DefaultExpiration)
+}
+
+func (storage InMemoryKeyStorage) Get(key string) (interface{}, bool) {
+	log.Info("reding existing account from memory based wallet")
+	return storage.cache.Get(key)
+}
+
+func NewInMemoryKeyStorage() *InMemoryKeyStorage {
+	log.Info("creating in-memory temporal wallet")
+	s := new(InMemoryKeyStorage)
+	// Create a cache with a default expiration time of 5 minutes, and which
+	// purges expired items every 10 minutes
+	s.cache = cache.New(5*time.Minute, 10*time.Minute)
+	return s
+}
