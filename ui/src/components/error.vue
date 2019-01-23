@@ -1,19 +1,20 @@
 <!--this file should not be modified -->
 <template>
-  <div class="page">
-     <div class="page-content">
-        <div class="container text-center">
-           <div class="display-1 text-muted mb-5"><i class="si si-exclamation"></i>{{code}}</div>
-           <h1 class="h2 mb-3">{{title}}</h1>
-           <p class="h4 text-muted font-weight-normal mb-7">{{description}}</p>
-           <div class="inline">
-            <a class="btn btn-primary spaced" href="#" v-on:click="onBack">
-              <i class="fe fe-arrow-left mr-2"></i>Go back
-            </a>
-            <slot name="content"></slot>
-           </div>
+  <div class="four-zero-four err">
+    <div class="four-zero-four-container">
+        <h1 class="title blue">{{code}}</h1>
+
+        <slot name="image"></slot>
+
+        <h3 class="message text-muted">{{title}}</h3>
+        <div class="details text-muted">{{description}}</div>
+        
+        <slot name="content"></slot>
+        
+        <div class="button-place">
+            <a class="btn btn-default btn-lg waves-effect" v-on:click="onBack">Go back</a>
         </div>
-     </div>
+    </div>
   </div>
 </template>
 
@@ -67,10 +68,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="true">
-.inline {
-  display: -webkit-inline-box;
+.err {
+    padding: 5%;
 }
-.spaced {
-  margin: 10px;
+.blue {
+  color: #383A3F;
+}
+.title {
+  font-size: 60pt;
+}
+.message {
+  font-size: 25pt;
+}
+.details {
+  font-size: 20pt;
 }
 </style>
