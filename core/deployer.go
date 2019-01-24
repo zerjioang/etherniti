@@ -9,10 +9,10 @@ import (
 
 	"github.com/zerjioang/methw/core/keystore/memory"
 
-	"github.com/zerjioang/methw/core/handlers"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/methw/core/handlers"
 )
 
 type Deployer struct {
@@ -87,6 +87,7 @@ func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
 func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
 	log.Info("registering routes")
 	handlers.NewIndexController().RegisterRouters(server)
+	handlers.NewProfileController().RegisterRouters(server)
 	return server
 }
 

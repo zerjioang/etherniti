@@ -7,11 +7,15 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/zerjioang/methw/core/eth"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
 
 type ConnectionProfile struct {
+	ConnectionId string
+	wallet       eth.WalletContent
 }
 
 func (profile ConnectionProfile) Claims() jwt.Claims {

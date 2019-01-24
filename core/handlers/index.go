@@ -6,9 +6,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/zerjioang/methw/shared"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/methw/shared"
 )
 
 type IndexController struct {
@@ -35,10 +35,8 @@ func (ctl IndexController) index(c echo.Context) error {
 	return c.String(http.StatusOK, indexWelcome)
 }
 
-/*
-implemented method from interface RouterRegistrable
-*/
+// implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Echo) {
-	log.Debug("exposing GET /")
+	log.Info("exposing index controller methods")
 	router.GET("/", ctl.index)
 }
