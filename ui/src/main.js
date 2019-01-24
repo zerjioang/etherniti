@@ -93,7 +93,6 @@ require("@/assets/css/themes/theme-methw.css");
 // load custom made modifications
 require("@/assets/css/custom.css");
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

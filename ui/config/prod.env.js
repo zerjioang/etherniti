@@ -21,8 +21,8 @@ module.exports = {
 
   //add configuration
   UI_TITLE: '"Methw"',
-  APP_TITLE: '"METHW: A High Performance Ethereum WebAPI"',
-  APP_DESC: '"METHW: A High Performance Ethereum WebAPI made for enterprises, companies and developers"',
+  APP_TITLE: '"METHW: A Multitenant High Performance Ethereum WebAPI"',
+  APP_DESC: '"METHW: A Multitenant High Performance Ethereum WebAPI made for enterprises, companies and developers"',
 
   EMAIL: '"hello@methw.org"',
   OFFICE_ADDRESS: '"Bilbao"',
