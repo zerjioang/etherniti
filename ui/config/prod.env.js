@@ -20,7 +20,7 @@ module.exports = {
   DASHBOARD_PRIVATE_ACCESS: 'true',
 
   //add configuration
-  UI_TITLE: '"gaethway"',
+  UI_TITLE: '"Gaethway"',
   APP_TITLE: '"Gaethway: A Multitenant High Performance Ethereum WebAPI"',
   APP_DESC: '"Gaethway: A Multitenant High Performance Ethereum WebAPI made for enterprises, companies and developers"',
 

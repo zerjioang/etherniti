@@ -8,7 +8,7 @@ module.exports = merge(prodEnv, {
   PRODUCTION: 'false',
 
   API_SCHEME: '"http"',
-  API_DOMAIN: '"apidev.gaethway.org:8080"',
+  API_DOMAIN: '"api-dev.gaethway.org:8080"',
 
   SWAGGER_URL: '"http://localhost:5555/api/docs/"',
   

@@ -1,11 +1,9 @@
 <template>
-    <baseDashboardView>
-        <div slot="content">
-            <h2>gaethway license</h2>
-            <p>Following, all used tools for building gaethway are listed with their corresponding licenses.</p>
-            <licenseInfoCardsRow/>
-        </div>
-    </baseDashboardView>
+    <div>
+        <h2>gaethway license</h2>
+        <p>Following, all used tools for building gaethway are listed with their corresponding licenses.</p>
+        <licenseInfoCardsRow/>
+    </div>
 </template>
 
 <script>
@@ -26,7 +24,6 @@ export default {
   },
   components: {
     licenseInfoCardsRow: () => import('@/components/licenseInfoCardsRow'),
-    baseDashboardView: () => import('@/components/baseDashboardView')
   }
 }
 </script>

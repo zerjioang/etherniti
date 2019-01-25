@@ -1,37 +1,27 @@
 <template>
-    <baseDashboardView>
-        <div slot="content">
-            <p>Current gaethway stats</p>
-            <widgetsRow :config="layout.widgetRowConfig"/>
-        </div>
-    </baseDashboardView>
 </template>
 
 <script>
 
-import widgetRowConfig from '@/layout/widgetRowConfig';
+import routerNames from '@/layout/routerNames';
 
 export default {
   name: 'index-view',
   data () {
     return {
-      title: process.env.UI_TITLE,
-      layout: {
-        widgetRowConfig: widgetRowConfig
-      }
     }
   },
   methods: {
   },
   created(){
     log("index-view::created");
+    log("redirecting to dahboard...");
+    this.$router.push({name: routerNames.dashboardHome.name});
   },
   mounted(){
     log("index-view::mounted");
   },
   components: {
-    widgetsRow: () => import('@/components/widgetsRow'),
-    baseDashboardView: () => import('@/components/baseDashboardView')
   }
 }
 </script>

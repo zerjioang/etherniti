@@ -47,13 +47,17 @@
             <div class="block-header">
                 <h2>{{pagetitle}}</h2>
             </div>
-            <slot name="content">
-                <p>This page has no content</p>
-            </slot>
+            <transition
+            name="fade"
+            mode="out-in"
+            @beforeLeave="beforeLeave"
+            @enter="enter"
+            @afterEnter="afterEnter">
+              <router-view/>  
+            </transition>
         </div>
     </section>
-
-</body>
+  </body>
 </template>
 
 <script>
@@ -102,8 +106,16 @@ export default {
         }
     }
   },
+  watch: {
+    '$route.meta' () {
+      // update breadcrum
+      // this.updateView();
+    }
+  },
   data () {
     return {
+      //to allow router view animations
+      prevHeight: 0,
       title: process.env.UI_TITLE,
       sidebarImage: require("@/assets/images/aside.png"),
       loaderVisible: false,
@@ -117,6 +129,20 @@ export default {
     }
   },
   methods: {
+    //to allow router view animations
+    beforeLeave(element) {
+      this.prevHeight = getComputedStyle(element).height;
+    },
+    enter(element) {
+      const { height } = getComputedStyle(element);
+      element.style.height = this.prevHeight;
+      setTimeout(() => {
+        element.style.height = height;
+      });
+    },
+    afterEnter(element) {
+      element.style.height = 'auto';
+    },
     test: function(){
         this.searchBarVisible = false;
     },
@@ -137,10 +163,10 @@ export default {
     }
   },
   created(){
-    log("index-view::created");
+    log("base-view::created");
   },
   mounted(){
-    log("index-view::mounted");
+    log("base-view::mounted");
     document.title = process.env.APP_TITLE;
     this.materialLoad();
   },
@@ -156,5 +182,16 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style type="text/css" scoped="true">
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
+}
 </style>

@@ -72,10 +72,10 @@ const leftAsideLayout = [
 	//library_books
 	{
 		id:97,
-		name:routerNames.report.name,
+		name:routerNames.bugReport.name,
 		icon: "report_problem",
 		class: "",
-		to:routerNames.report.path,
+		to:routerNames.bugReport.path,
 		active: false,
 		submenus: []
 	},

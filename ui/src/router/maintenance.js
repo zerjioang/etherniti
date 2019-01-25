@@ -8,8 +8,8 @@ const notfound = () => import('@/views/notfound');
 export default new Router({
   routes: [
     {
-      path: routerNames.home.path,
-      name: routerNames.home.name,
+      path: routerNames.index.path,
+      name: routerNames.index.name,
       component: maintenance
     },
     {
