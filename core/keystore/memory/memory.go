@@ -4,10 +4,15 @@
 package memory
 
 import (
+	"github.com/zerjioang/methw/core/eth"
 	"time"
 
 	"github.com/labstack/gommon/log"
 	"github.com/patrickmn/go-cache"
+)
+
+var (
+	emptyWallet = eth.WalletContent{}
 )
 
 // in memory storage of accounts
@@ -15,14 +20,22 @@ type InMemoryKeyStorage struct {
 	cache *cache.Cache
 }
 
-func (storage *InMemoryKeyStorage) Set(key string, value interface{}) {
+func (storage *InMemoryKeyStorage) Set(key string, value eth.WalletContent) {
 	log.Info("adding new account to memory based wallet")
 	storage.cache.Set(key, value, cache.DefaultExpiration)
 }
 
-func (storage InMemoryKeyStorage) Get(key string) (interface{}, bool) {
+func (storage InMemoryKeyStorage) Get(key string) (eth.WalletContent, bool) {
 	log.Info("reding existing account from memory based wallet")
-	return storage.cache.Get(key)
+	raw, found := storage.cache.Get(key)
+	if found {
+		//cast
+		content, ok := raw.(eth.WalletContent)
+		if ok {
+			return content, true
+		}
+	}
+	return emptyWallet, false
 }
 
 func NewInMemoryKeyStorage() *InMemoryKeyStorage {

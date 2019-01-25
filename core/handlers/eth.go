@@ -4,19 +4,28 @@
 package handlers
 
 import (
+	"errors"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/methw/core/api"
+	"github.com/zerjioang/methw/core/eth"
+	"github.com/zerjioang/methw/core/keystore/memory"
+	"github.com/zerjioang/methw/core/util"
 	"net/http"
 	"time"
 
-	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/methw/core/api"
-	"github.com/zerjioang/methw/core/util"
-
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
+	"github.com/patrickmn/go-cache"
+)
+
+const (
+	invalidAddress = `{"message": "please, provide a valid ethereum or quorum address"}`
 )
 
 type EthController struct {
-	cache *cache.Cache
+	// in memory storage of created wallets
+	wallet *memory.InMemoryKeyStorage
+	cache  *cache.Cache
 }
 
 func NewEthController() EthController {
@@ -24,84 +33,92 @@ func NewEthController() EthController {
 	// Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
 	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
+	// create an in memory wallet
+	ctl.wallet = memory.NewInMemoryKeyStorage()
 	return ctl
 }
 
-// new profile create request
-func (ctl EthController) create(c echo.Context) error {
-	//new profile request
-	req := api.NewProfileRequest{}
-	if err := c.Bind(&req); err != nil {
-		// return a binding error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(bindErr))
+// check if an ethereum address is valid
+func (ctl EthController) isValidAddress(c echo.Context) error {
+	//read user entered address
+	targetAddr := c.Param("address")
+	// check if not empty
+	if targetAddr != "" {
+		result := eth.IsValidAddress(targetAddr)
+		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
-	// assign an unique uuid
-	// save the data in the cache
-	uuid := util.GenerateUUID()
-	ctl.cache.Set(uuid, req, defaultProfileRequestTime)
-	rawBytes := util.GetJsonBytes(api.NewApiResponse("profile entry successfully created", uuid))
-	return c.JSONBlob(http.StatusOK, rawBytes)
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
 }
 
-// new profile read request
-func (ctl EthController) read(c echo.Context) error {
-	//new read profile request
-	targetId := c.Param("id")
-	//read the cache
-	rawInterface, exists := ctl.cache.Get(targetId)
-	if exists && rawInterface != nil {
-		//serialize to json and return back
-		rawBytes := util.GetJsonBytes(api.NewApiResponse("readed", rawInterface))
-		return c.JSONBlob(http.StatusOK, rawBytes)
+// check if an ethereum address is a contract address
+func (ctl EthController) isContractAddress(c echo.Context) error {
+	clientInstance, err := ctl.getClientInstance(c)
+	if err != nil || clientInstance == nil {
+		// there was an error recovering client instance
+		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErrRaw := util.GetJsonBytes(apiErr)
+		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
-	return c.JSONBlob(http.StatusOK, util.Bytes(readErr))
+	targetAddr := c.Param("address")
+	// check if not empty
+	if targetAddr != "" {
+		result, err := eth.IsSmartContractAddress(clientInstance, targetAddr)
+		if err != nil {
+			//some error happen, return error to client
+			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErrRaw := util.GetJsonBytes(apiErr)
+			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
+		}
+		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+	}
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
 }
 
-// new profile update request
-func (ctl EthController) update(c echo.Context) error {
-	//new profile request
-	req := api.NewProfileRequest{}
-	if err := c.Bind(&req); err != nil {
-		// return a binding error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(bindErr))
+// check if an ethereum address is a contract address
+func (ctl EthController) getBalance(c echo.Context) error {
+	clientInstance, err := ctl.getClientInstance(c)
+	if err != nil || clientInstance == nil {
+		// there was an error recovering client instance
+		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErrRaw := util.GetJsonBytes(apiErr)
+		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
-	// read target profile selection by user id
-	targetId := c.Param("id")
-
-	newProfile := api.Profile{}
-	newProfile.Address = req.Address
-	newProfile.Node = req.Node
-
-	updateErr := ctl.cache.Replace(targetId, newProfile, defaultProfileRequestTime)
-	if updateErr != nil {
-		// return error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(noExistsNoUpdate))
-	} else {
-		// no update error thrown
-		return c.JSONBlob(http.StatusOK, util.Bytes(itemUpdated))
+	targetAddr := c.Param("address")
+	// check if not empty
+	if targetAddr != "" {
+		ethAddr := eth.ConvertAddress(targetAddr)
+		result, err := eth.GetAccountBalance(clientInstance, ethAddr)
+		if err != nil {
+			//some error happen, return error to client
+			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErrRaw := util.GetJsonBytes(apiErr)
+			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
+		}
+		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
 }
 
-// new profile delete request
-func (ctl EthController) delete(c echo.Context) error {
-	// read target profile selection by user id
-	targetId := c.Param("id")
-	// remove requested id from cache
-	ctl.cache.Delete(targetId)
-	return c.JSONBlob(http.StatusOK, util.Bytes(itemDeleted))
-}
-
-// new profile list request
-func (ctl EthController) list(c echo.Context) error {
-	return c.String(http.StatusOK, indexWelcome)
+// from incoming http request, it recovers the eth client linked to it
+func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
+	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
+	wallet, found := ctl.wallet.Get(requestProfileKey)
+	if !found {
+		return nil, errors.New("invalid profile key provided in the request header")
+	}
+	return wallet.Client(), nil
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl EthController) RegisterRouters(router *echo.Echo) {
-	log.Info("exposing profile controller methods")
-	router.POST("/profile", ctl.create)
-	router.GET("/profile/:id", ctl.read)
-	router.PUT("/profile/:id", ctl.update)
-	router.DELETE("/profile/:id", ctl.delete)
-	router.GET("/", ctl.list)
+	log.Info("exposing eth controller methods")
+	//http://localhost:8080/eth/verify/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
+	router.GET("/eth/verify/:address", ctl.isValidAddress)
+	//http://localhost:8080/eth/hascontract/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
+	router.GET("/eth/hascontract/:address", ctl.isContractAddress)
+	//http://localhost:8080/eth/getbalance/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
+	router.GET("/eth/getbalance/:address", ctl.getBalance)
 }

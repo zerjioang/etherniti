@@ -79,6 +79,7 @@ func (ctl ProfileController) update(c echo.Context) error {
 
 	newProfile := api.Profile{}
 	newProfile.Address = req.Address
+	newProfile.PrivateKey = req.PrivateKey
 	newProfile.Node = req.Node
 
 	updateErr := ctl.cache.Replace(targetId, newProfile, defaultProfileRequestTime)

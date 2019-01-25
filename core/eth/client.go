@@ -19,8 +19,7 @@ const (
 	IPCClient
 )
 
-type EthereumClient struct {
-}
+type EthereumClient *ethclient.Client
 
 // get an ethereum client
 // ethGateway is the geth client running or

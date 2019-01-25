@@ -6,13 +6,15 @@ package api
 import "net/http"
 
 type Profile struct {
-	Address string `json:"address"`
-	Node    string `json:"node"`
+	Address    string `json:"address"`
+	PrivateKey string `json:"key"`
+	Node       string `json:"node"`
 }
 
 type NewProfileRequest struct {
-	Address string `json:"address" form:"address" query:"address"`
-	Node    string `json:"node" form:"node" query:"node"`
+	Address    string `json:"address" form:"address" query:"address"`
+	PrivateKey string `json:"key" form:"key" query:"key"`
+	Node       string `json:"node" form:"node" query:"node"`
 }
 
 type ApiError struct {
