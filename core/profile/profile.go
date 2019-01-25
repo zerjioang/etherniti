@@ -29,11 +29,11 @@ func (profile ConnectionProfile) Secret() string {
 	return "secret"
 }
 
-func NewConnectionProfile(claims jwt.MapClaims) (*ConnectionProfile, error) {
+func NewConnectionProfile(claims jwt.MapClaims) (ConnectionProfile, error) {
+	var profile ConnectionProfile
 	if claims == nil {
-		return nil, errors.New("failed to create connection profile with given token")
+		return profile, errors.New("failed to create connection profile with given token")
 	}
-	profile := new(ConnectionProfile)
 	return profile, nil
 }
 

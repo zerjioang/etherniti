@@ -15,6 +15,7 @@ import (
 
 var (
 	addressRegex = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+	ctx          = context.Background()
 )
 
 // converts an string ethereum address to eth address
@@ -30,7 +31,7 @@ func IsValidAddress(addr string) bool {
 
 func IsSmartContractAddress(client *ethclient.Client, addr string) (bool, error) {
 	address := ConvertAddress(addr)
-	bytecode, err := client.CodeAt(context.Background(), address, nil) // nil is latest block
+	bytecode, err := client.CodeAt(ctx, address, nil) // nil is latest block
 	// if the address has valid bytecode, is a contract
 	return len(bytecode) > 0, err
 }
@@ -42,11 +43,11 @@ fmt.Println(address.Bytes())      // [113 199 101 110 199 171 136 176 152 222 25
 */
 
 func GetAccountBalance(client *ethclient.Client, addr common.Address) (*big.Int, error) {
-	return client.BalanceAt(context.Background(), addr, nil)
+	return client.BalanceAt(ctx, addr, nil)
 }
 
 func GetAccountBalanceAtBlock(client *ethclient.Client, addr common.Address, blockNumber *big.Int) (*big.Int, error) {
-	return client.BalanceAt(context.Background(), addr, blockNumber)
+	return client.BalanceAt(ctx, addr, blockNumber)
 }
 
 func ToEth(balance *big.Int) *big.Float {

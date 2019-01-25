@@ -8,11 +8,9 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/methw/shared"
 )
 
 type IndexController struct {
-	shared.AutoRouteable
 }
 
 const (

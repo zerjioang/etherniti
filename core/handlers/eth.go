@@ -15,21 +15,12 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-const (
-	defaultProfileRequestTime = cache.DefaultExpiration
-	readErr                   = `{"error": "there was an error during execution"}`
-	bindErr                   = `{"error": "there was an error while processing your request information"}`
-	itemDeleted               = `{"message": "profile entry successfully deleted"}`
-	noExistsNoUpdate          = `{"error": "there was an error during execution and could not update requeste profile"}`
-	itemUpdated               = `{"message": "profile entry successfully updated"}`
-)
-
-type ProfileController struct {
+type EthController struct {
 	cache *cache.Cache
 }
 
-func NewProfileController() ProfileController {
-	ctl := ProfileController{}
+func NewEthController() EthController {
+	ctl := EthController{}
 	// Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
 	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
@@ -37,7 +28,7 @@ func NewProfileController() ProfileController {
 }
 
 // new profile create request
-func (ctl ProfileController) create(c echo.Context) error {
+func (ctl EthController) create(c echo.Context) error {
 	//new profile request
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -53,7 +44,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 }
 
 // new profile read request
-func (ctl ProfileController) read(c echo.Context) error {
+func (ctl EthController) read(c echo.Context) error {
 	//new read profile request
 	targetId := c.Param("id")
 	//read the cache
@@ -67,7 +58,7 @@ func (ctl ProfileController) read(c echo.Context) error {
 }
 
 // new profile update request
-func (ctl ProfileController) update(c echo.Context) error {
+func (ctl EthController) update(c echo.Context) error {
 	//new profile request
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -92,7 +83,7 @@ func (ctl ProfileController) update(c echo.Context) error {
 }
 
 // new profile delete request
-func (ctl ProfileController) delete(c echo.Context) error {
+func (ctl EthController) delete(c echo.Context) error {
 	// read target profile selection by user id
 	targetId := c.Param("id")
 	// remove requested id from cache
@@ -101,12 +92,12 @@ func (ctl ProfileController) delete(c echo.Context) error {
 }
 
 // new profile list request
-func (ctl ProfileController) list(c echo.Context) error {
+func (ctl EthController) list(c echo.Context) error {
 	return c.String(http.StatusOK, indexWelcome)
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl ProfileController) RegisterRouters(router *echo.Echo) {
+func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing profile controller methods")
 	router.POST("/profile", ctl.create)
 	router.GET("/profile/:id", ctl.read)
