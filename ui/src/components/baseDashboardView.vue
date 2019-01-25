@@ -1,5 +1,5 @@
 <template>
-  <body class="theme-methw">
+  <body class="theme-gaethway">
     <!-- Page Loader -->
     <loader text="Please wait..." :visible="loaderVisible"/>
     <!-- Overlay For Sidebars -->
@@ -15,7 +15,7 @@
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
     <navigationBar
-        title="METHW: A High Performance Ethereum WebAPI"
+        title="gaethway: A High Performance Ethereum WebAPI"
         :showSearchBar="searchBarVisible"
         v-on:openSearch="searchBarVisible=true"
         v-on:toggleRightAside="toggleRightAside"
@@ -59,6 +59,7 @@
 <script>
 
 import material from '@/mixins/material';
+import footerLayout from '@/layout/footer_config';
 
 export default {
   name: 'base-dashboard-view',
@@ -68,7 +69,7 @@ export default {
   props: {
     pagetitle: {
         type: String,
-        default: "MethW DASHBOARD"
+        default: "GAETHWAY DASHBOARD"
     }
   },
   directives: {
@@ -111,11 +112,7 @@ export default {
       leftAsideVisible: false,
       rightAsideRequested: false,
       layout: {
-        footer: {
-            version: "0.0.1",
-            copyright: "METHW Project",
-            years: "2018 - 2019"
-        }
+        footer: footerLayout
       }
     }
   },
@@ -144,6 +141,7 @@ export default {
   },
   mounted(){
     log("index-view::mounted");
+    document.title = process.env.APP_TITLE;
     this.materialLoad();
   },
   components: {

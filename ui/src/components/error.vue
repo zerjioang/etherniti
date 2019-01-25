@@ -12,7 +12,7 @@
         <slot name="content"></slot>
         
         <div class="button-place">
-            <a class="btn btn-default btn-lg waves-effect" v-on:click="onBack">Go back</a>
+            <a class="btn btn-default btn-lg waves-effect big" v-on:click="onBack">Go back</a>
         </div>
     </div>
   </div>
@@ -81,5 +81,8 @@ export default {
 }
 .details {
   font-size: 20pt;
+}
+.big {
+  font-size: 16pt !important;
 }
 </style>

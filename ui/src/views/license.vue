@@ -1,36 +1,31 @@
 <template>
     <baseDashboardView>
         <div slot="content">
-            <p>Current gaethway stats</p>
-            <widgetsRow :config="layout.widgetRowConfig"/>
+            <h2>gaethway license</h2>
+            <p>Following, all used tools for building gaethway are listed with their corresponding licenses.</p>
+            <licenseInfoCardsRow/>
         </div>
     </baseDashboardView>
 </template>
 
 <script>
-
-import widgetRowConfig from '@/layout/widgetRowConfig';
-
 export default {
-  name: 'index-view',
+  name: 'license-view',
   data () {
     return {
       title: process.env.UI_TITLE,
-      layout: {
-        widgetRowConfig: widgetRowConfig
-      }
     }
   },
   methods: {
   },
   created(){
-    log("index-view::created");
+    log("license-view::created");
   },
   mounted(){
-    log("index-view::mounted");
+    log("license-view::mounted");
   },
   components: {
-    widgetsRow: () => import('@/components/widgetsRow'),
+    licenseInfoCardsRow: () => import('@/components/licenseInfoCardsRow'),
     baseDashboardView: () => import('@/components/baseDashboardView')
   }
 }

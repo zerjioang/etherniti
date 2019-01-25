@@ -1,6 +1,6 @@
 <template>
   <errorMessage
-  pagetitle="cooming Soon - methw.org"
+  pagetitle="cooming Soon - gaethway.org"
   code="Cooming Soon"
   :title='apptitle'
   description="Cooming soon available on the web"></errorMessage>

@@ -1,4 +1,4 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package handlers
@@ -16,7 +16,7 @@ type IndexController struct {
 const (
 	indexWelcome = `{
   "name": "eth-wbapi",
-  "description": "MethW: Ethereum Multitenant API",
+  "description": "gaethway: Ethereum Multitenant API",
   "cluster_name": "eth-wbapi",
   "version": "0.0.1",
   "env": "development",

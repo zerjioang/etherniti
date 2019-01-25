@@ -1,10 +1,10 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package memory
 
 import (
-	"github.com/zerjioang/methw/core/eth"
+	"github.com/zerjioang/gaethway/core/eth"
 	"time"
 
 	"github.com/labstack/gommon/log"

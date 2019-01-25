@@ -1,24 +1,24 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package core
 
 import (
-	"github.com/zerjioang/methw/core/api"
+	"github.com/zerjioang/gaethway/core/api"
 	"net/http"
 	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/methw/core/handlers"
+	"github.com/zerjioang/gaethway/core/handlers"
 )
 
 type Deployer struct {
 }
 
 func (deployer Deployer) Run() error {
-	log.Info("loading Ethereum Multitenant Webapi (MethW)")
+	log.Info("loading Ethereum Multitenant Webapi (gaethway)")
 	e := echo.New()
 
 	// enable debug mode

@@ -1,0 +1,45 @@
+.theme-gaethway .navbar {
+  background-color: #0530ad; }
+
+.theme-gaethway .navbar-brand {
+  color: #fff; }
+  .theme-gaethway .navbar-brand:hover {
+    color: #fff; }
+  .theme-gaethway .navbar-brand:active {
+    color: #fff; }
+  .theme-gaethway .navbar-brand:focus {
+    color: #fff; }
+
+.theme-gaethway .nav > li > a {
+  color: #fff; }
+  .theme-gaethway .nav > li > a:hover {
+    background-color: transparent; }
+  .theme-gaethway .nav > li > a:focus {
+    background-color: transparent; }
+
+.theme-gaethway .nav .open > a {
+  background-color: transparent; }
+  .theme-gaethway .nav .open > a:hover {
+    background-color: transparent; }
+  .theme-gaethway .nav .open > a:focus {
+    background-color: transparent; }
+
+.theme-gaethway .bars {
+  color: #fff; }
+
+.theme-gaethway .sidebar .menu .list li.active {
+  background-color: transparent; }
+  .theme-gaethway .sidebar .menu .list li.active > :first-child i, .theme-gaethway .sidebar .menu .list li.active > :first-child span {
+    color: #0530ad; }
+
+.theme-gaethway .sidebar .menu .list .toggled {
+  background-color: transparent; }
+
+.theme-gaethway .sidebar .menu .list .ml-menu {
+  background-color: transparent; }
+
+.theme-gaethway .sidebar .legal {
+  background-color: #fff; }
+  .theme-gaethway .sidebar .legal .copyright a {
+    color: #0530ad !important; }
+

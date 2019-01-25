@@ -36,6 +36,6 @@ deploy:
   keep-history: true
   on:
     branch: master
-  repo: methw/web
+  repo: gaethway/web
   target_branch: master
-  fqdn: methw.org
+  fqdn: gaethway.org

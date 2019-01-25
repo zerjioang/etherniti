@@ -1,6 +1,6 @@
 FROM node:9.10.0-alpine as builder
 
-MAINTAINER team@methw.org
+MAINTAINER team@gaethway.org
 
 WORKDIR /opt/app
 

@@ -2,7 +2,7 @@
 	<!-- Footer -->
 	<div class="legal">
 	    <div class="copyright">
-	        &copy; {{years}} <a href="javascript:void(0);">{{copyright}}</a>.
+	        &copy; {{years}} <a href="javascript:void(0);" v-on:click="versionPopup">{{copyright}}</a>.
 	    </div>
 	    <div class="version">
 	        <b>Version: </b> {{version}}
@@ -12,6 +12,7 @@
 
 <script>
 
+import aboutDialog from '@/components/dialog/about';
 export default {
   name: 'aside-footer',
   props: {
@@ -28,13 +29,28 @@ export default {
       default: "@zerjioang"
     },
   },
-  mixins: [
-  ],
   data () {
     return {
     }
   },
   methods: {
+    versionPopup: function() {
+      this.$modal.show(aboutDialog,
+        {
+          title: "About Gaethway Project",
+          message: 'Gaethway Project is a Multitenant High Performance Ethereum and Quorum compatible webAPI',
+          icon: "code",
+          buttonText: "Close"
+        }, {
+          draggable: false,
+          scrollable: true,
+          height: "auto"
+        },{
+          'before-close': (event) => {
+            log('modal closed');
+          }
+        });
+    }
   },
   created(){
     log("aside-footer::created");

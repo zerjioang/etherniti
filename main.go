@@ -1,4 +1,4 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package main
@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/zerjioang/methw/core/util"
+	"github.com/zerjioang/gaethway/core/util"
 
-	"github.com/zerjioang/methw/core"
+	"github.com/zerjioang/gaethway/core"
 )
 
 func init() {

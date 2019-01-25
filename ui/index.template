@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-us">
 <head>
-    <title>METHW - High Performance Ethereum WebAPI</title>
+    <title>gaethway - High Performance Ethereum WebAPI</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -9,8 +9,8 @@
     <meta http-equiv="Pragma" content="no-store">
     <meta http-equiv="Expires" content="-1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="methw, ethereum, eth, blockchain, api">
-    <meta name="description" content="METHW: A High Performance Ethereum WebAPI made for enterprises, companies and developers">
+    <meta name="keywords" content="gaethway, ethereum, eth, blockchain, api">
+    <meta name="description" content="gaethway: A High Performance Ethereum WebAPI made for enterprises, companies and developers">
     <!--google search console tag -->
     <meta name="google-site-verification" content="WOFgTHwqmn9eKS9DBM8g9jUSvXUa1OALy5icAgf8940" />
     <!-- Favicon -->
@@ -30,7 +30,7 @@
     <link rel="shortcut icon" href="./static/favicon/favicon-96x96.png">
     <link rel="icon" type="image/x-icon" href="./static/favicon/favicon-96x96.png">
     <link rel="manifest" href="./static/favicon/manifest.json">
-    <link rel="canonical" href="https://methw.org" />
+    <link rel="canonical" href="https://gaethway.org" />
     <meta http-equiv="Content-Language" content="en" />
     <!--theme colors -->
     <meta name="msapplication-TileColor" content="#2d89ef">
@@ -42,30 +42,30 @@
     <meta name="MobileOptimized" content="320">
     
     <meta property=og:type content=business.business>
-    <meta property=og:title content="METHW - High Performance Ethereum WebAPI">
-    <meta property=og:url content=https://methw.org>
-    <meta property=og:image content=https://methw.org/static/images/meta/og.image.png> <meta property=business:contact_data:street_address content="Avenida de las Universidades">
+    <meta property=og:title content="gaethway - High Performance Ethereum WebAPI">
+    <meta property=og:url content=https://gaethway.org>
+    <meta property=og:image content=https://gaethway.org/static/images/meta/og.image.png> <meta property=business:contact_data:street_address content="Avenida de las Universidades">
     <meta property=business:contact_data:locality content=Bilbao>
     <meta property=business:contact_data:region content=Bizkaia>
     <meta property=business:contact_data:postal_code content=48014>
     <meta property=business:contact_data:country_name content=Spain>
     <meta name=twitter:card content=summary>
-    <meta name=twitter:title content="METHW - High Performance Ethereum WebAPI">
-    <meta name=twitter:description content="METHW - High Performance Ethereum WebAPI">
-    <meta name=twitter:site content=@methw>
-    <meta name=twitter:creator content=@methw>
+    <meta name=twitter:title content="gaethway - High Performance Ethereum WebAPI">
+    <meta name=twitter:description content="gaethway - High Performance Ethereum WebAPI">
+    <meta name=twitter:site content=@gaethway>
+    <meta name=twitter:creator content=@gaethway>
     <script type=application/ld+json>
     	{
 		    "@context": "http://schema.org",
 		    "@type": "WebSite",
-		    "url": "https://methw.org",
+		    "url": "https://gaethway.org",
 		    "potentialAction": [{
 		        "@type": "SearchAction",
-		        "target": "https://methw.org/search?q={query}",
+		        "target": "https://gaethway.org/search?q={query}",
 		        "query-input": "required name=query"
 		    }, {
 		        "@type": "SearchAction",
-		        "target": "android-app://com.methw/https/methw.org/search/?q={query}",
+		        "target": "android-app://com.gaethway/https/gaethway.org/search/?q={query}",
 		        "query-input": "required name=query"
 		    }]
 		}
@@ -74,12 +74,12 @@
     	{
 		    "@context": "http://schema.org",
 		    "@type": "Organization",
-		    "image": ["https://methw.org/static/images/meta/og.image.png"],
-		    "@id": "https://methw.org",
-		    "name": "methw",
+		    "image": ["https://gaethway.org/static/images/meta/og.image.png"],
+		    "@id": "https://gaethway.org",
+		    "name": "gaethway",
 		    "legalName": "Helix Distributed Ledger",
-		    "url": "https://methw.org",
-		    "logo": "https://methw.org/static/favicon/android-icon-192x192.png",
+		    "url": "https://gaethway.org",
+		    "logo": "https://gaethway.org/static/favicon/android-icon-192x192.png",
 		    "description": "Helix Distributed Ledger",
 		    "foundingDate": "2018",
 		    "founders": [{
@@ -96,7 +96,7 @@
 		        "postOfficeBoxNumber": "48007",
 		        "addressCountry": "ES"
 		    },
-		    "email": "mailto:hello@methw.org",
+		    "email": "mailto:hello@gaethway.org",
 		    "location": {
 		        "@id": "_:location_id"
 		    },
@@ -111,9 +111,9 @@
 		        "@type": "ContactPoint",
 		        "contactType": "customer support",
 		        "telephone": "+34 622 579 711",
-		        "email": "hello@methw.org"
+		        "email": "hello@gaethway.org"
 		    },
-		    "sameAs": ["http://methw.org", "http://www.methw.org", "http://www.facebook.com/methw", "http://www.twitter.com/methw", "http://pinterest.com/methw/", "http://methw.tumblr.com/", "http://www.linkedin.com/company/methw", "https://plus.google.com/0"]
+		    "sameAs": ["http://gaethway.org", "http://www.gaethway.org", "http://www.facebook.com/gaethway", "http://www.twitter.com/gaethway", "http://pinterest.com/gaethway/", "http://gaethway.tumblr.com/", "http://www.linkedin.com/company/gaethway", "https://plus.google.com/0"]
 		}
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,400i,700,700i&amp;subset=latin-ext">

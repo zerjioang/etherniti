@@ -1,4 +1,4 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package profile
@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zerjioang/methw/core/eth"
+	"github.com/zerjioang/gaethway/core/eth"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"

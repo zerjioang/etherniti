@@ -1,6 +1,6 @@
 <template>
   <errorMessage
-  pagetitle="maintenance - methw.org"
+  pagetitle="maintenance - gaethway.org"
   code="Under maintenance"
   :title='apptitle'
   description="We will back in a flash">

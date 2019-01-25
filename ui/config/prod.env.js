@@ -5,14 +5,14 @@ module.exports = {
   PRODUCTION: 'true',
 
   API_SCHEME: '"https"',
-  DOMAIN: '"methw.org"',
-  API_DOMAIN: '"api.methw.org"',
-  WEBAPP_DOMAIN: '"methw.org"',
+  DOMAIN: '"gaethway.org"',
+  API_DOMAIN: '"api.gaethway.org"',
+  WEBAPP_DOMAIN: '"gaethway.org"',
   API_PATH: '""',
 
-  SWAGGER_URL: '"https://swagger.methw.org"',
+  SWAGGER_URL: '"https://swagger.gaethway.org"',
 
-  REPO_API: '"https://github.com/zerjioang/methw"',
+  REPO_API: '"https://github.com/zerjioang/gaethway"',
   
   DASHBOARD_BASE_PATH: '"/app"',
   
@@ -20,11 +20,11 @@ module.exports = {
   DASHBOARD_PRIVATE_ACCESS: 'true',
 
   //add configuration
-  UI_TITLE: '"Methw"',
-  APP_TITLE: '"METHW: A Multitenant High Performance Ethereum WebAPI"',
-  APP_DESC: '"METHW: A Multitenant High Performance Ethereum WebAPI made for enterprises, companies and developers"',
+  UI_TITLE: '"gaethway"',
+  APP_TITLE: '"Gaethway: A Multitenant High Performance Ethereum WebAPI"',
+  APP_DESC: '"Gaethway: A Multitenant High Performance Ethereum WebAPI made for enterprises, companies and developers"',
 
-  EMAIL: '"hello@methw.org"',
+  EMAIL: '"hello@gaethway.org"',
   OFFICE_ADDRESS: '"Bilbao"',
   OFFICE_TIME: '"8:00AM To 5:00PM (GMT+2)"',
 

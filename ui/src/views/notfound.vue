@@ -1,6 +1,6 @@
 <template>
   <errorMessage
-  pagetitle="error 404 - methw.org"
+  pagetitle="error 404 - gaethway.org"
   code="404"
   title='Oops.. You just found an error page..'
   description="We are sorry but our service is currently not available, page might have been moved, deleted or abducted by aliens!">

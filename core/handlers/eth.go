@@ -1,4 +1,4 @@
-// Copyright MethW
+// Copyright gaethway
 // SPDX-License-Identifier: Apache License 2.0
 
 package handlers
@@ -7,10 +7,10 @@ import (
 	"errors"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/methw/core/api"
-	"github.com/zerjioang/methw/core/eth"
-	"github.com/zerjioang/methw/core/keystore/memory"
-	"github.com/zerjioang/methw/core/util"
+	"github.com/zerjioang/gaethway/core/api"
+	"github.com/zerjioang/gaethway/core/eth"
+	"github.com/zerjioang/gaethway/core/keystore/memory"
+	"github.com/zerjioang/gaethway/core/util"
 	"net/http"
 	"time"
 

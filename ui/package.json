@@ -1,7 +1,7 @@
 {
   "main": "index.html",
   "version": "1.0.0",
-  "description": "methw webapp",
+  "description": "gaethway webapp",
   "author": "zerjioang <sergio.anguita@opendeusto.es>",
   "private": true,
   "scripts": {
@@ -41,7 +41,7 @@
     "switchery": "^0.0.2",
     "vis": "^4.21.0",
     "vue": "^2.5.2",
-    "vue-js-modal": "^1.3.26",
+    "vue-js-modal": "^1.3.28",
     "vue-paypal-checkout": "^3.1.3",
     "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",

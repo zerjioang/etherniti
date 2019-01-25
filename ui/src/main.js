@@ -22,6 +22,7 @@ window.axios = axios;
 import select2 from 'select2';
 window.select2 = select2;
 
+//import modal library
 import VModal from 'vue-js-modal'
 Vue.use(VModal, { dialog: true, dynamic: true, injectModalsContainer: true });
 
@@ -88,7 +89,7 @@ require("@/assets/plugins/animate-css/animate.css");
 require("@/assets/css/style.css");
 
 // AdminBSB Themes. You can choose a theme from css/themes instead of get all themes
-require("@/assets/css/themes/theme-methw.css");
+require("@/assets/css/themes/theme-gaethway.css");
 
 // load custom made modifications
 require("@/assets/css/custom.css");
