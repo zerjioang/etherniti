@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h2>Ethereum Address Check</h2>
-        <p>Verify whether a given adress is valid or not</p>
+        <h2>Ethereum <small class="focus">address</small> checker</h2>
+        <p>Verify whether a given adress is valid or not, check if address is smart contract, etc.</p>
 
         <div class="row clearfix">
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-lg-4 col-md-5 col-sm-7 col-xs-12">
                 <div class="card">
                   <div class="header header-slim">
                       <h2 class="title">Ethereum Address validation
@@ -26,7 +26,19 @@
                   <div class="body slim">
                       <p v-show="false" class="card-inside-title">Enter address to validate</p>
                       <div class="row clearfix">
-                        <form method="GET" v-on:submit="submit">
+                        <form method="GET" v-on:submit="submit($event)">
+
+                            <!-- valid message -->
+                            <div v-show="result.visible" class="col-md-12">
+                              <div class="alert"
+                              :class="{
+                              'alert-success': result.valid,
+                              'alert-danger': !result.valid
+                              }">
+                                  The address <strong>{{form.address}}</strong> {{result.message}}
+                              </div>
+                            </div>
+
                            <div class="col-md-12">
                               <b>ETH Address</b>
                               <div class="input-group">
@@ -39,6 +51,7 @@
                                       class="form-control key"
                                       placeholder="0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
                                       :required="true"
+                                      v-model="form.address"
                                       :disabled="false">
                                   </div>
                               </div> <!-- form group end -->
@@ -62,11 +75,40 @@ export default {
   data () {
     return {
       title: process.env.UI_TITLE,
+      form: {
+        address: undefined
+      },
+      result: {
+        visible: false,
+        valid: false,
+        messageValid: "is a valid ETH address.",
+        messageInvalid: "is an invalid ETH address.",
+        message: ""
+      }
     }
   },
   methods: {
-    submit: function () {
-      alert("test")
+    submit: function (e) {
+      e.preventDefault();
+      //reset the form
+      setTimeout(() => {
+        this.show();
+      }, 200);
+    },
+    show: function(){
+      this.result.visible = true;
+      if (new Date().getMilliseconds() % 2 == 0) {
+        // valid
+        this.result.valid = true;
+        this.result.message = this.result.messageValid;
+      } else {
+        //invalid
+        this.result.valid = false;
+        this.result.message = this.result.messageInvalid;
+      }
+    },
+    reset: function(){
+      this.form.address = "";
     }
   },
   created(){
@@ -89,6 +131,11 @@ export default {
 .title {
   color: #012282 !important;
   font-weight: bold !important;
+}
+.focus {
+  color: #012282 !important;
+  font-weight: bold !important;
+  font-size: 25pt;
 }
 .subtitle {
   font-size: 12px !important;

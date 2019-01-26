@@ -24,7 +24,7 @@
 	                <b>Made with love and tons of coffe</b>
 	            	</br>
 	            	</br>
-	            	Interested in custom solutions, sales, or have general infrastructure questions? Please, do not hesitate to contact us at <a href="mailto:info@gethway.org" target="_blank" rel="noopener"><tt class="email">info@gethway.org</tt></a>. We are glad to help!
+	            	Interested in custom solutions, sales, or have general infrastructure questions? Please, do not hesitate to contact us at <a href="mailto:info@gaethway.org" target="_blank" rel="noopener"><tt class="email">info@gaethway.org</tt></a>. We are glad to help!
 	              </p>
 	          </div>
 	      </div>

@@ -5,7 +5,7 @@ icons are: https://feathericons.com/
 */
 const leftAsideLayout = [
 	{
-		id:0,
+		id:100,
 		name:routerNames.home.name,
 		icon: "home",
 		class: "",
@@ -14,11 +14,49 @@ const leftAsideLayout = [
 		submenus: []
 	},
 	{
+		id:101,
+		name:routerNames.eth.name,
+		icon: "storage",
+		class: "",
+		to:routerNames.eth.path,
+		active: false,
+		submenus: [
+			{
+				id:1011,
+				name:routerNames.ethCreate.name,
+				icon: "add",
+				class: "",
+				to:routerNames.ethCreate.path,
+				active: false,
+				submenus: []
+			}
+		]
+	},
+	{
+		id:101,
+		name:routerNames.quorum.name,
+		icon: "storage",
+		class: "",
+		to:routerNames.quorum.path,
+		active: false,
+		submenus: [
+			{
+				id:1011,
+				name:routerNames.quorumCreate.name,
+				icon: "add",
+				class: "",
+				to:routerNames.quorumCreate.path,
+				active: false,
+				submenus: []
+			}
+		]
+	},
+	{
 		id:1,
-		name:"Useful Tools",
+		name:routerNames.tools.name,
 		icon: "layers",
 		class: "",
-		to:"connectionProfile",
+		to:routerNames.tools.path,
 		active: false,
 		submenus: [
 			{
@@ -71,6 +109,43 @@ const leftAsideLayout = [
 	},
 	//library_books
 	{
+		id:96,
+		name:routerNames.privateApi.name,
+		icon: "lock",
+		class: "",
+		to:routerNames.privateApi.path,
+		active: false,
+		submenus: [
+			{
+				id:961,
+				name:routerNames.manageProfile.name,
+				icon: "art_track",
+				class: "",
+				to:routerNames.manageProfile.path,
+				active: false,
+				submenus: []
+			},
+			{
+				id:962,
+				name:routerNames.manageProfile.name,
+				icon: "settings",
+				class: "",
+				to:routerNames.manageProfile.path,
+				active: false,
+				submenus: []
+			},
+			{
+				id:963,
+				name:routerNames.manageProfile.name,
+				icon: "help_outline",
+				class: "",
+				to:routerNames.manageProfile.path,
+				active: false,
+				submenus: []
+			}
+		]
+	},
+	{
 		id:97,
 		name:routerNames.bugReport.name,
 		icon: "report_problem",
@@ -82,7 +157,7 @@ const leftAsideLayout = [
 	{
 		id:98,
 		name:routerNames.about.name,
-		icon: "info_outline",
+		icon: "info",
 		class: "",
 		to:routerNames.about.path,
 		active: false,
