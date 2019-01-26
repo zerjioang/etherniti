@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>about gaethway</h2>
-        <p>We provide secure, reliable, and private access to Ethereum and Quorum APIs.</p>
+        <p>We provide secure, reliable, and high performance access to <b>Ethereum</b> and <b>Quorum</b> APIs.</p>
 
         <div class="row">
           <div class="col-md-12">
@@ -14,8 +14,8 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            About gaethway <b>webAPI</b>
-                            <small>General information about-view gaethway <b>webAPI</b>, its service and this website</small>
+                            About gaethway <b>WebAPI</b>
+                            <small class="subtitle">General information about-view gaethway <b>WebAPI</b>, its service and this website</small>
                         </h2>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
@@ -32,39 +32,25 @@
                     </div>
 
                     <div class="body">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                            <li role="presentation" class="active"><a href="#home" data-toggle="tab" aria-expanded="true">ABOUT US</a></li>
-                            <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false">TERMS & CONDITIONS</a></li>
-                            <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false">PRIVACY POLICY</a></li>
-                            <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false">EUROPEAN GDPR</a></li>
-                        </ul>
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane fade" id="home">
-                                <b>Home Content</b>
-                                <p>
-                                    Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                    Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                    pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                    sadipscing mel.
-                                </p>
+                        <tabs :config="tabsConfig" :defaultTabId="tabsConfig[0].id">
+                            <div :slot="tabsConfig[0].ref">
+                                <aboutTab/>
                             </div>
-                            <div role="tabpanel" class="tab-pane fade" id="profile">
-                                <b>Profile Content</b>
-                                <p>
-                                    Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                    Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                    pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                    sadipscing mel.
-                                </p>
+                            <div :slot="tabsConfig[1].ref">
+                                <termsTab/>
                             </div>
-                        </div>
+                            <div :slot="tabsConfig[2].ref">
+                                <privacyTab/>
+                            </div>
+                            <div :slot="tabsConfig[3].ref">
+                                <gdprTab/>
+                            </div>
+                        </tabs>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- row finished -->
+
     </div>
 </template>
 
@@ -74,7 +60,36 @@ export default {
   name: 'about-view',
   data () {
     return {
-      title: process.env.UI_TITLE,
+      tabsConfig: [
+        {
+            id: 0,
+            title: "About us",
+            icon: "",
+            ref: "#about",
+            active: true
+        },
+        {
+            id: 1,
+            title: "Terms & conditions",
+            icon: "",
+            ref: "#terms",
+            active: false
+        },
+        {
+            id: 2,
+            title: "Privacy policy",
+            icon: "",
+            ref: "#privacy",
+            active: false
+        },
+        {
+            id: 3,
+            title: "european gdpr",
+            icon: "",
+            ref: "#gdpr",
+            active: false
+        }
+      ]
     }
   },
   methods: {
@@ -86,7 +101,12 @@ export default {
     log("about-view::mounted");
   },
   components: {
+    tabs: () => import('@/components/tabs'),
     authorCard: () => import('@/components/authorCard'),
+    aboutTab: () => import('@/components/tabs/about'),
+    termsTab: () => import('@/components/tabs/terms'),
+    privacyTab: () => import('@/components/tabs/privacy'),
+    gdprTab: () => import('@/components/tabs/gdpr'),
   }
 }
 </script>
@@ -95,5 +115,8 @@ export default {
 <style scoped>
 .centered {
   text-align: center;
+}
+.subtitle {
+    font-size: 12pt !important;
 }
 </style>

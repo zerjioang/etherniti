@@ -6,7 +6,7 @@
                 <h1 class="title centered">{{title}}</h1>
                 <p class="message centered">{{message}}</p>
                 <slot name="content"></slot>
-                <button class="btn btn-primary waves-effect fit" @click="$emit('close')">{{buttonText}}</button>
+                <button class="btn bg-indigo waves-effect btn-lg fit" @click="$emit('close')">{{buttonText}}</button>
             </div>
         </div>
     </div>

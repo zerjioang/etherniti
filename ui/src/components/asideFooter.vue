@@ -38,7 +38,7 @@ export default {
       this.$modal.show(aboutDialog,
         {
           title: "About Gaethway Project",
-          message: 'Gaethway Project is a Multitenant High Performance Ethereum and Quorum compatible webAPI',
+          message: 'Gaethway Project is a Multitenant High Performance Ethereum and Quorum compatible WebAPI',
           icon: "code",
           buttonText: "Close"
         }, {

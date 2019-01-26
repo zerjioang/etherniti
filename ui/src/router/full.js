@@ -7,6 +7,8 @@ const index = () => import('@/views/index');
 const baseDashboard = () => import('@/components/baseDashboardView');
 
 const home = () => import('@/views/home');
+const addressCheck = () => import('@/views/addressCheck');
+const balanceCheck = () => import('@/views/balanceCheck');
 const bugReport = () => import('@/views/bugReport');
 const about = () => import('@/views/about');
 const license = () => import('@/views/license');
@@ -49,7 +51,18 @@ export default new Router({
           name: routerNames.home.name,
           component: home
         },
-        
+        {
+          // dashboard >> address check
+          path: routerNames.addressChecker.path,
+          name: routerNames.addressChecker.name,
+          component: addressCheck
+        },
+        {
+          // dashboard >> balance check
+          path: routerNames.balanceChecker.path,
+          name: routerNames.balanceChecker.name,
+          component: balanceCheck
+        },
         {
           // dashboard >> report >> issue
           path: routerNames.bugReport.path,

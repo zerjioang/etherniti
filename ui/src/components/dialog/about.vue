@@ -22,7 +22,7 @@
                 Add direct interaction from low resources embedded devices that cannot directly sign transactions, such as <b>ESP32</b>, <b>Arduino Uno</b>, etc.
             </li>
             <li>
-                Add direct interaction from legacy software written in no compatible <b>Ethereum SDK</b>, leveraging the interaction in a <b>secure webAPI</b>.
+                Add direct interaction from legacy software written in no compatible <b>Ethereum SDK</b>, leveraging the interaction in a <b>secure WebAPI</b>.
             </li>
             <li>
                 Connect to the Blockchain some of the most used corporate <b>CRM, ERP, CMS</b>, etc.

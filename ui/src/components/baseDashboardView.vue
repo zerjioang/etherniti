@@ -15,7 +15,7 @@
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
     <navigationBar
-        title="gaethway: A High Performance Ethereum WebAPI"
+        :title="navigationBarTitle"
         :showSearchBar="searchBarVisible"
         v-on:openSearch="searchBarVisible=true"
         v-on:toggleRightAside="toggleRightAside"
@@ -117,6 +117,7 @@ export default {
       //to allow router view animations
       prevHeight: 0,
       title: process.env.UI_TITLE,
+      navigationBarTitle: process.env.APP_TITLE,
       sidebarImage: require("@/assets/images/aside.png"),
       loaderVisible: false,
       searchBarVisible: false,
