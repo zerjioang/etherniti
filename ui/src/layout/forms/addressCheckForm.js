@@ -35,12 +35,6 @@ const addressCheckForm = {
 				// titleInside: "Enter address to validate"
 				rowClass: "row clearfix",
 				method: "GET",
-				submit: function (e, component) {
-					e.preventDefault();
-					alert('submit me');
-					console.log(e)
-					console.log(component)
-				},
 				columns: [
 					{
 						id:10,
