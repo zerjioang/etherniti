@@ -48,9 +48,21 @@ const routerNames = {
 		  name: 'Manage Profiles',
 		},
 		privateApi: {
-		  path: '/private/',
+		  path: '/private/api',
 		  name: 'Private API',
 		},
+			privateApiConfiguration: {
+			  path: '/private/api/configure',
+			  name: 'Configuration',
+			},
+			privateApiManagement: {
+			  path: '/private/api/manage',
+			  name: 'Management',
+			},
+			privateApiInformation: {
+			  path: '/private/api/info',
+			  name: 'Information',
+			},
 		license: {
 		  path: '/license',
 		  name: 'License',

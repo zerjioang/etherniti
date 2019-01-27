@@ -1,6 +1,7 @@
 <template>
     <div>
-        <p>Current gaethway stats</p>
+      <pagetitle
+        :title="title"/>
         <widgetsRow :config="layout.widgetRowConfig"/>
     </div>
 </template>
@@ -13,6 +14,8 @@ export default {
   name: 'home-view',
   data () {
     return {
+      app: process.env.APP_NAME,
+      title: "Current "+process.env.APP_NAME+" stats",
       layout: {
         widgetRowConfig: widgetRowConfig
       }
@@ -27,11 +30,12 @@ export default {
     log("home-view::mounted");
   },
   components: {
+    pagetitle: () => import('@/components/pagetitle'),
     widgetsRow: () => import('@/components/widgetsRow'),
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 </style>

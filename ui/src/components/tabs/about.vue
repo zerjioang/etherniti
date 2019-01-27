@@ -13,7 +13,7 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 .tech {
     padding: 10px;
     background-color: #f7f7f7;

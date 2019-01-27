@@ -4,6 +4,11 @@
     <loader text="Please wait..." :visible="loaderVisible"/>
     <!-- Overlay For Sidebars -->
     <overlay :visible="searchBarVisible||isRightAsideVisible"/>
+
+    <!--
+    <div class="banner">test</div>
+    -->
+
     <!-- Search Bar -->
     <searchbar
     :visible="searchBarVisible"
@@ -116,7 +121,7 @@ export default {
     return {
       //to allow router view animations
       prevHeight: 0,
-      title: process.env.UI_TITLE,
+      title: process.env.APP_NAME,
       navigationBarTitle: process.env.APP_TITLE,
       sidebarImage: require("@/assets/images/aside.png"),
       loaderVisible: false,
@@ -194,5 +199,18 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0
+}
+
+.banner {
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+  font-size: 14pt;
+  height: 2.5rem;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 10px;
 }
 </style>

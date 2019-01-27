@@ -1,7 +1,8 @@
 <template>
     <div>
-        <h2>Report an issue</h2>
-        <p>Have you found a bug? Do you think something can be improved? Let us know!</p>
+       <pagetitle
+        title="Report an issue"
+        subtitle="Have you found a bug? Do you think something can be improved? Let us know!"/>
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -18,7 +19,7 @@ export default {
   name: 'report-bug-view',
   data () {
     return {
-      title: process.env.UI_TITLE,
+      title: process.env.APP_NAME,
     }
   },
   methods: {
@@ -30,12 +31,13 @@ export default {
     log("report-bug-view::mounted");
   },
   components: {
+    pagetitle: () => import('@/components/pagetitle'),
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 .centered {
   text-align: center;
 }

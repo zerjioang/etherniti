@@ -9,10 +9,10 @@
         <img class="minilogo" :src="require('@/assets/images/ethereum.png')">
         <img class="minilogo" :src="require('@/assets/images/quorum.png')">
         <p class="justified">
-            <b>gaethway</b> allows companies, developers and startups to interact with Ethereum in a very easy and friendly way. We add an abstraction layer that allows a <b>fast</b>, reliable and <b>secure</b> interaction with Ethereum networks and their smart contracts. We provide a fully featured High Performance WebAPI to operate ethereum as its usually done with other tools such as <b>Web3js</b>, <b>Metamask</b>, etc.
+            <b>{{app}}</b> allows companies, developers and startups to interact with Ethereum in a very easy and friendly way. We add an abstraction layer that allows a <b>fast</b>, reliable and <b>secure</b> interaction with Ethereum networks and their smart contracts. We provide a fully featured High Performance WebAPI to operate ethereum as its usually done with other tools such as <b>Web3js</b>, <b>Metamask</b>, etc.
         </p>
         <p>
-            <b>gaethway</b> can be very useful in several scenarios, such as:
+            <b>{{app}}</b> can be very useful in several scenarios, such as:
         </p>
         <ul>
             <li>
@@ -58,6 +58,7 @@ export default {
     },
     data() {
         var data = {
+            app: process.env.APP_NAME
         }
         return data;
     },

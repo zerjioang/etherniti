@@ -33,7 +33,7 @@ const leftAsideLayout = [
 		]
 	},
 	{
-		id:101,
+		id:102,
 		name:routerNames.quorum.name,
 		icon: "storage",
 		class: "",
@@ -41,7 +41,7 @@ const leftAsideLayout = [
 		active: false,
 		submenus: [
 			{
-				id:1011,
+				id:1021,
 				name:routerNames.quorumCreate.name,
 				icon: "add",
 				class: "",
@@ -52,7 +52,7 @@ const leftAsideLayout = [
 		]
 	},
 	{
-		id:1,
+		id:103,
 		name:routerNames.tools.name,
 		icon: "layers",
 		class: "",
@@ -60,7 +60,7 @@ const leftAsideLayout = [
 		active: false,
 		submenus: [
 			{
-				id:2,
+				id:1031,
 				name:routerNames.addressChecker.name,
 				icon: "done_all",
 				class: "",
@@ -69,7 +69,7 @@ const leftAsideLayout = [
 				submenus: []
 			},
 			{
-				id:3,
+				id:1032,
 				name:routerNames.balanceChecker.name,
 				icon: "attach_money",
 				class: "",
@@ -80,7 +80,7 @@ const leftAsideLayout = [
 		]
 	},
 	{
-		id:96,
+		id:104,
 		name:"Profiles",
 		icon: "group",
 		class: "",
@@ -88,7 +88,7 @@ const leftAsideLayout = [
 		active: false,
 		submenus: [
 			{
-				id:2,
+				id:1041,
 				name:routerNames.newProfile.name,
 				icon: "add_circle_outline",
 				class: "",
@@ -97,7 +97,7 @@ const leftAsideLayout = [
 				submenus: []
 			},
 			{
-				id:3,
+				id:1042,
 				name:routerNames.manageProfile.name,
 				icon: "assignment",
 				class: "",
@@ -107,9 +107,9 @@ const leftAsideLayout = [
 			}
 		]
 	},
-	//library_books
 	{
-		id:96,
+		// private api
+		id:105,
 		name:routerNames.privateApi.name,
 		icon: "lock",
 		class: "",
@@ -117,36 +117,40 @@ const leftAsideLayout = [
 		active: false,
 		submenus: [
 			{
-				id:961,
-				name:routerNames.manageProfile.name,
+				// private api > configuration
+				id:1051,
+				name:routerNames.privateApiConfiguration.name,
 				icon: "art_track",
 				class: "",
-				to:routerNames.manageProfile.path,
+				to:routerNames.privateApiConfiguration.path,
 				active: false,
 				submenus: []
 			},
 			{
-				id:962,
-				name:routerNames.manageProfile.name,
+				// private api > management
+				id:1052,
+				name:routerNames.privateApiManagement.name,
 				icon: "settings",
 				class: "",
-				to:routerNames.manageProfile.path,
+				to:routerNames.privateApiManagement.path,
 				active: false,
 				submenus: []
 			},
 			{
-				id:963,
-				name:routerNames.manageProfile.name,
+				// private api > information
+				id:1053,
+				name:routerNames.privateApiInformation.name,
 				icon: "help_outline",
 				class: "",
-				to:routerNames.manageProfile.path,
+				to:routerNames.privateApiInformation.path,
 				active: false,
 				submenus: []
 			}
 		]
 	},
 	{
-		id:97,
+		// bug report
+		id:106,
 		name:routerNames.bugReport.name,
 		icon: "report_problem",
 		class: "",
@@ -155,7 +159,8 @@ const leftAsideLayout = [
 		submenus: []
 	},
 	{
-		id:98,
+		// about
+		id:107,
 		name:routerNames.about.name,
 		icon: "info",
 		class: "",
@@ -164,7 +169,8 @@ const leftAsideLayout = [
 		submenus: []
 	},
 	{
-		id:99,
+		// license
+		id:108,
 		name:routerNames.license.name,
 		icon: "public",
 		class: "",

@@ -1,17 +1,28 @@
 <template>
     <div>
-        <h2>gaethway license</h2>
-        <p>Following, all used tools for building gaethway are listed with their corresponding licenses.</p>
-        <licenseInfoCardsRow/>
+      <pagetitle
+        :title="title"
+        subtitle="Following, all used tools for building gaethway are listed with their corresponding licenses."/>
+        
+        <h3 class="title">Licenses related to UI and this website</h3>
+        <licenseInfoCardsRow :config="lists.ui"/>
+        
+        <h3 class="title">Licenses related to webAPI, tracker and other backend software</h3>
+        <licenseInfoCardsRow :config="lists.api"/>
     </div>
 </template>
 
 <script>
+
+import licenseList from '@/layout/licenseList';
+
 export default {
   name: 'license-view',
   data () {
     return {
-      title: process.env.UI_TITLE,
+      app: process.env.APP_NAME,
+      title: process.env.APP_NAME + " license",
+      lists: licenseList
     }
   },
   methods: {
@@ -23,11 +34,15 @@ export default {
     log("license-view::mounted");
   },
   components: {
+    pagetitle: () => import('@/components/pagetitle'),
     licenseInfoCardsRow: () => import('@/components/licenseInfoCardsRow'),
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
+.title {
+  padding-bottom: 10px;
+}
 </style>

@@ -44,6 +44,7 @@ export default {
         }, {
           draggable: false,
           scrollable: true,
+          adaptative: true,
           height: "auto"
         },{
           'before-close': (event) => {

@@ -1,7 +1,8 @@
 <template>
     <div>
-        <h2>about gaethway</h2>
-        <p>We provide secure, reliable, and high performance access to <b>Ethereum</b> and <b>Quorum</b> APIs.</p>
+        <pagetitle
+        :title="title"
+        :subtitleHtml="subtitle"/>
 
         <div class="row">
           <div class="col-md-12">
@@ -14,8 +15,8 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            About gaethway <b>WebAPI</b>
-                            <small class="subtitle">General information about-view gaethway <b>WebAPI</b>, its service and this website</small>
+                            About {{app}} <b>WebAPI</b>
+                            <small class="subtitle">General information about-view {{app}} <b>WebAPI</b>, its service and this website</small>
                         </h2>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
@@ -60,6 +61,9 @@ export default {
   name: 'about-view',
   data () {
     return {
+      app: process.env.APP_NAME,
+      title: "About "+ process.env.APP_NAME,
+      subtitle: "We provide secure, reliable, and high performance access to <b>Ethereum</b> and <b>Quorum</b> APIs.",
       tabsConfig: [
         {
             id: 0,
@@ -101,6 +105,7 @@ export default {
     log("about-view::mounted");
   },
   components: {
+    pagetitle: () => import('@/components/pagetitle'),
     tabs: () => import('@/components/tabs'),
     authorCard: () => import('@/components/authorCard'),
     aboutTab: () => import('@/components/tabs/about'),
@@ -112,7 +117,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 .centered {
   text-align: center;
 }

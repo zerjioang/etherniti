@@ -11,16 +11,22 @@ if(prod){
 }
 Vue.config.productionTip = !prod;
 
+// import vue tour
+// info: https://github.com/pulsardev/vue-tour
+//import VueTour from 'vue-tour'
+//require('vue-tour/dist/vue-tour.css')
+//Vue.use(VueTour)
+
 //import and register vue-select
-import vSelect from 'vue-select';
-Vue.component('v-select', vSelect);
+//import vSelect from 'vue-select';
+//Vue.component('v-select', vSelect);
 
 //import and register axios
-import axios from 'axios';
-window.axios = axios;
+//import axios from 'axios';
+//window.axios = axios;
 
-import select2 from 'select2';
-window.select2 = select2;
+//import select2 from 'select2';
+//window.select2 = select2;
 
 //import modal library
 import VModal from 'vue-js-modal'

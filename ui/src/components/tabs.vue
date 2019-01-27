@@ -31,7 +31,7 @@ export default {
   props: {
   	config: {
   		type: Array,
-  		default: () => { return [];}
+  		default: () =>  []
   	},
   	defaultTabId: {
   		type: Number,
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 .tabtitle {
 	text-transform: uppercase;
 	cursor: pointer !important;

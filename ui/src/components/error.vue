@@ -44,7 +44,7 @@ export default {
   ],
   data () {
     return {
-    	uititle: process.env.UI_TITLE,
+    	uititle: process.env.APP_NAME,
     	domain: process.env.WEBAPP_DOMAIN
     }
   },

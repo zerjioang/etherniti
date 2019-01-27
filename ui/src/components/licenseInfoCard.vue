@@ -43,7 +43,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped="true">
 .license {
     font-size: 10pt;
     font-family: 'IBM Plex Mono', sans-serif;
