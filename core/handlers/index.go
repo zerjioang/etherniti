@@ -36,5 +36,6 @@ func (ctl IndexController) index(c echo.Context) error {
 // implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing index controller methods")
+	router.GET("/v1", ctl.index)
 	router.GET("/", ctl.index)
 }

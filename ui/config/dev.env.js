@@ -7,10 +7,10 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   PRODUCTION: 'false',
 
-  API_SCHEME: '"http"',
-  API_DOMAIN: '"api-dev.gaethway.org:8080"',
-
-  SWAGGER_URL: '"http://localhost:5555/api/docs/"',
+  API_SCHEME: '"https"',
+  DOMAIN: '"gaethway.org"',
+  API_DOMAIN: '"localhost:4430"',
+  WEBAPP_DOMAIN: '"gaethway.org"',
   
   DASHBOARD_BASE_PATH: '"/dashboard"',
   

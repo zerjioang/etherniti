@@ -5,53 +5,36 @@
         subtitle="Verify whether a given adress is valid or not, check if address is smart contract, etc."/>
 
         <div class="row clearfix">
-          <jsonForm
-          :config="addressCheckForm"
-          v-on:jsonevent="formEvent"></jsonForm>
+          <apiForm :form="form.addressCheckForm"></apiForm>
+          <apiForm :form="form.contractAddressCheckForm"></apiForm>
         </div>
+        
     </div>
 </template>
 
 <script>
 
 import addressCheckForm from '@/layout/forms/addressCheckForm';
+import contractAddressCheckForm from '@/layout/forms/contractAddressCheckForm';
 
 export default {
   name: 'eth-addr-check-view',
   data () {
     return {
-      addressCheckForm: addressCheckForm,
+      form: {
+        addressCheckForm: addressCheckForm,
+        contractAddressCheckForm: contractAddressCheckForm
+      },
       result: {
         visible: false,
         valid: false,
-        messageValid: "is a valid ETH address.",
-        messageInvalid: "is an invalid ETH address.",
+        messageValid: " is a valid ETH address.",
+        messageInvalid: " is an invalid ETH address.",
         message: ""
       }
     }
   },
   methods: {
-    formEvent: function(event, eventId){
-      event.preventDefault();
-      alert("address check");
-      alert(eventId);
-      log(addressCheckForm);
-    },
-    show: function(){
-      this.result.visible = true;
-      if (new Date().getMilliseconds() % 2 == 0) {
-        // valid
-        this.result.valid = true;
-        this.result.message = this.result.messageValid;
-      } else {
-        //invalid
-        this.result.valid = false;
-        this.result.message = this.result.messageInvalid;
-      }
-    },
-    reset: function(){
-      this.form.address = "";
-    }
   },
   created(){
     log("eth-addr-check-view::created");
@@ -61,11 +44,14 @@ export default {
   },
   components: {
     pagetitle: () => import('@/components/pagetitle'),
-    jsonForm: () => import('@/components/jsonForm')
+    apiForm: () => import('@/components/apiForm'),
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="true">
+.top-15 {
+  margin-top: 15px;
+}
 </style>

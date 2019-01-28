@@ -109,9 +109,9 @@ func (ctl ProfileController) list(c echo.Context) error {
 // implemented method from interface RouterRegistrable
 func (ctl ProfileController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing profile controller methods")
-	router.POST("/profile", ctl.create)
-	router.GET("/profile/:id", ctl.read)
-	router.PUT("/profile/:id", ctl.update)
-	router.DELETE("/profile/:id", ctl.delete)
-	router.GET("/", ctl.list)
+	router.POST("/v1/profile", ctl.create)
+	router.GET("/v1/profile/:id", ctl.read)
+	router.PUT("/v1/profile/:id", ctl.update)
+	router.DELETE("/v1/profile/:id", ctl.delete)
+	router.GET("/v1/profiles", ctl.list)
 }

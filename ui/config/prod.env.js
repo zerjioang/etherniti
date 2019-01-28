@@ -8,9 +8,9 @@ module.exports = {
   DOMAIN: '"gaethway.org"',
   API_DOMAIN: '"api.gaethway.org"',
   WEBAPP_DOMAIN: '"gaethway.org"',
-  API_PATH: '""',
+  API_PATH: '"/v1"',
 
-  SWAGGER_URL: '"https://swagger.gaethway.org"',
+  SWAGGER_URL: '"https://gaethway.org/swagger"',
 
   REPO_API: '"https://github.com/zerjioang/gaethway"',
   

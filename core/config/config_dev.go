@@ -7,7 +7,7 @@ package config
 
 const (
 	DevelopmentAddress = "localhost"
-	HttpsPort          = ":4330"
+	HttpsPort          = ":4430"
 	HttpPort           = ":8080"
 	HttpAddress        = DevelopmentAddress + HttpPort
 	HttpsAddress       = DevelopmentAddress + HttpsPort

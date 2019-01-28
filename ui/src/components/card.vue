@@ -2,29 +2,31 @@
 	<div class="card">
 
 	  <!--print card header if configured -->
-	  <div v-if="config.header" class="header header-slim">
-	      <h2 class="title">{{config.header.title}}
-	        <small class="subtitle">{{config.header.subtitle}}</small>
+	  <div v-if="form.header" class="header header-slim">
+	      <h2 class="title">{{form.header.title}}
+	        <small class="subtitle">{{form.header.subtitle}}</small>
 	      </h2>
 	      <ul class="header-dropdown m-r--5">
 	          <li class="dropdown">
 	              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-	                  <i class="material-icons">{{config.header.dropdown.icon}}</i>
+	                  <i class="material-icons">{{form.header.dropdown.icon}}</i>
 	              </a>
 	              <ul class="dropdown-menu pull-right">
-	                  <li v-for="dropitem in config.header.dropdown.items" :key="dropitem.id">
+	                  <li v-for="dropitem in form.header.dropdown.items" :key="dropitem.id">
 	                  	<a href="javascript:void(0);">{{dropitem.title}}</a></li>
 	              </ul>
 	          </li>
 	      </ul>
 	  </div> <!--header end -->
 
+	  <slot name="card-top"></slot>
+
 	  <div class="body slim">
-	      <p v-if="config.body.titleInside" class="card-inside-title">{{config.body.titleInside}}</p>
-	      <div :class="config.body.rowClass">
-	        <form :method="config.body.method" v-on:submit="trigger($event)" id="submit">
+	      <p v-if="form.body.titleInside" class="card-inside-title">{{form.body.titleInside}}</p>
+	      <div :class="form.body.rowClass">
+	        <form :method="form.body.method" v-on:submit="trigger($event)" id="submit">
 	           <div
-	           v-for="col in config.body.columns"
+	           v-for="col in form.body.columns"
 	           :key="col.id"
 	           :class="col.class">
 	           	  
@@ -35,7 +37,7 @@
 	              	v-for="groupItem in inputGroup.items"
 	              	:key="groupItem.id"
 	              	:config="groupItem"
-	              	:model="config.model"/>
+	              	:model="model"/>
 	           	  </div> <!-- form group end -->
 	           	  
 	           	  <div
@@ -61,7 +63,11 @@
 export default {
   name: 'card',
   props: {
-  	config: {
+  	form: {
+  		type: Object,
+  		default: () => {}
+  	},
+  	model: {
   		type: Object,
   		default: () => {}
   	},
@@ -72,7 +78,6 @@ export default {
   },
   methods: {
     trigger: function (event) {
-      
       const eventId = event.target.id;
       if (eventId!="") {
       	log("trigger event: "+eventId);

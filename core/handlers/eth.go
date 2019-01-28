@@ -23,6 +23,10 @@ const (
 	invalidAddress = `{"message": "please, provide a valid ethereum or quorum address"}`
 )
 
+var (
+	errNoConnectionProfile = errors.New("Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name.")
+)
+
 type EthController struct {
 	// in memory storage of created wallets
 	wallet *memory.InMemoryKeyStorage
@@ -46,7 +50,10 @@ func (ctl EthController) isValidAddress(c echo.Context) error {
 	// check if not empty
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
-		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(
+			api.NewApiResponse("address validation checked", result),
+			),
+		)
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
@@ -108,7 +115,7 @@ func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, e
 	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
 	wallet, found := ctl.wallet.Get(requestProfileKey)
 	if !found {
-		return nil, errors.New("invalid profile key provided in the request header")
+		return nil, errNoConnectionProfile
 	}
 	return wallet.Client(), nil
 }
@@ -117,9 +124,9 @@ func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, e
 func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing eth controller methods")
 	//http://localhost:8080/eth/verify/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
-	router.GET("/eth/verify/:address", ctl.isValidAddress)
+	router.GET("/v1/eth/verify/:address", ctl.isValidAddress)
 	//http://localhost:8080/eth/hascontract/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
-	router.GET("/eth/hascontract/:address", ctl.isContractAddress)
+	router.GET("/v1/eth/hascontract/:address", ctl.isContractAddress)
 	//http://localhost:8080/eth/getbalance/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
-	router.GET("/eth/getbalance/:address", ctl.getBalance)
+	router.GET("/v1/eth/getbalance/:address", ctl.getBalance)
 }

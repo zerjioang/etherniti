@@ -21,10 +21,6 @@ Vue.config.productionTip = !prod;
 //import vSelect from 'vue-select';
 //Vue.component('v-select', vSelect);
 
-//import and register axios
-//import axios from 'axios';
-//window.axios = axios;
-
 //import select2 from 'select2';
 //window.select2 = select2;
 
