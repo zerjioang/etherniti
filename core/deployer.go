@@ -12,6 +12,8 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/zerjioang/gaethway/core/config"
+
 	"github.com/zerjioang/gaethway/core/api"
 
 	"github.com/labstack/echo"
@@ -30,6 +32,10 @@ var (
 	}
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
+	}
+	defaultRedirectConfig = middleware.RedirectConfig{
+		Skipper: middleware.DefaultSkipper,
+		Code:    http.StatusMovedPermanently,
 	}
 )
 
@@ -93,6 +99,22 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 
 func (deployer Deployer) Run() {
 	log.Info("loading Ethereum Multitenant Webapi (gaethway)")
+
+	httpServerInstance := echo.New()
+	httpServerInstance.HideBanner = true
+	// add redirects from http to https
+	httpServerInstance.Pre(deployer.httpsRedirect)
+
+	// Start http server
+	go func() {
+		log.Info("starting http server...")
+		err := httpServerInstance.Start(config.HttpAddress)
+		if err != nil {
+			log.Error("shutting down http the server")
+		}
+	}()
+
+	// build a secure http server
 	e := echo.New()
 
 	// enable debug mode
@@ -112,9 +134,9 @@ func (deployer Deployer) Run() {
 		tlsConf.NextProtos = append(tlsConf.NextProtos, "h2")
 	}
 
-	//configure custom server
+	//configure custom secure server
 	s := &http.Server{
-		Addr:         ":8080",
+		Addr:         config.HttpsAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    tlsConf,
@@ -125,9 +147,6 @@ func (deployer Deployer) Run() {
 	// add a custom error handler
 	log.Info("[LAYER] custom error handler")
 	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
-
-	// add redirects from http to https
-	e.Pre(middleware.HTTPSRedirect())
 
 	// antibots, crawler middleware
 	// avoid bots and crawlers
@@ -171,12 +190,12 @@ func (deployer Deployer) Run() {
 
 	deployer.register(e)
 
-	// Start server
+	// Start secure server
 	go func() {
-		log.Info("starting http server...")
+		log.Info("starting https secure server...")
 		err := e.StartServer(s)
 		if err != nil {
-			e.Logger.Info("shutting down the server")
+			e.Logger.Info("shutting down https secure the server", err)
 		}
 	}()
 
@@ -188,11 +207,29 @@ func (deployer Deployer) Run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	log.Info("graceful shutdown of the service requested")
+	log.Info("shutting down http server...")
+	if err := httpServerInstance.Shutdown(ctx); err != nil {
+		log.Error(err)
+	}
+	log.Info("shutting down https secure server...")
 	if err := e.Shutdown(ctx); err != nil {
-		e.Logger.Fatal(err)
+		log.Error(err)
 	}
 	log.Info("graceful shutdown executed")
 	log.Info("exiting...")
+}
+
+// http to http redirect function
+func (deployer Deployer) httpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := c.Request()
+		scheme := c.Scheme()
+		// host := req.Host
+		if scheme == "http" {
+			return c.Redirect(301, config.GetRedirectUrl(req.Host, req.RequestURI))
+		}
+		return next(c)
+	}
 }
 
 // hardening middleware function.
