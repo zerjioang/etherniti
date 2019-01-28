@@ -5,7 +5,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/zerjioang/gaethway/core/util"
 
@@ -17,8 +16,5 @@ func init() {
 }
 
 func main() {
-	err := core.NewDeployer().Run()
-	if err != nil {
-		log.Fatal(err)
-	}
+	core.NewDeployer().Run()
 }
