@@ -4,8 +4,9 @@
 package memory
 
 import (
-	"github.com/zerjioang/gaethway/core/eth"
 	"time"
+
+	"github.com/zerjioang/gaethway/core/eth"
 
 	"github.com/labstack/gommon/log"
 	"github.com/patrickmn/go-cache"
