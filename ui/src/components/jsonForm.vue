@@ -1,22 +1,18 @@
 <template>
-	<section v-show="config!=undefined" class="container">
-		<div v-for="form in config.forms"
-			:key="form.id"
-			:class="form.class">
-			    <div v-for="col in form.columns"
-			    :key="col.id"
-			    :class="col.class">
-			        <div v-if="form.type == 'card'">
-			        	<card
-                :config="form"
-                v-on:jsonevent="emit"/>
-			        </div>
-			        <div v-else>
-			        	<p>Unsupported form type requested</p>
-			        </div>
-			    </div>
-			</div>
-	</section>
+	<div v-show="form!=undefined">
+		<div :class="form.class">
+	    <div v-if="form.type == 'card'">
+        <card :form="form" :model="model" v-on:jsonevent="emit">
+          <div slot="card-top">
+            <slot name="form-top"></slot>
+          </div>    
+        </card>
+      </div>
+      <div v-else>
+        <p>Unsupported form type requested</p>
+      </div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -24,10 +20,14 @@
 export default {
   name: 'json-form',
   props: {
-  	config: {
+  	form: {
   		type: Object,
   		default: () => {}
-  	}
+  	},
+    model: {
+      type: Object,
+      default: () => {}
+    }
   },
   data () {
     return {
