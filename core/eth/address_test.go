@@ -9,19 +9,26 @@ import (
 )
 
 const (
-	ganacheTestEndpoint = "HTTP://127.0.0.1:9545"
+	ganacheUITestEndpoint = "HTTP://127.0.0.1:9545"
+	ganacheUIAddress0 = "0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102"
+	ganacheCliTestEndpoint = "HTTP://172.17.0.2:8545"
+	ganacheCLIAddress0 = "0xa156Cf364ff355c5727AC79e5363377b6F726129"
+	// run tests using ganache cli
+	address0 = ganacheCLIAddress0
+	ganacheTestEndpoint = ganacheCliTestEndpoint
 )
 
 func TestConvertAddress(t *testing.T) {
-	addr := ConvertAddress("0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102")
-	if addr.Hex() != "0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102" {
+	addr := ConvertAddress(address0)
+	t.Log("address converted", addr.Hex())
+	if addr.Hex() != address0 {
 		t.Error("failed to convert account")
 	}
 }
 
 func TestGetAccountBalance(t *testing.T) {
 	// define the address
-	addr := ConvertAddress("0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102")
+	addr := ConvertAddress(address0)
 	// define the client
 	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
 	if err != nil {
@@ -35,7 +42,7 @@ func TestGetAccountBalance(t *testing.T) {
 	} else {
 		expected := big.NewInt(0)
 		expected, _ = expected.SetString("100000000000000000000", 10)
-		t.Log(balance)
+		t.Log("readed account balance", balance)
 		if balance.Cmp(expected) != 0 {
 			t.Error("failed to get balance for ganache account[0]")
 		}
@@ -44,7 +51,7 @@ func TestGetAccountBalance(t *testing.T) {
 
 func TestGetAccountBalanceAtBlock(t *testing.T) {
 	// define the address
-	addr := ConvertAddress("0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102")
+	addr := ConvertAddress(address0)
 	// define the client
 	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
 	if err != nil {
@@ -67,7 +74,7 @@ func TestGetAccountBalanceAtBlock(t *testing.T) {
 
 func TestToEth(t *testing.T) {
 	// define the address
-	addr := ConvertAddress("0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102")
+	addr := ConvertAddress(address0)
 	// define the client
 	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
 	if err != nil {
