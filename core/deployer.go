@@ -81,14 +81,18 @@ DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 )
 
+var (
+	localhostCert, certEtr = tls.X509KeyPair(
+		[]byte(localhostCertPem),
+		[]byte(localhostKeyPem),
+	)
+)
+
 type Deployer struct {
 }
 
 func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
-	return tls.X509KeyPair(
-		[]byte(localhostCertPem),
-		[]byte(localhostKeyPem),
-	)
+	return localhostCert, certEtr
 }
 
 func (deployer Deployer) Run() {
@@ -106,8 +110,7 @@ func (deployer Deployer) Run() {
 
 	//prepare tls configuration
 	tlsConf := new(tls.Config)
-	tlsConf.Certificates = make([]tls.Certificate, 1)
-	tlsConf.Certificates[0] = cert
+	tlsConf.Certificates = []tls.Certificate{cert}
 	if !e.DisableHTTP2 {
 		tlsConf.NextProtos = append(tlsConf.NextProtos, "h2")
 	}
