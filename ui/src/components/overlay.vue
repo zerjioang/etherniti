@@ -2,7 +2,6 @@
 <div class="overlay"></div>
 </template>
 
-
 <script>
 export default {
   name: 'overlay',

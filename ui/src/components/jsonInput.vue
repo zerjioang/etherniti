@@ -1,19 +1,47 @@
 <template>
 <div
 	v-if="config.type == 'icon+text'"
-	class="input-group">
+	:class="config.class">
 	<span class="input-group-addon">
 	  <i class="material-icons">{{config.icon}}</i>
 	</span>
-	<div class="form-line">
+  <div
+  class="form-line"
+  :class="{'focused': focus}">
 	  <input
+    @focus="focus=true"
+    @blur="focus=false"
 	  :type="config.input.type"
 	  :class="config.input.class"
 	  :placeholder="config.input.placeholder"
-	  :required="config.input.required"
+    :required="config.input.required"
+	  :autocomplete="config.input.autocomplete"
 	  :disabled="config.input.disabled"
 	  v-model="model[config.input.modelKey]">
 	</div>
+</div>
+<div
+  v-else-if="config.type == 'textarea'"
+  :class="config.class">
+  <span class="input-group-addon">
+    <i class="material-icons">{{config.icon}}</i>
+  </span>
+  <div
+  class="form-line"
+  :class="{'focused': focus}">
+    <textarea
+    @focus="focus=true"
+    @blur="focus=false"
+    :type="config.input.type"
+    :class="config.input.class"
+    :placeholder="config.input.placeholder"
+    :required="config.input.required"
+    :disabled="config.input.disabled"
+    :cols="config.input.cols"
+    :rows="config.input.rows"
+    v-model="model[config.input.modelKey]">
+    </textarea>
+  </div>
 </div>
 <div v-else>
 	<p>Not supported json input</p>
@@ -34,8 +62,14 @@ export default {
   		default: () => {}
   	}
   },
+  watch: {
+    focus: function (to, from) {
+      this.focus = to;
+    }
+  },
   data () {
     return {
+      focus: false
     }
   },
   methods: {

@@ -4,22 +4,24 @@
         title="Report an issue"
         subtitle="Have you found a bug? Do you think something can be improved? Let us know!"/>
 
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                </div>
-            </div>
+        <div class="row clearfix">
+          <apiForm :form="form.reportBug"></apiForm>
         </div>
     </div>
 </template>
 
 <script>
 
+import reportBugForm from '@/layout/forms/reportBugForm';
+
 export default {
   name: 'report-bug-view',
   data () {
     return {
       title: process.env.APP_NAME,
+      form: {
+        reportBug: reportBugForm
+      }
     }
   },
   methods: {
@@ -32,6 +34,7 @@ export default {
   },
   components: {
     pagetitle: () => import('@/components/pagetitle'),
+    apiForm: () => import('@/components/apiForm'),
   }
 }
 </script>

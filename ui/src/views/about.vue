@@ -46,6 +46,9 @@
                             <div :slot="tabsConfig[3].ref">
                                 <gdprTab/>
                             </div>
+                            <div :slot="tabsConfig[4].ref">
+                                <disclaimerTab/>
+                            </div>
                         </tabs>
                     </div>
                 </div>
@@ -57,6 +60,8 @@
 
 <script>
 
+import aboutTabsConfig from '@/layout/aboutTabsConfig';
+
 export default {
   name: 'about-view',
   data () {
@@ -64,36 +69,7 @@ export default {
       app: process.env.APP_NAME,
       title: "About "+ process.env.APP_NAME,
       subtitle: "We provide secure, reliable, and high performance access to <b>Ethereum</b> and <b>Quorum</b> APIs.",
-      tabsConfig: [
-        {
-            id: 0,
-            title: "About us",
-            icon: "",
-            ref: "#about",
-            active: true
-        },
-        {
-            id: 1,
-            title: "Terms & conditions",
-            icon: "",
-            ref: "#terms",
-            active: false
-        },
-        {
-            id: 2,
-            title: "Privacy policy",
-            icon: "",
-            ref: "#privacy",
-            active: false
-        },
-        {
-            id: 3,
-            title: "european gdpr",
-            icon: "",
-            ref: "#gdpr",
-            active: false
-        }
-      ]
+      tabsConfig: aboutTabsConfig
     }
   },
   methods: {
@@ -112,6 +88,7 @@ export default {
     termsTab: () => import('@/components/tabs/terms'),
     privacyTab: () => import('@/components/tabs/privacy'),
     gdprTab: () => import('@/components/tabs/gdpr'),
+    disclaimerTab: () => import('@/components/tabs/disclaimer'),
   }
 }
 </script>

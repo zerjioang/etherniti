@@ -45,10 +45,12 @@ const contractCheckForm = {
 					{
 						id:101,
 						title: "ETH Contract address",
+						class: "input-group",
 						items: [
 							{
 								id:102,
 								type:"icon+text",
+								class: "input-group",
 								icon: "account_box",
 								input: {
 									type: "text",
@@ -56,6 +58,7 @@ const contractCheckForm = {
 									placeholder: "0x798abda6cc246d0edba912092a2a3dbd3d11191b",
 									required: true,
 									disabled: false,
+									autocomplete: "on",
 									modelKey: "address",
 								}
 							}

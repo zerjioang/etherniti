@@ -4,22 +4,24 @@
         title="Ethereum Address balance check"
         subtitle="Given a Ethereum Address, check its current balance in real time"/>
 
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                </div>
-            </div>
+        <div class="row clearfix">
+          <apiForm :form="form.balanceCheck"></apiForm>
         </div>
     </div>
 </template>
 
 <script>
 
+import balanceCheckForm from '@/layout/forms/balanceCheckForm';
+
 export default {
   name: 'eth-addr-balance-view',
   data () {
     return {
       app: process.env.APP_NAME,
+      form: {
+        balanceCheck: balanceCheckForm
+      }
     }
   },
   methods: {
@@ -32,6 +34,7 @@ export default {
   },
   components: {
     pagetitle: () => import('@/components/pagetitle'),
+    apiForm: () => import('@/components/apiForm'),
   }
 }
 </script>

@@ -7,12 +7,13 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/zerjioang/gaethway/core/config"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/gaethway/core/config"
 
 	"github.com/zerjioang/gaethway/core/api"
 
@@ -284,7 +285,7 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 
 func (deployer Deployer) isBotRequest(userAgent string) bool {
 	var lock = false
-	for i:=0; i <len(api.BadBotsList) && !lock ;i++ {
+	for i := 0; i < len(api.BadBotsList) && !lock; i++ {
 		lock = strings.Contains(userAgent, api.BadBotsList[i])
 	}
 	return lock

@@ -52,7 +52,7 @@ func (ctl EthController) isValidAddress(c echo.Context) error {
 		result := eth.IsValidAddress(targetAddr)
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(
 			api.NewApiResponse("address validation checked", result),
-			),
+		),
 		)
 	}
 	// send invalid address message

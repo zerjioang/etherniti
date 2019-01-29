@@ -45,7 +45,7 @@
 	           	  	:key="btn.id"
 	           	  	class="form-btn">
 	           	  		<button
-	           	  		type="btn.type"
+	           	  		:type="btn.type"
 	           	  		:class="btn.class"
 	           	  		v-on:click="trigger($event)"
 	           	  		:id="btn.eventid">{{btn.text}}
