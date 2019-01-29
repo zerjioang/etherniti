@@ -1,8 +1,8 @@
 <template>
     <div>
       <pagetitle
-        title="Ethereum address checker"
-        subtitle="Verify whether a given adress is valid or not, check if address is smart contract, etc."/>
+        title="Ethereum Address checker"
+        subtitle="Verify whether a given Address is valid or not, check if address is smart contract, etc."/>
 
         <div class="row clearfix">
           <apiForm :form="form.addressCheckForm"></apiForm>

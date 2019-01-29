@@ -1,19 +1,20 @@
-const balanceCheckForm = {
+const balanceAtBlockCheckForm = {
 	id:10,
 	class: "col-lg-12 col-md-12 col-sm-12 col-xs-12",
 	type: "card",
 	api: {
 		method: 'get',
-		url: '/eth/getbalance/:address'
+		url: '/eth/getbalance/:address/block/:block'
 	},
 	model: {
 		nodeAddress: undefined,
 		profileId: undefined,
 		address: undefined,
+		block: undefined,
 	},
 	header: {
-		title: "Ethereum Address balance",
-		subtitle: "Get the balance of Ethereum account",
+		title: "Ethereum Address balance at given Block",
+		subtitle: "Get the balance of Ethereum account at given Block",
 		dropdown: {
 			icon: "more_vert",
 			items: [
@@ -104,6 +105,21 @@ const balanceCheckForm = {
 									autocomplete: "on",
 									modelKey: "address",
 								}
+							},
+							{
+								id: 203,
+								type:"icon+text",
+								class: "input-group",
+								icon: "email",
+								input: {
+									type: "text",
+									class: "form-control key",
+									placeholder: "Block number",
+									required: true,
+									disabled: false,
+									autocomplete: "on",
+									modelKey: "address",
+								}
 							}
 						]
 					},
@@ -113,7 +129,7 @@ const balanceCheckForm = {
 						id: 21,
 						type: "submit",
 						class: "btn btn-lg bg-indigo m-t-15 waves-effect upper",
-						text: "Get balance"
+						text: "Get balance at block"
 					}
 				]
 			}
@@ -121,4 +137,4 @@ const balanceCheckForm = {
 	}
 };
 
-export default balanceCheckForm;
+export default balanceAtBlockCheckForm;
