@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"errors"
+	"math/big"
 	"net/http"
 	"time"
 
@@ -24,7 +25,8 @@ const (
 )
 
 var (
-	errNoConnectionProfile = errors.New("Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name.")
+	noConnErrMsg = "Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
+	errNoConnectionProfile = errors.New(noConnErrMsg)
 )
 
 type EthController struct {
@@ -110,6 +112,35 @@ func (ctl EthController) getBalance(c echo.Context) error {
 	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
 }
 
+// check if an ethereum address is a contract address
+func (ctl EthController) getBalanceAtBlock(c echo.Context) error {
+	clientInstance, err := ctl.getClientInstance(c)
+	if err != nil || clientInstance == nil {
+		// there was an error recovering client instance
+		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErrRaw := util.GetJsonBytes(apiErr)
+		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
+	}
+	targetAddr := c.Param("address")
+	block := c.Param("block")
+	// check if not empty
+	if targetAddr != "" {
+		ethAddr := eth.ConvertAddress(targetAddr)
+		b := new(big.Int)
+		b.SetString(block, 10)
+		result, err := eth.GetAccountBalanceAtBlock(clientInstance, ethAddr, b)
+		if err != nil {
+			//some error happen, return error to client
+			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErrRaw := util.GetJsonBytes(apiErr)
+			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
+		}
+		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+	}
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
+}
+
 // from incoming http request, it recovers the eth client linked to it
 func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
 	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
@@ -129,4 +160,5 @@ func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	router.GET("/v1/eth/hascontract/:address", ctl.isContractAddress)
 	//http://localhost:8080/eth/getbalance/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 	router.GET("/v1/eth/getbalance/:address", ctl.getBalance)
+	router.GET("/v1/eth/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
 }
