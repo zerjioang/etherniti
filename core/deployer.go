@@ -7,12 +7,12 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/gaethway/core/config"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
-
-	"github.com/zerjioang/gaethway/core/config"
 
 	"github.com/zerjioang/gaethway/core/api"
 
@@ -131,7 +131,7 @@ func (deployer Deployer) Run() {
 	}
 
 	//prepare tls configuration
-	tlsConf := new(tls.Config)
+	var tlsConf tls.Config
 	tlsConf.Certificates = []tls.Certificate{cert}
 	if !e.DisableHTTP2 {
 		tlsConf.NextProtos = append(tlsConf.NextProtos, "h2")
@@ -142,7 +142,7 @@ func (deployer Deployer) Run() {
 		Addr:         config.HttpsAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
-		TLSConfig:    tlsConf,
+		TLSConfig:    &tlsConf,
 	}
 	//hide the banner
 	e.HideBanner = true
@@ -283,7 +283,11 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func (deployer Deployer) isBotRequest(userAgent string) bool {
-	return false
+	var lock = false
+	for i:=0; i <len(api.BadBotsList) && !lock ;i++ {
+		lock = strings.Contains(userAgent, api.BadBotsList[i])
+	}
+	return lock
 }
 
 // keepalive middleware function.
