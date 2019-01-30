@@ -7,43 +7,64 @@ import (
 	"errors"
 	"math/big"
 	"net/http"
-	"time"
 
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/api"
 	"github.com/zerjioang/gaethway/core/eth"
-	"github.com/zerjioang/gaethway/core/keystore/memory"
 	"github.com/zerjioang/gaethway/core/util"
 
 	"github.com/labstack/echo"
-	"github.com/patrickmn/go-cache"
 )
 
 const (
 	invalidAddress = `{"message": "please, provide a valid ethereum or quorum address"}`
+	accountKeyGenErr = `{"message": "failed to generate ecdsa private key"}`
 )
 
 var (
 	noConnErrMsg = "Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
 	errNoConnectionProfile = errors.New(noConnErrMsg)
+	accountKeyGenErrBytes = util.Bytes(accountKeyGenErr)
+	invalidAddressBytes = util.Bytes(invalidAddress)
 )
 
 type EthController struct {
-	// in memory storage of created wallets
-	wallet *memory.InMemoryKeyStorage
-	cache  *cache.Cache
+	// in memory based wallet manager
+	walletManager eth.WalletManager
 }
 
-func NewEthController() EthController {
+func NewEthController(manager eth.WalletManager) EthController {
 	ctl := EthController{}
-	// Create a cache with a default expiration time of 5 minutes, and which
-	// purges expired items every 10 minutes
-	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
-	// create an in memory wallet
-	ctl.wallet = memory.NewInMemoryKeyStorage()
+	ctl.walletManager = manager
 	return ctl
 }
+
+// generates an ethereum new account (address+key)
+func (ctl EthController) generateAddress(c echo.Context) error {
+
+	// Create an account
+	private, err := eth.GenerateNewKey()
+
+	if err != nil {
+		log.Error("failed to generate ethereum account key", err)
+		// send invalid generation message
+		return c.JSONBlob(http.StatusInternalServerError, accountKeyGenErrBytes)
+	}
+	address := eth.GetAddressFromPrivateKey(private)
+	privateKey := eth.GetPrivateKeyAsEthString(private)
+	var response = map[string]string{
+		"address": address.Hex(),
+		"private": privateKey,
+	}
+	return c.JSONBlob(
+		http.StatusOK,
+		util.GetJsonBytes(
+		api.NewApiResponse("ethereum account created", response),
+		),
+	)
+}
+
 
 // check if an ethereum address is valid
 func (ctl EthController) isValidAddress(c echo.Context) error {
@@ -58,7 +79,7 @@ func (ctl EthController) isValidAddress(c echo.Context) error {
 		)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
+	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
 // check if an ethereum address is a contract address
@@ -83,7 +104,7 @@ func (ctl EthController) isContractAddress(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
+	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
 // check if an ethereum address is a contract address
@@ -109,7 +130,7 @@ func (ctl EthController) getBalance(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
+	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
 // check if an ethereum address is a contract address
@@ -138,13 +159,13 @@ func (ctl EthController) getBalanceAtBlock(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, util.Bytes(invalidAddress))
+	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
 // from incoming http request, it recovers the eth client linked to it
 func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
 	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
-	wallet, found := ctl.wallet.Get(requestProfileKey)
+	wallet, found := ctl.walletManager.Get(requestProfileKey)
 	if !found {
 		return nil, errNoConnectionProfile
 	}
@@ -154,6 +175,8 @@ func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, e
 // implemented method from interface RouterRegistrable
 func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing eth controller methods")
+	//http://localhost:8080/eth/create
+	router.GET("/v1/eth/create", ctl.generateAddress)
 	//http://localhost:8080/eth/verify/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 	router.GET("/v1/eth/verify/:address", ctl.isValidAddress)
 	//http://localhost:8080/eth/hascontract/0x71c7656ec7ab88b098defb751b7401b5f6d8976f

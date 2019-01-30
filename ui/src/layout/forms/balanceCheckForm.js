@@ -56,7 +56,7 @@ const balanceCheckForm = {
 								input: {
 									type: "text",
 									class: "form-control key",
-									placeholder: "http://infura.io/XXX",
+									placeholder: "https://rinkeby.infura.io",
 									required: true,
 									disabled: false,
 									autocomplete: "on",

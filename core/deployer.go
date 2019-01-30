@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/gaethway/core/eth"
 	"net/http"
 	"os"
 	"os/signal"
@@ -96,6 +97,7 @@ var (
 )
 
 type Deployer struct {
+	manager eth.WalletManager
 }
 
 func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
@@ -108,6 +110,7 @@ func (deployer Deployer) Run() {
 	httpServerInstance := echo.New()
 	httpServerInstance.HideBanner = true
 	// add redirects from http to https
+	log.Info("[LAYER] http to https redirect")
 	httpServerInstance.Pre(deployer.httpsRedirect)
 
 	// Start http server
@@ -154,6 +157,7 @@ func (deployer Deployer) Run() {
 
 	// antibots, crawler middleware
 	// avoid bots and crawlers
+	log.Info("[LAYER] antibots")
 	e.Pre(deployer.antiBots)
 
 	// remove trailing slash for better usage
@@ -170,12 +174,15 @@ func (deployer Deployer) Run() {
 	log.Info("[LAYER] cors support")
 	e.Use(middleware.CORSWithConfig(corsConfig))
 
+	log.Info("[LAYER] server http headers hardening")
 	// add server api request hardening using http headers
 	e.Use(deployer.hardening)
 
+	log.Info("[LAYER] fake server http header")
 	// add fake server header
 	e.Use(deployer.fakeServer)
 
+	log.Info("[LAYER] unique request id")
 	// Request ID middleware generates a unique id for a request.
 	e.Use(middleware.RequestID())
 
@@ -184,12 +191,15 @@ func (deployer Deployer) Run() {
 	e.Use(middleware.GzipWithConfig(gzipConfig))
 
 	// avoid panics
+	log.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
 
+	log.Info("[LAYER] / static files")
 	//load root static folder
 	e.Static("/", resources+"/root")
 
 	// load swagger ui files
+	log.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
 
 	deployer.register(e)
@@ -283,6 +293,7 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// check if user agent string contains bot strings similarities
 func (deployer Deployer) isBotRequest(userAgent string) bool {
 	var lock = false
 	for i := 0; i < len(api.BadBotsList) && !lock; i++ {
@@ -301,6 +312,7 @@ func (deployer Deployer) keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// custom http error handler
 func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
 	code := http.StatusInternalServerError
 	if he, ok := err.(*echo.HTTPError); ok {
@@ -317,11 +329,14 @@ func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
 	log.Info("registering routes")
 	handlers.NewIndexController().RegisterRouters(server)
 	handlers.NewProfileController().RegisterRouters(server)
-	handlers.NewEthController().RegisterRouters(server)
+	handlers.NewTransactionController().RegisterRouters(server)
+	handlers.NewEthController(deployer.manager).RegisterRouters(server)
+	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
 	return server
 }
 
 func NewDeployer() Deployer {
 	d := Deployer{}
+	d.manager = eth.NewWalletManager()
 	return d
 }

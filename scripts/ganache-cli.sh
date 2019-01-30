@@ -14,7 +14,7 @@ echo "Running ganache-cli..."
 
 docker run \
 	-d \
-	-name ganache-cli \
+	--name ganache-cli \
 	-p 8545:8545 \
 	trufflesuite/ganache-cli:latest \
 	-a 10 \

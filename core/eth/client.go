@@ -5,7 +5,9 @@ package eth
 
 import (
 	"crypto/ecdsa"
+	"encoding/hex"
 	"errors"
+	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -60,14 +62,17 @@ func GetPrivateKeyBytes(privateKey *ecdsa.PrivateKey) []byte {
 
 // get the private key encoded as 0x..... string
 func GetPrivateKeyAsEthString(privateKey *ecdsa.PrivateKey) string {
-	return hexutil.Encode(
-		GetPrivateKeyBytes(privateKey),
-	)[2:]
+	return hex.EncodeToString(privateKey.D.Bytes())
 }
 
 // get the bytes of private key
 func GetPublicKey(privateKey *ecdsa.PrivateKey) *ecdsa.PublicKey {
 	return privateKey.Public().(*ecdsa.PublicKey)
+}
+
+// get ethereum address from its private key
+func GetAddressFromPrivateKey(privateKey *ecdsa.PrivateKey) common.Address {
+	return crypto.PubkeyToAddress(privateKey.PublicKey)
 }
 
 // get the bytes of public key
