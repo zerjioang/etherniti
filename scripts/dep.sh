@@ -10,10 +10,12 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
+ethTemp="eth-temp"
+
 echo "Downloading dependencies using go dep"
+rm -rf $ethTemp
 $GOPATH/bin/dep ensure -v
 
-ethTemp="eth-temp"
 ethPath="./vendor/github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/include/secp256k1.h"
 if [[ ! -f ${ethPath} ]] ; then
 	echo "etherem secp256k1 C files missing...downloading..."

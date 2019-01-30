@@ -1,12 +1,16 @@
+// Copyright gaethway
+// SPDX-License-Identifier: Apache License 2.0
+
 package eth
 
 import (
+	"time"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/gaethway/core/keystore/memory"
-	"github.com/zerjioang/gaethway/resources/erc20"
-	"time"
+	"github.com/zerjioang/gaethway/core/modules/token"
 )
 
 type WalletManager struct {
@@ -20,6 +24,7 @@ func NewWalletManager() WalletManager {
 	man.cache = cache.New(5*time.Minute, 10*time.Minute)
 	return man
 }
+
 // get token instance for given client and address
 func InstantiateToken(client *ethclient.Client, address common.Address) (*token.Token, error) {
 	instance, err := token.NewToken(address, client)

@@ -7,17 +7,20 @@
     ".",
     "queue"
   ]
-  revision = "bff00e20c68d9f136477d62d182a7dc917bae0ca"
+  revision = "f31987a23e44c5121ef8c8b2f2ea2e8ffa37b068"
+  version = "v1.1.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/aristanetworks/goarista"
   packages = ["monotime"]
-  revision = "ea17b1a17847fb6e4c0a91de0b674704693469b0"
+  revision = "8f049bdb8feb7d7d5f1a9b9cd854396112fb0c0e"
 
 [[projects]]
+  branch = "master"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
-  revision = "2e60448ffcc6bf78332d1fe590260095f554dd78"
+  revision = "ed77733ec07dfc8a513741138419b8d9d3de9d2d"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
@@ -28,7 +31,8 @@
 [[projects]]
   name = "github.com/deckarep/golang-set"
   packages = ["."]
-  revision = "504e848d77ea4752b3057b8fb46da0e7f746ccf3"
+  revision = "cbaa98ba5575e67703b32b4b19f73c91f3c4159e"
+  version = "v1.7.1"
 
 [[projects]]
   name = "github.com/dgrijalva/jwt-go"
@@ -69,8 +73,8 @@
 [[projects]]
   name = "github.com/go-stack/stack"
   packages = ["."]
-  revision = "54be5f394ed2c3e19dac9134a40a95ba5a017f7b"
-  version = "v1.5.4"
+  revision = "2fee6af1a9795aafbe0253a0cfbdf668e1fb8a9a"
+  version = "v1.8.0"
 
 [[projects]]
   branch = "master"
@@ -167,14 +171,8 @@
 [[projects]]
   name = "github.com/rs/cors"
   packages = ["."]
-  revision = "a62a804a8a009876ca59105f7899938a1349f4b3"
-  version = "v1.0"
-
-[[projects]]
-  name = "github.com/rs/xhandler"
-  packages = ["."]
-  revision = "d9d9599b6aaf6a058cb7b1f48291ded2cbd13390"
-  version = "v1.0"
+  revision = "9a47f48565a795472d43519dd49aac781f3034fb"
+  version = "v1.6.0"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -220,6 +218,7 @@
   revision = "dcecefd839c4193db0d35b88ec65b4c12d360ab0"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
   packages = [
     "acme",
@@ -228,21 +227,19 @@
     "scrypt",
     "sha3"
   ]
-  revision = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
+  revision = "b01c7a72566457eb1420261cdafef86638fc3861"
 
 [[projects]]
+  branch = "master"
   name = "golang.org/x/net"
-  packages = [
-    "context",
-    "websocket"
-  ]
-  revision = "a6577fac2d73be281a500b310739095313165611"
+  packages = ["websocket"]
+  revision = "d26f9f9a57f3fab6a695bec0d84433c2c50f8bbf"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "b90733256f2e882e81d52f9126de08df5615afd9"
+  revision = "302c3dd5f1cc82baae8e44d9c3178e89b6e2b345"
 
 [[projects]]
   branch = "v2"
@@ -253,6 +250,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7bf240699d278b34e5403812d775421f1f36e15f64494822ad58e917fe15272c"
+  inputs-digest = "b3c6e021e55f404a958ae394d2f6aafe2907645efbfaa1ac651410fa0635107c"
   solver-name = "gps-cdcl"
   solver-version = 1

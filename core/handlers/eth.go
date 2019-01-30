@@ -18,15 +18,15 @@ import (
 )
 
 const (
-	invalidAddress = `{"message": "please, provide a valid ethereum or quorum address"}`
+	invalidAddress   = `{"message": "please, provide a valid ethereum or quorum address"}`
 	accountKeyGenErr = `{"message": "failed to generate ecdsa private key"}`
 )
 
 var (
-	noConnErrMsg = "Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
+	noConnErrMsg           = "Invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
 	errNoConnectionProfile = errors.New(noConnErrMsg)
-	accountKeyGenErrBytes = util.Bytes(accountKeyGenErr)
-	invalidAddressBytes = util.Bytes(invalidAddress)
+	accountKeyGenErrBytes  = util.Bytes(accountKeyGenErr)
+	invalidAddressBytes    = util.Bytes(invalidAddress)
 )
 
 type EthController struct {
@@ -60,11 +60,10 @@ func (ctl EthController) generateAddress(c echo.Context) error {
 	return c.JSONBlob(
 		http.StatusOK,
 		util.GetJsonBytes(
-		api.NewApiResponse("ethereum account created", response),
+			api.NewApiResponse("ethereum account created", response),
 		),
 	)
 }
-
 
 // check if an ethereum address is valid
 func (ctl EthController) isValidAddress(c echo.Context) error {

@@ -1,3 +1,5 @@
+pragma solidity ^0.4.11;
+
 contract ERC20 {
     string public constant name = "";
     string public constant symbol = "";

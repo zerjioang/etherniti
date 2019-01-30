@@ -11,6 +11,11 @@ const (
 	HttpsPort    = ""
 )
 
+const (
+	CertPem = ``
+	KeyPem  = ``
+)
+
 //simply converts http requests into https
 func GetRedirectUrl(host string, path string) string {
 	return "https://" + host + path

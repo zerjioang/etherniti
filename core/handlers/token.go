@@ -1,15 +1,19 @@
+// Copyright gaethway
+// SPDX-License-Identifier: Apache License 2.0
+
 package handlers
 
 import (
 	"fmt"
+	"math"
+	"math/big"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/api"
 	"github.com/zerjioang/gaethway/core/eth"
-	"math"
-	"math/big"
 )
 
 // token controller

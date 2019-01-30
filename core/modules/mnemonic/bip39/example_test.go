@@ -1,8 +1,12 @@
+// Copyright gaethway
+// SPDX-License-Identifier: Apache License 2.0
+
 package bip39_test
 
 import (
 	"encoding/hex"
 	"fmt"
+
 	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39"
 )
 

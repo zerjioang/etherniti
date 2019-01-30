@@ -1,0 +1,2 @@
+solc --abi erc777.sol
+abigen --abi=ERC777_sol.abi --pkg=erc777 --out=erc777.go

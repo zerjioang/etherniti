@@ -1,11 +1,14 @@
+// Copyright gaethway
+// SPDX-License-Identifier: Apache License 2.0
+
 package bip39
 
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39/wordlists"
 	"testing"
 
+	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39/wordlists"
 )
 
 type vector struct {
@@ -257,7 +260,7 @@ func TestEntropyFromMnemonicInvalidChecksum(t *testing.T) {
 func TestEntropyFromMnemonicInvalidMnemonicSize(t *testing.T) {
 	for _, mnemonic := range []string{
 		"a a a a a a a a a a a a a a a a a a a a a a a a a", // Too many words
-		"a", // Too few
+		"a",                           // Too few
 		"a a a a a a a a a a a a a a", // Not multiple of 3
 	} {
 		_, err := EntropyFromMnemonic(mnemonic)

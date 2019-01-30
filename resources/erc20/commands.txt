@@ -1,2 +1,2 @@
 solc --abi erc20.sol
-abigen --abi=ERC20_sol.abi --pkg=token --out=erc20.go
+abigen --abi=ERC20_sol.abi --pkg=erc20 --out=erc20.go

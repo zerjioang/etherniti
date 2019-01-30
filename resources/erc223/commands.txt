@@ -1,0 +1,2 @@
+solc --abi erc223.sol
+abigen --abi=ERC223_sol.abi --pkg=erc223 --out=erc223.go

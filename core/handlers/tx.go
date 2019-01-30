@@ -1,14 +1,18 @@
+// Copyright gaethway
+// SPDX-License-Identifier: Apache License 2.0
+
 package handlers
 
 import (
 	"context"
 	"crypto/ecdsa"
+	"math/big"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"math/big"
 )
 
 var (
@@ -17,7 +21,6 @@ var (
 
 // eth transactions controller
 type TransactionController struct {
-	
 }
 
 // constructor like function
