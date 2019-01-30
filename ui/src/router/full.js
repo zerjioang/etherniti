@@ -3,9 +3,7 @@ import routerNames from '@/layout/routerNames';
 
 //allowed views
 
-const baseDashboard = () => import('@/components/baseDashboardView');
-
-const home = () => import('@/views/dashboard/home');
+const dashboardIndex = () => import('@/views/dashboard/home');
 const addressCheck = () => import('@/views/dashboard/tools/addressCheck');
 const balanceCheck = () => import('@/views/dashboard/tools/balanceCheck');
 const privateApi = () => import('@/views/dashboard/home');
@@ -25,9 +23,9 @@ export default new Router({
     },
     {
       // dashboard
-      path: routerNames.dashboardHome.path,
-      name: routerNames.dashboardHome.name,
-      component: baseDashboard,
+      path: routerNames.baseDashboardView.path,
+      name: routerNames.baseDashboardView.name,
+      component: routerNames.baseDashboardView.component,
       beforeEnter: (to, from, next) => {
         // evaluate before entering to dashboard
         // if the browser supports HTML5 webstorage apis
@@ -45,16 +43,40 @@ export default new Router({
       },
       children: [
         {
-          // dashboard >> index
-          path: routerNames.home.path,
-          name: routerNames.home.name,
-          component: home
+          // index >> dashboard
+          path: routerNames.dashboardIndex.path,
+          name: routerNames.dashboardIndex.name,
+          component: routerNames.dashboardIndex.component
         },
         {
           // dashboard >> address check
           path: routerNames.addressChecker.path,
           name: routerNames.addressChecker.name,
           component: addressCheck
+        },
+        {
+          // dashboard >> ganache accounts
+          path: routerNames.ganacheAccounts.path,
+          name: routerNames.ganacheAccounts.name,
+          component: routerNames.ganacheAccounts.component,
+        },
+        {
+          // dashboard >> ganache transactions
+          path: routerNames.ganacheTransactions.path,
+          name: routerNames.ganacheTransactions.name,
+          component: routerNames.ganacheTransactions.component,
+        },
+        {
+          // dashboard >> ganache blocks
+          path: routerNames.ganacheBlocks.path,
+          name: routerNames.ganacheBlocks.name,
+          component: routerNames.ganacheBlocks.component,
+        },
+        {
+          // dashboard >> ganache settings
+          path: routerNames.ganacheSettings.path,
+          name: routerNames.ganacheSettings.name,
+          component: routerNames.ganacheSettings.component,
         },
         {
           // dashboard >> balance check

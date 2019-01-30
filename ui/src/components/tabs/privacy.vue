@@ -73,7 +73,11 @@
     padding: 10px;
     background-color: #f7f7f7;
 }
-h4, h5, p {
+h4, h5, p {	
 	text-align: justify;
+	font-family: 'IBM Plex Mono';
+}
+h5 {
+	font-size: 16px;
 }
 </style>

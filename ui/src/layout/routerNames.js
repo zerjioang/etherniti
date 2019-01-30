@@ -4,33 +4,58 @@ const routerNames = {
 	  name: 'Index',
 	  component: () => import('@/views/index')
 	},
-	dashboardHome: {
+	baseDashboardView: {
 	  path: '/dashboard',
 	  name: 'Dashboard',
-	  component: undefined
+	  component: () => import('@/components/baseDashboardView')
 	},
-		home: {
-		  path: '/dashboard/',
-		  name: 'Dashboard',
-		  component: undefined
+	dashboardIndex: {
+	  path: '/dashboard',
+	  name: 'Dashboard',
+	  component: () => import('@/views/dashboard/home')
+	},
+	ganache: {
+	  path: '/ganache',
+	  name: 'Ganache',
+	  component: () => import('@/views/dashboard/ganache/index')
+	},
+		ganacheAccounts: {
+		  path: '/ganache/accounts',
+		  name: 'Accounts',
+		  component: () => import('@/views/dashboard/ganache/accounts')
+		},
+		ganacheTransactions: {
+		  path: '/ganache/tx',
+		  name: 'View Transactions',
+		  component: () => import('@/views/dashboard/ganache/tx')
+		},
+		ganacheBlocks: {
+		  path: '/ganache/blocks',
+		  name: 'Explore Blocks',
+		  component: () => import('@/views/dashboard/ganache/blocks')
+		},
+		ganacheSettings: {
+		  path: '/ganache/settings',
+		  name: 'Settings',
+		  component: () => import('@/views/dashboard/ganache/settings')
 		},
 		eth: {
-		  path: '/dashboard/eth/',
+		  path: '/eth/',
 		  name: 'Ethereum',
 		  component: undefined
 		},
 			ethCreate: {
-			  path: '/dashboard/eth/create',
+			  path: '/eth/create',
 			  name: 'New Account',
 			  component: undefined
 			},
 		quorum: {
-		  path: '/dashboard/quorum/',
+		  path: '/quorum/',
 		  name: 'Quorum',
 		  component: undefined
 		},
 			quorumCreate: {
-			  path: '/dashboard/quorum/create',
+			  path: '/quorum/create',
 			  name: 'New Account',
 			  component: undefined
 			},

@@ -78,4 +78,7 @@ export default {
 h4, h5, p {
 	text-align: justify;
 }
+h5 {
+	font-size: 16px;
+}
 </style>

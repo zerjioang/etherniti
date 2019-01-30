@@ -21,7 +21,7 @@ export default {
     log("index-view::created");
     if (this.supportsLocalStorage()) {
       log("redirecting to dashboard...");
-      this.$router.push({name: routerNames.dashboardHome.name});
+      this.$router.push({name: routerNames.dashboardIndex.name});
     } else {
       // redirect to localstorage error
       log("redirecting to local storage error view...");

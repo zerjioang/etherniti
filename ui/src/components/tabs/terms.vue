@@ -164,5 +164,9 @@
 }
 h4, h5, p {
 	text-align: justify;
+	font-family: 'IBM Plex Mono';
+}
+h5 {
+	font-size: 16px;
 }
 </style>

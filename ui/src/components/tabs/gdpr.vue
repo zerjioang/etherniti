@@ -25,7 +25,7 @@
 		</p>
 
 		<p>
-		    This project is fully compliance with European GDPR (https://eugdpr.org/the-regulation/, https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679&from=EN)
+		    This project is fully compliance with European GDPR (<a href="https://eugdpr.org/the-regulation/" target="blank" rel="noopener">https://eugdpr.org/the-regulation/</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679&from=EN" target="blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679&from=EN</a>)
 		</p>
 	</div>
 </template>
@@ -36,7 +36,11 @@
     padding: 10px;
     background-color: #f7f7f7;
 }
-h4, h5, p {
+h4, h5, p, a {
 	text-align: justify;
+	font-family: 'IBM Plex Mono';
+}
+h5 {
+	font-size: 16px;
 }
 </style>

@@ -182,7 +182,7 @@ export default {
     searchbar: () => import('@/components/searchbar'),
     navigationBar: () => import('@/components/navigationBar'),
     rightAside: () => import('@/components/rightAside'),
-    leftAside: () => import('@/components/leftAside')
+    leftAside: () => import('@/components/leftAside'),
   }
 }
 </script>
