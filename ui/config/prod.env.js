@@ -2,7 +2,6 @@
 
 module.exports = {
   NODE_ENV: '"production"',
-  PRODUCTION: 'true',
 
   API_SCHEME: '"https"',
   DOMAIN: '"gaethway.org"',

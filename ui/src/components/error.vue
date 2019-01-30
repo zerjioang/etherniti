@@ -1,17 +1,17 @@
 <!--this file should not be modified -->
 <template>
-  <div class="four-zero-four err">
-    <div class="four-zero-four-container">
-        <h1 class="title blue">{{code}}</h1>
+  <div class="row err">
+    <div class="col-md12">
 
         <slot name="image"></slot>
+        <h1 class="title blue">{{code}}</h1>
 
         <h3 class="message text-muted">{{title}}</h3>
         <div class="details text-muted">{{description}}</div>
         
         <slot name="content"></slot>
         
-        <div class="button-place">
+        <div class="button-place top" v-if="buttonVisible===true">
             <a class="btn btn-default btn-lg waves-effect big" v-on:click="onBack">Go back</a>
         </div>
     </div>
@@ -38,6 +38,10 @@ export default {
     description: {
       type: String,
       default: "We are sorry but our service is currently not available"
+    },
+    buttonVisible: {
+      type: Boolean,
+      default: true
     }
   },
   mixins: [
@@ -68,7 +72,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="true">
 .err {
-    padding: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    margin: 0px;
+    text-align: center;
 }
 .blue {
   color: #383A3F;
@@ -84,5 +91,11 @@ export default {
 }
 .big {
   font-size: 16pt !important;
+}
+.top {
+  padding-top: 30px;
+}
+body {
+  background-color: #1d1a1a;
 }
 </style>

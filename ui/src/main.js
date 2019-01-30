@@ -5,7 +5,7 @@ import selector from '@/router/selector';
 
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 
-const prod = process.env.PRODUCTION === true;
+const prod = process.env.NODE_ENV == 'production';
 if(prod){
 	OfflinePluginRuntime.install();
 }
@@ -92,6 +92,12 @@ require("@/assets/css/style.css");
 
 // AdminBSB Themes. You can choose a theme from css/themes instead of get all themes
 require("@/assets/css/themes/theme-gaethway.css");
+
+// clean scroll bar style
+require("@/assets/css/cleanscroll.css");
+
+// global cursor selection style
+require("@/assets/css/selection.css");
 
 // load custom made modifications
 require("@/assets/css/custom.css");

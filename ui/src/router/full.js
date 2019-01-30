@@ -2,17 +2,16 @@ import Router from 'vue-router';
 import routerNames from '@/layout/routerNames';
 
 //allowed views
-const index = () => import('@/views/index');
 
 const baseDashboard = () => import('@/components/baseDashboardView');
 
-const home = () => import('@/views/home');
-const addressCheck = () => import('@/views/addressCheck');
-const balanceCheck = () => import('@/views/balanceCheck');
-const bugReport = () => import('@/views/bugReport');
-const about = () => import('@/views/about');
-const license = () => import('@/views/license');
-const notfound = () => import('@/views/notfound');
+const home = () => import('@/views/dashboard/home');
+const addressCheck = () => import('@/views/dashboard/tools/addressCheck');
+const balanceCheck = () => import('@/views/dashboard/tools/balanceCheck');
+const privateApi = () => import('@/views/dashboard/home');
+const bugReport = () => import('@/views/dashboard/bugReport');
+const about = () => import('@/views/dashboard/about');
+const license = () => import('@/views/dashboard/license');
 
 const base = process.env.DASHBOARD_BASE_PATH;
 
@@ -22,7 +21,7 @@ export default new Router({
       // index
       path: routerNames.index.path,
       name: routerNames.index.name,
-      component: index
+      component: routerNames.index.component
     },
     {
       // dashboard
@@ -85,11 +84,17 @@ export default new Router({
       ]
     },
     {
+      // no local storage
+      path: routerNames.localstorage.path,
+      name: routerNames.localstorage.name,
+      component: routerNames.localstorage.component
+    },
+    {
       // not found
       path: routerNames.notfound.path,
       name: routerNames.notfound.name,
-      component: notfound
-    },
+      component: routerNames.notfound.component
+    }
   ],
   scrollBehavior: function (to, from, savedPosition) {
     return {x: 0, y: 0}; // return to top

@@ -12,3 +12,8 @@ pre,code,tt,xmp {
 p {
 	font-size: 16px;
 }
+
+html, body, #app {
+	width: 100%;
+	height: 100%;
+}

@@ -15,9 +15,6 @@
 
 <script>
 
-require("@/assets/css/cleanscroll.css");
-require("@/assets/css/selection.css");
-
 export default {
   name: 'App',
   data() {

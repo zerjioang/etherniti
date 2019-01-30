@@ -4,9 +4,13 @@
 <script>
 
 import routerNames from '@/layout/routerNames';
+import localstorage from '@/mixins/localstorage';
 
 export default {
   name: 'index-view',
+  mixins: [
+    localstorage
+  ],
   data () {
     return {
     }
@@ -15,8 +19,14 @@ export default {
   },
   created(){
     log("index-view::created");
-    log("redirecting to dahboard...");
-    this.$router.push({name: routerNames.dashboardHome.name});
+    if (this.supportsLocalStorage()) {
+      log("redirecting to dashboard...");
+      this.$router.push({name: routerNames.dashboardHome.name});
+    } else {
+      // redirect to localstorage error
+      log("redirecting to local storage error view...");
+      this.$router.push({name: routerNames.localstorage.name});
+    }
   },
   mounted(){
     log("index-view::mounted");
