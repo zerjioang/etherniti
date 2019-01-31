@@ -8,11 +8,11 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 )
 
 type EthClientType uint8

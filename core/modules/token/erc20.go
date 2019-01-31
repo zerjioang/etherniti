@@ -10,10 +10,10 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
 )
 
 // TokenABI is the input ABI used to generate the binding from.
@@ -105,7 +105,7 @@ func bindToken(address common.Address, caller bind.ContractCaller, transactor bi
 	if err != nil {
 		return nil, err
 	}
-	return bind.NewBoundContract(address, parsed, caller, transactor), nil
+	return bind.NewBoundContract(address, parsed, caller, transactor, nil), nil
 }
 
 // Call invokes the (constant) contract method with params as input values and

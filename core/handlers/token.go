@@ -8,8 +8,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/api"

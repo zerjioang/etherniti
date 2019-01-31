@@ -8,10 +8,10 @@ import (
 	"math/big"
 	"net/http"
 
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/api"
 	"github.com/zerjioang/gaethway/core/eth"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 	"github.com/zerjioang/gaethway/core/util"
 
 	"github.com/labstack/echo"
@@ -156,6 +156,20 @@ func (ctl EthController) getBalanceAtBlock(c echo.Context) error {
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 		}
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+	}
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
+}
+
+
+// get node information
+func (ctl EthController) getNodeIndo(c echo.Context) error {
+	clientInstance, err := ctl.getClientInstance(c)
+	if err != nil || clientInstance == nil {
+		// there was an error recovering client instance
+		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErrRaw := util.GetJsonBytes(apiErr)
+		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)

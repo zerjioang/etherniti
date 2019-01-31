@@ -6,9 +6,9 @@ package memory
 import (
 	"crypto/ecdsa"
 
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 )
 
 // content stored in the wallet

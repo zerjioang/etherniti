@@ -6,8 +6,8 @@ package eth
 import (
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/gaethway/core/keystore/memory"
 	"github.com/zerjioang/gaethway/core/modules/token"
