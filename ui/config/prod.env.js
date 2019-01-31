@@ -33,5 +33,8 @@ module.exports = {
 
   UI_AUTHOR_DISCLAIMER: "false",
 
-  ROUTER_MODE: "'hash'" //hash, history, html5
+  ROUTER_MODE: "'hash'", //hash, history, html5
+
+  //local storage and session storage item keys
+  WELCOME_WIZARD_STATUS_KEY: "'wizard_status'"
 }

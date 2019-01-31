@@ -10,6 +10,17 @@ export default {
     }
   },
   methods: {
+    //begin custom app helper methods
+    shouldWelcomeWizardPopup: function () {
+      log("checking welcome wizard status");
+      return this.getStore(process.env.WELCOME_WIZARD_STATUS_KEY) != 'skip';
+    },
+    setWelcomeWizardNoMoreVisible(){
+      log("setting welcome wizard as skipped");
+      this.setStore(process.env.WELCOME_WIZARD_STATUS_KEY, 'skip');
+    },
+
+    // begin localstorage generic methods
     getBrowserName(){
       let ua= navigator.userAgent, tem,
       M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -41,7 +52,27 @@ export default {
       }
       */
       return typeof(Storage) !== "undefined";
-    }
+    },
+    //wrapped localstorage and session storage functions
+    // so that they can be easily changed for other key-value storage methods
+    getSession(key){
+      return sessionStorage.getItem(key);
+    },
+    setSession(key, value){
+      return sessionStorage.setItem(key, value);
+    },
+    removeSession(key){
+      sessionStorage.removeItem(key);
+    },
+    getStore(key){
+      return localStorage.getItem(key);
+    },
+    setStore(key, value){
+      return localStorage.setItem(key, value);
+    },
+    removeStore(key){
+      localStorage.removeItem(key);
+    },
   },
   created(){
     log("localstorage-mixin::created");
