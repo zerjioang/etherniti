@@ -7,19 +7,20 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"fmt"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/eth"
 	"math/big"
 	"strings"
 	"time"
 
+	"github.com/zerjioang/gaethway/core/eth"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
-	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 )
 
 var (
@@ -40,7 +41,7 @@ func NewTransactionController() TransactionController {
 // sends new eth transaction using given configuration
 func (ctl EthController) DeployContract(to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte, compiledBytecode string, contractAbiStr string) (string, error) {
 	// Construct the transaction
-	d := time.Now().Add(1000*time.Millisecond)
+	d := time.Now().Add(1000 * time.Millisecond)
 	cancellableCtx, cancel := context.WithDeadline(ctx, d)
 
 	// connect the client
@@ -64,18 +65,17 @@ func (ctl EthController) DeployContract(to common.Address, amount *big.Int, gasL
 	// To get nonce at a particular block height
 	nonce, err := client.NonceAt(
 		cancellableCtx,
-		common.HexToAddress("0x56724a9e4d2bb2dca01999acade2e88a92b11a9e",
-		), nil)
+		common.HexToAddress("0x56724a9e4d2bb2dca01999acade2e88a92b11a9e"), nil)
 
 	/*
-	The arguments to this function in order are
-    1. nonce
-    2. to-address (we would need to convert this using common.HexToAddress(public address) )
-    3. balance to be sent (use big number)
-    4. gas limit
-    5. gas price
-    6. data (since this is not a contract transaction, we can pass nil )
-	 */
+			The arguments to this function in order are
+		    1. nonce
+		    2. to-address (we would need to convert this using common.HexToAddress(public address) )
+		    3. balance to be sent (use big number)
+		    4. gas limit
+		    5. gas price
+		    6. data (since this is not a contract transaction, we can pass nil )
+	*/
 	tx := types.NewContractCreation(nonce, big.NewInt(0), gasLimit, gasPrice, bytecode)
 	// Define signer and chain id
 	// chainID := big.NewInt(CHAIN_ID)
@@ -100,10 +100,10 @@ func (ctl EthController) DeployContract(to common.Address, amount *big.Int, gasL
 		fmt.Println("send tx error:")
 		log.Error(txErr)
 		cancel()
-		return "",txErr
+		return "", txErr
 	} else {
 		select {
-		case <-time.After(1-time.Millisecond):
+		case <-time.After(1 - time.Millisecond):
 			log.Info("tx send overslept")
 		case <-cancellableCtx.Done():
 			log.Info(cancellableCtx.Err())
@@ -116,11 +116,10 @@ func (ctl EthController) DeployContract(to common.Address, amount *big.Int, gasL
 	return "", nil
 }
 
-
 // sends new eth transaction using given configuration
 func (ctl EthController) SendTransaction(to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (string, error) {
 	// Construct the transaction
-	d := time.Now().Add(1000*time.Millisecond)
+	d := time.Now().Add(1000 * time.Millisecond)
 	cancellableCtx, cancel := context.WithDeadline(ctx, d)
 
 	// connect the client
@@ -137,18 +136,17 @@ func (ctl EthController) SendTransaction(to common.Address, amount *big.Int, gas
 	// To get nonce at a particular block height
 	nonce, err := client.NonceAt(
 		cancellableCtx,
-		common.HexToAddress("0x56724a9e4d2bb2dca01999acade2e88a92b11a9e",
-		), nil)
+		common.HexToAddress("0x56724a9e4d2bb2dca01999acade2e88a92b11a9e"), nil)
 
 	/*
-	The arguments to this function in order are
-    1. nonce
-    2. to-address (we would need to convert this using common.HexToAddress(public address) )
-    3. balance to be sent (use big number)
-    4. gas limit
-    5. gas price
-    6. data (since this is not a contract transaction, we can pass nil )
-	 */
+			The arguments to this function in order are
+		    1. nonce
+		    2. to-address (we would need to convert this using common.HexToAddress(public address) )
+		    3. balance to be sent (use big number)
+		    4. gas limit
+		    5. gas price
+		    6. data (since this is not a contract transaction, we can pass nil )
+	*/
 	tx := types.NewTransaction(nonce, to, amount, gasLimit, gasPrice, data)
 	// Define signer and chain id
 	// chainID := big.NewInt(CHAIN_ID)
@@ -173,17 +171,17 @@ func (ctl EthController) SendTransaction(to common.Address, amount *big.Int, gas
 		fmt.Println("send tx error:")
 		log.Error(txErr)
 		cancel()
-		return "",txErr
+		return "", txErr
 	} else {
 		select {
-			case <-time.After(1-time.Millisecond):
-				log.Info("tx send overslept")
-			case <-cancellableCtx.Done():
-				log.Info(cancellableCtx.Err())
-			default:
-				fmt.Printf("send success tx.hash=%s\n", signedTx.Hash().String())
-				cancel()
-				return signedTx.Hash().String(), nil
+		case <-time.After(1 - time.Millisecond):
+			log.Info("tx send overslept")
+		case <-cancellableCtx.Done():
+			log.Info(cancellableCtx.Err())
+		default:
+			fmt.Printf("send success tx.hash=%s\n", signedTx.Hash().String())
+			cancel()
+			return signedTx.Hash().String(), nil
 		}
 	}
 	return "", nil

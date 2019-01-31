@@ -22,13 +22,13 @@ import (
 	"os"
 	"strings"
 
+	"github.com/robertkrimen/otto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/signer/core"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/signer/rules/deps"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/signer/storage"
-	"github.com/robertkrimen/otto"
 )
 
 var (

@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pborman/uuid"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/sctx"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
-	"github.com/pborman/uuid"
 )
 
 // Adapt chains h (main request handler) main handler to adapters (middleware handlers)

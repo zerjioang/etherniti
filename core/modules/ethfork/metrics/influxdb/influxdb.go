@@ -5,9 +5,9 @@ import (
 	uurl "net/url"
 	"time"
 
+	"github.com/influxdata/influxdb/client"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/influxdata/influxdb/client"
 )
 
 type reporter struct {

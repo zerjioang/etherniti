@@ -23,11 +23,11 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enr"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 var (

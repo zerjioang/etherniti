@@ -34,11 +34,11 @@ import (
 	"io/ioutil"
 	"sync"
 
+	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock"
-	"github.com/syndtr/goleveldb/leveldb"
 )
 
 const (

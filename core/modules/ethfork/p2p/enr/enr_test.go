@@ -24,9 +24,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 )
 
 var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))

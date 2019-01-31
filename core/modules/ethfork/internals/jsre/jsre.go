@@ -26,9 +26,9 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/robertkrimen/otto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/jsre/deps"
-	"github.com/robertkrimen/otto"
 )
 
 var (

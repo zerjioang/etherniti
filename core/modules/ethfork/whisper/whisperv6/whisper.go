@@ -27,13 +27,13 @@ import (
 	"time"
 
 	mapset "github.com/deckarep/golang-set"
+	"github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/syndtr/goleveldb/leveldb/errors"
 	"golang.org/x/crypto/pbkdf2"
 	"golang.org/x/sync/syncmap"
 )

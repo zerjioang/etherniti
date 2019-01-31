@@ -25,10 +25,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 )
 
 var jsonEventTransfer = []byte(`{

@@ -23,6 +23,7 @@ import (
 	"sync"
 	"time"
 
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
@@ -31,7 +32,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	opentracing "github.com/opentracing/opentracing-go"
 )
 
 type notFoundError struct {

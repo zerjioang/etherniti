@@ -27,13 +27,13 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/usbwallet/trezor"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/golang/protobuf/proto"
 )
 
 // ErrTrezorPINNeeded is returned if opening the trezor requires a PIN code. In

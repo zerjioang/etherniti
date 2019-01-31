@@ -19,7 +19,7 @@ func BenchmarkHexIntUnmarshal(b *testing.B) {
 		}{}
 
 		data := []byte(`{"id": "0x1cc348"}`)
-		_= json.Unmarshal(data, &test)
+		_ = json.Unmarshal(data, &test)
 	}
 }
 

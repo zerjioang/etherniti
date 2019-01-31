@@ -25,6 +25,7 @@ import (
 	"sync"
 	"time"
 
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
@@ -38,7 +39,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/crypto/sha3"
 )
 

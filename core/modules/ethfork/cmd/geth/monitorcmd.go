@@ -25,10 +25,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gizak/termui"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/gizak/termui"
 	"gopkg.in/urfave/cli.v1"
 )
 

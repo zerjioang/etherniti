@@ -13,11 +13,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/pborman/uuid"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
-	"github.com/pborman/uuid"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

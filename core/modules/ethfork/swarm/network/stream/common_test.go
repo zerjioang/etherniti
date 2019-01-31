@@ -29,6 +29,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	colorable "github.com/mattn/go-colorable"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
 	p2ptest "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/testing"
@@ -37,7 +38,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
-	colorable "github.com/mattn/go-colorable"
 )
 
 var (

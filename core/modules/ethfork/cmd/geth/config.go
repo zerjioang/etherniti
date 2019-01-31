@@ -27,6 +27,7 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
+	"github.com/naoina/toml"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/dashboard"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
@@ -34,7 +35,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
 	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
-	"github.com/naoina/toml"
 )
 
 var (

@@ -6,10 +6,10 @@ package eth
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/gaethway/core/keystore/memory"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
 	"github.com/zerjioang/gaethway/core/modules/token"
 )
 

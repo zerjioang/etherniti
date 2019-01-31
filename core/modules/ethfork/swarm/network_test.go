@@ -28,6 +28,7 @@ import (
 	"testing"
 	"time"
 
+	colorable "github.com/mattn/go-colorable"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
@@ -36,7 +37,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/simulation"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	colorable "github.com/mattn/go-colorable"
 )
 
 var (

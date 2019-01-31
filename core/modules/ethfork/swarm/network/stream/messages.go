@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
 	bv "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/bitvector"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/opentracing/opentracing-go"
 )
 
 var syncBatchTimeout = 30 * time.Second

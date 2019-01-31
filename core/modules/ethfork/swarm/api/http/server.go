@@ -35,13 +35,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/cors"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
-	"github.com/rs/cors"
 )
 
 var (

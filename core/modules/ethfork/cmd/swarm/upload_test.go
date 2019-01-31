@@ -30,10 +30,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/mattn/go-colorable"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	swarmapi "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
-	"github.com/mattn/go-colorable"
 )
 
 func init() {

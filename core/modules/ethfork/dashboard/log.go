@@ -26,9 +26,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/mohae/deepcopy"
 	"github.com/rjeczalik/notify"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 )
 
 var emptyChunk = json.RawMessage("[]")

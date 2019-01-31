@@ -23,10 +23,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/pborman/uuid"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/pborman/uuid"
 	"gopkg.in/urfave/cli.v1"
 )
 

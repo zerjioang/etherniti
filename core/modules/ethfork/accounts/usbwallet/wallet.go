@@ -25,12 +25,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/karalabe/hid"
 	ethereum "github.com/zerjioang/gaethway/core/modules/ethfork"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/karalabe/hid"
 )
 
 // Maximum time between wallet health checks to detect USB unplugs.

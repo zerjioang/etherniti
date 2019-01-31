@@ -37,12 +37,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pborman/uuid"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
-	"github.com/pborman/uuid"
 )
 
 var (

@@ -35,12 +35,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/golang/snappy"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/bitutil"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/ecies"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/secp256k1"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/golang/snappy"
 	"golang.org/x/crypto/sha3"
 )
 

@@ -27,6 +27,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/hashicorp/golang-lru"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/prque"
@@ -43,7 +44,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/trie"
-	"github.com/hashicorp/golang-lru"
 )
 
 var (

@@ -21,11 +21,11 @@ import (
 	"encoding/json"
 	"sort"
 
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	lru "github.com/hashicorp/golang-lru"
 )
 
 // Vote represents a single vote that an authorized signer made to modify the

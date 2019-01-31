@@ -26,6 +26,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/prometheus/prometheus/util/flock"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
@@ -33,7 +34,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/prometheus/prometheus/util/flock"
 )
 
 // Node is a container on which services can be registered.

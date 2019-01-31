@@ -21,8 +21,8 @@ package keystore
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/rjeczalik/notify"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 )
 
 type watcher struct {

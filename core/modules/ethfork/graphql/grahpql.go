@@ -24,6 +24,8 @@ import (
 	"net/http"
 	"time"
 
+	graphqlgo "github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/zerjioang/gaethway/core/modules/ethfork"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
@@ -39,8 +41,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	graphqlgo "github.com/graph-gophers/graphql-go"
-	"github.com/graph-gophers/graphql-go/relay"
 )
 
 // Account represents an Ethereum account at a particular block.

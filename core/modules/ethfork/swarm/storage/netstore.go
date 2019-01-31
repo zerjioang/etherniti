@@ -24,9 +24,9 @@ import (
 	"sync/atomic"
 	"time"
 
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	lru "github.com/hashicorp/golang-lru"
 )
 
 type (

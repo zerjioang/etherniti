@@ -26,6 +26,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/hashicorp/golang-lru"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/consensus"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
@@ -33,7 +34,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	"github.com/hashicorp/golang-lru"
 )
 
 const (

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	jaeger "github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

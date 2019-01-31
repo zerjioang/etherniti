@@ -25,9 +25,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/pborman/uuid"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/pborman/uuid"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

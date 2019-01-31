@@ -31,8 +31,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/rs/cors"
+	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 )
 
 const (

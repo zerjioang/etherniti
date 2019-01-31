@@ -161,7 +161,6 @@ func (ctl EthController) getBalanceAtBlock(c echo.Context) error {
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
-
 // get node information
 func (ctl EthController) getNodeIndo(c echo.Context) error {
 	clientInstance, err := ctl.getClientInstance(c)

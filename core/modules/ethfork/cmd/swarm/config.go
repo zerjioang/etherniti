@@ -29,11 +29,11 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
+	"github.com/naoina/toml"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/naoina/toml"
 
 	bzzapi "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
 )

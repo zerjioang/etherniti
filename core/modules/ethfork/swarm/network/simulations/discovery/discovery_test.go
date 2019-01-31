@@ -27,6 +27,7 @@ import (
 	"testing"
 	"time"
 
+	colorable "github.com/mattn/go-colorable"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
@@ -36,7 +37,6 @@ import (
 	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
-	colorable "github.com/mattn/go-colorable"
 )
 
 // serviceName is used with the exec adapter so the exec'd binary knows which

@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/robertkrimen/otto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/usbwallet"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/robertkrimen/otto"
 )
 
 // bridge is a collection of JavaScript utility methods to bride the .js runtime
