@@ -279,6 +279,7 @@ func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
 	handlers.NewTransactionController().RegisterRouters(server)
 	handlers.NewEthController(deployer.manager).RegisterRouters(server)
 	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
+	handlers.NewGanacheController(deployer.manager).RegisterRouters(server)
 	return server
 }
 

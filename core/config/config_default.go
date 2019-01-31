@@ -7,9 +7,11 @@
 package config
 
 const (
-	HttpAddress  = "0.0.0.0:80"
-	HttpsAddress = "0.0.0.0:443"
-	HttpsPort    = ""
+	DevelopmentAddress = "localhost"
+	HttpsPort          = ":4430"
+	HttpPort           = ":8080"
+	HttpAddress        = DevelopmentAddress + HttpPort
+	HttpsAddress       = DevelopmentAddress + HttpsPort
 )
 
 const (

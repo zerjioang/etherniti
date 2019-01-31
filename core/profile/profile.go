@@ -5,9 +5,8 @@ package profile
 
 import (
 	"fmt"
+	"github.com/zerjioang/gaethway/core/keystore/memory"
 	"time"
-
-	"github.com/zerjioang/gaethway/core/eth"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
@@ -15,7 +14,7 @@ import (
 
 type ConnectionProfile struct {
 	ConnectionId string
-	wallet       eth.WalletContent
+	wallet       memory.WalletContent
 }
 
 func (profile ConnectionProfile) Claims() jwt.Claims {

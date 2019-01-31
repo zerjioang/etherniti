@@ -50,7 +50,7 @@ func GetAccountBalanceAtBlock(client *ethclient.Client, addr common.Address, blo
 	return client.BalanceAt(ctx, addr, blockNumber)
 }
 
-func ToEth(balance *big.Int) *big.Float {
+func ToEth(balance big.Int) *big.Float {
 	fbalance := new(big.Float)
 	fbalance.SetString(balance.String())
 	ethValue := new(big.Float).Quo(fbalance, big.NewFloat(math.Pow10(18)))

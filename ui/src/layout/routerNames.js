@@ -47,7 +47,7 @@ const routerNames = {
 			ethCreate: {
 			  path: '/eth/create',
 			  name: 'New Account',
-			  component: undefined
+			  component: () => import('@/views/dashboard/eth/accounts')
 			},
 		quorum: {
 		  path: '/quorum/',

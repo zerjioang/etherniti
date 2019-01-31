@@ -22,7 +22,6 @@ func Bytes(data string) []byte {
 func FastMarshal(data interface{}) ([]byte, error) {
 	return fastJson.Marshal(&data)
 }
-
 func GetJsonBytes(data interface{}) []byte {
 	if data != nil {
 		raw, _ := FastMarshal(&data)

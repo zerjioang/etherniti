@@ -79,6 +79,12 @@ export default new Router({
           component: routerNames.ganacheSettings.component,
         },
         {
+          // dashboard >> eth create account
+          path: routerNames.ethCreate.path,
+          name: routerNames.ethCreate.name,
+          component: routerNames.ethCreate.component,
+        },
+        {
           // dashboard >> balance check
           path: routerNames.balanceChecker.path,
           name: routerNames.balanceChecker.name,

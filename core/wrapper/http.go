@@ -24,6 +24,7 @@ func PostInterface(url string, data interface{}, c echo.Context) ([]byte, error)
 		return Post(url, dataBytes, c)
 	}
 }
+
 func Post(url string, json []byte, c echo.Context) ([]byte, error) {
 	if url == "" {
 		return nil, errors.New("please, provide a valid endpoint url to make a post request")
