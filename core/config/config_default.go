@@ -60,6 +60,8 @@ bDlwRQKBgGxz/v8dIP5xRXXXQYre+KxXtohY7QsDJxuC3R2NMCh9lovrsqWof5OQ
 xC1++6t6BnPJnMe4vdpMeuW8QTAKhHvm+XvPiPqnNeVSj7SLbOZDlivUiNZrr87t
 DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
+
+	TokenSecret = "t0k3n-s3cr3t-h3r3"
 )
 
 //simply converts http requests into https

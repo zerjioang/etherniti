@@ -5,27 +5,43 @@ package profile
 
 import (
 	"fmt"
-	"github.com/zerjioang/gaethway/core/keystore/memory"
-	"time"
+	"github.com/zerjioang/gaethway/core/config"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
 
+var (
+	emptyProfile ConnectionProfile
+	tokenSecretBytes = []byte(config.TokenSecret)
+)
+
+// default data for connection profile
 type ConnectionProfile struct {
-	ConnectionId string
-	wallet       memory.WalletContent
+	jwt.Claims `json:"_,omitempty"`
+
+	// unique identifier of the connection prfile
+	ConnectionId string `json:"connection_id"`
+
+	// address of the connection node: ip, domain, infura, etc
+	NodeAddress string `json:"node_address"`
+
+	//connection mode: ipc,http,rpc
+	Mode string `json:"mode"`
+
+	//connection por if required
+	Port int `json:"port"`
+
+	// default ethereum account for transactioning
+	Account string `json:"account"`
 }
 
-func (profile ConnectionProfile) Claims() jwt.Claims {
-	return jwt.MapClaims{
-		"foo": "bar",
-		"nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
-	}
+func (profile ConnectionProfile) Valid() error {
+	return nil
 }
 
-func (profile ConnectionProfile) Secret() string {
-	return "secret"
+func (profile ConnectionProfile) Secret() []byte {
+	return tokenSecretBytes
 }
 
 func NewConnectionProfile(claims jwt.MapClaims) (ConnectionProfile, error) {
@@ -39,13 +55,13 @@ func NewConnectionProfile(claims jwt.MapClaims) (ConnectionProfile, error) {
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, profile.Claims())
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, profile)
 
 	// Sign and get the complete encoded token as a string using the secret
 	return token.SignedString(profile.Secret())
 }
 
-func ParseConnectionProfileToken(tokenStr string) (*ConnectionProfile, error) {
+func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -63,6 +79,6 @@ func ParseConnectionProfileToken(tokenStr string) (*ConnectionProfile, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		return NewConnectionProfile(claims)
 	} else {
-		return nil, err
+		return emptyProfile, err
 	}
 }
