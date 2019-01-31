@@ -9,7 +9,6 @@ import (
 	"errors"
 
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
@@ -20,6 +19,7 @@ type EthClientType uint8
 const (
 	HttpClient EthClientType = iota
 	IPCClient
+	RPCClient
 )
 
 type EthereumClient *ethclient.Client
@@ -37,6 +37,12 @@ func getIPCClient(ipcEndpoint string) (*ethclient.Client, error) {
 	return ethclient.Dial(ipcEndpoint)
 }
 
+// get an ethereum client using rpc communication
+// rpc endpoint example: "rpc:127.0.0.1"
+func getRPCClient(rpcEndpoint string) (*ethclient.Client, error) {
+	return ethclient.DialContext(ctx, rpcEndpoint)
+}
+
 // get an ethereum client using specified mode and gateway
 func GetEthereumClient(mode EthClientType, gateway string) (*ethclient.Client, error) {
 	if mode == HttpClient {
@@ -44,6 +50,9 @@ func GetEthereumClient(mode EthClientType, gateway string) (*ethclient.Client, e
 	}
 	if mode == IPCClient {
 		return getIPCClient(gateway)
+	}
+	if mode == RPCClient {
+		return getRPCClient(gateway)
 	}
 	return nil, errors.New("invalid mode")
 }

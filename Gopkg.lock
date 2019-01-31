@@ -125,8 +125,8 @@
     "rlp",
     "trie"
   ]
-  revision = "9dc5d1a915ac0e0bd8429d6ac41df50eec91de5f"
-  version = "v1.8.21"
+  revision = "7fa3509e2eaf1a4ebc12344590e5699406690f15"
+  version = "v1.8.22"
 
 [[projects]]
   name = "github.com/fatih/color"
@@ -252,6 +252,12 @@
   packages = ["."]
   revision = "c9cfead9f2a36ddf3daa40ba269aa7f4bbba6b62"
   version = "v1.0.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jarcoal/httpmock"
+  packages = ["."]
+  revision = "53def6cd0f87425f5425d4f0f27f66f048759b94"
 
 [[projects]]
   name = "github.com/json-iterator/go"
@@ -460,7 +466,8 @@
   name = "github.com/stretchr/testify"
   packages = [
     "assert",
-    "require"
+    "require",
+    "suite"
   ]
   revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
   version = "v1.3.0"
@@ -483,6 +490,18 @@
     "leveldb/util"
   ]
   revision = "b001fa50d6b27f3f0bb175a87d0cb55426d0a0ae"
+
+[[projects]]
+  name = "github.com/tidwall/gjson"
+  packages = ["."]
+  revision = "5a96cfda705e1762dc0671e26b0b78925ad97e29"
+  version = "v1.1.5"
+
+[[projects]]
+  name = "github.com/tidwall/match"
+  packages = ["."]
+  revision = "33827db735fff6510490d69a8622612558a557ed"
+  version = "v1.0.1"
 
 [[projects]]
   name = "github.com/uber/jaeger-client-go"
@@ -642,6 +661,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "23f86cff0649f8c6683bbb738d93123fc41be961bbdac05af21114454c5d1536"
+  inputs-digest = "ed158416dd98f72107880116855113840289fc25f465158cfaceda5118955f9a"
   solver-name = "gps-cdcl"
   solver-version = 1
