@@ -4,5 +4,6 @@
 package api
 
 const (
+	//profile key http header key
 	HttpProfileHeaderkey = "X-Gaethway-Profile"
 )

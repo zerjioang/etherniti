@@ -5,6 +5,7 @@ package profile
 
 import (
 	"fmt"
+
 	"github.com/zerjioang/gaethway/core/config"
 
 	"github.com/dgrijalva/jwt-go"
@@ -12,7 +13,7 @@ import (
 )
 
 var (
-	emptyProfile ConnectionProfile
+	emptyProfile     ConnectionProfile
 	tokenSecretBytes = []byte(config.TokenSecret)
 )
 

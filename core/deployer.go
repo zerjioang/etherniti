@@ -53,31 +53,94 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 func (deployer Deployer) Run() {
 	log.Info("loading Ethereum Multitenant Webapi (gaethway)")
 
-	httpServerInstance := echo.New()
-	httpServerInstance.HideBanner = true
-	// add redirects from http to https
-	log.Info("[LAYER] http to https redirect")
-	httpServerInstance.Pre(deployer.httpsRedirect)
+	if config.EnableHttpsRedirect {
+		//build http server
+		httpServerInstance := deployer.newServerInstance()
+		// add redirects from http to https
+		log.Info("[LAYER] http to https redirect")
+		httpServerInstance.Pre(deployer.httpsRedirect)
 
-	// Start http server
-	go func() {
-		log.Info("starting http server...")
-		err := httpServerInstance.Start(config.HttpAddress)
+		// Start http server
+		go func() {
+			s, err := deployer.buildInsecureServerConfig(httpServerInstance)
+			if err != nil {
+				log.Error("failed to build http server configuration", err)
+			} else {
+				log.Info("starting http server...")
+				err := httpServerInstance.StartServer(s)
+				if err != nil {
+					log.Error("shutting down http the server", err)
+				}
+			}
+		}()
+		// Start https server
+		httpsServerInstance := deployer.newServerInstance()
+		go func() {
+			s, err := deployer.buildSecureServerConfig(httpServerInstance)
+			if err != nil {
+				log.Error("failed to build https server configuration", err)
+			} else {
+				log.Info("starting https server...")
+				err := httpServerInstance.StartServer(s)
+				if err != nil {
+					log.Error("shutting down https the server", err)
+				}
+			}
+		}()
+		//graceful shutdown of http and https server
+		deployer.shutdown(httpServerInstance, httpsServerInstance)
+	} else {
+		//deploy http server only
+		e := deployer.newServerInstance()
+		s, err := deployer.buildInsecureServerConfig(e)
 		if err != nil {
-			log.Error("shutting down http the server")
+			log.Error("failed to build server configuration", err)
+		} else {
+			deployer.configureRoutes(e)
+			// Start server
+			go func() {
+				log.Info("starting http server...")
+				err := e.StartServer(s)
+				if err != nil {
+					e.Logger.Info("shutting down http server", err)
+				}
+			}()
+			//graceful shutdown of http server
+			deployer.shutdown(e, nil)
 		}
-	}()
+	}
+}
 
-	// build a secure http server
-	e := echo.New()
+func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo){
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 10 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	log.Info("graceful shutdown of the service requested")
+	if httpInstance != nil {
+		log.Info("shutting down http server...")
+		if err := httpInstance.Shutdown(ctx); err != nil {
+			log.Error(err)
+		}
+	}
+	if httpsInstance != nil {
+		log.Info("shutting down https secure server...")
+		if err := httpsInstance.Shutdown(ctx); err != nil {
+			log.Error(err)
+		}
+	}
+	log.Info("graceful shutdown executed")
+	log.Info("exiting...")
+}
 
-	// enable debug mode
-	e.Debug = true
-
+func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
 	cert, err := deployer.GetLocalHostTLS()
 	if err != nil {
 		log.Fatal("failed to setup TLS configuration due to error", err)
-		return
+		return nil, err
 	}
 
 	//prepare tls configuration
@@ -88,95 +151,21 @@ func (deployer Deployer) Run() {
 	}
 
 	//configure custom secure server
-	s := &http.Server{
+	return &http.Server {
 		Addr:         config.HttpsAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    &tlsConf,
-	}
-	//hide the banner
-	e.HideBanner = true
+	}, nil
+}
 
-	// add a custom error handler
-	log.Info("[LAYER] custom error handler")
-	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
-
-	// antibots, crawler middleware
-	// avoid bots and crawlers
-	log.Info("[LAYER] antibots")
-	e.Pre(deployer.antiBots)
-
-	// remove trailing slash for better usage
-	log.Info("[LAYER] trailing slash remover")
-	e.Pre(middleware.RemoveTrailingSlash())
-
-	// log all single request
-	// configure logging level
-	log.Info("[LAYER] logger at warn level")
-	e.Logger.SetLevel(log.WARN)
-	e.Use(middleware.Logger())
-
-	// add CORS support
-	log.Info("[LAYER] cors support")
-	e.Use(middleware.CORSWithConfig(corsConfig))
-
-	log.Info("[LAYER] server http headers hardening")
-	// add server api request hardening using http headers
-	e.Use(deployer.hardening)
-
-	log.Info("[LAYER] fake server http header")
-	// add fake server header
-	e.Use(deployer.fakeServer)
-
-	log.Info("[LAYER] unique request id")
-	// Request ID middleware generates a unique id for a request.
-	e.Use(middleware.RequestID())
-
-	// add gzip support if client requests it
-	log.Info("[LAYER] gzip compression")
-	e.Use(middleware.GzipWithConfig(gzipConfig))
-
-	// avoid panics
-	log.Info("[LAYER] panic recovery")
-	e.Use(middleware.Recover())
-
-	log.Info("[LAYER] / static files")
-	//load root static folder
-	e.Static("/", resources+"/root")
-
-	// load swagger ui files
-	log.Info("[LAYER] /swagger files")
-	e.Static("/swagger", resources+"/swagger")
-
-	deployer.register(e)
-
-	// Start secure server
-	go func() {
-		log.Info("starting https secure server...")
-		err := e.StartServer(s)
-		if err != nil {
-			e.Logger.Info("shutting down https secure the server", err)
-		}
-	}()
-
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 10 seconds.
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	log.Info("graceful shutdown of the service requested")
-	log.Info("shutting down http server...")
-	if err := httpServerInstance.Shutdown(ctx); err != nil {
-		log.Error(err)
-	}
-	log.Info("shutting down https secure server...")
-	if err := e.Shutdown(ctx); err != nil {
-		log.Error(err)
-	}
-	log.Info("graceful shutdown executed")
-	log.Info("exiting...")
+func (deployer Deployer) buildInsecureServerConfig(e *echo.Echo) (*http.Server, error) {
+	//configure custom secure server
+	return &http.Server {
+		Addr:         config.HttpAddress,
+		ReadTimeout:  3 * time.Second,
+		WriteTimeout: 3 * time.Second,
+	}, nil
 }
 
 // http to http redirect function
@@ -265,10 +254,11 @@ func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
 	}
+	// log error always? less performance in production
 	c.Logger().Error(err)
-	_ = c.JSON(code, api.NewApiError(
-		code, err.Error()),
-	)
+
+	apiErr := api.NewApiError(code, err.Error())
+	_ = c.JSON(code, apiErr)
 }
 
 // register in echo server, allowed routes
@@ -279,10 +269,81 @@ func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
 	handlers.NewTransactionController().RegisterRouters(server)
 	handlers.NewEthController(deployer.manager).RegisterRouters(server)
 	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
-	handlers.NewGanacheController(deployer.manager).RegisterRouters(server)
 	return server
 }
 
+// build new http server instance
+func (deployer Deployer) newServerInstance() *echo.Echo {
+	// build a the server
+	e := echo.New()
+	// enable debug mode
+	e.Debug = false
+	//hide the banner
+	e.HideBanner = true
+	return e
+}
+
+// configure deployer internal configuration
+func (deployer Deployer) configureRoutes(e *echo.Echo) {
+	// add a custom error handler
+	log.Info("[LAYER] custom error handler")
+	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
+
+	// antibots, crawler middleware
+	// avoid bots and crawlers
+	log.Info("[LAYER] antibots")
+	e.Pre(deployer.antiBots)
+
+	// remove trailing slash for better usage
+	log.Info("[LAYER] trailing slash remover")
+	e.Pre(middleware.RemoveTrailingSlash())
+
+	// log all single request
+	// configure logging level
+	log.Info("[LAYER] logger at warn level")
+	if config.EnableLogging {
+		e.Logger.SetLevel(config.LogLevel)
+		e.Use(middleware.Logger())
+	}
+
+	// add CORS support
+	log.Info("[LAYER] cors support")
+	e.Use(middleware.CORSWithConfig(corsConfig))
+
+	log.Info("[LAYER] server http headers hardening")
+	// add server api request hardening using http headers
+	e.Use(deployer.hardening)
+
+	log.Info("[LAYER] fake server http header")
+	// add fake server header
+	e.Use(deployer.fakeServer)
+
+	log.Info("[LAYER] unique request id")
+	// Request ID middleware generates a unique id for a request.
+	if config.UseUniqueRequestId {
+		e.Use(middleware.RequestID())
+	}
+
+	// add gzip support if client requests it
+	log.Info("[LAYER] gzip compression")
+	e.Use(middleware.GzipWithConfig(gzipConfig))
+
+	// avoid panics
+	log.Info("[LAYER] panic recovery")
+	e.Use(middleware.Recover())
+
+	log.Info("[LAYER] / static files")
+	//load root static folder
+	e.Static("/", resources+"/root")
+
+	// load swagger ui files
+	log.Info("[LAYER] /swagger files")
+	e.Static("/swagger", resources+"/swagger")
+
+	deployer.register(e)
+}
+
+// create new deployer instance
 func NewDeployer() Deployer {
 	d := Deployer{}
 	d.manager = eth.NewWalletManager()

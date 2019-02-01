@@ -4,7 +4,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package token
+package erc20
 
 import (
 	"math/big"
@@ -19,8 +19,8 @@ import (
 // TokenABI is the input ABI used to generate the binding from.
 const TokenABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"spender\",\"type\":\"address\"},{\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenOwner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenOwner\",\"type\":\"address\"},{\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"tokenOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"}]"
 
-// Token is an auto generated Go binding around an Ethereum contract.
-type Token struct {
+// ERC20Token is an auto generated Go binding around an Ethereum contract.
+type ERC20Token struct {
 	TokenCaller     // Read-only binding to the contract
 	TokenTransactor // Write-only binding to the contract
 }
@@ -38,7 +38,7 @@ type TokenTransactor struct {
 // TokenSession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
 type TokenSession struct {
-	Contract     *Token            // Generic contract binding to set the session for
+	Contract     *ERC20Token       // Generic contract binding to set the session for
 	CallOpts     bind.CallOpts     // Call options to use throughout this session
 	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
@@ -59,7 +59,7 @@ type TokenTransactorSession struct {
 
 // TokenRaw is an auto generated low-level Go binding around an Ethereum contract.
 type TokenRaw struct {
-	Contract *Token // Generic contract binding to access the raw methods on
+	Contract *ERC20Token // Generic contract binding to access the raw methods on
 }
 
 // TokenCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
@@ -72,16 +72,16 @@ type TokenTransactorRaw struct {
 	Contract *TokenTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewToken creates a new instance of Token, bound to a specific deployed contract.
-func NewToken(address common.Address, backend bind.ContractBackend) (*Token, error) {
+// NewToken creates a new instance of ERC20Token, bound to a specific deployed contract.
+func NewToken(address common.Address, backend bind.ContractBackend) (*ERC20Token, error) {
 	contract, err := bindToken(address, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &Token{TokenCaller: TokenCaller{contract: contract}, TokenTransactor: TokenTransactor{contract: contract}}, nil
+	return &ERC20Token{TokenCaller: TokenCaller{contract: contract}, TokenTransactor: TokenTransactor{contract: contract}}, nil
 }
 
-// NewTokenCaller creates a new read-only instance of Token, bound to a specific deployed contract.
+// NewTokenCaller creates a new read-only instance of ERC20Token, bound to a specific deployed contract.
 func NewTokenCaller(address common.Address, caller bind.ContractCaller) (*TokenCaller, error) {
 	contract, err := bindToken(address, caller, nil)
 	if err != nil {
@@ -90,7 +90,7 @@ func NewTokenCaller(address common.Address, caller bind.ContractCaller) (*TokenC
 	return &TokenCaller{contract: contract}, nil
 }
 
-// NewTokenTransactor creates a new write-only instance of Token, bound to a specific deployed contract.
+// NewTokenTransactor creates a new write-only instance of ERC20Token, bound to a specific deployed contract.
 func NewTokenTransactor(address common.Address, transactor bind.ContractTransactor) (*TokenTransactor, error) {
 	contract, err := bindToken(address, nil, transactor)
 	if err != nil {

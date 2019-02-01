@@ -5,24 +5,28 @@ package api
 
 import "net/http"
 
+// profile model dto
 type Profile struct {
 	Address    string `json:"address"`
 	PrivateKey string `json:"key"`
 	Node       string `json:"node"`
 }
 
+// ne profile request dto
 type NewProfileRequest struct {
 	Address    string `json:"address" form:"address" query:"address"`
 	PrivateKey string `json:"key" form:"key" query:"key"`
 	Node       string `json:"node" form:"node" query:"node"`
 }
 
+// api error model dto
 type ApiError struct {
 	Code    int    `json:"code"`
 	Message string `json:"msg"`
 	Details string `json:"details"`
 }
 
+// api error constructor like function
 func NewApiError(code int, details string) ApiError {
 	ae := ApiError{}
 	ae.Code = code
@@ -31,6 +35,7 @@ func NewApiError(code int, details string) ApiError {
 	return ae
 }
 
+// api response model dto
 type ApiResponse struct {
 	Id   int `json:"id"`
 	Code int `json:"code"`
@@ -39,6 +44,7 @@ type ApiResponse struct {
 	Result  interface{} `json:"result"`
 }
 
+// api response constructor like function
 func NewApiResponse(message string, payload interface{}) ApiResponse {
 	ae := ApiResponse{}
 	ae.Id = 0

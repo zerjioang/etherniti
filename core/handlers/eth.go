@@ -5,8 +5,11 @@ package handlers
 
 import (
 	"errors"
+	"github.com/patrickmn/go-cache"
+	"github.com/zerjioang/gaethway/core/eth/rpc"
 	"math/big"
 	"net/http"
+	"time"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/gaethway/core/api"
@@ -32,11 +35,14 @@ var (
 type EthController struct {
 	// in memory based wallet manager
 	walletManager eth.WalletManager
+	//ethereum interaction cache
+	cache *cache.Cache
 }
 
 func NewEthController(manager eth.WalletManager) EthController {
 	ctl := EthController{}
 	ctl.walletManager = manager
+	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
 	return ctl
 }
 
@@ -174,6 +180,125 @@ func (ctl EthController) getNodeIndo(c echo.Context) error {
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
+func (ctl EthController) getAccounts(c echo.Context) error {
+	client := ctl.getClient(c)
+	list, err := client.EthAccounts()
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusInternalServerError,
+			util.GetJsonBytes(
+				api.NewApiError(http.StatusInternalServerError, err.Error()),
+			),
+		)
+	} else {
+		return c.JSONBlob(
+			http.StatusOK,
+			util.GetJsonBytes(
+				api.NewApiResponse("ethereum accounts readed", list),
+			),
+		)
+	}
+}
+
+/*
+{
+  "jsonrpc": "2.0",
+  "method": "eth_getBalance",
+  "params": ["0x0ADfCCa4B2a1132F82488546AcA086D7E24EA324", "latest"],
+  "id": 1
+}
+*/
+func (ctl EthController) getAccountsWithBalance(c echo.Context) error {
+	client := ctl.getClient(c)
+	list, err := client.EthAccounts()
+
+	type wrapper struct {
+		Account string `json:"account"`
+		Balance string `json:"balance"`
+		Eth     string `json:"eth"`
+		Key     string `json:"key"`
+	}
+	wrapperList := make([]wrapper, len(list))
+
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusInternalServerError,
+			util.GetJsonBytes(
+				api.NewApiError(http.StatusInternalServerError, err.Error()),
+			),
+		)
+	} else {
+		//iterate over account
+		for i := 0; i < len(list); i++ {
+			currentAccount := list[i]
+			bigInt, err := client.EthGetBalance(currentAccount, "latest")
+			if err != nil {
+				log.Error("failed to get account balance", currentAccount, err)
+			} else {
+				item := &wrapperList[i]
+				item.Account = currentAccount
+				item.Balance = bigInt.String()
+				item.Eth = eth.ToEth(bigInt).String()
+				item.Key = "secret"
+			}
+		}
+		return c.JSONBlob(
+			http.StatusOK,
+			util.GetJsonBytes(
+				api.NewApiResponse("ethereum accounts and their balance readed", wrapperList),
+			),
+		)
+	}
+}
+
+func (ctl EthController) getBlocks(c echo.Context) error {
+	return nil
+}
+
+func (ctl EthController) coinbase(c echo.Context) error {
+
+	raw, found := ctl.cache.Get("eth_coinbase")
+	if found && raw != nil {
+		//cache hit
+		//return result to client
+		return c.JSONBlob(
+			http.StatusOK,
+			util.GetJsonBytes(
+				api.NewApiResponse("coinbase address", raw),
+			),
+		)
+	} else {
+		//cache miss
+		client := ctl.getClient(c)
+		result, err := client.Call("eth_coinbase")
+		if err == nil {
+			if result != nil {
+				// add result to cache
+				ctl.cache.Set("eth_coinbase", result, cache.DefaultExpiration)
+				//return result to client
+				return c.JSONBlob(
+					http.StatusOK,
+					util.GetJsonBytes(
+						api.NewApiResponse("coinbase address", result),
+					),
+				)
+			} else {
+				return c.JSONBlob(http.StatusBadRequest,
+					util.GetJsonBytes(
+						api.NewApiError(http.StatusBadRequest, "empty response from server"),
+					),
+				)
+			}
+		} else {
+			return c.JSONBlob(http.StatusBadRequest,
+				util.GetJsonBytes(
+					api.NewApiError(http.StatusBadRequest, "failed to get coinbase address: "+err.Error()),
+				),
+			)
+		}
+	}
+}
+
 // from incoming http request, it recovers the eth client linked to it
 func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
 	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
@@ -184,16 +309,23 @@ func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, e
 	return wallet.Client(), nil
 }
 
+func (ctl EthController) getClient(context echo.Context) ethrpc.EthRPC {
+	client := ethrpc.NewDefaultRPC("http://127.0.0.1:8545")
+	return client
+}
+
+
 // implemented method from interface RouterRegistrable
 func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing eth controller methods")
-	//http://localhost:8080/eth/create
 	router.GET("/v1/eth/create", ctl.generateAddress)
-	//http://localhost:8080/eth/verify/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 	router.GET("/v1/eth/verify/:address", ctl.isValidAddress)
-	//http://localhost:8080/eth/hascontract/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 	router.GET("/v1/eth/hascontract/:address", ctl.isContractAddress)
-	//http://localhost:8080/eth/getbalance/0x71c7656ec7ab88b098defb751b7401b5f6d8976f
-	router.GET("/v1/eth/getbalance/:address", ctl.getBalance)
-	router.GET("/v1/eth/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
+	router.GET("/v1/eth/m/accounts", ctl.getAccounts)
+	router.GET("/v1/eth/m/accountsBalanced", ctl.getAccountsWithBalance)
+	router.GET("/v1/eth/m/blocks", ctl.getBlocks)
+	router.GET("/v1/eth/m/coinbase", ctl.coinbase)
+	
+	router.GET("/v1/eth/m/getbalance/:address", ctl.getBalance)
+	router.GET("/v1/eth/m/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
 }

@@ -5,6 +5,8 @@
 
 package config
 
+import "github.com/labstack/gommon/log"
+
 const (
 	HttpAddress  = "0.0.0.0:80"
 	HttpsAddress = "0.0.0.0:443"
@@ -12,8 +14,8 @@ const (
 )
 
 const (
-	CertPem = ``
-	KeyPem  = ``
+	CertPem     = ``
+	KeyPem      = ``
 	TokenSecret = `
 IoHrlEV4vl9GViynFBHs
 gJ6qDxkWULgz98UQrO4m
@@ -26,6 +28,10 @@ YRagObZKweSOD6H9hujc
 QHjieaOOKreDERoKUFqh
 sXM4zHcNESu2ijyfTZmX
 `
+	EnableHttpsRedirect = false
+	UseUniqueRequestId = true
+	EnableLogging = true
+	LogLevel = log.ERROR
 )
 
 //simply converts http requests into https

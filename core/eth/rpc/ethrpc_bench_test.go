@@ -40,10 +40,9 @@ func (s *EthRPCBenchSuite) registerResponseError(err error) {
 }
 
 func (s *EthRPCBenchSuite) getBody(request *http.Request) []byte {
-	defer request.Body.Close()
 	body, err := ioutil.ReadAll(request.Body)
 	s.Require().Nil(err)
-
+	_ = request.Body.Close()
 	return body
 }
 
@@ -63,7 +62,8 @@ func (s *EthRPCBenchSuite) paramsEqual(body []byte, expected string) {
 }
 
 func (s *EthRPCBenchSuite) SetupSuite() {
-	s.rpc = NewEthRPC("http://127.0.0.1:8545", WithHttpClient(http.DefaultClient), WithLogger(nil), WithDebug(false))
+	client := NewDefaultRPC("http://127.0.0.1:8545")
+	s.rpc = &client
 
 	httpmock.Activate()
 }
@@ -1161,7 +1161,7 @@ func BenchmarkEthError(b *testing.B) {
 }
 
 func BenchmarkEth1(b *testing.B) {
-	client := NewEthRPC("")
+	client := NewDefaultRPC("")
 	require.Equal(b, int64(1000000000000000000), Eth1().Int64())
 	require.Equal(b, int64(1000000000000000000), client.Eth1().Int64())
 }

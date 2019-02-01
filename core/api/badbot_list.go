@@ -4,6 +4,7 @@
 package api
 
 var (
+	// bad bot blacklisted user agent strings
 	BadBotsList = []string{
 		"almaden",
 		"Anarchie",

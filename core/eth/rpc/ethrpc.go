@@ -7,11 +7,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/labstack/gommon/log"
 	"io/ioutil"
-	"log"
 	"math/big"
 	"net/http"
-	"os"
 )
 
 // EthError - ethereum error
@@ -23,6 +22,10 @@ type EthError struct {
 func (err EthError) Error() string {
 	return fmt.Sprintf("Error %d (%s)", err.Code, err.Message)
 }
+
+var (
+	oneEth = big.NewInt(1000000000000000000)
+)
 
 type ethResponse struct {
 	ID      int             `json:"id"`
@@ -40,40 +43,21 @@ type ethRequest struct {
 
 // EthRPC - Ethereum rpc client
 type EthRPC struct {
+	//ethereum or quorum node endpoint
 	url    string
-	client httpClient
-	log    logger
+	client http.Client
+	// debug flag
 	Debug  bool
 }
-
 
 // New create new rpc client with given url
 func NewDefaultRPC(url string) EthRPC {
 	rpc := EthRPC{
 		url:    url,
-		client: http.DefaultClient,
-		log:    log.New(os.Stderr, "", log.LstdFlags),
-		Debug: false,
+		client: http.Client{},
+		Debug:  false,
 	}
 	return rpc
-}
-// New create new rpc client with given url
-func New(url string, options ...func(rpc *EthRPC)) *EthRPC {
-	rpc := &EthRPC{
-		url:    url,
-		client: http.DefaultClient,
-		log:    log.New(os.Stderr, "", log.LstdFlags),
-	}
-	for _, option := range options {
-		option(rpc)
-	}
-
-	return rpc
-}
-
-// NewEthRPC create new rpc client with given url
-func NewEthRPC(url string, options ...func(rpc *EthRPC)) *EthRPC {
-	return New(url, options...)
 }
 
 func (rpc EthRPC) call(method string, target interface{}, params ...interface{}) error {
@@ -109,9 +93,6 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	}
 
 	response, err := rpc.client.Post(rpc.url, "application/json", bytes.NewBuffer(body))
-	if response != nil {
-		defer response.Body.Close()
-	}
 	if err != nil {
 		return nil, err
 	}
@@ -120,9 +101,11 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	if err != nil {
 		return nil, err
 	}
+	//data readed, close body
+	_ = response.Body.Close()
 
 	if rpc.Debug {
-		rpc.log.Println(fmt.Sprintf("%s\nRequest: %s\nResponse: %s\n", method, body, data))
+		log.Debug(fmt.Sprintf("%s\nRequest: %s\nResponse: %s\n", method, body, data))
 	}
 
 	resp := new(ethResponse)
@@ -524,5 +507,5 @@ func (rpc EthRPC) Eth1() *big.Int {
 
 // Eth1 returns 1 ethereum value (10^18 wei)
 func Eth1() *big.Int {
-	return big.NewInt(1000000000000000000)
+	return oneEth
 }

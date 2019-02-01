@@ -61,6 +61,10 @@ DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 
 	TokenSecret = "t0k3n-s3cr3t-h3r3"
+	EnableHttpsRedirect = false
+	UseUniqueRequestId = true
+	EnableLogging = true
+	LogLevel = log.DEBUG
 )
 
 //simply converts http requests into https

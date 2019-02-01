@@ -4,13 +4,13 @@
 package eth
 
 import (
+	"github.com/zerjioang/gaethway/core/modules/token/erc20"
 	"time"
 
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/gaethway/core/keystore/memory"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
 	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
-	"github.com/zerjioang/gaethway/core/modules/token"
 )
 
 type WalletManager struct {
@@ -26,8 +26,8 @@ func NewWalletManager() WalletManager {
 }
 
 // get token instance for given client and address
-func InstantiateToken(client *ethclient.Client, address common.Address) (*token.Token, error) {
-	instance, err := token.NewToken(address, client)
+func InstantiateToken(client *ethclient.Client, address common.Address) (*erc20.ERC20Token, error) {
+	instance, err := erc20.NewToken(address, client)
 	return instance, err
 }
 
