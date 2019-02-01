@@ -66,14 +66,19 @@ const routerNames = {
 		},
 		addressChecker: {
 		  path: '/address/verify',
-		  name: 'Address Check',
+		  name: 'Addressing tools',
 		  component: undefined
 		},
-		balanceChecker: {
-		  path: '/address/balance',
-		  name: 'Balance Check',
-		  component: undefined
+		alastria: {
+		  path: '/alastria',
+		  name: 'Alastria',
+		  component: () => import('@/views/dashboard/alastria/index')
 		},
+			alastriaStatus: {
+			  path: '/alastria/status',
+			  name: 'Status',
+			  component: () => import('@/views/dashboard/alastria/status')
+			},
 		newProfile: {
 		  path: '/profiles/create',
 		  name: 'New Profile',

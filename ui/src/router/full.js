@@ -5,7 +5,6 @@ import routerNames from '@/layout/routerNames';
 
 const dashboardIndex = () => import('@/views/dashboard/home');
 const addressCheck = () => import('@/views/dashboard/tools/addressCheck');
-const balanceCheck = () => import('@/views/dashboard/tools/balanceCheck');
 const privateApi = () => import('@/views/dashboard/home');
 const bugReport = () => import('@/views/dashboard/bugReport');
 const about = () => import('@/views/dashboard/about');
@@ -85,10 +84,16 @@ export default new Router({
           component: routerNames.ethCreate.component,
         },
         {
-          // dashboard >> balance check
-          path: routerNames.balanceChecker.path,
-          name: routerNames.balanceChecker.name,
-          component: balanceCheck
+          // dashboard >> alastria >> index
+          path: routerNames.alastria.path,
+          name: routerNames.alastria.name,
+          component: routerNames.alastria.component,
+        },
+        {
+          // dashboard >> alastria >> status
+          path: routerNames.alastriaStatus.path,
+          name: routerNames.alastriaStatus.name,
+          component: routerNames.alastriaStatus.component,
         },
         {
           // dashboard >> report >> issue
