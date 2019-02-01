@@ -8,6 +8,5 @@ import (
 )
 
 func GenerateUUID() string {
-	u := uuid.NewV4()
-	return u.String()
+	return uuid.NewV4().String()
 }

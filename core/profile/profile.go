@@ -4,17 +4,18 @@
 package profile
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/zerjioang/gaethway/core/config"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/pkg/errors"
 )
 
 var (
 	emptyProfile     ConnectionProfile
 	tokenSecretBytes = []byte(config.TokenSecret)
+	errTokenNoValid = errors.New("invalid fields token provided")
 )
 
 // default data for connection profile
@@ -35,22 +36,46 @@ type ConnectionProfile struct {
 
 	// default ethereum account for transactioning
 	Account string `json:"account"`
+
+	//standard claims
+	//Identifies the recipients that the JWT is intended for.
+	// Each principal intended to process the JWT must identify
+	// itself with a value in the audience claim.
+	// If the principal processing the claim does not identify
+	// itself with a value in the aud claim when this claim is present,
+	// then the JWT must be rejected.
+	Audience  string `json:"aud,omitempty"`
+	// Identifies the expiration time on and after which the
+	// JWT must not be accepted for processing. The value must be
+	// a NumericDate[10]: either an integer or decimal, representing
+	// seconds past 1970-01-01 00:00:00Z.
+	ExpiresAt int64  `json:"exp,omitempty"`
+	// Case sensitive unique identifier of the token
+	// even among different issuers.
+	Id        string `json:"jti,omitempty"`
+	// Identifies the time at which the JWT was issued.
+	// The value must be a NumericDate.
+	IssuedAt  int64  `json:"iat,omitempty"`
+	//Identifies principal that issued the JWT.
+	Issuer    string `json:"iss,omitempty"`
+	// Identifies the time on which the JWT will start to be accepted
+	// for processing. The value must be a NumericDate.
+	NotBefore int64  `json:"nbf,omitempty"`
+	//Identifies the subject of the JWT.
+	Subject   string `json:"sub,omitempty"`
 }
 
 func (profile ConnectionProfile) Valid() error {
+	valid := profile.ConnectionId != "" &&
+		profile.NodeAddress != ""
+	if !valid {
+		return errTokenNoValid
+	}
 	return nil
 }
 
 func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
-}
-
-func NewConnectionProfile(claims jwt.MapClaims) (ConnectionProfile, error) {
-	var profile ConnectionProfile
-	if claims == nil {
-		return profile, errors.New("failed to create connection profile with given token")
-	}
-	return profile, nil
 }
 
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
@@ -63,6 +88,7 @@ func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 }
 
 func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
+	var profile ConnectionProfile
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -72,14 +98,23 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-		return "", nil
+		// return used token secret
+		return tokenSecretBytes, nil
 	})
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return NewConnectionProfile(claims)
-	} else {
-		return emptyProfile, err
+	if err != nil {
+		return profile, err
 	}
+
+	profile, ok := token.Claims.(ConnectionProfile)
+	if ok && token.Valid {
+		return profile, nil
+	} else {
+		return profile, err
+	}
+}
+
+//constructor like function
+func NewConnectionProfile() ConnectionProfile {
+	p := ConnectionProfile{}
+	return p
 }
