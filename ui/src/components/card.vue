@@ -40,16 +40,17 @@
 	              	:model="model"/>
 	           	  </div> <!-- form group end -->
 	           	  
-	           	  <div
-	           	  	v-for="btn in col.buttons"
+	           	  <div class="col-md-12 text-right">
+           	  		<button
+           	  		v-for="btn in col.buttons"
 	           	  	:key="btn.id"
-	           	  	class="form-btn">
-	           	  		<button
-	           	  		:type="btn.type"
-	           	  		:class="btn.class"
-	           	  		v-on:click="trigger($event)"
-	           	  		:id="btn.eventid">{{btn.text}}
-	           	  		</button> 
+	           	  	class="form-btn"
+           	  		:type="btn.type"
+           	  		:class="btn.class"
+                  :disabled="btn.disabled"
+           	  		v-on:click="trigger($event)"
+           	  		:id="btn.eventid">{{btn.text}}
+           	  		</button> 
 	              </div> <!-- buttons required in current col end -->
 	          </div> <!-- col end -->
 	        </form>
@@ -131,5 +132,9 @@ export default {
 
 .upper {
   text-transform: uppercase;
+}
+
+.multiple-btn-row {
+	margin-left: 5px;
 }
 </style>

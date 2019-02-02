@@ -1,17 +1,18 @@
-const addressCheckForm = {
+const createAddressForm = {
 	id:10,
 	class: "col-lg-6 col-md-6 col-sm-12 col-xs-12",
 	type: "card",
 	api: {
 		method: 'get',
-		url: '/eth/verify/'
+		url: '/eth/create/'
 	},
 	model: {
-		address: undefined
+		address: undefined,
+		key: undefined
 	},
 	header: {
-		title: "Ethereum Address validation",
-		subtitle: "Verify if given address is valid or not",
+		title: "Create Ethereum/Quorum account",
+		subtitle: "Create new account dynamically",
 		dropdown: {
 			icon: "more_vert",
 			items: [
@@ -44,7 +45,7 @@ const addressCheckForm = {
 				inputgroup: [
 					{
 						id:101,
-						title: "ETH Address",
+						title: "Account details",
 						items: [
 							{
 								id:102,
@@ -55,10 +56,25 @@ const addressCheckForm = {
 									type: "text",
 									class: "form-control key",
 									placeholder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-									required: true,
-									disabled: false,
+									required: false,
+									disabled: true,
 									autocomplete: "on",
 									modelKey: "address",
+								}
+							},
+							{
+								id:103,
+								type:"icon+text",
+								class: "input-group",
+								icon: "account_box",
+								input: {
+									type: "text",
+									class: "form-control key",
+									placeholder: "secret",
+									required: false,
+									disabled: true,
+									autocomplete: "on",
+									modelKey: "key",
 								}
 							}
 						]
@@ -68,8 +84,15 @@ const addressCheckForm = {
 					{
 						id: 11,
 						type: "submit",
-						class: "btn btn-lg bg-indigo m-t-15 waves-effect upper",
-						text: "validate address"
+						class: "btn btn-lg bg-indigo m-t-15 waves-effect upper multiple-btn-row",
+						text: "Create account"
+					},
+					{
+						id: 12,
+						type: "copy-to-clipboard",
+						class: "btn btn-lg bg-indigo m-t-15 waves-effect upper multiple-btn-row",
+						disabled: true,
+						text: "Copy to clipboard"
 					}
 				]
 			}
@@ -77,4 +100,4 @@ const addressCheckForm = {
 	}
 };
 
-export default addressCheckForm;
+export default createAddressForm;

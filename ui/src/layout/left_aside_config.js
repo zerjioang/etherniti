@@ -64,6 +64,7 @@ const leftAsideLayout = [
 			}
 		]
 	},
+	// Ethereum
 	{
 		id:102,
 		name:routerNames.eth.name,
@@ -73,30 +74,12 @@ const leftAsideLayout = [
 		active: false,
 		submenus: [
 			{
+				// ethereum >> create account
 				id:1023,
 				name:routerNames.ethCreate.name,
 				icon: "add",
 				class: "",
 				to:routerNames.ethCreate.path,
-				active: false,
-				submenus: []
-			}
-		]
-	},
-	{
-		id:103,
-		name:routerNames.quorum.name,
-		icon: "storage",
-		class: "",
-		to:routerNames.quorum.path,
-		active: false,
-		submenus: [
-			{
-				id:1031,
-				name:routerNames.quorumCreate.name,
-				icon: "add",
-				class: "",
-				to:routerNames.quorumCreate.path,
 				active: false,
 				submenus: []
 			}

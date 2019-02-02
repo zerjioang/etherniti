@@ -5,20 +5,23 @@
         subtitle="Create new Ethereum and Quorum addresses on the fly"/>
 
         <div class="row clearfix">
-          <apiForm :form="form.addressCheckForm"></apiForm>
+          <apiForm :form="form.createAddressForm"></apiForm>
+          <apiForm :form="form.createAddressInNodeForm"></apiForm>
         </div>
     </div>
 </template>
 
 <script>
 
-import addressCheckForm from '@/layout/forms/addressCheckForm';
+import createAddressForm from '@/layout/forms/createAddressForm';
+import createAddressInNodeForm from '@/layout/forms/createAddressInNodeForm';
 export default {
   name: 'eth-accounts-view',
   data () {
     return {
       form: {
-        addressCheckForm: addressCheckForm,
+        createAddressForm: createAddressForm,
+        createAddressInNodeForm: createAddressInNodeForm
       },
       result: {
         visible: false,

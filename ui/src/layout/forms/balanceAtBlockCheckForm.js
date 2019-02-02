@@ -13,8 +13,8 @@ const balanceAtBlockCheckForm = {
 		block: undefined,
 	},
 	header: {
-		title: "Ethereum Address balance at given Block",
-		subtitle: "Get the balance of Ethereum account at given Block",
+		title: "Ethereum Address balance at given block",
+		subtitle: "Get the balance of Ethereum account at given block",
 		dropdown: {
 			icon: "more_vert",
 			items: [

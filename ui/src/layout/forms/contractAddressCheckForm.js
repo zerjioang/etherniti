@@ -10,7 +10,7 @@ const contractCheckForm = {
 		address: undefined
 	},
 	header: {
-		title: "Ethereum Contract Address Check",
+		title: "Ethereum contract address check",
 		subtitle: "Verify if given address is a contract address or not",
 		dropdown: {
 			icon: "more_vert",
