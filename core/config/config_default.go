@@ -65,8 +65,9 @@ DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 
 	TokenSecret = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect = false
-	UseUniqueRequestId = true
+	UseUniqueRequestId = false
 	EnableRateLimit = false
+	BlockTorConnections = false
 	EnableLogging = true
 	LogLevel = log.DEBUG
 )

@@ -31,6 +31,7 @@ sXM4zHcNESu2ijyfTZmX
 	EnableHttpsRedirect = false
 	UseUniqueRequestId = false
 	EnableRateLimit = true
+	BlockTorConnections = true
 	EnableLogging = true
 	LogLevel = log.ERROR
 )

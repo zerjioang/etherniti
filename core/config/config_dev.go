@@ -64,6 +64,7 @@ DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 	EnableHttpsRedirect = false
 	UseUniqueRequestId = true
 	EnableRateLimit = false
+	BlockTorConnections = true
 	EnableLogging = true
 	LogLevel = log.DEBUG
 )

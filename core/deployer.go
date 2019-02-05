@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"github.com/zerjioang/gaethway/core/server/mods/ratelimit"
+	"github.com/zerjioang/gaethway/core/server/mods/tor"
 	"net/http"
 	"os"
 	"os/signal"
@@ -220,6 +221,7 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add antibots policy
 		ua := c.Request().UserAgent()
+		ua = strings.ToLower(ua)
 		if ua == "" || deployer.isBotRequest(ua) {
 			//drop the request
 			return userAgentErr
@@ -320,8 +322,14 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 
 	if config.EnableRateLimit {
 		// add rate limit control
-		log.Info("[LAYER] rest api rate limit")
+		log.Info("[LAYER] rest api rate limit middleware added")
 		e.Use(ratelimit.RateLimit)
+	}
+
+	if config.BlockTorConnections {
+		// add rate limit control
+		log.Info("[LAYER] tor connections blocker middleware added")
+		e.Use(tor.BlockTorConnections)
 	}
 
 	log.Info("[LAYER] unique request id")
