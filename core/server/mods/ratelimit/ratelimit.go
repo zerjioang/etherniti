@@ -1,10 +1,12 @@
 package ratelimit
 
 import (
-	"errors"
 	"github.com/labstack/echo"
+	"github.com/zerjioang/gaethway/core/api"
+	"net/http"
 	"strconv"
 	"sync/atomic"
+	"time"
 )
 
 // 4,000 requests per hour.
@@ -28,7 +30,7 @@ const (
 
 var (
 	rateRemaining = rateLimit
-	rateExcedeed = errors.New("rate limit reached")
+	rateExcedeed = api.NewApiError(http.StatusTooManyRequests, "rate limit reached")
 	//rateCache *cache.Cache
 )
 
@@ -45,6 +47,11 @@ func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
 		//get current request identifier
 		// read request token. if not available fallback to user ip
 
+		//get current time
+		timeNow := time.Now()
+		//currentTime := timeNow.Unix()
+		afterHourTime := timeNow.Add(60*time.Minute)
+
 		// read current limit
 		currentRequestsLimit := atomic.LoadInt32(&rateRemaining)
 
@@ -52,18 +59,21 @@ func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
 		h := c.Response().Header()
 		// add rate limit max value: 4000
 		h.Set(XRateLimit, rateLimitStr)
-		// add current user remaining limit
-		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit), 10))
 
 		if currentRequestsLimit > 0 {
-			//allow request
 			//decrease counter limit
 			atomic.AddInt32(&rateRemaining, -1)
+
+			// add current user remaining limit
+			h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit), 10))
+
+			//allow request
 			return next(c)
 		} else {
 			//return rate limit excedeed message
-			h.Set(XRateReset, "1549361984")
-			return rateExcedeed
+			rateResetStr := strconv.FormatInt(afterHourTime.Unix(), 10)
+			h.Set(XRateReset, rateResetStr)
+			return c.JSON(http.StatusTooManyRequests, rateExcedeed)
 		}
 	}
 }

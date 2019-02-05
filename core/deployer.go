@@ -193,14 +193,13 @@ func (deployer Deployer) hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		h.Set("strict-transport-security", "max-age=31536000; includeSubDomains; preload")
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline'")
+		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' font-src fonts.googleapis.com fonts.gstatic.com")
 		h.Set("Expect-CT", "enforce, max-age=30")
 		h.Set("X-UA-Compatible", "IE=Edge,chrome=1")
 		h.Set("x-frame-options", "SAMEORIGIN")
 		h.Set("Referrer-Policy", "same-origin")
 		h.Set("Feature-Policy", "microphone 'none'; payment 'none'; sync-xhr 'self'")
 		h.Set("x-firefox-spdy", "h2")
-		h.Set("x-powered-by", "PHP/5.6.38")
 		return next(c)
 	}
 }
@@ -210,8 +209,8 @@ func (deployer Deployer) fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add fake server header
 		h := c.Response().Header()
-		h.Set("server", "Apache")
-		h.Set("x-powered-by", "PHP/5.6.38")
+		h.Set("server", "Apache/2.0.54")
+		h.Set("x-powered-by", "PHP/5.1.6")
 		return next(c)
 	}
 }
@@ -319,9 +318,11 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// add fake server header
 	e.Use(deployer.fakeServer)
 
-	log.Info("[LAYER] rest api rate limit")
-	// add fake server header
-	e.Use(ratelimit.RateLimit)
+	if config.EnableRateLimit {
+		// add rate limit control
+		log.Info("[LAYER] rest api rate limit")
+		e.Use(ratelimit.RateLimit)
+	}
 
 	log.Info("[LAYER] unique request id")
 	// Request ID middleware generates a unique id for a request.
@@ -340,6 +341,7 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] / static files")
 	//load root static folder
 	e.Static("/", resources+"/root")
+	e.Static("/phpinfo.php", resources+"/root/phpinfo.php")
 
 	// load swagger ui files
 	log.Info("[LAYER] /swagger files")

@@ -29,7 +29,8 @@ QHjieaOOKreDERoKUFqh
 sXM4zHcNESu2ijyfTZmX
 `
 	EnableHttpsRedirect = false
-	UseUniqueRequestId = true
+	UseUniqueRequestId = false
+	EnableRateLimit = true
 	EnableLogging = true
 	LogLevel = log.ERROR
 )
