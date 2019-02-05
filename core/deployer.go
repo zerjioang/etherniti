@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/gaethway/core/server/mods/ratelimit"
 	"net/http"
 	"os"
 	"os/signal"
@@ -317,6 +318,10 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] fake server http header")
 	// add fake server header
 	e.Use(deployer.fakeServer)
+
+	log.Info("[LAYER] rest api rate limit")
+	// add fake server header
+	e.Use(ratelimit.RateLimit)
 
 	log.Info("[LAYER] unique request id")
 	// Request ID middleware generates a unique id for a request.
