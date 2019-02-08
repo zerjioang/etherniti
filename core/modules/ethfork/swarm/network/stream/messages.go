@@ -22,11 +22,11 @@ import (
 	"time"
 
 	"github.com/opentracing/opentracing-go"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	bv "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/bitvector"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	bv "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network/bitvector"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 var syncBatchTimeout = 30 * time.Second

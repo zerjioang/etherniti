@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 func TestParseURI(t *testing.T) {

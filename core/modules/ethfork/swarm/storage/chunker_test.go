@@ -24,7 +24,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/testutil"
 	"golang.org/x/crypto/sha3"
 )
 

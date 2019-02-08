@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
 )
 
 type TestPeer interface {

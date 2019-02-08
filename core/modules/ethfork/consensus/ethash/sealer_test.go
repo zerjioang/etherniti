@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // Tests whether remote HTTP servers are correctly notified of new work.

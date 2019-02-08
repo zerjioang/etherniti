@@ -23,12 +23,12 @@ import (
 	"math/big"
 	"sort"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/trie"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/trie"
 )
 
 type revision struct {
@@ -507,7 +507,7 @@ func (self *StateDB) Copy() *StateDB {
 	}
 	// Copy the dirty states, logs, and preimages
 	for addr := range self.journal.dirties {
-		// As documented [here](https://github.com/zerjioang/gaethway/core/modules/ethfork/pull/16485#issuecomment-380438527),
+		// As documented [here](https://github.com/zerjioang/etherniti/core/modules/ethfork/pull/16485#issuecomment-380438527),
 		// and in the Finalise-method, there is a case where an object is in the journal but not
 		// in the stateObjects: OOG after touch on ripeMD prior to Byzantium. Thus, we need to check for
 		// nil

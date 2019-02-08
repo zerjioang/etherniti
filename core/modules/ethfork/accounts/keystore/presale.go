@@ -26,8 +26,8 @@ import (
 	"fmt"
 
 	"github.com/pborman/uuid"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 	"golang.org/x/crypto/pbkdf2"
 )
 

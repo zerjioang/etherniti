@@ -20,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
 )
 
 const (

@@ -20,14 +20,14 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 // lesCommons contains fields needed by both server and client.

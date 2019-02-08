@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // Verify that Client implements the ethereum interfaces.

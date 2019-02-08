@@ -2,12 +2,12 @@ Pod::Spec.new do |spec|
   spec.name         = 'Geth'
   spec.version      = '{{.Version}}'
   spec.license      = { :type => 'GNU Lesser General Public License, Version 3.0' }
-  spec.homepage     = 'https://github.com/zerjioang/gaethway/core/modules/ethfork'
+  spec.homepage     = 'https://github.com/zerjioang/etherniti/core/modules/ethfork'
   spec.authors      = { {{range .Contributors}}
 		'{{.Name}}' => '{{.Email}}',{{end}}
 	}
   spec.summary      = 'iOS Ethereum Client'
-  spec.source       = { :git => 'https://github.com/zerjioang/gaethway/core/modules/ethfork.git', :commit => '{{.Commit}}' }
+  spec.source       = { :git => 'https://github.com/zerjioang/etherniti/core/modules/ethfork.git', :commit => '{{.Commit}}' }
 
 	spec.platform = :ios
   spec.ios.deployment_target  = '9.0'

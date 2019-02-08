@@ -16,7 +16,7 @@
 
 package simulation
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
 
 // BucketKey is the type that should be used for keys in simulation buckets.
 type BucketKey string

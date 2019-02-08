@@ -16,7 +16,7 @@
 
 package bind
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
 
 // tmplData is the data structure required to fill the binding template.
 type tmplData struct {
@@ -68,12 +68,12 @@ import (
 	"math/big"
 	"strings"
 
-	ethereum "github.com/zerjioang/gaethway/core/modules/ethfork"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
+	ethereum "github.com/zerjioang/etherniti/core/modules/ethfork"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

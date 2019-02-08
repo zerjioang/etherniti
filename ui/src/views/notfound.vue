@@ -2,7 +2,7 @@
   <div class="t-root">
     <errorMessage
       class="t-child"
-      pagetitle="error 404 - gaethway.org"
+      pagetitle="error 404 - etherniti.org"
       code="404"
       title='Oops.. You just found an error page..'
       description="">

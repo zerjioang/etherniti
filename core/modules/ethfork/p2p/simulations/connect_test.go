@@ -19,9 +19,9 @@ package simulations
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
 )
 
 func newTestNetwork(t *testing.T, nodeCount int) (*Network, []enode.ID) {

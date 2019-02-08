@@ -22,9 +22,9 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 var emptyCodeHash = crypto.Keccak256(nil)

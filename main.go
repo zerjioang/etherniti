@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package main
@@ -6,9 +6,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/util"
+	"github.com/zerjioang/etherniti/core/util"
 
-	"github.com/zerjioang/gaethway/core"
+	"github.com/zerjioang/etherniti/core"
 )
 
 func init() {

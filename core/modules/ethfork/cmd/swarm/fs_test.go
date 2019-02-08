@@ -29,8 +29,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 type testFile struct {

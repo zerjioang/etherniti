@@ -17,8 +17,8 @@
 package core
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // NewTxsEvent is posted when a batch of transactions enter the transaction pool.

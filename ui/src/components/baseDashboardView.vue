@@ -1,5 +1,5 @@
 <template>
-  <body class="theme-gaethway">
+  <body class="theme-etherniti">
     <!-- Page Loader -->
     <loader text="Please wait..." :visible="loaderVisible"/>
     <!-- Overlay For Sidebars -->

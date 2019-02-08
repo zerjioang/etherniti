@@ -17,7 +17,7 @@
 // Package bind generates Ethereum contract Go bindings.
 //
 // Detailed usage document and tutorial available on the go-ethereum Wiki page:
-// https://github.com/zerjioang/gaethway/core/modules/ethfork/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
+// https://github.com/zerjioang/etherniti/core/modules/ethfork/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
 package bind
 
 import (
@@ -29,7 +29,7 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
 )
 
 // Lang is a target programming language selector to generate bindings for.

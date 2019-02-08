@@ -31,7 +31,7 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 func TestClientRequest(t *testing.T) {
@@ -323,7 +323,7 @@ func TestClientSubscribeClose(t *testing.T) {
 	}
 }
 
-// This test reproduces https://github.com/zerjioang/gaethway/core/modules/ethfork/issues/17837 where the
+// This test reproduces https://github.com/zerjioang/etherniti/core/modules/ethfork/issues/17837 where the
 // client hangs during shutdown when Unsubscribe races with Client.Close.
 func TestClientCloseUnsubscribeRace(t *testing.T) {
 	service := &NotificationTestService{}

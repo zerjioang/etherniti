@@ -26,8 +26,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // nodeDockerfile is the Dockerfile required to run an Ethereum node.

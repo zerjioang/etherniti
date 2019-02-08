@@ -23,8 +23,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 const (

@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 func TestWhisperBasic(t *testing.T) {

@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // deployExplorer creates a new block explorer based on some user input.

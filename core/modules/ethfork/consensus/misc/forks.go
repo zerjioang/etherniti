@@ -19,9 +19,9 @@ package misc
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 // VerifyForkHashes verifies that blocks conforming to network hard-forks do have

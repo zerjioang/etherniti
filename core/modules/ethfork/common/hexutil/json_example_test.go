@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 )
 
 type MyType [5]byte

@@ -26,8 +26,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // faucetDockerfile is the Dockerfile required to build a faucet container to

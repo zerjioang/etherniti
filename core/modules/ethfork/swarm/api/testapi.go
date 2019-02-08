@@ -17,7 +17,7 @@
 package api
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network"
 )
 
 type Control struct {

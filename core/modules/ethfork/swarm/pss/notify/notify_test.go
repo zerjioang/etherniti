@@ -9,17 +9,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pss"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv5"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pss"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv5"
 )
 
 var (

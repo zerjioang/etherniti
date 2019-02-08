@@ -26,9 +26,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // prepare converts an ethash cache or dataset from a byte stream into the internal

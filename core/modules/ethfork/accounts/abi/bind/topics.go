@@ -22,9 +22,9 @@ import (
 	"math/big"
 	"reflect"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 // makeTopics converts a filter query argument list into a filter topic set.

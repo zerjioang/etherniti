@@ -19,7 +19,7 @@ package event_test
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
 )
 
 func ExampleNewSubscription() {

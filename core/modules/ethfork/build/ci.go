@@ -58,9 +58,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/build"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	sv "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/version"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/build"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	sv "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/version"
 )
 
 var (
@@ -776,7 +776,7 @@ func doAndroidArchive(cmdline []string) {
 	// Build the Android archive and Maven resources
 	build.MustRun(goTool("get", "golang.org/x/mobile/cmd/gomobile", "golang.org/x/mobile/cmd/gobind"))
 	build.MustRun(gomobileTool("init", "--ndk", os.Getenv("ANDROID_NDK")))
-	build.MustRun(gomobileTool("bind", "-ldflags", "-s -w", "--target", "android", "--javapkg", "org.ethereum", "-v", "github.com/zerjioang/gaethway/core/modules/ethfork/mobile"))
+	build.MustRun(gomobileTool("bind", "-ldflags", "-s -w", "--target", "android", "--javapkg", "org.ethereum", "-v", "github.com/zerjioang/etherniti/core/modules/ethfork/mobile"))
 
 	if *local {
 		// If we're building locally, copy bundle to build dir and skip Maven
@@ -902,7 +902,7 @@ func doXCodeFramework(cmdline []string) {
 	// Build the iOS XCode framework
 	build.MustRun(goTool("get", "golang.org/x/mobile/cmd/gomobile", "golang.org/x/mobile/cmd/gobind"))
 	build.MustRun(gomobileTool("init"))
-	bind := gomobileTool("bind", "-ldflags", "-s -w", "--target", "ios", "--tags", "ios", "-v", "github.com/zerjioang/gaethway/core/modules/ethfork/mobile")
+	bind := gomobileTool("bind", "-ldflags", "-s -w", "--target", "ios", "--tags", "ios", "-v", "github.com/zerjioang/etherniti/core/modules/ethfork/mobile")
 
 	if *local {
 		// If we're building locally, use the build folder and stop afterwards

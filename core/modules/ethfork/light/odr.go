@@ -23,11 +23,11 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/rawdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 // NoOdr is the default context passed to an ODR capable function when the ODR

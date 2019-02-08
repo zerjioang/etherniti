@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/pipes"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/pipes"
 )
 
 func TestTCPPipe(t *testing.T) {

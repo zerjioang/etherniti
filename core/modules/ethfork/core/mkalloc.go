@@ -34,8 +34,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 type allocItem struct{ Addr, Balance *big.Int }

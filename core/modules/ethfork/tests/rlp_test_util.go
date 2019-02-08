@@ -24,7 +24,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // RLPTest is the JSON structure of a single RLP test.

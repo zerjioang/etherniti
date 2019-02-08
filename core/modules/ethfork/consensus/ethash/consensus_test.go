@@ -23,9 +23,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 type diffTest struct {

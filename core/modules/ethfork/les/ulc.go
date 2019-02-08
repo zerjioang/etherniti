@@ -3,8 +3,8 @@ package les
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
 )
 
 type ulc struct {

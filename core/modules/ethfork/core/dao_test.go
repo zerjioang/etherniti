@@ -20,10 +20,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/consensus/ethash"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/consensus/ethash"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 // Tests that DAO-fork enabled clients can properly filter out fork-commencing

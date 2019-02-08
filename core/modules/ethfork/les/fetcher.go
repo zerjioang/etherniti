@@ -22,13 +22,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/consensus"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/consensus"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/rawdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 const (

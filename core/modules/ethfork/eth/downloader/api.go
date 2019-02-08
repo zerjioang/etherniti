@@ -20,9 +20,9 @@ import (
 	"context"
 	"sync"
 
-	ethereum "github.com/zerjioang/gaethway/core/modules/ethfork"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	ethereum "github.com/zerjioang/etherniti/core/modules/ethfork"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 )
 
 // PublicDownloaderAPI provides an API which gives information about the current synchronisation status.

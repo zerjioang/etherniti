@@ -21,11 +21,11 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // Constants to match up protocol versions and messages

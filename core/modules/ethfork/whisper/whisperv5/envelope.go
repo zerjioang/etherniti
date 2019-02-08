@@ -26,11 +26,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/ecies"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto/ecies"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // Envelope represents a clear-text data packet to transmit through the Whisper

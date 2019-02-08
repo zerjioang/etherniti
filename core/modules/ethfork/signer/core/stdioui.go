@@ -21,9 +21,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/ethapi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 )
 
 type StdIOUI struct {

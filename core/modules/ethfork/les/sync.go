@@ -20,9 +20,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth/downloader"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/rawdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth/downloader"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
 )
 
 // syncer is responsible for periodically synchronising with the network, both

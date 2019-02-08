@@ -30,8 +30,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // Tests that the account management snippets work correctly.

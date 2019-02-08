@@ -22,8 +22,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 const (

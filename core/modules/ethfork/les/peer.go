@@ -24,13 +24,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/les/flowcontrol"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/les/flowcontrol"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 var (

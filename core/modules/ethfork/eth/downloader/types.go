@@ -19,7 +19,7 @@ package downloader
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // peerDropFn is a callback type for dropping a peer detected as malicious.

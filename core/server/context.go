@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package server
@@ -11,7 +11,7 @@ type GaethwayContext struct {
 	echo.Context
 }
 
-func NewgaethwayContext() GaethwayContext {
+func NewethernitiContext() GaethwayContext {
 	ctx := GaethwayContext{}
 	return ctx
 }

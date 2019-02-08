@@ -27,7 +27,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations"
 )
 
 // TestSnapshotCreate is a high level e2e test that tests for snapshot generation.

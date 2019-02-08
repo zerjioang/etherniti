@@ -91,7 +91,7 @@ require("@/assets/plugins/animate-css/animate.css");
 require("@/assets/css/style.css");
 
 // AdminBSB Themes. You can choose a theme from css/themes instead of get all themes
-require("@/assets/css/themes/theme-gaethway.css");
+require("@/assets/css/themes/theme-etherniti.css");
 
 // clean scroll bar style
 require("@/assets/css/cleanscroll.css");

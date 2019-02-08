@@ -22,7 +22,7 @@ const (
 
 // locationTrims are trimmed for display to avoid unwieldy log lines.
 var locationTrims = []string{
-	"github.com/zerjioang/gaethway/core/modules/ethfork/",
+	"github.com/zerjioang/etherniti/core/modules/ethfork/",
 }
 
 // PrintOrigins sets or unsets log location (file:line) printing for terminal

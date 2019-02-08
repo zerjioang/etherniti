@@ -17,9 +17,9 @@
 package simulation
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
 )
 
 // Service returns a single Service by name on a particular node

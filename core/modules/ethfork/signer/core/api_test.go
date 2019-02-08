@@ -28,13 +28,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/ethapi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 //Used for testing

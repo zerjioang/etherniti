@@ -23,10 +23,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/tests"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/tests"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

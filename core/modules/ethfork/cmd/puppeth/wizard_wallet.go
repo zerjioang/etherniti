@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // deployWallet creates a new web wallet based on some user input.

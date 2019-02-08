@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 	"gopkg.in/urfave/cli.v1"
 )
 

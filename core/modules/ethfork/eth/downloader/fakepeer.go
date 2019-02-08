@@ -19,11 +19,11 @@ package downloader
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/rawdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 // FakePeer is a mock downloader peer that operates on a local database instance

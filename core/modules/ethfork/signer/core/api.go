@@ -25,15 +25,15 @@ import (
 	"math/big"
 	"reflect"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/usbwallet"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/usbwallet"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/ethapi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // numberOfAccountsToDerive For hardware wallets, the number of accounts to derive
@@ -518,7 +518,7 @@ func (api *SignerAPI) SignTransaction(ctx context.Context, args SendTxArgs, meth
 //
 // The key used to calculate the signature is decrypted with the given password.
 //
-// https://github.com/zerjioang/gaethway/core/modules/ethfork/wiki/Management-APIs#personal_sign
+// https://github.com/zerjioang/etherniti/core/modules/ethfork/wiki/Management-APIs#personal_sign
 func (api *SignerAPI) Sign(ctx context.Context, addr common.MixedcaseAddress, data hexutil.Bytes) (hexutil.Bytes, error) {
 	sighash, msg := SignHash(data)
 	// We make the request prior to looking up if we actually have the account, to prevent

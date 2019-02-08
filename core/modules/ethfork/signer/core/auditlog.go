@@ -21,11 +21,11 @@ import (
 
 	"encoding/json"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/ethapi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 type AuditLogger struct {

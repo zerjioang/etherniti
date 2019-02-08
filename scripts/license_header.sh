@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright gaethway
+# Copyright etherniti
 # SPDX-License-Identifier: Apache License 2.0
 #
 
@@ -10,7 +10,7 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
-echo "Checking gaethway source files license header..."
+echo "Checking etherniti source files license header..."
 pwd
 
 copyrightContent=$(cat ./docs/header.txt)

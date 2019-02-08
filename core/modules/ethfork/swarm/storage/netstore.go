@@ -25,8 +25,8 @@ import (
 	"time"
 
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 type (

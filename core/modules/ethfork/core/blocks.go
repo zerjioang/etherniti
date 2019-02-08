@@ -16,7 +16,7 @@
 
 package core
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/common"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/common"
 
 // BadHashes represent a set of manually tracked bad hashes (usually hard forks)
 var BadHashes = map[common.Hash]bool{

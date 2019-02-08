@@ -10,8 +10,8 @@ import (
 	"bytes"
 	"math/big"
 
-	cloudflare "github.com/zerjioang/gaethway/core/modules/ethfork/crypto/bn256/cloudflare"
-	google "github.com/zerjioang/gaethway/core/modules/ethfork/crypto/bn256/google"
+	cloudflare "github.com/zerjioang/etherniti/core/modules/ethfork/crypto/bn256/cloudflare"
+	google "github.com/zerjioang/etherniti/core/modules/ethfork/crypto/bn256/google"
 )
 
 // FuzzAdd fuzzez bn256 addition between the Google and Cloudflare libraries.

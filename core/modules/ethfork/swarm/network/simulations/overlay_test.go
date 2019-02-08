@@ -26,9 +26,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 var (

@@ -39,12 +39,12 @@ import (
 	"time"
 
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/tracing"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/tracing"
 )
 
 // error codes used by this  protocol scheme

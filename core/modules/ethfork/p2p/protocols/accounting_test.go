@@ -19,9 +19,9 @@ package protocols
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 //dummy Balance implementation

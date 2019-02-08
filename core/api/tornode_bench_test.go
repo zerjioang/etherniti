@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/armon/go-radix"
-	"github.com/zerjioang/gaethway/core/util"
+	"github.com/zerjioang/etherniti/core/util"
 	"testing"
 )
 

@@ -24,8 +24,8 @@ import (
 
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/debug"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/debug"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

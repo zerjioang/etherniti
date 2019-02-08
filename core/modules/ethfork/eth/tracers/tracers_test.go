@@ -27,17 +27,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/tests"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/tests"
 )
 
 // To generate a new callTracer test, copy paste the makeTest method below into

@@ -19,7 +19,7 @@ package trie
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // MissingNodeError is returned by the trie functions (TryGet, TryUpdate, TryDelete)

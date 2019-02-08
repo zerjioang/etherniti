@@ -24,12 +24,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
-	p2ptest "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/testing"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
+	p2ptest "github.com/zerjioang/etherniti/core/modules/ethfork/p2p/testing"
 )
 
 // handshake message type

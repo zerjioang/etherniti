@@ -19,7 +19,7 @@ package state
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // journalEntry is a modification entry in the state change journal that can be

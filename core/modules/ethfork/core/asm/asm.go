@@ -21,7 +21,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
 )
 
 // Iterator for disassembled EVM instructions

@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 )
 
 // a regexp for extracting the unit from time.Duration.String

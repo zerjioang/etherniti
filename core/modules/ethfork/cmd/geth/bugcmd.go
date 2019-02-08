@@ -26,10 +26,10 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/internals/browser"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/internals/browser"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -41,7 +41,7 @@ var bugCommand = cli.Command{
 	Category:  "MISCELLANEOUS COMMANDS",
 }
 
-const issueURL = "https://github.com/zerjioang/gaethway/core/modules/ethfork/issues/new"
+const issueURL = "https://github.com/zerjioang/etherniti/core/modules/ethfork/issues/new"
 
 // reportBug reports a bug by opening a new URL to the go-ethereum GH issue
 // tracker and setting default values as the issue body.

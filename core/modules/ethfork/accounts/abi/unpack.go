@@ -22,7 +22,7 @@ import (
 	"math/big"
 	"reflect"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 var (

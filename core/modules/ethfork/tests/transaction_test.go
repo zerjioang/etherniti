@@ -20,7 +20,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 func TestTransaction(t *testing.T) {

@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/fuse"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/fuse"
 	"gopkg.in/urfave/cli.v1"
 )
 

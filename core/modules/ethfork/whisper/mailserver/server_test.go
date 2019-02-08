@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv6"
 )
 
 const powRequirement = 0.00001

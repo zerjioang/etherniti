@@ -42,7 +42,7 @@ import (
 	"fmt"
 	"hash"
 
-	ethcrypto "github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	ethcrypto "github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 var (

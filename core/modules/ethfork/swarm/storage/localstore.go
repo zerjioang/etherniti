@@ -21,9 +21,9 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock"
 )
 
 type LocalStoreParams struct {

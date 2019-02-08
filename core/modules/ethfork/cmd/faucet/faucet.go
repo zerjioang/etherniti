@@ -41,23 +41,23 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth/downloader"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethstats"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/les"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/discv5"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/nat"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth/downloader"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethstats"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/les"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/discv5"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/nat"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 	"golang.org/x/net/websocket"
 )
 
@@ -449,7 +449,7 @@ func (f *faucet) apiHandler(conn *websocket.Conn) {
 		case *noauthFlag:
 			username, avatar, address, err = authNoAuth(msg.URL)
 		default:
-			err = errors.New("Something funky happened, please open an issue at https://github.com/zerjioang/gaethway/core/modules/ethfork/issues")
+			err = errors.New("Something funky happened, please open an issue at https://github.com/zerjioang/etherniti/core/modules/ethfork/issues")
 		}
 		if err != nil {
 			if err = sendError(conn, err); err != nil {

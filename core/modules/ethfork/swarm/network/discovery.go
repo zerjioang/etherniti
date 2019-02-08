@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pot"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pot"
 )
 
 // discovery bzz extension for requesting and relaying node address records

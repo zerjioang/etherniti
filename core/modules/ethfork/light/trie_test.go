@@ -23,13 +23,13 @@ import (
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/consensus/ethash"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/trie"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/consensus/ethash"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/trie"
 )
 
 func TestNodeIterator(t *testing.T) {

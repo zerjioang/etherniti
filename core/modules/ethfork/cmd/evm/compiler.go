@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/evm/internals/compiler"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/evm/internals/compiler"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

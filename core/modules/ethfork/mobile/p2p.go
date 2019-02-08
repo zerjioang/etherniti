@@ -21,7 +21,7 @@ package geth
 import (
 	"errors"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
 )
 
 // NodeInfo represents pi short summary of the information known about the host.

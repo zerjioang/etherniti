@@ -19,8 +19,8 @@ package trie
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // SecureTrie wraps a trie with key hashing. In a secure trie, all

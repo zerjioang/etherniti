@@ -19,7 +19,7 @@ package vm
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
 )
 
 func memorySha3(stack *Stack) *big.Int {

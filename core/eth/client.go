@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package eth
@@ -8,10 +8,10 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 )
 
 type EthClientType uint8

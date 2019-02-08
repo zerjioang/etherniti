@@ -28,17 +28,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/rawdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/ethapi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/trie"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/rawdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/ethapi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/trie"
 )
 
 // PublicEthereumAPI provides an API to access Ethereum full node-related

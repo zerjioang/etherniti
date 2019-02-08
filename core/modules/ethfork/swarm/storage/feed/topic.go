@@ -21,9 +21,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/bitutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/bitutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 // TopicLength establishes the max length of a topic string

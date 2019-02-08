@@ -25,7 +25,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // explorerDockerfile is the Dockerfile required to run a block explorer.

@@ -19,10 +19,10 @@ package metrics
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	gethmetrics "github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics/influxdb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	gethmetrics "github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics/influxdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

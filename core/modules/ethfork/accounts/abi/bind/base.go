@@ -22,12 +22,12 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
 )
 
 // SignerFn is a signer function callback when a contract requires a method to

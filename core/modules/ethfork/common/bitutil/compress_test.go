@@ -21,7 +21,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 )
 
 // Tests that data bitset encoding and decoding works and is bijective.

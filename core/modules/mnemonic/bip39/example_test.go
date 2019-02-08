@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package bip39_test
@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39"
+	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
 )
 
 func ExampleNewMnemonic() {

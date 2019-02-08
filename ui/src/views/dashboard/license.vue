@@ -2,7 +2,7 @@
     <div>
       <pagetitle
         :title="title"
-        subtitle="Following, all used tools for building gaethway are listed with their corresponding licenses."/>
+        subtitle="Following, all used tools for building etherniti are listed with their corresponding licenses."/>
         
         <h3 class="title">Licenses related to UI and this website</h3>
         <licenseInfoCardsRow :config="lists.ui"/>

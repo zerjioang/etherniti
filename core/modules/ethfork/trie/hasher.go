@@ -20,8 +20,8 @@ import (
 	"hash"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 	"golang.org/x/crypto/sha3"
 )
 

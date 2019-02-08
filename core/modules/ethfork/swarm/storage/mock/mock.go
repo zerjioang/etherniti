@@ -36,7 +36,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // ErrNotFound indicates that the chunk is not found.

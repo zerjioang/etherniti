@@ -1,7 +1,7 @@
 {
   "main": "index.html",
   "version": "1.0.0",
-  "description": "gaethway webapp",
+  "description": "etherniti webapp",
   "author": "zerjioang <sergio.anguita@opendeusto.es>",
   "private": true,
   "scripts": {

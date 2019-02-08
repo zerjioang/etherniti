@@ -21,9 +21,9 @@ import (
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 var dumper = spew.ConfigState{Indent: "    "}

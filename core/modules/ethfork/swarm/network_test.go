@@ -29,14 +29,14 @@ import (
 	"time"
 
 	colorable "github.com/mattn/go-colorable"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations/adapters"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/simulation"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations/adapters"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network/simulation"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 var (

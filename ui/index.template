@@ -9,8 +9,8 @@
     <meta http-equiv="Pragma" content="no-store">
     <meta http-equiv="Expires" content="-1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="gaethway, ethereum, eth, blockchain, api">
-    <meta name="description" content="gaethway: A High Performance Ethereum WebAPI made for enterprises, companies and developers">
+    <meta name="keywords" content="etherniti, ethereum, eth, blockchain, api">
+    <meta name="description" content="etherniti: A High Performance Ethereum WebAPI made for enterprises, companies and developers">
     <!--google search console tag -->
     <meta name="google-site-verification" content="WOFgTHwqmn9eKS9DBM8g9jUSvXUa1OALy5icAgf8940" />
     <!-- Favicon -->
@@ -30,7 +30,7 @@
     <link rel="shortcut icon" href="./static/favicon/favicon-96x96.png">
     <link rel="icon" type="image/x-icon" href="./static/favicon/favicon-96x96.png">
     <link rel="manifest" href="./static/favicon/manifest.json">
-    <link rel="canonical" href="https://gaethway.org" />
+    <link rel="canonical" href="https://etherniti.org" />
     <meta http-equiv="Content-Language" content="en" />
     <!--theme colors -->
     <meta name="msapplication-TileColor" content="#2d89ef">
@@ -42,30 +42,30 @@
     <meta name="MobileOptimized" content="320">
     
     <meta property=og:type content=business.business>
-    <meta property=og:title content="gaethway - High Performance Ethereum WebAPI">
-    <meta property=og:url content=https://gaethway.org>
-    <meta property=og:image content=https://gaethway.org/static/images/meta/og.image.png> <meta property=business:contact_data:street_address content="Avenida de las Universidades">
+    <meta property=og:title content="etherniti - High Performance Ethereum WebAPI">
+    <meta property=og:url content=https://etherniti.org>
+    <meta property=og:image content=https://etherniti.org/static/images/meta/og.image.png> <meta property=business:contact_data:street_address content="Avenida de las Universidades">
     <meta property=business:contact_data:locality content=Bilbao>
     <meta property=business:contact_data:region content=Bizkaia>
     <meta property=business:contact_data:postal_code content=48014>
     <meta property=business:contact_data:country_name content=Spain>
     <meta name=twitter:card content=summary>
-    <meta name=twitter:title content="gaethway - High Performance Ethereum WebAPI">
-    <meta name=twitter:description content="gaethway - High Performance Ethereum WebAPI">
-    <meta name=twitter:site content=@gaethway>
-    <meta name=twitter:creator content=@gaethway>
+    <meta name=twitter:title content="etherniti - High Performance Ethereum WebAPI">
+    <meta name=twitter:description content="etherniti - High Performance Ethereum WebAPI">
+    <meta name=twitter:site content=@etherniti>
+    <meta name=twitter:creator content=@etherniti>
     <script type=application/ld+json>
     	{
 		    "@context": "http://schema.org",
 		    "@type": "WebSite",
-		    "url": "https://gaethway.org",
+		    "url": "https://etherniti.org",
 		    "potentialAction": [{
 		        "@type": "SearchAction",
-		        "target": "https://gaethway.org/search?q={query}",
+		        "target": "https://etherniti.org/search?q={query}",
 		        "query-input": "required name=query"
 		    }, {
 		        "@type": "SearchAction",
-		        "target": "android-app://com.gaethway/https/gaethway.org/search/?q={query}",
+		        "target": "android-app://com.etherniti/https/etherniti.org/search/?q={query}",
 		        "query-input": "required name=query"
 		    }]
 		}
@@ -74,12 +74,12 @@
     	{
 		    "@context": "http://schema.org",
 		    "@type": "Organization",
-		    "image": ["https://gaethway.org/static/images/meta/og.image.png"],
-		    "@id": "https://gaethway.org",
-		    "name": "gaethway",
+		    "image": ["https://etherniti.org/static/images/meta/og.image.png"],
+		    "@id": "https://etherniti.org",
+		    "name": "etherniti",
 		    "legalName": "Helix Distributed Ledger",
-		    "url": "https://gaethway.org",
-		    "logo": "https://gaethway.org/static/favicon/android-icon-192x192.png",
+		    "url": "https://etherniti.org",
+		    "logo": "https://etherniti.org/static/favicon/android-icon-192x192.png",
 		    "description": "Helix Distributed Ledger",
 		    "foundingDate": "2018",
 		    "founders": [{
@@ -96,7 +96,7 @@
 		        "postOfficeBoxNumber": "48007",
 		        "addressCountry": "ES"
 		    },
-		    "email": "mailto:hello@gaethway.org",
+		    "email": "mailto:hello@etherniti.org",
 		    "location": {
 		        "@id": "_:location_id"
 		    },
@@ -111,9 +111,9 @@
 		        "@type": "ContactPoint",
 		        "contactType": "customer support",
 		        "telephone": "+34 622 579 711",
-		        "email": "hello@gaethway.org"
+		        "email": "hello@etherniti.org"
 		    },
-		    "sameAs": ["http://gaethway.org", "http://www.gaethway.org", "http://www.facebook.com/gaethway", "http://www.twitter.com/gaethway", "http://pinterest.com/gaethway/", "http://gaethway.tumblr.com/", "http://www.linkedin.com/company/gaethway", "https://plus.google.com/0"]
+		    "sameAs": ["http://etherniti.org", "http://www.etherniti.org", "http://www.facebook.com/etherniti", "http://www.twitter.com/etherniti", "http://pinterest.com/etherniti/", "http://etherniti.tumblr.com/", "http://www.linkedin.com/company/etherniti", "https://plus.google.com/0"]
 		}
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,400i,700,700i&amp;subset=latin-ext">

@@ -24,14 +24,14 @@ import (
 	"time"
 
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	pq "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/priorityqueue"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/stream/intervals"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/protocols"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	pq "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network/priorityqueue"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network/stream/intervals"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 type notFoundError struct {

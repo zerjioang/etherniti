@@ -19,8 +19,8 @@ package enode
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enr"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enr"
 )
 
 func newLocalNodeForTesting() (*LocalNode, *DB) {

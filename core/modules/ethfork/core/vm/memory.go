@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
 )
 
 // Memory implements a simple memory model for the ethereum virtual machine.

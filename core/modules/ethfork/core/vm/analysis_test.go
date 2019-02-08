@@ -19,7 +19,7 @@ package vm
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 func TestJumpDestAnalysis(t *testing.T) {

@@ -36,11 +36,11 @@ import (
 
 	"github.com/elastic/gosigar"
 	"github.com/mohae/deepcopy"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 	"golang.org/x/net/websocket"
 )
 

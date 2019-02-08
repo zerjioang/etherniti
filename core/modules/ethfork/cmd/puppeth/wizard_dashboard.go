@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // deployDashboard queries the user for various input on deploying a web-service

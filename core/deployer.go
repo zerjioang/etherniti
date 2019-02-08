@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package core
@@ -7,30 +7,30 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/zerjioang/gaethway/core/server/mods/ratelimit"
-	"github.com/zerjioang/gaethway/core/server/mods/tor"
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/eth"
+	"github.com/zerjioang/etherniti/core/eth"
 
-	"github.com/zerjioang/gaethway/core/config"
+	"github.com/zerjioang/etherniti/core/config"
 
-	"github.com/zerjioang/gaethway/core/api"
+	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/gaethway/core/handlers"
+	"github.com/zerjioang/etherniti/core/handlers"
 )
 
 var (
 	userAgentErr = errors.New("not authorized. security policy not satisfied")
 	gopath       = os.Getenv("GOPATH")
-	resources    = gopath + "/src/github.com/zerjioang/gaethway/resources"
+	resources    = gopath + "/src/github.com/zerjioang/etherniti/resources"
 	corsConfig   = middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
@@ -53,7 +53,7 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 }
 
 func (deployer Deployer) Run() {
-	log.Info("loading Ethereum Multitenant Webapi (gaethway)")
+	log.Info("loading Ethereum Multitenant Webapi (etherniti)")
 
 	if config.EnableHttpsRedirect {
 		//build http server

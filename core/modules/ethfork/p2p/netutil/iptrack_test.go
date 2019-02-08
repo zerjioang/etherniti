@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
 )
 
 const (

@@ -23,8 +23,8 @@ import (
 	"crypto/elliptic"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/secp256k1"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto/secp256k1"
 )
 
 // Ecrecover returns the uncompressed public key that created the given signature.

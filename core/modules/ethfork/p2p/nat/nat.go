@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/jackpal/go-nat-pmp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // An implementation of nat.Interface can map local ports to ports

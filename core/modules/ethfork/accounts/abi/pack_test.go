@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 func TestPack(t *testing.T) {

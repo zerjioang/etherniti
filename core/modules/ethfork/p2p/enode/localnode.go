@@ -26,9 +26,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enr"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/netutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enr"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/netutil"
 )
 
 const (

@@ -19,8 +19,8 @@ package les
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/bitutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/bitutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
 )
 
 const (

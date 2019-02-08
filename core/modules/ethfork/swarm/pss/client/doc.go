@@ -28,11 +28,11 @@
 //  	"context"
 //  	"fmt"
 //  	"os"
-//  	pss "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pss/client"
-//  	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
-//  	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-//  	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pot"
-//  	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+//  	pss "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pss/client"
+//  	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/protocols"
+//  	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+//  	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pot"
+//  	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 //  )
 //
 //  type FooMsg struct {

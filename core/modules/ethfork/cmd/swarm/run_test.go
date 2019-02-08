@@ -33,15 +33,15 @@ import (
 	"time"
 
 	"github.com/docker/docker/pkg/reexec"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/keystore"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/cmdtest"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	swarmhttp "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/http"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/keystore"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/cmdtest"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	swarmhttp "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/http"
 )
 
 var loglevel = flag.Int("loglevel", 3, "verbosity of logs")

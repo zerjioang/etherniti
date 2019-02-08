@@ -3,7 +3,7 @@
 		<!-- based on https://infura.io/privacy -->
 		<h4>Gaethway Privacy Policy</h4>
 		<p>
-		    This privacy policy (“Policy”) describes how Gaethway Project (“Gaethway” “Project”, “the Project”, “we”, “our”, or “us”) collects, uses, shares, and stores personal information of users of this website, https://gaethway.org/ (the “Site”). This Policy applies to the Site, applications, products and services (collectively, “Services”) on or in which it is posted, linked, or referenced.
+		    This privacy policy (“Policy”) describes how Gaethway Project (“Gaethway” “Project”, “the Project”, “we”, “our”, or “us”) collects, uses, shares, and stores personal information of users of this website, https://etherniti.org/ (the “Site”). This Policy applies to the Site, applications, products and services (collectively, “Services”) on or in which it is posted, linked, or referenced.
 		</p>
 		<p>
 		    By using the Services, you accept the terms of this Policy and our Terms of Use, and consent to our collection, use, disclosure, and retention of your information as described in this Policy. If you have not done so already, please also review our terms of use. The terms of use contain provisions that limit our liability to you and require you to resolve any dispute with us on an individual basis and not as part of any class or representative action. IF YOU DO NOT AGREE WITH ANY PART OF THIS PRIVACY POLICY OR OUR TERMS OF USE, THEN PLEASE DO NOT USE ANY OF THE SERVICES.

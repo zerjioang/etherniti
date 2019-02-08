@@ -21,7 +21,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
 )
 
 // Subscription represents a stream of events. The carrier of the events is typically a

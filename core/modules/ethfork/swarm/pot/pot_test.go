@@ -24,7 +24,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 const (

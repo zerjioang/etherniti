@@ -19,8 +19,8 @@
 package whisperv5
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 )
 
 // TopicType represents a cryptographically secure, probabilistic partial

@@ -22,8 +22,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
 )
 
 // Compiler contains information about the parsed source

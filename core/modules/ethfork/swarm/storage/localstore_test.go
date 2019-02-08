@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
 )
 
 var (

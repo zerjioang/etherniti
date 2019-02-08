@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package handlers
@@ -10,10 +10,10 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/gaethway/core/api"
-	"github.com/zerjioang/gaethway/core/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 )
 
 // token controller

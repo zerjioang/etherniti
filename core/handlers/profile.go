@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package handlers
@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/gaethway/core/api"
-	"github.com/zerjioang/gaethway/core/util"
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"

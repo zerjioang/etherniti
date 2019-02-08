@@ -27,10 +27,10 @@ import (
 	"time"
 
 	"github.com/docker/docker/pkg/reexec"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
 )
 
 func TestConfigDump(t *testing.T) {

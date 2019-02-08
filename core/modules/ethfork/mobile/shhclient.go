@@ -19,8 +19,8 @@
 package geth
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/whisper/shhclient"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/whisper/shhclient"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv6"
 )
 
 // WhisperClient provides access to the Ethereum APIs.

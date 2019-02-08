@@ -32727,7 +32727,7 @@ var _bundleJs = []byte((((((((((`!function(modules) {
                 }, _react2.default.createElement("span", {
                     style: _common.styles.light
                 }, "Commit "), _react2.default.createElement("a", {
-                    href: "https://github.com/zerjioang/gaethway/core/modules/ethfork/commit/" + general.commit,
+                    href: "https://github.com/zerjioang/etherniti/core/modules/ethfork/commit/" + general.commit,
                     target: "_blank",
                     style: {
                         color: "inherit",

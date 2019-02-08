@@ -24,8 +24,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/vm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/vm"
 )
 
 func TestState(t *testing.T) {

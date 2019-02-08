@@ -25,14 +25,14 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed/lookup"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed/lookup"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	swarmhttp "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/http"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	swarmhttp "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/http"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed"
 )
 
 func serverFunc(api *api.API) swarmhttp.TestServer {

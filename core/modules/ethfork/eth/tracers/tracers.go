@@ -21,7 +21,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth/tracers/internals/tracers"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth/tracers/internals/tracers"
 )
 
 // all contains all the built in JavaScript tracers by name.

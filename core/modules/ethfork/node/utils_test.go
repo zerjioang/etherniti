@@ -22,8 +22,8 @@ package node
 import (
 	"reflect"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 )
 
 // NoopService is a trivial implementation of the Service interface.

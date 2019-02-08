@@ -25,8 +25,8 @@ import (
 	"sync"
 	"time"
 
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 /*

@@ -19,7 +19,7 @@
 package downloader
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 )
 
 var (

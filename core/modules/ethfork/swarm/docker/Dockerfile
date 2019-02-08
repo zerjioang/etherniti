@@ -6,7 +6,7 @@ RUN apk add --update git gcc g++ linux-headers
 RUN mkdir -p $GOPATH/src/github.com/ethereum && \
     cd $GOPATH/src/github.com/ethereum && \
     git clone https://github.com/ethersphere/go-ethereum && \
-    cd $GOPATH/src/github.com/zerjioang/gaethway/core/modules/ethfork && \
+    cd $GOPATH/src/github.com/zerjioang/etherniti/core/modules/ethfork && \
     git checkout ${VERSION} && \
     go install -ldflags "-X main.gitCommit=${VERSION}" ./cmd/swarm && \
     go install -ldflags "-X main.gitCommit=${VERSION}" ./cmd/swarm/swarm-smoke && \

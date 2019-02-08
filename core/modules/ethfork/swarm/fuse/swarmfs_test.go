@@ -30,10 +30,10 @@ import (
 	"testing"
 
 	colorable "github.com/mattn/go-colorable"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/testutil"
 )
 
 var (

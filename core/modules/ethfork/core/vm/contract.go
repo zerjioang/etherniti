@@ -19,7 +19,7 @@ package vm
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // ContractRef is a reference to the contract's backing object

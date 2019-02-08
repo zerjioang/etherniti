@@ -21,7 +21,7 @@ import (
 	"io"
 	"net"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // Entry is implemented by known node record entry types.

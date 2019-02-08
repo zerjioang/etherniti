@@ -23,10 +23,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv6"
 )
 
 // A Nonce is a 64-bit hash which proves (combined with the mix-hash) that

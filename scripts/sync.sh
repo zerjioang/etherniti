@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright gaethway
+# Copyright etherniti
 # SPDX-License-Identifier: Apache License 2.0
 #
 
@@ -29,7 +29,7 @@ if [[ ! -f ${ethPath} ]] ; then
 
 		echo "renaming package name"
 		# renaming package names of the files to include them in the project
-		find . -type f -exec sed -i 's/github\.com\/ethereum\/go-ethereum/github\.com\/zerjioang\/gaethway\/core\/modules\/ethfork/g' {} +
+		find . -type f -exec sed -i 's/github\.com\/ethereum\/go-ethereum/github\.com\/zerjioang\/etherniti\/core\/modules\/ethfork/g' {} +
 
 		echo "renaming internal package"
 		# rename locked internal (to internals) package to be usable from external

@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pot"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv5"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/protocols"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pot"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv5"
 )
 
 type testCase struct {

@@ -22,8 +22,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 //matches hex swarm hashes

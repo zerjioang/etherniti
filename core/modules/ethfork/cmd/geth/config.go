@@ -28,13 +28,13 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 
 	"github.com/naoina/toml"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/dashboard"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/eth"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/graphql"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/node"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/dashboard"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/eth"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/graphql"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/node"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv6"
 )
 
 var (

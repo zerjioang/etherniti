@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 // Tests that the node iterator indeed walks over the entire database contents.

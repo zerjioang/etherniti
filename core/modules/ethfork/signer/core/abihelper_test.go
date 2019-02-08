@@ -25,8 +25,8 @@ import (
 	"math/big"
 	"reflect"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 func verify(t *testing.T, jsondata, calldata string, exp []interface{}) {

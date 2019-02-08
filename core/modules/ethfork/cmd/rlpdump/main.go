@@ -26,7 +26,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 var (

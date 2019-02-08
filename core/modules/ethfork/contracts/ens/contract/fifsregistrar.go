@@ -6,10 +6,10 @@ package contract
 import (
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // FIFSRegistrarABI is the input ABI used to generate the binding from.

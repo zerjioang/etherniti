@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	swarm "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	swarm "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed"
 	"gopkg.in/urfave/cli.v1"
 )
 

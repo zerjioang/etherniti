@@ -7,9 +7,9 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
 
   API_SCHEME: '"https"',
-  DOMAIN: '"gaethway.org"',
+  DOMAIN: '"etherniti.org"',
   API_DOMAIN: '"localhost:4430"',
-  WEBAPP_DOMAIN: '"gaethway.org"',
+  WEBAPP_DOMAIN: '"etherniti.org"',
   
   DASHBOARD_BASE_PATH: '"/dashboard"',
   

@@ -26,8 +26,8 @@ import (
 	"time"
 
 	"github.com/pborman/uuid"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

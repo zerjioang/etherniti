@@ -19,7 +19,7 @@ package vm
 import (
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 func makeStackFunc(pop, push int) stackValidationFunc {

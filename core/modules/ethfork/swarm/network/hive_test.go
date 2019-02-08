@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
-	p2ptest "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/testing"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
+	p2ptest "github.com/zerjioang/etherniti/core/modules/ethfork/p2p/testing"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
 )
 
 func newHiveTester(t *testing.T, params *HiveParams, n int, store state.Store) (*bzzTester, *Hive) {

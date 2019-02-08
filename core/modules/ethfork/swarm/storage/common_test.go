@@ -29,8 +29,8 @@ import (
 	"time"
 
 	"github.com/mattn/go-colorable"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
 )
 
 var (

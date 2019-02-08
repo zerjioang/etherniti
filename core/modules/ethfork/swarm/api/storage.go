@@ -20,7 +20,7 @@ import (
 	"context"
 	"path"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 type Response struct {

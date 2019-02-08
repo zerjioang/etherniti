@@ -19,7 +19,7 @@
 package ethdb_test
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 var _ ethdb.Database = &ethdb.LDBDatabase{}

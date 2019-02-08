@@ -22,10 +22,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/protocols"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
 )
 
 // SwAP Swarm Accounting Protocol

@@ -20,7 +20,7 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/encryption"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/encryption"
 	"golang.org/x/crypto/sha3"
 )
 

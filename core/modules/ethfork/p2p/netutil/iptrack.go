@@ -19,7 +19,7 @@ package netutil
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
 )
 
 // IPTracker predicts the external endpoint, i.e. IP address and port, of the local host

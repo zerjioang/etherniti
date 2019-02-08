@@ -1,6 +1,6 @@
 package discv5
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 
 var (
 	ingressTrafficMeter = metrics.NewRegisteredMeter("discv5/InboundTraffic", nil)

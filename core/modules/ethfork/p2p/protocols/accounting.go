@@ -19,7 +19,7 @@ package protocols
 import (
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 )
 
 // define some metrics

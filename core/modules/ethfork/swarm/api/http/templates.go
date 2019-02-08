@@ -22,7 +22,7 @@ import (
 	"html/template"
 	"path"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
 )
 
 type htmlListData struct {

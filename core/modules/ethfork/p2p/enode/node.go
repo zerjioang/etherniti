@@ -26,7 +26,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enr"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enr"
 )
 
 // Node represents a host on the network.

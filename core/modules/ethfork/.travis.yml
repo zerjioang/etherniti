@@ -1,5 +1,5 @@
 language: go
-go_import_path: github.com/zerjioang/gaethway/core/modules/ethfork
+go_import_path: github.com/zerjioang/etherniti/core/modules/ethfork
 sudo: false
 matrix:
   include:

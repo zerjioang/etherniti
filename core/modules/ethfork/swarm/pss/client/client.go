@@ -25,14 +25,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/protocols"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pss"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/protocols"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pss"
 )
 
 const (

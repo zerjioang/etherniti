@@ -22,7 +22,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/asm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/asm"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

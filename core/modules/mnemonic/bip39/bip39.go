@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 // Package bip39 is the Golang implementation of the BIP39 spec.
@@ -17,7 +17,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
 
 	"golang.org/x/crypto/pbkdf2"
 )

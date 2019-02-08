@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package bip39
@@ -8,7 +8,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/mnemonic/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
 )
 
 type vector struct {

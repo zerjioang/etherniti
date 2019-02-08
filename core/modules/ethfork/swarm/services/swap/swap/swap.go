@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 // SwAP Swarm Accounting Protocol with

@@ -36,12 +36,12 @@ import (
 	"time"
 
 	"github.com/rs/cors"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed"
 )
 
 var (

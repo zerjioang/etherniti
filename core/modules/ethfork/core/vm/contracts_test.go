@@ -21,7 +21,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // precompiledTest defines the input/output pairs for precompiled contract tests.

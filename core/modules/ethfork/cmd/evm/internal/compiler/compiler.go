@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/asm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/asm"
 )
 
 func Compile(fn string, src []byte, debug bool) (string, error) {

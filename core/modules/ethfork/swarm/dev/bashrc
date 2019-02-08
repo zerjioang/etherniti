@@ -1,4 +1,4 @@
-export ROOT="${GOPATH}/src/github.com/zerjioang/gaethway/core/modules/ethfork"
+export ROOT="${GOPATH}/src/github.com/zerjioang/etherniti/core/modules/ethfork"
 export PATH="${ROOT}/swarm/dev/bin:${PATH}"
 
 cd "${ROOT}/swarm/dev"

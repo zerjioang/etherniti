@@ -25,7 +25,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // ethstatsDockerfile is the Dockerfile required to build an ethstats backend

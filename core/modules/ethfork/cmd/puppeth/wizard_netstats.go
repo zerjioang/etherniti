@@ -24,8 +24,8 @@ import (
 	"sync"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // networkStats verifies the status of network components and generates a protip

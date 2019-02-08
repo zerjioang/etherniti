@@ -3,7 +3,7 @@ package feed
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 )
 
 func TestTopic(t *testing.T) {

@@ -27,7 +27,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 func newTestLDB() (*ethdb.LDBDatabase, func()) {

@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 // Method represents a callable given a `Name` and whether the method is a constant.

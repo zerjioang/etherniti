@@ -21,10 +21,10 @@ import (
 	"hash"
 	"strconv"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed/lookup"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed/lookup"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 // ID uniquely identifies an update on the network.

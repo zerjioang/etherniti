@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 )
 
 func TestUnmarshalJSONNewFilterArgs(t *testing.T) {

@@ -29,10 +29,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	swarm "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	swarm "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
 	"gopkg.in/urfave/cli.v1"
 )
 

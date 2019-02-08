@@ -22,8 +22,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	swarm "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	swarm "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
 	"gopkg.in/urfave/cli.v1"
 )
 

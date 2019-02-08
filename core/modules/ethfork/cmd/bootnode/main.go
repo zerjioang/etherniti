@@ -24,14 +24,14 @@ import (
 	"net"
 	"os"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/discover"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/discv5"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/nat"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/netutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/discover"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/discv5"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/nat"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/netutil"
 )
 
 func main() {

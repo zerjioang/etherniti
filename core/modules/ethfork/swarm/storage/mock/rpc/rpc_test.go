@@ -19,9 +19,9 @@ package rpc
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock/mem"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock/test"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock/mem"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock/test"
 )
 
 // TestDBStore is running test for a GlobalStore

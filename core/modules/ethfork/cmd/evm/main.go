@@ -22,7 +22,7 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
 	"gopkg.in/urfave/cli.v1"
 )
 

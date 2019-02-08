@@ -31,11 +31,11 @@ import (
 	"time"
 
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

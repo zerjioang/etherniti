@@ -19,7 +19,7 @@ package vm
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 // Gas costs

@@ -3,7 +3,7 @@
     <errorMessage
     class="t-child"
     buttonVisible="false"
-    pagetitle="gaethway.org | BROWSER NOT COMPATIBLE"
+    pagetitle="etherniti.org | BROWSER NOT COMPATIBLE"
     code="Web browser not compatible"
     :title=title
     description="">

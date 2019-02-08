@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
 )
 
 type exp struct {

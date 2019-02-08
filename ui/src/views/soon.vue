@@ -3,7 +3,7 @@
     <errorMessage
     class="t-child"
     buttonVisible="false"
-    pagetitle="gaethway.org | COOMING SOON"
+    pagetitle="etherniti.org | COOMING SOON"
     code="Cooming Soon"
     :title='apptitle'
     description="Cooming soon available on the web">

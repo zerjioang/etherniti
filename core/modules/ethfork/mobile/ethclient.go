@@ -21,8 +21,8 @@ package geth
 import (
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 )
 
 // EthereumClient provides access to the Ethereum APIs.

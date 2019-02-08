@@ -22,7 +22,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 // Interface represents a wrapped version of Go's interface{}, with the capacity

@@ -16,7 +16,7 @@
 
 package downloader
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 
 type DoneEvent struct {
 	Latest *types.Header

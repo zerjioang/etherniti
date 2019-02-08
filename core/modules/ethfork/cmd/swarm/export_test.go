@@ -26,8 +26,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/testutil"
 )
 
 // TestCLISwarmExportImport perform the following test:

@@ -21,9 +21,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/encryption"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/encryption"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
 )
 
 func TestHasherStore(t *testing.T) {

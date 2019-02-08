@@ -19,7 +19,7 @@ package intervals
 import (
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
 )
 
 // TestInmemoryStore tests basic functionality of InmemoryStore.

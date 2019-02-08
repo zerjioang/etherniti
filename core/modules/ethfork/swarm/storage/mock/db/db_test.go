@@ -23,7 +23,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock/test"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock/test"
 )
 
 // TestDBStore is running a test.MockStore tests

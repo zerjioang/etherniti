@@ -24,8 +24,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/compiler"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/compiler"
 )
 
 var (

@@ -23,15 +23,15 @@ import (
 	"os"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	swarm "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
-	swarmhttp "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/http"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/feed/lookup"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	swarm "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
+	swarmhttp "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/http"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/feed/lookup"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/testutil"
 )
 
 func TestCLIFeedUpdate(t *testing.T) {

@@ -3,7 +3,7 @@
     <errorMessage
     class="t-child"
     buttonVisible="false"
-    pagetitle="gaethway.org | UNDER MAINTENANCE"
+    pagetitle="etherniti.org | UNDER MAINTENANCE"
     code="Under maintenance"
     :title='apptitle'
     description="We will back in a flash">

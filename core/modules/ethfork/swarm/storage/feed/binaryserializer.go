@@ -16,7 +16,7 @@
 
 package feed
 
-import "github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+import "github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 
 type binarySerializer interface {
 	binaryPut(serializedData []byte) error

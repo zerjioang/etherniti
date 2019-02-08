@@ -36,11 +36,11 @@ import (
 	"time"
 
 	"github.com/golang/snappy"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/bitutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/ecies"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto/secp256k1"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/bitutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto/ecies"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto/secp256k1"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 	"golang.org/x/crypto/sha3"
 )
 

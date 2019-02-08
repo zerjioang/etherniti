@@ -22,12 +22,12 @@ import (
 	"fmt"
 
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 const (

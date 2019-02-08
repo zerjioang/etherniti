@@ -4,14 +4,14 @@ module.exports = {
   NODE_ENV: '"production"',
 
   API_SCHEME: '"https"',
-  DOMAIN: '"gaethway.org"',
-  API_DOMAIN: '"api.gaethway.org"',
-  WEBAPP_DOMAIN: '"gaethway.org"',
+  DOMAIN: '"etherniti.org"',
+  API_DOMAIN: '"api.etherniti.org"',
+  WEBAPP_DOMAIN: '"etherniti.org"',
   API_PATH: '"/v1"',
 
-  SWAGGER_URL: '"https://gaethway.org/swagger"',
+  SWAGGER_URL: '"https://etherniti.org/swagger"',
 
-  REPO_API: '"https://github.com/zerjioang/gaethway"',
+  REPO_API: '"https://github.com/zerjioang/etherniti"',
   
   DASHBOARD_BASE_PATH: '"/app"',
   
@@ -23,7 +23,7 @@ module.exports = {
   APP_TITLE: '"Gaethway: A Multitenant High Performance Ethereum WebAPI"',
   APP_DESC: '"Gaethway: A Multitenant High Performance Ethereum WebAPI made for enterprises, companies and developers"',
 
-  EMAIL: '"hello@gaethway.org"',
+  EMAIL: '"hello@etherniti.org"',
   OFFICE_ADDRESS: '"Bilbao"',
   OFFICE_TIME: '"8:00AM To 5:00PM (GMT+2)"',
 

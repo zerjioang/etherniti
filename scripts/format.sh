@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Copyright gaethway
+# Copyright etherniti
 # SPDX-License-Identifier: Apache License 2.0
 #
 

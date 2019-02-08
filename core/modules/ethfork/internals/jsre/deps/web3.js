@@ -5862,7 +5862,7 @@ module.exports = Shh;
  * @author Alex Beregszaszi <alex@rtfs.hu>
  * @date 2016
  *
- * Reference: https://github.com/zerjioang/gaethway/core/modules/ethfork/blob/swarm/internals/web3ext/web3ext.go#L33
+ * Reference: https://github.com/zerjioang/etherniti/core/modules/ethfork/blob/swarm/internals/web3ext/web3ext.go#L33
  */
 
 "use strict";

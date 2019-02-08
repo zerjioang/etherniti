@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
 )
 
 // This example demonstrates how SubscriptionScope can be used to control the lifetime of

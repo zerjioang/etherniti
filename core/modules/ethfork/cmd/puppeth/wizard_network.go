@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 )
 
 // manageServers displays a list of servers the user can disconnect from, and an

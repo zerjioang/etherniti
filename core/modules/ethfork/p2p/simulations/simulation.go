@@ -20,7 +20,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
 )
 
 // Simulation provides a framework for running actions in a simulated network

@@ -24,9 +24,9 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api"
-	swarm "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/client"
-	swarmhttp "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/http"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api"
+	swarm "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/client"
+	swarmhttp "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/http"
 )
 
 // TestManifestChange tests manifest add, update and remove

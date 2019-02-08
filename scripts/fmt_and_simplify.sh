@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright gaethway
+# Copyright etherniti
 # SPDX-License-Identifier: Apache License 2.0
 #
 
@@ -12,7 +12,7 @@ cd ..
 
 echo "Formatting source code with gofmt (and simplification)"
 
-packageName="github.com/zerjioang/gaethway"
+packageName="github.com/zerjioang/etherniti"
 
 #get all files excluding vendors
 filelist=$(find ./ -name "*.go" | grep -vendor)

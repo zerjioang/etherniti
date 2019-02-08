@@ -24,8 +24,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p"
 )
 
 // Tests that datadirs can be successfully created, be them manually configured

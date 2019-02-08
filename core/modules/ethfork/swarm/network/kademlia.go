@@ -24,10 +24,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/pot"
-	sv "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/version"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/pot"
+	sv "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/version"
 )
 
 /*

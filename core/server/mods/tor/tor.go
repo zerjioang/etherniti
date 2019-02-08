@@ -2,7 +2,7 @@ package tor
 
 import (
 	"github.com/labstack/echo"
-	"github.com/zerjioang/gaethway/core/api"
+	"github.com/zerjioang/etherniti/core/api"
 	"net/http"
 )
 

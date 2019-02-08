@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
 )
 
 // ProtocolVersion defines the current version of the protocol that will be included in each update message

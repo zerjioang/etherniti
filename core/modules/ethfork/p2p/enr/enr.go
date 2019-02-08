@@ -40,7 +40,7 @@ import (
 	"io"
 	"sort"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 const SizeLimit = 300 // maximum encoded size of a node record in bytes

@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 // makeTestTrie create a sample test trie to test node-wise reconstruction.

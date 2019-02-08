@@ -25,9 +25,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock"
 )
 
 // MockStore creates NodeStore instances from provided GlobalStorer,

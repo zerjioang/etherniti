@@ -26,8 +26,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/bitutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/bitutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 // bloomIndexes represents the bit indexes inside the bloom filter that belong

@@ -80,7 +80,7 @@ run_image() {
     --rm \
     --hostname "${name}" \
     --name     "${name}" \
-    --volume   "${ROOT}:/go/src/github.com/zerjioang/gaethway/core/modules/ethfork" \
+    --volume   "${ROOT}:/go/src/github.com/zerjioang/etherniti/core/modules/ethfork" \
     --volume   "/var/run/docker.sock:/var/run/docker.sock" \
     ${docker_args} \
     "${name}" \

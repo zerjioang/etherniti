@@ -36,6 +36,6 @@ deploy:
   keep-history: true
   on:
     branch: master
-  repo: gaethway/web
+  repo: etherniti/web
   target_branch: master
-  fqdn: gaethway.org
+  fqdn: etherniti.org

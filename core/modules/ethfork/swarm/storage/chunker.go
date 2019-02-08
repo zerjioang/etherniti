@@ -26,10 +26,10 @@ import (
 
 	opentracing "github.com/opentracing/opentracing-go"
 	olog "github.com/opentracing/opentracing-go/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/spancontext"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/spancontext"
 )
 
 /*

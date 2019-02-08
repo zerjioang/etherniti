@@ -1,16 +1,16 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package eth
 
 import (
-	"github.com/zerjioang/gaethway/core/modules/token/erc20"
+	"github.com/zerjioang/etherniti/core/modules/token/erc20"
 	"time"
 
 	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/gaethway/core/keystore/memory"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethclient"
+	"github.com/zerjioang/etherniti/core/keystore/memory"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 )
 
 type WalletManager struct {

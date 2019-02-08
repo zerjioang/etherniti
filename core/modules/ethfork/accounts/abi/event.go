@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/crypto"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
 )
 
 // Event is an event potentially triggered by the EVM's LOG mechanism. The Event

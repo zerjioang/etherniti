@@ -26,8 +26,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/mclock"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/light"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/mclock"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/light"
 )
 
 var (

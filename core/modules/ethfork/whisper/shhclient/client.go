@@ -19,10 +19,10 @@ package shhclient
 import (
 	"context"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
-	whisper "github.com/zerjioang/gaethway/core/modules/ethfork/whisper/whisperv6"
+	"github.com/zerjioang/etherniti/core/modules/ethfork"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
+	whisper "github.com/zerjioang/etherniti/core/modules/ethfork/whisper/whisperv6"
 )
 
 // Client defines typed wrappers for the Whisper v6 RPC API.

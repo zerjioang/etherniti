@@ -22,8 +22,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 	"gopkg.in/urfave/cli.v1"
 )
 

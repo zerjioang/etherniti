@@ -28,10 +28,10 @@ import (
 	"testing"
 
 	ldberrors "github.com/syndtr/goleveldb/leveldb/errors"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage/mock/mem"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage/mock/mem"
 )
 
 type testDbStore struct {

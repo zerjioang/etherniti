@@ -21,7 +21,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
 )
 
 // TestDBStore tests basic functionality of DBStore.

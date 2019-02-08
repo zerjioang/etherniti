@@ -19,7 +19,7 @@ package core
 import (
 	"runtime"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core/types"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
 )
 
 // senderCacher is a concurrent transaction sender recoverer and cacher.

@@ -18,7 +18,7 @@ package stream
 import (
 	"testing"
 
-	p2ptest "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/testing"
+	p2ptest "github.com/zerjioang/etherniti/core/modules/ethfork/p2p/testing"
 )
 
 // This test checks the default behavior of the server, that is

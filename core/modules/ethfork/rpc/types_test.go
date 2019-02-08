@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/math"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/math"
 )
 
 func TestBlockNumberJSONUnmarshal(t *testing.T) {

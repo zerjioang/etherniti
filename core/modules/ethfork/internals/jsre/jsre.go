@@ -27,8 +27,8 @@ import (
 	"time"
 
 	"github.com/robertkrimen/otto"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/internals/jsre/deps"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/internals/jsre/deps"
 )
 
 var (

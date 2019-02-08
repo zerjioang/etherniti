@@ -27,8 +27,8 @@ import (
 	"time"
 
 	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/shed"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/shed"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
 )
 
 // Store holds fields and indexes (including their encoding functions)

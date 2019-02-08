@@ -30,14 +30,14 @@ import (
 	"time"
 
 	colorable "github.com/mattn/go-colorable"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	p2ptest "github.com/zerjioang/gaethway/core/modules/ethfork/p2p/testing"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/network/simulation"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/state"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/storage"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/testutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	p2ptest "github.com/zerjioang/etherniti/core/modules/ethfork/p2p/testing"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/network/simulation"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/state"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/storage"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/testutil"
 )
 
 var (

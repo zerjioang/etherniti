@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"github.com/zerjioang/gaethway/core/util"
+	"github.com/zerjioang/etherniti/core/util"
 	"testing"
 	"time"
 )
@@ -20,7 +20,7 @@ func TestCreateConnectionProfileToken(t *testing.T) {
 			Account: "0x0",
 			//standard claims
 			Id: util.GenerateUUID(),
-			Issuer: "gaethway",
+			Issuer: "etherniti",
 			ExpiresAt: now.Add(10*time.Minute).Unix(),
 			NotBefore: now.Unix(),
 			IssuedAt: now.Unix(),

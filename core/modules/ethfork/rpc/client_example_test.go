@@ -22,7 +22,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rpc"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rpc"
 )
 
 // In this example, our client wishes to track the latest 'block number'

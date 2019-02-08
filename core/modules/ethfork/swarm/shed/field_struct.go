@@ -18,7 +18,7 @@ package shed
 
 import (
 	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/rlp"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/rlp"
 )
 
 // StructField is a helper to store complex structure by

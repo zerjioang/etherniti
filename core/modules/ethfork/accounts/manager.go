@@ -21,7 +21,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/event"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/event"
 )
 
 // Manager is an overarching account manager that can communicate with various

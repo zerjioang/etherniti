@@ -21,13 +21,13 @@ import (
 	"os"
 	"sort"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/cmd/utils"
-	gethmetrics "github.com/zerjioang/gaethway/core/modules/ethfork/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/metrics/influxdb"
-	swarmmetrics "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/metrics"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/tracing"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/cmd/utils"
+	gethmetrics "github.com/zerjioang/etherniti/core/modules/ethfork/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/metrics/influxdb"
+	swarmmetrics "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/metrics"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/tracing"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/log"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

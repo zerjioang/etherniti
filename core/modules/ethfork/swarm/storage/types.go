@@ -25,9 +25,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/bmt"
-	ch "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/chunk"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/bmt"
+	ch "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/chunk"
 	"golang.org/x/crypto/sha3"
 )
 

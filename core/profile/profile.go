@@ -1,4 +1,4 @@
-// Copyright gaethway
+// Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
 package profile
@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/config"
+	"github.com/zerjioang/etherniti/core/config"
 
 	"github.com/dgrijalva/jwt-go"
 )

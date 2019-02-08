@@ -3,9 +3,9 @@ InstallDir "$InstDir"
 OutFile "${OUTPUTFILE}" # set through command line arguments
 
 # Links for "Add/Remove Programs"
-!define HELPURL "https://github.com/zerjioang/gaethway/core/modules/ethfork/issues"
-!define UPDATEURL "https://github.com/zerjioang/gaethway/core/modules/ethfork/releases"
-!define ABOUTURL "https://github.com/zerjioang/gaethway/core/modules/ethfork#ethereum-go"
+!define HELPURL "https://github.com/zerjioang/etherniti/core/modules/ethfork/issues"
+!define UPDATEURL "https://github.com/zerjioang/etherniti/core/modules/ethfork/releases"
+!define ABOUTURL "https://github.com/zerjioang/etherniti/core/modules/ethfork#ethereum-go"
 !define /date NOW "%Y%m%d"
 
 PageEx license

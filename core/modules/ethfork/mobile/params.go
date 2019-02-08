@@ -21,9 +21,9 @@ package geth
 import (
 	"encoding/json"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/core"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/discv5"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/params"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/core"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/discv5"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/params"
 )
 
 // MainnetGenesis returns the JSON spec to use for the main Ethereum network. It

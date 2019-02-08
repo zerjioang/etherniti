@@ -26,7 +26,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/hexutil"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
 	"golang.org/x/crypto/sha3"
 )
 

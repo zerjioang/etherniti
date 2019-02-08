@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/common/prque"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/ethdb"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/common/prque"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/ethdb"
 )
 
 // ErrNotRequested is returned by the trie sync when it's requested to process a

@@ -20,8 +20,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/enode"
-	"github.com/zerjioang/gaethway/core/modules/ethfork/p2p/simulations"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/enode"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/p2p/simulations"
 )
 
 // PeerEvent is the type of the channel returned by Simulation.PeerEvents.

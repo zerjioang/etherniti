@@ -20,17 +20,17 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/zerjioang/gaethway/core/modules/ethfork/swarm/log"
+	"github.com/zerjioang/etherniti/core/modules/ethfork/swarm/log"
 )
 
 /*
 http roundtripper to register for bzz url scheme
-see https://github.com/zerjioang/gaethway/core/modules/ethfork/issues/2040
+see https://github.com/zerjioang/etherniti/core/modules/ethfork/issues/2040
 Usage:
 
 import (
- "github.com/zerjioang/gaethway/core/modules/ethfork/common/httpclient"
- "github.com/zerjioang/gaethway/core/modules/ethfork/swarm/api/http"
+ "github.com/zerjioang/etherniti/core/modules/ethfork/common/httpclient"
+ "github.com/zerjioang/etherniti/core/modules/ethfork/swarm/api/http"
 )
 client := httpclient.New()
 // for (private) swarm proxy running locally
