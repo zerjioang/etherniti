@@ -12,18 +12,22 @@ LABEL PROJECT etherniti
 
 ENV BASE /go/src/github.com/zerjioang/etherniti
 ENV BUILD_MODE dev
-ENV FILE etherniti
-ENV HELIX_GOOS linux
-ENV HELIX_GOARCH amd64
+ENV FILE proxy
+ENV USER etherniti
+ENV ETHERNITI_GOOS linux
+ENV ETHERNITI_GOARCH amd64
 
 # add source code to docker image for multistage build
 WORKDIR $BASE
 COPY . $BASE
 
-RUN ./scripts/dep.sh && \
-    ./scripts/compile_build.sh && \
-    rm -rf .git vendor && \
-    chmod +x $FILE
+# Create user $USER and compile
+RUN adduser --system --no-create-home --gecos 'Etherniti user' --disabled-password -q ${USER} && \
+    ./scripts/docker/compile_build.sh $FILE && \
+    rm -rf .git && \
+    chmod +x $FILE && \
+    chown $USER $FILE && \
+    ls -alh
 
 # BEGIN: install modified version of glibc
 FROM alpine:latest
@@ -62,27 +66,19 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 # END: install modified version of glibc
 
-ENV X_HELIX_INTERACTION_PORT                8080 4430
+ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
+ENV USER                                    etherniti
 
-ENV USER gouser
 WORKDIR /home/${USER}
 
-# Create gouser
-RUN adduser -S ${USER} && \
-    mkdir -p /home/${USER}/.etherniti && \
-    chown $USER -R /home/${USER}/.etherniti && \
-    chmod -R +rxw /home/${USER}/.etherniti
+# Create user $USER
+RUN adduser -S ${USER}
 
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/etherniti       etherniti
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           proxy
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources       /home/${USER}/.etherniti/shared/resources
 
-# Create gouser
-RUN chown $USER -R /home/${USER}/etherniti && \
-    chmod +rxw /home/${USER}/etherniti
+ENTRYPOINT ["./proxy"]
+EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
+# change to non root user for execution
 USER ${USER}
-
-EXPOSE $X_HELIX_INTERACTION_PORT
-
-CMD ["./etherniti"]

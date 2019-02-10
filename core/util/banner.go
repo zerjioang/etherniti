@@ -30,6 +30,8 @@ etherniti version : $VER
 
 var (
 	banner = ""
+	// compilation commit
+	Commit = ""
 )
 
 func init() {
@@ -45,5 +47,6 @@ func getBannerFromTemplate() string {
 	banner = strings.Replace(banner, "$GO_VERSION", runtime.Version(), -1)
 	banner = strings.Replace(banner, "$GO_COMPILER", runtime.Compiler, -1)
 	banner = strings.Replace(banner, "$VER", version, -1)
+	banner = strings.Replace(banner, "COMMIT", Commit, -1)
 	return banner
 }

@@ -12,9 +12,9 @@ LABEL PROJECT etherniti
 
 ENV BASE /go/src/github.com/zerjioang/etherniti
 ENV BUILD_MODE prod
-ENV FILE etherniti
-ENV HELIX_GOOS linux
-ENV HELIX_GOARCH amd64
+ENV FILE proxy
+ENV ETHERNITI_GOOS linux
+ENV ETHERNITI_GOARCH amd64
 ENV USER etherniti
 
 # add source code to docker image for multistage build
@@ -22,14 +22,15 @@ WORKDIR $BASE
 COPY . $BASE
 
 # optimize code for production compilation
-RUN echo "Preparing code for production deployment" && \
-    ./scripts/prepare_production.sh
+# RUN echo "Preparing code for production deployment" && ./scripts/prepare_production.sh
 
-# compile
-RUN ./scripts/dep.sh && \
-    ./scripts/compile_build.sh && \
-    rm -rf .git vendor && \
+# Create user $USER and compile
+RUN adduser --system --no-create-home --gecos 'Etherniti user' --disabled-password -q ${USER} && \
+    ./scripts/dep.sh && \
+    ./scripts/docker/compile_build.sh && \
+    rm -rf .git && \
     chmod +rwx $FILE && \
+    chown $USER $FILE && \
     upx -9 -v $FILE
 
 # BEGIN: install modified version of glibc
@@ -69,27 +70,19 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 # END: install modified version of glibc
 
-ENV X_HELIX_INTERACTION_PORT                80 443
+ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
+ENV USER                                    etherniti
 
-ENV USER gouser
 WORKDIR /home/${USER}
 
-# Create gouser
-RUN adduser -S ${USER} && \
-    mkdir -p /home/${USER}/.etherniti && \
-    chown $USER -R /home/${USER}/.etherniti && \
-    chmod -R +rxw /home/${USER}/.etherniti
+# Create user $USER
+RUN adduser -S ${USER}
 
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/etherniti       etherniti
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           proxy
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources       /home/${USER}/.etherniti/shared/resources
 
-# Create gouser
-RUN chown $USER -R /home/${USER}/etherniti && \
-    chmod +rxw /home/${USER}/etherniti
+ENTRYPOINT ["./proxy"]
+EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
+# change to non root user for execution
 USER ${USER}
-
-EXPOSE $X_HELIX_INTERACTION_PORT
-
-CMD ["./etherniti"]

@@ -19,24 +19,19 @@ if [[ -z "$hash" ]]; then
     hash="development-build"
 fi
 
-if [[ -z "$FILE" ]]; then
-    echo "no compilation filename found. setting default to: etherniti"
-    FILE="etherniti"
-fi
-
 if [[ -z "$BUILD_MODE" ]]; then
     echo "no BUILD_MODE found.           setting default to: dev"
     BUILD_MODE="dev" # prod
 fi
 
-if [[ -z "$HELIX_GOARCH" ]]; then
+if [[ -z "$ETHERNITI_GOARCH" ]]; then
     echo "no GOARCH found.               setting default to: amd64"
-    HELIX_GOARCH="amd64" # arm
+    ETHERNITI_GOARCH="amd64" # arm
 fi
 
-if [[ -z "$HELIX_GOOS" ]]; then
+if [[ -z "$ETHERNITI_GOOS" ]]; then
     echo "no GOOS found.                 setting default to: linux"
-    HELIX_GOOS="linux"
+    ETHERNITI_GOOS="linux"
 fi
 
 # Disabling CGO also removes the need for the cross-compile dependencies
@@ -48,7 +43,12 @@ fi
 # -w just disables debug letting the file be smaller
 # -s
 function compile(){
-    if [[ "$HELIX_GOARCH" = "arm" ]]; then
+    outputname=$1
+    if [[ -z "$outputname" ]]; then
+        echo "no compilation filename found. setting default to: etherniti"
+        outputname="etherniti"
+    fi
+    if [[ "$ETHERNITI_GOARCH" = "arm" ]]; then
         echo "compiling for arm..."
         # compile for arm-v7
         sudo apt-get install gcc \
@@ -65,21 +65,24 @@ function compile(){
         GOOS=linux \
         GOARCH=arm \
         GOARM=7 \
-        go build 
+        go build -o $outputname
     else
-        echo "compiling for $HELIX_GOARCH..."
+        echo "compiling for $ETHERNITI_GOARCH..."
         if [[ "$BUILD_MODE" = "dev" ]]; then
             echo "compiling development version..."
             echo "Using commit hash '$hash' for current build"
-            GOOS=${HELIX_GOOS} \
-            GOARCH=${HELIX_GOARCH} \
-            go build -ldflags "-X 'main.Build=$hash'" -tags dev
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
+            go build \
+                -ldflags "-X 'main.Build=$hash'" \
+                -tags dev \
+                -o $outputname
         else
             echo "compiling production version..."
             echo "Using commit hash '$hash' for current build"
             CGO_ENABLED=1 \
-            GOOS=${HELIX_GOOS} \
-            GOARCH=${HELIX_GOARCH} \
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
             go build \
             -a \
             -tags 'netgo prod' \
@@ -87,7 +90,7 @@ function compile(){
             -ldflags "-extldflags -static" \
             -ldflags "-libgcc=none" \
             -ldflags "-s -w -X 'main.Build=$hash'" \
-            -o $FILE && \
+            -o $outputname && \
             ls -alh
         fi
     fi
