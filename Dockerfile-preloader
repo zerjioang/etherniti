@@ -1,0 +1,18 @@
+# 
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
+# 
+
+FROM golang:1.11.4
+
+MAINTAINER team@etherniti.org
+
+LABEL IMAGE etherniti-preloader
+LABEL PROJECT etherniti
+
+# install pre-reqs
+RUN echo "Installing dependencies..." && \
+    apt-get update && \
+    apt-get install -y musl ca-certificates upx musl git curl && \
+    echo "installing dep..." && \
+    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh

@@ -1,0 +1,131 @@
+# .goreleaser.yml
+
+project_name: Etherniti
+
+release:
+  github:
+    owner: zerjioang
+    name: etherniti
+
+# Build customization
+builds:
+    # You can have multiple builds defined as a yaml list
+  -
+    # Path to main.go file or main package.
+    # Default is `.`.
+    main: ./main.go
+    binary: etherniti
+    #hooks:
+      #post: /bin/sh script.sh
+    # -s
+    #This flag strips all the symbol information from the artifact produced.
+    # If say you are a few KB/MB off from your binary fitting on
+    #  a floppy disk, this flag is your friend.
+    # -w
+    # This ldflags -w just disables debug letting the file be smaller.
+    ldflags: -s -w -extldflags -static -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+    env:
+      # until CUDA support is working, disable it
+      # more information at: https://golang.org/cmd/cgo/
+      # Disabling CGOalso removes the need for the cross-compile dependencies.
+      - CGO_ENABLED=0
+    flags:
+      - -tags
+      - netgo
+    goos:
+      - linux
+      # - darwin
+      # - windows
+      # - freebsd
+      # - netbsd
+      # - openbsd
+      # - dragonfly
+    goarch:
+      #- 386
+      - amd64
+      #- arm
+      #- arm64
+
+    # GOARM to build for when GOARCH is arm.
+    # For more info refer to: https://golang.org/doc/install/source#environment
+    # Default is only 6.
+    goarm:
+      - 6
+      - 7
+
+    ignore:
+      - goos: openbsd
+        goarch: arm
+        goarm: 6
+
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - '^dev:'
+    - 'README'
+    - Merge pull request
+    - Merge branch
+
+nfpm:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  replacements:
+    amd64: 64bit
+    386: 32bit
+    arm: ARM
+    arm64: ARM64
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+    openbsd: OpenBSD
+    netbsd: NetBSD
+    freebsd: FreeBSD
+    dragonfly: DragonFlyBSD
+  vendor: etherniti DLT
+  homepage: https://www.etherniti.org
+  maintainer: zerjioang <sergio.anguita@opendeusto.es>
+  description: Etherniti is a Multitenant High Performance Ethereum and Quorum compatible WebAPI enabling fast prototyping features. Also compatible with QuikNode, Infura, Alastria, Geth and Parity.
+  license: "Private"
+
+  # Formats to be generated.
+  formats:
+      - deb
+      - rpm
+
+  # Packages your package depends on.
+  dependencies:
+    - docker
+    - go
+
+# Archive customization
+archive:
+  format: tar.gz
+  format_overrides:
+    - goos: windows
+      format: zip
+  name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+  replacements:
+    amd64: 64bit
+    386: 32bit
+    arm: ARM
+    arm64: ARM64
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+    openbsd: OpenBSD
+    netbsd: NetBSD
+    freebsd: FreeBSD
+    dragonfly: DragonFlyBSD
+  files:
+    - README.md
+    - LICENSE
+    - VERSION
+    - AUTHORS
+    
+git:
+  short_hash: true

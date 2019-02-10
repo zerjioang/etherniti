@@ -1,0 +1,28 @@
+#ignore all git related stuff
+.github
+.gitignore
+
+# ignore test when compilation
+**/*_test.go
+
+# ignore ipc files created in test execution
+**/*.ipc
+*.ipc
+
+# ignore documentation files
+AUTHOR
+LICENSE
+VERSION
+readme
+docs
+site
+**/*.md
+
+# ignore documentation builder
+**/python36_venv
+
+# ignore dashboard files
+**/dashboard
+
+# ignore dynamically created files
+**/swagger.json

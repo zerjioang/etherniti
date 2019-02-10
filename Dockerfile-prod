@@ -1,0 +1,95 @@
+# 
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
+# 
+
+FROM preloader:latest as compiler
+
+MAINTAINER team@etherniti.org
+
+LABEL IMAGE etherniti-api
+LABEL PROJECT etherniti
+
+ENV BASE /go/src/github.com/zerjioang/etherniti
+ENV BUILD_MODE prod
+ENV FILE etherniti
+ENV HELIX_GOOS linux
+ENV HELIX_GOARCH amd64
+ENV USER etherniti
+
+# add source code to docker image for multistage build
+WORKDIR $BASE
+COPY . $BASE
+
+# optimize code for production compilation
+RUN echo "Preparing code for production deployment" && \
+    ./scripts/prepare_production.sh
+
+# compile
+RUN ./scripts/dep.sh && \
+    ./scripts/compile_build.sh && \
+    rm -rf .git vendor && \
+    chmod +rwx $FILE && \
+    upx -9 -v $FILE
+
+# BEGIN: install modified version of glibc
+FROM alpine:latest
+ENV LANG=C.UTF-8
+
+# Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
+RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
+    ALPINE_GLIBC_PACKAGE_VERSION="2.27-r0" && \
+    ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
+    ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
+    ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
+    apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
+    wget \
+        "https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub" \
+        -O "/etc/apk/keys/sgerrand.rsa.pub" && \
+    wget \
+        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
+    apk add --no-cache \
+        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
+    \
+    rm "/etc/apk/keys/sgerrand.rsa.pub" && \
+    /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true && \
+    echo "export LANG=$LANG" > /etc/profile.d/locale.sh && \
+    \
+    apk del glibc-i18n && \
+    rm "/root/.wget-hsts" && \
+    apk del .build-dependencies && \
+    rm \
+        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
+
+# END: install modified version of glibc
+
+ENV X_HELIX_INTERACTION_PORT                80 443
+
+ENV USER gouser
+WORKDIR /home/${USER}
+
+# Create gouser
+RUN adduser -S ${USER} && \
+    mkdir -p /home/${USER}/.etherniti && \
+    chown $USER -R /home/${USER}/.etherniti && \
+    chmod -R +rxw /home/${USER}/.etherniti
+
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/etherniti       etherniti
+COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources       /home/${USER}/.etherniti/shared/resources
+
+# Create gouser
+RUN chown $USER -R /home/${USER}/etherniti && \
+    chmod +rxw /home/${USER}/etherniti
+
+USER ${USER}
+
+EXPOSE $X_HELIX_INTERACTION_PORT
+
+CMD ["./etherniti"]

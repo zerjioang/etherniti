@@ -1,5 +1,5 @@
-**/vendor
 **/dist
+**/vendor
 **/node_modules
 \.idea
 etherniti
