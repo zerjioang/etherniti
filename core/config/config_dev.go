@@ -1,20 +1,26 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build dev
+// +build dev !dev
+// +build !prod
 
 package config
 
+import (
+	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/util"
+)
+
 const (
 	DevelopmentAddress = "localhost"
-	HttpsPort          = ":4430"
 	HttpPort           = ":8080"
+	HttpsPort          = ":4430"
 	HttpAddress        = DevelopmentAddress + HttpPort
 	HttpsAddress       = DevelopmentAddress + HttpsPort
 )
 
 const (
-	CertPem = `-----BEGIN CERTIFICATE-----
+	certPem = `-----BEGIN CERTIFICATE-----
 MIIC+jCCAeKgAwIBAgIRAI4ga6WaCWzhnIgevZi02qgwDQYJKoZIhvcNAQELBQAw
 EjEQMA4GA1UEChMHQWNtZSBDbzAeFw0xOTAxMjgxNjA0NDNaFw0yMDAxMjgxNjA0
 NDNaMBIxEDAOBgNVBAoTB0FjbWUgQ28wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
@@ -32,7 +38,7 @@ E8IccKiKru2bL0llj4aqg0sdHmdLMBtsjWbT/yQaveBG/bNNDk0u5IqgJWSVePwk
 jFPtgDvxFkDoDAhzrJcenMSt6LtTAoBLKkWPSRC3u+iwVLacIv0pmxj+1nGW+H18
 mklI/9mByeejncVBGPp5vHastJpTFyRJ4V8CRZOQ4j9fRx7sEmQ7N+9pqDNtsw==
 -----END CERTIFICATE-----`
-	KeyPem = `-----BEGIN RSA PRIVATE KEY-----
+	keyPem = `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAk0o50LlZf7wvvhZzxXERG8CLKzy2PBuAkB4CqsWJEdCfzQsg
 ksDXwv3Rg0UhNC7p/Zb1I41wYveBbXfq/n96JIGD65oJ+yv0eTfyvt5Br4H8VIGR
 VxGLSs+cKI2/qVBcE3YH09wR6dp2gRSzCiPN/ANybeTBxFyVhDR7PKL3ITFor5Va
@@ -60,16 +66,48 @@ xC1++6t6BnPJnMe4vdpMeuW8QTAKhHvm+XvPiPqnNeVSj7SLbOZDlivUiNZrr87t
 DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 
-	TokenSecret = "t0k3n-s3cr3t-h3r3"
+	TokenSecret         = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect = false
-	UseUniqueRequestId = true
-	EnableRateLimit = false
+	UseUniqueRequestId  = true
+	EnableRateLimit     = false
 	BlockTorConnections = true
-	EnableLogging = true
-	LogLevel = log.DEBUG
+	EnableLogging       = true
+	LogLevel            = log.DEBUG
 )
+
+var (
+	//hardcoded cert content as bytes
+	certPemBytes []byte
+	//hardcoded key content as bytes
+	keyPemBytes []byte
+	// allowed cors domains
+	AllowedCorsOriginList = []string{
+		"*",
+		"localhost",
+		"api.etherniti.org",
+	}
+)
+
+func init() {
+	//hardcoded cert content as bytes
+	certPemBytes = util.Bytes(certPem)
+	//hardcoded key content as bytes
+	keyPemBytes = util.Bytes(keyPem)
+}
 
 //simply converts http requests into https
 func GetRedirectUrl(host string, path string) string {
 	return "https://" + HttpsAddress + path
+}
+
+// get SSL certificate cert.pem from proper source:
+// hardcoded value or from local storage file
+func GetCertPem() []byte {
+	return certPemBytes
+}
+
+// get SSL certificate key.pem from proper source:
+// hardcoded value or from local storage file
+func GetKeyPem() []byte {
+	return keyPemBytes
 }

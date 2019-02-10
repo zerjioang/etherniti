@@ -2,17 +2,15 @@ package integrity
 
 import (
 	"crypto/rand"
-	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
-	"os"
 	"testing"
 )
 
-func TestIntegrity(t *testing.T){
+func TestIntegrity(t *testing.T) {
 
 	//read private key
 	block, _ := pem.Decode([]byte(integrityPrivateKey))

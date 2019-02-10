@@ -10,9 +10,9 @@ import (
 )
 
 var (
-	empty     []byte
-	json      = jsoniter.ConfigCompatibleWithStandardLibrary
-	fastJson  = jsoniter.ConfigFastest
+	empty    []byte
+	json     = jsoniter.ConfigCompatibleWithStandardLibrary
+	fastJson = jsoniter.ConfigFastest
 )
 
 func Bytes(data string) []byte {

@@ -7,13 +7,14 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
-	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/mods/tor"
 
 	"github.com/zerjioang/etherniti/core/eth"
 
@@ -32,17 +33,28 @@ var (
 	gopath       = os.Getenv("GOPATH")
 	resources    = gopath + "/src/github.com/zerjioang/etherniti/resources"
 	corsConfig   = middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowOrigins: config.AllowedCorsOriginList,
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			"X-Language",
+			config.HttpProfileHeaderkey,
+		},
 	}
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
 	}
-	localhostCert, certEtr = tls.X509KeyPair(
-		[]byte(config.CertPem),
-		[]byte(config.KeyPem),
-	)
+	localhostCert tls.Certificate
+	certEtr       error
 )
+
+func init() {
+	localhostCert, certEtr = tls.X509KeyPair(
+		config.GetCertPem(),
+		config.GetKeyPem(),
+	)
+}
 
 type Deployer struct {
 	manager eth.WalletManager
@@ -113,7 +125,7 @@ func (deployer Deployer) Run() {
 	}
 }
 
-func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo){
+func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 10 seconds.
 	quit := make(chan os.Signal)
@@ -153,7 +165,7 @@ func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, er
 	}
 
 	//configure custom secure server
-	return &http.Server {
+	return &http.Server{
 		Addr:         config.HttpsAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
@@ -163,7 +175,7 @@ func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, er
 
 func (deployer Deployer) buildInsecureServerConfig(e *echo.Echo) (*http.Server, error) {
 	//configure custom secure server
-	return &http.Server {
+	return &http.Server{
 		Addr:         config.HttpAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,

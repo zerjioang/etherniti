@@ -5,11 +5,13 @@ package handlers
 
 import (
 	"errors"
-	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"math/big"
 	"net/http"
 	"time"
+
+	"github.com/patrickmn/go-cache"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
@@ -301,7 +303,7 @@ func (ctl EthController) coinbase(c echo.Context) error {
 
 // from incoming http request, it recovers the eth client linked to it
 func (ctl EthController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
-	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
+	requestProfileKey := c.Request().Header.Get(config.HttpProfileHeaderkey)
 	wallet, found := ctl.walletManager.Get(requestProfileKey)
 	if !found {
 		return nil, errNoConnectionProfile
@@ -314,7 +316,6 @@ func (ctl EthController) getClient(context echo.Context) ethrpc.EthRPC {
 	return client
 }
 
-
 // implemented method from interface RouterRegistrable
 func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing eth controller methods")
@@ -325,7 +326,7 @@ func (ctl EthController) RegisterRouters(router *echo.Echo) {
 	router.GET("/v1/eth/m/accountsBalanced", ctl.getAccountsWithBalance)
 	router.GET("/v1/eth/m/blocks", ctl.getBlocks)
 	router.GET("/v1/eth/m/coinbase", ctl.coinbase)
-	
+
 	router.GET("/v1/eth/m/getbalance/:address", ctl.getBalance)
 	router.GET("/v1/eth/m/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
 }

@@ -1,6 +1,8 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
+// +build !dev dev
+
 package api
 
 var (
@@ -187,9 +189,5 @@ var (
 		"turnitinbot",
 		"sindice",
 		"purebot",
-		"libwww-perl",
-		"apachebench",
-		"wget",
-		"curl",
 	}
 )

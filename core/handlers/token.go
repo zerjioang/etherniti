@@ -8,9 +8,10 @@ import (
 	"math"
 	"math/big"
 
+	"github.com/zerjioang/etherniti/core/config"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
 	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
@@ -90,7 +91,7 @@ func (ctl TokenController) summary(c echo.Context) error {
 
 // from incoming http request, it recovers the eth client linked to it
 func (ctl TokenController) getClientInstance(c echo.Context) (*ethclient.Client, error) {
-	requestProfileKey := c.Request().Header.Get(api.HttpProfileHeaderkey)
+	requestProfileKey := c.Request().Header.Get(config.HttpProfileHeaderkey)
 	wallet, found := ctl.walletManager.Get(requestProfileKey)
 	if !found {
 		return nil, errNoConnectionProfile

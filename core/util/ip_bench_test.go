@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func BenchmarkIpToUint32(b *testing.B){
+func BenchmarkIpToUint32(b *testing.B) {
 
 	b.Run("convert-bytes", func(b *testing.B) {
 		b.ReportAllocs()

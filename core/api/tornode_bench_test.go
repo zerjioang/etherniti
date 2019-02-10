@@ -1,19 +1,19 @@
 package api
 
 import (
-	"github.com/armon/go-radix"
-	"github.com/zerjioang/etherniti/core/util"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/util"
 )
 
-func BenchmarkRadixResolve(b *testing.B){
+func BenchmarkRadixResolve(b *testing.B) {
 	// Create a tree
 	r := radix.New()
 	/*
-	1.163.34.119
-	1.172.104.133
-	1.41.132.176
-	100.1.197.216
+		1.163.34.119
+		1.172.104.133
+		1.41.132.176
+		100.1.197.216
 	*/
 	r.Insert("1.163.34.119", nil)
 	r.Insert("1.172.104.133", nil)
@@ -28,14 +28,14 @@ func BenchmarkRadixResolve(b *testing.B){
 	}
 }
 
-func BenchmarkMapResolve(b *testing.B){
+func BenchmarkMapResolve(b *testing.B) {
 	// Create a tree
 	mapper := make(map[string]interface{})
 	/*
-	1.163.34.119
-	1.172.104.133
-	1.41.132.176
-	100.1.197.216
+		1.163.34.119
+		1.172.104.133
+		1.41.132.176
+		100.1.197.216
 	*/
 	mapper["1.163.34.119"] = nil
 	mapper["1.172.104.133"] = nil
@@ -50,14 +50,14 @@ func BenchmarkMapResolve(b *testing.B){
 	}
 }
 
-func BenchmarkMapUint32Resolve(b *testing.B){
+func BenchmarkMapUint32Resolve(b *testing.B) {
 	// Create a tree
 	mapper := make(map[uint32]interface{})
 	/*
-	1.163.34.119
-	1.172.104.133
-	1.41.132.176
-	100.1.197.216
+		1.163.34.119
+		1.172.104.133
+		1.41.132.176
+		100.1.197.216
 	*/
 	mapper[util.Ip2int("1.163.34.119")] = nil
 	mapper[util.Ip2int("1.172.104.133")] = nil

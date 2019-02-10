@@ -24,12 +24,12 @@ func BenchmarkGetJsonBytes(b *testing.B) {
 		b.SetBytes(1)
 
 		type testStruct struct {
-			Id int
+			Id      int
 			Message string
 		}
-		test := testStruct{Id:23554675, Message:"this is a test struct"}
+		test := testStruct{Id: 23554675, Message: "this is a test struct"}
 		for i := 0; i < b.N; i++ {
-			_,_ = FastMarshal(test)
+			_, _ = FastMarshal(test)
 		}
 	})
 	b.Run("std-marshal-example", func(b *testing.B) {
@@ -37,12 +37,12 @@ func BenchmarkGetJsonBytes(b *testing.B) {
 		b.SetBytes(1)
 
 		type testStruct struct {
-			Id int
+			Id      int
 			Message string
 		}
-		test := testStruct{Id:23554675, Message:"this is a test struct"}
+		test := testStruct{Id: 23554675, Message: "this is a test struct"}
 		for i := 0; i < b.N; i++ {
-			_,_ = StdMarshal(test)
+			_, _ = StdMarshal(test)
 		}
 	})
 	b.Run("std-json-go", func(b *testing.B) {
@@ -50,12 +50,12 @@ func BenchmarkGetJsonBytes(b *testing.B) {
 		b.SetBytes(1)
 
 		type testStruct struct {
-			Id int
+			Id      int
 			Message string
 		}
-		test := testStruct{Id:23554675, Message:"this is a test struct"}
+		test := testStruct{Id: 23554675, Message: "this is a test struct"}
 		for i := 0; i < b.N; i++ {
-			_,_ = json2.Marshal(test)
+			_, _ = json2.Marshal(test)
 		}
 	})
 }

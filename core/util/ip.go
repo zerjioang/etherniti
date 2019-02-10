@@ -19,7 +19,7 @@ func Int2ip(ipInt int64) string {
 	b0 := strconv.FormatInt((ipInt>>24)&0xff, 10)
 	b1 := strconv.FormatInt((ipInt>>16)&0xff, 10)
 	b2 := strconv.FormatInt((ipInt>>8)&0xff, 10)
-	b3 := strconv.FormatInt(ipInt & 0xff, 10)
+	b3 := strconv.FormatInt(ipInt&0xff, 10)
 
 	return b0 + "." + b1 + "." + b2 + "." + b3
 }

@@ -15,7 +15,7 @@ import (
 var (
 	emptyProfile     ConnectionProfile
 	tokenSecretBytes = []byte(config.TokenSecret)
-	errTokenNoValid = errors.New("invalid fields token provided")
+	errTokenNoValid  = errors.New("invalid fields token provided")
 )
 
 // default data for connection profile
@@ -44,25 +44,25 @@ type ConnectionProfile struct {
 	// If the principal processing the claim does not identify
 	// itself with a value in the aud claim when this claim is present,
 	// then the JWT must be rejected.
-	Audience  string `json:"aud,omitempty"`
+	Audience string `json:"aud,omitempty"`
 	// Identifies the expiration time on and after which the
 	// JWT must not be accepted for processing. The value must be
 	// a NumericDate[10]: either an integer or decimal, representing
 	// seconds past 1970-01-01 00:00:00Z.
-	ExpiresAt int64  `json:"exp,omitempty"`
+	ExpiresAt int64 `json:"exp,omitempty"`
 	// Case sensitive unique identifier of the token
 	// even among different issuers.
-	Id        string `json:"jti,omitempty"`
+	Id string `json:"jti,omitempty"`
 	// Identifies the time at which the JWT was issued.
 	// The value must be a NumericDate.
-	IssuedAt  int64  `json:"iat,omitempty"`
+	IssuedAt int64 `json:"iat,omitempty"`
 	//Identifies principal that issued the JWT.
-	Issuer    string `json:"iss,omitempty"`
+	Issuer string `json:"iss,omitempty"`
 	// Identifies the time on which the JWT will start to be accepted
 	// for processing. The value must be a NumericDate.
-	NotBefore int64  `json:"nbf,omitempty"`
+	NotBefore int64 `json:"nbf,omitempty"`
 	//Identifies the subject of the JWT.
-	Subject   string `json:"sub,omitempty"`
+	Subject string `json:"sub,omitempty"`
 }
 
 func (profile ConnectionProfile) Valid() error {

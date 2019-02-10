@@ -4,8 +4,9 @@
 package eth
 
 import (
-	"github.com/zerjioang/etherniti/core/modules/token/erc20"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/token/erc20"
 
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/keystore/memory"

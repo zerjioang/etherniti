@@ -7,10 +7,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/labstack/gommon/log"
 	"io/ioutil"
 	"math/big"
 	"net/http"
+
+	"github.com/labstack/gommon/log"
 )
 
 // EthError - ethereum error
@@ -47,7 +48,7 @@ type EthRPC struct {
 	url    string
 	client http.Client
 	// debug flag
-	Debug  bool
+	Debug bool
 }
 
 // New create new rpc client with given url

@@ -1,9 +1,10 @@
 package tor
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
-	"net/http"
 )
 
 var (
@@ -18,7 +19,7 @@ func BlockTorConnections(next echo.HandlerFunc) echo.HandlerFunc {
 		requestIp := c.Request().RemoteAddr
 
 		_, found := api.TornodeList[requestIp]
-		if ! found {
+		if !found {
 			//received request IP is not blacklisted
 			return next(c)
 		} else {

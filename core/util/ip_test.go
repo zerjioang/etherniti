@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestIpToUint32(t *testing.T){
+func TestIpToUint32(t *testing.T) {
 
 	t.Run("convert-bytes", func(t *testing.T) {
 		intVal := Ip2int("101.41.132.176")

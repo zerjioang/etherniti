@@ -1,9 +1,10 @@
 package profile
 
 import (
-	"github.com/zerjioang/etherniti/core/util"
 	"testing"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/util"
 )
 
 func TestCreateConnectionProfileToken(t *testing.T) {
@@ -14,16 +15,16 @@ func TestCreateConnectionProfileToken(t *testing.T) {
 		now := time.Now()
 		p := ConnectionProfile{
 			ConnectionId: util.GenerateUUID(),
-			NodeAddress: "http://127.0.0.1:8454",
-			Mode: "http",
-			Port: 8454,
-			Account: "0x0",
+			NodeAddress:  "http://127.0.0.1:8454",
+			Mode:         "http",
+			Port:         8454,
+			Account:      "0x0",
 			//standard claims
-			Id: util.GenerateUUID(),
-			Issuer: "etherniti",
-			ExpiresAt: now.Add(10*time.Minute).Unix(),
+			Id:        util.GenerateUUID(),
+			Issuer:    "etherniti",
+			ExpiresAt: now.Add(10 * time.Minute).Unix(),
 			NotBefore: now.Unix(),
-			IssuedAt: now.Unix(),
+			IssuedAt:  now.Unix(),
 		}
 		token, err := CreateConnectionProfileToken(p)
 		if err != nil {
