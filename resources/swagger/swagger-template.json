@@ -87,7 +87,7 @@
   },
   "securityDefinitions": {
     "token": {
-      "type": "token",
+      "type": "apiKey",
       "name": "authorization",
       "in": "header"
     }
