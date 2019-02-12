@@ -75,11 +75,14 @@ ENV USER                                    etherniti
 
 WORKDIR /home/${USER}
 
-# Create user $USER
-RUN adduser -S ${USER}
+# Create user $USER and resources folder
+RUN adduser -S ${USER} && mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources
 
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           proxy
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
+# copy proxy resource files
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources/root     $GOPATH/src/github.com/zerjioang/etherniti/resources/root
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources/swagger  $GOPATH/src/github.com/zerjioang/etherniti/resources/swagger
 
 ENTRYPOINT ["./proxy"]
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
