@@ -23,4 +23,4 @@ else
 fi
 
 echo "Building production container image from Dockerfile"
-docker build -f ./Dockerfile-prod -t api-etherniti:latest .
+docker build -f ./Dockerfile-prod -t etherniti/proxy:latest .

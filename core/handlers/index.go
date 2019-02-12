@@ -20,7 +20,7 @@ type IndexController struct {
 const (
 	indexWelcome = `{
   "name": "eth-wbapi",
-  "description": "etherniti: Ethereum Multitenant API",
+  "description": "Etherniti: Ethereum Multitenant API",
   "cluster_name": "eth-wbapi",
   "version": "0.0.1",
   "env": "development",

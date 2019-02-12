@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DevelopmentAddress = "localhost"
+	DevelopmentAddress = "0.0.0.0"
 	HttpPort           = ":8080"
 	HttpsPort          = ":4430"
 	HttpAddress        = DevelopmentAddress + HttpPort
@@ -84,6 +84,12 @@ var (
 	AllowedCorsOriginList = []string{
 		"*",
 		"localhost",
+		"api.etherniti.org",
+	}
+	//allowed hostnames
+	AllowedHostnames = []string{
+		"localhost:8080",
+		"127.0.0.1:8080",
 		"api.etherniti.org",
 	}
 )

@@ -49,11 +49,25 @@ var (
 	certEtr       error
 )
 
+func recoverName() {
+	if r := recover(); r!= nil {
+		log.Info("recovered from ", r)
+	}
+}
+
 func init() {
-	localhostCert, certEtr = tls.X509KeyPair(
-		config.GetCertPem(),
-		config.GetKeyPem(),
-	)
+	defer recoverName()
+	certBytes := config.GetCertPem()
+	keyBytes := config.GetKeyPem()
+	if certBytes != nil && len(certBytes) > 0 &&
+		keyBytes != nil && len(keyBytes) > 0 {
+		localhostCert, certEtr = tls.X509KeyPair(
+			certBytes,
+			keyBytes,
+		)
+	} else {
+		log.Error("failed to load SSL crypto data")
+	}
 }
 
 type Deployer struct {
@@ -242,10 +256,31 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// check if http request host value is allowed or not
+func (deployer Deployer) hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// add Host policy
+		h := c.Request().Host
+		var allowed = false
+		var size = len(config.AllowedHostnames)
+		for i := 0; i < size && !allowed; i++ {
+			allowed = strings.Compare(h, config.AllowedHostnames[i]) == 0
+		}
+		if allowed {
+			// fordward request to next middleware
+			return next(c)
+		} else {
+			// drop the request
+			return nil
+		}
+	}
+}
+
 // check if user agent string contains bot strings similarities
 func (deployer Deployer) isBotRequest(userAgent string) bool {
 	var lock = false
-	for i := 0; i < len(api.BadBotsList) && !lock; i++ {
+	var size = len(api.BadBotsList)
+	for i := 0; i < size && !lock; i++ {
 		lock = strings.Contains(userAgent, api.BadBotsList[i])
 	}
 	return lock
@@ -307,6 +342,10 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// avoid bots and crawlers
 	log.Info("[LAYER] antibots")
 	e.Pre(deployer.antiBots)
+
+	// avoid bots and crawlers
+	log.Info("[LAYER] hostname check")
+	e.Pre(deployer.hostnameCheck)
 
 	// remove trailing slash for better usage
 	log.Info("[LAYER] trailing slash remover")

@@ -7,11 +7,11 @@ import "github.com/labstack/echo"
 
 // creating a custom context,
 // allow us to add new features in a clean way
-type GaethwayContext struct {
+type EthernitiContext struct {
 	echo.Context
 }
 
-func NewethernitiContext() GaethwayContext {
-	ctx := GaethwayContext{}
+func NewEthernitiContext() EthernitiContext {
+	ctx := EthernitiContext{}
 	return ctx
 }
