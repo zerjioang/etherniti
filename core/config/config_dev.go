@@ -88,8 +88,8 @@ var (
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
-		"localhost:8080",
-		"127.0.0.1:8080",
+		"localhost",
+		"127.0.0.1",
 		"api.etherniti.org",
 	}
 )

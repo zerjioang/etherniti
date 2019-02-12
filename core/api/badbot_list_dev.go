@@ -189,5 +189,9 @@ var (
 		"turnitinbot",
 		"sindice",
 		"purebot",
+		//"libwww-perl", //allow in development mode
+		//"apachebench", //allow in development mode
+		//"wget",        //allow in development mode
+		//"curl",        //allow in development mode
 	}
 )
