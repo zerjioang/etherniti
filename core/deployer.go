@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
@@ -220,7 +221,7 @@ func (deployer Deployer) hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		h.Set("strict-transport-security", "max-age=31536000; includeSubDomains; preload")
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' font-src fonts.googleapis.com fonts.gstatic.com")
+		//h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' font-src fonts.googleapis.com fonts.gstatic.com")
 		h.Set("Expect-CT", "enforce, max-age=30")
 		h.Set("X-UA-Compatible", "IE=Edge,chrome=1")
 		h.Set("x-frame-options", "SAMEORIGIN")
@@ -415,8 +416,30 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// load swagger ui files
 	log.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
+	//configure swagger json
+	configureSwaggerJson()
 
 	deployer.register(e)
+}
+func configureSwaggerJson() {
+	//read template file
+	log.Debug("reading swagger json file")
+	raw, err := ioutil.ReadFile(resources+"/swagger/swagger-template.json")
+	if err != nil {
+		log.Error("failed reading swagger template file", err)
+		return
+	}
+	//replace hardcoded variables
+	str := string(raw)
+	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
+	str = strings.Replace(str, "$host", "dev-proxy.etherniti.org", -1)
+	str = strings.Replace(str, "$basepath", "/v1", -1)
+	//write swagger.json file
+	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
+	if writeErr != nil {
+		log.Error("failed writing swagger.json file", writeErr)
+		return
+	}
 }
 
 // create new deployer instance

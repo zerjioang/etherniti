@@ -23,6 +23,3 @@ site
 
 # ignore dashboard files
 **/dashboard
-
-# ignore dynamically created files
-**/swagger.json
