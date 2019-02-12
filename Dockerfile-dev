@@ -81,7 +81,7 @@ COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources/root     $GOPATH/src/github.com/zerjioang/etherniti/resources/root
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/resources/swagger  $GOPATH/src/github.com/zerjioang/etherniti/resources/swagger
 
-ENTRYPOINT ["proxy"]
+ENTRYPOINT ["./proxy"]
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
 # change to non root user for execution
