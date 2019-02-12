@@ -10,11 +10,11 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 )
 
 // token controller

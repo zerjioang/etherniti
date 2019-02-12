@@ -9,8 +9,8 @@ import (
 	"math/big"
 	"regexp"
 
-	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 var (

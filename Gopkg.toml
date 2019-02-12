@@ -1,0 +1,14 @@
+# A [[constraint]] stanza defines rules for how a direct dependency
+# must be incorporated into the dependency graph. Dep respects these
+# declarations from the current project's Gopkg.toml, as well as the
+# Gopkg.toml files found in any dependencies.
+[[constraint]]
+  # Required: the root import path of the project being constrained.
+  name = "github.com/etherniti/jwt-go"
+  # Recommended: the version constraint to enforce for the project.
+  # Note that only one of "branch", "version" or "revision" can be specified.
+  # version = "1.0.0"
+  # revision = "abc123"
+  branch = "develop"
+  # Optional: an alternate location (URL or import path) for the project's source.
+  # source = "https://github.com/myfork/package.git"

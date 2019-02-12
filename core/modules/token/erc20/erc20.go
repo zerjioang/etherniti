@@ -10,10 +10,10 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/accounts/abi/bind"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/core/types"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 // TokenABI is the input ABI used to generate the binding from.

@@ -6,9 +6,9 @@ package memory
 import (
 	"crypto/ecdsa"
 
-	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
+	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // content stored in the wallet

@@ -13,10 +13,10 @@ import (
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
 	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/labstack/echo"

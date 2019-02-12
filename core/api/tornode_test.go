@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/armon/go-radix"
 	"testing"
 )
 

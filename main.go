@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/zerjioang/etherniti/core"
@@ -14,6 +15,7 @@ var (
 	// build commit hash value
 	Build string
 )
+
 func init() {
 	util.Commit = Build
 	fmt.Println(util.WelcomeBanner())

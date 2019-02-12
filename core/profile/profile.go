@@ -9,7 +9,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/etherniti/jwt-go"
 )
 
 var (
@@ -67,7 +67,8 @@ type ConnectionProfile struct {
 
 func (profile ConnectionProfile) Valid() error {
 	valid := profile.ConnectionId != "" &&
-		profile.NodeAddress != ""
+		profile.NodeAddress != "" &&
+		profile.Account != ""
 	if !valid {
 		return errTokenNoValid
 	}
@@ -84,7 +85,7 @@ func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, profile)
 
 	// Sign and get the complete encoded token as a string using the secret
-	return token.SignedString(profile.Secret())
+	return token.SignedString(tokenSecretBytes)
 }
 
 func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
@@ -95,7 +96,8 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	// to the callback, providing flexibility.
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		// return used token secret

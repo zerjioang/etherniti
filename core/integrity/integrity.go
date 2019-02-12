@@ -1,5 +1,14 @@
 package integrity
 
+import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"os"
+)
+
 const (
 	// rsa 4096 integrity key
 	integrityPrivateKey = `-----BEGIN PRIVATE KEY-----
@@ -56,3 +65,16 @@ I+QAbR7cNjM5lJzksS6JwdfZ/U8H
 -----END PRIVATE KEY-----
 `
 )
+
+func EncryptOAEP(secretMessage string, pubkey rsa.PublicKey) string {
+	label := []byte("OAEP Encrypted")
+	// crypto/rand.Reader is a good source of entropy for randomizing the
+	// encryption function.
+	rng := rand.Reader
+	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, &pubkey, []byte(secretMessage),    label)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error from encryption: %s\n", err)
+		return "Error from encryption";
+	}
+	return base64.StdEncoding.EncodeToString(ciphertext)
+}

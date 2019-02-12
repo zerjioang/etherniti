@@ -8,10 +8,10 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/modules/ethfork/common"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/common/hexutil"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/crypto"
-	"github.com/zerjioang/etherniti/core/modules/ethfork/ethclient"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type EthClientType uint8
