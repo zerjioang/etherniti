@@ -84,5 +84,5 @@ func (ctl IndexController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing index controller methods")
 	router.GET("/v1", ctl.index)
 	router.GET("/", ctl.index)
-	router.GET("/status", ctl.status)
+	router.GET("/v1/status", ctl.status)
 }
