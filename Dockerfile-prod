@@ -16,6 +16,7 @@ ENV FILE proxy
 ENV ETHERNITI_GOOS linux
 ENV ETHERNITI_GOARCH amd64
 ENV USER etherniti
+ENV RESOURCE_DIR /go/src/github.com/zerjioang/etherniti/resources
 
 # add source code to docker image for multistage build
 WORKDIR $BASE
@@ -72,14 +73,20 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
 ENV USER                                    etherniti
+ENV GOPATH                                  /home/${USER}/go
 
 WORKDIR /home/${USER}
 
-# Create user $USER
-RUN adduser -S ${USER}
+# Create user $USER and resources folder
+RUN adduser -S ${USER} && \
+    addgroup -S appgroup && \
+    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources
 
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           proxy
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
+# copy proxy resource files
+COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/root     $GOPATH/src/github.com/zerjioang/etherniti/resources/root
+COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/swagger  $GOPATH/src/github.com/zerjioang/etherniti/resources/swagger
 
 ENTRYPOINT ["./proxy"]
 EXPOSE $X_ETHERNITI_INTERACTION_PORT

@@ -35,8 +35,16 @@ var (
 	//key content as bytes readed from filesystem
 	fsKeyBytes []byte
 	// allowed cors domains
+	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
+		"api.etherniti.org",
+		"proxy.etherniti.org",
+	}
+	//allowed hostnames
+	AllowedHostnames = []string{
+		"api.etherniti.org",
+		"proxy.etherniti.org",
 	}
 )
 

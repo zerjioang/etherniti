@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
@@ -49,11 +50,25 @@ var (
 	certEtr       error
 )
 
+func recoverName() {
+	if r := recover(); r!= nil {
+		log.Info("recovered from ", r)
+	}
+}
+
 func init() {
-	localhostCert, certEtr = tls.X509KeyPair(
-		config.GetCertPem(),
-		config.GetKeyPem(),
-	)
+	defer recoverName()
+	certBytes := config.GetCertPem()
+	keyBytes := config.GetKeyPem()
+	if certBytes != nil && len(certBytes) > 0 &&
+		keyBytes != nil && len(keyBytes) > 0 {
+		localhostCert, certEtr = tls.X509KeyPair(
+			certBytes,
+			keyBytes,
+		)
+	} else {
+		log.Error("failed to load SSL crypto data")
+	}
 }
 
 type Deployer struct {
@@ -206,7 +221,7 @@ func (deployer Deployer) hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		h.Set("strict-transport-security", "max-age=31536000; includeSubDomains; preload")
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' font-src fonts.googleapis.com fonts.gstatic.com")
+		//h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' font-src fonts.googleapis.com fonts.gstatic.com")
 		h.Set("Expect-CT", "enforce, max-age=30")
 		h.Set("X-UA-Compatible", "IE=Edge,chrome=1")
 		h.Set("x-frame-options", "SAMEORIGIN")
@@ -236,16 +251,47 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 		ua = strings.ToLower(ua)
 		if ua == "" || deployer.isBotRequest(ua) {
 			//drop the request
+			log.Warn("drop request: User-Agent =", ua)
 			return userAgentErr
 		}
 		return next(c)
 	}
 }
 
+// check if http request host value is allowed or not
+func (deployer Deployer) hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// add Host policy
+		h := c.Request().Host
+		chunks := strings.Split(h, ":")
+		var hostname = ""
+		if len(chunks) == 1 {
+			//no port defined in host header
+			hostname = h
+		} else if len(chunks) == 2 {
+			//port defined in host header
+			hostname = chunks[0]
+		}
+		var allowed = false
+		var size = len(config.AllowedHostnames)
+		for i := 0; i < size && !allowed; i++ {
+			allowed = strings.Compare(hostname, config.AllowedHostnames[i]) == 0
+		}
+		if allowed {
+			// fordward request to next middleware
+			return next(c)
+		} else {
+			// drop the request
+			return nil
+		}
+	}
+}
+
 // check if user agent string contains bot strings similarities
 func (deployer Deployer) isBotRequest(userAgent string) bool {
 	var lock = false
-	for i := 0; i < len(api.BadBotsList) && !lock; i++ {
+	var size = len(api.BadBotsList)
+	for i := 0; i < size && !lock; i++ {
 		lock = strings.Contains(userAgent, api.BadBotsList[i])
 	}
 	return lock
@@ -303,15 +349,6 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] custom error handler")
 	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
 
-	// antibots, crawler middleware
-	// avoid bots and crawlers
-	log.Info("[LAYER] antibots")
-	e.Pre(deployer.antiBots)
-
-	// remove trailing slash for better usage
-	log.Info("[LAYER] trailing slash remover")
-	e.Pre(middleware.RemoveTrailingSlash())
-
 	// log all single request
 	// configure logging level
 	log.Info("[LAYER] logger at warn level")
@@ -319,6 +356,19 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 		e.Logger.SetLevel(config.LogLevel)
 		e.Use(middleware.Logger())
 	}
+
+	// antibots, crawler middleware
+	// avoid bots and crawlers
+	log.Info("[LAYER] antibots")
+	e.Pre(deployer.antiBots)
+
+	// avoid bots and crawlers
+	log.Info("[LAYER] hostname check")
+	e.Pre(deployer.hostnameCheck)
+
+	// remove trailing slash for better usage
+	log.Info("[LAYER] trailing slash remover")
+	e.Pre(middleware.RemoveTrailingSlash())
 
 	// add CORS support
 	log.Info("[LAYER] cors support")
@@ -366,8 +416,30 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// load swagger ui files
 	log.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
+	//configure swagger json
+	configureSwaggerJson()
 
 	deployer.register(e)
+}
+func configureSwaggerJson() {
+	//read template file
+	log.Debug("reading swagger json file")
+	raw, err := ioutil.ReadFile(resources+"/swagger/swagger-template.json")
+	if err != nil {
+		log.Error("failed reading swagger template file", err)
+		return
+	}
+	//replace hardcoded variables
+	str := string(raw)
+	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
+	str = strings.Replace(str, "$host", "dev-proxy.etherniti.org", -1)
+	str = strings.Replace(str, "$basepath", "/v1", -1)
+	//write swagger.json file
+	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
+	if writeErr != nil {
+		log.Error("failed writing swagger.json file", writeErr)
+		return
+	}
 }
 
 // create new deployer instance

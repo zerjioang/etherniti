@@ -23,4 +23,4 @@ else
 fi
 
 echo "Building development container image from Dockerfile"
-docker build -f Dockerfile-dev -t api-etherniti:latest .
+docker build -f Dockerfile-dev -t etherniti/proxy:develop .

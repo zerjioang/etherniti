@@ -20,7 +20,7 @@ type IndexController struct {
 const (
 	indexWelcome = `{
   "name": "eth-wbapi",
-  "description": "etherniti: Ethereum Multitenant API",
+  "description": "Etherniti: Ethereum Multitenant API",
   "cluster_name": "eth-wbapi",
   "version": "0.0.1",
   "env": "development",
@@ -84,5 +84,5 @@ func (ctl IndexController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing index controller methods")
 	router.GET("/v1", ctl.index)
 	router.GET("/", ctl.index)
-	router.GET("/status", ctl.status)
+	router.GET("/v1/status", ctl.status)
 }

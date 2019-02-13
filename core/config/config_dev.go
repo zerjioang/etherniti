@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DevelopmentAddress = "localhost"
+	DevelopmentAddress = "0.0.0.0"
 	HttpPort           = ":8080"
 	HttpsPort          = ":4430"
 	HttpAddress        = DevelopmentAddress + HttpPort
@@ -85,6 +85,14 @@ var (
 		"*",
 		"localhost",
 		"api.etherniti.org",
+	}
+	//allowed hostnames
+	AllowedHostnames = []string{
+		"localhost",
+		"127.0.0.1",
+		"api.etherniti.org",
+		"proxy.etherniti.org",
+		"dev-proxy.etherniti.org",
 	}
 )
 
