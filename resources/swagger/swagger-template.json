@@ -87,8 +87,8 @@
     "/integrity": {
       "get": {
         "tags": ["public"],
-        "summary": "Check proxy integrity",
-        "description": "Get digitally signed integrity message from proxy instance",
+        "summary": "Check remote proxy integrity status",
+        "description": "Get digitally signed integrity message from proxy instance can compare signature validity with provided public key",
         "operationId": "integrity",
         "consumes": ["application/json"],
         "produces": ["application/json"],

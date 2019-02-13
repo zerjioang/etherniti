@@ -19,8 +19,15 @@ var (
 	// sha256 hash
 	h = sha256.New()
 	//decode private key
-	integrityPrivKey, _ = decode(config.IntegrityPrivateKeyPem, config.IntegrityPublicKeyPem)
+	integrityPrivKey *ecdsa.PrivateKey
+	//private integrity key bytes
+	privateBytes = []byte(config.IntegrityPrivateKeyPem)
+	publicBytes = []byte(config.IntegrityPublicKeyPem)
 )
+
+func init(){
+	integrityPrivKey, _ = decode(privateBytes, publicBytes)
+}
 
 func SignMsgWithIntegrity(message string) (string, string) {
 	//create test message
@@ -60,12 +67,12 @@ func encode(privateKey *ecdsa.PrivateKey, publicKey *ecdsa.PublicKey) (string, s
 }
 
 // decode private key and public from pem
-func decode(pemEncoded string, pemEncodedPub string) (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
-	block, _ := pem.Decode(util.Bytes(pemEncoded))
+func decode(pemEncoded []byte, pemEncodedPub []byte) (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
+	block, _ := pem.Decode(pemEncoded)
 	x509Encoded := block.Bytes
 	privateKey, _ := x509.ParseECPrivateKey(x509Encoded)
 
-	blockPub, _ := pem.Decode(util.Bytes(pemEncodedPub))
+	blockPub, _ := pem.Decode(pemEncodedPub)
 	x509EncodedPub := blockPub.Bytes
 	genericPublicKey, _ := x509.ParsePKIXPublicKey(x509EncodedPub)
 	publicKey := genericPublicKey.(*ecdsa.PublicKey)

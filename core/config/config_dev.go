@@ -94,6 +94,8 @@ var (
 		"proxy.etherniti.org",
 		"dev-proxy.etherniti.org",
 	}
+	//swagger.json injected params
+	SwaggerApiDomain = "localhost:8080"
 )
 
 func init() {

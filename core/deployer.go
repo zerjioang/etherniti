@@ -432,7 +432,7 @@ func configureSwaggerJson() {
 	//replace hardcoded variables
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
-	str = strings.Replace(str, "$host", "dev-proxy.etherniti.org", -1)
+	str = strings.Replace(str, "$host", config.SwaggerApiDomain, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	//write swagger.json file
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)

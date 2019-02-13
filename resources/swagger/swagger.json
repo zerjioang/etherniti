@@ -13,7 +13,7 @@
       "url": "https://www.etherniti.org/docs/license/"
     }
   },
-  "host": "dev-proxy.etherniti.org",
+  "host": "localhost:8080",
   "basePath": "/v1",
   "tags": [
     {
@@ -83,6 +83,27 @@
           }
         }
       }
+    },
+    "/integrity": {
+      "get": {
+        "tags": ["public"],
+        "summary": "Check remote proxy integrity status",
+        "description": "Get digitally signed integrity message from proxy instance can compare signature validity with provided public key",
+        "operationId": "integrity",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy integrity response",
+            "example": {
+              "hash": "fee0ed78f06ccd7756ac5d737d81a9dccc1a7637fb5f9eb17e16e417adfc75d8",
+              "message": "2019-02-13 17:36:05.446063875 +0100 CET m=+54.618977742",
+              "signature": "303c021c095ee9f68b564ed838c0540cc5836afda07cb55ff76f6d8b4f0f22c5021c2c8d430cf0c4380070923a59e87277287592eef16ac0414802306db3"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -94,7 +115,7 @@
   },
   "definitions": {},
   "externalDocs": {
-    "description": "Find out more about Etherniti, the Ethereum REST API Proxy at",
+    "description": "Find out more about Etherniti, a Ethereum REST API Proxy at https://www.etherniti.org",
     "url": "https://www.etherniti.org"
   }
 }

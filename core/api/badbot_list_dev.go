@@ -1,8 +1,8 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build !dev
-// +build dev !prod
+// +build !dev dev
+// +build !prod
 
 package api
 
