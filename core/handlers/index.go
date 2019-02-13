@@ -6,6 +6,9 @@ package handlers
 import (
 	"net/http"
 	"runtime"
+	"time"
+
+	"github.com/zerjioang/etherniti/core/integrity"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/server/mods/disk"
@@ -79,10 +82,26 @@ func (ctl IndexController) status(c echo.Context) error {
 	return c.JSON(http.StatusOK, wrapper)
 }
 
+func (ctl IndexController) integrity(c echo.Context) error {
+	// get current date time
+	currentTime := time.Now()
+	timeStr := currentTime.String()
+
+	//sign message
+	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
+	wrapper := map[string]string{
+		"message":   timeStr,
+		"hash":      hash,
+		"signature": signature,
+	}
+	return c.JSON(http.StatusOK, wrapper)
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing index controller methods")
 	router.GET("/v1", ctl.index)
 	router.GET("/", ctl.index)
 	router.GET("/v1/status", ctl.status)
+	router.GET("/v1/integrity", ctl.integrity)
 }

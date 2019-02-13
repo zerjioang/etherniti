@@ -34,6 +34,12 @@ if [[ -z "$ETHERNITI_GOOS" ]]; then
     ETHERNITI_GOOS="linux"
 fi
 
+if [[ -z "$ETHERNITI_COMPILER" ]]; then
+    echo "no CC found.                 setting default to: gcc"
+    # gcc gc gccgo
+    ETHERNITI_COMPILER="gcc"
+fi
+
 # Disabling CGO also removes the need for the cross-compile dependencies
 # forced a rebuild with -a
 # netgo to make sure we use built-in net package and not the system’s one
@@ -50,6 +56,7 @@ function compile(){
     fi
     if [[ "$ETHERNITI_GOARCH" = "arm" ]]; then
         echo "compiling for arm..."
+        ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-7
         # compile for arm-v7
         sudo apt-get install gcc \
         make \
@@ -60,7 +67,7 @@ function compile(){
         gccgo-7-arm-linux-gnueabihf \
         gcc-arm-linux-gnueabi
         # trigger the compilation
-        CC=/usr/bin/arm-linux-gnueabihf-gcc-7 \
+        CC=${ETHERNITI_COMPILER} \
         CGO_ENABLED=1 \
         GOOS=linux \
         GOARCH=arm \
@@ -71,6 +78,8 @@ function compile(){
         if [[ "$BUILD_MODE" = "dev" ]]; then
             echo "compiling development version..."
             echo "Using commit hash '$hash' for current build"
+            CGO_ENABLED=1 \
+            CC=${ETHERNITI_COMPILER} \
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
@@ -81,6 +90,7 @@ function compile(){
             echo "compiling production version..."
             echo "Using commit hash '$hash' for current build"
             CGO_ENABLED=1 \
+            CC=${ETHERNITI_COMPILER} \
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \

@@ -51,7 +51,7 @@ var (
 )
 
 func recoverName() {
-	if r := recover(); r!= nil {
+	if r := recover(); r != nil {
 		log.Info("recovered from ", r)
 	}
 }
@@ -424,7 +424,7 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 func configureSwaggerJson() {
 	//read template file
 	log.Debug("reading swagger json file")
-	raw, err := ioutil.ReadFile(resources+"/swagger/swagger-template.json")
+	raw, err := ioutil.ReadFile(resources + "/swagger/swagger-template.json")
 	if err != nil {
 		log.Error("failed reading swagger template file", err)
 		return

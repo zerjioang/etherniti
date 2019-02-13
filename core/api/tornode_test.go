@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/armon/go-radix"
 	"testing"
+
+	"github.com/armon/go-radix"
 )
 
 func TestCreateRadix(t *testing.T) {

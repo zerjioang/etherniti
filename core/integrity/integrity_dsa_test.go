@@ -36,7 +36,7 @@ func TestIntegrity(t *testing.T) {
 	fmt.Printf("%x \n", privatekey)
 
 	fmt.Println("Public Key :")
-	fmt.Printf("%x \n",pubkey)
+	fmt.Printf("%x \n", pubkey)
 
 	// Sign
 	var h hash.Hash
@@ -68,5 +68,3 @@ func TestIntegrity(t *testing.T) {
 	verifystatus = dsa.Verify(&pubkey, signhash, r, s)
 	fmt.Println(verifystatus) // should be false
 }
-
-

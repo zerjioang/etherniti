@@ -19,6 +19,10 @@ func Bytes(data string) []byte {
 	return *(*[]byte)(unsafe.Pointer(&data))
 }
 
+func ToString(data []byte) string {
+	return *(*string)(unsafe.Pointer(&data))
+}
+
 func FastMarshal(data interface{}) ([]byte, error) {
 	return fastJson.Marshal(&data)
 }
