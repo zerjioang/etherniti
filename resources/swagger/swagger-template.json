@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "$title Definition",
-    "version": "1.0.0",
+    "description": "$title definition",
+    "version": "$version",
     "title": "$title",
     "termsOfService": "https://www.etherniti.org/docs/terms-of-service/",
     "contact": {
@@ -18,10 +18,18 @@
   "tags": [
     {
       "name": "public",
-      "description": "Public REST API Proxy operations",
+      "description": "Public Ethereum REST API Proxy operations",
       "externalDocs": {
-        "description": "Find out more about Etherniti, the Ethereum REST API public operations at",
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/public-operations/"
+      }
+    },
+    {
+      "name": "profile",
+      "description": "Ethereum REST API Proxy connection profile management",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/profile-management/"
       }
     }
   ],
@@ -115,7 +123,7 @@
   },
   "definitions": {},
   "externalDocs": {
-    "description": "Find out more about Etherniti, a Ethereum REST API Proxy at https://www.etherniti.org",
+    "description": "Find out more about Etherniti, an Ethereum REST API Proxy at https://www.etherniti.org",
     "url": "https://www.etherniti.org"
   }
 }

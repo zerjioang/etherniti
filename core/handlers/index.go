@@ -37,6 +37,8 @@ var (
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
 	diskMonitor = disk.DiskUsage("/")
+	//bytes of welcome message
+	indexWelcomeBytes = []byte(indexWelcome)
 )
 
 func NewIndexController() IndexController {
@@ -45,12 +47,12 @@ func NewIndexController() IndexController {
 }
 
 func (ctl IndexController) index(c echo.Context) error {
-	return c.String(http.StatusOK, indexWelcome)
+	return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
 }
 
 func (ctl IndexController) status(c echo.Context) error {
 
-	// 1 read memory stats
+	// read memory stats
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
 
@@ -66,31 +68,40 @@ func (ctl IndexController) status(c echo.Context) error {
 		"heapalloc":   m.HeapAlloc,
 
 		// cpus stats
-		"numcpus": numcpus,
-
+		"cpus": numcpus,
+		// runtime stats
+		"runtime": map[string]string{
+			"version":  runtime.Version(),
+			"compiler": runtime.Compiler,
+		},
 		// software version stats
-		"runtime":           runtime.Version(),
-		"http-version":      echo.Version,
-		"etherniti-version": config.Version,
-
+		"version": map[string]string{
+			"http":      echo.Version,
+			"etherniti": config.Version,
+		},
 		// basic disk stats
-		"disk-all":  float64(diskMonitor.All) / gbUnits,
-		"disk-used": float64(diskMonitor.Used) / gbUnits,
-		"disk-free": float64(diskMonitor.Free) / gbUnits,
+		"disk": map[string]float64{
+			"all":  float64(diskMonitor.All) / gbUnits,
+			"used": float64(diskMonitor.Used) / gbUnits,
+			"free": float64(diskMonitor.Free) / gbUnits,
+		},
 	}
 
 	return c.JSON(http.StatusOK, wrapper)
 }
 
+// return server side integrity message signed with private ecdsa key
 func (ctl IndexController) integrity(c echo.Context) error {
 	// get current date time
 	currentTime := time.Now()
 	timeStr := currentTime.String()
+	millisStr := currentTime.Unix()
 
 	//sign message
 	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
-	wrapper := map[string]string{
+	wrapper := map[string]interface{}{
 		"message":   timeStr,
+		"millis":   millisStr,
 		"hash":      hash,
 		"signature": signature,
 	}
