@@ -10,13 +10,13 @@ MAINTAINER team@etherniti.org
 LABEL IMAGE etherniti-api
 LABEL PROJECT etherniti
 
-ENV BASE /go/src/github.com/zerjioang/etherniti
-ENV BUILD_MODE dev
-ENV FILE proxy
-ENV USER etherniti
-ENV ETHERNITI_GOOS linux
-ENV ETHERNITI_GOARCH amd64
-ENV RESOURCE_DIR /go/src/github.com/zerjioang/etherniti/resources
+ENV BASE                /go/src/github.com/zerjioang/etherniti
+ENV BUILD_MODE          prod
+ENV FILE                proxy
+ENV ETHERNITI_GOOS      linux
+ENV ETHERNITI_GOARCH    amd64
+ENV USER                etherniti
+ENV RESOURCE_DIR        /go/src/github.com/zerjioang/etherniti/resources
 
 # add source code to docker image for multistage build
 WORKDIR $BASE
@@ -81,26 +81,27 @@ ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
 ENV USER                                    etherniti
 ENV GOPATH                                  /home/${USER}/go
 ENV EXEC                                    proxy
+ENV BASE                                    src/github.com/zerjioang/etherniti/resources
 
 WORKDIR /home/${USER}
 
-# Copy hardening script
+# copy hardening script
 COPY ./scripts/docker/hardening.sh hardening.sh
 
-# Create user $USER and resources folder
+# create user $USER
 RUN adduser -S ${USER} && \
     addgroup -S appgroup && \
     mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources && \
     chmod +x hardening.sh && \
     ./hardening.sh && \
     rm hardening.sh && \
-    echo "export PATH=$PATH:/home/${USER}/${EXEC}" > /home/${USER}/.bash_profile && \
+    alias proxy=/home/${USER}/${EXEC} && \
     ls -alh
 
 # copy proxy resource files
 
-COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/root     $GOPATH/src/github.com/zerjioang/etherniti/resources/root
-COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/swagger  $GOPATH/src/github.com/zerjioang/etherniti/resources/swagger
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root     ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger  ${GOPATH}/${BASE}/swagger
 
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
@@ -111,4 +112,4 @@ EXPOSE $X_ETHERNITI_INTERACTION_PORT
 USER ${USER}
 
 # set container entrypoint
-ENTRYPOINT ${EXEC}
+ENTRYPOINT ./${EXEC}

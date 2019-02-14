@@ -10,13 +10,13 @@ MAINTAINER team@etherniti.org
 LABEL IMAGE etherniti-api
 LABEL PROJECT etherniti
 
-ENV BASE /go/src/github.com/zerjioang/etherniti
-ENV BUILD_MODE prod
-ENV FILE proxy
-ENV ETHERNITI_GOOS linux
-ENV ETHERNITI_GOARCH amd64
-ENV USER etherniti
-ENV RESOURCE_DIR /go/src/github.com/zerjioang/etherniti/resources
+ENV BASE 				/go/src/github.com/zerjioang/etherniti
+ENV BUILD_MODE 			prod
+ENV FILE 				proxy
+ENV ETHERNITI_GOOS 		linux
+ENV ETHERNITI_GOARCH 	amd64
+ENV USER 				etherniti
+ENV RESOURCE_DIR 		/go/src/github.com/zerjioang/etherniti/resources
 
 # add source code to docker image for multistage build
 WORKDIR $BASE
@@ -25,29 +25,38 @@ COPY . $BASE
 # optimize code for production compilation
 # RUN echo "Preparing code for production deployment" && ./scripts/prepare_production.sh
 
-# Create user $USER and compile
-RUN adduser --system --no-create-home --gecos 'Etherniti user' --disabled-password -q ${USER} && \
-    ./scripts/dep.sh && \
-    ./scripts/docker/compile_build.sh && \
+# Create user ${USER} and compile
+RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password -q ${USER} && \
+    ./scripts/docker/compile_build.sh ${FILE} && \
     rm -rf .git && \
-    chmod +rwx $FILE && \
-    chown $USER $FILE && \
-    upx -9 -v $FILE
+    chmod +x ${FILE} && \
+    chown ${USER} ${FILE} && \
+    upx -9 -v $FILE && \
+    ls -alh
 
 # BEGIN: install modified version of glibc
-FROM alpine:latest
+FROM alpine:3.9
+
 ENV LANG=C.UTF-8
 
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
+
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
-    ALPINE_GLIBC_PACKAGE_VERSION="2.27-r0" && \
+    ALPINE_GLIBC_PACKAGE_VERSION="2.29-r0" && \
     ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
-    wget \
-        "https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub" \
-        -O "/etc/apk/keys/sgerrand.rsa.pub" && \
+    echo \
+        "-----BEGIN PUBLIC KEY-----\
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApZ2u1KJKUu/fW4A25y9m\
+        y70AGEa/J3Wi5ibNVGNn1gT1r0VfgeWd0pUybS4UmcHdiNzxJPgoWQhV2SSW1JYu\
+        tOqKZF5QSN6X937PTUpNBjUvLtTQ1ve1fp39uf/lEXPpFpOPL88LKnDBgbh7wkCp\
+        m2KzLVGChf83MS0ShL6G9EQIAUxLm99VpgRjwqTQ/KfzGtpke1wqws4au0Ab4qPY\
+        KXvMLSPLUp7cfulWvhmZSegr5AdhNw5KNizPqCJT8ZrGvgHypXyiFvvAH5YRtSsc\
+        Zvo9GI2e2MaZyo9/lvb+LbLEJZKEQckqRj4P26gmASrZEPStwc+yqy1ShHLA0j6m\
+        1QIDAQAB\
+        -----END PUBLIC KEY-----" | sed 's/   */\n/g' > "/etc/apk/keys/sgerrand.rsa.pub" && \
     wget \
         "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
@@ -62,6 +71,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
     echo "export LANG=$LANG" > /etc/profile.d/locale.sh && \
     \
     apk del glibc-i18n && \
+    \
     rm "/root/.wget-hsts" && \
     apk del .build-dependencies && \
     rm \
@@ -69,27 +79,41 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
 
-# END: install modified version of glibc
+# END: install modified version of glibc for alpine
 
 ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
 ENV USER                                    etherniti
 ENV GOPATH                                  /home/${USER}/go
+ENV EXEC                                    proxy
+ENV BASE                                    src/github.com/zerjioang/etherniti/resources
 
 WORKDIR /home/${USER}
 
-# Create user $USER and resources folder
+# copy hardening script
+COPY ./scripts/docker/hardening.sh hardening.sh
+
+# create user $USER
 RUN adduser -S ${USER} && \
     addgroup -S appgroup && \
-    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources
+    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources && \
+    chmod +x hardening.sh && \
+    ./hardening.sh && \
+    rm hardening.sh && \
+    alias proxy=/home/${USER}/${EXEC} && \
+    ls -alh
 
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           proxy
-COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/
 # copy proxy resource files
-COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/root     $GOPATH/src/github.com/zerjioang/etherniti/resources/root
-COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/resources/swagger  $GOPATH/src/github.com/zerjioang/etherniti/resources/swagger
 
-ENTRYPOINT ["./proxy"]
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root     ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger  ${GOPATH}/${BASE}/swagger
+
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
+COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
+
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
 # change to non root user for execution
 USER ${USER}
+
+# set container entrypoint
+ENTRYPOINT ./${EXEC}
