@@ -94,7 +94,7 @@ RUN adduser -S ${USER} && \
     chmod +x hardening.sh && \
     ./hardening.sh && \
     rm hardening.sh && \
-    echo "export PATH=$PATH:/home/${USER}/${EXEC}" >> ~/.bash_profile && \
+    echo "export PATH=$PATH:/home/${USER}/${EXEC}" > /home/${USER}/.bash_profile && \
     ls -alh
 
 # copy proxy resource files
