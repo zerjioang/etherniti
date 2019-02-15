@@ -74,21 +74,28 @@
             "description": "proxy internal metrics collection",
             "schema": {
               "example": {
-                "alloc": 1827840,
-                "disk-all": 45.61288070678711,
-                "disk-free": 43.46699142456055,
-                "disk-used": 2.1458892822265625,
-                "etherniti-version": "0.0.1",
-                "frees": 7902,
-                "heapalloc": 1827840,
-                "http-version": "3.3.10-dev",
-                "mallocs": 11055,
+                "alloc": 1843848,
+                "cpus": 2,
+                "disk": {
+                  "all": 45.61288070678711,
+                  "free": 43.18564224243164,
+                  "used": 2.4272384643554688
+                },
+                "frees": 3364,
+                "heapalloc": 1843848,
+                "mallocs": 6574,
                 "numForcedGC": 0,
-                "numcpus": 2,
-                "numgc": 17,
-                "runtime": "go1.11.4",
+                "numgc": 3,
+                "runtime": {
+                  "compiler": "gc",
+                  "version": "go1.11.5"
+                },
                 "sys": 71760120,
-                "total": 27329488
+                "total": 8893712,
+                "version": {
+                  "etherniti": "0.0.1",
+                  "http": "3.3.10-dev"
+                }
               }
             }
           }
@@ -109,9 +116,10 @@
             "description": "proxy integrity response",
             "schema": {
               "example": {
-                "hash": "fee0ed78f06ccd7756ac5d737d81a9dccc1a7637fb5f9eb17e16e417adfc75d8",
-                "message": "2019-02-13 17:36:05.446063875 +0100 CET m=+54.618977742",
-                "signature": "303c021c095ee9f68b564ed838c0540cc5836afda07cb55ff76f6d8b4f0f22c5021c2c8d430cf0c4380070923a59e87277287592eef16ac0414802306db3"
+                "hash": "7b5812166a5d17d92b8a1fd6b902f93dbbd4f35ab67f1992a299d3425256e5a5",
+                "message": "2019-02-15 19:12:37.335762366 +0000 UTC m=+58.000586724",
+                "millis": 1550257957,
+                "signature": "303d021c1fe29cbd9cb8823a96746be129f88ab0c736e8760da0203a4afb9bbf021d0083a020db2323a3afd1bcef1c8224eeac870548fd9263fb83b141bf68"
               }
             }
           }
