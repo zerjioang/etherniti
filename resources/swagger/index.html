@@ -39,8 +39,12 @@
     <script>
     window.onload = function() {
       // Begin Swagger UI call region
+      let loc = window.location;
+      let host = loc.hostname;
+      let port = loc.port ? ':' + location.port : '';
+      // Build a system
       const ui = SwaggerUIBundle({
-        url: "/swagger/swagger.json",
+        url: loc.protocol + "//" + host + port + "/swagger/swagger.json",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

@@ -13,7 +13,7 @@
       "url": "https://www.etherniti.org/docs/license/"
     }
   },
-  "host": "localhost:8080",
+  "host": "dev-proxy.etherniti.org",
   "basePath": "/v1",
   "tags": [{
     "name": "public",
