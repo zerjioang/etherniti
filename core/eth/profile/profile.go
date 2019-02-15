@@ -6,10 +6,11 @@ package profile
 import (
 	"errors"
 	"fmt"
-
-	"github.com/zerjioang/etherniti/core/config"
-
 	"github.com/etherniti/jwt-go"
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -22,9 +23,6 @@ var (
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 
-	// unique identifier of the connection prfile
-	ConnectionId string `json:"connection_id"`
-
 	// address of the connection node: ip, domain, infura, etc
 	NodeAddress string `json:"node_address"`
 
@@ -36,6 +34,9 @@ type ConnectionProfile struct {
 
 	// default ethereum account for transactioning
 	Account string `json:"account"`
+
+	// validity of the profile: whether all required data is present or not
+	Valididity bool `json:"valid"`
 
 	//standard claims
 	//Identifies the recipients that the JWT is intended for.
@@ -65,11 +66,9 @@ type ConnectionProfile struct {
 	Subject string `json:"sub,omitempty"`
 }
 
+// implementation from Claims
 func (profile ConnectionProfile) Valid() error {
-	valid := profile.ConnectionId != "" &&
-		profile.NodeAddress != "" &&
-		profile.Account != ""
-	if !valid {
+	if !profile.Valididity {
 		return errTokenNoValid
 	}
 	return nil
@@ -108,7 +107,13 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	}
 
 	profile, ok := token.Claims.(ConnectionProfile)
-	if ok && token.Valid {
+
+	//check profile validity
+	profile.Valididity = profile.Id != "" &&
+		profile.NodeAddress != "" &&
+		profile.Account != ""
+
+	if ok && profile.Valididity {
 		return profile, nil
 	} else {
 		return profile, err
@@ -119,4 +124,41 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 func NewConnectionProfile() ConnectionProfile {
 	p := ConnectionProfile{}
 	return p
+}
+
+//constructor like function
+func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile {
+	now := fastime.Now()
+	p := ConnectionProfile{
+		Id: util.GenerateUUID(),
+		NodeAddress:data.NodeAddress,
+		Mode:data.Mode,
+		Port:data.Port,
+		Issuer:    "etherniti",
+		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
+		NotBefore: now.Unix(),
+		IssuedAt:  now.Unix(),
+	}
+	//check profile validity
+	p.Valididity = p.Id != "" &&
+		p.NodeAddress != "" &&
+		p.Account != ""
+	return p
+}
+
+func NewDefaultConnectionProfile() ConnectionProfile{
+	now := fastime.Now()
+	return ConnectionProfile{
+		NodeAddress:  "http://127.0.0.1:8454",
+		Mode:         "http",
+		Port:         8454,
+		Account:      "0x0",
+		//standard claims
+		Id:        util.GenerateUUID(),
+		Issuer:    "etherniti",
+		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
+		NotBefore: now.Unix(),
+		IssuedAt:  now.Unix(),
+		Valididity: false,
+	}
 }

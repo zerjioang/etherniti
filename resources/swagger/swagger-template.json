@@ -15,15 +15,14 @@
   },
   "host": "$host",
   "basePath": "$basepath",
-  "tags": [
-    {
-      "name": "public",
-      "description": "Public Ethereum REST API Proxy operations",
-      "externalDocs": {
-        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/public-operations/"
-      }
-    },
+  "tags": [{
+    "name": "public",
+    "description": "Public Ethereum REST API Proxy operations",
+    "externalDocs": {
+      "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+      "url": "https://www.etherniti.org/docs/public-operations/"
+    }
+  },
     {
       "name": "profile",
       "description": "Ethereum REST API Proxy connection profile management",
@@ -47,13 +46,15 @@
         "responses": {
           "200": {
             "description": "proxy welcome message",
-            "example": {
-              "name": "eth-wbapi",
-              "description": "Etherniti: Ethereum Multitenant API",
-              "cluster_name": "eth-wbapi",
-              "version": "0.0.1",
-              "env": "development",
-              "tagline": "dapps everywhere"
+            "schema": {
+              "example": {
+                "name": "eth-wbapi",
+                "description": "Etherniti: Ethereum Multitenant API",
+                "cluster_name": "eth-wbapi",
+                "version": "0.0.1",
+                "env": "development",
+                "tagline": "dapps everywhere"
+              }
             }
           }
         }
@@ -71,22 +72,24 @@
         "responses": {
           "200": {
             "description": "proxy internal metrics collection",
-            "example": {
-              "alloc": 1827840,
-              "disk-all": 45.61288070678711,
-              "disk-free": 43.46699142456055,
-              "disk-used": 2.1458892822265625,
-              "etherniti-version": "0.0.1",
-              "frees": 7902,
-              "heapalloc": 1827840,
-              "http-version": "3.3.10-dev",
-              "mallocs": 11055,
-              "numForcedGC": 0,
-              "numcpus": 2,
-              "numgc": 17,
-              "runtime": "go1.11.4",
-              "sys": 71760120,
-              "total": 27329488
+            "schema": {
+              "example": {
+                "alloc": 1827840,
+                "disk-all": 45.61288070678711,
+                "disk-free": 43.46699142456055,
+                "disk-used": 2.1458892822265625,
+                "etherniti-version": "0.0.1",
+                "frees": 7902,
+                "heapalloc": 1827840,
+                "http-version": "3.3.10-dev",
+                "mallocs": 11055,
+                "numForcedGC": 0,
+                "numcpus": 2,
+                "numgc": 17,
+                "runtime": "go1.11.4",
+                "sys": 71760120,
+                "total": 27329488
+              }
             }
           }
         }
@@ -104,10 +107,69 @@
         "responses": {
           "200": {
             "description": "proxy integrity response",
-            "example": {
-              "hash": "fee0ed78f06ccd7756ac5d737d81a9dccc1a7637fb5f9eb17e16e417adfc75d8",
-              "message": "2019-02-13 17:36:05.446063875 +0100 CET m=+54.618977742",
-              "signature": "303c021c095ee9f68b564ed838c0540cc5836afda07cb55ff76f6d8b4f0f22c5021c2c8d430cf0c4380070923a59e87277287592eef16ac0414802306db3"
+            "schema": {
+              "example": {
+                "hash": "fee0ed78f06ccd7756ac5d737d81a9dccc1a7637fb5f9eb17e16e417adfc75d8",
+                "message": "2019-02-13 17:36:05.446063875 +0100 CET m=+54.618977742",
+                "signature": "303c021c095ee9f68b564ed838c0540cc5836afda07cb55ff76f6d8b4f0f22c5021c2c8d430cf0c4380070923a59e87277287592eef16ac0414802306db3"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "post": {
+        "tags": ["profile"],
+        "summary": "Create a connection profile using prefered provider",
+        "description": "Create a connection profile using prefered provider. Choose between, public node, private node, infura, etc",
+        "operationId": "profile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "profile",
+            "schema": {
+              "example": {
+                "peer":"http://172.168.0.2",
+                "mode":"geth",
+                "port":8545,
+                "address": "0xaa"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "profile creation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "profile token successfully created",
+                "result": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/count": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Count created profiles",
+        "description": "Get the number of profiles created in last cycle",
+        "operationId": "profile-count",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "profile count response",
+            "schema": {
+              "example": 10
             }
           }
         }

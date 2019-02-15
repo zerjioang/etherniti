@@ -2,17 +2,21 @@ package profile
 
 import (
 	"testing"
-	"time"
-
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 func BenchmarkConnectionProfile(b *testing.B) {
-	b.Run("instantiate", func(b *testing.B) {
+	b.Run("create-profile-empty", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		for n := 0; n < b.N; n++ {
 			_ = NewConnectionProfile()
+		}
+	})
+	b.Run("create-profile", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		for n := 0; n < b.N; n++ {
+			_ = NewDefaultConnectionProfile()
 		}
 	})
 	b.Run("valid-false", func(b *testing.B) {
@@ -28,7 +32,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		b.SetBytes(1)
 		// run the Fib function b.N times
 		profile := NewConnectionProfile()
-		profile.ConnectionId = "test-id"
+		profile.Id = "test-id"
 		profile.NodeAddress = "node-test-address"
 		profile.Account = "test-account"
 		for n := 0; n < b.N; n++ {
@@ -46,20 +50,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 	b.Run("create-token", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		now := time.Now()
-		profile := ConnectionProfile{
-			ConnectionId: util.GenerateUUID(),
-			NodeAddress:  "http://127.0.0.1:8454",
-			Mode:         "http",
-			Port:         8454,
-			Account:      "0x0",
-			//standard claims
-			Id:        util.GenerateUUID(),
-			Issuer:    "etherniti",
-			ExpiresAt: now.Add(10 * time.Minute).Unix(),
-			NotBefore: now.Unix(),
-			IssuedAt:  now.Unix(),
-		}
+		profile := NewDefaultConnectionProfile()
 		for n := 0; n < b.N; n++ {
 			_, _ = CreateConnectionProfileToken(profile)
 		}

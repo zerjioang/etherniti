@@ -12,11 +12,19 @@ type Profile struct {
 	Node       string `json:"node"`
 }
 
-// ne profile request dto
+// new profile request dto
 type NewProfileRequest struct {
-	Address    string `json:"address" form:"address" query:"address"`
-	PrivateKey string `json:"key" form:"key" query:"key"`
-	Node       string `json:"node" form:"node" query:"node"`
+	// address of the connection node: ip, domain, infura, etc
+	NodeAddress string `json:"peer" form:"peer" query:"peer"`
+
+	//connection mode: ipc,http,rpc
+	Mode string `json:"mode" form:"mode" query:"mode"`
+
+	//connection por if required
+	Port int `json:"port" form:"port" query:"port"`
+
+	// default ethereum account for transactioning
+	Address string `json:"address" form:"address" query:"address"`
 }
 
 // api error model dto

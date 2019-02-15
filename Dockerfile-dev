@@ -11,7 +11,7 @@ LABEL IMAGE etherniti-api
 LABEL PROJECT etherniti
 
 ENV BASE                /go/src/github.com/zerjioang/etherniti
-ENV BUILD_MODE          prod
+ENV BUILD_MODE          dev
 ENV FILE                proxy
 ENV ETHERNITI_GOOS      linux
 ENV ETHERNITI_GOARCH    amd64

@@ -4,12 +4,12 @@
 package handlers
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/eth/counter"
+	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/util"
+	"net/http"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
@@ -25,14 +25,19 @@ const (
 )
 
 type ProfileController struct {
-	cache *cache.Cache
+	//cache *cache.Cache
 }
+
+//atomic counters
+var (
+	profilesCreated counter.Count32
+)
 
 func NewProfileController() ProfileController {
 	ctl := ProfileController{}
 	// Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
-	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
+	//ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
 	return ctl
 }
 
@@ -44,74 +49,46 @@ func (ctl ProfileController) create(c echo.Context) error {
 		// return a binding error
 		return c.JSONBlob(http.StatusBadRequest, util.Bytes(bindErr))
 	}
-	// assign an unique uuid
-	// save the data in the cache
-	uuid := util.GenerateUUID()
-	ctl.cache.Set(uuid, req, defaultProfileRequestTime)
-	rawBytes := util.GetJsonBytes(api.NewApiResponse("profile entry successfully created", uuid))
-	return c.JSONBlob(http.StatusOK, rawBytes)
-}
-
-// new profile read request
-func (ctl ProfileController) read(c echo.Context) error {
-	//new read profile request
-	targetId := c.Param("id")
-	//read the cache
-	rawInterface, exists := ctl.cache.Get(targetId)
-	if exists && rawInterface != nil {
-		//serialize to json and return back
-		rawBytes := util.GetJsonBytes(api.NewApiResponse("readed", rawInterface))
+	// create the connection profile
+	userProfile := profile.NewConnectionProfileWithData(req)
+	// create the token
+	token, err := profile.CreateConnectionProfileToken(userProfile)
+	if err == nil {
+		rawBytes := util.GetJsonBytes(api.NewApiResponse("profile token successfully created", token))
+		// increment created counter
+		profilesCreated.Increment()
+		return c.JSONBlob(http.StatusOK, rawBytes)
+	} else {
+		//token generation error
+		rawBytes := util.GetJsonBytes( api.NewApiError(http.StatusBadRequest, err.Error()) )
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
+}
+
+// profile validation check
+func (ctl ProfileController) validate(c echo.Context) error {
 	return c.JSONBlob(http.StatusOK, util.Bytes(readErr))
 }
 
-// new profile update request
-func (ctl ProfileController) update(c echo.Context) error {
-	//new profile request
-	req := api.NewProfileRequest{}
-	if err := c.Bind(&req); err != nil {
-		// return a binding error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(bindErr))
-	}
-	// read target profile selection by user id
-	targetId := c.Param("id")
-
-	newProfile := api.Profile{}
-	newProfile.Address = req.Address
-	newProfile.PrivateKey = req.PrivateKey
-	newProfile.Node = req.Node
-
-	updateErr := ctl.cache.Replace(targetId, newProfile, defaultProfileRequestTime)
-	if updateErr != nil {
-		// return error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(noExistsNoUpdate))
-	} else {
-		// no update error thrown
-		return c.JSONBlob(http.StatusOK, util.Bytes(itemUpdated))
-	}
+// profile validation check
+func (ctl ProfileController) count(c echo.Context) error {
+	return c.JSON(
+		http.StatusOK, profilesCreated.Get(),
+	)
 }
 
 // new profile delete request
-func (ctl ProfileController) delete(c echo.Context) error {
+func (ctl ProfileController) clear(c echo.Context) error {
 	// read target profile selection by user id
-	targetId := c.Param("id")
+	//targetId := c.Param("id")
 	// remove requested id from cache
-	ctl.cache.Delete(targetId)
+	//ctl.cache.Delete(targetId)
 	return c.JSONBlob(http.StatusOK, util.Bytes(itemDeleted))
-}
-
-// new profile list request
-func (ctl ProfileController) list(c echo.Context) error {
-	return c.String(http.StatusOK, indexWelcome)
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl ProfileController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing profile controller methods")
 	router.POST("/v1/profile", ctl.create)
-	router.GET("/v1/profile/:id", ctl.read)
-	router.PUT("/v1/profile/:id", ctl.update)
-	router.DELETE("/v1/profile/:id", ctl.delete)
-	router.GET("/v1/profiles", ctl.list)
+	router.GET("/v1/profile/count", ctl.count)
 }
