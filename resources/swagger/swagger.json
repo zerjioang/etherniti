@@ -136,7 +136,8 @@
                 "peer":"http://172.168.0.2",
                 "mode":"geth",
                 "port":8545,
-                "address": "0xaa"
+                "address": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                "key": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
               }
             }
           }
@@ -146,7 +147,10 @@
             "description": "profile creation response",
             "schema": {
               "example": {
-                "token":""
+                "id": 0,
+                "code": 200,
+                "msg": "profile token successfully created",
+                "result": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
               }
             }
           }

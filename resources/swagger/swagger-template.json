@@ -136,7 +136,8 @@
                 "peer":"http://172.168.0.2",
                 "mode":"geth",
                 "port":8545,
-                "address": "0xaa"
+                "address": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+                "key": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
               }
             }
           }

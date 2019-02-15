@@ -25,7 +25,7 @@ func (fastTime FastTime) Unix() int64 {
 }
 func (fastTime FastTime) Add(duration Duration) FastTime {
 	fastTime.nsec += uint32(duration.Nanoseconds())
-	fastTime.sec += duration.Nanoseconds() / 1000000
+	fastTime.sec += duration.Nanoseconds() / 1000000000
 	return fastTime
 }
 

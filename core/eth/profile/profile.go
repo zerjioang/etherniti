@@ -24,7 +24,8 @@ type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 
 	// address of the connection node: ip, domain, infura, etc
-	NodeAddress string `json:"node_address"`
+	Peer string `json:"peer"`
+
 
 	//connection mode: ipc,http,rpc
 	Mode string `json:"mode"`
@@ -33,10 +34,13 @@ type ConnectionProfile struct {
 	Port int `json:"port"`
 
 	// default ethereum account for transactioning
-	Account string `json:"account"`
+	Address string `json:"address"`
+
+	// user or device private key
+	Key string `json:"key"`
 
 	// validity of the profile: whether all required data is present or not
-	Valididity bool `json:"valid"`
+	Valididity bool `json:"validity"`
 
 	//standard claims
 	//Identifies the recipients that the JWT is intended for.
@@ -110,8 +114,9 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 
 	//check profile validity
 	profile.Valididity = profile.Id != "" &&
-		profile.NodeAddress != "" &&
-		profile.Account != ""
+		profile.Peer != "" &&
+		profile.Address != "" &&
+		profile.Key != ""
 
 	if ok && profile.Valididity {
 		return profile, nil
@@ -130,10 +135,12 @@ func NewConnectionProfile() ConnectionProfile {
 func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
-		Id: util.GenerateUUID(),
-		NodeAddress:data.NodeAddress,
-		Mode:data.Mode,
-		Port:data.Port,
+		Id:        util.GenerateUUID(),
+		Peer:      data.Peer,
+		Address:      data.Address,
+		Key:      data.Key,
+		Mode:      data.Mode,
+		Port:      data.Port,
 		Issuer:    "etherniti",
 		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
 		NotBefore: now.Unix(),
@@ -141,18 +148,20 @@ func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile 
 	}
 	//check profile validity
 	p.Valididity = p.Id != "" &&
-		p.NodeAddress != "" &&
-		p.Account != ""
+		p.Peer != "" &&
+		p.Address != "" &&
+		p.Key != ""
 	return p
 }
 
 func NewDefaultConnectionProfile() ConnectionProfile{
 	now := fastime.Now()
 	return ConnectionProfile{
-		NodeAddress:  "http://127.0.0.1:8454",
-		Mode:         "http",
-		Port:         8454,
-		Account:      "0x0",
+		Peer:    "http://127.0.0.1:8454",
+		Mode:    "http",
+		Port:    8454,
+		Address: "0x0",
+		Key:     "0x0",
 		//standard claims
 		Id:        util.GenerateUUID(),
 		Issuer:    "etherniti",

@@ -15,7 +15,7 @@ type Profile struct {
 // new profile request dto
 type NewProfileRequest struct {
 	// address of the connection node: ip, domain, infura, etc
-	NodeAddress string `json:"peer" form:"peer" query:"peer"`
+	Peer string `json:"peer" form:"peer" query:"peer"`
 
 	//connection mode: ipc,http,rpc
 	Mode string `json:"mode" form:"mode" query:"mode"`
@@ -25,6 +25,7 @@ type NewProfileRequest struct {
 
 	// default ethereum account for transactioning
 	Address string `json:"address" form:"address" query:"address"`
+	Key string `json:"key" form:"key" query:"key"`
 }
 
 // api error model dto

@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,500');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,500');
 
-html *
-{
-    font-family: 'IBM Plex Sans', sans-serif !important;;
+h1,h2,h3,h4,h5,ul,li,p,b,a,div,button,input,select {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
+.swagger-ui .opblock-body pre,
+.copy-paste {
+    font-family: 'IBM Plex Mono', monospace !important;
+}
+.microlight {
+    word-break: break-all;
 }

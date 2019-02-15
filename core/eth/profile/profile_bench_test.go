@@ -33,8 +33,8 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		// run the Fib function b.N times
 		profile := NewConnectionProfile()
 		profile.Id = "test-id"
-		profile.NodeAddress = "node-test-address"
-		profile.Account = "test-account"
+		profile.Peer = "node-test-address"
+		profile.Address = "test-account"
 		for n := 0; n < b.N; n++ {
 			_ = profile.Valid()
 		}
