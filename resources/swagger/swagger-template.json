@@ -15,20 +15,29 @@
   },
   "host": "$host",
   "basePath": "$basepath",
-  "tags": [{
+  "tags": [
+    {
     "name": "public",
     "description": "Public Ethereum REST API Proxy operations",
     "externalDocs": {
       "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
       "url": "https://www.etherniti.org/docs/public-operations/"
     }
-  },
+    },
     {
       "name": "profile",
       "description": "Ethereum REST API Proxy connection profile management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/profile-management/"
+      }
+    },
+    {
+      "name": "wallet",
+      "description": "Ethereum REST API Proxy wallet service",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/wallet/"
       }
     }
   ],
@@ -141,6 +150,7 @@
             "name": "profile",
             "schema": {
               "example": {
+                "networkId": 1,
                 "peer":"http://172.168.0.2",
                 "mode":"geth",
                 "port":8545,
@@ -177,6 +187,37 @@
         "responses": {
           "200": {
             "description": "profile count response",
+            "schema": {
+              "example": 10
+            }
+          }
+        }
+      }
+    },
+    "/mnemonic/bip39": {
+      "post": {
+        "tags": ["wallet"],
+        "summary": "Generate a bip39 mnemonic",
+        "description": "Generate a bip39 mnemonic with given customization details such as language, length, etc",
+        "operationId": "mnemonic-bip39",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "configuration",
+            "schema": {
+              "example": {
+                "language": "english",
+                "size": 192
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "mnemonic response",
             "schema": {
               "example": 10
             }

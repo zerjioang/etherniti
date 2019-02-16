@@ -23,9 +23,11 @@ var (
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 
+	//network id of target connection
+	NetworkId string `json:"networkId"`
+
 	// address of the connection node: ip, domain, infura, etc
 	Peer string `json:"peer"`
-
 
 	//connection mode: ipc,http,rpc
 	Mode string `json:"mode"`
@@ -136,6 +138,7 @@ func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile 
 	now := fastime.Now()
 	p := ConnectionProfile{
 		Id:        util.GenerateUUID(),
+		NetworkId: data.NetworkId,
 		Peer:      data.Peer,
 		Address:      data.Address,
 		Key:      data.Key,

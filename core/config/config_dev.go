@@ -12,14 +12,6 @@ import (
 )
 
 const (
-	DevelopmentAddress = "0.0.0.0"
-	HttpPort           = ":8080"
-	HttpsPort          = ":4430"
-	HttpAddress        = DevelopmentAddress + HttpPort
-	HttpsAddress       = DevelopmentAddress + HttpsPort
-)
-
-const (
 	certPem = `-----BEGIN CERTIFICATE-----
 MIIC+jCCAeKgAwIBAgIRAI4ga6WaCWzhnIgevZi02qgwDQYJKoZIhvcNAQELBQAw
 EjEQMA4GA1UEChMHQWNtZSBDbzAeFw0xOTAxMjgxNjA0NDNaFw0yMDAxMjgxNjA0
@@ -66,6 +58,13 @@ xC1++6t6BnPJnMe4vdpMeuW8QTAKhHvm+XvPiPqnNeVSj7SLbOZDlivUiNZrr87t
 DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 
+	DevelopmentAddress = "0.0.0.0"
+	HttpPort           = ":8080"
+	HttpsPort          = ":4430"
+	HttpAddress        = DevelopmentAddress + HttpPort
+	HttpsAddress       = DevelopmentAddress + HttpsPort
+	DebugServer = true
+	HideServerData = false
 	TokenSecret         = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect = false
 	UseUniqueRequestId  = true
@@ -95,8 +94,8 @@ var (
 		"dev-proxy.etherniti.org",
 	}
 	//swagger.json injected params
-	//SwaggerApiDomain = "localhost:8080"
-	SwaggerApiDomain = "dev-proxy.etherniti.org"
+	SwaggerApiDomain = "localhost:8080"
+	// SwaggerApiDomain = "dev-proxy.etherniti.org"
 )
 
 func init() {

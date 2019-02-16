@@ -326,6 +326,7 @@ func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
 	log.Info("registering routes")
 	handlers.NewIndexController().RegisterRouters(server)
 	handlers.NewProfileController().RegisterRouters(server)
+	handlers.NewWalletController().RegisterRouters(server)
 	handlers.NewTransactionController().RegisterRouters(server)
 	handlers.NewEthController(deployer.manager).RegisterRouters(server)
 	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
@@ -337,9 +338,11 @@ func (deployer Deployer) newServerInstance() *echo.Echo {
 	// build a the server
 	e := echo.New()
 	// enable debug mode
-	e.Debug = false
+	e.Debug = config.DebugServer
+	e.HidePort = config.HideServerData
 	//hide the banner
-	e.HideBanner = true
+	e.HideBanner = config.HideServerData
+
 	return e
 }
 

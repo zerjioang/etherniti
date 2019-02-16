@@ -17,11 +17,11 @@ import (
 
 const (
 	defaultProfileRequestTime = cache.DefaultExpiration
-	readErr                   = `{"error": "there was an error during execution"}`
-	bindErr                   = `{"error": "there was an error while processing your request information"}`
-	itemDeleted               = `{"message": "profile entry successfully deleted"}`
-	noExistsNoUpdate          = `{"error": "there was an error during execution and could not update requeste profile"}`
-	itemUpdated               = `{"message": "profile entry successfully updated"}`
+	readErr                   = `there was an error during execution`
+	bindErr                   = `there was an error while processing your request information`
+	itemDeleted               = `profile entry successfully deleted`
+	noExistsNoUpdate          = `there was an error during execution and could not update requeste profile`
+	itemUpdated               = `profile entry successfully updated`
 )
 
 type ProfileController struct {
@@ -47,7 +47,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		return c.JSONBlob(http.StatusBadRequest, util.Bytes(bindErr))
+		return ErrorStr(c, bindErr)
 	}
 	// create the connection profile
 	userProfile := profile.NewConnectionProfileWithData(req)

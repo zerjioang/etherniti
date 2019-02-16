@@ -14,6 +14,10 @@ type Profile struct {
 
 // new profile request dto
 type NewProfileRequest struct {
+
+	//network id of target connection
+	NetworkId string `json:"networkId" form:"networkId" query:"networkId"`
+
 	// address of the connection node: ip, domain, infura, etc
 	Peer string `json:"peer" form:"peer" query:"peer"`
 
@@ -26,6 +30,16 @@ type NewProfileRequest struct {
 	// default ethereum account for transactioning
 	Address string `json:"address" form:"address" query:"address"`
 	Key string `json:"key" form:"key" query:"key"`
+}
+
+// new profile request dto
+type NewMnemonicRequest struct {
+
+	// size
+	Size uint16 `json:"size" form:"size" query:"size"`
+
+	// language
+	Language string `json:"language" form:"language" query:"language"`
 }
 
 // api error model dto

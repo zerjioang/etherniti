@@ -17,9 +17,8 @@ const (
 	HttpsPort    = ":443"
 	HttpAddress  = "0.0.0.0:80"
 	HttpsAddress = "0.0.0.0:443"
-)
-
-const (
+	DebugServer = false
+	HideServerData = true
 	TokenSecret         = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
 	EnableHttpsRedirect = false
 	UseUniqueRequestId  = false
