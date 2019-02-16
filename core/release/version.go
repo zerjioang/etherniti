@@ -1,4 +1,4 @@
-package config
+package release
 
 const (
 	// etherniti software version

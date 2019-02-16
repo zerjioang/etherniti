@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/release"
 	"net/http"
 	"runtime"
 	"time"
@@ -25,7 +26,7 @@ const (
   "name": "eth-wbapi",
   "description": "Etherniti: Ethereum Multitenant API",
   "cluster_name": "eth-wbapi",
-  "version": "` + config.Version + `",
+  "version": "` + release.Version + `",
   "env": "` + config.EnvironmentName + `",
   "tagline": "dapps everywhere"
 }`
@@ -77,7 +78,7 @@ func (ctl IndexController) status(c echo.Context) error {
 		// software version stats
 		"version": map[string]string{
 			"http":      echo.Version,
-			"etherniti": config.Version,
+			"etherniti": release.Version,
 		},
 		// basic disk stats
 		"disk": map[string]float64{

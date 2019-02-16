@@ -5,6 +5,7 @@ package util
 
 import (
 	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/release"
 	"runtime"
 	"strings"
 )
@@ -53,6 +54,6 @@ func getBannerFromTemplate() string {
 	banner = strings.Replace(banner, "$GOROOT", runtime.GOROOT(), 1)
 	banner = strings.Replace(banner, "$GO_VERSION", runtime.Version(), 1)
 	banner = strings.Replace(banner, "$GO_COMPILER", runtime.Compiler, 1)
-	banner = strings.Replace(banner, "$VER", config.Version, 1)
+	banner = strings.Replace(banner, "$VER", release.Version, 1)
 	return banner
 }
