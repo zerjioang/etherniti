@@ -11,4 +11,20 @@ func BenchmarkGetRedirectUrl(b *testing.B) {
 			_ = GetRedirectUrl("subdomain.localhost.com", "/v1/do/the/test")
 		}
 	})
+	b.Run("cert-pem", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		// run the Fib function b.N times
+		for n := 0; n < b.N; n++ {
+			_ = GetCertPem()
+		}
+	})
+	b.Run("key-pem", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		// run the Fib function b.N times
+		for n := 0; n < b.N; n++ {
+			_ = GetKeyPem()
+		}
+	})
 }

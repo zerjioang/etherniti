@@ -29,7 +29,7 @@ var (
 	//read only once, the number of server cpus
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
-	diskMonitor = disk.DiskUsage("/")
+	diskMonitor = disk.DiskUsage()
 )
 
 // index data
@@ -68,6 +68,10 @@ var (
 	//bytes of welcome message
 	indexWelcomeBytes = []byte(indexWelcomeJson)
 )
+
+func init(){
+	diskMonitor.Eval("/")
+}
 
 func NewIndexController() IndexController {
 	dc := IndexController{}
