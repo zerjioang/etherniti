@@ -79,7 +79,8 @@ func NewIndexController() IndexController {
 }
 
 func Index(c echo.Context) error {
-	if c.Request().Header.Get("content-type") == "application/json" {
+	log.Info(c.Request().Header)
+	if c.Request().Header.Get("Accept") == "application/json" {
 		return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
 	}
 	return c.HTML(http.StatusOK, indexWelcomeHtml)
