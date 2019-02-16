@@ -4,6 +4,7 @@
 package util
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"runtime"
 	"strings"
 )
@@ -26,7 +27,6 @@ gocompiler        : $GO_COMPILER
 etherniti version : $VER
 etherniti commit  : $COMMIT
 `
-	version = "0.0.1"
 )
 
 var (
@@ -53,6 +53,6 @@ func getBannerFromTemplate() string {
 	banner = strings.Replace(banner, "$GOROOT", runtime.GOROOT(), 1)
 	banner = strings.Replace(banner, "$GO_VERSION", runtime.Version(), 1)
 	banner = strings.Replace(banner, "$GO_COMPILER", runtime.Compiler, 1)
-	banner = strings.Replace(banner, "$VER", version, 1)
+	banner = strings.Replace(banner, "$VER", config.Version, 1)
 	return banner
 }

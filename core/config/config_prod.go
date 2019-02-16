@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	EnvironmentName     = "production"
 	HttpPort            = ":80"
 	HttpsPort           = ":443"
 	HttpAddress         = "0.0.0.0:80"

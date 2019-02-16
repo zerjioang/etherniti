@@ -58,6 +58,7 @@ xC1++6t6BnPJnMe4vdpMeuW8QTAKhHvm+XvPiPqnNeVSj7SLbOZDlivUiNZrr87t
 DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 
+	EnvironmentName     = "development"
 	DevelopmentAddress  = "0.0.0.0"
 	HttpPort            = ":8080"
 	HttpsPort           = ":4430"

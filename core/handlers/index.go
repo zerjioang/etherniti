@@ -25,8 +25,8 @@ const (
   "name": "eth-wbapi",
   "description": "Etherniti: Ethereum Multitenant API",
   "cluster_name": "eth-wbapi",
-  "version": "0.0.1",
-  "env": "development",
+  "version": "` + config.Version + `",
+  "env": "` + config.EnvironmentName + `",
   "tagline": "dapps everywhere"
 }`
 	gbUnits = float64(disk.GB)
