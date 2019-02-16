@@ -6,6 +6,7 @@ package profile
 import (
 	"errors"
 	"fmt"
+
 	"github.com/etherniti/jwt-go"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
@@ -24,7 +25,7 @@ type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 
 	//network id of target connection
-	NetworkId string `json:"networkId"`
+	NetworkId uint8 `json:"networkId"`
 
 	// address of the connection node: ip, domain, infura, etc
 	Peer string `json:"peer"`
@@ -40,6 +41,9 @@ type ConnectionProfile struct {
 
 	// user or device private key
 	Key string `json:"key"`
+
+	// service version when profile was generated
+	Version int `json:"version"`
 
 	// validity of the profile: whether all required data is present or not
 	Valididity bool `json:"validity"`
@@ -140,14 +144,15 @@ func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile 
 		Id:        util.GenerateUUID(),
 		NetworkId: data.NetworkId,
 		Peer:      data.Peer,
-		Address:      data.Address,
-		Key:      data.Key,
+		Address:   data.Address,
+		Key:       data.Key,
 		Mode:      data.Mode,
 		Port:      data.Port,
 		Issuer:    "etherniti",
 		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
+		Version:   1,
 	}
 	//check profile validity
 	p.Valididity = p.Id != "" &&
@@ -157,7 +162,7 @@ func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile 
 	return p
 }
 
-func NewDefaultConnectionProfile() ConnectionProfile{
+func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
 		Peer:    "http://127.0.0.1:8454",
@@ -166,11 +171,11 @@ func NewDefaultConnectionProfile() ConnectionProfile{
 		Address: "0x0",
 		Key:     "0x0",
 		//standard claims
-		Id:        util.GenerateUUID(),
-		Issuer:    "etherniti",
-		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
-		NotBefore: now.Unix(),
-		IssuedAt:  now.Unix(),
+		Id:         util.GenerateUUID(),
+		Issuer:     "etherniti",
+		ExpiresAt:  now.Add(10 * fastime.Minute).Unix(),
+		NotBefore:  now.Unix(),
+		IssuedAt:   now.Unix(),
 		Valididity: false,
 	}
 }

@@ -46,7 +46,7 @@ func BenchmarkECDSA(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		for n := 0; n < b.N; n++ {
-			signMsgWithIntegrity("hello-world")
+			SignMsgWithIntegrity("hello-world")
 		}
 	})
 }

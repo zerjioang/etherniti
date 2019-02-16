@@ -113,6 +113,7 @@ func (ctl EthController) DeployContract(to common.Address, amount *big.Int, gasL
 			return signedTx.Hash().String(), nil
 		}
 	}
+	cancel()
 	return "", nil
 }
 
@@ -184,6 +185,7 @@ func (ctl EthController) SendTransaction(to common.Address, amount *big.Int, gas
 			return signedTx.Hash().String(), nil
 		}
 	}
+	cancel()
 	return "", nil
 }
 

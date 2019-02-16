@@ -58,13 +58,13 @@ xC1++6t6BnPJnMe4vdpMeuW8QTAKhHvm+XvPiPqnNeVSj7SLbOZDlivUiNZrr87t
 DagBWzI58Ymmo2EJHbe48ChjOf5aeZpH7l8ZtSDbdHRFOKcUPDUJ
 -----END RSA PRIVATE KEY-----`
 
-	DevelopmentAddress = "0.0.0.0"
-	HttpPort           = ":8080"
-	HttpsPort          = ":4430"
-	HttpAddress        = DevelopmentAddress + HttpPort
-	HttpsAddress       = DevelopmentAddress + HttpsPort
-	DebugServer = true
-	HideServerData = false
+	DevelopmentAddress  = "0.0.0.0"
+	HttpPort            = ":8080"
+	HttpsPort           = ":4430"
+	HttpAddress         = DevelopmentAddress + HttpPort
+	HttpsAddress        = DevelopmentAddress + HttpsPort
+	DebugServer         = true
+	HideServerData      = false
 	TokenSecret         = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect = false
 	UseUniqueRequestId  = true

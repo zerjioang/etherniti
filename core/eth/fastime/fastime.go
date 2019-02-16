@@ -3,6 +3,7 @@ package fastime
 import "time"
 
 type Duration int64
+
 // Nanoseconds returns the duration as an integer nanosecond count.
 func (d Duration) Nanoseconds() int64 { return int64(d) }
 
@@ -32,7 +33,7 @@ func (fastTime FastTime) Add(duration Duration) FastTime {
 func Now() FastTime {
 	t := time.Now()
 	return FastTime{
-		nsec:uint32(t.Nanosecond()),
-		sec: t.Unix(),
+		nsec: uint32(t.Nanosecond()),
+		sec:  t.Unix(),
 	}
 }

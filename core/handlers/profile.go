@@ -4,12 +4,13 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/util"
-	"net/http"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
@@ -47,6 +48,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
+		log.Error("failed to bind request data to model: ", err)
 		return ErrorStr(c, bindErr)
 	}
 	// create the connection profile
@@ -60,7 +62,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
 		//token generation error
-		rawBytes := util.GetJsonBytes( api.NewApiError(http.StatusBadRequest, err.Error()) )
+		rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, err.Error()))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }

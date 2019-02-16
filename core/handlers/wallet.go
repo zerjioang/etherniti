@@ -5,15 +5,16 @@ package handlers
 
 import (
 	"crypto/rand"
+	"io"
+	"net/http"
+	"strings"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
 	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
 	"github.com/zerjioang/etherniti/core/util"
-	"io"
-	"net/http"
-	"strings"
 )
 
 type WalletController struct {
@@ -37,6 +38,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	req := api.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
+		log.Error("failed to bind request data to model:", err)
 		return ErrorStr(c, bindErr)
 	}
 
@@ -75,7 +77,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 
 	// create new entropy from rand reader
 	// entropy is measured as bits and size measures bytes
-	var entropyBytes = uint8(req.Size/8)
+	var entropyBytes = uint8(req.Size / 8)
 	entropy := make([]byte, entropyBytes)
 	n, readErr := io.ReadFull(rand.Reader, entropy)
 	if readErr != nil || uint8(n) != entropyBytes {
@@ -100,4 +102,3 @@ func (ctl WalletController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing wallet controller methods")
 	router.POST("/v1/mnemonic/bip39", ctl.mnemonic)
 }
-

@@ -16,7 +16,7 @@ type Profile struct {
 type NewProfileRequest struct {
 
 	//network id of target connection
-	NetworkId string `json:"networkId" form:"networkId" query:"networkId"`
+	NetworkId uint8 `json:"networkId" form:"networkId" query:"networkId"`
 
 	// address of the connection node: ip, domain, infura, etc
 	Peer string `json:"peer" form:"peer" query:"peer"`
@@ -29,7 +29,7 @@ type NewProfileRequest struct {
 
 	// default ethereum account for transactioning
 	Address string `json:"address" form:"address" query:"address"`
-	Key string `json:"key" form:"key" query:"key"`
+	Key     string `json:"key" form:"key" query:"key"`
 }
 
 // new profile request dto

@@ -101,7 +101,7 @@ func (ctl IndexController) integrity(c echo.Context) error {
 	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
 	wrapper := map[string]interface{}{
 		"message":   timeStr,
-		"millis":   millisStr,
+		"millis":    millisStr,
 		"hash":      hash,
 		"signature": signature,
 	}
