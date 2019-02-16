@@ -4,7 +4,6 @@
 package util
 
 import (
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/release"
 	"runtime"
 	"strings"
