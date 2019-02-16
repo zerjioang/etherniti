@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/release"
 	"io/ioutil"
 	"net/http"
@@ -27,7 +28,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/etherniti/core/handlers"
 )
 
 var (
@@ -82,7 +82,6 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 
 func (deployer Deployer) Run() {
 	log.Info("loading Ethereum Multitenant Webapi (etherniti)")
-
 	if config.EnableHttpsRedirect {
 		//build http server
 		httpServerInstance := deployer.newServerInstance()
@@ -142,9 +141,10 @@ func (deployer Deployer) Run() {
 }
 
 func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 10 seconds.
+	// The make built-in returns a value of type T (not *T), and it's memory is
+	// initialized.
 	quit := make(chan os.Signal)
+
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -322,27 +322,15 @@ func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
 	_ = c.JSON(code, apiErr)
 }
 
-// register in echo server, allowed routes
-func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
-	log.Info("registering routes")
-	handlers.NewIndexController().RegisterRouters(server)
-	handlers.NewProfileController().RegisterRouters(server)
-	handlers.NewWalletController().RegisterRouters(server)
-	handlers.NewTransactionController().RegisterRouters(server)
-	handlers.NewEthController(deployer.manager).RegisterRouters(server)
-	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
-	return server
-}
-
 // build new http server instance
 func (deployer Deployer) newServerInstance() *echo.Echo {
 	// build a the server
 	e := echo.New()
 	// enable debug mode
 	e.Debug = config.DebugServer
-	e.HidePort = config.HideServerData
+	e.HidePort = config.HideServerDataInConsole
 	//hide the banner
-	e.HideBanner = config.HideServerData
+	e.HideBanner = config.HideServerDataInConsole
 
 	return e
 }
@@ -358,7 +346,12 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] logger at warn level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
-		e.Use(middleware.Logger())
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+				`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+				`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
+				`,"in":${bytes_in},"out":${bytes_out}}`+"\n",
+		}))
 	}
 
 	// antibots, crawler middleware
@@ -412,19 +405,46 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
 
+	// register version 1 api calls
+	apiGroup := e.Group("/v1", deployer.apiV1)
+	deployer.register(apiGroup)
+
 	log.Info("[LAYER] / static files")
 	//load root static folder
-	e.Static("/", resources+"/root")
+	//e.Static("/", resources+"/root")
 	e.Static("/phpinfo.php", resources+"/root/phpinfo.php")
 
 	// load swagger ui files
 	log.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
-	//configure swagger json
-	configureSwaggerJson()
 
-	deployer.register(e)
+	// register root calls
+	e.GET("/", handlers.Index)
+	e.GET("/v1", handlers.Index)
+
+	//configure swagger json from template data
+	configureSwaggerJson()
 }
+
+// create a group for all /api/v1 functions
+func (deployer Deployer) apiV1(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return next(c)
+	}
+}
+
+// register in echo server, allowed routes
+func (deployer Deployer) register(group *echo.Group) *echo.Group {
+	log.Info("registering routes")
+	handlers.NewIndexController().RegisterRouters(group)
+	handlers.NewProfileController().RegisterRouters(group)
+	handlers.NewWalletController().RegisterRouters(group)
+	handlers.NewTransactionController().RegisterRouters(group)
+	handlers.NewEthController(deployer.manager).RegisterRouters(group)
+	handlers.NewTokenController(deployer.manager).RegisterRouters(group)
+	return group
+}
+
 func configureSwaggerJson() {
 	//read template file
 	log.Debug("reading swagger json file")

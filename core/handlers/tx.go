@@ -227,6 +227,6 @@ func (ctl EthController) CallContract() {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl TransactionController) RegisterRouters(router *echo.Echo) {
+func (ctl TransactionController) RegisterRouters(router *echo.Group) {
 
 }

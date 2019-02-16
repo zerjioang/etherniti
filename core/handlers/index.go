@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/release"
 	"net/http"
 	"runtime"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/integrity"
 
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/server/mods/disk"
 
 	"github.com/labstack/echo"
@@ -22,14 +22,6 @@ type IndexController struct {
 }
 
 const (
-	indexWelcome = `{
-  "name": "eth-wbapi",
-  "description": "Etherniti: Ethereum Multitenant API",
-  "cluster_name": "eth-wbapi",
-  "version": "` + release.Version + `",
-  "env": "` + config.EnvironmentName + `",
-  "tagline": "dapps everywhere"
-}`
 	gbUnits = float64(disk.GB)
 )
 
@@ -38,8 +30,43 @@ var (
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
 	diskMonitor = disk.DiskUsage("/")
+)
+
+// index data
+const (
+	indexWelcomeJson = `{
+  "name": "eth-wbapi",
+  "description": "Etherniti: Ethereum REST API",
+  "cluster_name": "eth-wbapi",
+  "version": "` + release.Version + `",
+  "env": "` + config.EnvironmentName + `",
+  "tagline": "dapps everywhere"
+}`
+	indexWelcomeHtml = `<!doctype html>
+<title>Etherniti: Ethereum Multitenant API</title>
+<style>
+  body { text-align: center; padding: 150px; }
+  h1 { font-size: 50px; }
+  body { font: 20px Helvetica, sans-serif; color: #333; }
+  article { display: block; text-align: left; width: 800px; margin: 0 auto; }
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
+</style>
+
+<article>
+    <h1 style="text-align:center">Etherniti: an Ethereum REST API</h1>
+	<h2 style="text-align:center">a High Performance, Multitenant RESTful proxy service for Ethereum</h2>
+    <div>
+        <p>Please refer to official API documentation for further details or visit <a href="http://dev-proxy.etherniti.org/swagger">http://dev-proxy.etherniti.org/swagger</a></p>
+        <p>&mdash; Etherniti core team</p>
+    </div>
+</article>
+	`
+)
+
+var (
 	//bytes of welcome message
-	indexWelcomeBytes = []byte(indexWelcome)
+	indexWelcomeBytes = []byte(indexWelcomeJson)
 )
 
 func NewIndexController() IndexController {
@@ -47,8 +74,11 @@ func NewIndexController() IndexController {
 	return dc
 }
 
-func (ctl IndexController) index(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
+func Index(c echo.Context) error {
+	if c.Request().Header.Get("content-type") == "application/json" {
+		return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
+	}
+	return c.HTML(http.StatusOK, indexWelcomeHtml)
 }
 
 func (ctl IndexController) status(c echo.Context) error {
@@ -110,10 +140,9 @@ func (ctl IndexController) integrity(c echo.Context) error {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl IndexController) RegisterRouters(router *echo.Echo) {
+func (ctl IndexController) RegisterRouters(router *echo.Group) {
 	log.Info("exposing index controller methods")
-	router.GET("/v1", ctl.index)
-	router.GET("/", ctl.index)
-	router.GET("/v1/status", ctl.status)
-	router.GET("/v1/integrity", ctl.integrity)
+	router.GET("/", Index)
+	router.GET("/status", ctl.status)
+	router.GET("/integrity", ctl.integrity)
 }

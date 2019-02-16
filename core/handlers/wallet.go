@@ -98,7 +98,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl WalletController) RegisterRouters(router *echo.Echo) {
+func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	log.Info("exposing wallet controller methods")
-	router.POST("/v1/mnemonic/bip39", ctl.mnemonic)
+	router.POST("/mnemonic/bip39", ctl.mnemonic)
 }

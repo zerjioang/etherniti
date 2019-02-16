@@ -89,9 +89,9 @@ func (ctl ProfileController) clear(c echo.Context) error {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl ProfileController) RegisterRouters(router *echo.Echo) {
+func (ctl ProfileController) RegisterRouters(router *echo.Group) {
 	log.Info("exposing profile controller methods")
-	router.POST("/v1/profile", ctl.create)
-	router.GET("/v1/profile/count", ctl.count)
-	router.GET("/v1/profile/validate", ctl.validate)
+	router.POST("/profile", ctl.create)
+	router.GET("/profile/count", ctl.count)
+	router.GET("/profile/validate", ctl.validate)
 }

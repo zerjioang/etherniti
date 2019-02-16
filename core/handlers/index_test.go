@@ -26,6 +26,6 @@ func TestIndex(t *testing.T) {
 	// Assertions
 	if assert.NoError(t, ctl.index(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, indexWelcome, rec.Body.String())
+		assert.Equal(t, indexWelcomeJson, rec.Body.String())
 	}
 }

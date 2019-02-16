@@ -100,8 +100,8 @@ func (ctl TokenController) getClientInstance(c echo.Context) (*ethclient.Client,
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl TokenController) RegisterRouters(router *echo.Echo) {
+func (ctl TokenController) RegisterRouters(router *echo.Group) {
 	log.Info("exposing eth controller methods")
 	//http://localhost:8080/eth/create
-	router.POST("/v1/token/instance", ctl.instantiate)
+	router.POST("/token/instance", ctl.instantiate)
 }

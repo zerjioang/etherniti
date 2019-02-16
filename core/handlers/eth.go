@@ -317,16 +317,16 @@ func (ctl EthController) getClient(context echo.Context) ethrpc.EthRPC {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl EthController) RegisterRouters(router *echo.Echo) {
+func (ctl EthController) RegisterRouters(router *echo.Group) {
 	log.Info("exposing eth controller methods")
-	router.GET("/v1/eth/create", ctl.generateAddress)
-	router.GET("/v1/eth/verify/:address", ctl.isValidAddress)
-	router.GET("/v1/eth/hascontract/:address", ctl.isContractAddress)
-	router.GET("/v1/eth/m/accounts", ctl.getAccounts)
-	router.GET("/v1/eth/m/accountsBalanced", ctl.getAccountsWithBalance)
-	router.GET("/v1/eth/m/blocks", ctl.getBlocks)
-	router.GET("/v1/eth/m/coinbase", ctl.coinbase)
+	router.GET("/eth/create", ctl.generateAddress)
+	router.GET("/eth/verify/:address", ctl.isValidAddress)
+	router.GET("/eth/hascontract/:address", ctl.isContractAddress)
+	router.GET("/eth/m/accounts", ctl.getAccounts)
+	router.GET("/eth/m/accountsBalanced", ctl.getAccountsWithBalance)
+	router.GET("/eth/m/blocks", ctl.getBlocks)
+	router.GET("/eth/m/coinbase", ctl.coinbase)
 
-	router.GET("/v1/eth/m/getbalance/:address", ctl.getBalance)
-	router.GET("/v1/eth/m/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
+	router.GET("/eth/m/getbalance/:address", ctl.getBalance)
+	router.GET("/eth/m/getbalance/:address/block/:block", ctl.getBalanceAtBlock)
 }

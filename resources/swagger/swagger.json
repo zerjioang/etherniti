@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "Etherniti Proxy REST API definition",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "title": "Etherniti Proxy REST API",
     "termsOfService": "https://www.etherniti.org/docs/terms-of-service/",
     "contact": {
@@ -13,7 +13,7 @@
       "url": "https://www.etherniti.org/docs/license/"
     }
   },
-  "host": "localhost:8080",
+  "host": "dev-proxy.etherniti.org",
   "basePath": "/v1",
   "tags": [
     {
