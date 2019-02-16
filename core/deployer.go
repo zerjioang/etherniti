@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/etherniti/core/release"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -435,7 +436,7 @@ func configureSwaggerJson() {
 	//replace hardcoded variables
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
-	str = strings.Replace(str, "$version", config.Version, -1)
+	str = strings.Replace(str, "$version", release.Version, -1)
 	str = strings.Replace(str, "$host", config.SwaggerApiDomain, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	//write swagger.json file
