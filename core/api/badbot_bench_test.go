@@ -2,7 +2,7 @@ package api
 
 import "testing"
 
-func BenchmarkBadBot(b *testing.B){
+func BenchmarkBadBot(b *testing.B) {
 	b.Run("first", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)

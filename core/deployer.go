@@ -44,6 +44,14 @@ var (
 			config.HttpProfileHeaderkey,
 		},
 	}
+	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+		`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
+		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
+	errorLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+		`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
+		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
 	}
@@ -347,10 +355,7 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
-				`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-				`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
-				`,"in":${bytes_in},"out":${bytes_out}}`+"\n",
+			Format: accessLogFormat,
 		}))
 	}
 

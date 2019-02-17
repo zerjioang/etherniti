@@ -29,7 +29,7 @@ var (
 	//read only once, the number of server cpus
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
-	diskMonitor = disk.DiskUsage()
+	diskMonitor = disk.DiskUsagePtr()
 )
 
 // index data
@@ -69,8 +69,12 @@ var (
 	indexWelcomeBytes = []byte(indexWelcomeJson)
 )
 
-func init(){
-	diskMonitor.Eval("/")
+func init() {
+	var monErr error
+	monErr = diskMonitor.Eval("/")
+	if monErr != nil {
+		log.Error("failed to start disk status monitor on path /. Caused by: ", monErr)
+	}
 }
 
 func NewIndexController() IndexController {
@@ -79,7 +83,6 @@ func NewIndexController() IndexController {
 }
 
 func Index(c echo.Context) error {
-	log.Info(c.Request().Header)
 	if c.Request().Header.Get("Accept") == "application/json" {
 		return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
 	}
@@ -94,17 +97,23 @@ func (ctl IndexController) status(c echo.Context) error {
 
 	wrapper := map[string]interface{}{
 		// memory stats
-		"alloc":       m.Alloc,
-		"total":       m.TotalAlloc,
-		"sys":         m.Sys,
-		"mallocs":     m.Mallocs,
-		"frees":       m.Frees,
-		"numgc":       m.NumGC,
-		"numForcedGC": m.NumForcedGC,
-		"heapalloc":   m.HeapAlloc,
-
+		"memory": map[string]uint64{
+			"alloc":     m.Alloc,
+			"total":     m.TotalAlloc,
+			"sys":       m.Sys,
+			"mallocs":   m.Mallocs,
+			"frees":     m.Frees,
+			"heapalloc": m.HeapAlloc,
+		},
+		// gc stats
+		"gc": map[string]uint32{
+			"numgc":       m.NumGC,
+			"numForcedGC": m.NumForcedGC,
+		},
 		// cpus stats
-		"cpus": numcpus,
+		"cpus": map[string]int{
+			"cores": numcpus,
+		},
 		// runtime stats
 		"runtime": map[string]string{
 			"version":  runtime.Version(),
@@ -117,9 +126,9 @@ func (ctl IndexController) status(c echo.Context) error {
 		},
 		// basic disk stats
 		"disk": map[string]float64{
-			"all":  float64(diskMonitor.All) / gbUnits,
-			"used": float64(diskMonitor.Used) / gbUnits,
-			"free": float64(diskMonitor.Free) / gbUnits,
+			"all":  float64(diskMonitor.all) / gbUnits,
+			"used": float64(diskMonitor.used) / gbUnits,
+			"free": float64(diskMonitor.free) / gbUnits,
 		},
 	}
 

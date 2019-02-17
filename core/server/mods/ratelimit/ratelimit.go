@@ -34,7 +34,6 @@ var (
 )
 
 type RateLimitEngine struct {
-
 }
 
 // constructor like function

@@ -10,31 +10,57 @@ func BenchmarkDiskUsage(b *testing.B) {
 			_ = DiskUsage()
 		}
 	})
+	b.Run("instantiate-concurrent", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		for n := 0; n < b.N; n++ {
+			go DiskUsage()
+		}
+	})
+	b.Run("is-monitoring", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		disk := DiskUsage()
+		for n := 0; n < b.N; n++ {
+			_ = disk.IsMonitoring()
+		}
+	})
 	b.Run("read-all", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
+		_ = disk.Eval("/")
 		for n := 0; n < b.N; n++ {
-			disk, _ = disk.Eval("/")
-			_ = disk.All
+			_ = disk.All()
 		}
 	})
+
+	b.Run("read-all-concurrent", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		disk := DiskUsage()
+		_ = disk.Eval("/")
+		for n := 0; n < b.N; n++ {
+			go disk.All()
+		}
+	})
+
 	b.Run("read-used", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
+		_ = disk.Eval("/")
 		for n := 0; n < b.N; n++ {
-			disk, _ = disk.Eval("/")
-			_ = disk.Used
+			_ = disk.Used()
 		}
 	})
 	b.Run("read-free", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
+		_ = disk.Eval("/")
 		for n := 0; n < b.N; n++ {
-			disk, _ = disk.Eval("/")
-			_ = disk.Free
+			_ = disk.Free()
 		}
 	})
 }
