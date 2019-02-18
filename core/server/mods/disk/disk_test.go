@@ -14,7 +14,7 @@ func TestDiskUsage(t *testing.T) {
 		disk := DiskUsage()
 		t.Log(disk.IsMonitoring())
 		t.Log(disk.IsMonitoring())
-	})
+		})
 	t.Run("read-once", func(t *testing.T) {
 		disk := DiskUsage()
 		err := disk.Eval("/")

@@ -11,17 +11,34 @@
     "license": {
       "name": "Etherniti License",
       "url": "https://www.etherniti.org/docs/license/"
-    }
+    },
+    "x-apisguru-categories": [
+      "iot",
+      "ethereum",
+      "blockchain"
+    ],
+    "x-logo": {
+      "url": "/favicon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "x-preferred": true,
+    "x-providerName": "etherniti.org"
   },
   "host": "$host",
   "basePath": "$basepath",
+  "consumes": [
+    "application/json;charset=utf-8"
+  ],
+  "produces": [
+    "application/json;charset=utf-8"
+  ],
   "tags": [
     {
     "name": "public",
     "description": "Public Ethereum REST API Proxy operations",
     "externalDocs": {
       "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-      "url": "https://www.etherniti.org/docs/public-operations/"
+      "url": "https://www.etherniti.org/docs/api/public-operations/"
     }
     },
     {
@@ -29,7 +46,7 @@
       "description": "Ethereum REST API Proxy connection profile management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/profile-management/"
+        "url": "https://www.etherniti.org/docs/api/profile-management/"
       }
     },
     {
@@ -37,13 +54,21 @@
       "description": "Ethereum REST API Proxy wallet service",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/wallet/"
+        "url": "https://www.etherniti.org/docs/api/wallet/"
+      }
+    },
+    {
+      "name": "private",
+      "description": "Ethereum REST API Proxy context dependant services",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/api/private"
       }
     }
   ],
   "schemes": ["http", "https"],
   "paths": {
-    "/": {
+    "/public": {
       "get": {
         "tags": ["public"],
         "summary": "Proxy welcome message",
@@ -51,6 +76,7 @@
         "operationId": "index",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [],
         "responses": {
           "200": {
@@ -69,7 +95,7 @@
         }
       }
     },
-    "/status": {
+    "/public/status": {
       "get": {
         "tags": ["public"],
         "summary": "Proxy health status",
@@ -77,6 +103,7 @@
         "operationId": "status",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [],
         "responses": {
           "200": {
@@ -111,7 +138,7 @@
         }
       }
     },
-    "/integrity": {
+    "/public/integrity": {
       "get": {
         "tags": ["public"],
         "summary": "Check remote proxy integrity status",
@@ -119,6 +146,7 @@
         "operationId": "integrity",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [],
         "responses": {
           "200": {
@@ -135,7 +163,7 @@
         }
       }
     },
-    "/profile": {
+    "/public/profile": {
       "post": {
         "tags": ["profile"],
         "summary": "Create a connection profile using prefered provider",
@@ -143,6 +171,7 @@
         "operationId": "profile",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [
           {
             "in": "body",
@@ -154,8 +183,8 @@
                 "peer":"http://172.168.0.2",
                 "mode":"geth",
                 "port":8545,
-                "address": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-                "key": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
+                "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
               }
             }
           }
@@ -175,7 +204,7 @@
         }
       }
     },
-    "/profile/count": {
+    "/public/profile/count": {
       "get": {
         "tags": ["profile"],
         "summary": "Count created profiles",
@@ -183,6 +212,7 @@
         "operationId": "profile-count",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [],
         "responses": {
           "200": {
@@ -194,7 +224,7 @@
         }
       }
     },
-    "/mnemonic/bip39": {
+    "/public/mnemonic/bip39": {
       "post": {
         "tags": ["wallet"],
         "summary": "Generate a bip39 mnemonic",
@@ -202,6 +232,7 @@
         "operationId": "mnemonic-bip39",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "deprecated": false,
         "parameters": [
           {
             "in": "body",
@@ -224,13 +255,159 @@
           }
         }
       }
+    },
+    "/public/eth/create": {
+      "get": {
+        "tags": ["wallet"],
+        "summary": "Generate a new Ethereum compatible account",
+        "description": "Generate a new Ethereum compatible account and get its address and key",
+        "operationId": "new-account",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "account creation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "ethereum account created",
+                "result": {
+                  "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
+                  "private": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/eth/verify/{address}": {
+      "get": {
+        "tags": ["wallet"],
+        "summary": "Verify Ethereum address",
+        "description": "Verify if given Ethereum address is valid or not",
+        "operationId": "verify-address",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Ethereum address to be validated",
+            "schema": {
+              "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/eth/is/contract/{address}": {
+      "get": {
+        "tags": ["wallet", "private"],
+        "summary": "Verify if Ethereum address is a contract",
+        "description": "Verify if given Ethereum address is a contract holder address or not",
+        "operationId": "has-contract",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [
+          {
+            "connectionProfileToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Ethereum address to be validated",
+            "schema": {
+              "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/private/eth/node/info": {
+      "get": {
+        "tags": ["wallet", "private"],
+        "summary": "Get Ethereum node info",
+        "description": "Get Ethereum node info",
+        "operationId": "node-info",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [
+          {
+            "connectionProfileToken": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "ethereum node information response",
+            "schema": {
+              "example": {
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
-    "token": {
+    "connectionProfileToken": {
       "type": "apiKey",
-      "name": "authorization",
+      "description": "Connection profile definition access token for Etherniti REST API Proxy",
+      "name": "X-Etherniti-Profile",
       "in": "header"
+    }
+  },
+  "responses": {
+    "ProfileInvalidError": {
+      "description": "Connection Profile token is missing, was expired or is invalid",
+      "schema": {
+        "example": {
+          "code": 400,
+          "msg": "Bad Request",
+          "details": "please provide a connection profile token for this kind of call"
+        }
+      }
     }
   },
   "definitions": {},

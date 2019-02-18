@@ -4,12 +4,14 @@
 package eth
 
 import (
+	"context"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/etherniti/core/server"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/token/erc20"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/keystore/memory"
 )
@@ -27,7 +29,12 @@ func NewWalletManager() WalletManager {
 }
 
 // get token instance for given client and address
-func InstantiateToken(client *ethclient.Client, address common.Address) (*erc20.ERC20Token, error) {
+func InstantiateToken(cc *server.EthernitiContext, address common.Address) (*erc20.ERC20Token, error) {
+	// get the client from cc context
+	client, clientErr := ethclient.DialContext(context.Background(), "")
+	if clientErr != nil {
+		return nil, clientErr
+	}
 	instance, err := erc20.NewToken(address, client)
 	return instance, err
 }

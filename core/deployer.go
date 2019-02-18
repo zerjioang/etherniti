@@ -7,8 +7,10 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/release"
+	"github.com/zerjioang/etherniti/core/server"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -252,7 +254,7 @@ func (deployer Deployer) fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// fakeServer antiBots function.
+// bots blacklist function.
 func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add antibots policy
@@ -317,17 +319,43 @@ func (deployer Deployer) keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+func (deployer Deployer) injectCustomContext(h echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cc := &server.EthernitiContext{Context:c}
+		return h(cc)
+	}
+}
+
+// jwt middleware function.
+func (deployer Deployer) jwt(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// add fake server header
+		h := c.Request().Header
+		token := h.Get(config.HttpProfileHeaderkey)
+		if token == "" {
+			return handlers.ErrorStr(c, "please provide a connection profile token for this kind of call")
+		}
+		_, parseErr := profile.ParseConnectionProfileToken(token)
+		if parseErr != nil {
+			return handlers.Error(c, parseErr)
+		}
+		return next(c)
+	}
+}
+
 // custom http error handler
 func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
+
+	// TODO implement custom error code propagation
+	/*
 	code := http.StatusInternalServerError
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
 	}
+	*/
 	// log error always? less performance in production
 	c.Logger().Error(err)
-
-	apiErr := api.NewApiError(code, err.Error())
-	_ = c.JSON(code, apiErr)
+	_ = handlers.Error(c, err)
 }
 
 // build new http server instance
@@ -339,7 +367,6 @@ func (deployer Deployer) newServerInstance() *echo.Echo {
 	e.HidePort = config.HideServerDataInConsole
 	//hide the banner
 	e.HideBanner = config.HideServerDataInConsole
-
 	return e
 }
 
@@ -406,6 +433,10 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] gzip compression")
 	e.Use(middleware.GzipWithConfig(gzipConfig))
 
+	// add custom context handler
+	log.Info("[LAYER] injecting custom context")
+	e.Use(deployer.injectCustomContext)
+
 	// avoid panics
 	log.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
@@ -426,6 +457,7 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// register root calls
 	e.GET("/", handlers.Index)
 	e.GET("/v1", handlers.Index)
+	e.GET("/v1/public", handlers.Index)
 
 	//configure swagger json from template data
 	configureSwaggerJson()
@@ -440,13 +472,20 @@ func (deployer Deployer) apiV1(next echo.HandlerFunc) echo.HandlerFunc {
 
 // register in echo server, allowed routes
 func (deployer Deployer) register(group *echo.Group) *echo.Group {
-	log.Info("registering routes")
-	handlers.NewIndexController().RegisterRouters(group)
-	handlers.NewProfileController().RegisterRouters(group)
-	handlers.NewWalletController().RegisterRouters(group)
-	handlers.NewTransactionController().RegisterRouters(group)
-	handlers.NewEthController(deployer.manager).RegisterRouters(group)
-	handlers.NewTokenController(deployer.manager).RegisterRouters(group)
+	log.Info("registering context free routes")
+
+	publicGroup := group.Group("/public", deployer.apiV1)
+
+	handlers.NewIndexController().RegisterRouters(publicGroup)
+	handlers.NewProfileController().RegisterRouters(publicGroup)
+	handlers.NewWalletController().RegisterRouters(publicGroup)
+	handlers.NewEthController().RegisterRouters(publicGroup)
+
+	privateGroup := group.Group("/private", deployer.apiV1)
+	privateGroup.Use(deployer.jwt)
+	//add jwt middleware to private group
+	handlers.NewWeb3Controller(deployer.manager).RegisterRouters(privateGroup)
+	handlers.NewTokenController(deployer.manager).RegisterRouters(privateGroup)
 	return group
 }
 

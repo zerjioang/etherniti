@@ -126,9 +126,9 @@ func (ctl IndexController) status(c echo.Context) error {
 		},
 		// basic disk stats
 		"disk": map[string]float64{
-			"all":  float64(diskMonitor.all) / gbUnits,
-			"used": float64(diskMonitor.used) / gbUnits,
-			"free": float64(diskMonitor.free) / gbUnits,
+			"all":  float64(diskMonitor.All()) / gbUnits,
+			"used": float64(diskMonitor.Used()) / gbUnits,
+			"free": float64(diskMonitor.Free()) / gbUnits,
 		},
 	}
 

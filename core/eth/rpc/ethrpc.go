@@ -191,6 +191,14 @@ func (rpc EthRPC) EthSyncing() (*Syncing, error) {
 	return syncing, err
 }
 
+// EthCoinbase returns the node information
+func (rpc EthRPC) EthNodeInfo() (string, error) {
+	var address string
+
+	err := rpc.call("eth_info", &address)
+	return address, err
+}
+
 // EthCoinbase returns the client coinbase address
 func (rpc EthRPC) EthCoinbase() (string, error) {
 	var address string

@@ -5,6 +5,7 @@ package eth
 
 import (
 	"context"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"math"
 	"math/big"
 	"regexp"
@@ -29,9 +30,8 @@ func IsValidAddress(addr string) bool {
 	return addressRegex.MatchString(addr)
 }
 
-func IsSmartContractAddress(client *ethclient.Client, addr string) (bool, error) {
-	address := ConvertAddress(addr)
-	bytecode, err := client.CodeAt(ctx, address, nil) // nil is latest block
+func IsSmartContractAddress(client ethrpc.EthRPC, addr string) (bool, error) {
+	bytecode, err := client.EthGetCode(addr, "") // empty is latest
 	// if the address has valid bytecode, is a contract
 	return len(bytecode) > 0, err
 }
