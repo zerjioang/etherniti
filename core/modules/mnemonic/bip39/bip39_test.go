@@ -23,13 +23,13 @@ func TestGetWordList(t *testing.T) {
 
 func TestGetWordIndex(t *testing.T) {
 	for expectedIdx, word := range wordList {
-		actualIdx, ok := GetWordIndex(word)
+		actualIdx, ok := GetWordIndexFromTree(word)
 		assertTrue(t, ok)
 		assertEqual(t, actualIdx, expectedIdx)
 	}
 
 	for _, word := range []string{"a", "set", "of", "invalid", "words"} {
-		actualIdx, ok := GetWordIndex(word)
+		actualIdx, ok := GetWordIndexFromTree(word)
 		assertFalse(t, ok)
 		assertEqual(t, actualIdx, 0)
 	}
@@ -40,12 +40,12 @@ func TestNewMnemonic(t *testing.T) {
 		entropy, err := hex.DecodeString(vector.entropy)
 		assertNil(t, err)
 
-		mnemonic, err := NewMnemonic(entropy)
-		assertNil(t, err)
+		mnemonic, rerr := NewMnemonic(entropy)
+		assertFalse(t, rerr.Occur())
 		assertEqualString(t, vector.mnemonic, mnemonic)
 
-		_, err = NewSeedWithErrorChecking(mnemonic, "TREZOR")
-		assertNil(t, err)
+		_, serr := NewSeedWithErrorChecking(mnemonic, "TREZOR")
+		assertFalse(t, serr.Occur())
 
 		seed := NewSeed(mnemonic, "TREZOR")
 		assertEqualString(t, vector.seed, hex.EncodeToString(seed))
@@ -89,7 +89,7 @@ func TestNewEntropy(t *testing.T) {
 	// Good tests.
 	for i := 128; i <= 256; i += 32 {
 		_, err := NewEntropy(i)
-		assertNil(t, err)
+		assertFalse(t, err.Occur())
 	}
 	// Bad Values
 	for i := 0; i <= 256; i++ {
@@ -113,12 +113,12 @@ func TestMnemonicToByteArrayForDifferentArrayLangths(t *testing.T) {
 		}
 
 		mnemonic, err := NewMnemonic(seed)
-		if err != nil {
+		if err.Occur() {
 			t.Errorf("%v", err)
 		}
 
 		_, err = MnemonicToByteArray(mnemonic)
-		if err != nil {
+		if err.Occur() {
 			t.Errorf("Failed for %x - %v", seed, mnemonic)
 		}
 	}
@@ -222,12 +222,12 @@ func TestMnemonicToByteArrayForZeroLeadingSeeds(t *testing.T) {
 		seed, _ := hex.DecodeString(m)
 
 		mnemonic, err := NewMnemonic(seed)
-		if err != nil {
+		if err.Occur() {
 			t.Errorf("%v", err)
 		}
 
 		_, err = MnemonicToByteArray(mnemonic)
-		if err != nil {
+		if err.Occur() {
 			t.Errorf("Failed for %x - %v", seed, mnemonic)
 		}
 	}
@@ -271,15 +271,15 @@ func TestEntropyFromMnemonicInvalidMnemonicSize(t *testing.T) {
 func testEntropyFromMnemonic(t *testing.T, bitSize int) {
 	for i := 0; i < 512; i++ {
 		expectedEntropy, err := NewEntropy(bitSize)
-		assertNil(t, err)
+		assertFalse(t, err.Occur())
 		assertTrue(t, len(expectedEntropy) != 0)
 
 		mnemonic, err := NewMnemonic(expectedEntropy)
-		assertNil(t, err)
+		assertFalse(t, err.Occur())
 		assertTrue(t, len(mnemonic) != 0)
 
-		actualEntropy, err := EntropyFromMnemonic(mnemonic)
-		assertNil(t, err)
+		actualEntropy, terr := EntropyFromMnemonic(mnemonic)
+		assertFalse(t, terr.Occur())
 		assertEqualByteSlices(t, expectedEntropy, actualEntropy)
 	}
 }

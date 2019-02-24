@@ -7,16 +7,17 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/zerjioang/etherniti/core/eth/profile"
-	"github.com/zerjioang/etherniti/core/handlers"
-	"github.com/zerjioang/etherniti/core/release"
-	"github.com/zerjioang/etherniti/core/server"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/eth/profile"
+	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/release"
+	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
@@ -48,11 +49,11 @@ var (
 	}
 	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
 		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-		`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
+		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
 		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	errorLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
 		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-		`"status":${status},"err":"${error}","latency":${latency},"latency_human":"${latency_human}"` +
+		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
 		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
@@ -179,7 +180,7 @@ func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.E
 func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
 	cert, err := deployer.GetLocalHostTLS()
 	if err != nil {
-		log.Fatal("failed to setup TLS configuration due to error", err)
+		log.Fatal("failed to setup TLS configuration due to trycatch", err)
 		return nil, err
 	}
 
@@ -321,7 +322,7 @@ func (deployer Deployer) keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 
 func (deployer Deployer) injectCustomContext(h echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		cc := &server.EthernitiContext{Context:c}
+		cc := &server.EthernitiContext{Context: c}
 		return h(cc)
 	}
 }
@@ -343,17 +344,17 @@ func (deployer Deployer) jwt(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// custom http error handler
+// custom http trycatch handler
 func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
 
-	// TODO implement custom error code propagation
+	// TODO implement custom trycatch code propagation
 	/*
-	code := http.StatusInternalServerError
-	if he, ok := err.(*echo.HTTPError); ok {
-		code = he.Code
-	}
+		code := http.StatusInternalServerError
+		if he, ok := err.(*echo.HTTPError); ok {
+			code = he.Code
+		}
 	*/
-	// log error always? less performance in production
+	// log trycatch always? less performance in production
 	c.Logger().Error(err)
 	_ = handlers.Error(c, err)
 }
@@ -372,8 +373,8 @@ func (deployer Deployer) newServerInstance() *echo.Echo {
 
 // configure deployer internal configuration
 func (deployer Deployer) configureRoutes(e *echo.Echo) {
-	// add a custom error handler
-	log.Info("[LAYER] custom error handler")
+	// add a custom trycatch handler
+	log.Info("[LAYER] custom trycatch handler")
 	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
 
 	// log all single request

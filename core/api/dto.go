@@ -42,14 +42,14 @@ type NewMnemonicRequest struct {
 	Language string `json:"language" form:"language" query:"language"`
 }
 
-// api error model dto
+// api trycatch model dto
 type ApiError struct {
 	Code    int    `json:"code"`
 	Message string `json:"msg"`
 	Details string `json:"details"`
 }
 
-// api error constructor like function
+// api trycatch constructor like function
 func NewApiError(code int, details string) ApiError {
 	ae := ApiError{}
 	ae.Code = code
@@ -62,7 +62,7 @@ func NewApiError(code int, details string) ApiError {
 type ApiResponse struct {
 	Id   int `json:"id"`
 	Code int `json:"code"`
-	//Error error
+	//Error trycatch
 	Message string      `json:"msg"`
 	Result  interface{} `json:"result"`
 }

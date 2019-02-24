@@ -8,10 +8,10 @@ import (
 
 func TestNewApiError(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		apiErr := NewApiError(200, "test-error")
+		apiErr := NewApiError(200, "test-trycatch")
 		require.NotNil(t, apiErr)
 		require.Equal(t, apiErr.Code, 200)
-		require.Equal(t, apiErr.Details, "test-error")
+		require.Equal(t, apiErr.Details, "test-trycatch")
 	})
 }
 

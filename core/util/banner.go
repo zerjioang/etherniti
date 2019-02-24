@@ -4,9 +4,10 @@
 package util
 
 import (
-	"github.com/zerjioang/etherniti/core/release"
 	"runtime"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/release"
 )
 
 const (

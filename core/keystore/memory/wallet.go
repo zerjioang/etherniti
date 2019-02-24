@@ -5,6 +5,7 @@ package memory
 
 import (
 	"crypto/ecdsa"
+
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/ethereum/go-ethereum/common"

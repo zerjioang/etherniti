@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/spanish.txt
-	// $ crc32 spanish.txt
-	// 266e4f3d
-	checksum := crc32.ChecksumIEEE([]byte(spanish))
-	if fmt.Sprintf("%x", checksum) != "266e4f3d" {
-		panic("spanish checksum invalid")
-	}
-}
 
 // Spanish is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/spanish.txt

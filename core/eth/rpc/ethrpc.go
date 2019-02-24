@@ -14,7 +14,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-// EthError - ethereum error
+// EthError - ethereum trycatch
 type EthError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
@@ -32,7 +32,7 @@ type ethResponse struct {
 	ID      int             `json:"id"`
 	JSONRPC string          `json:"jsonrpc"`
 	Result  json.RawMessage `json:"result"`
-	Error   *EthError       `json:"error"`
+	Error   *EthError       `json:"trycatch"`
 }
 
 type ethRequest struct {

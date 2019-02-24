@@ -7,14 +7,15 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"fmt"
-	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/server"
-	"github.com/zerjioang/etherniti/core/util"
 	"math/big"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/patrickmn/go-cache"
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/server"
+	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
@@ -58,7 +59,7 @@ func (ctl Web3Controller) getBalance(c echo.Context) error {
 
 	clientInstance, err := GetClientInstance(cc)
 	if err != nil {
-		// there was an error recovering client instance
+		// there was an trycatch recovering client instance
 		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -68,7 +69,7 @@ func (ctl Web3Controller) getBalance(c echo.Context) error {
 	if targetAddr != "" {
 		result, err := clientInstance.EthGetBalance(targetAddr, "latest")
 		if err != nil {
-			//some error happen, return error to client
+			//some trycatch happen, return trycatch to client
 			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -89,7 +90,7 @@ func (ctl Web3Controller) getBalanceAtBlock(c echo.Context) error {
 
 	clientInstance, err := GetClientInstance(cc)
 	if err != nil {
-		// there was an error recovering client instance
+		// there was an trycatch recovering client instance
 		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -100,7 +101,7 @@ func (ctl Web3Controller) getBalanceAtBlock(c echo.Context) error {
 	if targetAddr != "" {
 		result, err := clientInstance.EthGetBalance(targetAddr, block)
 		if err != nil {
-			//some error happen, return error to client
+			//some trycatch happen, return trycatch to client
 			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -121,7 +122,7 @@ func (ctl Web3Controller) getNodeInfo(c echo.Context) error {
 
 	clientInstance, err := GetClientInstance(cc)
 	if err != nil {
-		// there was an error recovering client instance
+		// there was an trycatch recovering client instance
 		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -282,7 +283,7 @@ func (ctl Web3Controller) isContractAddress(c echo.Context) error {
 	}
 	clientInstance, err := GetClientInstance(cc)
 	if err != nil {
-		// there was an error recovering client instance
+		// there was an trycatch recovering client instance
 		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -292,7 +293,7 @@ func (ctl Web3Controller) isContractAddress(c echo.Context) error {
 	if targetAddr != "" {
 		result, err := eth.IsSmartContractAddress(clientInstance, targetAddr)
 		if err != nil {
-			//some error happen, return error to client
+			//some trycatch happen, return trycatch to client
 			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
@@ -355,7 +356,7 @@ func (ctl Web3Controller) DeployContract(to common.Address, amount *big.Int, gas
 	// Sign the transaction signature with the private key
 	signedTx, signatureErr := types.SignTx(tx, signer, privateKey)
 	if signatureErr != nil {
-		fmt.Println("signature create error:")
+		fmt.Println("signature create trycatch:")
 		log.Error(signatureErr)
 		cancel()
 		return "", signatureErr
@@ -363,7 +364,7 @@ func (ctl Web3Controller) DeployContract(to common.Address, amount *big.Int, gas
 	// Send the signed transaction to the network
 	txErr := client.SendTransaction(cancellableCtx, signedTx)
 	if txErr != nil {
-		fmt.Println("send tx error:")
+		fmt.Println("send tx trycatch:")
 		log.Error(txErr)
 		cancel()
 		return "", txErr
@@ -427,7 +428,7 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 	// Sign the transaction signature with the private key
 	signedTx, signatureErr := types.SignTx(tx, signer, privateKey)
 	if signatureErr != nil {
-		fmt.Println("signature create error:")
+		fmt.Println("signature create trycatch:")
 		log.Error(signatureErr)
 		cancel()
 		return "", signatureErr
@@ -435,7 +436,7 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 	// Send the signed transaction to the network
 	txErr := client.SendTransaction(cancellableCtx, signedTx)
 	if txErr != nil {
-		fmt.Println("send tx error:")
+		fmt.Println("send tx trycatch:")
 		log.Error(txErr)
 		cancel()
 		return "", txErr
@@ -470,7 +471,7 @@ func (ctl Web3Controller) CallContract() {
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		log.Error("error casting public key to ECDSA")
+		log.Error("trycatch casting public key to ECDSA")
 	}
 
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)

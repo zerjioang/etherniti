@@ -1,11 +1,12 @@
 package ratelimit
 
 import (
-	"github.com/zerjioang/etherniti/core/api"
 	"net/http"
 	"strconv"
 	"sync/atomic"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/api"
 )
 
 // 4,000 requests per hour.

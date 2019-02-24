@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/french.txt
-	// $ crc32 french.txt
-	// 3e56b216
-	checksum := crc32.ChecksumIEEE([]byte(french))
-	if fmt.Sprintf("%x", checksum) != "3e56b216" {
-		panic("french checksum invalid")
-	}
-}
 
 // French is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/french.txt

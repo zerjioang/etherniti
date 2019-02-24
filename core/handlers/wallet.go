@@ -37,7 +37,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 
 	req := api.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding error
+		// return a binding trycatch
 		log.Error("failed to bind request data to model:", err)
 		return ErrorStr(c, bindErr)
 	}
@@ -62,7 +62,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	} else if req.Language == "spanish" {
 		bip39.SetWordList(wordlists.Spanish)
 	} else {
-		//return invalid language error
+		//return invalid language trycatch
 		return ErrorStr(c, "provided language is not supported")
 	}
 
@@ -71,7 +71,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 		req.Size != 192 &&
 		req.Size != 224 &&
 		req.Size != 256 {
-		//return invalid size error
+		//return invalid size trycatch
 		return ErrorStr(c, "provided size is not supported")
 	}
 
@@ -88,7 +88,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	// create mnemonic based on user config and created entropy source
 	mnemomic, err := bip39.NewMnemonic(entropy)
 	if err != nil {
-		//return mnemonic error
+		//return mnemonic trycatch
 		return Error(c, err)
 	} else {
 		//return mnemonic content

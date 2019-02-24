@@ -18,10 +18,10 @@ import (
 
 const (
 	defaultProfileRequestTime = cache.DefaultExpiration
-	readErr                   = `there was an error during execution`
-	bindErr                   = `there was an error while processing your request information`
+	readErr                   = `there was an trycatch during execution`
+	bindErr                   = `there was an trycatch while processing your request information`
 	itemDeleted               = `profile entry successfully deleted`
-	noExistsNoUpdate          = `there was an error during execution and could not update requeste profile`
+	noExistsNoUpdate          = `there was an trycatch during execution and could not update requeste profile`
 	itemUpdated               = `profile entry successfully updated`
 )
 
@@ -47,7 +47,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	//new profile request
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding error
+		// return a binding trycatch
 		log.Error("failed to bind request data to model: ", err)
 		return ErrorStr(c, bindErr)
 	}
@@ -61,7 +61,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 		profilesCreated.Increment()
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
-		//token generation error
+		//token generation trycatch
 		rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, err.Error()))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}

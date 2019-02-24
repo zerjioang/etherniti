@@ -97,7 +97,7 @@ func (s *EthRPCTestSuite) TestWeb3ClientVersion() {
 }
 
 func (s *EthRPCTestSuite) TestCall() {
-	// Test http error
+	// Test http trycatch
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return nil, errors.New("Error")
 	})
@@ -114,9 +114,9 @@ func (s *EthRPCTestSuite) TestCall() {
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
-	// Test eth error
+	// Test eth trycatch
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
-		return httpmock.NewStringResponse(200, `{"error": {"code": 21, "message": "eee"}}`), nil
+		return httpmock.NewStringResponse(200, `{"trycatch": {"code": 21, "message": "eee"}}`), nil
 	})
 	_, err = s.rpc.Call("test")
 	s.Require().NotNil(err)
@@ -127,7 +127,7 @@ func (s *EthRPCTestSuite) TestCall() {
 }
 
 func (s *EthRPCTestSuite) Test_call() {
-	// Test http error
+	// Test http trycatch
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return nil, fmt.Errorf("Error")
 	})
@@ -207,7 +207,7 @@ func (s *EthRPCTestSuite) TestNetListening() {
 }
 
 func (s *EthRPCTestSuite) TestNetPeerCount() {
-	// Test error
+	// Test trycatch
 	s.registerResponseError(errors.New("Error"))
 	peerCount, err := s.rpc.NetPeerCount()
 	s.Require().NotNil(err)
@@ -811,7 +811,7 @@ func (s *EthRPCTestSuite) TestEthCall() {
 }
 
 func (s *EthRPCTestSuite) TestEthEstimateGas() {
-	s.registerResponseError(errors.New("error"))
+	s.registerResponseError(errors.New("trycatch"))
 	result, err := s.rpc.EthEstimateGas(T{
 		From: "0x111",
 		To:   "0x222",
@@ -832,7 +832,7 @@ func (s *EthRPCTestSuite) TestEthEstimateGas() {
 
 func (s *EthRPCTestSuite) TestEthGetTransactionReceipt() {
 	hash := "0x9c17afa5336d3cfd47e2e795520959b92e627e123e538fd4d5d7ece9025a8dce"
-	s.registerResponseError(errors.New("error"))
+	s.registerResponseError(errors.New("trycatch"))
 	receipt, err := s.rpc.EthGetTransactionReceipt(hash)
 	s.Require().NotNil(err)
 

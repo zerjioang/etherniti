@@ -5,9 +5,10 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/zerjioang/etherniti/core/server"
 	"math"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/labstack/echo"

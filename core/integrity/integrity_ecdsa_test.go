@@ -25,7 +25,7 @@ func TestECDSAIntegrity(t *testing.T) {
 
 	r, s, err := ecdsaSign(signhash, priv)
 	if err != nil {
-		t.Error("signing hash error", err)
+		t.Error("signing hash trycatch", err)
 	}
 	//now verify
 	verify := ecdsaVerify(signhash, r, s, &pub)

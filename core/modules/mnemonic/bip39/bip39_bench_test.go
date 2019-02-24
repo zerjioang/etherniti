@@ -14,4 +14,11 @@ func BenchmarkBip39(b *testing.B) {
 			NewMnemonic(entropy)
 		}
 	})
+	b.Run("is-valid", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		for n := 0; n < b.N; n++ {
+			IsMnemonicValid("all hour make first leader extend hole alien behind guard gospel lava path output census museum junior mass reopen famous sing advance salt reform")
+		}
+	})
 }

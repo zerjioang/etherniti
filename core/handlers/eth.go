@@ -5,11 +5,12 @@ package handlers
 
 import (
 	"errors"
+	"net/http"
+
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/util"
-	"net/http"
 
 	"github.com/labstack/echo"
 )
@@ -33,7 +34,6 @@ func NewEthController() EthController {
 	ctl := EthController{}
 	return ctl
 }
-
 
 // generates an ethereum new account (address+key)
 func (ctl EthController) generateAddress(c echo.Context) error {

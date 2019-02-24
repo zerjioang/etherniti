@@ -5,10 +5,11 @@ package eth
 
 import (
 	"context"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"math"
 	"math/big"
 	"regexp"
+
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"

@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/server"
-	"net/http"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"

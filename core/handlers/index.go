@@ -4,11 +4,12 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/release"
 	"net/http"
 	"runtime"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/release"
 
 	"github.com/zerjioang/etherniti/core/integrity"
 

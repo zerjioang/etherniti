@@ -5,9 +5,10 @@ package eth
 
 import (
 	"context"
+	"time"
+
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/zerjioang/etherniti/core/server"
-	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/token/erc20"
 

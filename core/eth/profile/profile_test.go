@@ -27,7 +27,7 @@ func TestCreateConnectionProfileToken(t *testing.T) {
 		t.Run("parse-empty", func(t *testing.T) {
 			_, err := ParseConnectionProfileToken("")
 			if err == nil {
-				t.Error("failed to control error for empty tokens")
+				t.Error("failed to control trycatch for empty tokens")
 			}
 		})
 		t.Run("parse-token", func(t *testing.T) {
