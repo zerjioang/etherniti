@@ -41,15 +41,18 @@ var (
 	indexWelcomeBytes = []byte(indexWelcome)
 )
 
+// contructor like function
 func NewIndexController() IndexController {
 	dc := IndexController{}
 	return dc
 }
 
+//concurrency safe
 func (ctl IndexController) index(c echo.Context) error {
 	return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
 }
 
+//concurrency safe
 func (ctl IndexController) status(c echo.Context) error {
 
 	// read memory stats
@@ -91,6 +94,7 @@ func (ctl IndexController) status(c echo.Context) error {
 }
 
 // return server side integrity message signed with private ecdsa key
+// concurrency safe
 func (ctl IndexController) integrity(c echo.Context) error {
 	// get current date time
 	currentTime := time.Now()
@@ -108,7 +112,6 @@ func (ctl IndexController) integrity(c echo.Context) error {
 	return c.JSON(http.StatusOK, wrapper)
 }
 
-// implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Echo) {
 	log.Info("exposing index controller methods")
 	router.GET("/v1", ctl.index)

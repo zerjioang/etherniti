@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"testing"
 	"time"
 
@@ -8,17 +9,35 @@ import (
 )
 
 var (
-	testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25uZWN0aW9uX2lkIjoiNjZkN2ZmZGYtZTRlNy00NTQ1LWJiMTYtY2QxNmJmNDM1ODUyIiwibm9kZV9hZGRyZXNzIjoiaHR0cDovLzEyNy4wLjAuMTo4NDU0IiwibW9kZSI6Imh0dHAiLCJwb3J0Ijo4NDU0LCJhY2NvdW50IjoiMHgwIiwiZXhwIjoxNTQ5MDIzNjM2LCJqdGkiOiI4ZDc5YTNhMC0xYzZhLTRjOGUtYTM4NS02N2M0NTlmMGM0ZTQiLCJpYXQiOjE1NDkwMjMwMzYsImlzcyI6ImdhZXRod2F5IiwibmJmIjoxNTQ5MDIzMDM2fQ.PXIQarefAxSCyClRhKpJisd3A0xZ-gPkVUgnGDPP474"
+	testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25uZWN0aW9uX2lkIjoiMjUwZDVkNDEtYzNmNy00MTc3LTk4MjItNzI3YWRlNDQyZWNkIiwibm9kZV9hZGRyZXNzIjoiaHR0cDovLzEyNy4wLjAuMTo4NDU0IiwibW9kZSI6Imh0dHAiLCJwb3J0Ijo4NDU0LCJhY2NvdW50IjoiMHgwIiwiZXhwIjoxOTEwMjE4MDYxLCJqdGkiOiI0N2U5YjVhYi1hNDg4LTRmNWEtYjg0Ny0zMTEwODVhNDA2NzIiLCJpYXQiOjE1NTAyMTgwNjEsImlzcyI6ImV0aGVybml0aSIsIm5iZiI6MTU1MDIxODA2MX0.BE8yxe35eVtbWNF_pwWrh7-vHIRWTUDya9kQ8dLchr0"
 )
 
 func TestCreateConnectionProfileToken(t *testing.T) {
+
 	t.Run("empty-connection-profile", func(t *testing.T) {
 		NewConnectionProfile()
 	})
+
+	t.Run("connection-profile", func(t *testing.T) {
+		now := fastime.Now()
+		unixtime := now.Unix()
+		_ = ConnectionProfile {
+			NodeAddress:  "http://127.0.0.1:8454",
+			Mode:         "http",
+			Port:         8454,
+			Account:      "0x0",
+			//standard claims
+			Id:        util.GenerateUUID(),
+			Issuer:    "etherniti",
+			ExpiresAt: now.Add(10 * time.Minute).Unix(),
+			NotBefore: unixtime,
+			IssuedAt:  unixtime,
+		}
+	})
+
 	t.Run("create-token", func(t *testing.T) {
-		now := time.Now()
+		now := fastime.Now()
 		p := ConnectionProfile{
-			ConnectionId: util.GenerateUUID(),
 			NodeAddress:  "http://127.0.0.1:8454",
 			Mode:         "http",
 			Port:         8454,
@@ -36,6 +55,7 @@ func TestCreateConnectionProfileToken(t *testing.T) {
 		}
 		t.Log(token)
 	})
+
 	t.Run("parse-token", func(t *testing.T) {
 		t.Run("parse-empty", func(t *testing.T) {
 			_, err := ParseConnectionProfileToken("")

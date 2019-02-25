@@ -6,14 +6,13 @@ package profile
 import (
 	"errors"
 	"fmt"
-
-	"github.com/zerjioang/etherniti/core/config"
-
 	"github.com/etherniti/jwt-go"
+	"github.com/zerjioang/etherniti/core/config"
 )
 
 var (
 	emptyProfile     ConnectionProfile
+	defaultSigningMethod = jwt.SigningMethodHS256
 	tokenSecretBytes = []byte(config.TokenSecret)
 	errTokenNoValid  = errors.New("invalid fields token provided")
 )
@@ -21,9 +20,6 @@ var (
 // default data for connection profile
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
-
-	// unique identifier of the connection prfile
-	ConnectionId string `json:"connection_id"`
 
 	// address of the connection node: ip, domain, infura, etc
 	NodeAddress string `json:"node_address"`
@@ -52,6 +48,7 @@ type ConnectionProfile struct {
 	ExpiresAt int64 `json:"exp,omitempty"`
 	// Case sensitive unique identifier of the token
 	// even among different issuers.
+	// it works also as unique identifier of the connection profile
 	Id string `json:"jti,omitempty"`
 	// Identifies the time at which the JWT was issued.
 	// The value must be a NumericDate.
@@ -66,7 +63,7 @@ type ConnectionProfile struct {
 }
 
 func (profile ConnectionProfile) Valid() error {
-	valid := profile.ConnectionId != "" &&
+	valid := profile.Id != "" &&
 		profile.NodeAddress != "" &&
 		profile.Account != ""
 	if !valid {
@@ -80,12 +77,15 @@ func (profile ConnectionProfile) Secret() []byte {
 }
 
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
+
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, profile)
+	token := jwt.NewTokenPoolWithClaims(defaultSigningMethod, profile)
 
 	// Sign and get the complete encoded token as a string using the secret
-	return token.SignedString(tokenSecretBytes)
+	signedStr, err := token.SignedString(tokenSecretBytes)
+	// return result
+	return signedStr, err
 }
 
 func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
