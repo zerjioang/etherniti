@@ -4,7 +4,6 @@
 package handlers
 
 import (
-	"net/http"
 	"runtime"
 	"time"
 
@@ -86,7 +85,7 @@ func NewIndexController() IndexController {
 
 func Index(c echo.Context) error {
 	var code int
-	code, c = Cached(c, true)
+	code, c = Cached(c, true, 86400) // 24h cache directive
 	if c.Request().Header.Get("Accept") == "application/json" {
 		return c.JSONBlob(code, indexWelcomeBytes)
 	}
@@ -136,8 +135,9 @@ func (ctl IndexController) status(c echo.Context) error {
 			"free": float64(diskMonitor.Free()) / gbUnits,
 		},
 	}
-
-	return c.JSON(http.StatusOK, wrapper)
+	var code int
+	code, c = Cached(c, true, 5) // 5 seconds cache directive
+	return c.JSON(code, wrapper)
 }
 
 // return server side integrity message signed with private ecdsa key
@@ -156,7 +156,9 @@ func (ctl IndexController) integrity(c echo.Context) error {
 		"hash":      hash,
 		"signature": signature,
 	}
-	return c.JSON(http.StatusOK, wrapper)
+	var code int
+	code, c = Cached(c, true, 86400) // 24h cache directive
+	return c.JSON(code, wrapper)
 }
 
 // implemented method from interface RouterRegistrable

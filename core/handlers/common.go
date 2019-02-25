@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
@@ -62,18 +63,21 @@ proxies and can only be cached by the end-client.
 The max-age value sets a timespan for how
 long to cache the resource (in seconds).
  */
-func Cached(c echo.Context, cacheValid bool) (int, echo.Context) {
+func Cached(c echo.Context, cacheValid bool, seconds uint) (int, echo.Context) {
 	// add cache headers
 	r := c.Response()
 	h := r.Header()
-	h.Set("Cache-Control", "public, max-age=86400") // 24h cache
-	//h.Set("Cache-Control", "private")
-	if cacheValid {
-		//cached item is still valid, so return a not modified
-		r.Status = http.StatusOK // http.StatusNotModified
-	} else {
-		// cached data set as invalid, return 200 ok in order to update
-		r.Status = http.StatusOK
+	if seconds > 0 {
+		timeStr := strconv.Itoa(int(seconds))
+		h.Set("Cache-Control", "public, max-age="+timeStr) // 24h cache = 86400
+		//h.Set("Cache-Control", "private")
+		if cacheValid {
+			//cached item is still valid, so return a not modified
+			r.Status = http.StatusOK // http.StatusNotModified
+		} else {
+			// cached data set as invalid, return 200 ok in order to update
+			r.Status = http.StatusOK
+		}
 	}
 	return r.Status, c
 }
