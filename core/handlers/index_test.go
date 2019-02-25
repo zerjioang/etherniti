@@ -21,11 +21,10 @@ func TestIndex(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	ctl := NewIndexController()
 
 	// Assertions
-	if assert.NoError(t, ctl.index(c)) {
+	if assert.NoError(t, Index(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, indexWelcome, rec.Body.String())
+		assert.Equal(t, indexWelcomeJson, rec.Body.String())
 	}
 }

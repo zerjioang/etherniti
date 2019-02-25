@@ -3,8 +3,6 @@ package config
 const (
 	//profile key http header key
 	HttpProfileHeaderkey = "X-Etherniti-Profile"
-	// etherniti software version
-	Version = "0.0.1"
 	// integrity related digital signature p256 private key
 	IntegrityPrivateKeyPem = `-----BEGIN PRIVATE KEY-----
 MGgCAQEEHC6J2ZYpSrUrIba8+msP0+ZmUnGV8DGYsRk/O7egBwYFK4EEACGhPAM6

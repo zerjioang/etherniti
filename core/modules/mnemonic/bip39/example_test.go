@@ -24,7 +24,8 @@ func ExampleNewMnemonic() {
 		224 bits -> 21 words
 		256 bits -> 24 words
 	*/
-	mnemomic, _ := bip39.NewMnemonic(entropy)
+	mnemomic, serr := bip39.NewMnemonic(entropy)
+	fmt.Println(serr)
 	fmt.Println(mnemomic)
 	// output:
 	// all hour make first leader extend hole alien behind guard gospel lava path output census museum junior mass reopen famous sing advance salt reform

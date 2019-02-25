@@ -6,8 +6,23 @@ import (
 )
 
 func TestDiskUsage(t *testing.T) {
-	disk := DiskUsage("/")
-	fmt.Printf("All: %.2f GB\n", float64(disk.All)/float64(GB))
-	fmt.Printf("Used: %.2f GB\n", float64(disk.Used)/float64(GB))
-	fmt.Printf("Free: %.2f GB\n", float64(disk.Free)/float64(GB))
+	t.Run("is-monitoring-once", func(t *testing.T) {
+		disk := DiskUsage()
+		t.Log(disk.IsMonitoring())
+	})
+	t.Run("is-monitoring-twice", func(t *testing.T) {
+		disk := DiskUsage()
+		t.Log(disk.IsMonitoring())
+		t.Log(disk.IsMonitoring())
+	})
+	t.Run("read-once", func(t *testing.T) {
+		disk := DiskUsage()
+		err := disk.Eval("/")
+		if err != nil {
+			t.Error(err)
+		}
+		fmt.Printf("all: %.2f GB\n", float64(disk.All())/float64(GB))
+		fmt.Printf("used: %.2f GB\n", float64(disk.Used())/float64(GB))
+		fmt.Printf("free: %.2f GB\n", float64(disk.Free())/float64(GB))
+	})
 }

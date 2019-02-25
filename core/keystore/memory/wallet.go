@@ -6,7 +6,7 @@ package memory
 import (
 	"crypto/ecdsa"
 
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/ethereum/go-ethereum/common"
 )
@@ -18,10 +18,10 @@ type WalletContent struct {
 	// account's private key enconded as ecdsa go struct
 	privateKey ecdsa.PrivateKey
 	// client interaction eth/quorum node for processing interactions
-	connectionClient *ethclient.Client
+	connectionClient ethrpc.EthRPC
 }
 
 // returns the client linked to the saved wallet
-func (wallet WalletContent) Client() *ethclient.Client {
+func (wallet WalletContent) Client() ethrpc.EthRPC {
 	return wallet.connectionClient
 }

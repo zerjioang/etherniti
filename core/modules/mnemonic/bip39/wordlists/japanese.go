@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/japanese.txt
-	// $ crc32 japanese.txt
-	// 0acc1419
-	checksum := crc32.ChecksumIEEE([]byte(japanese))
-	if fmt.Sprintf("%x", checksum) != "acc1419" {
-		panic(fmt.Sprintf("japanese checksum invalid: %x", checksum))
-	}
-}
 
 // Japanese is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/japanese.txt

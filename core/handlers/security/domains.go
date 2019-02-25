@@ -10172,6 +10172,6 @@ var (
 )
 
 // convert list to bytes
-func init(){
+func init() {
 	DomainBlacklistRawBytes, _ = json.Marshal(DomainBlacklist)
 }

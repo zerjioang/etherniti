@@ -89,6 +89,7 @@ var (
 		"linkwalker",
 		"mag-net",
 		"magnet",
+		"masscan",
 		"mass downloader",
 		"memo",
 		"microsoft.url",

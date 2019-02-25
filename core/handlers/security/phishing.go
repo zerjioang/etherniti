@@ -8590,13 +8590,13 @@ var (
 		"airdrop-bitnational.com",
 	}
 
-	FuzzyListRawBytes = []byte{}
+	FuzzyListRawBytes         = []byte{}
 	PhishingWhitelistRawBytes = []byte{}
 	PhishingBlacklistRawBytes = []byte{}
 )
 
 // convert list to bytes
-func init(){
+func init() {
 	FuzzyListRawBytes, _ = json.Marshal(FuzzyList)
 	PhishingWhitelistRawBytes, _ = json.Marshal(PhishingWhitelist)
 	PhishingBlacklistRawBytes, _ = json.Marshal(PhishingBlacklist)

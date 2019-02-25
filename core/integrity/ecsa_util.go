@@ -22,10 +22,10 @@ var (
 	integrityPrivKey *ecdsa.PrivateKey
 	//private integrity key bytes
 	privateBytes = []byte(config.IntegrityPrivateKeyPem)
-	publicBytes = []byte(config.IntegrityPublicKeyPem)
+	publicBytes  = []byte(config.IntegrityPublicKeyPem)
 )
 
-func init(){
+func init() {
 	integrityPrivKey, _ = decode(privateBytes, publicBytes)
 }
 

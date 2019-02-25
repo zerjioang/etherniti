@@ -14,6 +14,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/eth/profile"
+	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/release"
+	"github.com/zerjioang/etherniti/core/server"
+
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
 
@@ -26,7 +32,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"github.com/zerjioang/etherniti/core/handlers"
 )
 
 var (
@@ -43,6 +48,14 @@ var (
 			config.HttpProfileHeaderkey,
 		},
 	}
+	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
+		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
+	errorLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
+		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
 	}
@@ -67,7 +80,7 @@ func init() {
 			keyBytes,
 		)
 	} else {
-		log.Error("failed to load SSL crypto data")
+		logger.ErrorLog.Error("failed to load SSL crypto data")
 	}
 }
 
@@ -81,7 +94,6 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 
 func (deployer Deployer) Run() {
 	log.Info("loading Ethereum Multitenant Webapi (etherniti)")
-
 	if config.EnableHttpsRedirect {
 		//build http server
 		httpServerInstance := deployer.newServerInstance()
@@ -93,12 +105,12 @@ func (deployer Deployer) Run() {
 		go func() {
 			s, err := deployer.buildInsecureServerConfig(httpServerInstance)
 			if err != nil {
-				log.Error("failed to build http server configuration", err)
+				logger.ErrorLog.Error("failed to build http server configuration", err)
 			} else {
 				log.Info("starting http server...")
 				err := httpServerInstance.StartServer(s)
 				if err != nil {
-					log.Error("shutting down http the server", err)
+					logger.ErrorLog.Error("shutting down http the server", err)
 				}
 			}
 		}()
@@ -107,12 +119,12 @@ func (deployer Deployer) Run() {
 		go func() {
 			s, err := deployer.buildSecureServerConfig(httpServerInstance)
 			if err != nil {
-				log.Error("failed to build https server configuration", err)
+				logger.ErrorLog.Error("failed to build https server configuration", err)
 			} else {
 				log.Info("starting https server...")
 				err := httpServerInstance.StartServer(s)
 				if err != nil {
-					log.Error("shutting down https the server", err)
+					logger.ErrorLog.Error("shutting down https the server", err)
 				}
 			}
 		}()
@@ -123,7 +135,7 @@ func (deployer Deployer) Run() {
 		e := deployer.newServerInstance()
 		s, err := deployer.buildInsecureServerConfig(e)
 		if err != nil {
-			log.Error("failed to build server configuration", err)
+			logger.ErrorLog.Error("failed to build server configuration", err)
 		} else {
 			deployer.configureRoutes(e)
 			// Start server
@@ -141,9 +153,10 @@ func (deployer Deployer) Run() {
 }
 
 func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 10 seconds.
+	// The make built-in returns a value of type T (not *T), and it's memory is
+	// initialized.
 	quit := make(chan os.Signal)
+
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -152,13 +165,13 @@ func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.E
 	if httpInstance != nil {
 		log.Info("shutting down http server...")
 		if err := httpInstance.Shutdown(ctx); err != nil {
-			log.Error(err)
+			logger.ErrorLog.Error(err)
 		}
 	}
 	if httpsInstance != nil {
 		log.Info("shutting down https secure server...")
 		if err := httpsInstance.Shutdown(ctx); err != nil {
-			log.Error(err)
+			logger.ErrorLog.Error(err)
 		}
 	}
 	log.Info("graceful shutdown executed")
@@ -168,7 +181,7 @@ func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.E
 func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
 	cert, err := deployer.GetLocalHostTLS()
 	if err != nil {
-		log.Fatal("failed to setup TLS configuration due to error", err)
+		log.Fatal("failed to setup TLS configuration due to trycatch", err)
 		return nil, err
 	}
 
@@ -243,7 +256,7 @@ func (deployer Deployer) fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// fakeServer antiBots function.
+// bots blacklist function.
 func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add antibots policy
@@ -308,28 +321,40 @@ func (deployer Deployer) keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// custom http error handler
-func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
-	code := http.StatusInternalServerError
-	if he, ok := err.(*echo.HTTPError); ok {
-		code = he.Code
+func (deployer Deployer) injectCustomContext(h echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cc := &server.EthernitiContext{Context: c}
+		return h(cc)
 	}
-	// log error always? less performance in production
-	c.Logger().Error(err)
-
-	apiErr := api.NewApiError(code, err.Error())
-	_ = c.JSON(code, apiErr)
 }
 
-// register in echo server, allowed routes
-func (deployer Deployer) register(server *echo.Echo) *echo.Echo {
-	log.Info("registering routes")
-	handlers.NewIndexController().RegisterRouters(server)
-	handlers.NewProfileController().RegisterRouters(server)
-	handlers.NewTransactionController().RegisterRouters(server)
-	handlers.NewEthController(deployer.manager).RegisterRouters(server)
-	handlers.NewTokenController(deployer.manager).RegisterRouters(server)
-	return server
+// jwt middleware function.
+func (deployer Deployer) jwt(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// add fake server header
+		h := c.Request().Header
+		token := h.Get(config.HttpProfileHeaderkey)
+		if token == "" {
+			return handlers.ErrorStr(c, "please provide a connection profile token for this kind of call")
+		}
+		_, parseErr := profile.ParseConnectionProfileToken(token)
+		if parseErr != nil {
+			return handlers.Error(c, parseErr)
+		}
+		return next(c)
+	}
+}
+
+// custom http error handler. returns error messages as json
+func (deployer Deployer) customHTTPErrorHandler(err error, c echo.Context) {
+	// use code snippet below to customize http return code
+	/*
+		code := http.StatusInternalServerError
+		if he, ok := err.(*echo.HTTPError); ok {
+			code = he.Code
+		}
+	*/
+	_ = handlers.Error(c, err)
 }
 
 // build new http server instance
@@ -337,16 +362,17 @@ func (deployer Deployer) newServerInstance() *echo.Echo {
 	// build a the server
 	e := echo.New()
 	// enable debug mode
-	e.Debug = false
+	e.Debug = config.DebugServer
+	e.HidePort = config.HideServerDataInConsole
 	//hide the banner
-	e.HideBanner = true
+	e.HideBanner = config.HideServerDataInConsole
 	return e
 }
 
 // configure deployer internal configuration
 func (deployer Deployer) configureRoutes(e *echo.Echo) {
-	// add a custom error handler
-	log.Info("[LAYER] custom error handler")
+	// add a custom trycatch handler
+	log.Info("[LAYER] custom trycatch handler")
 	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
 
 	// log all single request
@@ -354,7 +380,9 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] logger at warn level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
-		e.Use(middleware.Logger())
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: accessLogFormat,
+		}))
 	}
 
 	// antibots, crawler middleware
@@ -404,41 +432,80 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	log.Info("[LAYER] gzip compression")
 	e.Use(middleware.GzipWithConfig(gzipConfig))
 
+	// add custom context handler
+	log.Info("[LAYER] injecting custom context")
+	e.Use(deployer.injectCustomContext)
+
 	// avoid panics
 	log.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
 
+	// register version 1 api calls
+	apiGroup := e.Group("/v1", deployer.apiV1)
+	deployer.register(apiGroup)
+
 	log.Info("[LAYER] / static files")
 	//load root static folder
-	e.Static("/", resources+"/root")
+	//e.Static("/", resources+"/root")
 	e.Static("/phpinfo.php", resources+"/root/phpinfo.php")
 
 	// load swagger ui files
 	log.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
-	//configure swagger json
-	configureSwaggerJson()
 
-	deployer.register(e)
+	// register root calls
+	e.GET("/", handlers.Index)
+	e.GET("/v1", handlers.Index)
+	e.GET("/v1/public", handlers.Index)
+
+	//configure swagger json from template data
+	configureSwaggerJson()
 }
+
+// create a group for all /api/v1 functions
+func (deployer Deployer) apiV1(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return next(c)
+	}
+}
+
+// register in echo server, allowed routes
+func (deployer Deployer) register(group *echo.Group) *echo.Group {
+	log.Info("registering context free routes")
+
+	publicGroup := group.Group("/public", deployer.apiV1)
+
+	handlers.NewIndexController().RegisterRouters(publicGroup)
+	handlers.NewProfileController().RegisterRouters(publicGroup)
+	handlers.NewWalletController().RegisterRouters(publicGroup)
+	handlers.NewEthController().RegisterRouters(publicGroup)
+
+	privateGroup := group.Group("/private", deployer.apiV1)
+	privateGroup.Use(deployer.jwt)
+	//add jwt middleware to private group
+	handlers.NewWeb3Controller(deployer.manager).RegisterRouters(privateGroup)
+	handlers.NewTokenController(deployer.manager).RegisterRouters(privateGroup)
+	return group
+}
+
 func configureSwaggerJson() {
 	//read template file
 	log.Debug("reading swagger json file")
 	raw, err := ioutil.ReadFile(resources + "/swagger/swagger-template.json")
 	if err != nil {
-		log.Error("failed reading swagger template file", err)
+		logger.ErrorLog.Error("failed reading swagger template file", err)
 		return
 	}
 	//replace hardcoded variables
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
-	str = strings.Replace(str, "$version", config.Version, -1)
+	str = strings.Replace(str, "$version", release.Version, -1)
 	str = strings.Replace(str, "$host", config.SwaggerApiDomain, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	//write swagger.json file
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
 	if writeErr != nil {
-		log.Error("failed writing swagger.json file", writeErr)
+		logger.ErrorLog.Error("failed writing swagger.json file", writeErr)
 		return
 	}
 }

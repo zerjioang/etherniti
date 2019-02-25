@@ -3,21 +3,22 @@ package profile
 /*
 initial package performance
 
-BenchmarkConnectionProfile/instantiate-4         	2000000000	         0.34 ns/op	2937.51 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/create-profile-4          1000000	      1808 ns/op	   0.55 MB/s	     128 B/op	       4 allocs/op
-BenchmarkConnectionProfile/valid-false-4         	300000000	         5.44 ns/op	 183.84 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/valid-true-4          	300000000	         5.99 ns/op	 166.94 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/get-secret-4          	2000000000	         0.34 ns/op	2903.84 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/create-token-4        	  200000	      8784 ns/op	   0.11 MB/s	    4033 B/op	      36 allocs/op
-BenchmarkConnectionProfile/parse-token-4         	  100000	     21726 ns/op	   0.05 MB/s	    6398 B/op	     111 allocs/op
+BenchmarkConnectionProfile/create-profile-empty-4         	2000000000	         0.43 ns/op	2308.66 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/create-profile-4         	      1000000	      1117 ns/op	   0.89 MB/s	      64 B/op	       2 allocs/op
+BenchmarkConnectionProfile/valid-false-4                  	200000000	         7.09 ns/op	 140.95 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/valid-true-4                   	200000000	         8.19 ns/op	 122.09 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/get-secret-4                   	2000000000	         0.45 ns/op	2242.62 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/create-token-4                 	  200000	      9184 ns/op	   0.11 MB/s	    3649 B/op	      36 allocs/op
+BenchmarkConnectionProfile/parse-token-4                  	   50000	     25569 ns/op	   0.04 MB/s	    5929 B/op	     103 allocs/op
 
-// after optimizing package to use fastime instead of time:
+after replacing time with fasttime
 
-BenchmarkConnectionProfile/instantiate-empty-profile-4         	2000000000	         0.33 ns/op	3072.33 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/create-profile-4                    	 2000000	       901 ns/op	   1.11 MB/s	      64 B/op	       2 allocs/op
-BenchmarkConnectionProfile/valid-false-4                       	300000000	         6.38 ns/op	 156.66 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/valid-true-4                        	200000000	         6.63 ns/op	 150.89 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/get-secret-4                        	2000000000	         0.33 ns/op	3068.21 MB/s	       0 B/op	       0 allocs/op
-BenchmarkConnectionProfile/create-token-4                      	  200000	      7956 ns/op	   0.13 MB/s	    3553 B/op	      34 allocs/op
-BenchmarkConnectionProfile/parse-token-4                       	  100000	     20064 ns/op	   0.05 MB/s	    6350 B/op	     107 allocs/op
+BenchmarkConnectionProfile/create-profile-empty-4         	2000000000	         0.40 ns/op	2481.14 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/create-profile-4               	 1000000	      1223 ns/op	   0.82 MB/s	      64 B/op	       2 allocs/op
+BenchmarkConnectionProfile/valid-false-4                  	300000000	         5.87 ns/op	 170.29 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/valid-true-4                   	300000000	         5.86 ns/op	 170.78 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/get-secret-4                   	2000000000	         0.41 ns/op	2463.78 MB/s	       0 B/op	       0 allocs/op
+BenchmarkConnectionProfile/create-token-4                 	  200000	     10693 ns/op	   0.09 MB/s	    3713 B/op	      36 allocs/op
+BenchmarkConnectionProfile/parse-token-4                  	   50000	     23192 ns/op	   0.04 MB/s	    5929 B/op	     103 allocs/op
+
 */

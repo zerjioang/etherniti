@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/chinese_simplified.txt
-	// $ crc32 chinese_simplified.txt
-	// e3721bbf
-	checksum := crc32.ChecksumIEEE([]byte(chineseSimplified))
-	if fmt.Sprintf("%x", checksum) != "e3721bbf" {
-		panic("chineseSimplified checksum invalid")
-	}
-}
 
 // ChineseSimplified is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/chinese_simplified.txt

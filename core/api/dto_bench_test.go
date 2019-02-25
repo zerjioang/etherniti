@@ -10,7 +10,7 @@ func BenchmarkNewApiError(b *testing.B) {
 		b.SetBytes(1)
 		// run the Fib function b.N times
 		for n := 0; n < b.N; n++ {
-			_ = NewApiError(200, "test-error")
+			_ = NewApiError(200, "test-trycatch")
 		}
 	})
 }

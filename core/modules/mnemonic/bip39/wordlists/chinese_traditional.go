@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/chinese_traditional.txt
-	// $ crc32 chinese_traditional.txt
-	// 3c20b443
-	checksum := crc32.ChecksumIEEE([]byte(chineseTraditional))
-	if fmt.Sprintf("%x", checksum) != "3c20b443" {
-		panic("chineseTraditional checksum invalid")
-	}
-}
 
 // ChineseTraditional is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/chinese_traditional.txt

@@ -6,7 +6,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
 )
 
@@ -35,46 +34,50 @@ var (
 	//rateCache *cache.Cache
 )
 
-func init() {
-	// Create a cache with a default expiration time of 60 minutes, and which
-	// purges expired items every 5 minutes
-	//rateCache = cache.New(60*time.Minute, 5*time.Minute)
+type RateLimitEngine struct {
 }
 
-// REST API style rate limit middleware function.
-func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+// constructor like function
+func NewRateLimitEngine() RateLimitEngine {
+	rle := RateLimitEngine{}
+	return rle
+}
 
-		//get current request identifier
-		// read request token. if not available fallback to user ip
+// ratelimit evaluation function
+func (rte RateLimitEngine) Eval(h *http.Header) bool {
+	//get current request identifier
+	// read request token. if not available fallback to user ip
 
-		//get current time
-		timeNow := time.Now()
-		//currentTime := timeNow.Unix()
-		afterHourTime := timeNow.Add(60 * time.Minute)
+	//validate input data
+	if h == nil {
+		return false
+	}
 
-		// read current limit
-		currentRequestsLimit := atomic.LoadInt32(&rateRemaining)
+	//get current time
+	timeNow := time.Now()
+	//currentTime := timeNow.Unix()
+	afterHourTime := timeNow.Add(60 * time.Minute)
 
-		//inject rate limit headers
-		h := c.Response().Header()
-		// add rate limit max value: 4000
-		h.Set(XRateLimit, rateLimitStr)
+	// read current limit
+	currentRequestsLimit := atomic.LoadInt32(&rateRemaining)
 
-		if currentRequestsLimit > 0 {
-			//decrease counter limit
-			atomic.AddInt32(&rateRemaining, -1)
+	//inject rate limit headers
+	// add rate limit max value: 4000
+	h.Set(XRateLimit, rateLimitStr)
 
-			// add current user remaining limit
-			h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit), 10))
+	if currentRequestsLimit > 0 {
+		//decrease counter limit
+		atomic.AddInt32(&rateRemaining, -1)
 
-			//allow request
-			return next(c)
-		} else {
-			//return rate limit excedeed message
-			rateResetStr := strconv.FormatInt(afterHourTime.Unix(), 10)
-			h.Set(XRateReset, rateResetStr)
-			return c.JSON(http.StatusTooManyRequests, rateExcedeed)
-		}
+		// add current user remaining limit
+		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit), 10))
+
+		//allow request
+		return true
+	} else {
+		//return rate limit excedeed message
+		rateResetStr := strconv.FormatInt(afterHourTime.Unix(), 10)
+		h.Set(XRateReset, rateResetStr)
+		return false
 	}
 }

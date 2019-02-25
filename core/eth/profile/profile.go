@@ -6,13 +6,16 @@ package profile
 import (
 	"errors"
 	"fmt"
+
 	"github.com/etherniti/jwt-go"
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
 	emptyProfile     ConnectionProfile
-	defaultSigningMethod = jwt.SigningMethodHS256
 	tokenSecretBytes = []byte(config.TokenSecret)
 	errTokenNoValid  = errors.New("invalid fields token provided")
 )
@@ -21,8 +24,11 @@ var (
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 
+	//network id of target connection
+	NetworkId uint8 `json:"networkId"`
+
 	// address of the connection node: ip, domain, infura, etc
-	NodeAddress string `json:"node_address"`
+	Peer string `json:"peer"`
 
 	//connection mode: ipc,http,rpc
 	Mode string `json:"mode"`
@@ -31,7 +37,16 @@ type ConnectionProfile struct {
 	Port int `json:"port"`
 
 	// default ethereum account for transactioning
-	Account string `json:"account"`
+	Address string `json:"address"`
+
+	// user or device private key
+	Key string `json:"key"`
+
+	// service version when profile was generated
+	Version int `json:"version"`
+
+	// validity of the profile: whether all required data is present or not
+	Valididity bool `json:"validity"`
 
 	//standard claims
 	//Identifies the recipients that the JWT is intended for.
@@ -48,7 +63,6 @@ type ConnectionProfile struct {
 	ExpiresAt int64 `json:"exp,omitempty"`
 	// Case sensitive unique identifier of the token
 	// even among different issuers.
-	// it works also as unique identifier of the connection profile
 	Id string `json:"jti,omitempty"`
 	// Identifies the time at which the JWT was issued.
 	// The value must be a NumericDate.
@@ -62,11 +76,9 @@ type ConnectionProfile struct {
 	Subject string `json:"sub,omitempty"`
 }
 
+// implementation from Claims
 func (profile ConnectionProfile) Valid() error {
-	valid := profile.Id != "" &&
-		profile.NodeAddress != "" &&
-		profile.Account != ""
-	if !valid {
+	if !profile.Valididity {
 		return errTokenNoValid
 	}
 	return nil
@@ -77,15 +89,12 @@ func (profile ConnectionProfile) Secret() []byte {
 }
 
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
-
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-	token := jwt.NewTokenPoolWithClaims(defaultSigningMethod, profile)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, profile)
 
 	// Sign and get the complete encoded token as a string using the secret
-	signedStr, err := token.SignedString(tokenSecretBytes)
-	// return result
-	return signedStr, err
+	return token.SignedString(tokenSecretBytes)
 }
 
 func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
@@ -108,7 +117,14 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	}
 
 	profile, ok := token.Claims.(ConnectionProfile)
-	if ok && token.Valid {
+
+	//check profile validity
+	profile.Valididity = profile.Id != "" &&
+		profile.Peer != "" &&
+		profile.Address != "" &&
+		profile.Key != ""
+
+	if ok && profile.Valididity {
 		return profile, nil
 	} else {
 		return profile, err
@@ -119,4 +135,47 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 func NewConnectionProfile() ConnectionProfile {
 	p := ConnectionProfile{}
 	return p
+}
+
+//constructor like function
+func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile {
+	now := fastime.Now()
+	p := ConnectionProfile{
+		Id:        util.GenerateUUID(),
+		NetworkId: data.NetworkId,
+		Peer:      data.Peer,
+		Address:   data.Address,
+		Key:       data.Key,
+		Mode:      data.Mode,
+		Port:      data.Port,
+		Issuer:    "etherniti",
+		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
+		NotBefore: now.Unix(),
+		IssuedAt:  now.Unix(),
+		Version:   1,
+	}
+	//check profile validity
+	p.Valididity = p.Id != "" &&
+		p.Peer != "" &&
+		p.Address != "" &&
+		p.Key != ""
+	return p
+}
+
+func NewDefaultConnectionProfile() ConnectionProfile {
+	now := fastime.Now()
+	return ConnectionProfile{
+		Peer:    "http://127.0.0.1:8454",
+		Mode:    "http",
+		Port:    8454,
+		Address: "0x0",
+		Key:     "0x0",
+		//standard claims
+		Id:         util.GenerateUUID(),
+		Issuer:     "etherniti",
+		ExpiresAt:  now.Add(10 * fastime.Minute).Unix(),
+		NotBefore:  now.Unix(),
+		IssuedAt:   now.Unix(),
+		Valididity: false,
+	}
 }

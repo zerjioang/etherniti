@@ -60,18 +60,4 @@ func TestProfile(t *testing.T) {
 			}
 		})
 	})
-	t.Run("delete_profile", func(t *testing.T) {
-		t.Run("empty-request", func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodPost, "/", nil)
-			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-			rec := httptest.NewRecorder()
-			c := e.NewContext(req, rec)
-			ctl := NewProfileController()
-
-			// Assertions
-			if assert.NoError(t, ctl.delete(c)) {
-				assert.Equal(t, http.StatusOK, rec.Code)
-			}
-		})
-	})
 }

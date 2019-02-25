@@ -4,10 +4,11 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/handlers/security"
-	"net/http"
 )
 
 type SecurityController struct {

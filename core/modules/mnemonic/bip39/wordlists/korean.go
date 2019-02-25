@@ -4,21 +4,8 @@
 package wordlists
 
 import (
-	"fmt"
-	"hash/crc32"
 	"strings"
 )
-
-func init() {
-	// Ensure word list is correct
-	// $ wget https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/korean.txt
-	// $ crc32 korean.txt
-	// 4ef461eb
-	checksum := crc32.ChecksumIEEE([]byte(korean))
-	if fmt.Sprintf("%x", checksum) != "4ef461eb" {
-		panic("korean checksum invalid")
-	}
-}
 
 // Korean is a slice of mnemonic words taken from the bip39 specification
 // https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/korean.txt
