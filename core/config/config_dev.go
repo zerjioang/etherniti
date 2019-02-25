@@ -63,6 +63,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnableHttpsRedirect     = false
 	UseUniqueRequestId      = false
 	EnableCors              = true
+	EnableCache             = true
 	EnableRateLimit         = false
 	BlockTorConnections     = true
 	EnableLogging           = true

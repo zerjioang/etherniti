@@ -25,6 +25,7 @@ const (
 	EnableHttpsRedirect = false
 	UseUniqueRequestId  = false
 	EnableCors          = true
+	EnableCache         = true
 	EnableRateLimit     = true
 	BlockTorConnections = true
 	EnableLogging       = true

@@ -84,12 +84,13 @@ func NewIndexController() IndexController {
 	return dc
 }
 
-//concurrency safe
 func Index(c echo.Context) error {
+	var code int
+	code, c = Cached(c, true)
 	if c.Request().Header.Get("Accept") == "application/json" {
-		return c.JSONBlob(http.StatusOK, indexWelcomeBytes)
+		return c.JSONBlob(code, indexWelcomeBytes)
 	}
-	return c.HTML(http.StatusOK, indexWelcomeHtml)
+	return c.HTML(code, indexWelcomeHtml)
 }
 
 //concurrency safe

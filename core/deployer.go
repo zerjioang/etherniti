@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -20,7 +21,6 @@ import (
 	"github.com/zerjioang/etherniti/core/release"
 	"github.com/zerjioang/etherniti/core/server"
 
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
 
 	"github.com/zerjioang/etherniti/core/eth"
@@ -242,7 +242,7 @@ func (deployer Deployer) hardening(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// fakeServer middleware function.
+// fake server headers middleware function.
 func (deployer Deployer) fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add fake server header
@@ -382,18 +382,18 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 		}))
 	}
 
+	// remove trailing slash for better usage
+	logger.Info("[LAYER] trailing slash remover")
+	e.Pre(middleware.RemoveTrailingSlash())
+
 	// antibots, crawler middleware
 	// avoid bots and crawlers
 	logger.Info("[LAYER] antibots")
 	e.Pre(deployer.antiBots)
 
-	// avoid bots and crawlers
+	// avoid bots and crawlers checking origin host value
 	logger.Info("[LAYER] hostname check")
 	e.Pre(deployer.hostnameCheck)
-
-	// remove trailing slash for better usage
-	logger.Info("[LAYER] trailing slash remover")
-	e.Pre(middleware.RemoveTrailingSlash())
 
 	// add CORS support
 	if config.EnableCors {
@@ -409,16 +409,16 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// add fake server header
 	e.Use(deployer.fakeServer)
 
-	if config.EnableRateLimit {
-		// add rate limit control
-		logger.Info("[LAYER] rest api rate limit middleware added")
-		e.Use(ratelimit.RateLimit)
-	}
-
 	if config.BlockTorConnections {
 		// add rate limit control
 		logger.Info("[LAYER] tor connections blocker middleware added")
 		e.Use(tor.BlockTorConnections)
+	}
+
+	if config.EnableRateLimit {
+		// add rate limit control
+		logger.Info("[LAYER] rest api rate limit middleware added")
+		e.Use(ratelimit.RateLimit)
 	}
 
 	// Request ID middleware generates a unique id for a request.
@@ -445,7 +445,7 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 
 	logger.Info("[LAYER] / static files")
 	//load root static folder
-	//e.Static("/", resources+"/root")
+	e.Static("/", resources+"/root")
 	e.Static("/phpinfo.php", resources+"/root/phpinfo.php")
 
 	// load swagger ui files
