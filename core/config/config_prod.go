@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 const (
@@ -23,6 +24,7 @@ const (
 	TokenSecret         = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
 	EnableHttpsRedirect = false
 	UseUniqueRequestId  = false
+	EnableCors          = true
 	EnableRateLimit     = true
 	BlockTorConnections = true
 	EnableLogging       = true
@@ -51,7 +53,7 @@ var (
 )
 
 func init() {
-	log.Info("loading production ssl crypto material for https")
+	logger.Info("loading production ssl crypto material for https")
 	certPath := os.Getenv("X_ETHERNITI_SSL_CERT_FILE")
 	fsCertBytes = loadCertBytes(certPath)
 

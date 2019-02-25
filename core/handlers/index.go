@@ -17,7 +17,6 @@ import (
 	"github.com/zerjioang/etherniti/core/server/mods/disk"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 )
 
 type IndexController struct {
@@ -76,7 +75,7 @@ func init() {
 	var monErr error
 	monErr = diskMonitor.Eval("/")
 	if monErr != nil {
-		logger.ErrorLog.Error("failed to start disk status monitor on path /. Caused by: ", monErr)
+		logger.Error("failed to start disk status monitor on path /. Caused by: ", monErr)
 	}
 }
 
@@ -121,13 +120,13 @@ func (ctl IndexController) status(c echo.Context) error {
 		},
 		// runtime stats
 		"runtime": map[string]string{
-			"version":  runtime.Version(),
 			"compiler": runtime.Compiler,
 		},
 		// software version stats
 		"version": map[string]string{
-			"http":      echo.Version,
 			"etherniti": release.Version,
+			"go":        runtime.Version(),
+			"http":      echo.Version,
 		},
 		// basic disk stats
 		"disk": map[string]float64{
@@ -161,7 +160,7 @@ func (ctl IndexController) integrity(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Group) {
-	log.Info("exposing index controller methods")
+	logger.Info("exposing index controller methods")
 	router.GET("/", Index)
 	router.GET("/status", ctl.status)
 	router.GET("/integrity", ctl.integrity)

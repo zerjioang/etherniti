@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/handlers/security"
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 type SecurityController struct {
@@ -43,8 +43,8 @@ func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 }
 
 func (ctl SecurityController) RegisterRouters(router *echo.Echo) {
-	log.Info("exposing index controller methods")
-	router.GET("/v1/security/domains/blacklist", ctl.domainBlacklist)
-	router.GET("/v1/security/phishing/blacklist", ctl.phisingBlacklist)
-	router.GET("/v1/security/phishing/whitelist", ctl.phisingWhitelist)
+	logger.Info("exposing index controller methods")
+	router.GET("/security/domains/blacklist", ctl.domainBlacklist)
+	router.GET("/security/phishing/blacklist", ctl.phisingBlacklist)
+	router.GET("/security/phishing/whitelist", ctl.phisingWhitelist)
 }

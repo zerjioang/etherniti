@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/big"
 
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -97,7 +98,7 @@ func (ctl TokenController) summary(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl TokenController) RegisterRouters(router *echo.Group) {
-	log.Info("exposing eth controller methods")
+	logger.Info("exposing eth controller methods")
 	//http://localhost:8080/eth/create
 	router.POST("/token/instance", ctl.instantiate)
 }

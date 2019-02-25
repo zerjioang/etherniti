@@ -24,7 +24,7 @@
     "x-preferred": true,
     "x-providerName": "etherniti.org"
   },
-  "host": "localhost:8080",
+  "host": "dev-proxy.etherniti.org",
   "basePath": "/v1",
   "consumes": [
     "application/json;charset=utf-8"

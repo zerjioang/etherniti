@@ -7,7 +7,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -43,7 +42,7 @@ func (ctl EthController) generateAddress(c echo.Context) error {
 	private, err := eth.GenerateNewKey()
 
 	if err != nil {
-		logger.ErrorLog.Error("failed to generate ethereum account key", err)
+		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
 		return c.JSONBlob(http.StatusInternalServerError, accountKeyGenErrBytes)
 	}
@@ -79,7 +78,7 @@ func (ctl EthController) isValidAddress(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl EthController) RegisterRouters(router *echo.Group) {
-	log.Info("exposing eth controller methods")
+	logger.Info("exposing eth controller methods")
 	router.GET("/eth/create", ctl.generateAddress)
 	router.GET("/eth/verify/:address", ctl.isValidAddress)
 

@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
@@ -39,7 +38,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	req := api.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch
-		logger.ErrorLog.Error("failed to bind request data to model:", err)
+		logger.Error("failed to bind request data to model:", err)
 		return ErrorStr(c, bindErr)
 	}
 
@@ -89,7 +88,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	// create mnemonic based on user config and created entropy source
 	mnemomic, err := bip39.NewMnemonic(entropy)
 	if err.Occur() {
-		//return mnemonic trycatch
+		//return mnemonic error
 		return StackError(c, err)
 	} else {
 		//return mnemonic content
@@ -100,6 +99,6 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
-	log.Info("exposing wallet controller methods")
+	logger.Info("exposing wallet controller methods")
 	router.POST("/mnemonic/bip39", ctl.mnemonic)
 }

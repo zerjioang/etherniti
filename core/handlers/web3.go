@@ -27,7 +27,6 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 )
 
 var (
@@ -203,7 +202,7 @@ func (ctl Web3Controller) getAccountsWithBalance(c echo.Context) error {
 			currentAccount := list[i]
 			bigInt, err := client.EthGetBalance(currentAccount, "latest")
 			if err != nil {
-				logger.ErrorLog.Error("failed to get account balance", currentAccount, err)
+				logger.Error("failed to get account balance", currentAccount, err)
 			} else {
 				item := &wrapperList[i]
 				item.Account = currentAccount
@@ -315,7 +314,7 @@ func (ctl Web3Controller) DeployContract(to common.Address, amount *big.Int, gas
 	// connect the client
 	client, err := ethclient.Dial("https://rinkeby.infura.io")
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 		cancel()
 		return "", err
 	}
@@ -358,7 +357,7 @@ func (ctl Web3Controller) DeployContract(to common.Address, amount *big.Int, gas
 	signedTx, signatureErr := types.SignTx(tx, signer, privateKey)
 	if signatureErr != nil {
 		fmt.Println("signature create trycatch:")
-		logger.ErrorLog.Error(signatureErr)
+		logger.Error(signatureErr)
 		cancel()
 		return "", signatureErr
 	}
@@ -366,15 +365,15 @@ func (ctl Web3Controller) DeployContract(to common.Address, amount *big.Int, gas
 	txErr := client.SendTransaction(cancellableCtx, signedTx)
 	if txErr != nil {
 		fmt.Println("send tx trycatch:")
-		logger.ErrorLog.Error(txErr)
+		logger.Error(txErr)
 		cancel()
 		return "", txErr
 	} else {
 		select {
 		case <-time.After(1 - time.Millisecond):
-			log.Info("tx send overslept")
+			logger.Info("tx send overslept")
 		case <-cancellableCtx.Done():
-			log.Info(cancellableCtx.Err())
+			logger.Info(cancellableCtx.Err())
 		default:
 			fmt.Printf("send success tx.hash=%s\n", signedTx.Hash().String())
 			cancel()
@@ -394,7 +393,7 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 	// connect the client
 	client, err := ethclient.Dial("https://rinkeby.infura.io")
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 		cancel()
 		return "", err
 	}
@@ -430,7 +429,7 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 	signedTx, signatureErr := types.SignTx(tx, signer, privateKey)
 	if signatureErr != nil {
 		fmt.Println("signature create trycatch:")
-		logger.ErrorLog.Error(signatureErr)
+		logger.Error(signatureErr)
 		cancel()
 		return "", signatureErr
 	}
@@ -438,15 +437,15 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 	txErr := client.SendTransaction(cancellableCtx, signedTx)
 	if txErr != nil {
 		fmt.Println("send tx trycatch:")
-		logger.ErrorLog.Error(txErr)
+		logger.Error(txErr)
 		cancel()
 		return "", txErr
 	} else {
 		select {
 		case <-time.After(1 - time.Millisecond):
-			log.Info("tx send overslept")
+			logger.Info("tx send overslept")
 		case <-cancellableCtx.Done():
-			log.Info(cancellableCtx.Err())
+			logger.Info(cancellableCtx.Err())
 		default:
 			fmt.Printf("send success tx.hash=%s\n", signedTx.Hash().String())
 			cancel()
@@ -461,29 +460,29 @@ func (ctl Web3Controller) SendTransaction(to common.Address, amount *big.Int, ga
 func (ctl Web3Controller) CallContract() {
 	client, err := ethclient.Dial("https://rinkeby.infura.io")
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 	}
 
 	privateKey, err := crypto.HexToECDSA("fad9c8855b740a0b7ed4c221dbad0f33a83a49cad6b3fe8d5817ac83d38b6a19")
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 	}
 
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		logger.ErrorLog.Error("trycatch casting public key to ECDSA")
+		logger.Error("trycatch casting public key to ECDSA")
 	}
 
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := client.PendingNonceAt(ctx, fromAddress)
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 	}
 
 	gasPrice, err := client.SuggestGasPrice(ctx)
 	if err != nil {
-		logger.ErrorLog.Error(err)
+		logger.Error(err)
 	}
 
 	auth := bind.NewKeyedTransactor(privateKey)

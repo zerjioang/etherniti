@@ -14,7 +14,6 @@ import (
 	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 )
 
 const (
@@ -49,7 +48,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	req := api.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch
-		logger.ErrorLog.Error("failed to bind request data to model: ", err)
+		logger.Error("failed to bind request data to model: ", err)
 		return ErrorStr(c, bindErr)
 	}
 	// create the connection profile
@@ -91,7 +90,7 @@ func (ctl ProfileController) clear(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl ProfileController) RegisterRouters(router *echo.Group) {
-	log.Info("exposing profile controller methods")
+	logger.Info("exposing profile controller methods")
 	router.POST("/profile", ctl.create)
 	router.GET("/profile/count", ctl.count)
 	router.GET("/profile/validate", ctl.validate)

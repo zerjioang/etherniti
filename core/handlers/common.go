@@ -20,19 +20,19 @@ func Success(c echo.Context, msg string, result string) error {
 }
 
 func ErrorStr(c echo.Context, str string) error {
-	logger.ErrorLog.Error(str)
+	logger.Error(str)
 	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, str))
 	return c.JSONBlob(http.StatusBadRequest, rawBytes)
 }
 
 func Error(c echo.Context, err error) error {
-	logger.ErrorLog.Error(err)
+	logger.Error(err)
 	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, err.Error()))
 	return c.JSONBlob(http.StatusBadRequest, rawBytes)
 }
 
 func StackError(c echo.Context, stackErr trycatch.Error) error {
-	logger.ErrorLog.Error(stackErr)
+	logger.Error(stackErr)
 	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, stackErr.Error()))
 	return c.JSONBlob(http.StatusBadRequest, rawBytes)
 }

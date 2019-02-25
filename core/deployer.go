@@ -52,10 +52,6 @@ var (
 		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
 		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
 		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
-	errorLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
-		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
-		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
 	}
@@ -65,7 +61,7 @@ var (
 
 func recoverName() {
 	if r := recover(); r != nil {
-		log.Info("recovered from ", r)
+		logger.Info("recovered from ", r)
 	}
 }
 
@@ -80,7 +76,7 @@ func init() {
 			keyBytes,
 		)
 	} else {
-		logger.ErrorLog.Error("failed to load SSL crypto data")
+		logger.Error("failed to load SSL crypto data")
 	}
 }
 
@@ -93,57 +89,58 @@ func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
 }
 
 func (deployer Deployer) Run() {
-	log.Info("loading Ethereum Multitenant Webapi (etherniti)")
+	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	if config.EnableHttpsRedirect {
 		//build http server
 		httpServerInstance := deployer.newServerInstance()
 		// add redirects from http to https
-		log.Info("[LAYER] http to https redirect")
+		logger.Info("[LAYER] http to https redirect")
 		httpServerInstance.Pre(deployer.httpsRedirect)
 
 		// Start http server
 		go func() {
 			s, err := deployer.buildInsecureServerConfig(httpServerInstance)
 			if err != nil {
-				logger.ErrorLog.Error("failed to build http server configuration", err)
+				logger.Error("failed to build http server configuration", err)
 			} else {
-				log.Info("starting http server...")
+				logger.Info("starting http server...")
 				err := httpServerInstance.StartServer(s)
 				if err != nil {
-					logger.ErrorLog.Error("shutting down http the server", err)
+					logger.Error("shutting down http the server", err)
 				}
 			}
 		}()
 		// Start https server
-		httpsServerInstance := deployer.newServerInstance()
+		secureServer := deployer.newServerInstance()
 		go func() {
-			s, err := deployer.buildSecureServerConfig(httpServerInstance)
+			s, err := deployer.buildSecureServerConfig(secureServer)
 			if err != nil {
-				logger.ErrorLog.Error("failed to build https server configuration", err)
+				logger.Error("failed to build https server configuration", err)
 			} else {
-				log.Info("starting https server...")
-				err := httpServerInstance.StartServer(s)
+				logger.Info("starting https server...")
+				deployer.configureRoutes(secureServer)
+				err := secureServer.StartServer(s)
 				if err != nil {
-					logger.ErrorLog.Error("shutting down https the server", err)
+					logger.Error("shutting down https the server", err)
 				}
 			}
 		}()
 		//graceful shutdown of http and https server
-		deployer.shutdown(httpServerInstance, httpsServerInstance)
+		deployer.shutdown(httpServerInstance, secureServer)
 	} else {
 		//deploy http server only
 		e := deployer.newServerInstance()
 		s, err := deployer.buildInsecureServerConfig(e)
 		if err != nil {
-			logger.ErrorLog.Error("failed to build server configuration", err)
+			logger.Error("failed to build server configuration", err)
 		} else {
 			deployer.configureRoutes(e)
 			// Start server
 			go func() {
-				log.Info("starting http server...")
+				logger.Info("starting http server...")
 				err := e.StartServer(s)
 				if err != nil {
-					e.Logger.Info("shutting down http server", err)
+					logger.Info("shutting down http server", err)
 				}
 			}()
 			//graceful shutdown of http server
@@ -161,21 +158,21 @@ func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.E
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	log.Info("graceful shutdown of the service requested")
+	logger.Info("graceful shutdown of the service requested")
 	if httpInstance != nil {
-		log.Info("shutting down http server...")
+		logger.Info("shutting down http server...")
 		if err := httpInstance.Shutdown(ctx); err != nil {
-			logger.ErrorLog.Error(err)
+			logger.Error(err)
 		}
 	}
 	if httpsInstance != nil {
-		log.Info("shutting down https secure server...")
+		logger.Info("shutting down https secure server...")
 		if err := httpsInstance.Shutdown(ctx); err != nil {
-			logger.ErrorLog.Error(err)
+			logger.Error(err)
 		}
 	}
-	log.Info("graceful shutdown executed")
-	log.Info("exiting...")
+	logger.Info("graceful shutdown executed")
+	logger.Info("exiting...")
 }
 
 func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
@@ -229,7 +226,7 @@ func (deployer Deployer) hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		// add security headers
 		h := c.Response().Header()
 		h.Set("server", "Apache")
-		h.Set("access-control-allow-credentials", "true")
+		// h.Set("access-control-allow-credentials", "true")
 		h.Set("x-xss-protection", "1; mode=block")
 		h.Set("strict-transport-security", "max-age=31536000; includeSubDomains; preload")
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
@@ -264,7 +261,7 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 		ua = strings.ToLower(ua)
 		if ua == "" || deployer.isBotRequest(ua) {
 			//drop the request
-			log.Warn("drop request: User-Agent =", ua)
+			logger.Warn("drop request: User-Agent =", ua)
 			return userAgentErr
 		}
 		return next(c)
@@ -372,12 +369,12 @@ func (deployer Deployer) newServerInstance() *echo.Echo {
 // configure deployer internal configuration
 func (deployer Deployer) configureRoutes(e *echo.Echo) {
 	// add a custom trycatch handler
-	log.Info("[LAYER] custom trycatch handler")
+	logger.Info("[LAYER] custom trycatch handler")
 	e.HTTPErrorHandler = deployer.customHTTPErrorHandler
 
 	// log all single request
 	// configure logging level
-	log.Info("[LAYER] logger at warn level")
+	logger.Info("[LAYER] logger at warn level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -387,70 +384,72 @@ func (deployer Deployer) configureRoutes(e *echo.Echo) {
 
 	// antibots, crawler middleware
 	// avoid bots and crawlers
-	log.Info("[LAYER] antibots")
+	logger.Info("[LAYER] antibots")
 	e.Pre(deployer.antiBots)
 
 	// avoid bots and crawlers
-	log.Info("[LAYER] hostname check")
+	logger.Info("[LAYER] hostname check")
 	e.Pre(deployer.hostnameCheck)
 
 	// remove trailing slash for better usage
-	log.Info("[LAYER] trailing slash remover")
+	logger.Info("[LAYER] trailing slash remover")
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	// add CORS support
-	log.Info("[LAYER] cors support")
-	e.Use(middleware.CORSWithConfig(corsConfig))
+	if config.EnableCors {
+		logger.Info("[LAYER] cors support")
+		e.Use(middleware.CORSWithConfig(corsConfig))
+	}
 
-	log.Info("[LAYER] server http headers hardening")
+	logger.Info("[LAYER] server http headers hardening")
 	// add server api request hardening using http headers
 	e.Use(deployer.hardening)
 
-	log.Info("[LAYER] fake server http header")
+	logger.Info("[LAYER] fake server http header")
 	// add fake server header
 	e.Use(deployer.fakeServer)
 
 	if config.EnableRateLimit {
 		// add rate limit control
-		log.Info("[LAYER] rest api rate limit middleware added")
+		logger.Info("[LAYER] rest api rate limit middleware added")
 		e.Use(ratelimit.RateLimit)
 	}
 
 	if config.BlockTorConnections {
 		// add rate limit control
-		log.Info("[LAYER] tor connections blocker middleware added")
+		logger.Info("[LAYER] tor connections blocker middleware added")
 		e.Use(tor.BlockTorConnections)
 	}
 
-	log.Info("[LAYER] unique request id")
 	// Request ID middleware generates a unique id for a request.
 	if config.UseUniqueRequestId {
+		logger.Info("[LAYER] unique request id")
 		e.Use(middleware.RequestID())
 	}
 
 	// add gzip support if client requests it
-	log.Info("[LAYER] gzip compression")
+	logger.Info("[LAYER] gzip compression")
 	e.Use(middleware.GzipWithConfig(gzipConfig))
 
 	// add custom context handler
-	log.Info("[LAYER] injecting custom context")
+	logger.Info("[LAYER] injecting custom context")
 	e.Use(deployer.injectCustomContext)
 
 	// avoid panics
-	log.Info("[LAYER] panic recovery")
+	logger.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
 
 	// register version 1 api calls
 	apiGroup := e.Group("/v1", deployer.apiV1)
 	deployer.register(apiGroup)
 
-	log.Info("[LAYER] / static files")
+	logger.Info("[LAYER] / static files")
 	//load root static folder
 	//e.Static("/", resources+"/root")
 	e.Static("/phpinfo.php", resources+"/root/phpinfo.php")
 
 	// load swagger ui files
-	log.Info("[LAYER] /swagger files")
+	logger.Info("[LAYER] /swagger files")
 	e.Static("/swagger", resources+"/swagger")
 
 	// register root calls
@@ -471,7 +470,7 @@ func (deployer Deployer) apiV1(next echo.HandlerFunc) echo.HandlerFunc {
 
 // register in echo server, allowed routes
 func (deployer Deployer) register(group *echo.Group) *echo.Group {
-	log.Info("registering context free routes")
+	logger.Info("registering context free routes")
 
 	publicGroup := group.Group("/public", deployer.apiV1)
 
@@ -493,7 +492,7 @@ func configureSwaggerJson() {
 	log.Debug("reading swagger json file")
 	raw, err := ioutil.ReadFile(resources + "/swagger/swagger-template.json")
 	if err != nil {
-		logger.ErrorLog.Error("failed reading swagger template file", err)
+		logger.Error("failed reading swagger template file", err)
 		return
 	}
 	//replace hardcoded variables
@@ -505,7 +504,7 @@ func configureSwaggerJson() {
 	//write swagger.json file
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
 	if writeErr != nil {
-		logger.ErrorLog.Error("failed writing swagger.json file", writeErr)
+		logger.Error("failed writing swagger.json file", writeErr)
 		return
 	}
 }
