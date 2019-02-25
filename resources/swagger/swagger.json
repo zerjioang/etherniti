@@ -24,7 +24,7 @@
     "x-preferred": true,
     "x-providerName": "etherniti.org"
   },
-  "host": "dev-proxy.etherniti.org",
+  "host": "localhost:8080",
   "basePath": "/v1",
   "consumes": [
     "application/json;charset=utf-8"
@@ -32,15 +32,14 @@
   "produces": [
     "application/json;charset=utf-8"
   ],
-  "tags": [
-    {
+  "tags": [{
     "name": "public",
     "description": "Public Ethereum REST API Proxy operations",
     "externalDocs": {
       "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
       "url": "https://www.etherniti.org/docs/api/public-operations/"
     }
-    },
+  },
     {
       "name": "profile",
       "description": "Ethereum REST API Proxy connection profile management",
@@ -63,6 +62,14 @@
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/api/private"
+      }
+    },
+    {
+      "name": "security",
+      "description": "Ethereum REST API Proxy security services",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API security services at",
+        "url": "https://www.etherniti.org/docs/api/security"
       }
     }
   ],
@@ -172,23 +179,21 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "parameters": [
-          {
-            "in": "body",
-            "required": true,
-            "name": "profile",
-            "schema": {
-              "example": {
-                "networkId": 1,
-                "peer":"http://172.168.0.2",
-                "mode":"geth",
-                "port":8545,
-                "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
-                "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
-              }
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "profile",
+          "schema": {
+            "example": {
+              "networkId": 1,
+              "peer": "http://172.168.0.2",
+              "mode": "geth",
+              "port": 8545,
+              "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
+              "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
             }
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "profile creation response",
@@ -233,19 +238,17 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "parameters": [
-          {
-            "in": "body",
-            "required": true,
-            "name": "configuration",
-            "schema": {
-              "example": {
-                "language": "english",
-                "size": 192
-              }
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "configuration",
+          "schema": {
+            "example": {
+              "language": "english",
+              "size": 192
             }
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "mnemonic response",
@@ -293,16 +296,14 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "parameters": [
-          {
-            "in": "path",
-            "name": "address",
-            "description": "Ethereum address to be validated",
-            "schema": {
-              "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
-            }
+        "parameters": [{
+          "in": "path",
+          "name": "address",
+          "description": "Ethereum address to be validated",
+          "schema": {
+            "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "verification response",
@@ -327,21 +328,17 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "security": [
-          {
-            "connectionProfileToken": []
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "address",
+          "description": "Ethereum address to be validated",
+          "schema": {
+            "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
           }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "address",
-            "description": "Ethereum address to be validated",
-            "schema": {
-              "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
-            }
-          }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "verification response",
@@ -369,22 +366,79 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "security": [
-          {
-            "connectionProfileToken": []
-          }
-        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
         "parameters": [],
         "responses": {
           "200": {
             "description": "ethereum node information response",
             "schema": {
-              "example": {
-              }
+              "example": {}
             }
           },
           "400": {
             "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/public/security/domains/blacklist": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Blacklisted domain list",
+        "description": "Get a list of Blacklisted domain based on OSINT (Open Source Intelligence)",
+        "operationId": "security-domains",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "blacklisted domain list",
+            "schema": {
+              "example": ["a", "b", "..."]
+            }
+          }
+        }
+      }
+    },
+    "/public/security/phishing/blacklist": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Blacklisted phishing list",
+        "description": "Get a list of Blacklisted phishing domains based on OSINT (Open Source Intelligence)",
+        "operationId": "phishing-blacklist-domains",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "blacklisted phishing domain list",
+            "schema": {
+              "example": ["a", "b", "..."]
+            }
+          }
+        }
+      }
+    },
+    "/public/security/phishing/whitelist": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Whitelist phishing list",
+        "description": "Get a list of whitelisted phishing domains based on OSINT (Open Source Intelligence)",
+        "operationId": "phishing-whitelist-domains",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "whitelisted phishing domain list",
+            "schema": {
+              "example": ["a", "b", "..."]
+            }
           }
         }
       }

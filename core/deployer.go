@@ -476,6 +476,7 @@ func (deployer Deployer) register(group *echo.Group) *echo.Group {
 
 	handlers.NewIndexController().RegisterRouters(publicGroup)
 	handlers.NewProfileController().RegisterRouters(publicGroup)
+	handlers.NewSecurityController().RegisterRouters(publicGroup)
 	handlers.NewWalletController().RegisterRouters(publicGroup)
 	handlers.NewEthController().RegisterRouters(publicGroup)
 
@@ -501,6 +502,7 @@ func configureSwaggerJson() {
 	str = strings.Replace(str, "$version", release.Version, -1)
 	str = strings.Replace(str, "$host", config.SwaggerApiDomain, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
+	str = strings.Replace(str, "$header-auth-key", config.HttpProfileHeaderkey, -1)
 	//write swagger.json file
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
 	if writeErr != nil {

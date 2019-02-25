@@ -42,7 +42,7 @@ func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 	return c.JSONBlob(http.StatusOK, security.PhishingBlacklistRawBytes)
 }
 
-func (ctl SecurityController) RegisterRouters(router *echo.Echo) {
+func (ctl SecurityController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/security/domains/blacklist", ctl.domainBlacklist)
 	router.GET("/security/phishing/blacklist", ctl.phisingBlacklist)

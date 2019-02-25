@@ -9,6 +9,7 @@ package config
 import (
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/util"
+	"os"
 )
 
 // openssl genrsa -out server.key 2048
@@ -51,17 +52,17 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 `
 
 	EnvironmentName         = "development"
-	DevelopmentAddress      = "0.0.0.0"
+	HttpListenInterface     = "127.0.0.1"
 	HttpPort                = ":8080"
 	HttpsPort               = ":4430"
-	HttpAddress             = DevelopmentAddress + HttpPort
-	HttpsAddress            = DevelopmentAddress + HttpsPort
+	HttpAddress             = HttpListenInterface + HttpPort
+	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = true
 	HideServerDataInConsole = false
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect     = false
 	UseUniqueRequestId      = false
-	EnableCors              = false
+	EnableCors              = true
 	EnableRateLimit         = false
 	BlockTorConnections     = true
 	EnableLogging           = true
@@ -76,6 +77,8 @@ var (
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
+		"0.0.0.0",
+		"127.0.0.1",
 		"localhost",
 		"api.etherniti.org",
 	}
@@ -88,8 +91,7 @@ var (
 		"dev-proxy.etherniti.org",
 	}
 	//swagger.json injected params
-	// SwaggerApiDomain = "localhost:8080"
-	SwaggerApiDomain = "dev-proxy.etherniti.org"
+	SwaggerApiDomain = "localhost:8080"
 )
 
 func init() {
@@ -97,6 +99,11 @@ func init() {
 	certPemBytes = util.Bytes(certPem)
 	//hardcoded key content as bytes
 	keyPemBytes = util.Bytes(keyPem)
+	// set hostname based on target machine
+	n, _ := os.Hostname()
+	if n == "apollo" {
+		SwaggerApiDomain = "dev-proxy.etherniti.org"
+	}
 }
 
 //simply converts http requests into https
