@@ -1,8 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build dev !dev
-// +build !pre
+// +build pre !dev
 // +build !prod
 
 package config
@@ -66,10 +65,10 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnableLogging           = true
 	LogLevel                = log.DEBUG
 
-	//for 'local development' deployment
+	//for pre-stage deployment
+	HttpListenInterface = "0.0.0.0"
+	SwaggerApiDomain = "dev-proxy.etherniti.org"
 
-	HttpListenInterface     = "127.0.0.1"
-	SwaggerApiDomain 		= HttpListenInterface+":"+HttpPort
 	HttpAddress             = HttpListenInterface + HttpPort
 	HttpsAddress            = HttpListenInterface + HttpsPort
 )
