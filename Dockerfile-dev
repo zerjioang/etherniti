@@ -10,11 +10,13 @@ MAINTAINER team@etherniti.org
 LABEL IMAGE etherniti-api
 LABEL PROJECT etherniti
 
+# build parameters
+ARG BUILD_MODE=dev
+ARG FILE=proxy
+ARG ETHERNITI_GOOS=linux
+ARG ETHERNITI_GOARCH=amd64
+
 ENV BASE                /go/src/github.com/zerjioang/etherniti
-ENV BUILD_MODE          dev
-ENV FILE                proxy
-ENV ETHERNITI_GOOS      linux
-ENV ETHERNITI_GOARCH    amd64
 ENV USER                etherniti
 ENV RESOURCE_DIR        /go/src/github.com/zerjioang/etherniti/resources
 
