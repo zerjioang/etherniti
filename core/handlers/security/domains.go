@@ -1,5 +1,7 @@
 package security
 
+import "encoding/json"
+
 // https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json
 // last update: feb-25-2019
 var (
@@ -10166,4 +10168,10 @@ var (
 		"xn--myethrwalet-6qb77c.com",
 		"xn--myetherwallt-fwb.net",
 	}
+	DomainBlacklistRawBytes = []byte{}
 )
+
+// convert list to bytes
+func init(){
+	DomainBlacklistRawBytes, _ = json.Marshal(DomainBlacklist)
+}

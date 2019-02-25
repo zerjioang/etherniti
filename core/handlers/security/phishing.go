@@ -1,5 +1,7 @@
 package security
 
+import "encoding/json"
+
 // https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json
 // last update: feb-25-2019
 var (
@@ -8587,4 +8589,15 @@ var (
 		"bcrypto.club",
 		"airdrop-bitnational.com",
 	}
+
+	FuzzyListRawBytes = []byte{}
+	PhishingWhitelistRawBytes = []byte{}
+	PhishingBlacklistRawBytes = []byte{}
 )
+
+// convert list to bytes
+func init(){
+	FuzzyListRawBytes, _ = json.Marshal(FuzzyList)
+	PhishingWhitelistRawBytes, _ = json.Marshal(PhishingWhitelist)
+	PhishingBlacklistRawBytes, _ = json.Marshal(PhishingBlacklist)
+}
