@@ -52,11 +52,8 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 `
 
 	EnvironmentName         = "development"
-	HttpListenInterface     = "127.0.0.1"
 	HttpPort                = ":8080"
 	HttpsPort               = ":4430"
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = true
 	HideServerDataInConsole = false
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
@@ -93,6 +90,9 @@ var (
 	}
 	//swagger.json injected params
 	SwaggerApiDomain = "localhost:8080"
+	HttpListenInterface     = "127.0.0.1"
+	HttpAddress             = HttpListenInterface + HttpPort
+	HttpsAddress            = HttpListenInterface + HttpsPort
 )
 
 func init() {
@@ -104,6 +104,7 @@ func init() {
 	n, _ := os.Hostname()
 	if n == "apollo" {
 		SwaggerApiDomain = "dev-proxy.etherniti.org"
+		HttpListenInterface = "0.0.0.0"
 	}
 }
 
