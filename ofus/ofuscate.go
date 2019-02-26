@@ -26,13 +26,21 @@ func main() {
 		log.Println(err)
 	}
 	// one scanner, start ofuscating
-	ofuscate()
+	ofusErr := ofuscate()
+	if ofusErr != nil {
+		log.Println(ofusErr)
+	}
 }
 
-func ofuscate() {
+func ofuscate() error {
 	for k, v := range pathMap {
 		log.Printf("processing dir %s \t\t moving to %s\n", k, v)
+		err := copyFolder(k, v)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func visitor(path string, info os.FileInfo, err error) error {
