@@ -141,8 +141,8 @@
 [[projects]]
   name = "github.com/mattn/go-isatty"
   packages = ["."]
-  revision = "a6dda38a851a575e6799957cdd53ffe0b3fdd90f"
-  version = "v0.0.5"
+  revision = "369ecd8cea9851e459abb67eb171853e3986591e"
+  version = "v0.0.6"
 
 [[projects]]
   name = "github.com/modern-go/concurrent"
@@ -261,13 +261,13 @@
     "scrypt",
     "sha3"
   ]
-  revision = "ffb98f73852f696ea2bb21a617a5c4b3e067a439"
+  revision = "7f87c0fbb88b590338857bcb720678c2583d4dea"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["websocket"]
-  revision = "3a22650c66bd7f4fb6d1e8072ffd7b75c8a27898"
+  revision = "fe579d43d83210096a79b46dcca0e3721058393a"
 
 [[projects]]
   branch = "master"
