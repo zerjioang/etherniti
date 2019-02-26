@@ -7,6 +7,6 @@ import (
 
 func main() {
 	gopath := os.Getenv("GOPATH")
-	scan := gopath+"/github.com/zerjioang/etherniti"
+	scan := gopath+"/src/github.com/zerjioang/etherniti"
 	lib.NewOfuscator().Start(scan)
 }

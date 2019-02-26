@@ -56,18 +56,11 @@ func visitor(path string, info os.FileInfo, err error) error {
 	if err != nil {
 		return err
 	}
-	skip := path == "." ||
-		path == ".git" ||
-		path == ".idea" ||
-		path == "docs" ||
-		path == "resources" ||
-		path == "scripts" ||
-		path == "vendor" ||
-		path == "ofus" ||
-		strings.HasPrefix(path,".git/") ||
-		strings.HasPrefix(path,"vendor/") ||
-		strings.HasPrefix(path,"resources/") ||
-		strings.HasPrefix(path,"scripts/")
+	skip := strings.Contains(path,"/.idea") ||
+		strings.Contains(path,"/.git") ||
+		strings.Contains(path,"/vendor") ||
+		strings.Contains(path,"/resources") ||
+		strings.Contains(path,"/scripts")
 	if !skip {
 		if info.IsDir() {
 			//add item to pathmap
