@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"fmt"
@@ -11,6 +11,7 @@ import (
 const (
 	alphabet = "abcdefghijklmnopqrstuvwxyz"
 )
+
 var (
 	//alphabet byte array
 	alphabetRaw = []byte(alphabet)
@@ -18,10 +19,18 @@ var (
 	pathMap map[string]string
 	pathCounter int
 )
-func main() {
+type Ofuscator struct {
+
+}
+
+func NewOfuscator() Ofuscator {
+	return Ofuscator{}
+}
+
+func (of Ofuscator) Start(path string) {
 	pathMap = make(map[string]string)
 	//scan the source code
-	err := filepath.Walk(".", visitor)
+	err := filepath.Walk(path, visitor)
 	if err != nil {
 		log.Println(err)
 	}
