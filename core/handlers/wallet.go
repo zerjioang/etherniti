@@ -7,7 +7,6 @@ import (
 	"crypto/rand"
 	"io"
 	"net/http"
-	"strings"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
@@ -37,13 +36,13 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 
 	req := api.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding trycatch
+		// return a binding trycatch error
 		logger.Error("failed to bind request data to model:", err)
 		return ErrorStr(c, bindErr)
 	}
 
 	// lowercase language
-	req.Language = strings.ToLower(req.Language)
+	req.Language = util.ToLowerAscii(req.Language)
 
 	if req.Language == "chinese-simplified" {
 		bip39.SetWordList(wordlists.ChineseSimplified)

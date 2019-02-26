@@ -7,9 +7,10 @@
 package config
 
 import (
+	"os"
+
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/util"
-	"os"
 )
 
 // openssl genrsa -out server.key 2048

@@ -7,13 +7,15 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/handlers"
@@ -258,14 +260,28 @@ func (deployer Deployer) antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add antibots policy
 		ua := c.Request().UserAgent()
-		ua = strings.ToLower(ua)
-		if ua == "" || deployer.isBotRequest(ua) {
+		ua = util.ToLowerAscii(ua)
+		if ua == "" {
 			//drop the request
-			logger.Warn("drop request: User-Agent =", ua)
+			logger.Warn("drop request: no user-agent provided")
+			return userAgentErr
+		} else if deployer.isBotRequest(ua) {
+			//drop the request
+			logger.Warn("drop request: provided user-agent is considered as a bot", ua)
 			return userAgentErr
 		}
 		return next(c)
 	}
+}
+
+// check if user agent string contains bot strings similarities
+func (deployer Deployer) isBotRequest(userAgent string) bool {
+	var lock = false
+	var size = len(api.BadBotsList)
+	for i := 0; i < size && !lock; i++ {
+		lock = strings.Contains(userAgent, api.BadBotsList[i])
+	}
+	return lock
 }
 
 // check if http request host value is allowed or not
@@ -297,27 +313,23 @@ func (deployer Deployer) hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// check if user agent string contains bot strings similarities
-func (deployer Deployer) isBotRequest(userAgent string) bool {
-	var lock = false
-	var size = len(api.BadBotsList)
-	for i := 0; i < size && !lock; i++ {
-		lock = strings.Contains(userAgent, api.BadBotsList[i])
-	}
-	return lock
-}
-
 // keepalive middleware function.
 func (deployer Deployer) keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// add keep alive headers
-		h := c.Response().Header()
-		h.Set("Connection", "Keep-Alive")
-		h.Set("Keep-Alive", "timeout=5, max=1000")
+		// add keep alive headers in the response if requested by the client
+		connectionMode := c.Request().Header.Get("Connection")
+		connectionMode = util.ToLowerAscii(connectionMode)
+		if connectionMode == "keep-alive" {
+			// keep alive connection mode requested
+			h := c.Response().Header()
+			h.Set("Connection", "Keep-Alive")
+			h.Set("Keep-Alive", "timeout=5, max=1000")
+		}
 		return next(c)
 	}
 }
 
+// inject support for custom context on each request
 func (deployer Deployer) injectCustomContext(h echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cc := &server.EthernitiContext{Context: c}

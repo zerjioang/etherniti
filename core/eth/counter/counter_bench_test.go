@@ -1,36 +1,37 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package ratelimit
+package counter_test
 
 import (
-	"net/http"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/counter"
 )
 
-func BenchmarkRatelimit(b *testing.B) {
+func BenchmarkCounterPtr(b *testing.B) {
+
 	b.Run("instantiate", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		for n := 0; n < b.N; n++ {
-			_ = NewRateLimitEngine()
+			_ = counter.NewCounter32()
 		}
 	})
-	b.Run("eval-nil", func(b *testing.B) {
+	b.Run("add", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		limiter := NewRateLimitEngine()
+		c := counter.NewCounter32()
 		for n := 0; n < b.N; n++ {
-			limiter.Eval(nil)
+			c.Increment()
 		}
 	})
-	b.Run("eval-empty", func(b *testing.B) {
+	b.Run("get", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		limiter := NewRateLimitEngine()
-		h := new(http.Header)
+		c := counter.NewCounter32()
 		for n := 0; n < b.N; n++ {
-			limiter.Eval(h)
+			_ = c.Get()
 		}
 	})
 }

@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package handlers
 
 import (
@@ -62,7 +65,7 @@ proxies and can only be cached by the end-client.
 
 The max-age value sets a timespan for how
 long to cache the resource (in seconds).
- */
+*/
 func Cached(c echo.Context, cacheValid bool, seconds uint) (int, echo.Context) {
 	// add cache headers
 	r := c.Response()

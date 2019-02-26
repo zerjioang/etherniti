@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package fastime
 
 import "time"
@@ -16,6 +19,7 @@ const (
 	Hour                 = 60 * Minute
 )
 
+// fast time struct stored on stack
 type FastTime struct {
 	nsec uint32
 	sec  int64
@@ -25,15 +29,17 @@ func (fastTime FastTime) Unix() int64 {
 	return fastTime.sec
 }
 func (fastTime FastTime) Add(duration Duration) FastTime {
-	fastTime.nsec += uint32(duration.Nanoseconds())
-	fastTime.sec += duration.Nanoseconds() / 1000000000
+	ns := duration.Nanoseconds()
+	fastTime.nsec += uint32(ns)
+	fastTime.sec += ns / 1000000000
 	return fastTime
 }
 
 func Now() FastTime {
 	t := time.Now()
-	return FastTime{
+	ft := FastTime{
 		nsec: uint32(t.Nanosecond()),
 		sec:  t.Unix(),
 	}
+	return ft
 }

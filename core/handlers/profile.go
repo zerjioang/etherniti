@@ -29,8 +29,8 @@ type ProfileController struct {
 	//cache *cache.Cache
 }
 
-//atomic counters
 var (
+	//atomic counters stored on heap
 	profilesCreated counter.Count32
 )
 
