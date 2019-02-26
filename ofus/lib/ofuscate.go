@@ -1,9 +1,10 @@
 package lib
 
 import (
-	"fmt"
+	"bytes"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -17,6 +18,7 @@ var (
 	alphabetRaw = []byte(alphabet)
 
 	pathMap map[string]string
+	fileMap map[string]string
 	pathCounter int
 )
 type Ofuscator struct {
@@ -29,6 +31,7 @@ func NewOfuscator() Ofuscator {
 
 func (of Ofuscator) Start(path string) {
 	pathMap = make(map[string]string)
+	fileMap = make(map[string]string)
 	//scan the source code
 	err := filepath.Walk(path, visitor)
 	if err != nil {
@@ -42,9 +45,13 @@ func (of Ofuscator) Start(path string) {
 }
 
 func ofuscate() error {
+	createErr := os.MkdirAll("out", os.ModePerm)
+	if createErr != nil {
+		return createErr
+	}
 	for k, v := range pathMap {
-		log.Printf("processing dir %s \t\t moving to %s\n", k, v)
-		err := copyFolder(k, v)
+		log.Printf("processing file %s moving to %s\n", k, v)
+		err := copyFile(k, v)
 		if err != nil {
 			return err
 		}
@@ -52,37 +59,56 @@ func ofuscate() error {
 	return nil
 }
 
-func visitor(path string, info os.FileInfo, err error) error {
+func visitor(file string, info os.FileInfo, err error) error {
 	if err != nil {
 		return err
 	}
-	skip := strings.Contains(path,"/.idea") ||
-		strings.Contains(path,"/.git") ||
-		strings.Contains(path,"/vendor") ||
-		strings.Contains(path,"/resources") ||
-		strings.Contains(path,"/scripts")
+	skip := strings.Contains(file, "/.idea") ||
+		strings.Contains(file, "/.git") ||
+		strings.Contains(file, "/docs") ||
+		strings.Contains(file, "/vendor") ||
+		strings.Contains(file, "/resources") ||
+		strings.Contains(file, "/scripts")
 	if !skip {
-		if info.IsDir() {
+		if !info.IsDir() {
 			//add item to pathmap
-			ofuscatedPathName := ofuscatePath(pathCounter)
-			// add prefix
-			ofuscatedPathName = "out/" + ofuscatedPathName
-			pathMap[path] = ofuscatedPathName
-			fmt.Println(path, ofuscatedPathName, info.Size())
-			pathCounter++
+			// get base path
+			basedir, basename := path.Split(file)
+			log.Println("processing", basedir)
+
+			if strings.HasPrefix(basename, ".") || isWhiteListed(basename) {
+				//file is considered as hidden file. keep it that way
+				log.Println("skipping ofuscation of file", file)
+				pathMap[file] = "out/" + basename
+			} else {
+				ofuscatedPathName := ofuscatePath(pathCounter)
+				// add prefix
+				ofuscatedPathName = "out/" + ofuscatedPathName
+				// add extension
+				extension := filepath.Ext(file)
+				// processing basename
+				ofuscatedPathName = ofuscatedPathName + extension
+				pathMap[file] = ofuscatedPathName
+				pathCounter++
+			}
 		}
 	}
 	return nil
 }
 
+func isWhiteListed(filename string) bool {
+	return filename == "AUTHORS" ||
+		filename == "LICENSE" ||
+		filename == "VERSION" ||
+		filename == "MAINTAINERS.md" ||
+		filename == "CONTRIBUTING.md" ||
+		filename == "Gopkg.toml" ||
+		filename == "Gopkg.lock" ||
+		filename == "README.md"
+}
+
 func ofuscatePath(pathCounter int) string {
-	firstSize := len(alphabetRaw)
-	if pathCounter < firstSize {
-		//path can be encoded as single character
-		return string(alphabetRaw[pathCounter])
-	} else {
-		idx := pathCounter/firstSize - 1 //arrays start a 0
-		current := string(alphabetRaw[idx])
-		return current + ofuscatePath(pathCounter-firstSize)
-	}
+	var buf bytes.Buffer
+	encode(uint64(pathCounter), &buf, alphabet)
+	return buf.String()
 }
