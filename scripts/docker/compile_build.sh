@@ -21,7 +21,7 @@ fi
 
 if [[ -z "$BUILD_MODE" ]]; then
     echo "no BUILD_MODE found.           setting default to: dev"
-    BUILD_MODE="dev" # prod
+    BUILD_MODE="pre" # dev, pre, prod
 fi
 
 if [[ -z "$ETHERNITI_GOARCH" ]]; then
@@ -85,6 +85,17 @@ function compile(){
             go build \
                 -ldflags "-X 'main.Build=$hash'" \
                 -tags dev \
+                -o $outputname
+        elif [[ "$BUILD_MODE" = "pre" ]]; then
+            echo "compiling pre-stage version..."
+            echo "Using commit hash '$hash' for current build"
+            CGO_ENABLED=1 \
+            CC=${ETHERNITI_COMPILER} \
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
+            go build \
+                -ldflags "-X 'main.Build=$hash'" \
+                -tags pre \
                 -o $outputname
         else
             echo "compiling production version..."

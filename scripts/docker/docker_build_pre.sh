@@ -14,4 +14,4 @@ source ./docker_build.sh
 # move to project root dir from ./scripts to ./
 cd ../..
 
-build --build-arg BUILD_MODE=dev -t etherniti/proxy:latest
+build --build-arg BUILD_MODE=pre -t etherniti/proxy:latest 
