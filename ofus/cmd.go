@@ -8,5 +8,7 @@ import (
 func main() {
 	gopath := os.Getenv("GOPATH")
 	scan := gopath+"/src/github.com/zerjioang/etherniti"
-	lib.NewOfuscator().Start(scan)
+	mainPath := scan+"/main.go"
+	of := lib.NewOfuscator()
+	of.Start(scan, mainPath)
 }
