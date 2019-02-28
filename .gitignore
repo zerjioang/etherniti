@@ -4,3 +4,5 @@
 \.idea
 etherniti
 eth-temp
+secrets
+resources/swagger/swagger.json

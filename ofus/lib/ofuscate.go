@@ -17,10 +17,11 @@ var (
 	//alphabet byte array
 	alphabetRaw = []byte(alphabet)
 )
+
 type Ofuscator struct {
-	rootPath string
-	mainFilePath string
-	internalMapper        map[string]OfusEntry
+	rootPath       string
+	mainFilePath   string
+	internalMapper map[string]OfusEntry
 	pathCounter    uint64
 	packageCounter uint64
 }
@@ -113,14 +114,14 @@ func (of *Ofuscator) addAsProcessableFile(file string, parent string, ofuscatedP
 	// add extension
 	extension := filepath.Ext(file)
 
-	entryItem := OfusEntry {
-		originalPath:file,
-		ofuscatedFilename:ofuscatedName,
-		ofuscatedPackageName:ofuscatedPkgName,
-		extension:extension,
-		parentDir: parent,
-		idx:of.pathCounter,
-		ofuscate:true,
+	entryItem := OfusEntry{
+		originalPath:         file,
+		ofuscatedFilename:    ofuscatedName,
+		ofuscatedPackageName: ofuscatedPkgName,
+		extension:            extension,
+		parentDir:            parent,
+		idx:                  of.pathCounter,
+		ofuscate:             true,
 	}
 
 	// processing basename
@@ -133,14 +134,14 @@ func (of *Ofuscator) addAsEntryPoint(file string) {
 	of.pathCounter++
 	ofuscatedName = "main_" + ofuscatedName
 
-	entryItem := OfusEntry {
-		originalPath:file,
-		ofuscatedFilename:ofuscatedName,
-		ofuscatedPackageName:"main",
-		extension:extension,
-		parentDir: "",
-		idx:of.pathCounter,
-		ofuscate:true,
+	entryItem := OfusEntry{
+		originalPath:         file,
+		ofuscatedFilename:    ofuscatedName,
+		ofuscatedPackageName: "main",
+		extension:            extension,
+		parentDir:            "",
+		idx:                  of.pathCounter,
+		ofuscate:             true,
 	}
 
 	of.internalMapper[file] = entryItem
@@ -150,14 +151,14 @@ func (of *Ofuscator) addAsNoProcessableFile(file string, basename string) {
 	//file is considered as hidden file. keep it that way
 	log.Println("skipping ofuscation of file", file)
 
-	entryItem := OfusEntry {
-		originalPath:file,
-		ofuscatedFilename:basename,
-		ofuscatedPackageName:"",
-		extension:"",
-		parentDir: "",
-		idx:0,
-		ofuscate: true,
+	entryItem := OfusEntry{
+		originalPath:         file,
+		ofuscatedFilename:    basename,
+		ofuscatedPackageName: "",
+		extension:            "",
+		parentDir:            "",
+		idx:                  0,
+		ofuscate:             true,
 	}
 
 	of.internalMapper[file] = entryItem

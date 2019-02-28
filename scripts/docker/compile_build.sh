@@ -76,7 +76,7 @@ function compile(){
     else
         echo "compiling for $ETHERNITI_GOARCH..."
         if [[ "$BUILD_MODE" = "dev" ]]; then
-            echo "compiling development version..."
+            echo "compiling dev-stage version..."
             echo "Using commit hash '$hash' for current build"
             CGO_ENABLED=1 \
             CC=${ETHERNITI_COMPILER} \

@@ -47,36 +47,6 @@
   version = "v3.2.0"
 
 [[projects]]
-  name = "github.com/ethereum/go-ethereum"
-  packages = [
-    ".",
-    "accounts",
-    "accounts/abi",
-    "accounts/abi/bind",
-    "accounts/keystore",
-    "common",
-    "common/hexutil",
-    "common/math",
-    "common/mclock",
-    "common/prque",
-    "core/types",
-    "crypto",
-    "crypto/secp256k1",
-    "ethclient",
-    "ethdb",
-    "event",
-    "log",
-    "metrics",
-    "p2p/netutil",
-    "params",
-    "rlp",
-    "rpc",
-    "trie"
-  ]
-  revision = "c942700427557e3ff6de3aaf6b916e2f056c1ec2"
-  version = "v1.8.23"
-
-[[projects]]
   name = "github.com/etherniti/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"

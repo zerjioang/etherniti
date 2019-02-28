@@ -3,13 +3,13 @@ package lib
 import "os"
 
 type OfusEntry struct {
-	originalPath string
+	originalPath         string
 	ofuscatedPackageName string
-	ofuscatedFilename string
-	extension string
-	parentDir string
-	idx uint64
-	ofuscate bool
+	ofuscatedFilename    string
+	extension            string
+	parentDir            string
+	idx                  uint64
+	ofuscate             bool
 }
 
 func (entry OfusEntry) OfuscatedBasePath() string {
@@ -30,4 +30,3 @@ func (entry OfusEntry) createDstOfuscatedDir() error {
 	outpath := entry.OfuscatedBasePath()
 	return os.MkdirAll(outpath, os.ModePerm)
 }
-
