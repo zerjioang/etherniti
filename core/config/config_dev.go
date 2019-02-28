@@ -72,6 +72,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 
 	HttpListenInterface = "127.0.0.1"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
+	SwaggerAddress      = HttpListenInterface + ":" + HttpPort
 
 	//connection profile params
 	TokenExpiration = 100 * fastime.Hour
