@@ -55,8 +55,8 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 `
 
 	EnvironmentName         = "beta-stage"
-	HttpPort                = "80"
-	HttpsPort               = "443"
+	HttpPort                = "8080"
+	HttpsPort               = "4430"
 	HttpAddress             = HttpListenInterface + HttpPort
 	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = true
