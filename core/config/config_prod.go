@@ -52,7 +52,6 @@ const (
 
 var (
 	// allowed cors domains
-	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
 		"api.etherniti.org",

@@ -87,10 +87,6 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 )
 
 var (
-	//hardcoded cert content as bytes
-	certPemBytes []byte
-	//hardcoded key content as bytes
-	keyPemBytes []byte
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
