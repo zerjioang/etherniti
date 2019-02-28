@@ -38,7 +38,7 @@ const (
 	// production required listen mode
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress    = "http://dev-proxy.etherniti.org"
+	SwaggerAddress    = "dev-proxy.etherniti.org"
 
 	//connection profile params
 	TokenExpiration = 10 * fastime.Minute
