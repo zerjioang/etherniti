@@ -6,7 +6,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
@@ -17,12 +16,8 @@ import (
 )
 
 const (
-	defaultProfileRequestTime = cache.DefaultExpiration
-	readErr                   = `there was an trycatch during execution`
-	bindErr                   = `there was an trycatch while processing your request information`
-	itemDeleted               = `profile entry successfully deleted`
-	noExistsNoUpdate          = `there was an trycatch during execution and could not update requeste profile`
-	itemUpdated               = `profile entry successfully updated`
+	readErr = `there was an trycatch during execution`
+	bindErr = `there was an trycatch while processing your request information`
 )
 
 type ProfileController struct {
@@ -74,18 +69,9 @@ func (ctl ProfileController) validate(c echo.Context) error {
 
 // profile validation check
 func (ctl ProfileController) count(c echo.Context) error {
-	return c.JSON(
-		http.StatusOK, profilesCreated.Get(),
-	)
-}
-
-// new profile delete request
-func (ctl ProfileController) clear(c echo.Context) error {
-	// read target profile selection by user id
-	//targetId := c.Param("id")
-	// remove requested id from cache
-	//ctl.cache.Delete(targetId)
-	return c.JSONBlob(http.StatusOK, util.Bytes(itemDeleted))
+	var code int
+	code, c = Cached(c, true, 10) // cache policy: 10 seconds
+	return c.JSON(code, profilesCreated.Get())
 }
 
 // implemented method from interface RouterRegistrable

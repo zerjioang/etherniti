@@ -4,8 +4,6 @@
 package handlers
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/handlers/security"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -24,14 +22,18 @@ func NewSecurityController() SecurityController {
 // This list is maintained by GitHub user 409H at
 // https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json
 func (ctl SecurityController) domainBlacklist(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, security.DomainBlacklistRawBytes)
+	var code int
+	code, c = Cached(c, true, CacheOneDay) // 24h cache directive
+	return c.JSONBlob(code, security.DomainBlacklistRawBytes)
 }
 
 // return a whitelist of non phishing sites,
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, security.PhishingWhitelistRawBytes)
+	var code int
+	code, c = Cached(c, true, CacheOneDay) // 24h cache directive
+	return c.JSONBlob(code, security.PhishingWhitelistRawBytes)
 }
 
 // return a blacklist of phishing sites,
@@ -39,7 +41,9 @@ func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, security.PhishingBlacklistRawBytes)
+	var code int
+	code, c = Cached(c, true, CacheOneDay) // 24h cache directive
+	return c.JSONBlob(code, security.PhishingBlacklistRawBytes)
 }
 
 func (ctl SecurityController) RegisterRouters(router *echo.Group) {

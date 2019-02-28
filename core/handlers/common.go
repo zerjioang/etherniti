@@ -18,6 +18,11 @@ import (
 	"github.com/zerjioang/etherniti/core/util"
 )
 
+const (
+	CacheOneDay   = 86400    // seconds in a day
+	CacheInfinite = 31104000 // 86400 * 30 *12 // seconds in a year
+)
+
 func Success(c echo.Context, msg string, result string) error {
 	rawBytes := util.GetJsonBytes(api.NewApiResponse(msg, result))
 	return c.JSONBlob(http.StatusOK, rawBytes)

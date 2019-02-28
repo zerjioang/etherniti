@@ -1,13 +1,17 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build pre !dev
+// +build !dev
+// +build pre
 // +build !prod
 
 package config
 
 import (
+	"time"
+
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/util"
 )
 
@@ -50,9 +54,11 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 -----END EC PRIVATE KEY-----
 `
 
-	EnvironmentName         = "development"
-	HttpPort                = ":8080"
-	HttpsPort               = ":4430"
+	EnvironmentName         = "beta-stage"
+	HttpPort                = ":80"
+	HttpsPort               = ":443"
+	HttpAddress             = HttpListenInterface + HttpPort
+	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = true
 	HideServerDataInConsole = false
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
@@ -67,10 +73,17 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 
 	//for pre-stage deployment
 	HttpListenInterface = "0.0.0.0"
-	SwaggerApiDomain = "dev-proxy.etherniti.org"
+	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
+	//connection profile params
+	TokenExpiration = 10 * fastime.Minute
+
+	//rate limit units must be the same in both variables
+	RateLimitUnits   = 1 * time.Hour
+	RateLimitUnitsFt = 1 * fastime.Hour
+	// ratelimit configuration
+	RateLimit    = 100
+	RateLimitStr = "100"
 )
 
 var (
@@ -101,21 +114,4 @@ func init() {
 	certPemBytes = util.Bytes(certPem)
 	//hardcoded key content as bytes
 	keyPemBytes = util.Bytes(keyPem)
-}
-
-//simply converts http requests into https
-func GetRedirectUrl(host string, path string) string {
-	return "https://" + HttpsAddress + path
-}
-
-// get SSL certificate cert.pem from proper source:
-// hardcoded value or from local storage file
-func GetCertPem() []byte {
-	return certPemBytes
-}
-
-// get SSL certificate key.pem from proper source:
-// hardcoded value or from local storage file
-func GetKeyPem() []byte {
-	return keyPemBytes
 }

@@ -1,6 +1,8 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
+// +build !dev
+// +build !pre
 // +build prod
 
 package config
@@ -8,17 +10,19 @@ package config
 import (
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
 const (
 	EnvironmentName     = "production"
-	HttpPort            = ":80"
-	HttpsPort           = ":443"
-	HttpAddress         = "0.0.0.0:80"
-	HttpsAddress        = "0.0.0.0:443"
+	HttpPort            = "80"
+	HttpsPort           = "443"
+	HttpAddress         = HttpListenInterface + HttpPort
+	HttpsAddress        = HttpListenInterface + HttpsPort
 	DebugServer         = false
 	HideServerData      = true
 	TokenSecret         = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
@@ -30,13 +34,23 @@ const (
 	BlockTorConnections = true
 	EnableLogging       = true
 	LogLevel            = log.ERROR
+
+	// production required listen mode
+	HttpListenInterface = "0.0.0.0"
+	ListeningAddress    = HttpListenInterface + ":" + HttpPort
+
+	//connection profile params
+	TokenExpiration = 10 * fastime.Minute
+
+	//rate limit units must be the same in both variables
+	RateLimitUnits   = 1 * time.Hour
+	RateLimitUnitsFt = 1 * fastime.Hour
+	// ratelimit configuration
+	RateLimit    = 100
+	RateLimitStr = "100"
 )
 
 var (
-	//cert content as bytes readed from filesystem
-	fsCertBytes []byte
-	//key content as bytes readed from filesystem
-	fsKeyBytes []byte
 	// allowed cors domains
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
@@ -56,10 +70,10 @@ var (
 func init() {
 	logger.Info("loading production ssl crypto material for https")
 	certPath := os.Getenv("X_ETHERNITI_SSL_CERT_FILE")
-	fsCertBytes = loadCertBytes(certPath)
+	certPemBytes = loadCertBytes(certPath)
 
 	keyPath := os.Getenv("X_ETHERNITI_SSL_KEY_FILE")
-	fsKeyBytes = loadCertBytes(keyPath)
+	keyPemBytes = loadCertBytes(keyPath)
 }
 
 func loadCertBytes(path string) []byte {
@@ -71,21 +85,4 @@ func loadCertBytes(path string) []byte {
 		log.Fatal("failed to load production HTTPS SSL certificate data. Empty content found on given file")
 	}
 	return certData
-}
-
-//simply converts http requests into https
-func GetRedirectUrl(host string, path string) string {
-	return "https://" + host + path
-}
-
-// get SSL certificate cert.pem from proper source:
-// hardcoded value or from local storage file
-func GetCertPem() []byte {
-	return fsCertBytes
-}
-
-// get SSL certificate key.pem from proper source:
-// hardcoded value or from local storage file
-func GetKeyPem() []byte {
-	return fsKeyBytes
 }

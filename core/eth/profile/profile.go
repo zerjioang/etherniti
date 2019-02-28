@@ -87,6 +87,36 @@ func (profile ConnectionProfile) Valid() error {
 func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
 }
+func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfile {
+	profile.Peer = profile.readString(claims["peer"])
+	profile.Mode = profile.readString(claims["mode"])
+	profile.Address = profile.readString(claims["address"])
+	profile.Key = profile.readString(claims["key"])
+	profile.Version = profile.readInt(claims["version"])
+	profile.Id = profile.readString(claims["id"])
+	profile.Key = profile.readString(claims["key"])
+	return profile
+}
+
+func (profile ConnectionProfile) readString(v interface{}) string {
+	if v != nil {
+		str, ok := v.(string)
+		if ok {
+			return str
+		}
+	}
+	return ""
+}
+
+func (profile ConnectionProfile) readInt(v interface{}) int {
+	if v != nil {
+		val, ok := v.(int)
+		if ok {
+			return val
+		}
+	}
+	return 0
+}
 
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	// Create a new token object, specifying signing method and the claims
@@ -116,15 +146,18 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 		return profile, err
 	}
 
-	profile, ok := token.Claims.(ConnectionProfile)
+	mapc, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return profile, errors.New("failed to read token claims")
+	}
+	profile = profile.Populate(mapc)
 
 	//check profile validity
-	profile.Valididity = profile.Id != "" &&
-		profile.Peer != "" &&
+	profile.Valididity = profile.Peer != "" &&
 		profile.Address != "" &&
 		profile.Key != ""
 
-	if ok && profile.Valididity {
+	if profile.Valididity {
 		return profile, nil
 	} else {
 		return profile, err
@@ -143,13 +176,13 @@ func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile 
 	p := ConnectionProfile{
 		Id:        util.GenerateUUID(),
 		NetworkId: data.NetworkId,
-		Peer:      data.Peer,
-		Address:   data.Address,
-		Key:       data.Key,
-		Mode:      data.Mode,
+		Peer:      data.Peer,    //required
+		Address:   data.Address, // required
+		Key:       data.Key,     //required
+		Mode:      data.Mode,    //required
 		Port:      data.Port,
-		Issuer:    "etherniti",
-		ExpiresAt: now.Add(10 * fastime.Minute).Unix(),
+		Issuer:    "etherniti.org",
+		ExpiresAt: now.Add(config.TokenExpiration).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
 		Version:   1,

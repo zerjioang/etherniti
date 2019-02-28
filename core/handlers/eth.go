@@ -62,12 +62,16 @@ func (ctl EthController) generateAddress(c echo.Context) error {
 
 // check if an ethereum address is valid
 func (ctl EthController) isValidAddress(c echo.Context) error {
+	//since this method checks address as string, cache always
+	var code int
+	code, c = Cached(c, true, CacheInfinite) // 24h cache directive
+
 	//read user entered address
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
-		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(
+		return c.JSONBlob(code, util.GetJsonBytes(
 			api.NewApiResponse("address validation checked", result),
 		),
 		)

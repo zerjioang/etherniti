@@ -21,16 +21,16 @@ func BenchmarkRatelimit(b *testing.B) {
 		b.SetBytes(1)
 		limiter := NewRateLimitEngine()
 		for n := 0; n < b.N; n++ {
-			limiter.Eval(nil)
+			_ = limiter.Eval("", nil)
 		}
 	})
 	b.Run("eval-empty", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		limiter := NewRateLimitEngine()
-		h := new(http.Header)
+		h := http.Header{}
 		for n := 0; n < b.N; n++ {
-			limiter.Eval(h)
+			_ = limiter.Eval("127.0.0.1", h)
 		}
 	})
 }

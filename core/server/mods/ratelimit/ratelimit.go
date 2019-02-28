@@ -6,10 +6,11 @@ package ratelimit
 import (
 	"net/http"
 	"strconv"
-	"sync/atomic"
-	"time"
 
+	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
 )
 
 // 4,000 requests per hour.
@@ -26,61 +27,71 @@ const (
 	XRateReset = "X-Rate-Limit-Reset"
 )
 
+type RateLimitResult bool
+
 const (
-	rateLimit    int32 = 4000
-	rateLimitStr       = "4000"
+	Deny  RateLimitResult = false
+	Allow RateLimitResult = true
 )
 
 var (
-	rateRemaining = rateLimit
-	rateExcedeed  = api.NewApiError(http.StatusTooManyRequests, "rate limit reached")
-	//rateCache *cache.Cache
+	rateExcedeed                  = api.NewApiError(http.StatusTooManyRequests, "rate limit reached")
+	defaultCacheMeasurementUnit   = config.RateLimitUnits
+	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt
 )
 
+type limit struct {
+	value uint32
+	reset int64
+}
 type RateLimitEngine struct {
+	rateCache *cache.Cache
 }
 
 // constructor like function
 func NewRateLimitEngine() RateLimitEngine {
 	rle := RateLimitEngine{}
+	rle.rateCache = cache.New(defaultCacheMeasurementUnit, defaultCacheMeasurementUnit)
 	return rle
 }
 
 // ratelimit evaluation function
-func (rte RateLimitEngine) Eval(h *http.Header) bool {
-	//get current request identifier
-	// read request token. if not available fallback to user ip
-
-	//validate input data
+func (rte RateLimitEngine) Eval(clientIdentifier string, h http.Header) RateLimitResult {
 	if h == nil {
-		return false
+		return Deny
 	}
 
 	//get current time
-	timeNow := time.Now()
-	//currentTime := timeNow.Unix()
-	afterHourTime := timeNow.Add(60 * time.Minute)
+	timeNow := fastime.Now()
+	resetTime := timeNow.Add(defaultCacheMeasurementUnitFt)
+
+	//inject rate limit header: X-Rate-Limit-Limit
+	h.Set(XRateLimit, config.RateLimitStr)
 
 	// read current limit
-	currentRequestsLimit := atomic.LoadInt32(&rateRemaining)
+	var currentRequestsLimit limit
+	rateRemaining, found := rte.rateCache.Get(clientIdentifier)
+	if !found {
+		// initialize client max allowed rate limit
+		currentRequestsLimit = limit{value: config.RateLimit, reset: resetTime.Unix()}
+	} else {
+		currentRequestsLimit = rateRemaining.(limit)
+	}
 
-	//inject rate limit headers
-	// add rate limit max value: 4000
-	h.Set(XRateLimit, rateLimitStr)
-
-	if currentRequestsLimit > 0 {
-		//decrease counter limit
-		atomic.AddInt32(&rateRemaining, -1)
+	if currentRequestsLimit.value > 0 {
+		//decrease counter limit and save it again
+		currentRequestsLimit.value--
+		rte.rateCache.Set(clientIdentifier, currentRequestsLimit, defaultCacheMeasurementUnit)
 
 		// add current user remaining limit
-		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit), 10))
+		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit.value), 10))
+
+		//set rate limit reset time
+		rateResetStr := strconv.FormatInt(currentRequestsLimit.reset, 10)
+		h.Set(XRateReset, rateResetStr)
 
 		//allow request
-		return true
-	} else {
-		//return rate limit excedeed message
-		rateResetStr := strconv.FormatInt(afterHourTime.Unix(), 10)
-		h.Set(XRateReset, rateResetStr)
-		return false
+		return Allow
 	}
+	return Deny
 }

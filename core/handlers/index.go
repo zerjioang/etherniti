@@ -85,7 +85,7 @@ func NewIndexController() IndexController {
 
 func Index(c echo.Context) error {
 	var code int
-	code, c = Cached(c, true, 86400) // 24h cache directive
+	code, c = Cached(c, true, CacheOneDay) // 24h cache directive
 	if c.Request().Header.Get("Accept") == "application/json" {
 		return c.JSONBlob(code, indexWelcomeBytes)
 	}

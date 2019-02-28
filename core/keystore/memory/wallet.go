@@ -6,15 +6,15 @@ package memory
 import (
 	"crypto/ecdsa"
 
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 // content stored in the wallet
 type WalletContent struct {
 	// address of the account
-	ethAddress common.Address
+	ethAddress fixtures.Address
 	// account's private key enconded as ecdsa go struct
 	privateKey ecdsa.PrivateKey
 	// client interaction eth/quorum node for processing interactions

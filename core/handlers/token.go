@@ -4,16 +4,10 @@
 package handlers
 
 import (
-	"fmt"
-	"math"
-	"math/big"
-
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth"
 )
 
@@ -32,7 +26,6 @@ func NewTokenController(manager eth.WalletManager) TokenController {
 
 func (ctl TokenController) instantiate(c echo.Context) error {
 	targetAddr := c.Param("address")
-	ethAddr := eth.ConvertAddress(targetAddr)
 
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
@@ -40,7 +33,7 @@ func (ctl TokenController) instantiate(c echo.Context) error {
 		return ErrorStr(c, "failed to execute requested operation")
 	}
 
-	instance, err := eth.InstantiateToken(cc, ethAddr)
+	instance, err := eth.InstantiateToken(cc, targetAddr)
 	if err == nil && instance != nil {
 		//todo save token instance in memory
 	}
@@ -49,19 +42,17 @@ func (ctl TokenController) instantiate(c echo.Context) error {
 
 func (ctl TokenController) summary(c echo.Context) error {
 	targetAddr := c.Param("address")
-	ethAddr := eth.ConvertAddress(targetAddr)
-
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
 		return ErrorStr(c, "failed to execute requested operation")
 	}
-	instance, err := eth.InstantiateToken(cc, ethAddr)
+	instance, err := eth.InstantiateToken(cc, targetAddr)
 	if err == nil && instance != nil {
 		//todo save token instance in memory
 
 		//show token summary
-		bal, err := instance.BalanceOf(&bind.CallOpts{}, ethAddr)
+		/*bal, err := instance.BalanceOf(&bind.CallOpts{}, ethAddr)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -92,6 +83,7 @@ func (ctl TokenController) summary(c echo.Context) error {
 		value := new(big.Float).Quo(fbal, big.NewFloat(math.Pow10(int(decimals))))
 
 		fmt.Printf("balance: %f", value) // "balance: 74605500.647409"
+		*/
 	}
 	return nil
 }

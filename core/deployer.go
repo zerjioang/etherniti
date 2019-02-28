@@ -17,7 +17,6 @@ import (
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/util"
 
-	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/release"
@@ -84,6 +83,7 @@ func init() {
 
 type Deployer struct {
 	manager eth.WalletManager
+	limiter ratelimit.RateLimitEngine
 }
 
 func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
@@ -193,7 +193,7 @@ func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, er
 
 	//configure custom secure server
 	return &http.Server{
-		Addr:         config.HttpsAddress,
+		Addr:         config.ListeningAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    &tlsConf,
@@ -203,7 +203,7 @@ func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, er
 func (deployer Deployer) buildInsecureServerConfig(e *echo.Echo) (*http.Server, error) {
 	//configure custom secure server
 	return &http.Server{
-		Addr:         config.HttpAddress,
+		Addr:         config.ListeningAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}, nil
@@ -340,17 +340,18 @@ func (deployer Deployer) injectCustomContext(h echo.HandlerFunc) echo.HandlerFun
 // jwt middleware function.
 func (deployer Deployer) jwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// add fake server header
-		h := c.Request().Header
-		token := h.Get(config.HttpProfileHeaderkey)
+		// convert context in etherniti context
+		cc := &server.EthernitiContext{Context: c}
+		token := cc.ReadConnectionProfileToken()
 		if token == "" {
 			return handlers.ErrorStr(c, "please provide a connection profile token for this kind of call")
 		}
-		_, parseErr := profile.ParseConnectionProfileToken(token)
+
+		_, parseErr := cc.ConnectionProfileSetup()
 		if parseErr != nil {
 			return handlers.Error(c, parseErr)
 		}
-		return next(c)
+		return next(cc)
 	}
 }
 
@@ -496,7 +497,7 @@ func (deployer Deployer) register(group *echo.Group) *echo.Group {
 	privateGroup.Use(deployer.jwt)
 	//add jwt middleware to private group
 	handlers.NewWeb3Controller(deployer.manager).RegisterRouters(privateGroup)
-	handlers.NewTokenController(deployer.manager).RegisterRouters(privateGroup)
+	//handlers.NewTokenController(deployer.manager).RegisterRouters(privateGroup)
 	return group
 }
 
@@ -512,7 +513,7 @@ func configureSwaggerJson() {
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti Proxy REST API", -1)
 	str = strings.Replace(str, "$version", release.Version, -1)
-	str = strings.Replace(str, "$host", config.SwaggerApiDomain, -1)
+	str = strings.Replace(str, "$host", config.ListeningAddress, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", config.HttpProfileHeaderkey, -1)
 	//write swagger.json file
@@ -527,5 +528,6 @@ func configureSwaggerJson() {
 func NewDeployer() Deployer {
 	d := Deployer{}
 	d.manager = eth.NewWalletManager()
+	d.limiter = ratelimit.NewRateLimitEngine()
 	return d
 }

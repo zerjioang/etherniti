@@ -129,7 +129,7 @@ func (s *EthRPCTestSuite) TestCall() {
 func (s *EthRPCTestSuite) Test_call() {
 	// Test http trycatch
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
-		return nil, fmt.Errorf("Error")
+		return nil, fmt.Errorf("error")
 	})
 	err := s.rpc.call("test", nil)
 	s.Require().NotNil(err)

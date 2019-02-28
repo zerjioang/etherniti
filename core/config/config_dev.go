@@ -1,16 +1,16 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build dev !dev
 // +build !pre
 // +build !prod
 
 package config
 
 import (
-	"os"
+	"time"
 
 	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/util"
 )
 
@@ -54,8 +54,8 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 `
 
 	EnvironmentName         = "development"
-	HttpPort                = ":8080"
-	HttpsPort               = ":4430"
+	HttpPort                = "8080"
+	HttpsPort               = "4430"
 	DebugServer             = true
 	HideServerDataInConsole = false
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
@@ -63,24 +63,28 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	UseUniqueRequestId      = false
 	EnableCors              = true
 	EnableCache             = true
-	EnableRateLimit         = false
+	EnableRateLimit         = true
 	BlockTorConnections     = true
 	EnableLogging           = true
 	LogLevel                = log.DEBUG
 
 	//for 'local development' deployment
 
-	HttpListenInterface     = "127.0.0.1"
-	SwaggerApiDomain 		= HttpListenInterface+":"+HttpPort
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
+	HttpListenInterface = "127.0.0.1"
+	ListeningAddress    = HttpListenInterface + ":" + HttpPort
+
+	//connection profile params
+	TokenExpiration = 100 * fastime.Hour
+
+	//rate limit units must be the same in both variables
+	RateLimitUnits   = 5 * time.Second
+	RateLimitUnitsFt = 5 * fastime.Second
+	// ratelimit configuration
+	RateLimit    = 10
+	RateLimitStr = "10"
 )
 
 var (
-	//hardcoded cert content as bytes
-	certPemBytes []byte
-	//hardcoded key content as bytes
-	keyPemBytes []byte
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
@@ -104,21 +108,4 @@ func init() {
 	certPemBytes = util.Bytes(certPem)
 	//hardcoded key content as bytes
 	keyPemBytes = util.Bytes(keyPem)
-}
-
-//simply converts http requests into https
-func GetRedirectUrl(host string, path string) string {
-	return "https://" + HttpsAddress + path
-}
-
-// get SSL certificate cert.pem from proper source:
-// hardcoded value or from local storage file
-func GetCertPem() []byte {
-	return certPemBytes
-}
-
-// get SSL certificate key.pem from proper source:
-// hardcoded value or from local storage file
-func GetKeyPem() []byte {
-	return keyPemBytes
 }
