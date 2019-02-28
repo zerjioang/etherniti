@@ -131,7 +131,7 @@ func (of *Ofuscator) addAsEntryPoint(file string) {
 	extension := filepath.Ext(file)
 	ofuscatedName := of.counterToName(of.pathCounter)
 	of.pathCounter++
-	ofuscatedName = "main_" + ofuscatedName + extension
+	ofuscatedName = "main_" + ofuscatedName
 
 	entryItem := OfusEntry {
 		originalPath:file,

@@ -14,16 +14,16 @@ type OfusEntry struct {
 
 func (entry OfusEntry) OfuscatedBasePath() string {
 	if entry.ofuscatedPackageName == "" {
-		return "out/"
+		return "out/src/elf/"
 	}
-	return "out/" + entry.ofuscatedPackageName
+	return "out/src/elf/" + entry.ofuscatedPackageName
 }
 
 func (entry OfusEntry) OfuscatedFilePath() string {
 	if entry.ofuscatedPackageName == "" {
-		return "out/" + entry.ofuscatedFilename + entry.extension
+		return "out/src/elf/" + entry.ofuscatedFilename + entry.extension
 	}
-	return "out/" + entry.ofuscatedPackageName + "/" + entry.ofuscatedFilename + entry.extension
+	return "out/src/elf/" + entry.ofuscatedPackageName + "/" + entry.ofuscatedFilename + entry.extension
 }
 
 func (entry OfusEntry) createDstOfuscatedDir() error {
