@@ -93,7 +93,7 @@ var (
 		New: func() interface{} {
 			// Pools often contain things like *bytes.Buffer, which are
 			// temporary and re-usable.
-			wrapper := new(protocol.ServerStatusResponse)
+			wrapper := protocol.ServerStatusResponse{}
 			wrapper.Runtime.Compiler = runtime.Compiler
 
 			wrapper.Version.Etherniti = release.Version
@@ -164,18 +164,18 @@ func (ctl IndexController) Status(c echo.Context) error {
 	return c.JSONBlob(code, data)
 }
 
-func (ctl IndexController) status() []byte {
+func (ctl *IndexController) status() []byte {
 	ctl.statusLock.Lock()
 	raw := ctl.lastStatusBytes
 	ctl.statusLock.Unlock()
 	return raw
 }
 
-func (ctl IndexController) statusReload() []byte {
+func (ctl *IndexController) statusReload() []byte {
 
-	//get the wrapper from the pool, adn cast it
-	wrapper := statusPool.Get().(*protocol.ServerStatusResponse)
-	memMonitor.ReadPtr(wrapper)
+	//get the wrapper from the pool, and cast it
+	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
+	wrapper = memMonitor.Read(wrapper)
 
 	wrapper.Disk.All = diskMonitor.All()
 	wrapper.Disk.Used = diskMonitor.Used()
@@ -219,7 +219,7 @@ func (ctl IndexController) integrityReload() protocol.IntegrityResponse {
 	return wrapper
 }
 
-func (ctl IndexController) integrity() []byte {
+func (ctl *IndexController) integrity() []byte {
 	ctl.integrityLock.Lock()
 	raw := ctl.lastIntegrityBytes
 	ctl.integrityLock.Unlock()
