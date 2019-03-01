@@ -4,18 +4,21 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/core/api/protocol"
-	"github.com/zerjioang/etherniti/core/server/mods/mem"
+	"bytes"
 	"runtime"
 	"strconv"
 	"sync"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/integrity"
+	"github.com/zerjioang/etherniti/core/server/mods/mem"
+	"github.com/zerjioang/etherniti/core/util"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/release"
-
-	"github.com/zerjioang/etherniti/core/integrity"
 
 	"github.com/zerjioang/etherniti/core/server/mods/disk"
 
@@ -23,6 +26,11 @@ import (
 )
 
 type IndexController struct {
+	lastIntegrityBytes []byte
+	integrityLock      *sync.Mutex
+
+	lastStatusBytes []byte
+	statusLock      *sync.Mutex
 }
 
 const (
@@ -34,7 +42,10 @@ var (
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
 	diskMonitor = disk.DiskUsagePtr()
-	memMonitor = mem.MemStatusMonitor()
+	memMonitor  = mem.MemStatusMonitor()
+	// integrity ticker (24h)
+	integrityTicker = time.NewTicker(25 * time.Hour)
+	statusTicker    = time.NewTicker(5 * time.Second)
 )
 
 // index data
@@ -74,7 +85,7 @@ var (
 	//bytes of welcome message
 	indexWelcomeBytes     = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes = []byte(indexWelcomeHtml)
-	// sync pools
+	// internally used struct pools to reduce GC
 	statusPool = sync.Pool{
 		// New creates an object when the pool has nothing available to return.
 		// New must return an interface{} to make it flexible. You have to cast
@@ -82,7 +93,7 @@ var (
 		New: func() interface{} {
 			// Pools often contain things like *bytes.Buffer, which are
 			// temporary and re-usable.
-			wrapper := protocol.ServerStatusResponse{}
+			wrapper := new(protocol.ServerStatusResponse)
 			wrapper.Runtime.Compiler = runtime.Compiler
 
 			wrapper.Version.Etherniti = release.Version
@@ -94,20 +105,48 @@ var (
 			return wrapper
 		},
 	}
+	bufferBool = sync.Pool{
+		// New creates an object when the pool has nothing available to return.
+		// New must return an interface{} to make it flexible. You have to cast
+		// your type after getting it.
+		New: func() interface{} {
+			return new(bytes.Buffer)
+		},
+	}
 )
 
 // contructor like function
 func init() {
-	var monErr error
-	monErr = diskMonitor.Eval("/")
-	if monErr != nil {
-		logger.Error("failed to start disk status monitor on path /. Caused by: ", monErr)
-	}
+	diskMonitor.Start("/")
 	memMonitor.Start()
 }
 
 func NewIndexController() IndexController {
 	dc := IndexController{}
+	dc.integrityLock = new(sync.Mutex)
+	dc.statusLock = new(sync.Mutex)
+	// load initial value for integrity bytes
+	dc.lastIntegrityBytes = util.GetJsonBytes(dc.integrityReload())
+	dc.lastStatusBytes = dc.statusReload()
+
+	go func(ctl *IndexController) {
+		for range integrityTicker.C {
+			// time to update integrity signature
+			dc.integrityLock.Lock()
+			ctl.lastIntegrityBytes = util.GetJsonBytes(ctl.integrityReload())
+			dc.integrityLock.Unlock()
+		}
+	}(&dc)
+
+	go func(ctl *IndexController) {
+		for range statusTicker.C {
+			// time to update integrity signature
+			dc.statusLock.Lock()
+			ctl.lastStatusBytes = ctl.statusReload()
+			dc.statusLock.Unlock()
+		}
+	}(&dc)
+
 	return dc
 }
 
@@ -119,26 +158,37 @@ func Index(c echo.Context) error {
 }
 
 func (ctl IndexController) Status(c echo.Context) error {
-	wrapper := ctl.status()
+	data := ctl.status()
 	var code int
 	code, c = Cached(c, true, 5) // 5 seconds cache directive
-	return c.JSONBlob(code, wrapper)
+	return c.JSONBlob(code, data)
 }
 
 func (ctl IndexController) status() []byte {
+	ctl.statusLock.Lock()
+	raw := ctl.lastStatusBytes
+	ctl.statusLock.Unlock()
+	return raw
+}
+
+func (ctl IndexController) statusReload() []byte {
 
 	//get the wrapper from the pool, adn cast it
-	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
-	wrapper = memMonitor.Read(wrapper)
+	wrapper := statusPool.Get().(*protocol.ServerStatusResponse)
+	memMonitor.ReadPtr(wrapper)
 
 	wrapper.Disk.All = diskMonitor.All()
 	wrapper.Disk.Used = diskMonitor.Used()
 	wrapper.Disk.Free = diskMonitor.Free()
 
-	data := wrapper.Bytes()
+	//get the buffer from the pool, adn cast it
+	buffer := bufferBool.Get().(*bytes.Buffer)
+	data := wrapper.Bytes(buffer)
+	buffer.Reset()
 
 	// Then put it back
 	statusPool.Put(wrapper)
+	bufferBool.Put(buffer)
 
 	return data
 }
@@ -146,17 +196,16 @@ func (ctl IndexController) status() []byte {
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
 func (ctl IndexController) Integrity(c echo.Context) error {
-	wrapper := ctl.integrity()
 	var code int
 	code, c = Cached(c, true, 86400) // 24h cache directive
-	return c.JSON(code, wrapper)
+	return c.JSONBlob(code, ctl.integrity())
 }
 
-func (ctl IndexController) integrity() protocol.IntegrityResponse {
+func (ctl IndexController) integrityReload() protocol.IntegrityResponse {
 	// get current date time
-	currentTime := time.Now()
-	timeStr := currentTime.String()
+	currentTime := fastime.Now()
 	millis := currentTime.Unix()
+	timeStr := time.Unix(millis, 0).Format(time.RFC3339)
 	millisStr := strconv.FormatInt(millis, 10)
 
 	//sign message
@@ -168,6 +217,13 @@ func (ctl IndexController) integrity() protocol.IntegrityResponse {
 	wrapper.Hash = hash
 	wrapper.Signature = signature
 	return wrapper
+}
+
+func (ctl IndexController) integrity() []byte {
+	ctl.integrityLock.Lock()
+	raw := ctl.lastIntegrityBytes
+	ctl.integrityLock.Unlock()
+	return raw
 }
 
 // implemented method from interface RouterRegistrable

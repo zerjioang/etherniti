@@ -3,7 +3,6 @@ package protocol
 import (
 	"bytes"
 	"strconv"
-	"unsafe"
 )
 
 type ServerStatusResponse struct {
@@ -37,10 +36,41 @@ type ServerStatusResponse struct {
 	} `json:"gc"`
 }
 
-func (r ServerStatusResponse) Bytes() []byte {
-	buffer.WriteString("x")
-	data := `{"cpus":{"cores":`+itoa(r.Cpus.Cores)+`},"runtime":{"compiler":"`+r.Runtime.Compiler+`"},"version":{"etherniti":"`+r.Version.Etherniti+`","http":"`+r.Version.HTTP+`","go":"`+r.Version.Go+`"},"disk":{"all":`+itoau64(r.Disk.All)+`,"used":`+itoau64(r.Disk.Used)+`,"free":`+itoau64(r.Disk.Free)+`},"memory":{"frees":`+itoau64(r.Memory.Frees)+`,"heapalloc":`+itoau64(r.Memory.Heapalloc)+`,"alloc":`+itoau64(r.Memory.Alloc)+`,"total":`+itoau64(r.Memory.Total)+`,"sys":`+itoau64(r.Memory.Sys)+`,"mallocs":`+itoau64(r.Memory.Mallocs)+`},"gc":{"numgc":`+itoau32(r.Gc.Numgc)+`,"numForcedGC":`+itoau32(r.Gc.NumForcedGC)+`}}`
-	return *(*[]byte)(unsafe.Pointer(&data))
+func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {
+	buffer.WriteString(`{"cpus":{"cores":`)
+	buffer.WriteString(itoa(r.Cpus.Cores))
+	buffer.WriteString(`},"runtime":{"compiler":"`)
+	buffer.WriteString(r.Runtime.Compiler)
+	buffer.WriteString(`"},"version":{"etherniti":"`)
+	buffer.WriteString(r.Version.Etherniti)
+	buffer.WriteString(`","http":"`)
+	buffer.WriteString(r.Version.HTTP)
+	buffer.WriteString(`","go":"`)
+	buffer.WriteString(r.Version.Go)
+	buffer.WriteString(`"},"disk":{"all":`)
+	buffer.WriteString(itoau64(r.Disk.All))
+	buffer.WriteString(`,"used":`)
+	buffer.WriteString(itoau64(r.Disk.Used))
+	buffer.WriteString(`,"free":`)
+	buffer.WriteString(itoau64(r.Disk.Free))
+	buffer.WriteString(`},"memory":{"frees":`)
+	buffer.WriteString(itoau64(r.Memory.Frees))
+	buffer.WriteString(`,"heapalloc":`)
+	buffer.WriteString(itoau64(r.Memory.Heapalloc))
+	buffer.WriteString(`,"alloc":`)
+	buffer.WriteString(itoau64(r.Memory.Alloc))
+	buffer.WriteString(`,"total":`)
+	buffer.WriteString(itoau64(r.Memory.Total))
+	buffer.WriteString(`,"sys":`)
+	buffer.WriteString(itoau64(r.Memory.Sys))
+	buffer.WriteString(`,"mallocs":`)
+	buffer.WriteString(itoau64(r.Memory.Mallocs))
+	buffer.WriteString(`},"gc":{"numgc":`)
+	buffer.WriteString(itoau32(r.Gc.Numgc))
+	buffer.WriteString(`,"numForcedGC":`)
+	buffer.WriteString(itoau32(r.Gc.NumForcedGC))
+	buffer.WriteString(`}}`)
+	return buffer.Bytes()
 }
 
 func itoa(v int) string {

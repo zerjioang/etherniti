@@ -7,6 +7,8 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/labstack/gommon/log"
 )
 
 const (
@@ -22,17 +24,16 @@ var (
 )
 
 type DiskStatus struct {
-	all        uint64
-	used       uint64
-	free       uint64
-	monitoring bool
-	lock       sync.Mutex
+	all  uint64
+	used uint64
+	free uint64
+	lock *sync.Mutex
 }
 
 // constructor like function
 func DiskUsage() DiskStatus {
 	disk := DiskStatus{}
-	disk.lock = sync.Mutex{}
+	disk.lock = new(sync.Mutex)
 	return disk
 }
 
@@ -42,62 +43,61 @@ func DiskUsagePtr() *DiskStatus {
 }
 
 // disk usage of path/disk
-func (disk *DiskStatus) Eval(path string) error {
-	if !disk.monitoring {
-		// initialize read values
-		disk.read(path)
-		// start monitor
-		go disk.monitor(path)
-	}
-	return nil
+func (disk *DiskStatus) Start(path string) {
+	// initialize read values
+	disk.read(path)
+	// start monitor
+	go disk.monitor(path)
 }
 
 // internal ticker based monitor
-func (disk *DiskStatus) monitor(path string) error {
-	disk.monitoring = true
-	for !disk.monitoring {
-		for range ticker.C {
-			disk.read(path)
+func (disk *DiskStatus) monitor(path string) {
+	for range ticker.C {
+		rErr := disk.read(path)
+		if rErr != nil {
+			log.Error("disk status read error", rErr)
 		}
 	}
-	return nil
 }
 
-func (disk *DiskStatus) read(path string) (*DiskStatus, error) {
-	disk.lock.Lock()
+func (disk *DiskStatus) read(path string) error {
 	fs := syscall.Statfs_t{}
 	err := syscall.Statfs(path, &fs)
 	if err != nil {
-		return disk, err
+		return err
 	}
+	disk.lock.Lock()
 	disk.all = fs.Blocks * uint64(fs.Bsize)
 	disk.free = fs.Bfree * uint64(fs.Bsize)
 	disk.used = disk.all - disk.free
 	disk.lock.Unlock()
-	return disk, nil
+	return nil
 }
 
 // get all value
-func (disk DiskStatus) All() uint64 {
+func (disk *DiskStatus) All() uint64 {
 	disk.lock.Lock()
-	defer disk.lock.Unlock()
-	return disk.all / GB
+	raw := disk.all / GB
+	disk.lock.Unlock()
+	return raw
 }
 
 // get used value
-func (disk DiskStatus) Used() uint64 {
+func (disk *DiskStatus) Used() uint64 {
 	disk.lock.Lock()
-	defer disk.lock.Unlock()
-	return disk.used / GB
+	raw := disk.used / GB
+	disk.lock.Unlock()
+	return raw
 }
 
 // get free value
-func (disk DiskStatus) Free() uint64 {
+func (disk *DiskStatus) Free() uint64 {
 	disk.lock.Lock()
-	defer disk.lock.Unlock()
-	return disk.free / GB
+	raw := disk.free / GB
+	disk.lock.Unlock()
+	return raw
 }
 
 func (disk DiskStatus) IsMonitoring() bool {
-	return disk.monitoring
+	return true
 }

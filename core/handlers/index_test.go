@@ -4,9 +4,10 @@
 package handlers
 
 import (
-	"github.com/pkg/profile"
 	"testing"
 	"time"
+
+	"github.com/pkg/profile"
 )
 
 func TestIndexConcurrency(t *testing.T) {
@@ -79,7 +80,7 @@ func TestIndexConcurrency(t *testing.T) {
 	})
 }
 
-func TestIndexProfiling(t *testing.T){
+func TestIndexProfiling(t *testing.T) {
 	t.Run("status", func(t *testing.T) {
 		t.Run("cpu", func(t *testing.T) {
 			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
@@ -103,7 +104,7 @@ func TestIndexProfiling(t *testing.T){
 			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
 			defer profile.Start().Stop()
 			ctl := NewIndexController()
-			for n := 0; n < 1000000; n++ {
+			for n := 0; n < 10000; n++ {
 				ctl.integrity()
 			}
 		})
@@ -111,7 +112,7 @@ func TestIndexProfiling(t *testing.T){
 			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
 			defer profile.Start(profile.MemProfile).Stop()
 			ctl := NewIndexController()
-			for n := 0; n < 1000000; n++ {
+			for n := 0; n < 10000; n++ {
 				ctl.integrity()
 			}
 		})
@@ -135,12 +136,30 @@ func BenchmarkIndexMethods(b *testing.B) {
 		}
 	})
 
+	b.Run("status-reload", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		ctl := NewIndexController()
+		for n := 0; n < b.N; n++ {
+			ctl.statusReload()
+		}
+	})
+
 	b.Run("integrity", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		ctl := NewIndexController()
 		for n := 0; n < b.N; n++ {
 			ctl.integrity()
+		}
+	})
+
+	b.Run("integrity-reload", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		ctl := NewIndexController()
+		for n := 0; n < b.N; n++ {
+			ctl.integrityReload()
 		}
 	})
 }

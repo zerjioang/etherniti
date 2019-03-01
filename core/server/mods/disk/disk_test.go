@@ -20,7 +20,7 @@ func TestDiskUsage(t *testing.T) {
 	})
 	t.Run("read-once", func(t *testing.T) {
 		disk := DiskUsage()
-		err := disk.Eval("/")
+		err := disk.Start("/")
 		if err != nil {
 			t.Error(err)
 		}

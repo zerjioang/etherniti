@@ -4,10 +4,11 @@
 package mem
 
 import (
-	"github.com/zerjioang/etherniti/core/api/protocol"
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/api/protocol"
 )
 
 const (
@@ -26,13 +27,13 @@ type MemStatus struct {
 	//mem stats data holder
 	m runtime.MemStats
 	// locker for concurrent access
-	lock sync.Mutex
+	lock *sync.Mutex
 }
 
 // constructor like function
 func MemStatusMonitor() MemStatus {
 	mem := MemStatus{}
-	mem.lock = sync.Mutex{}
+	mem.lock = new(sync.Mutex)
 	return mem
 }
 
@@ -41,7 +42,7 @@ func (mem *MemStatus) Start() {
 	go mem.monitor()
 }
 
-func (mem *MemStatus) Read(wrapper protocol.ServerStatusResponse) protocol.ServerStatusResponse{
+func (mem *MemStatus) Read(wrapper protocol.ServerStatusResponse) protocol.ServerStatusResponse {
 	mem.lock.Lock()
 	wrapper.Memory.Alloc = mem.m.Alloc
 	wrapper.Memory.Total = mem.m.TotalAlloc
@@ -56,7 +57,7 @@ func (mem *MemStatus) Read(wrapper protocol.ServerStatusResponse) protocol.Serve
 	return wrapper
 }
 
-func (mem *MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse){
+func (mem *MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse) {
 	mem.lock.Lock()
 	wrapper.Memory.Alloc = mem.m.Alloc
 	wrapper.Memory.Total = mem.m.TotalAlloc
