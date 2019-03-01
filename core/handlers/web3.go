@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
@@ -25,16 +25,13 @@ var (
 
 // eth web3 controller
 type Web3Controller struct {
-	// in memory based wallet manager
-	walletManager eth.WalletManager
 	//ethereum interaction cache
 	cache *cache.Cache
 }
 
 // constructor like function
-func NewWeb3Controller(manager eth.WalletManager) Web3Controller {
+func NewWeb3Controller() Web3Controller {
 	ctl := Web3Controller{}
-	ctl.walletManager = manager
 	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
 	return ctl
 }
@@ -44,13 +41,13 @@ func (ctl Web3Controller) getBalance(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, err := cc.ClientInstance()
 	if err != nil {
 		// there was an trycatch recovering client instance
-		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
@@ -60,7 +57,7 @@ func (ctl Web3Controller) getBalance(c echo.Context) error {
 		result, err := clientInstance.EthGetBalance(targetAddr, "latest")
 		if err != nil {
 			//some trycatch happen, return trycatch to client
-			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 		}
@@ -75,13 +72,13 @@ func (ctl Web3Controller) getBalanceAtBlock(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, err := cc.ClientInstance()
 	if err != nil {
 		// there was an trycatch recovering client instance
-		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
@@ -92,7 +89,7 @@ func (ctl Web3Controller) getBalanceAtBlock(c echo.Context) error {
 		result, err := clientInstance.EthGetBalance(targetAddr, block)
 		if err != nil {
 			//some trycatch happen, return trycatch to client
-			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 		}
@@ -107,13 +104,13 @@ func (ctl Web3Controller) getNodeInfo(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, err := cc.ClientInstance()
 	if err != nil {
 		// there was an trycatch recovering client instance
-		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
@@ -122,7 +119,7 @@ func (ctl Web3Controller) getNodeInfo(c echo.Context) error {
 		// send invalid address message
 		return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 	} else {
-		return Success(c, "eth_info", data)
+		return protocol.Success(c, "eth_info", data)
 	}
 }
 
@@ -130,23 +127,26 @@ func (ctl Web3Controller) getAccounts(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
-	client := GetClient(cc)
+	client, cliErr := cc.ClientInstance()
+	if cliErr != nil {
+		return protocol.Error(c, cliErr)
+	}
 	list, err := client.EthAccounts()
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusInternalServerError,
 			util.GetJsonBytes(
-				api.NewApiError(http.StatusInternalServerError, err.Error()),
+				protocol.NewApiError(http.StatusInternalServerError, err.Error()),
 			),
 		)
 	} else {
 		return c.JSONBlob(
 			http.StatusOK,
 			util.GetJsonBytes(
-				api.NewApiResponse("ethereum accounts readed", list),
+				protocol.NewApiResponse("ethereum accounts readed", list),
 			),
 		)
 	}
@@ -165,10 +165,13 @@ func (ctl Web3Controller) getAccountsWithBalance(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
-	client := GetClient(cc)
+	client, cliErr := cc.ClientInstance()
+	if cliErr != nil {
+		return protocol.Error(c, cliErr)
+	}
 	list, err := client.EthAccounts()
 
 	type wrapper struct {
@@ -183,7 +186,7 @@ func (ctl Web3Controller) getAccountsWithBalance(c echo.Context) error {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusInternalServerError,
 			util.GetJsonBytes(
-				api.NewApiError(http.StatusInternalServerError, err.Error()),
+				protocol.NewApiError(http.StatusInternalServerError, err.Error()),
 			),
 		)
 	} else {
@@ -204,7 +207,7 @@ func (ctl Web3Controller) getAccountsWithBalance(c echo.Context) error {
 		return c.JSONBlob(
 			http.StatusOK,
 			util.GetJsonBytes(
-				api.NewApiResponse("ethereum accounts and their balance readed", wrapperList),
+				protocol.NewApiResponse("ethereum accounts and their balance readed", wrapperList),
 			),
 		)
 	}
@@ -219,7 +222,7 @@ func (ctl Web3Controller) coinbase(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	raw, found := ctl.cache.Get("eth_coinbase")
@@ -229,12 +232,15 @@ func (ctl Web3Controller) coinbase(c echo.Context) error {
 		return c.JSONBlob(
 			http.StatusOK,
 			util.GetJsonBytes(
-				api.NewApiResponse("coinbase address", raw),
+				protocol.NewApiResponse("coinbase address", raw),
 			),
 		)
 	} else {
 		//cache miss
-		client := GetClient(cc)
+		client, cliErr := cc.ClientInstance()
+		if cliErr != nil {
+			return protocol.Error(c, cliErr)
+		}
 		result, err := client.Call("eth_coinbase")
 		if err == nil {
 			if result != nil {
@@ -244,20 +250,20 @@ func (ctl Web3Controller) coinbase(c echo.Context) error {
 				return c.JSONBlob(
 					http.StatusOK,
 					util.GetJsonBytes(
-						api.NewApiResponse("coinbase address", result),
+						protocol.NewApiResponse("coinbase address", result),
 					),
 				)
 			} else {
 				return c.JSONBlob(http.StatusBadRequest,
 					util.GetJsonBytes(
-						api.NewApiError(http.StatusBadRequest, "empty response from server"),
+						protocol.NewApiError(http.StatusBadRequest, "empty response from server"),
 					),
 				)
 			}
 		} else {
 			return c.JSONBlob(http.StatusBadRequest,
 				util.GetJsonBytes(
-					api.NewApiError(http.StatusBadRequest, "failed to get coinbase address: "+err.Error()),
+					protocol.NewApiError(http.StatusBadRequest, "failed to get coinbase address: "+err.Error()),
 				),
 			)
 		}
@@ -269,12 +275,12 @@ func (ctl Web3Controller) isContractAddress(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return ErrorStr(c, "failed to execute requested operation")
+		return protocol.ErrorStr(c, "failed to execute requested operation")
 	}
 	clientInstance, err := cc.ClientInstance()
 	if err != nil {
 		// there was an error recovering client instance
-		apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+		apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 		apiErrRaw := util.GetJsonBytes(apiErr)
 		return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 	}
@@ -284,7 +290,7 @@ func (ctl Web3Controller) isContractAddress(c echo.Context) error {
 		result, err := eth.IsSmartContractAddress(clientInstance, targetAddr)
 		if err != nil {
 			//some error happen, return error to client
-			apiErr := api.NewApiError(http.StatusBadRequest, err.Error())
+			apiErr := protocol.NewApiError(http.StatusBadRequest, err.Error())
 			apiErrRaw := util.GetJsonBytes(apiErr)
 			return c.JSONBlob(http.StatusBadRequest, apiErrRaw)
 		}

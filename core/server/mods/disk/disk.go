@@ -4,6 +4,7 @@
 package disk
 
 import (
+	"sync"
 	"syscall"
 	"time"
 )
@@ -17,21 +18,21 @@ const (
 
 var (
 	//shared coordinator for all disk status reader
-	// ticker = time.NewTicker(5 * time.Second)
-	ticker = time.NewTicker(100 * time.Millisecond)
+	ticker = time.NewTicker(5 * time.Second)
 )
 
 type DiskStatus struct {
-	all  uint64
-	used uint64
-	free uint64
-	//monitoring bool
+	all        uint64
+	used       uint64
+	free       uint64
 	monitoring bool
+	lock       sync.Mutex
 }
 
 // constructor like function
 func DiskUsage() DiskStatus {
 	disk := DiskStatus{}
+	disk.lock = sync.Mutex{}
 	return disk
 }
 
@@ -63,6 +64,7 @@ func (disk *DiskStatus) monitor(path string) error {
 }
 
 func (disk *DiskStatus) read(path string) (*DiskStatus, error) {
+	disk.lock.Lock()
 	fs := syscall.Statfs_t{}
 	err := syscall.Statfs(path, &fs)
 	if err != nil {
@@ -71,22 +73,29 @@ func (disk *DiskStatus) read(path string) (*DiskStatus, error) {
 	disk.all = fs.Blocks * uint64(fs.Bsize)
 	disk.free = fs.Bfree * uint64(fs.Bsize)
 	disk.used = disk.all - disk.free
+	disk.lock.Unlock()
 	return disk, nil
 }
 
 // get all value
 func (disk DiskStatus) All() uint64 {
-	return disk.all
+	disk.lock.Lock()
+	defer disk.lock.Unlock()
+	return disk.all / GB
 }
 
 // get used value
 func (disk DiskStatus) Used() uint64 {
-	return disk.used
+	disk.lock.Lock()
+	defer disk.lock.Unlock()
+	return disk.used / GB
 }
 
 // get free value
 func (disk DiskStatus) Free() uint64 {
-	return disk.free
+	disk.lock.Lock()
+	defer disk.lock.Unlock()
+	return disk.free / GB
 }
 
 func (disk DiskStatus) IsMonitoring() bool {

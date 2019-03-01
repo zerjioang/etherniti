@@ -4,8 +4,10 @@
 package server
 
 import (
+	"errors"
+
+	"github.com/json-iterator/go"
 	"github.com/labstack/echo"
-	"github.com/pkg/errors"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
@@ -59,15 +61,38 @@ func (context EthernitiContext) ReadConnectionProfileToken() string {
 }
 
 //custom json encoder
-/*
 func (context EthernitiContext) JSON(code int, i interface{}) (err error) {
-
-	return context.JSONBlob(code, raw)
+	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	var json = jsoniter.ConfigFastest
+	data, encErr := json.Marshal(i)
+	if encErr != nil {
+		return encErr
+	}
+	return context.JSONBlob(code, data)
 }
-*/
+
+func (context *EthernitiContext) writeContentType(value string) {
+	header := context.Response().Header()
+	if header.Get(echo.HeaderContentType) == "" {
+		header.Set(echo.HeaderContentType, value)
+	}
+}
+
+func (context *EthernitiContext) Blob(code int, contentType string, b []byte) (err error) {
+	context.writeContentType(contentType)
+	response := context.Response()
+	response.WriteHeader(code)
+	_, err = response.Write(b)
+	return
+}
+
+func (context *EthernitiContext) HTMLBlob(code int, b []byte) (err error) {
+	return context.Blob(code, echo.MIMETextHTMLCharsetUTF8, b)
+}
 
 // constructor like function
-func NewEthernitiContext() EthernitiContext {
-	ctx := EthernitiContext{}
+func NewEthernitiContext(c echo.Context) *EthernitiContext {
+	ctx := new(EthernitiContext)
+	ctx.Context = c
 	return ctx
 }

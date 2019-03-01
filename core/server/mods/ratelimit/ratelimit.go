@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/api/protocol"
+
 	"github.com/patrickmn/go-cache"
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 )
@@ -35,7 +36,7 @@ const (
 )
 
 var (
-	rateExcedeed                  = api.NewApiError(http.StatusTooManyRequests, "rate limit reached")
+	rateExcedeed                  = protocol.NewApiError(http.StatusTooManyRequests, "rate limit reached")
 	defaultCacheMeasurementUnit   = config.RateLimitUnits
 	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt
 )

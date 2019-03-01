@@ -9,7 +9,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
 	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
@@ -34,11 +34,11 @@ func NewWalletController() WalletController {
 */
 func (ctl WalletController) mnemonic(c echo.Context) error {
 
-	req := api.NewMnemonicRequest{}
+	req := protocol.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch error
 		logger.Error("failed to bind request data to model:", err)
-		return ErrorStr(c, bindErr)
+		return protocol.ErrorStr(c, bindErr)
 	}
 
 	// lowercase language
@@ -62,7 +62,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 		bip39.SetWordList(wordlists.Spanish)
 	} else {
 		//return invalid language trycatch
-		return ErrorStr(c, "provided language is not supported")
+		return protocol.ErrorStr(c, "provided language is not supported")
 	}
 
 	if req.Size != 128 &&
@@ -71,7 +71,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 		req.Size != 224 &&
 		req.Size != 256 {
 		//return invalid size trycatch
-		return ErrorStr(c, "provided size is not supported")
+		return protocol.ErrorStr(c, "provided size is not supported")
 	}
 
 	// create new entropy from rand reader
@@ -81,17 +81,17 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	n, readErr := io.ReadFull(rand.Reader, entropy)
 	if readErr != nil || uint8(n) != entropyBytes {
 		//failed to get a full entropy source
-		return ErrorStr(c, "failed to get a full entropy source")
+		return protocol.ErrorStr(c, "failed to get a full entropy source")
 	}
 
 	// create mnemonic based on user config and created entropy source
 	mnemomic, err := bip39.NewMnemonic(entropy)
 	if err.Occur() {
 		//return mnemonic error
-		return StackError(c, err)
+		return protocol.StackError(c, err)
 	} else {
 		//return mnemonic content
-		rawBytes := util.GetJsonBytes(api.NewApiResponse("mnemonic successfully created", mnemomic))
+		rawBytes := util.GetJsonBytes(protocol.NewApiResponse("mnemonic successfully created", mnemomic))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }

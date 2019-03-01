@@ -4,7 +4,11 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/core/server/mods/mem"
 	"runtime"
+	"strconv"
+	"sync"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/config"
@@ -30,18 +34,20 @@ var (
 	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
 	diskMonitor = disk.DiskUsagePtr()
+	memMonitor = mem.MemStatusMonitor()
 )
 
 // index data
 const (
-	indexWelcomeJson = `{
-  "name": "eth-wbapi",
-  "description": "Etherniti: Ethereum REST API",
-  "cluster_name": "eth-wbapi",
-  "version": "` + release.Version + `",
-  "env": "` + config.EnvironmentName + `",
-  "tagline": "dapps everywhere"
-}`
+	/*IndexWelcomeJson = `{
+	  "name": "eth-wbapi",
+	  "description": "Etherniti: Ethereum REST API",
+	  "cluster_name": "eth-wbapi",
+	  "version": "` + release.Version + `",
+	  "env": "` + config.EnvironmentName + `",
+	  "tagline": "dapps everywhere"
+	}`*/
+	IndexWelcomeJson = `{"name":"eth-wbapi","description":"Etherniti:Ethereum REST API","cluster_name":"eth-wbapi","version":"` + release.Version + `","env":"` + config.EnvironmentName + `","tagline":"dapps everywhere"}`
 	indexWelcomeHtml = `<!doctype html>
 <title>Etherniti: Ethereum Multitenant API</title>
 <style>
@@ -66,7 +72,28 @@ const (
 
 var (
 	//bytes of welcome message
-	indexWelcomeBytes = []byte(indexWelcomeJson)
+	indexWelcomeBytes     = []byte(IndexWelcomeJson)
+	indexWelcomeHtmlBytes = []byte(indexWelcomeHtml)
+	// sync pools
+	statusPool = sync.Pool{
+		// New creates an object when the pool has nothing available to return.
+		// New must return an interface{} to make it flexible. You have to cast
+		// your type after getting it.
+		New: func() interface{} {
+			// Pools often contain things like *bytes.Buffer, which are
+			// temporary and re-usable.
+			wrapper := protocol.ServerStatusResponse{}
+			wrapper.Runtime.Compiler = runtime.Compiler
+
+			wrapper.Version.Etherniti = release.Version
+			wrapper.Version.Go = runtime.Version()
+			wrapper.Version.HTTP = echo.Version
+
+			wrapper.Cpus.Cores = numcpus
+
+			return wrapper
+		},
+	}
 )
 
 // contructor like function
@@ -76,6 +103,7 @@ func init() {
 	if monErr != nil {
 		logger.Error("failed to start disk status monitor on path /. Caused by: ", monErr)
 	}
+	memMonitor.Start()
 }
 
 func NewIndexController() IndexController {
@@ -84,87 +112,68 @@ func NewIndexController() IndexController {
 }
 
 func Index(c echo.Context) error {
-	var code int
-	code, c = Cached(c, true, CacheOneDay) // 24h cache directive
 	if c.Request().Header.Get("Accept") == "application/json" {
-		return c.JSONBlob(code, indexWelcomeBytes)
+		return CachedJsonBlob(c, true, CacheInfinite, indexWelcomeBytes)
 	}
-	return c.HTML(code, indexWelcomeHtml)
+	return CachedHtml(c, true, CacheInfinite, indexWelcomeHtmlBytes)
 }
 
-//concurrency safe
-func (ctl IndexController) status(c echo.Context) error {
-
-	// read memory stats
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-
-	wrapper := map[string]interface{}{
-		// memory stats
-		"memory": map[string]uint64{
-			"alloc":     m.Alloc,
-			"total":     m.TotalAlloc,
-			"sys":       m.Sys,
-			"mallocs":   m.Mallocs,
-			"frees":     m.Frees,
-			"heapalloc": m.HeapAlloc,
-		},
-		// gc stats
-		"gc": map[string]uint32{
-			"numgc":       m.NumGC,
-			"numForcedGC": m.NumForcedGC,
-		},
-		// cpus stats
-		"cpus": map[string]int{
-			"cores": numcpus,
-		},
-		// runtime stats
-		"runtime": map[string]string{
-			"compiler": runtime.Compiler,
-		},
-		// software version stats
-		"version": map[string]string{
-			"etherniti": release.Version,
-			"go":        runtime.Version(),
-			"http":      echo.Version,
-		},
-		// basic disk stats
-		"disk": map[string]float64{
-			"all":  float64(diskMonitor.All()) / gbUnits,
-			"used": float64(diskMonitor.Used()) / gbUnits,
-			"free": float64(diskMonitor.Free()) / gbUnits,
-		},
-	}
+func (ctl IndexController) Status(c echo.Context) error {
+	wrapper := ctl.status()
 	var code int
 	code, c = Cached(c, true, 5) // 5 seconds cache directive
-	return c.JSON(code, wrapper)
+	return c.JSONBlob(code, wrapper)
+}
+
+func (ctl IndexController) status() []byte {
+
+	//get the wrapper from the pool, adn cast it
+	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
+	wrapper = memMonitor.Read(wrapper)
+
+	wrapper.Disk.All = diskMonitor.All()
+	wrapper.Disk.Used = diskMonitor.Used()
+	wrapper.Disk.Free = diskMonitor.Free()
+
+	data := wrapper.Bytes()
+
+	// Then put it back
+	statusPool.Put(wrapper)
+
+	return data
 }
 
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
-func (ctl IndexController) integrity(c echo.Context) error {
-	// get current date time
-	currentTime := time.Now()
-	timeStr := currentTime.String()
-	millisStr := currentTime.Unix()
-
-	//sign message
-	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
-	wrapper := map[string]interface{}{
-		"message":   timeStr,
-		"millis":    millisStr,
-		"hash":      hash,
-		"signature": signature,
-	}
+func (ctl IndexController) Integrity(c echo.Context) error {
+	wrapper := ctl.integrity()
 	var code int
 	code, c = Cached(c, true, 86400) // 24h cache directive
 	return c.JSON(code, wrapper)
+}
+
+func (ctl IndexController) integrity() protocol.IntegrityResponse {
+	// get current date time
+	currentTime := time.Now()
+	timeStr := currentTime.String()
+	millis := currentTime.Unix()
+	millisStr := strconv.FormatInt(millis, 10)
+
+	//sign message
+	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
+
+	var wrapper protocol.IntegrityResponse
+	wrapper.Message = timeStr
+	wrapper.Millis = millisStr
+	wrapper.Hash = hash
+	wrapper.Signature = signature
+	return wrapper
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", Index)
-	router.GET("/status", ctl.status)
-	router.GET("/integrity", ctl.integrity)
+	router.GET("/status", ctl.Status)
+	router.GET("/integrity", ctl.Integrity)
 }

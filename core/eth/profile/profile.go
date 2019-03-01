@@ -7,8 +7,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/zerjioang/etherniti/core/api/protocol"
+
 	"github.com/etherniti/jwt-go"
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/util"
@@ -171,7 +172,7 @@ func NewConnectionProfile() ConnectionProfile {
 }
 
 //constructor like function
-func NewConnectionProfileWithData(data api.NewProfileRequest) ConnectionProfile {
+func NewConnectionProfileWithData(data protocol.NewProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
 		Id:        util.GenerateUUID(),

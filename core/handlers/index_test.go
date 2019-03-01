@@ -4,27 +4,143 @@
 package handlers
 
 import (
-	"net/http"
-	"net/http/httptest"
+	"github.com/pkg/profile"
 	"testing"
-
-	"github.com/labstack/echo"
-	"github.com/stretchr/testify/assert"
+	"time"
 )
 
-// an end to end test from go
-// it deploys a temporal http server for testing
-func TestIndex(t *testing.T) {
-	// Setup
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/", nil)
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+func TestIndexConcurrency(t *testing.T) {
+	t.Run("index-single-echo", func(t *testing.T) {
+		testServer := MockServer()
+		ctx := NewContext(testServer)
+		err := Index(ctx)
+		if err != nil {
+			t.Log(err)
+		}
+	})
+	t.Run("index-concurrency-echo", func(t *testing.T) {
+		times := 100
+		testServer := MockServer()
+		for i := 0; i < times; i++ {
+			go func() {
+				ctx := NewContext(testServer)
+				err := Index(ctx)
+				if err != nil {
+					t.Log(err)
+				}
+			}()
+		}
+		time.Sleep(2 * time.Second)
+	})
 
-	// Assertions
-	if assert.NoError(t, Index(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, indexWelcomeJson, rec.Body.String())
-	}
+	t.Run("status-single-echo", func(t *testing.T) {
+		testServer := MockServer()
+		ctl := NewIndexController()
+		ctx := NewContext(testServer)
+		err := ctl.Status(ctx)
+		if err != nil {
+			t.Log(err)
+		}
+	})
+	t.Run("status-concurrency-echo", func(t *testing.T) {
+		times := 100
+		testServer := MockServer()
+		ctl := NewIndexController()
+		for i := 0; i < times; i++ {
+			go func() {
+				ctx := NewContext(testServer)
+				err := ctl.Status(ctx)
+				if err != nil {
+					t.Log(err)
+				}
+			}()
+		}
+		time.Sleep(2 * time.Second)
+	})
+	t.Run("status-concurrency-controller", func(t *testing.T) {
+		times := 100
+		ctl := NewIndexController()
+		for i := 0; i < times; i++ {
+			go func() {
+				result := ctl.status()
+				if result == nil || len(result) == 0 {
+					t.Log("invalid status result")
+				}
+			}()
+		}
+		time.Sleep(2 * time.Second)
+	})
+	t.Run("status-single-controller", func(t *testing.T) {
+		ctl := NewIndexController()
+		result := ctl.status()
+		if result == nil || len(result) == 0 {
+			t.Log("invalid status result")
+		}
+	})
+}
+
+func TestIndexProfiling(t *testing.T){
+	t.Run("status", func(t *testing.T) {
+		t.Run("cpu", func(t *testing.T) {
+			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
+			defer profile.Start().Stop()
+			ctl := NewIndexController()
+			for n := 0; n < 1000000; n++ {
+				ctl.status()
+			}
+		})
+		t.Run("mem", func(t *testing.T) {
+			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
+			defer profile.Start(profile.MemProfile).Stop()
+			ctl := NewIndexController()
+			for n := 0; n < 1000000; n++ {
+				ctl.status()
+			}
+		})
+	})
+	t.Run("integrity", func(t *testing.T) {
+		t.Run("cpu", func(t *testing.T) {
+			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
+			defer profile.Start().Stop()
+			ctl := NewIndexController()
+			for n := 0; n < 1000000; n++ {
+				ctl.integrity()
+			}
+		})
+		t.Run("mem", func(t *testing.T) {
+			// go tool pprof --pdf ~/go/bin/yourbinary /var/path/to/cpu.pprof > file.pdf
+			defer profile.Start(profile.MemProfile).Stop()
+			ctl := NewIndexController()
+			for n := 0; n < 1000000; n++ {
+				ctl.integrity()
+			}
+		})
+	})
+}
+
+func BenchmarkIndexMethods(b *testing.B) {
+	b.Run("instantiation", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		for n := 0; n < b.N; n++ {
+			_ = NewIndexController()
+		}
+	})
+	b.Run("status", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		ctl := NewIndexController()
+		for n := 0; n < b.N; n++ {
+			ctl.status()
+		}
+	})
+
+	b.Run("integrity", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		ctl := NewIndexController()
+		for n := 0; n < b.N; n++ {
+			ctl.integrity()
+		}
+	})
 }

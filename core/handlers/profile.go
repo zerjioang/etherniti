@@ -6,7 +6,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -40,24 +40,24 @@ func NewProfileController() ProfileController {
 // new profile create request
 func (ctl ProfileController) create(c echo.Context) error {
 	//new profile request
-	req := api.NewProfileRequest{}
+	req := protocol.NewProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch
 		logger.Error("failed to bind request data to model: ", err)
-		return ErrorStr(c, bindErr)
+		return protocol.ErrorStr(c, bindErr)
 	}
 	// create the connection profile
 	userProfile := profile.NewConnectionProfileWithData(req)
 	// create the token
 	token, err := profile.CreateConnectionProfileToken(userProfile)
 	if err == nil {
-		rawBytes := util.GetJsonBytes(api.NewApiResponse("profile token successfully created", token))
+		rawBytes := util.GetJsonBytes(protocol.NewApiResponse("profile token successfully created", token))
 		// increment created counter
 		profilesCreated.Increment()
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
 		//token generation trycatch
-		rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, err.Error()))
+		rawBytes := util.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, err.Error()))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }

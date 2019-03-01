@@ -6,6 +6,8 @@ package eth
 import (
 	"math/big"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
 
 const (
@@ -86,7 +88,7 @@ func TestToEth(t *testing.T) {
 	if bErr != nil {
 		t.Error("failed to get account balance", err)
 	} else {
-		ethValue := ToEth(*balance)
+		ethValue := fixtures.ToEth(*balance)
 		t.Log("ETH value", ethValue)
 	}
 }

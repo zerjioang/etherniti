@@ -63,8 +63,8 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	UseUniqueRequestId      = false
 	EnableCors              = true
 	EnableCache             = true
-	EnableRateLimit         = true
-	BlockTorConnections     = true
+	EnableRateLimit         = false
+	BlockTorConnections     = false
 	EnableLogging           = true
 	LogLevel                = log.DEBUG
 

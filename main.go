@@ -6,9 +6,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/zerjioang/etherniti/core/util"
+	"github.com/zerjioang/etherniti/core/handlers"
 
-	"github.com/zerjioang/etherniti/core"
+	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -25,5 +25,5 @@ func init() {
 //compile passing -ldflags "-X main.Build <build sha1>"
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
-	core.NewDeployer().Run()
+	handlers.NewDeployer().Run()
 }

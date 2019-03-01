@@ -26,9 +26,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/ethereum/go-ethereum/common/hexutil"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
-	"github.com/zerjioang/temp/ethereum/go-ethereum/common"
-	"github.com/zerjioang/temp/ethereum/go-ethereum/common/hexutil"
 )
 
 var testAddrHex = "970e8128ab834e8eac17ab8e3812f010678cf791"
@@ -88,7 +88,7 @@ func TestUnmarshalPubkey(t *testing.T) {
 
 func TestSign(t *testing.T) {
 	key, _ := HexToECDSA(testPrivHex)
-	addr := common.HexToAddress(testAddrHex)
+	addr := fixtures.HexToAddress(testAddrHex)
 
 	msg := Keccak256([]byte("foo"))
 	sig, err := Sign(msg, key)
@@ -127,7 +127,7 @@ func TestInvalidSign(t *testing.T) {
 
 func TestNewContractAddress(t *testing.T) {
 	key, _ := HexToECDSA(testPrivHex)
-	addr := common.HexToAddress(testAddrHex)
+	addr := fixtures.HexToAddress(testAddrHex)
 	genAddr := fixtures.PubkeyToAddress(key.PublicKey)
 	// sanity check before using addr to create contract address
 	checkAddr(t, genAddr, addr)
@@ -135,17 +135,17 @@ func TestNewContractAddress(t *testing.T) {
 	caddr0 := CreateAddress(addr, 0)
 	caddr1 := CreateAddress(addr, 1)
 	caddr2 := CreateAddress(addr, 2)
-	checkAddr(t, common.HexToAddress("333c3310824b7c685133f2bedb2ca4b8b4df633d"), caddr0)
-	checkAddr(t, common.HexToAddress("8bda78331c916a08481428e4b07c96d3e916d165"), caddr1)
-	checkAddr(t, common.HexToAddress("c9ddedf451bc62ce88bf9292afb13df35b670699"), caddr2)
+	checkAddr(t, fixtures.HexToAddress("333c3310824b7c685133f2bedb2ca4b8b4df633d"), caddr0)
+	checkAddr(t, fixtures.HexToAddress("8bda78331c916a08481428e4b07c96d3e916d165"), caddr1)
+	checkAddr(t, fixtures.HexToAddress("c9ddedf451bc62ce88bf9292afb13df35b670699"), caddr2)
 }
 
 func TestLoadECDSAFile(t *testing.T) {
-	keyBytes := common.FromHex(testPrivHex)
+	keyBytes := fixtures.FromHex(testPrivHex)
 	fileName0 := "test_key0"
 	fileName1 := "test_key1"
 	checkKey := func(k *ecdsa.PrivateKey) {
-		checkAddr(t, PubkeyToAddress(k.PublicKey), common.HexToAddress(testAddrHex))
+		checkAddr(t, PubkeyToAddress(k.PublicKey), fixtures.HexToAddress(testAddrHex))
 		loadedKeyBytes := FromECDSA(k)
 		if !bytes.Equal(loadedKeyBytes, keyBytes) {
 			t.Fatalf("private key mismatch: want: %x have: %x", keyBytes, loadedKeyBytes)
@@ -182,9 +182,9 @@ func TestValidateSignatureValues(t *testing.T) {
 		}
 	}
 	minusOne := big.NewInt(-1)
-	one := common.Big1
-	zero := common.Big0
-	secp256k1nMinus1 := new(big.Int).Sub(secp256k1N, common.Big1)
+	one := fixtures.Big1
+	zero := fixtures.Big0
+	secp256k1nMinus1 := new(big.Int).Sub(secp256k1N, fixtures.Big1)
 
 	// correct v,r,s
 	check(true, 0, one, one)
@@ -228,7 +228,7 @@ func checkhash(t *testing.T, name string, f func([]byte) []byte, msg, exp []byte
 	}
 }
 
-func checkAddr(t *testing.T, addr0, addr1 common.Address) {
+func checkAddr(t *testing.T, addr0, addr1 fixtures.Address) {
 	if addr0 != addr1 {
 		t.Fatalf("address mismatch: want: %x have: %x", addr0, addr1)
 	}
@@ -243,7 +243,7 @@ func TestPythonIntegration(t *testing.T) {
 	msg0 := Keccak256([]byte("foo"))
 	sig0, _ := Sign(msg0, k0)
 
-	msg1 := common.FromHex("00000000000000000000000000000000")
+	msg1 := fixtures.FromHex("00000000000000000000000000000000")
 	sig1, _ := Sign(msg0, k0)
 
 	t.Logf("msg: %x, privkey: %s sig: %x\n", msg0, kh, sig0)

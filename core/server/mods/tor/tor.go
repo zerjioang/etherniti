@@ -6,12 +6,14 @@ package tor
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/api/protocol"
+
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
 )
 
 var (
-	torBlockedError = api.NewApiError(http.StatusNotAcceptable, "Tor based connection blocked")
+	torBlockedError = protocol.NewApiError(http.StatusNotAcceptable, "Tor based connection blocked")
 )
 
 // REST API style Tor IP blocker

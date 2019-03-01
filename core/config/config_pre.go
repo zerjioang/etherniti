@@ -59,22 +59,22 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	HttpsPort               = "4430"
 	HttpAddress             = HttpListenInterface + HttpPort
 	HttpsAddress            = HttpListenInterface + HttpsPort
-	DebugServer             = true
-	HideServerDataInConsole = false
+	DebugServer             = false
+	HideServerDataInConsole = true
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
 	EnableHttpsRedirect     = false
 	UseUniqueRequestId      = false
 	EnableCors              = true
 	EnableCache             = true
 	EnableRateLimit         = false
-	BlockTorConnections     = true
-	EnableLogging           = true
-	LogLevel                = log.DEBUG
+	BlockTorConnections     = false
+	EnableLogging           = false
+	LogLevel                = log.WARN
 
 	//for pre-stage deployment
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress    = "dev-proxy.etherniti.org"
+	SwaggerAddress      = "dev-proxy.etherniti.org"
 
 	//connection profile params
 	TokenExpiration = 10 * fastime.Minute

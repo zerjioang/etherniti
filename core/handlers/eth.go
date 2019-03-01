@@ -7,7 +7,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util"
@@ -55,7 +55,7 @@ func (ctl EthController) generateAddress(c echo.Context) error {
 	return c.JSONBlob(
 		http.StatusOK,
 		util.GetJsonBytes(
-			api.NewApiResponse("ethereum account created", response),
+			protocol.NewApiResponse("ethereum account created", response),
 		),
 	)
 }
@@ -72,7 +72,7 @@ func (ctl EthController) isValidAddress(c echo.Context) error {
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
 		return c.JSONBlob(code, util.GetJsonBytes(
-			api.NewApiResponse("address validation checked", result),
+			protocol.NewApiResponse("address validation checked", result),
 		),
 		)
 	}

@@ -6,16 +6,11 @@ package handlers
 import (
 	"net/http"
 	"strconv"
-
-	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server"
-	"github.com/zerjioang/etherniti/core/trycatch"
-
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"sync"
 
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/util"
+
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 const (
@@ -23,30 +18,7 @@ const (
 	CacheInfinite = 31104000 // 86400 * 30 *12 // seconds in a year
 )
 
-func Success(c echo.Context, msg string, result string) error {
-	rawBytes := util.GetJsonBytes(api.NewApiResponse(msg, result))
-	return c.JSONBlob(http.StatusOK, rawBytes)
-}
-
-func ErrorStr(c echo.Context, str string) error {
-	logger.Error(str)
-	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, str))
-	return c.JSONBlob(http.StatusBadRequest, rawBytes)
-}
-
-func Error(c echo.Context, err error) error {
-	logger.Error(err)
-	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, err.Error()))
-	return c.JSONBlob(http.StatusBadRequest, rawBytes)
-}
-
-func StackError(c echo.Context, stackErr trycatch.Error) error {
-	logger.Error(stackErr)
-	rawBytes := util.GetJsonBytes(api.NewApiError(http.StatusBadRequest, stackErr.Error()))
-	return c.JSONBlob(http.StatusBadRequest, rawBytes)
-}
-
-func GetClient(context *server.EthernitiContext) ethrpc.EthRPC {
+func GetClient(context *echo.Context) ethrpc.EthRPC {
 	client := ethrpc.NewDefaultRPC("http://127.0.0.1:8545")
 	return client
 }
@@ -73,6 +45,8 @@ long to cache the resource (in seconds).
 */
 func Cached(c echo.Context, cacheValid bool, seconds uint) (int, echo.Context) {
 	// add cache headers
+	edit := sync.Mutex{}
+	edit.Lock()
 	r := c.Response()
 	h := r.Header()
 	if seconds > 0 {
@@ -87,5 +61,24 @@ func Cached(c echo.Context, cacheValid bool, seconds uint) (int, echo.Context) {
 			r.Status = http.StatusOK
 		}
 	}
+	edit.Unlock()
 	return r.Status, c
+}
+
+func CachedHtml(c echo.Context, cacheValid bool, seconds uint, htmlContent []byte) error {
+	var code int
+	code, c = Cached(c, cacheValid, seconds)
+	return c.HTMLBlob(code, htmlContent)
+}
+
+func CachedJsonBlob(c echo.Context, cacheValid bool, seconds uint, data []byte) error {
+	var code int
+	code, c = Cached(c, cacheValid, seconds)
+	return c.JSONBlob(code, data)
+}
+
+func CachedJson(c echo.Context, cacheValid bool, seconds uint, data interface{}) error {
+	var code int
+	code, c = Cached(c, cacheValid, seconds)
+	return c.JSON(code, data)
 }
