@@ -67,7 +67,7 @@ func (rpc EthRPC) call(method string, target interface{}, params ...interface{})
 		return err
 	}
 
-	if target == nil {
+	if target == nil || result == nil {
 		return nil
 	}
 
@@ -191,12 +191,26 @@ func (rpc EthRPC) EthSyncing() (*Syncing, error) {
 	return syncing, err
 }
 
-// EthCoinbase returns the node information
+// returns ethereum node information
 func (rpc EthRPC) EthNodeInfo() (string, error) {
-	var address string
+	var response string
 
-	err := rpc.call("eth_info", &address)
-	return address, err
+	err := rpc.call("eth_info", &response)
+	return response, err
+}
+
+func (rpc EthRPC) EthMethodNoParams(methodName string) (interface{}, error) {
+	var response interface{}
+	err := rpc.call(methodName, &response)
+	return response, err
+}
+
+// returns ethereum node information
+func (rpc EthRPC) EthNetVersion() (string, error) {
+	var response string
+
+	err := rpc.call("net_version", &response)
+	return response, err
 }
 
 // EthCoinbase returns the client coinbase address

@@ -52,6 +52,12 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewWalletController().RegisterRouters(publicGroup)
 	NewEthController().RegisterRouters(publicGroup)
 
+	//register public ethereum network related services
+	NewRopstenController().RegisterRouters(publicGroup)
+	NewRinkebyController().RegisterRouters(publicGroup)
+	NewKovanController().RegisterRouters(publicGroup)
+	NewMainNetController().RegisterRouters(publicGroup)
+
 	privateGroup := group.Group("/private", next)
 	privateGroup.Use(jwt)
 	//add jwt middleware to private group

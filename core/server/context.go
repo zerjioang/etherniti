@@ -36,14 +36,25 @@ func (context *EthernitiContext) ConnectionProfileSetup() (profile.ConnectionPro
 	return readedProfile, err
 }
 
-// from incoming http request, it recovers the eth client linked to it from token data
-func (context EthernitiContext) ClientInstance() (ethrpc.EthRPC, error) {
+// it recovers the eth client linked to it
+// if peer url is provided, this peer address is used to dial
+// otherwise, token information is readed in order to custom peer dial
+func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl string) (ethrpc.EthRPC, string, error) {
 	var client ethrpc.EthRPC
-	if context.profileData.Peer == "" {
-		return client, noPeerAddressError
+	var contextId string
+	// by default, peer url is used to dial
+	if peerUrl == "" {
+		//no peer url found, try to read from user token
+		if context.profileData.Peer == "" {
+			return client, "", noPeerAddressError
+		}
+		contextId = context.profileData.Peer
+	} else {
+		// use peer url
+		contextId = peerUrl
 	}
-	client = ethrpc.NewDefaultRPC(context.profileData.Peer)
-	return client, nil
+	client = ethrpc.NewDefaultRPC(contextId)
+	return client, contextId, nil
 }
 
 // reads connection profile token from allowed sources

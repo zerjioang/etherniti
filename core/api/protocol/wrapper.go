@@ -14,6 +14,11 @@ func Success(c echo.Context, msg string, result string) error {
 	return c.JSONBlob(http.StatusOK, rawBytes)
 }
 
+func ToSuccess(msg string, result interface{}) []byte {
+	rawBytes := util.GetJsonBytes(NewApiResponse(msg, result))
+	return rawBytes
+}
+
 func ErrorStr(c echo.Context, str string) error {
 	logger.Error(str)
 	rawBytes := util.GetJsonBytes(NewApiError(http.StatusBadRequest, str))
@@ -22,7 +27,8 @@ func ErrorStr(c echo.Context, str string) error {
 
 func Error(c echo.Context, err error) error {
 	logger.Error(err)
-	rawBytes := util.GetJsonBytes(NewApiError(http.StatusBadRequest, err.Error()))
+	apierr := NewApiError(http.StatusBadRequest, err.Error())
+	rawBytes := util.GetJsonBytes(apierr)
 	return c.JSONBlob(http.StatusBadRequest, rawBytes)
 }
 

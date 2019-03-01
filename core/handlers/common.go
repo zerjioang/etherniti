@@ -9,19 +9,12 @@ import (
 	"sync"
 
 	"github.com/labstack/echo"
-
-	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 const (
 	CacheOneDay   = 86400    // seconds in a day
 	CacheInfinite = 31104000 // 86400 * 30 *12 // seconds in a year
 )
-
-func GetClient(context *echo.Context) ethrpc.EthRPC {
-	client := ethrpc.NewDefaultRPC("http://127.0.0.1:8545")
-	return client
-}
 
 // cache middleware function.
 /*
