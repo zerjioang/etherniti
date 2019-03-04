@@ -1,9 +1,16 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package handlers
 
 import "testing"
 
-func TestUnixSocketListener(t *testing.T) {
-	t.Run("instantiation", func(t *testing.T) {
-		NewUnixSocketDeployer()
+func BenchmarkUnixSocketListener(b *testing.B) {
+	b.Run("instantiation", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		for n := 0; n < b.N; n++ {
+			NewSocketListener()
+		}
 	})
 }

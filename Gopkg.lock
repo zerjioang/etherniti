@@ -47,6 +47,35 @@
   version = "v3.2.0"
 
 [[projects]]
+  name = "github.com/ethereum/go-ethereum"
+  packages = [
+    ".",
+    "accounts",
+    "accounts/abi",
+    "accounts/abi/bind",
+    "accounts/keystore",
+    "common",
+    "common/hexutil",
+    "common/math",
+    "common/mclock",
+    "common/prque",
+    "core/types",
+    "crypto",
+    "crypto/bn256/cloudflare",
+    "crypto/bn256/google",
+    "crypto/secp256k1",
+    "ethdb",
+    "event",
+    "log",
+    "metrics",
+    "params",
+    "rlp",
+    "trie"
+  ]
+  revision = "c942700427557e3ff6de3aaf6b916e2f056c1ec2"
+  version = "v1.8.23"
+
+[[projects]]
   name = "github.com/etherniti/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -67,8 +96,8 @@
 [[projects]]
   name = "github.com/google/uuid"
   packages = ["."]
-  revision = "9b3b1e0f5f99ae461456d768e7d301a7acdaa2d8"
-  version = "v1.1.0"
+  revision = "0cd6bf5da1e1c83f8b45653022c74f71af0538a4"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
@@ -139,6 +168,12 @@
   version = "v1.2"
 
 [[projects]]
+  name = "github.com/pkg/profile"
+  packages = ["."]
+  revision = "5b67d428864e92711fcbd2f8629456121a56d91f"
+  version = "v1.2.1"
+
+[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
@@ -149,12 +184,6 @@
   packages = ["."]
   revision = "69d839f37b13a8cb7a78366f7633a4071cb43be7"
   version = "v0.9.2"
-
-[[projects]]
-  name = "github.com/rs/cors"
-  packages = ["."]
-  revision = "9a47f48565a795472d43519dd49aac781f3034fb"
-  version = "v1.6.0"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -231,29 +260,20 @@
     "scrypt",
     "sha3"
   ]
-  revision = "7f87c0fbb88b590338857bcb720678c2583d4dea"
-
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/net"
-  packages = ["websocket"]
-  revision = "fe579d43d83210096a79b46dcca0e3721058393a"
+  revision = "8dd112bcdc25174059e45e07517d9fc663123347"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
-  packages = ["unix"]
-  revision = "cc5685c2db1239775905f3911f0067c0fa74762f"
-
-[[projects]]
-  branch = "v2"
-  name = "gopkg.in/natefinch/npipe.v2"
-  packages = ["."]
-  revision = "c1b8fa8bdccecb0b8db834ee0b92fdbcfa606dd6"
+  packages = [
+    "cpu",
+    "unix"
+  ]
+  revision = "c2f5717e611cf8e89a852a41081355194d80c943"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5b88bc927d41213d2d1d5499b3dc05ed7da8ccf8ac0c847450057afb13db66e6"
+  inputs-digest = "5be672ecdc418ca945a19b9136fe58af71a25e30f5f295f375a9518025abd61c"
   solver-name = "gps-cdcl"
   solver-version = 1

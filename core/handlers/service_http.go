@@ -6,7 +6,6 @@ package handlers
 import (
 	"context"
 	"crypto/tls"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -14,49 +13,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/release"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
-
-	"github.com/zerjioang/etherniti/core/eth"
-
-	"github.com/zerjioang/etherniti/core/config"
-
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
-	"github.com/labstack/gommon/log"
 )
-
-var (
-	userAgentErr = errors.New("not authorized. security policy not satisfied")
-	gopath       = os.Getenv("GOPATH")
-	resources    = gopath + "/src/github.com/zerjioang/etherniti/resources"
-	corsConfig   = middleware.CORSConfig{
-		AllowOrigins: config.AllowedCorsOriginList,
-		AllowHeaders: []string{
-			echo.HeaderOrigin,
-			echo.HeaderContentType,
-			echo.HeaderAccept,
-			"X-Language",
-			config.HttpProfileHeaderkey,
-		},
-	}
-	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
-		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
-		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
-	gzipConfig = middleware.GzipConfig{
-		Level: 5,
-	}
-	localhostCert tls.Certificate
-	certEtr       error
-)
-
-func recoverName() {
-	if r := recover(); r != nil {
-		logger.Info("recovered from ", r)
-	}
-}
 
 func init() {
 	defer recoverName()
@@ -73,27 +37,27 @@ func init() {
 	}
 }
 
-type Deployer struct {
+type HttpListener struct {
 	manager eth.WalletManager
 	limiter ratelimit.RateLimitEngine
 }
 
-func (deployer Deployer) GetLocalHostTLS() (tls.Certificate, error) {
+func (l HttpListener) GetLocalHostTLS() (tls.Certificate, error) {
 	return localhostCert, certEtr
 }
 
-func (deployer Deployer) Run() {
+func (l HttpListener) Run() {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	if config.EnableHttpsRedirect {
 		//build http server
-		httpServerInstance := deployer.newServerInstance()
+		httpServerInstance := NewServer()
 		// add redirects from http to https
 		logger.Info("[LAYER] http to https redirect")
 		httpServerInstance.Pre(httpsRedirect)
 
 		// Start http server
 		go func() {
-			s, err := deployer.buildInsecureServerConfig(httpServerInstance)
+			s, err := l.buildInsecureServerConfig()
 			if err != nil {
 				logger.Error("failed to build http server configuration", err)
 			} else {
@@ -105,14 +69,14 @@ func (deployer Deployer) Run() {
 			}
 		}()
 		// Start https server
-		secureServer := deployer.newServerInstance()
+		secureServer := NewServer()
 		go func() {
-			s, err := deployer.buildSecureServerConfig(secureServer)
+			s, err := l.buildSecureServerConfig(secureServer)
 			if err != nil {
 				logger.Error("failed to build https server configuration", err)
 			} else {
 				logger.Info("starting https server...")
-				ConfigureRoutes(secureServer)
+				ConfigureServerRoutes(secureServer)
 				err := secureServer.StartServer(s)
 				if err != nil {
 					logger.Error("shutting down https the server", err)
@@ -120,15 +84,15 @@ func (deployer Deployer) Run() {
 			}
 		}()
 		//graceful shutdown of http and https server
-		deployer.shutdown(httpServerInstance, secureServer)
+		l.shutdown(httpServerInstance, secureServer)
 	} else {
 		//deploy http server only
-		e := deployer.newServerInstance()
-		s, err := deployer.buildInsecureServerConfig(e)
+		e := NewServer()
+		s, err := l.buildInsecureServerConfig()
 		if err != nil {
 			logger.Error("failed to build server configuration", err)
 		} else {
-			ConfigureRoutes(e)
+			ConfigureServerRoutes(e)
 			// Start server
 			go func() {
 				logger.Info("starting http server...")
@@ -138,12 +102,12 @@ func (deployer Deployer) Run() {
 				}
 			}()
 			//graceful shutdown of http server
-			deployer.shutdown(e, nil)
+			l.shutdown(e, nil)
 		}
 	}
 }
 
-func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
+func (l HttpListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
 	// The make built-in returns a value of type T (not *T), and it's memory is
 	// initialized.
 	quit := make(chan os.Signal)
@@ -169,8 +133,8 @@ func (deployer Deployer) shutdown(httpInstance *echo.Echo, httpsInstance *echo.E
 	logger.Info("exiting...")
 }
 
-func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
-	cert, err := deployer.GetLocalHostTLS()
+func (l HttpListener) buildSecureServerConfig(e *echo.Echo) (*http.Server, error) {
+	cert, err := l.GetLocalHostTLS()
 	if err != nil {
 		log.Fatal("failed to setup TLS configuration due to trycatch", err)
 		return nil, err
@@ -192,25 +156,13 @@ func (deployer Deployer) buildSecureServerConfig(e *echo.Echo) (*http.Server, er
 	}, nil
 }
 
-func (deployer Deployer) buildInsecureServerConfig(e *echo.Echo) (*http.Server, error) {
+func (l HttpListener) buildInsecureServerConfig() (*http.Server, error) {
 	//configure custom secure server
 	return &http.Server{
 		Addr:         config.ListeningAddress,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}, nil
-}
-
-// build new http server instance
-func (deployer Deployer) newServerInstance() *echo.Echo {
-	// build a the server
-	e := echo.New()
-	// enable debug mode
-	e.Debug = config.DebugServer
-	e.HidePort = config.HideServerDataInConsole
-	//hide the banner
-	e.HideBanner = config.HideServerDataInConsole
-	return e
 }
 
 func configureSwaggerJson() {
@@ -237,8 +189,8 @@ func configureSwaggerJson() {
 }
 
 // create new deployer instance
-func NewDeployer() Deployer {
-	d := Deployer{}
+func NewHttpListener() HttpListener {
+	d := HttpListener{}
 	d.manager = eth.NewWalletManager()
 	d.limiter = ratelimit.NewRateLimitEngine()
 	return d

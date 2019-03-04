@@ -12,16 +12,18 @@ import (
 	"encoding/hex"
 	"io"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
 )
 
 const TestCount = 1000
 
 func generateKeyPair() (pubkey, privkey []byte) {
-	key, err := ecdsa.GenerateKey(S256(), rand.Reader)
+	key, err := ecdsa.GenerateKey(crypto.S256(), rand.Reader)
 	if err != nil {
 		panic(err)
 	}
-	pubkey = elliptic.Marshal(S256(), key.X, key.Y)
+	pubkey = elliptic.Marshal(crypto.S256(), key.X, key.Y)
 
 	privkey = make([]byte, 32)
 	blob := key.D.Bytes()

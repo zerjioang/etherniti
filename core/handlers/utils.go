@@ -17,14 +17,25 @@ import (
 	"github.com/zerjioang/etherniti/core/server"
 )
 
-// for testing
-func MockServer() *echo.Echo {
-	// Setup
-	testServer := echo.New()
-	ConfigureRoutes(testServer)
-	return testServer
+// create a mock  server for testing
+func NewDefaultServer() *echo.Echo {
+	// build a the server
+	e := echo.New()
+	// enable debug mode
+	e.Debug = config.DebugServer
+	e.HidePort = config.HideServerDataInConsole
+	//hide the banner
+	e.HideBanner = config.HideServerDataInConsole
+	return e
+}
+func NewServer() *echo.Echo {
+	// build a the server
+	e := NewDefaultServer()
+	ConfigureServerRoutes(e)
+	return e
 }
 
+// creates a new echo context
 func NewContext(e *echo.Echo) echo.Context {
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
@@ -33,15 +44,23 @@ func NewContext(e *echo.Echo) echo.Context {
 	return server.NewEthernitiContext(c)
 }
 
+func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.ResponseRecorder, echo.Context) {
+	req := httptest.NewRequest(http.MethodPost, "/", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	return req, rec, server.NewEthernitiContext(c)
+}
+
 // configure deployer internal configuration
-func ConfigureRoutes(e *echo.Echo) {
+func ConfigureServerRoutes(e *echo.Echo) {
 	// add a custom trycatch handler
 	logger.Info("[LAYER] custom trycatch handler")
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
 	// log all single request
 	// configure logging level
-	logger.Info("[LAYER] logger at warn level")
+	logger.Info("[LAYER] logger level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -49,47 +68,49 @@ func ConfigureRoutes(e *echo.Echo) {
 		}))
 	}
 
-	// remove trailing slash for better usage
-	logger.Info("[LAYER] trailing slash remover")
-	e.Pre(middleware.RemoveTrailingSlash())
-
-	// antibots, crawler middleware
-	// avoid bots and crawlers
-	logger.Info("[LAYER] antibots")
-	e.Pre(antiBots)
-
-	// avoid bots and crawlers checking origin host value
-	logger.Info("[LAYER] hostname check")
-	e.Pre(hostnameCheck)
-
 	// custom context
 	logger.Info("[LAYER] custom context")
 	e.Use(customContext)
 
-	// add CORS support
-	if config.EnableCors {
-		logger.Info("[LAYER] cors support")
-		e.Use(middleware.CORSWithConfig(corsConfig))
-	}
+	if config.IsHttpMode() {
+		// remove trailing slash for better usage
+		logger.Info("[LAYER] trailing slash remover")
+		e.Pre(middleware.RemoveTrailingSlash())
 
-	logger.Info("[LAYER] server http headers hardening")
-	// add server api request hardening using http headers
-	e.Use(hardening)
+		// antibots, crawler middleware
+		// avoid bots and crawlers
+		logger.Info("[LAYER] antibots")
+		e.Pre(antiBots)
 
-	logger.Info("[LAYER] fake server http header")
-	// add fake server header
-	e.Use(fakeServer)
+		// avoid bots and crawlers checking origin host value
+		logger.Info("[LAYER] hostname check")
+		e.Pre(hostnameCheck)
 
-	if config.BlockTorConnections {
-		// add rate limit control
-		logger.Info("[LAYER] tor connections blocker middleware added")
-		e.Use(tor.BlockTorConnections)
-	}
+		// add CORS support
+		if config.EnableCors {
+			logger.Info("[LAYER] cors support")
+			e.Use(middleware.CORSWithConfig(corsConfig))
+		}
 
-	if config.EnableRateLimit {
-		// add rate limit control
-		logger.Info("[LAYER] rest api rate limit middleware added")
-		e.Use(ratelimit.RateLimit)
+		logger.Info("[LAYER] server http headers hardening")
+		// add server api request hardening using http headers
+		e.Use(hardening)
+
+		logger.Info("[LAYER] fake server http header")
+		// add fake server header
+		e.Use(fakeServer)
+
+		if config.BlockTorConnections {
+			// add rate limit control
+			logger.Info("[LAYER] tor connections blocker middleware added")
+			e.Use(tor.BlockTorConnections)
+		}
+
+		if config.EnableRateLimit {
+			// add rate limit control
+			logger.Info("[LAYER] rest api rate limit middleware added")
+			e.Use(ratelimit.RateLimit)
+		}
 	}
 
 	// Request ID middleware generates a unique id for a request.
@@ -127,6 +148,6 @@ func ConfigureRoutes(e *echo.Echo) {
 
 func GetTestSetup() *echo.Echo {
 	testServer := echo.New()
-	ConfigureRoutes(testServer)
+	ConfigureServerRoutes(testServer)
 	return testServer
 }

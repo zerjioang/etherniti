@@ -36,6 +36,7 @@ const (
 	LogLevel            = log.ERROR
 
 	// production required listen mode
+	ListeningMode       = "http" // http or socket
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = "dev-proxy.etherniti.org"

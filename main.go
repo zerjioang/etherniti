@@ -6,6 +6,9 @@ package main
 import (
 	"fmt"
 
+	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/core/config"
+
 	"github.com/zerjioang/etherniti/core/handlers"
 
 	"github.com/zerjioang/etherniti/core/util"
@@ -25,5 +28,17 @@ func init() {
 //compile passing -ldflags "-X main.Build <build sha1>"
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
-	handlers.NewDeployer().Run()
+	if config.IsHttpMode() {
+		log.Info("starting http server")
+		handlers.NewHttpListener().Run()
+	} else if config.IsSocketMode() {
+		log.Info("starting unix socket server")
+		// curl --unix-socket /tmp/echo.sock http://localhost
+		sErr := handlers.NewSocketListener().Run("/tmp/eth.sock", false)
+		if sErr != nil {
+			log.Error("failed to execute socket server:", sErr)
+		}
+	} else {
+		log.Error("invalid mode")
+	}
 }
