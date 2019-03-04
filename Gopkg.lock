@@ -257,6 +257,7 @@
     "acme",
     "acme/autocert",
     "pbkdf2",
+    "ripemd160",
     "scrypt",
     "sha3"
   ]
@@ -274,6 +275,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5be672ecdc418ca945a19b9136fe58af71a25e30f5f295f375a9518025abd61c"
+  inputs-digest = "cddda98c6cd5c8a8bdbb336ea1d5017e73720d0e1998c16d9883d1d3b68b118a"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -14,6 +14,7 @@ const (
 
 var (
 	Big1 = big.NewInt(1)
+	Big0 = big.NewInt(0)
 )
 
 // HexOrDecimal256 marshals big.Int as hex or decimal.

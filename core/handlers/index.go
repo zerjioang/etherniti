@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/handlers/cache"
+
 	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/integrity"
@@ -152,15 +154,15 @@ func NewIndexController() IndexController {
 
 func Index(c echo.Context) error {
 	if c.Request().Header.Get("Accept") == "application/json" {
-		return CachedJsonBlob(c, true, CacheInfinite, indexWelcomeBytes)
+		return cache.CachedJsonBlob(c, true, cache.CacheInfinite, indexWelcomeBytes)
 	}
-	return CachedHtml(c, true, CacheInfinite, indexWelcomeHtmlBytes)
+	return cache.CachedHtml(c, true, cache.CacheInfinite, indexWelcomeHtmlBytes)
 }
 
 func (ctl IndexController) Status(c echo.Context) error {
 	data := ctl.status()
 	var code int
-	code, c = Cached(c, true, 5) // 5 seconds cache directive
+	code, c = cache.Cached(c, true, 5) // 5 seconds cache directive
 	return c.JSONBlob(code, data)
 }
 
@@ -197,7 +199,7 @@ func (ctl *IndexController) statusReload() []byte {
 // concurrency safe
 func (ctl IndexController) Integrity(c echo.Context) error {
 	var code int
-	code, c = Cached(c, true, 86400) // 24h cache directive
+	code, c = cache.Cached(c, true, 86400) // 24h cache directive
 	return c.JSONBlob(code, ctl.integrity())
 }
 

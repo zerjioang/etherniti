@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
 	"os"
@@ -16,6 +17,7 @@ import (
 )
 
 var (
+	ctx          = context.Background()
 	userAgentErr = errors.New("not authorized. security policy not satisfied")
 	gopath       = os.Getenv("GOPATH")
 	resources    = gopath + "/src/github.com/zerjioang/etherniti/resources"

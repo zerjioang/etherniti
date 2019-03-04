@@ -87,3 +87,40 @@ func loadCertBytes(path string) []byte {
 	}
 	return certData
 }
+
+//set default environment variables value for current context
+func SetDefaults(env map[string]interface{}) map[string]interface{} {
+	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "beta-stage"
+	env["X_ETHERNITI_HTTP_PORT"] = "8080"
+	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
+	env["X_ETHERNITI_DEBUG_SERVER"] = false
+	env["X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"] = true
+	env["X_ETHERNITI_TOKEN_SECRET"] = "t0k3n-s3cr3t-h3r3"
+	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = false
+	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
+	env["X_ETHERNITI_ENABLE_CORS"] = true
+	env["X_ETHERNITI_ENABLE_CACHE"] = true
+	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
+	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
+	env["X_ETHERNITI_ENABLE_LOGGING"] = true
+	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
+
+	//for 'local development' deployment
+	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
+	env["X_ETHERNITI_LISTENING_INTERFACE"] = "0.0.0.0"
+	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
+	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "dev-proxy.etherniti.org"
+
+	//connection profile params
+	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 10 * fastime.Minute
+
+	//rate limit units must be the same in both variables
+	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 10 * time.Second
+	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 10 * time.Second
+
+	// ratelimit configuration
+	env["X_ETHERNITI_RATE_LIMIT"] = 10
+	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
+
+	return env
+}

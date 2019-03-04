@@ -3,6 +3,11 @@
 
 package config
 
+import (
+	"os"
+	"strings"
+)
+
 const (
 	//profile key http header key
 	HttpProfileHeaderkey = "X-Etherniti-Profile"
@@ -14,6 +19,16 @@ var (
 	//key content as bytes readed from filesystem
 	keyPemBytes []byte
 )
+
+//read environment variables
+func Read(env map[string]interface{}) {
+	for _, e := range os.Environ() {
+		pair := strings.Split(e, "=")
+		if len(pair) == 2 {
+			env[pair[0]] = pair[1]
+		}
+	}
+}
 
 //simply converts http requests into https
 func GetRedirectUrl(host string, path string) string {

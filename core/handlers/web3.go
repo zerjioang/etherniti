@@ -4,12 +4,13 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
 
-	"github.com/patrickmn/go-cache"
+	"github.com/zerjioang/etherniti/core/handlers/cache"
+
+	gocache "github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -21,7 +22,6 @@ import (
 )
 
 var (
-	ctx       = context.Background()
 	methodMap = map[string]string{
 		"client_version":   "web3_clientVersion",
 		"net_version":      "net_version",
@@ -45,7 +45,7 @@ var (
 // eth web3 controller
 type Web3Controller struct {
 	//ethereum interaction cache
-	cache *cache.Cache
+	cache *gocache.Cache
 	//main connection peer address/ip
 	peer string
 	//connection name: mainet, ropsten, rinkeby, etc
@@ -56,7 +56,7 @@ type Web3Controller struct {
 func NewWeb3Controller() Web3Controller {
 	ctl := Web3Controller{}
 	ctl.SetTargetName("eth")
-	ctl.cache = cache.New(5*time.Minute, 10*time.Minute)
+	ctl.cache = gocache.New(5*time.Minute, 10*time.Minute)
 	return ctl
 }
 
@@ -159,7 +159,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 		//cache hit
 		logger.Info(key, ": cache hit")
 		response := protocol.ToSuccess(key, result.(string))
-		return CachedJsonBlob(c, true, CacheInfinite, response)
+		return cache.CachedJsonBlob(c, true, cache.CacheInfinite, response)
 	} else {
 		//cache miss
 		logger.Info(key, ": cache miss")
@@ -175,9 +175,9 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 			return protocol.Error(c, err)
 		} else {
 			// save result in the cache
-			ctl.cache.Set(key, data, cache.NoExpiration)
+			ctl.cache.Set(key, data, gocache.NoExpiration)
 			response := protocol.ToSuccess(key, data)
-			return CachedJsonBlob(c, true, CacheInfinite, response)
+			return cache.CachedJsonBlob(c, true, cache.CacheInfinite, response)
 		}
 	}
 }
@@ -218,7 +218,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 		//cache hit
 		logger.Info(method, ": cache hit")
 		response := protocol.ToSuccess(method, result)
-		return CachedJsonBlob(c, true, CacheInfinite, response)
+		return cache.CachedJsonBlob(c, true, cache.CacheInfinite, response)
 	} else {
 		//cache miss
 		logger.Info(method, ": cache miss")
@@ -231,9 +231,9 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 			return protocol.ErrorStr(c, "the network peer did not return any response")
 		} else {
 			// save result in the cache
-			ctl.cache.Set(cacheKey, rpcResponse, cache.NoExpiration)
+			ctl.cache.Set(cacheKey, rpcResponse, gocache.NoExpiration)
 			response := protocol.ToSuccess(method, rpcResponse)
-			return CachedJsonBlob(c, true, CacheInfinite, response)
+			return cache.CachedJsonBlob(c, true, cache.CacheInfinite, response)
 		}
 	}
 }

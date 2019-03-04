@@ -6,6 +6,8 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/handlers/cache"
+
 	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
@@ -70,7 +72,7 @@ func (ctl ProfileController) validate(c echo.Context) error {
 // profile validation check
 func (ctl ProfileController) count(c echo.Context) error {
 	var code int
-	code, c = Cached(c, true, 10) // cache policy: 10 seconds
+	code, c = cache.Cached(c, true, 10) // cache policy: 10 seconds
 	return c.JSON(code, profilesCreated.Get())
 }
 

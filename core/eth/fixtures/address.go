@@ -80,16 +80,11 @@ func Keccak256(data ...[]byte) []byte {
 	return d.Sum(nil)
 }
 
-// S256 returns an instance of the secp256k1 curve.
-func S256() elliptic.Curve {
-	return secp256k1.S256()
-}
-
 func FromECDSAPub(pub *ecdsa.PublicKey) []byte {
 	if pub == nil || pub.X == nil || pub.Y == nil {
 		return nil
 	}
-	return elliptic.Marshal(S256(), pub.X, pub.Y)
+	return elliptic.Marshal(secp256k1.S256(), pub.X, pub.Y)
 }
 
 func PubkeyToAddress(p ecdsa.PublicKey) Address {

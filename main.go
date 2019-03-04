@@ -6,6 +6,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/zerjioang/etherniti/core/logger"
+
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
 
@@ -28,8 +30,14 @@ func init() {
 //compile passing -ldflags "-X main.Build <build sha1>"
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
+
+	// 1 read environment variables
+	envars := map[string]interface{}{}
+	config.SetDefaults(envars)
+	config.Read(envars)
+
 	if config.IsHttpMode() {
-		log.Info("starting http server")
+		logger.Info("starting http server")
 		handlers.NewHttpListener().Run()
 	} else if config.IsSocketMode() {
 		log.Info("starting unix socket server")

@@ -7,6 +7,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/handlers/cache"
+
 	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -64,7 +66,7 @@ func (ctl EthController) generateAddress(c echo.Context) error {
 func (ctl EthController) isValidAddress(c echo.Context) error {
 	//since this method checks address as string, cache always
 	var code int
-	code, c = Cached(c, true, CacheInfinite) // 24h cache directive
+	code, c = cache.Cached(c, true, cache.CacheInfinite) // 24h cache directive
 
 	//read user entered address
 	targetAddr := c.Param("address")
