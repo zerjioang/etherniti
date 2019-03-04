@@ -10,11 +10,17 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
-echo "Running code QA basic scripts"
+echo "Checking code quality with linters..."
 
-./scripts/fmt_and_simplify.sh && \
-./scripts/fmt.sh && \
-./scripts/goimports.sh && \
+# go fmt
+./scripts/fmt.sh
+# go fmt simplify
+./scripts/fmt_and_simplify.sh
+# go imports
+./scripts/goimports.sh
+# go vet
+./scripts/govet.sh -tags dev
+# add license header to files
 ./scripts/license_header.sh
 
 echo "qa scripts finished"

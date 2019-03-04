@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package bn256
 
 // For details of the algorithms used, see "Multiplication and Squaring on

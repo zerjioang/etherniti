@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 // +build amd64,!generic arm64,!generic
 
 package bn256

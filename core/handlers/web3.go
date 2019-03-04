@@ -21,24 +21,24 @@ import (
 )
 
 var (
-	ctx = context.Background()
+	ctx       = context.Background()
 	methodMap = map[string]string{
-		"client_version":"web3_clientVersion",
-		"net_version":"net_version",
-		"net_peers":"net_peerCount",
-		"protocol_version":"eth_protocolVersion",
-		"syncing":"eth_syncing",
-		"coinbase":"eth_coinbase",
-		"mining":"eth_mining",
-		"hashrate":"eth_hashrate",
-		"gasprice":"eth_gasPrice",
-		"accounts":"eth_accounts",
-		"block_latest":"eth_blockNumber",
-		"compilers":"eth_getCompilers",
-		"block_current":"eth_getWork",
-		"shh_version":"shh_version",
-		"shh_new":"shh_newIdentity",
-		"shh_group":"shh_newGroup",
+		"client_version":   "web3_clientVersion",
+		"net_version":      "net_version",
+		"net_peers":        "net_peerCount",
+		"protocol_version": "eth_protocolVersion",
+		"syncing":          "eth_syncing",
+		"coinbase":         "eth_coinbase",
+		"mining":           "eth_mining",
+		"hashrate":         "eth_hashrate",
+		"gasprice":         "eth_gasPrice",
+		"accounts":         "eth_accounts",
+		"block_latest":     "eth_blockNumber",
+		"compilers":        "eth_getCompilers",
+		"block_current":    "eth_getWork",
+		"shh_version":      "shh_version",
+		"shh_new":          "shh_newIdentity",
+		"shh_group":        "shh_newGroup",
 	}
 )
 
@@ -208,11 +208,11 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	if len(chunks) == 5 {
 		key = chunks[4]
 	} else if len(chunks) == 6 {
-		key = chunks[4]+"_"+chunks[5]
+		key = chunks[4] + "_" + chunks[5]
 	}
 	//resolve method name from key value
 	method := methodMap[key]
-	cacheKey := cId+":"+method
+	cacheKey := cId + ":" + method
 	result, found := ctl.cache.Get(cacheKey)
 	if found && result != nil {
 		//cache hit

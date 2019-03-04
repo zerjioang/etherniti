@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package fixtures
 
 // Lengths of hashes and addresses in bytes.

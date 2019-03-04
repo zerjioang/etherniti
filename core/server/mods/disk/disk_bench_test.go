@@ -32,7 +32,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
-		_ = disk.Start("/")
+		disk.Start("/")
 		for n := 0; n < b.N; n++ {
 			_ = disk.All()
 		}
@@ -42,7 +42,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
-		_ = disk.Start("/")
+		disk.Start("/")
 		for n := 0; n < b.N; n++ {
 			go disk.All()
 		}
@@ -52,7 +52,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
-		_ = disk.Start("/")
+		disk.Start("/")
 		for n := 0; n < b.N; n++ {
 			_ = disk.Used()
 		}
@@ -61,7 +61,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
-		_ = disk.Start("/")
+		disk.Start("/")
 		for n := 0; n < b.N; n++ {
 			_ = disk.Free()
 		}
