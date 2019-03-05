@@ -35,7 +35,7 @@ type HttpListener struct {
 	limiter ratelimit.RateLimitEngine
 }
 
-func recoverFromPem(){
+func recoverFromPem() {
 	if r := recover(); r != nil {
 		logger.Info("recovered from pem", r)
 	}

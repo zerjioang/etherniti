@@ -92,7 +92,7 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	if err != nil {
 		return nil, err
 	}
-
+	log.Info("sending request: ", string(body))
 	response, err := rpc.client.Post(rpc.url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
