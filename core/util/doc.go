@@ -19,6 +19,9 @@ BenchmarkIpToUint32/convert-string-4        			   	200000000	        10.3 ns/op	
 BenchmarkIpToUint32/convert-string-unsafe-inline-4         	1000000000	         2.86 ns/op	 349.53 MB/s	       0 B/op	       0 allocs/op
 BenchmarkIpToUint32/convert-string-unsafe-4                	500000000	         3.10 ns/op	 322.44 MB/s	       0 B/op	       0 allocs/op
 
+BenchmarkStringUtils/to-lower-std-4         	10000000	       137 ns/op	   7.29 MB/s	      64 B/op	       2 allocs/op
+BenchmarkStringUtils/ToLowerAscii-4         	20000000	        63.1 ns/op	  15.85 MB/s	      32 B/op	       1 allocs/op
+
 # Data sizes
 
 int8 	8 bits 	    -128 to 127

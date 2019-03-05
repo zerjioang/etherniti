@@ -41,11 +41,12 @@ func GetJsonBytes(data interface{}) []byte {
 // this function is at least, twice as fast as standard to lower function of go standard library
 func ToLowerAscii(src string) string {
 	rawBytes := []byte(src)
-	for i := 0; i < len(rawBytes); i++ {
-		c := rawBytes[i]
-		if c >= 'A' && c <= 'Z' {
-			rawBytes[i] = c + 32
+	s := len(rawBytes)
+	for i := 0; i < s; i++ {
+		c := &rawBytes[i]
+		if *c >= 'A' && *c <= 'Z' {
+			*c = *c + 32
 		}
 	}
-	return ToString(rawBytes)
+	return string(rawBytes)
 }

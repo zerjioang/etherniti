@@ -7,7 +7,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 const (
@@ -29,21 +29,14 @@ func TestConvertAddress(t *testing.T) {
 }
 
 func TestGetAccountBalance(t *testing.T) {
-	// define the address
-	addr := ConvertAddress(address0)
 	// define the client
-	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint)
+	expected := big.NewInt(0)
+	expected, _ = expected.SetString("100000000000000000000", 10)
+	balance, err := cli.EthGetBalance(address0, "latest")
 	if err != nil {
 		t.Error("failed to get the client", err)
-	} else if ganacheClient == nil {
-		t.Error("failed to get a valid client")
-	}
-	balance, bErr := GetAccountBalance(ganacheClient, addr)
-	if bErr != nil {
-		t.Error("failed to get account balance", bErr)
 	} else {
-		expected := big.NewInt(0)
-		expected, _ = expected.SetString("100000000000000000000", 10)
 		t.Log("readed account balance", balance)
 		if balance.Cmp(expected) != 0 {
 			t.Error("failed to get balance for ganache account[0]")
@@ -52,43 +45,17 @@ func TestGetAccountBalance(t *testing.T) {
 }
 
 func TestGetAccountBalanceAtBlock(t *testing.T) {
-	// define the address
-	addr := ConvertAddress(address0)
 	// define the client
-	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint)
+	expected := big.NewInt(0)
+	expected, _ = expected.SetString("100000000000000000000", 10)
+	balance, err := cli.EthGetBalance(address0, "0")
 	if err != nil {
 		t.Error("failed to get the client", err)
-	} else if ganacheClient == nil {
-		t.Error("failed to get a valid client")
-	}
-	balance, bErr := GetAccountBalanceAtBlock(ganacheClient, addr, big.NewInt(0))
-	if bErr != nil {
-		t.Error("failed to get account balance", err)
 	} else {
-		expected := big.NewInt(0)
-		expected, _ = expected.SetString("100000000000000000000", 10)
-		t.Log(balance)
+		t.Log("readed account balance", balance)
 		if balance.Cmp(expected) != 0 {
 			t.Error("failed to get balance for ganache account[0]")
 		}
-	}
-}
-
-func TestToEth(t *testing.T) {
-	// define the address
-	addr := ConvertAddress(address0)
-	// define the client
-	ganacheClient, err := GetEthereumClient(HttpClient, ganacheTestEndpoint)
-	if err != nil {
-		t.Error("failed to get the client", err)
-	} else if ganacheClient == nil {
-		t.Error("failed to get a valid client")
-	}
-	balance, bErr := GetAccountBalance(ganacheClient, addr)
-	if bErr != nil {
-		t.Error("failed to get account balance", err)
-	} else {
-		ethValue := fixtures.ToEth(*balance)
-		t.Log("ETH value", ethValue)
 	}
 }

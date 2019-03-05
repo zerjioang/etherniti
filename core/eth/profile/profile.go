@@ -175,7 +175,7 @@ func NewConnectionProfile() ConnectionProfile {
 func NewConnectionProfileWithData(data protocol.NewProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
-		Id:        util.GenerateUUID(),
+		Id:        util.GenerateUUIDFromEntropy(),
 		NetworkId: data.NetworkId,
 		Peer:      data.Peer,    //required
 		Address:   data.Address, // required
@@ -205,7 +205,7 @@ func NewDefaultConnectionProfile() ConnectionProfile {
 		Address: "0x0",
 		Key:     "0x0",
 		//standard claims
-		Id:         util.GenerateUUID(),
+		Id:         util.GenerateUUIDFromEntropy(),
 		Issuer:     "etherniti",
 		ExpiresAt:  now.Add(10 * fastime.Minute).Unix(),
 		NotBefore:  now.Unix(),
