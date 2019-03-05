@@ -7,10 +7,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/shared/protocol"
+
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
@@ -72,20 +74,20 @@ func (ctl *Web3Controller) getBalance(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if err != nil {
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	}
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
 		result, err := clientInstance.EthGetBalance(targetAddr, "latest")
 		if err != nil {
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		}
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
@@ -98,13 +100,13 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if err != nil {
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	}
 	targetAddr := c.Param("address")
 	block := c.Param("block")
@@ -112,7 +114,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.Context) error {
 	if targetAddr != "" {
 		result, err := clientInstance.EthGetBalance(targetAddr, block)
 		if err != nil {
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		}
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}
@@ -125,21 +127,21 @@ func (ctl *Web3Controller) getNodeInfo(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if err != nil {
 		// there was an error recovering client instance
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	}
 	data, err := clientInstance.EthNodeInfo()
 	if err != nil {
 		// send invalid response message
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	} else {
-		return protocol.Success(c, "eth_info", data)
+		return api.Success(c, "eth_info", data)
 	}
 }
 
@@ -148,7 +150,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	//try to get this information from the cache
@@ -157,7 +159,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 	if found && result != nil {
 		//cache hit
 		logger.Info(key, ": cache hit")
-		response := protocol.ToSuccess(key, result.(string))
+		response := api.ToSuccess(key, result.(string))
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 	} else {
 		//cache miss
@@ -166,16 +168,16 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 		logger.Info("web3 request using context id: ", cId)
 		if err != nil {
 			// there was an error recovering client instance
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		}
 		data, err := clientInstance.EthNetVersion()
 		if err != nil {
 			// send invalid response message
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		} else {
 			// save result in the cache
 			ctl.cache.Set(key, data, clientcache.NoExpiration)
-			response := protocol.ToSuccess(key, data)
+			response := api.ToSuccess(key, data)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	}
@@ -185,14 +187,14 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if err != nil {
 		// there was an error recovering client instance
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	}
 
 	//resolve method name from url
@@ -201,7 +203,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	// methodName example: /v1/public/ropsten/net/version
 	chunks := strings.Split(methodName, "/")
 	if len(chunks) < 5 {
-		return protocol.ErrorStr(c, "invalid url or web3 method provided")
+		return api.ErrorStr(c, "invalid url or web3 method provided")
 	}
 	var key string
 	if len(chunks) == 5 {
@@ -216,7 +218,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	if found && result != nil {
 		//cache hit
 		logger.Info(method, ": cache hit")
-		response := protocol.ToSuccess(method, result)
+		response := api.ToSuccess(method, result)
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 	} else {
 		//cache miss
@@ -224,14 +226,14 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 		rpcResponse, err := clientInstance.EthMethodNoParams(method)
 		if err != nil {
 			// send invalid response message
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		} else if rpcResponse == nil {
 			// send invalid response message
-			return protocol.ErrorStr(c, "the network peer did not return any response")
+			return api.ErrorStr(c, "the network peer did not return any response")
 		} else {
 			// save result in the cache
 			ctl.cache.Set(cacheKey, rpcResponse, clientcache.NoExpiration)
-			response := protocol.ToSuccess(method, rpcResponse)
+			response := api.ToSuccess(method, rpcResponse)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	}
@@ -250,13 +252,13 @@ func (ctl *Web3Controller) getAccountsWithBalance(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if cliErr != nil {
-		return protocol.Error(c, cliErr)
+		return api.Error(c, cliErr)
 	}
 	list, err := client.EthAccounts()
 
@@ -304,19 +306,19 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if err != nil {
-		return protocol.Error(c, err)
+		return api.Error(c, err)
 	}
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
 		result, err := eth.IsSmartContractAddress(clientInstance, targetAddr)
 		if err != nil {
-			return protocol.Error(c, err)
+			return api.Error(c, err)
 		}
 		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
 	}

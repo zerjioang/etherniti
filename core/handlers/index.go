@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/integrity"
 	"github.com/zerjioang/etherniti/core/server/mods/mem"

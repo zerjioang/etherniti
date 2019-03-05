@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 const (

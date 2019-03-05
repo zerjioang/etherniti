@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package handlers
+package socket
 
 import (
 	"context"
@@ -10,6 +10,9 @@ import (
 	"net/http"
 	"syscall"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/shared/def/listener"
 
 	"github.com/labstack/echo"
 
@@ -21,23 +24,29 @@ import (
 // UNIX domain sockets are a method by which processes on the same host can communicate
 // Communication is bidirectional with stream sockets and unidirectional with datagram sockets.
 type UnixSocketListener struct {
-	e *echo.Echo
+	e    *echo.Echo
+	path string
+	mode bool
 }
 
-func (l UnixSocketListener) Run(socketPath string, background bool) error {
+func (l UnixSocketListener) RunMode(socketPath string, background bool) {
+	l.path = socketPath
+	l.mode = background
+}
+
+func (l UnixSocketListener) Listen() error {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI via unix sockets")
-	l.e = NewDefaultServer()
-	ConfigureServerRoutes(l.e)
-	if background {
-		l.background(socketPath)
+	l.e = base.NewDefaultServer()
+	if l.mode {
+		l.background()
 	} else {
-		l.foreground(socketPath)
+		l.foreground()
 	}
 	return nil
 }
 
 // create new socket listener instance
-func NewSocketListener() UnixSocketListener {
+func NewSocketListener() listener.ListenerInterface {
 	d := UnixSocketListener{}
 	return d
 }
@@ -101,7 +110,7 @@ func (l UnixSocketListener) unixServerListener(c net.Conn) {
 		log.Debug("server got:", string(data))
 
 		//build request
-		req, rec, _ := NewContextFromSocket(l.e, data)
+		req, rec, _ := base.NewContextFromSocket(l.e, data)
 		// execute appropiare handler for current request
 		l.e.ServeHTTP(rec, req)
 		responseBytes := rec.Body.Bytes()
@@ -116,12 +125,12 @@ func (l UnixSocketListener) unixServerListener(c net.Conn) {
 }
 
 // run unix socket server instance in background
-func (l UnixSocketListener) background(socketPath string) {
-	go l.foreground(socketPath)
+func (l UnixSocketListener) background() {
+	go l.foreground()
 }
 
 // run unix socket server instance in foreground
-func (l UnixSocketListener) foreground(socketPath string) error {
+func (l UnixSocketListener) foreground() error {
 	log.Debug("starting unix socket server")
 	// Instead of identifying a server by an IP address and port,
 	// a UNIX domain socket is known by a pathname.
@@ -134,11 +143,11 @@ func (l UnixSocketListener) foreground(socketPath string) error {
 	// even after the server exits.
 	// If the server subsequently restarts,
 	// the file prevents re-binding:
-	unErr := syscall.Unlink(socketPath)
+	unErr := syscall.Unlink(l.path)
 	if unErr != nil {
 		log.Warn("failed to unlink unix socket: ", unErr)
 	}
-	ln, err := net.Listen("unix", socketPath)
+	ln, err := net.Listen("unix", l.path)
 	if err != nil {
 		log.Error("unix socket listen error: ", err)
 		return err

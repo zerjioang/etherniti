@@ -1,12 +1,17 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package handlers
+package base
 
 import (
+	"errors"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/labstack/echo/middleware"
+	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/mods/tor"
+	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
@@ -14,6 +19,27 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/core/util"
+)
+
+var (
+	userAgentErr = errors.New("not authorized. security policy not satisfied")
+	corsConfig   = middleware.CORSConfig{
+		AllowOrigins: config.AllowedCorsOriginList,
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			"X-Language",
+			constants.HttpProfileHeaderkey,
+		},
+	}
+	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
+		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
+		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
+		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
+	gzipConfig = middleware.GzipConfig{
+		Level: 5,
+	}
 )
 
 // custom http error handler. returns error messages as json
@@ -25,11 +51,11 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 			code = he.Code
 		}
 	*/
-	_ = protocol.Error(c, err)
+	_ = api.Error(c, err)
 }
 
 // http to http redirect function
-func httpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
+func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := c.Request()
 		scheme := c.Scheme()
@@ -155,4 +181,108 @@ func customContext(next echo.HandlerFunc) echo.HandlerFunc {
 		cc := server.NewEthernitiContext(c)
 		return next(cc)
 	}
+}
+
+// configure deployer internal configuration
+func ConfigureServerRoutes(e *echo.Echo) {
+	// add a custom trycatch handler
+	logger.Info("[LAYER] custom trycatch handler")
+	e.HTTPErrorHandler = customHTTPErrorHandler
+
+	// log all single request
+	// configure logging level
+	logger.Info("[LAYER] logger level")
+	if config.EnableLogging {
+		e.Logger.SetLevel(config.LogLevel)
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: accessLogFormat,
+		}))
+	}
+
+	// custom context
+	logger.Info("[LAYER] custom context")
+	e.Use(customContext)
+
+	if config.IsHttpMode() {
+		// remove trailing slash for better usage
+		logger.Info("[LAYER] trailing slash remover")
+		e.Pre(middleware.RemoveTrailingSlash())
+
+		// antibots, crawler middleware
+		// avoid bots and crawlers
+		logger.Info("[LAYER] antibots")
+		e.Pre(antiBots)
+
+		// avoid bots and crawlers checking origin host value
+		logger.Info("[LAYER] hostname check")
+		e.Pre(hostnameCheck)
+
+		// add CORS support
+		if config.EnableCors {
+			logger.Info("[LAYER] cors support")
+			e.Use(middleware.CORSWithConfig(corsConfig))
+		}
+
+		logger.Info("[LAYER] server http headers hardening")
+		// add server api request hardening using http headers
+		e.Use(hardening)
+
+		logger.Info("[LAYER] fake server http header")
+		// add fake server header
+		e.Use(fakeServer)
+
+		if config.BlockTorConnections {
+			// add rate limit control
+			logger.Info("[LAYER] tor connections blocker middleware added")
+			e.Use(tor.BlockTorConnections)
+		}
+
+		if config.EnableRateLimit {
+			// add rate limit control
+			logger.Info("[LAYER] rest api rate limit middleware added")
+			e.Use(ratelimit.RateLimit)
+		}
+	}
+
+	// Request ID middleware generates a unique id for a request.
+	if config.UseUniqueRequestId {
+		logger.Info("[LAYER] unique request id")
+		e.Use(middleware.RequestID())
+	}
+
+	// add gzip support if client requests it
+	logger.Info("[LAYER] gzip compression")
+	e.Use(middleware.GzipWithConfig(gzipConfig))
+
+	// avoid panics
+	logger.Info("[LAYER] panic recovery")
+	e.Use(middleware.Recover())
+
+	// RegisterServices version 1 api calls
+	handlers.RegisterServices(e)
+
+	logger.Info("[LAYER] / static files")
+	//load root static folder
+	e.Static("/", config.ResourcesDirRoot)
+	e.Static("/phpinfo.php", config.ResourcesDirPHP)
+
+	// load swagger ui files
+	logger.Info("[LAYER] /swagger files")
+	e.Static("/swagger", config.ResourcesDirSwagger)
+
+	// RegisterServices root calls
+	RegisterRoot(e)
+}
+
+// RegisterServices in echo server, allowed routes
+func RegisterRoot(e *echo.Echo) {
+	e.GET("/", handlers.Index)
+	e.GET("/v1", handlers.Index)
+	e.GET("/v1/public", handlers.Index)
+}
+
+func GetTestSetup() *echo.Echo {
+	testServer := echo.New()
+	ConfigureServerRoutes(testServer)
+	return testServer
 }

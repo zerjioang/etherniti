@@ -6,10 +6,11 @@ package server
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
@@ -64,7 +65,7 @@ func (context EthernitiContext) ReadConnectionProfileToken() string {
 
 	var tokenDataStr string
 	// read if token provided via header key
-	tokenDataStr = req.Header.Get(config.HttpProfileHeaderkey)
+	tokenDataStr = req.Header.Get(constants.HttpProfileHeaderkey)
 	if tokenDataStr == "" {
 		//read if token provided via query param
 		tokenDataStr = context.QueryParam("token")

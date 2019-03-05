@@ -6,9 +6,10 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -46,7 +47,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch
 		logger.Error("failed to bind request data to model: ", err)
-		return protocol.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, bindErr)
 	}
 	// create the connection profile
 	userProfile := profile.NewConnectionProfileWithData(req)

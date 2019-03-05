@@ -4,7 +4,7 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 
@@ -31,7 +31,7 @@ func (ctl TokenController) instantiate(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 
 	instance, err := eth.InstantiateToken(cc, targetAddr)
@@ -46,7 +46,7 @@ func (ctl TokenController) summary(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return protocol.ErrorStr(c, "failed to execute requested operation")
+		return api.ErrorStr(c, "failed to execute requested operation")
 	}
 	instance, err := eth.InstantiateToken(cc, targetAddr)
 	if err == nil && instance != nil {

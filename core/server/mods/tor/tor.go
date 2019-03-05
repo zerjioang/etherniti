@@ -6,7 +6,7 @@ package tor
 import (
 	"net/http"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"

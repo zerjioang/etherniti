@@ -18,25 +18,25 @@ import (
 )
 
 const (
-	EnvironmentName     = "production"
-	HttpPort            = "80"
-	HttpsPort           = "443"
-	HttpAddress         = HttpListenInterface + HttpPort
-	HttpsAddress        = HttpListenInterface + HttpsPort
-	DebugServer         = false
-	HideServerData      = true
-	TokenSecret         = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
-	EnableHttpsRedirect = false
-	UseUniqueRequestId  = false
-	EnableCors          = true
-	EnableCache         = true
-	EnableRateLimit     = true
-	BlockTorConnections = true
-	EnableLogging       = true
-	LogLevel            = log.ERROR
+	EnvironmentName         = "production"
+	HttpPort                = "80"
+	HttpsPort               = "443"
+	HttpAddress             = HttpListenInterface + HttpPort
+	HttpsAddress            = HttpListenInterface + HttpsPort
+	DebugServer             = false
+	HideServerDataInConsole = true
+	TokenSecret             = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
+	EnableHttpsRedirect     = false
+	UseUniqueRequestId      = false
+	EnableCors              = true
+	EnableCache             = true
+	EnableRateLimit         = true
+	BlockTorConnections     = true
+	EnableLogging           = true
+	LogLevel                = log.ERROR
 
 	// production required listen mode
-	ListeningMode       = "http" // http or socket
+	listeningMode       = "http" // http or socket
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = "dev-proxy.etherniti.org"

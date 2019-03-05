@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package handlers
+package http
 
 import (
 	"context"
@@ -13,17 +13,36 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/shared/def/listener"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/release"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 )
 
+var (
+	//variables used when HTTPS is requested
+	localhostCert tls.Certificate
+	certEtr       error
+)
+
+type HttpListener struct {
+	limiter ratelimit.RateLimitEngine
+}
+
+func recoverFromPem(){
+	if r := recover(); r != nil {
+		logger.Info("recovered from pem", r)
+	}
+}
+
 func init() {
-	defer recoverName()
+	defer recoverFromPem()
 	certBytes := config.GetCertPem()
 	keyBytes := config.GetKeyPem()
 	if certBytes != nil && len(certBytes) > 0 &&
@@ -37,23 +56,21 @@ func init() {
 	}
 }
 
-type HttpListener struct {
-	manager eth.WalletManager
-	limiter ratelimit.RateLimitEngine
-}
-
 func (l HttpListener) GetLocalHostTLS() (tls.Certificate, error) {
 	return localhostCert, certEtr
 }
 
-func (l HttpListener) Run() {
+func (l HttpListener) RunMode(address string, background bool) {
+}
+
+func (l HttpListener) Listen() error {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	if config.EnableHttpsRedirect {
 		//build http server
-		httpServerInstance := NewServer()
+		httpServerInstance := base.NewServer(nil)
 		// add redirects from http to https
 		logger.Info("[LAYER] http to https redirect")
-		httpServerInstance.Pre(httpsRedirect)
+		httpServerInstance.Pre(base.HttpsRedirect)
 
 		// Start http server
 		go func() {
@@ -69,14 +86,14 @@ func (l HttpListener) Run() {
 			}
 		}()
 		// Start https server
-		secureServer := NewServer()
+		secureServer := base.NewServer(base.ConfigureServerRoutes)
 		go func() {
 			s, err := l.buildSecureServerConfig(secureServer)
 			if err != nil {
 				logger.Error("failed to build https server configuration", err)
 			} else {
 				logger.Info("starting https server...")
-				ConfigureServerRoutes(secureServer)
+				configureSwaggerJson()
 				err := secureServer.StartServer(s)
 				if err != nil {
 					logger.Error("shutting down https the server", err)
@@ -87,15 +104,15 @@ func (l HttpListener) Run() {
 		l.shutdown(httpServerInstance, secureServer)
 	} else {
 		//deploy http server only
-		e := NewServer()
+		e := base.NewServer(base.ConfigureServerRoutes)
 		s, err := l.buildInsecureServerConfig()
 		if err != nil {
 			logger.Error("failed to build server configuration", err)
 		} else {
-			ConfigureServerRoutes(e)
 			// Start server
 			go func() {
 				logger.Info("starting http server...")
+				configureSwaggerJson()
 				err := e.StartServer(s)
 				if err != nil {
 					logger.Info("shutting down http server", err)
@@ -105,6 +122,7 @@ func (l HttpListener) Run() {
 			l.shutdown(e, nil)
 		}
 	}
+	return nil
 }
 
 func (l HttpListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
@@ -166,6 +184,10 @@ func (l HttpListener) buildInsecureServerConfig() (*http.Server, error) {
 }
 
 func configureSwaggerJson() {
+	configureSwaggerJsonWithDir(config.ResourcesDir)
+}
+
+func configureSwaggerJsonWithDir(resources string) {
 	//read template file
 	log.Debug("reading swagger json file")
 	raw, err := ioutil.ReadFile(resources + "/swagger/swagger-template.json")
@@ -179,7 +201,7 @@ func configureSwaggerJson() {
 	str = strings.Replace(str, "$version", release.Version, -1)
 	str = strings.Replace(str, "$host", config.SwaggerAddress, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
-	str = strings.Replace(str, "$header-auth-key", config.HttpProfileHeaderkey, -1)
+	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)
 	//write swagger.json file
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
 	if writeErr != nil {
@@ -189,9 +211,8 @@ func configureSwaggerJson() {
 }
 
 // create new deployer instance
-func NewHttpListener() HttpListener {
+func NewHttpListener() listener.ListenerInterface {
 	d := HttpListener{}
-	d.manager = eth.NewWalletManager()
 	d.limiter = ratelimit.NewRateLimitEngine()
 	return d
 }

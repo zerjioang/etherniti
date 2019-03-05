@@ -13,7 +13,8 @@ import (
 	"encoding/pem"
 	"math/big"
 
-	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util"
 )
 
@@ -24,8 +25,8 @@ var (
 	//decode private key
 	integrityPrivKey *ecdsa.PrivateKey
 	//private integrity key bytes
-	privateBytes = []byte(config.IntegrityPrivateKeyPem)
-	publicBytes  = []byte(config.IntegrityPublicKeyPem)
+	privateBytes = []byte(constants.IntegrityPrivateKeyPem)
+	publicBytes  = []byte(constants.IntegrityPublicKeyPem)
 )
 
 func init() {

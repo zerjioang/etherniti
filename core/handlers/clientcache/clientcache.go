@@ -70,9 +70,3 @@ func CachedJsonBlob(c echo.Context, cacheValid bool, seconds uint, data []byte) 
 	code, c = Cached(c, cacheValid, seconds)
 	return c.JSONBlob(code, data)
 }
-
-func CachedJson(c echo.Context, cacheValid bool, seconds uint, data interface{}) error {
-	var code int
-	code, c = Cached(c, cacheValid, seconds)
-	return c.JSON(code, data)
-}

@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package handlers
+package http
 
 import (
 	"testing"
@@ -10,20 +10,20 @@ import (
 
 func TestUnixSocketListener(t *testing.T) {
 	t.Run("instantiation", func(t *testing.T) {
-		NewSocketListener()
+		NewHttpListener()
 	})
 	t.Run("run", func(t *testing.T) {
-		s := NewSocketListener()
-		err := s.Run("/tmp/go.sock", true)
+		s := NewHttpListener()
+		err := s.Listen()
 		if err != nil {
 			t.Error(err)
 		}
 		time.Sleep(200000 * time.Second)
 	})
 	t.Run("request-status", func(t *testing.T) {
-		s := NewSocketListener()
+		s := NewHttpListener()
 		// run the socket servre
-		err := s.Run("/tmp/go.sock", true)
+		err := s.Listen()
 		if err != nil {
 			t.Error(err)
 		}

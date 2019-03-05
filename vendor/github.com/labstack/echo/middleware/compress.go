@@ -65,7 +65,9 @@ func GzipWithConfig(config GzipConfig) echo.MiddlewareFunc {
 			}
 
 			res := c.Response()
-			res.Header().Add(echo.HeaderVary, echo.HeaderAcceptEncoding)
+			res.Header().Set(echo.HeaderVary, echo.HeaderAcceptEncoding)
+			// Content-Encoding: gzip
+			res.Header().Set("Content-Encoding", "deflate")
 			if strings.Contains(c.Request().Header.Get(echo.HeaderAcceptEncoding), gzipScheme) {
 				res.Header().Set(echo.HeaderContentEncoding, gzipScheme) // Issue #806
 				rw := res.Writer

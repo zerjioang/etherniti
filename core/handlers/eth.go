@@ -7,9 +7,10 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
+
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util"

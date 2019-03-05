@@ -5,7 +5,7 @@ package handlers
 
 import (
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 )
@@ -17,12 +17,12 @@ func jwt(next echo.HandlerFunc) echo.HandlerFunc {
 		cc := c.(*server.EthernitiContext)
 		token := cc.ReadConnectionProfileToken()
 		if token == "" {
-			return protocol.ErrorStr(c, "please provide a connection profile token for this kind of call")
+			return api.ErrorStr(c, "please provide a connection profile token for this kind of call")
 		}
 
 		_, parseErr := cc.ConnectionProfileSetup()
 		if parseErr != nil {
-			return protocol.Error(c, parseErr)
+			return api.Error(c, parseErr)
 		}
 		return next(cc)
 	}
@@ -33,13 +33,6 @@ func next(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return next(c)
 	}
-}
-
-// RegisterServices in echo server, allowed routes
-func RegisterRoot(e *echo.Echo) {
-	e.GET("/", Index)
-	e.GET("/v1", Index)
-	e.GET("/v1/public", Index)
 }
 
 // RegisterServices in echo server, allowed routes

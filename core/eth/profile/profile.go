@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zerjioang/etherniti/core/api/protocol"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/etherniti/jwt-go"
 	"github.com/zerjioang/etherniti/core/config"

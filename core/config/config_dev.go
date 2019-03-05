@@ -69,7 +69,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	LogLevel                = log.DEBUG
 
 	//for 'local development' deployment
-	ListeningMode       = "http" // http or socket
+	listeningMode       = "http" // http or socket
 	HttpListenInterface = "127.0.0.1"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = HttpListenInterface + ":" + HttpPort

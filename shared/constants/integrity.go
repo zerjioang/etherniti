@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package config
+package constants
 
 const (
 	// integrity related digital signature p256 private key

@@ -106,7 +106,7 @@ func CORSWithConfig(config CORSConfig) echo.MiddlewareFunc {
 
 			// Simple request
 			if req.Method != http.MethodOptions {
-				res.Header().Add(echo.HeaderVary, echo.HeaderOrigin)
+				res.Header().Set(echo.HeaderVary, echo.HeaderOrigin)
 				res.Header().Set(echo.HeaderAccessControlAllowOrigin, allowOrigin)
 				if config.AllowCredentials {
 					res.Header().Set(echo.HeaderAccessControlAllowCredentials, "true")
@@ -118,9 +118,9 @@ func CORSWithConfig(config CORSConfig) echo.MiddlewareFunc {
 			}
 
 			// Preflight request
-			res.Header().Add(echo.HeaderVary, echo.HeaderOrigin)
-			res.Header().Add(echo.HeaderVary, echo.HeaderAccessControlRequestMethod)
-			res.Header().Add(echo.HeaderVary, echo.HeaderAccessControlRequestHeaders)
+			res.Header().Set(echo.HeaderVary, echo.HeaderOrigin)
+			res.Header().Set(echo.HeaderVary, echo.HeaderAccessControlRequestMethod)
+			res.Header().Set(echo.HeaderVary, echo.HeaderAccessControlRequestHeaders)
 			res.Header().Set(echo.HeaderAccessControlAllowOrigin, allowOrigin)
 			res.Header().Set(echo.HeaderAccessControlAllowMethods, allowMethods)
 			if config.AllowCredentials {

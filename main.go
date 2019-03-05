@@ -6,12 +6,12 @@ package main
 import (
 	"fmt"
 
+	"github.com/zerjioang/etherniti/core/listener"
+
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
-
-	"github.com/zerjioang/etherniti/core/handlers"
 
 	"github.com/zerjioang/etherniti/core/util"
 )
@@ -36,17 +36,13 @@ func main() {
 	config.SetDefaults(envars)
 	config.Read(envars)
 
-	if config.IsHttpMode() {
-		logger.Info("starting http server")
-		handlers.NewHttpListener().Run()
-	} else if config.IsSocketMode() {
-		log.Info("starting unix socket server")
-		// curl --unix-socket /tmp/echo.sock http://localhost
-		sErr := handlers.NewSocketListener().Run("/tmp/eth.sock", false)
-		if sErr != nil {
-			log.Error("failed to execute socket server:", sErr)
-		}
-	} else {
-		log.Error("invalid mode")
+	// 2 get listening mode from env vars
+	logger.Info("starting etherniti proxy")
+	mode := config.ServiceListeningMode()
+
+	// 3 run listener
+	err := listener.FactoryListener(mode).Listen()
+	if err != nil {
+		log.Error("failed to execute http server:", err)
 	}
 }

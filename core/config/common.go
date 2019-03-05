@@ -6,18 +6,20 @@ package config
 import (
 	"os"
 	"strings"
-)
 
-const (
-	//profile key http header key
-	HttpProfileHeaderkey = "X-Etherniti-Profile"
+	"github.com/zerjioang/etherniti/shared/def/listener"
 )
 
 var (
 	//cert content as bytes readed from filesystem
 	certPemBytes []byte
 	//key content as bytes readed from filesystem
-	keyPemBytes []byte
+	keyPemBytes         []byte
+	gopath              = os.Getenv("GOPATH")
+	ResourcesDir        = gopath + "/src/github.com/zerjioang/etherniti/resources"
+	ResourcesDirRoot    = ResourcesDir + "/root"
+	ResourcesDirPHP     = ResourcesDir + "/root/phpinfo.php"
+	ResourcesDirSwagger = ResourcesDir + "/swagger"
 )
 
 //read environment variables
@@ -48,9 +50,20 @@ func GetKeyPem() []byte {
 }
 
 func IsHttpMode() bool {
-	return ListeningMode == "http"
+	return listeningMode == "http"
 }
 
 func IsSocketMode() bool {
-	return ListeningMode == "socket"
+	return listeningMode == "socket"
+}
+
+func ServiceListeningMode() listener.ServiceType {
+	switch listeningMode {
+	case "http":
+		return listener.HttpMode
+	case "socket":
+		return listener.UnixMode
+	default:
+		return listener.UnknownMode
+	}
 }

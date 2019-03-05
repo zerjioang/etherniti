@@ -82,7 +82,7 @@
       }
     }
   ],
-  "schemes": ["http", "https"],
+  "schemes": ["http", "https", "unix"],
   "paths": {
     "/public": {
       "get": {

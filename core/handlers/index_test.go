@@ -7,12 +7,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/listener/base"
+
 	"github.com/pkg/profile"
 )
 
 func TestIndexConcurrency(t *testing.T) {
 	t.Run("index-single-echo", func(t *testing.T) {
-		testServer := NewServer()
+		testServer := base.NewServer()
 		ctx := NewContext(testServer)
 		err := Index(ctx)
 		if err != nil {
