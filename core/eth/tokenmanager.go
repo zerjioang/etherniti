@@ -4,23 +4,21 @@
 package eth
 
 import (
-	"time"
-
+	"github.com/zerjioang/etherniti/core/modules/cache"
 	"github.com/zerjioang/etherniti/core/server"
 
-	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/keystore/memory"
 )
 
 type WalletManager struct {
 	wallet *memory.InMemoryKeyStorage
-	cache  *cache.Cache
+	cache  *cache.MemoryCache
 }
 
 func NewWalletManager() WalletManager {
 	man := WalletManager{}
 	man.wallet = memory.NewInMemoryKeyStorage()
-	man.cache = cache.New(5*time.Minute, 10*time.Minute)
+	man.cache = cache.NewMemoryCache()
 	return man
 }
 

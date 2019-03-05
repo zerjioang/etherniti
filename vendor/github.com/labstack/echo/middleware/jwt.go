@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/etherniti/jwt-go"
 	"github.com/labstack/echo"
 )
 

@@ -7,9 +7,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/modules/cache"
+
 	"github.com/zerjioang/etherniti/core/api/protocol"
 
-	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 )
@@ -46,13 +47,13 @@ type limit struct {
 	reset int64
 }
 type RateLimitEngine struct {
-	rateCache *cache.Cache
+	rateCache *cache.MemoryCache
 }
 
 // constructor like function
 func NewRateLimitEngine() RateLimitEngine {
 	rle := RateLimitEngine{}
-	rle.rateCache = cache.New(defaultCacheMeasurementUnit, defaultCacheMeasurementUnit)
+	rle.rateCache = cache.NewMemoryCache()
 	return rle
 }
 

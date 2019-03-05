@@ -4,15 +4,12 @@
 package util
 
 import (
+	"encoding/json"
 	"unsafe"
-
-	"github.com/json-iterator/go"
 )
 
 var (
-	empty    []byte
-	json     = jsoniter.ConfigCompatibleWithStandardLibrary
-	fastJson = jsoniter.ConfigFastest
+	empty []byte
 )
 
 func Bytes(data string) []byte {
@@ -23,15 +20,12 @@ func ToString(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
 }
 
-func FastMarshal(data interface{}) ([]byte, error) {
-	return fastJson.Marshal(&data)
-}
 func StdMarshal(data interface{}) ([]byte, error) {
 	return json.Marshal(&data)
 }
 func GetJsonBytes(data interface{}) []byte {
 	if data != nil {
-		raw, _ := fastJson.Marshal(&data)
+		raw, _ := StdMarshal(data)
 		return raw
 	}
 	return empty

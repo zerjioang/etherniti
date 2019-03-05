@@ -6,7 +6,8 @@ package server
 import (
 	"errors"
 
-	"github.com/json-iterator/go"
+	"github.com/zerjioang/etherniti/core/util"
+
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
@@ -73,9 +74,7 @@ func (context EthernitiContext) ReadConnectionProfileToken() string {
 
 //custom json encoder
 func (context EthernitiContext) JSON(code int, i interface{}) (err error) {
-	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	var json = jsoniter.ConfigFastest
-	data, encErr := json.Marshal(i)
+	data, encErr := util.StdMarshal(i)
 	if encErr != nil {
 		return encErr
 	}

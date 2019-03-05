@@ -5,7 +5,7 @@ package handlers
 
 import (
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/handlers/cache"
+	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/handlers/security"
 	"github.com/zerjioang/etherniti/core/logger"
 )
@@ -24,7 +24,7 @@ func NewSecurityController() SecurityController {
 // https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json
 func (ctl SecurityController) domainBlacklist(c echo.Context) error {
 	var code int
-	code, c = cache.Cached(c, true, cache.CacheOneDay) // 24h cache directive
+	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
 	return c.JSONBlob(code, security.DomainBlacklistRawBytes)
 }
 
@@ -33,7 +33,7 @@ func (ctl SecurityController) domainBlacklist(c echo.Context) error {
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
 	var code int
-	code, c = cache.Cached(c, true, cache.CacheOneDay) // 24h cache directive
+	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
 	return c.JSONBlob(code, security.PhishingWhitelistRawBytes)
 }
 
@@ -43,7 +43,7 @@ func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 	var code int
-	code, c = cache.Cached(c, true, cache.CacheOneDay) // 24h cache directive
+	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
 	return c.JSONBlob(code, security.PhishingBlacklistRawBytes)
 }
 

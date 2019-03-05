@@ -4,10 +4,8 @@
 package memory
 
 import (
-	"time"
-
-	"github.com/patrickmn/go-cache"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/cache"
 )
 
 var (
@@ -16,12 +14,12 @@ var (
 
 // in memory storage of accounts
 type InMemoryKeyStorage struct {
-	cache *cache.Cache
+	cache *cache.MemoryCache
 }
 
 func (storage *InMemoryKeyStorage) Set(key string, value WalletContent) {
 	logger.Info("adding new account to memory based wallet")
-	storage.cache.Set(key, value, cache.DefaultExpiration)
+	storage.cache.Set(key, value, 1)
 }
 
 func (storage InMemoryKeyStorage) Get(key string) (WalletContent, bool) {
@@ -42,6 +40,6 @@ func NewInMemoryKeyStorage() *InMemoryKeyStorage {
 	s := new(InMemoryKeyStorage)
 	// Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
-	s.cache = cache.New(5*time.Minute, 10*time.Minute)
+	s.cache = cache.NewMemoryCache()
 	return s
 }
