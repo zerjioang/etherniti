@@ -33,7 +33,7 @@ const (
 	EnableRateLimit         = true
 	BlockTorConnections     = true
 	EnableLogging           = true
-	LogLevel                = log.ERROR
+	LogLevel                = log.DEBUG
 
 	// production required listen mode
 	listeningMode       = "http" // http or socket
