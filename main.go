@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/zerjioang/etherniti/core/handlers"
 
 	"github.com/zerjioang/etherniti/core/listener"
 
@@ -23,11 +24,12 @@ var (
 
 func init() {
 	util.Commit = Build
+	handlers.LoadConstants()
 	fmt.Println(util.WelcomeBanner())
 }
 
-//generate build sha1: git rev-parse --short HEAD
-//compile passing -ldflags "-X main.Build <build sha1>"
+// generate build sha1: git rev-parse --short HEAD
+// compile passing -ldflags "-X main.Build <build sha1>"
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
 
