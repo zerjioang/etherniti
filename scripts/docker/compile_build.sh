@@ -127,7 +127,7 @@ function compile(){
             go build \
             -a \
             -tags 'netgo prod' \
-            -ldflags "-s -w -libgcc=none -pthread -lpthread -X 'main.Build=$hash' -linkmode external -extldflags '-static'" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags '-static'" \
             -o $outputname && \
             ls -alh
         fi
