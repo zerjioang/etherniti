@@ -68,8 +68,8 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnableCache             = true
 	EnableRateLimit         = false
 	BlockTorConnections     = false
-	EnableLogging           = false
-	LogLevel                = log.WARN
+	EnableLogging           = true
+	LogLevel                = log.DEBUG
 
 	//for pre-stage deployment
 	listeningMode       = "http" // http or socket
