@@ -7,23 +7,29 @@ FROM preloader:latest as compiler
 
 MAINTAINER team@etherniti.org
 
-LABEL IMAGE etherniti-api
-LABEL PROJECT etherniti
+LABEL IMAGE             proxy-etherniti
+LABEL PROJECT           etherniti
 
-ENV BASE 				/go/src/github.com/zerjioang/etherniti
-ENV BUILD_MODE 			prod
-ENV FILE 				proxy
-ENV ETHERNITI_GOOS 		linux
-ENV ETHERNITI_GOARCH 	amd64
-ENV USER 				etherniti
-ENV RESOURCE_DIR 		/go/src/github.com/zerjioang/etherniti/resources
+# production build parameters
+ARG BASE=/go/src/github.com/zerjioang/etherniti
+ARG BUILD_MODE=prod
+ARG FILE=proxy
+ARG ETHERNITI_GOOS=linux
+ARG ETHERNITI_GOARCH=amd64
+ARG USER=etherniti
+ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/resources
+
+ENV USER                etherniti
 
 # add source code to docker image for multistage build
-WORKDIR $BASE
-COPY . $BASE
+WORKDIR                 $BASE
+COPY                  . $BASE
 
 # optimize code for production compilation
-# RUN echo "Preparing code for production deployment" && ./scripts/prepare_production.sh
+RUN echo "Preparing code for production deployment" && \
+    chmod +x ./scripts/prepare_production.sh && \
+    ././scripts/prepare_production.sh && \
+    rm ./scripts/prepare_production.sh
 
 # Create user ${USER} and compile
 RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password -q ${USER} && \
@@ -37,9 +43,8 @@ RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password
 # BEGIN: install modified version of glibc
 FROM alpine:3.9
 
-ENV LANG=C.UTF-8
-
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
+ENV LANG=C.UTF-8
 
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
     ALPINE_GLIBC_PACKAGE_VERSION="2.29-r0" && \
@@ -81,11 +86,11 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 # END: install modified version of glibc for alpine
 
-ENV X_ETHERNITI_INTERACTION_PORT            8080 4430
-ENV USER                                    etherniti
-ENV GOPATH                                  /home/${USER}/go
-ENV EXEC                                    proxy
-ENV BASE                                    src/github.com/zerjioang/etherniti/resources
+ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
+ARG USER=etherniti
+ARG GOPATH=/home/${USER}/go
+ARG EXEC=proxy
+ARG BASE=src/github.com/zerjioang/etherniti/resources
 
 WORKDIR /home/${USER}
 
@@ -104,11 +109,11 @@ RUN adduser -S ${USER} && \
 
 # copy proxy resource files
 
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root     ${GOPATH}/${BASE}/root
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger  ${GOPATH}/${BASE}/swagger
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root        ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger     ${GOPATH}/${BASE}/swagger
 
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
-COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy       ${EXEC}
+COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                 /etc/ssl/certs/ca-certificates.crt
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 

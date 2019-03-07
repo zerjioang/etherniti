@@ -1,4 +1,10 @@
 #!/bin/sh
+
+#
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
+#
+
 set -x #trace on
 set -e #break on error
 echo "hardening container..."

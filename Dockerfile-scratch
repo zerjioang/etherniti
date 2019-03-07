@@ -1,0 +1,68 @@
+# 
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
+# 
+
+FROM preloader:latest as compiler
+
+MAINTAINER team@etherniti.org
+
+LABEL IMAGE             proxy-etherniti
+LABEL PROJECT           etherniti
+
+# production build parameters
+ARG BASE=/go/src/github.com/zerjioang/etherniti
+ARG BUILD_MODE=prod
+ARG FILE=proxy
+ARG ETHERNITI_GOOS=linux
+ARG ETHERNITI_GOARCH=amd64
+ARG USER=etherniti
+ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/resources
+
+ENV USER                etherniti
+
+# add source code to docker image for multistage build
+WORKDIR                 $BASE
+COPY                  . $BASE
+
+# optimize code for production compilation
+RUN echo "Preparing code for production deployment" && \
+    chmod +x ./scripts/prepare_production.sh && \
+    ././scripts/prepare_production.sh && \
+    rm ./scripts/prepare_production.sh
+
+# Create user ${USER} and compile
+RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password -q ${USER} && \
+    ./scripts/docker/compile_build.sh ${FILE} && \
+    rm -rf .git && \
+    chmod +x ${FILE} && \
+    chown ${USER} ${FILE} && \
+    upx -9 -v $FILE && \
+    ls -alh
+
+# BEGIN: install modified version of glibc
+FROM scratch
+
+ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
+ARG USER=etherniti
+ARG GOPATH=/home/${USER}/go
+ARG EXEC=proxy
+ARG BASE=src/github.com/zerjioang/etherniti/resources
+
+WORKDIR /home/${USER}
+
+# copy proxy resource files
+
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root        ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger     ${GOPATH}/${BASE}/swagger
+
+COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy       ${EXEC}
+COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                 /etc/ssl/certs/ca-certificates.crt
+
+EXPOSE $X_ETHERNITI_INTERACTION_PORT
+
+# change to non root user for execution
+USER ${USER}
+
+# set container entrypoint
+ENTRYPOINT ./${EXEC}

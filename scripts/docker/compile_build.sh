@@ -35,20 +35,54 @@ if [[ -z "$ETHERNITI_GOOS" ]]; then
 fi
 
 if [[ -z "$ETHERNITI_COMPILER" ]]; then
-    echo "no CC found.                 setting default to: gcc"
+    echo "no CC found.                   setting default to: gcc"
     # gcc gc gccgo
     ETHERNITI_COMPILER="gcc"
 fi
 
+if [[ -z "$ETHERNITI_GOGCCFLAGS" ]]; then
+    defaultFlags="-C -m64 -pthread -lpthread all=-trimpath=$GOPATH -fmessage-length=0"
+    echo "no GOGCCFLAGS.                 setting default to: $defaultFlags"
+    ETHERNITI_GOGCCFLAGS="$defaultFlags"
+fi
+
+if [[ -z "$ETHERNITI_CGO_ENABLED" ]]; then
+    echo "no ETHERNITI_CGO_ENABLED.      setting default to: 1"
+    ETHERNITI_CGO_ENABLED=1
+fi
+
+echo "
+HASH:                       $hash
+BUILD_MODE:                 $BUILD_MODE
+ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
+ETHERNITI_GOOS:             $ETHERNITI_GOOS
+ETHERNITI_COMPILER:         $ETHERNITI_COMPILER
+ETHERNITI_GOGCCFLAGS:       $ETHERNITI_GOGCCFLAGS
+ETHERNITI_CGO_ENABLED:      $ETHERNITI_CGO_ENABLED
+"
+
 # Disabling CGO also removes the need for the cross-compile dependencies
 # forced a rebuild with -a
 # netgo to make sure we use built-in net package and not the system’s one
+# -trimpath is used to tell go compile to trim $GOPATH from source file path in stack trace.
+# -fmessage-length=0 You can use the options described below to control
+# the formatting algorithm for diagnostic messages, e.g. how many characters
+# per line, how often source location information should be reported. 
+# -C is used to disable printing of columns in error messages
 # -ldflags '-linkmode external'
 # -ldflags '-extldflags -static'
 # -ldflags '-libgcc=none'
+# libgcc: compiler support lib for internal linking; use "none" to disable
 # -w just disables debug letting the file be smaller
 # -s
 function compile(){
+
+    CGO_ENABLED=${ETHERNITI_CGO_ENABLED}
+    CC=${ETHERNITI_COMPILER}
+    GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS}
+    GOOS=${ETHERNITI_GOOS}
+    GOARCH=${ETHERNITI_GOARCH}
+
     outputname=$1
     if [[ -z "$outputname" ]]; then
         echo "no compilation filename found. setting default to: etherniti"
@@ -67,50 +101,33 @@ function compile(){
         gccgo-7-arm-linux-gnueabihf \
         gcc-arm-linux-gnueabi
         # trigger the compilation
-        CC=${ETHERNITI_COMPILER} \
-        CGO_ENABLED=1 \
-        GOOS=linux \
         GOARCH=arm \
         GOARM=7 \
-        go build -o $outputname
+        go build \
+            -o $outputname
     else
         echo "compiling for $ETHERNITI_GOARCH..."
         if [[ "$BUILD_MODE" = "dev" ]]; then
             echo "compiling dev-stage version..."
             echo "Using commit hash '$hash' for current build"
-            CGO_ENABLED=1 \
-            CC=${ETHERNITI_COMPILER} \
-            GOOS=${ETHERNITI_GOOS} \
-            GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -ldflags "-X 'main.Build=$hash'" \
                 -tags dev \
+                -ldflags "-X 'main.Build=$hash'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
             echo "Using commit hash '$hash' for current build"
-            CGO_ENABLED=1 \
-            CC=${ETHERNITI_COMPILER} \
-            GOOS=${ETHERNITI_GOOS} \
-            GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -ldflags "-X 'main.Build=$hash'" \
                 -tags pre \
+                -ldflags "-X 'main.Build=$hash'" \
                 -o $outputname
         else
             echo "compiling production version..."
             echo "Using commit hash '$hash' for current build"
-            CGO_ENABLED=1 \
-            CC=${ETHERNITI_COMPILER} \
-            GOOS=${ETHERNITI_GOOS} \
-            GOARCH=${ETHERNITI_GOARCH} \
             go build \
             -a \
             -tags 'netgo prod' \
-            -ldflags "-linkmode external" \
-            -ldflags "-extldflags -static" \
-            -ldflags "-libgcc=none" \
-            -ldflags "-s -w -X 'main.Build=$hash'" \
+            -ldflags "-s -w -libgcc=none -pthread -lpthread -X 'main.Build=$hash' -linkmode external -extldflags '-static'" \
             -o $outputname && \
             ls -alh
         fi

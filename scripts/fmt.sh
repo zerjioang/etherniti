@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright etherniti
-# SPDX-License-Identifier: Apache License 2.0
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
 #
 
 cd "$(dirname "$0")"

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Copyright Helix Distributed Ledger. All Rights Reserved.
-# SPDX-License-Identifier: GNU GPL v3
-
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
+#
 
 # Check whether a given container (filtered by name) exists or not
 function existsImage(){

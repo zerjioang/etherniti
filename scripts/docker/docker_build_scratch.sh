@@ -22,5 +22,5 @@ else
 	echo "using already compiler preloader docker image"
 fi
 
-echo "Building production container image from Dockerfile"
-docker build -f ./Dockerfile-prod -t etherniti/proxy:latest .
+echo "Building scratch container image from Dockerfile"
+docker build -f ./Dockerfile-scratch -t etherniti/proxy:latest .

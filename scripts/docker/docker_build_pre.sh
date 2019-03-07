@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright Helix Distributed Ledger. All Rights Reserved.
-# SPDX-License-Identifier: GNU GPL v3
+# Copyright Etherniti. All Rights Reserved.
+# SPDX-License-Identifier: Apache 2
 #
 
 cd "$(dirname "$0")"
