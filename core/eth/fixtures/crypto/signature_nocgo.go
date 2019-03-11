@@ -22,7 +22,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"errors"
-	"fmt"
 	"math/big"
 
 	"github.com/btcsuite/btcd/btcec"
@@ -59,10 +58,10 @@ func SigToPub(hash, sig []byte) (*ecdsa.PublicKey, error) {
 // The produced signature is in the [R || S || V] format where V is 0 or 1.
 func Sign(hash []byte, prv *ecdsa.PrivateKey) ([]byte, error) {
 	if len(hash) != 32 {
-		return nil, fmt.Errorf("hash is required to be exactly 32 bytes (%d)", len(hash))
+		return nil, errors.New("hash is required to be exactly 32 bytes" /*len(hash)*/)
 	}
 	if prv.Curve != btcec.S256() {
-		return nil, fmt.Errorf("private key curve is not secp256k1")
+		return nil, errors.New("private key curve is not secp256k1")
 	}
 	sig, err := btcec.SignCompact(btcec.S256(), (*btcec.PrivateKey)(prv), hash, false)
 	if err != nil {

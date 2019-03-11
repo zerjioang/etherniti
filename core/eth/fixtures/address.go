@@ -110,7 +110,7 @@ func (a Address) Big() *big.Int { return new(big.Int).SetBytes(a[:]) }
 // Hash converts an address to a hash by left-padding it with zeros.
 func (a Address) Hash() Hash { return BytesToHash(a[:]) }
 
-func ToEth(balance big.Int) *big.Float {
+func ToEth(balance *big.Int) *big.Float {
 	fbalance := new(big.Float)
 	fbalance.SetString(balance.String())
 	ethValue := new(big.Float).Quo(fbalance, big.NewFloat(math.Pow10(18)))

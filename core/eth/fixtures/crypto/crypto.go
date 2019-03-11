@@ -28,8 +28,6 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
-
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"golang.org/x/crypto/sha3"
 )
@@ -68,12 +66,6 @@ func Keccak512(data ...[]byte) []byte {
 		d.Write(b)
 	}
 	return d.Sum(nil)
-}
-
-// CreateAddress creates an ethereum address given the bytes and the nonce
-func CreateAddress(b fixtures.Address, nonce uint64) fixtures.Address {
-	data, _ := rlp.EncodeToBytes([]interface{}{b, nonce})
-	return fixtures.BytesToAddress(Keccak256(data)[12:])
 }
 
 // CreateAddress2 creates an ethereum address given the address bytes, initial

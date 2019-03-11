@@ -4,7 +4,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/zerjioang/etherniti/core/constants"
 	"github.com/zerjioang/etherniti/core/handlers"
 
 	"github.com/zerjioang/etherniti/core/listener"
@@ -25,7 +25,8 @@ var (
 func init() {
 	util.Commit = Build
 	handlers.LoadConstants()
-	fmt.Println(util.WelcomeBanner())
+	println(util.WelcomeBanner())
+	logger.Info("system running with pointers size of: ", constants.PointerSize, "bits")
 }
 
 // generate build sha1: git rev-parse --short HEAD

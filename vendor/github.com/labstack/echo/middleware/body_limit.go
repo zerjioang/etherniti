@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"errors"
 	"io"
 	"sync"
 
@@ -60,7 +60,7 @@ func BodyLimitWithConfig(config BodyLimitConfig) echo.MiddlewareFunc {
 
 	limit, err := bytes.Parse(config.Limit)
 	if err != nil {
-		panic(fmt.Errorf("echo: invalid body-limit=%s", config.Limit))
+		panic(errors.New("echo: invalid body-limit="+config.Limit))
 	}
 	config.limit = limit
 	pool := limitedReaderPool(config)

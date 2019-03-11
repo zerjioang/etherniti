@@ -5,7 +5,6 @@ package profile
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
@@ -16,9 +15,10 @@ import (
 )
 
 var (
-	emptyProfile     ConnectionProfile
-	tokenSecretBytes = []byte(config.TokenSecret)
-	errTokenNoValid  = errors.New("invalid fields token provided")
+	emptyProfile            ConnectionProfile
+	tokenSecretBytes        = []byte(config.TokenSecret)
+	errTokenNoValid         = errors.New("invalid fields token provided")
+	errInvalidSigningMethod = errors.New("unexpected signing method")
 )
 
 // default data for connection profile
@@ -138,7 +138,7 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 		// Don't forget to validate the alg is what you expect:
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			return nil, errInvalidSigningMethod
 		}
 		// return used token secret
 		return tokenSecretBytes, nil

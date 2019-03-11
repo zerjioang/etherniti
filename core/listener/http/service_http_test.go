@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestUnixSocketListener(t *testing.T) {
+func TestHttpListener(t *testing.T) {
 	t.Run("instantiation", func(t *testing.T) {
 		NewHttpListener()
 	})
@@ -29,10 +29,5 @@ func TestUnixSocketListener(t *testing.T) {
 		}
 		// wait one second to bootup
 		time.Sleep(1 * time.Second)
-		// send GET style request for v1/public for welcome message
-		cli := socketHttpClient("/tmp/go.sock")
-		resp, err := cli.Get("http://unix/v1/public")
-		t.Log("response", resp)
-		t.Log("error", err)
 	})
 }

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"errors"
 	"runtime"
 
 	"github.com/labstack/echo"
@@ -65,7 +65,7 @@ func RecoverWithConfig(config RecoverConfig) echo.MiddlewareFunc {
 				if r := recover(); r != nil {
 					err, ok := r.(error)
 					if !ok {
-						err = fmt.Errorf("%v", r)
+						err = errors.New("recovered from panic. could not detect cause")
 					}
 					stack := make([]byte, config.StackSize)
 					length := runtime.Stack(stack, !config.DisableStackAll)

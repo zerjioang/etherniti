@@ -3,7 +3,6 @@ package echo
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"net"
@@ -503,7 +502,8 @@ func (c *context) Inline(file, name string) error {
 }
 
 func (c *context) contentDisposition(file, name, dispositionType string) error {
-	c.response.Header().Set(HeaderContentDisposition, fmt.Sprintf("%s; filename=%q", dispositionType, name))
+	str := dispositionType+"; filename="+name
+	c.response.Header().Set(HeaderContentDisposition, str)
 	return c.File(file)
 }
 

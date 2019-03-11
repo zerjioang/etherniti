@@ -21,7 +21,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 1.4 MB reflect
 1.3 MB github.com/zerjioang/etherniti/vendor/golang.org/x/sys/unix
 1.3 MB github.com/zerjioang/etherniti/core/handlers/security
-964 kB github.com/zerjioang/etherniti/core/api
+1.0 MB github.com/zerjioang/etherniti/core/api
 932 kB crypto/tls
 870 kB math/big
 752 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto/secp256k1
@@ -29,14 +29,13 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 630 kB crypto/x509
 582 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/echo
 546 kB encoding/json
-480 kB github.com/zerjioang/etherniti/core/handlers
 447 kB vendor/golang_org/x/text/unicode/norm
 433 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/echo/middleware
 424 kB time
 402 kB regexp/syntax
 395 kB vendor/golang_org/x/net/dns/dnsmessage
 388 kB fmt
-372 kB github.com/zerjioang/etherniti/core/eth/fixtures/rlp
+360 kB github.com/zerjioang/etherniti/core/handlers
 355 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/acme
 351 kB regexp
 336 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/acme/autocert
@@ -60,6 +59,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 186 kB mime
 179 kB internal/poll
 177 kB bytes
+176 kB github.com/zerjioang/etherniti/core/listener/base
 170 kB bufio
 167 kB vendor/golang_org/x/net/http2/hpack
 163 kB crypto/rsa
@@ -72,8 +72,9 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 140 kB crypto/cipher
 132 kB io
 120 kB sync
+114 kB github.com/zerjioang/etherniti/core/listener/http
+114 kB github.com/zerjioang/etherniti/vendor/github.com/ethereum/go-ethereum/common/hexutil
 112 kB sort
-111 kB github.com/zerjioang/etherniti/core/api/protocol
 111 kB runtime/cgo
 98 kB vendor/golang_org/x/text/transform
 98 kB crypto/aes
@@ -82,14 +83,15 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 93 kB context
 91 kB github.com/zerjioang/etherniti/core/eth
 90 kB path/filepath
-90 kB github.com/zerjioang/etherniti/core/eth/fixtures
+89 kB github.com/zerjioang/etherniti/core/eth/fixtures
 89 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/gommon/log
+88 kB github.com/zerjioang/etherniti/core/listener/socket
 87 kB crypto/ecdsa
 82 kB github.com/zerjioang/etherniti/vendor/github.com/armon/go-radix
 78 kB crypto/sha512
 78 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/sha3
 76 kB github.com/zerjioang/etherniti/core/server/mods/ratelimit
-75 kB github.com/zerjioang/etherniti/core/handlers/clientcache
+74 kB github.com/zerjioang/etherniti/core/handlers/clientcache
 72 kB encoding/base64
 72 kB crypto/sha256
 69 kB crypto/sha1
@@ -97,9 +99,9 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 67 kB crypto/x509/pkix
 66 kB compress/gzip
 65 kB vendor/golang_org/x/net/http/httpproxy
-64 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto
 62 kB github.com/zerjioang/etherniti/core/server/mods/tor
 60 kB net/http/internal
+58 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto
 58 kB github.com/zerjioang/etherniti/vendor/github.com/valyala/fasttemplate
 57 kB net/http/httptrace
 55 kB io/ioutil
@@ -110,6 +112,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 52 kB crypto/rand
 51 kB log
 50 kB github.com/zerjioang/etherniti/core/eth/profile
+50 kB github.com/zerjioang/etherniti/shared/protocol
 48 kB crypto/des
 47 kB github.com/zerjioang/etherniti/vendor/github.com/valyala/bytebufferpool
 45 kB crypto/md5
@@ -124,7 +127,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 32 kB internal/cpu
 31 kB path
 30 kB vendor/golang_org/x/crypto/curve25519
-28 kB github.com/zerjioang/etherniti/core/config
+30 kB github.com/zerjioang/etherniti/core/config
 26 kB vendor/golang_org/x/net/http/httpguts
 26 kB unicode/utf8
 25 kB internal/singleflight
@@ -157,12 +160,16 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 5.7 kB github.com/zerjioang/etherniti/core/logger
 5.7 kB crypto/subtle
 5.6 kB internal/syscall/unix
+4.7 kB github.com/zerjioang/etherniti/core/listener
 4.2 kB internal/nettrace
+4.0 kB github.com/zerjioang/etherniti/shared/def/listener
 3.7 kB github.com/zerjioang/etherniti/core/eth/counter
 3.6 kB internal/race
 3.4 kB errors
 3.1 kB crypto/internal/subtle
 2.5 kB github.com/zerjioang/etherniti/vendor/github.com/mattn/go-isatty
+1.0 kB github.com/zerjioang/etherniti/shared/constants
+648 B github.com/zerjioang/etherniti/core/constants
 488 B github.com/zerjioang/etherniti/core/release
 ```
 

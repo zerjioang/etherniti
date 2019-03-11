@@ -5,8 +5,9 @@ package bip32
 
 import (
 	"crypto/rand"
-	"fmt"
+	"errors"
 	"math/big"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -98,7 +99,7 @@ func (enc *Encoding) DecodeString(s string) ([]byte, error) {
 	for i := range s {
 		n, ok := enc.index[s[i]]
 		if !ok {
-			return nil, fmt.Errorf("invalid character %q at index %d", s[i], i)
+			return nil, errors.New("invalid character " + string(s[i]) + " at index " + strconv.Itoa(i))
 		}
 		result = result.Add(result.Mul(result, enc.base), n)
 	}
@@ -113,7 +114,7 @@ func (enc *Encoding) DecodeStringN(s string, n int) ([]byte, error) {
 		return nil, err
 	}
 	if len(value) > n {
-		return nil, fmt.Errorf("value is too large")
+		return nil, errors.New("value is too large")
 	}
 	pad := make([]byte, n-len(value))
 	return append(pad, value...), nil

@@ -35,19 +35,19 @@ import (
 	"crypto/elliptic"
 	"crypto/hmac"
 	"crypto/subtle"
-	"fmt"
+	"errors"
 	"hash"
 	"io"
 	"math/big"
 )
 
 var (
-	ErrImport                     = fmt.Errorf("ecies: failed to import key")
-	ErrInvalidCurve               = fmt.Errorf("ecies: invalid elliptic curve")
-	ErrInvalidParams              = fmt.Errorf("ecies: invalid ECIES parameters")
-	ErrInvalidPublicKey           = fmt.Errorf("ecies: invalid public key")
-	ErrSharedKeyIsPointAtInfinity = fmt.Errorf("ecies: shared key is point at infinity")
-	ErrSharedKeyTooBig            = fmt.Errorf("ecies: shared key params are too big")
+	ErrImport                     = errors.New("ecies: failed to import key")
+	ErrInvalidCurve               = errors.New("ecies: invalid elliptic curve")
+	ErrInvalidParams              = errors.New("ecies: invalid ECIES parameters")
+	ErrInvalidPublicKey           = errors.New("ecies: invalid public key")
+	ErrSharedKeyIsPointAtInfinity = errors.New("ecies: shared key is point at infinity")
+	ErrSharedKeyTooBig            = errors.New("ecies: shared key params are too big")
 )
 
 // PublicKey is a representation of an elliptic curve public key.
@@ -138,9 +138,9 @@ func (prv *PrivateKey) GenerateShared(pub *PublicKey, skLen, macLen int) (sk []b
 }
 
 var (
-	ErrKeyDataTooLong = fmt.Errorf("ecies: can't supply requested key data")
-	ErrSharedTooLong  = fmt.Errorf("ecies: shared secret is too long")
-	ErrInvalidMessage = fmt.Errorf("ecies: invalid message")
+	ErrKeyDataTooLong = errors.New("ecies: can't supply requested key data")
+	ErrSharedTooLong  = errors.New("ecies: shared secret is too long")
+	ErrInvalidMessage = errors.New("ecies: invalid message")
 )
 
 var (
@@ -171,7 +171,7 @@ func concatKDF(hash hash.Hash, z, s1 []byte, kdLen int) (k []byte, err error) {
 
 	reps := ((kdLen + 7) * 8) / (hash.BlockSize() * 8)
 	if big.NewInt(int64(reps)).Cmp(big2To32M1) > 0 {
-		fmt.Println(big2To32M1)
+		println(big2To32M1)
 		return nil, ErrKeyDataTooLong
 	}
 

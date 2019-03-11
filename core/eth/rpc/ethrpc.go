@@ -6,10 +6,12 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"math/big"
 	"net/http"
+	"strconv"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
 
 	"github.com/labstack/gommon/log"
 )
@@ -21,7 +23,7 @@ type EthError struct {
 }
 
 func (err EthError) Error() string {
-	return fmt.Sprintf("Error %d (%s)", err.Code, err.Message)
+	return "Error " + err.Message + " with code " + strconv.Itoa(err.Code)
 }
 
 var (
@@ -106,7 +108,9 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	_ = response.Body.Close()
 
 	if rpc.Debug {
-		log.Debug(fmt.Sprintf("%s\nRequest: %s\nResponse: %s\n", method, body, data))
+		log.Debug("request method", method)
+		log.Debug("request body", body)
+		log.Debug("request data", data)
 	}
 
 	resp := new(ethResponse)
@@ -139,7 +143,8 @@ func (rpc EthRPC) Web3ClientVersion() (string, error) {
 func (rpc EthRPC) Web3Sha3(data []byte) (string, error) {
 	var hash string
 
-	err := rpc.call("web3_sha3", &hash, fmt.Sprintf("0x%x", data))
+	hashData := fixtures.Encode(data)
+	err := rpc.call("web3_sha3", &hash, hashData)
 	return hash, err
 }
 
@@ -241,10 +246,10 @@ func (rpc EthRPC) EthHashrate() (int, error) {
 }
 
 // EthGasPrice returns the current price per gas in wei.
-func (rpc EthRPC) EthGasPrice() (big.Int, error) {
+func (rpc EthRPC) EthGasPrice() (*big.Int, error) {
 	var response string
 	if err := rpc.call("eth_gasPrice", &response); err != nil {
-		return big.Int{}, err
+		return new(big.Int), err
 	}
 
 	return ParseBigInt(response)
@@ -269,10 +274,10 @@ func (rpc EthRPC) EthBlockNumber() (int, error) {
 }
 
 // EthGetBalance returns the balance of the account of given address in wei.
-func (rpc EthRPC) EthGetBalance(address, block string) (big.Int, error) {
+func (rpc EthRPC) EthGetBalance(address, block string) (*big.Int, error) {
 	var response string
 	if err := rpc.call("eth_getBalance", &response, address, block); err != nil {
-		return big.Int{}, err
+		return new(big.Int), err
 	}
 
 	return ParseBigInt(response)

@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
-	"fmt"
+	"encoding/hex"
 	"io"
 	"math/big"
 
@@ -169,7 +169,8 @@ func expandPublicKey(key []byte) (*big.Int, *big.Int) {
 }
 
 func validatePrivateKey(key []byte) error {
-	if fmt.Sprintf("%x", key) == "0000000000000000000000000000000000000000000000000000000000000000" || //if the key is zero
+	hexkey := hex.EncodeToString(key)
+	if hexkey == "0000000000000000000000000000000000000000000000000000000000000000" || //if the key is zero
 		bytes.Compare(key, curveParams.N.Bytes()) >= 0 || //or is outside of the curve
 		len(key) != 32 { //or is too short
 		return ErrInvalidPrivateKey

@@ -4,9 +4,10 @@
 package lib
 
 import (
-	"fmt"
 	"io"
 	"os"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 func copyFolder(source string, dest string) (err error) {
@@ -26,12 +27,12 @@ func copyFolder(source string, dest string) (err error) {
 		if obj.IsDir() {
 			err = copyFolder(sourcefilepointer, destinationfilepointer)
 			if err != nil {
-				fmt.Println(err)
+				logger.Error(err)
 			}
 		} else {
 			err = copyFile(sourcefilepointer, destinationfilepointer)
 			if err != nil {
-				fmt.Println(err)
+				logger.Error(err)
 			}
 		}
 	}
