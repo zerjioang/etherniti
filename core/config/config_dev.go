@@ -7,6 +7,10 @@
 package config
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
+	"net/http"
+	_ "net/http/pprof"
+	"runtime"
 	"time"
 
 	"github.com/labstack/gommon/log"
@@ -144,4 +148,33 @@ func SetDefaults(env map[string]interface{}) {
 	// ratelimit configuration
 	env["X_ETHERNITI_RATE_LIMIT"] = 10
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
+}
+
+// setup server config
+func Setup(){
+	// enable profile mode if requested
+	if IsProfilingEnabled(){
+		go runProfiler()
+	}
+}
+
+//There are 7 places you can get profiles in the default webserver: the ones mentioned above
+//
+//http://localhost:6060/debug/pprof/
+//http://localhost:6060/debug/pprof/goroutine
+//http://localhost:6060/debug/pprof/heap
+//http://localhost:6060/debug/pprof/threadcreate
+//http://localhost:6060/debug/pprof/block
+//http://localhost:6060/debug/pprof/mutex
+//
+//and also 2 more: the CPU profile and the CPU trace.
+//
+//http://localhost:6060/debug/pprof/profile?seconds=5
+//http://localhost:6060/debug/pprof/trace?seconds=5
+func runProfiler() {
+	go func() {
+		logger.Info("starting go profiler on :6060...")
+		runtime.SetBlockProfileRate(1)
+		log.Error(http.ListenAndServe(":6060", nil))
+	}()
 }

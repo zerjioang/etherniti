@@ -43,6 +43,8 @@ func main() {
 	logger.Info("starting etherniti proxy")
 	mode := config.ServiceListeningMode()
 
+	config.Setup()
+
 	// 3 run listener
 	err := listener.FactoryListener(mode).Listen()
 	if err != nil {

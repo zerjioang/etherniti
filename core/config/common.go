@@ -57,6 +57,10 @@ func IsSocketMode() bool {
 	return listeningMode == "socket"
 }
 
+func IsProfilingEnabled() bool {
+	return true
+}
+
 func ServiceListeningMode() listener.ServiceType {
 	switch listeningMode {
 	case "http":
