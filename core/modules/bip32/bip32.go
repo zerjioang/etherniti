@@ -283,8 +283,8 @@ func B58Deserialize(data string) (*Key, error) {
 	return Deserialize(b)
 }
 
-// NewSeed returns a cryptographically secure seed
-func NewSeed() ([]byte, error) {
+// NewRandomSeed returns a cryptographically secure seed
+func NewRandomSeed() ([]byte, error) {
 	// Well that easy, just make go read 256 random bytes into a slice
 	s := make([]byte, 256)
 	//_, err := rand.Read(s)

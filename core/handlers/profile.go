@@ -19,8 +19,8 @@ import (
 )
 
 const (
-	readErr = `there was an trycatch during execution`
-	bindErr = `there was an trycatch while processing your request information`
+	readErr = `there was an error during execution`
+	bindErr = `there was an error while processing your request information`
 )
 
 type ProfileController struct {

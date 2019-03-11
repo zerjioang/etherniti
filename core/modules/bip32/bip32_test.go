@@ -189,7 +189,7 @@ func TestPublicParentPublicChildDerivation(t *testing.T) {
 
 func TestNewSeed(t *testing.T) {
 	for i := 0; i < 20; i++ {
-		seed, err := NewSeed()
+		seed, err := NewRandomSeed()
 		assert.NoError(t, err)
 		assert.Equal(t, 256, len(seed))
 	}
@@ -265,7 +265,7 @@ func assertKeySerialization(t *testing.T, key *Key, knownBase58 string) {
 func TestExample(t *testing.T) {
 	// Generate a seed to determine all keys from.
 	// This should be persisted, backed up, and secured
-	seed, err := NewSeed()
+	seed, err := NewRandomSeed()
 	if err != nil {
 		log.Fatalln("Error generating seed:", err)
 	}

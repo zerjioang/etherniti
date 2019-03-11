@@ -152,5 +152,5 @@ func SetDefaults(env map[string]interface{}) map[string]interface{} {
 }
 
 // setup server config
-func Setup(){
+func Setup() {
 }

@@ -7,11 +7,12 @@
 package config
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"net/http"
 	_ "net/http/pprof"
 	"runtime"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
@@ -151,9 +152,9 @@ func SetDefaults(env map[string]interface{}) {
 }
 
 // setup server config
-func Setup(){
+func Setup() {
 	// enable profile mode if requested
-	if IsProfilingEnabled(){
+	if IsProfilingEnabled() {
 		go runProfiler()
 	}
 }

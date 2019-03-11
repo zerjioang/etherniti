@@ -1,6 +1,12 @@
 package bip32
 
 /*
+The Hierarchical Deterministic (HD) key creation and transfer protocol (BIP32), which allows creating child keys from parent keys in a hierarchy. Wallets using the HD protocol are called HD wallets.
+Synonyms
+
+    HD protocol
+    HD wallet
+
 RECENT CHANGES:
 * (16 Apr 2013) Added private derivation for i ≥ 0x80000000 (less risk of parent private key leakage)
 * (30 Apr 2013) Switched from multiplication by I<sub>L</sub> to addition of I<sub>L</sub> (faster, easier implementation)

@@ -33,3 +33,8 @@ func Error(i ...interface{}) {
 func Info(i ...interface{}) {
 	customLog.Info(i...)
 }
+
+// custom info format logger
+func Debug(i ...interface{}) {
+	customLog.Debug(i...)
+}

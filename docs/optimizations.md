@@ -1,5 +1,22 @@
 # Optimizations
 
+## A bunch of benchmarks for basic Go things
+
+### Headlines
+
+* Locking and unlocking an uncontended mutex takes ~25 ns
+* Allocating some memory takes ~30 ns
+* Using a sync.Pool takes ~25ns
+* deferring a function takes ~90 ns
+* Pushing a byte through a channel takes ~100 to 250 ns
+* Checking if something is in a map, then adding it takes ~250 ns if the map has enough room
+* Checking if something is in an unordered slice, then appending it takes ~222 ns up to around 100 items if the slice has cpacity
+* A type assertion takes ~0.90 ns
+* Storing a value in an interface type takes ~33 ns and involves an allocation, even for relatively small types
+* Storing an existing pointer in an interface type takes ~8ns and no allocations.
+* It's slightly faster to do a type assertion on an interface type then a call on the concrete type (1.1 ns), than to call a method on the interface type directly (2.3 ns)
+
+
 To try and still break down a Go binary to its dependencies, we must use a Go-enlightened tool that can understand the Go binary format. Let’s find one.
 
 ```bash

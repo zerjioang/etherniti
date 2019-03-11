@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
+	"github.com/zerjioang/etherniti/core/modules/bip39"
 )
 
 func ExampleNewMnemonic() {

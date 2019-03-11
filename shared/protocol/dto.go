@@ -3,8 +3,6 @@
 
 package protocol
 
-import "net/http"
-
 // profile model dto
 type Profile struct {
 	Address    string `json:"address"`
@@ -35,11 +33,23 @@ type NewProfileRequest struct {
 // new profile request dto
 type NewMnemonicRequest struct {
 
-	// size
+	// size of initial entropy: 128 to 256 bits
 	Size uint16 `json:"size" form:"size" query:"size"`
 
 	// language
 	Language string `json:"language" form:"language" query:"language"`
+}
+
+// new hd wallet request dto
+type NewHdWalletRequest struct {
+	NewMnemonicRequest
+}
+
+// new hd wallet response dto
+type HdWalletResponse struct {
+	MasterPrivateKey string
+	MasterPublicKey  string
+	Mnemonic         string
 }
 
 // api trycatch model dto
@@ -53,7 +63,7 @@ type ApiError struct {
 func NewApiError(code int, details string) ApiError {
 	ae := ApiError{}
 	ae.Code = code
-	ae.Message = http.StatusText(code)
+	ae.Message = StatusText(code)
 	ae.Details = details
 	return ae
 }

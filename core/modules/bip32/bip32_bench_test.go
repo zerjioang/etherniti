@@ -15,7 +15,7 @@ func BenchmarkBip32(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			_, _ = NewSeed()
+			_, _ = NewRandomSeed()
 		}
 	})
 	b.Run("new-master", func(b *testing.B) {
@@ -24,7 +24,7 @@ func BenchmarkBip32(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			seed, err := NewSeed()
+			seed, err := NewRandomSeed()
 			if err != nil {
 				log.Fatalln("Error generating seed:", err)
 			}
@@ -39,7 +39,7 @@ func BenchmarkBip32(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			seed, err := NewSeed()
+			seed, err := NewRandomSeed()
 			if err != nil {
 				log.Fatalln("Error generating seed:", err)
 			}
@@ -55,7 +55,7 @@ func BenchmarkBip32(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			seed, err := NewSeed()
+			seed, err := NewRandomSeed()
 			if err != nil {
 				log.Fatalln("Error generating seed:", err)
 			}
@@ -71,7 +71,7 @@ func BenchmarkBip32(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			seed, err := NewSeed()
+			seed, err := NewRandomSeed()
 			if err != nil {
 				log.Fatalln("Error generating seed:", err)
 			}

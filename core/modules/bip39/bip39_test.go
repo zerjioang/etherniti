@@ -8,7 +8,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 )
 
 type vector struct {

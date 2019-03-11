@@ -16,9 +16,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 
-	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/trycatch"
 
 	"github.com/armon/go-radix"
 	"golang.org/x/crypto/pbkdf2"

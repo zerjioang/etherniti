@@ -8,14 +8,20 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/modules/bip32"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39"
-	"github.com/zerjioang/etherniti/core/modules/mnemonic/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/modules/bip39"
+	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 	"github.com/zerjioang/etherniti/core/util"
+)
+
+const (
+	defaultPath = "m/44'/60'/0'/0/0"
 )
 
 type WalletController struct {
@@ -98,8 +104,50 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 	}
 }
 
+func (ctl WalletController) hdWallet(c echo.Context) error {
+	req := protocol.NewHdWalletRequest{}
+	if err := c.Bind(&req); err != nil {
+		// return a binding trycatch error
+		logger.Error("failed to bind request data to model:", err)
+		return api.ErrorStr(c, bindErr)
+	}
+	response, err := ctl.createHdWallet(req)
+	if err != nil {
+		return api.Error(c, err)
+	} else {
+		//hd wallet success
+		logger.Info("hd wallet successfully created")
+		response := api.ToSuccess("hd wallet successfully created", response)
+		return c.JSONBlob(protocol.StatusOK, response)
+	}
+}
+
+func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) (protocol.HdWalletResponse, error) {
+	// Generate a mnemonic for memorization or user-friendly seeds
+	entropy, _ := bip39.NewEntropy(256)
+	mnemonic, _ := bip39.NewMnemonic(entropy)
+
+	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
+	seed := bip39.NewSeed(mnemonic, "Secret Passphrase")
+
+	masterKey, _ := bip32.NewMasterKey(seed)
+	publicKey := masterKey.PublicKey()
+
+	// Display mnemonic and keys
+	logger.Debug("Mnemonic: ", mnemonic)
+	logger.Debug("Master private key: ", masterKey)
+	logger.Debug("Master public key: ", publicKey)
+
+	var response protocol.HdWalletResponse
+	response.MasterPrivateKey = masterKey.String()
+	response.MasterPublicKey = publicKey.String()
+	response.Mnemonic = mnemonic
+	return response, nil
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing wallet controller methods")
 	router.POST("/mnemonic/bip39", ctl.mnemonic)
+	router.POST("/hd/bip32", ctl.hdWallet)
 }
