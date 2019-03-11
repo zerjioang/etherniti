@@ -166,12 +166,12 @@ func (rpc EthRPC) NetListening() (bool, error) {
 
 // NetPeerCount returns number of peers currently connected to the client.
 func (rpc EthRPC) NetPeerCount() (int, error) {
-	var response string
+	var response int
 	if err := rpc.call("net_peerCount", &response); err != nil {
 		return 0, err
 	}
 
-	return ParseInt(response)
+	return response, nil
 }
 
 // EthProtocolVersion returns the current ethereum protocol version.
@@ -246,13 +246,18 @@ func (rpc EthRPC) EthHashrate() (int, error) {
 }
 
 // EthGasPrice returns the current price per gas in wei.
-func (rpc EthRPC) EthGasPrice() (*big.Int, error) {
+func (rpc EthRPC) EthGasPrice() (int64, error) {
 	var response string
 	if err := rpc.call("eth_gasPrice", &response); err != nil {
-		return new(big.Int), err
+		return 0, err
 	}
-
-	return ParseBigInt(response)
+	// example 0x4a817c800
+	// fast check if string starts with 0x
+	if len(response) > 2 && response[0] == 48 && response[1] == 120 {
+		response = response[2:]
+	}
+	//return ParseBigInt(response)
+	return ParseHexToInt(response)
 }
 
 // EthAccounts returns a list of addresses owned by client.

@@ -18,7 +18,7 @@ type EthereumAPI interface {
 	EthCoinbase() (string, error)
 	EthMining() (bool, error)
 	EthHashrate() (int, error)
-	EthGasPrice() (*big.Int, error)
+	EthGasPrice() (int64, error)
 	EthAccounts() ([]string, error)
 	EthBlockNumber() (int, error)
 	EthGetBalance(address, block string) (*big.Int, error)

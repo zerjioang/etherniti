@@ -26,8 +26,8 @@ func BytesToAddress(b []byte) Address {
 }
 
 // Hex returns an EIP55-compliant hex string representation of the address.
-func (a Address) Hex() string {
-	unchecksummed := hex.EncodeToString(a[:])
+func EIP55Hex(data []byte) string {
+	unchecksummed := hex.EncodeToString(data)
 	sha := NewKeccak256()
 	sha.Write([]byte(unchecksummed))
 	hash := sha.Sum(nil)
@@ -45,6 +45,11 @@ func (a Address) Hex() string {
 		}
 	}
 	return "0x" + string(result)
+}
+
+// Hex returns an EIP55-compliant hex string representation of the address.
+func (a Address) Hex() string {
+	return EIP55Hex(a[:])
 }
 
 // FromHex returns the bytes represented by the hexadecimal string s.
