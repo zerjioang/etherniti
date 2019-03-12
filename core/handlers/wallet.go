@@ -5,9 +5,11 @@ package handlers
 
 import (
 	"crypto/rand"
-	"github.com/zerjioang/etherniti/core/modules/bip32"
+	"crypto/sha512"
 	"io"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/modules/bip32"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -39,7 +41,7 @@ func NewWalletController() WalletController {
 	224 bits -> 21 words
 	256 bits -> 24 words
 */
-func (ctl WalletController) mnemonic(c echo.Context) error {
+func (ctl WalletController) Mnemonic(c echo.Context) error {
 
 	req := protocol.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -81,27 +83,27 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 		return api.ErrorStr(c, "provided size is not supported")
 	}
 
-	// create new entropy from rand reader
-	// entropy is measured as bits and size measures bytes
+	// create new Entropy from rand reader
+	// Entropy is measured as bits and size measures bytes
 	var entropyBytes = uint8(req.Size / 8)
 	entropy := make([]byte, entropyBytes)
 	n, readErr := io.ReadFull(rand.Reader, entropy)
 	if readErr != nil || uint8(n) != entropyBytes {
-		//failed to get a full entropy source
-		return api.ErrorStr(c, "failed to get a full entropy source")
+		//failed to get a full Entropy source
+		return api.ErrorStr(c, "failed to get a full Entropy source")
 	}
 
-	// create mnemonic based on user config and created entropy source
+	// create Mnemonic based on user config and created Entropy source
 	mnemomic, err := bip39.NewMnemonic(entropy)
 	if err.Occur() {
-		//return mnemonic error
+		//return Mnemonic error
 		return api.StackError(c, err)
 	} else {
-		return api.SendSuccess(c, "mnemonic successfully created", mnemomic)
+		return api.SendSuccess(c, "Mnemonic successfully created", mnemomic)
 	}
 }
 
-func (ctl WalletController) hdWallet(c echo.Context) error {
+func (ctl WalletController) HdWallet(c echo.Context) error {
 	req := protocol.NewHdWalletRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch error
@@ -116,7 +118,7 @@ func (ctl WalletController) hdWallet(c echo.Context) error {
 	}
 }
 
-func (ctl WalletController) entropy(c echo.Context) error {
+func (ctl WalletController) Entropy(c echo.Context) error {
 	req := protocol.EntropyRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding trycatch error
@@ -126,7 +128,7 @@ func (ctl WalletController) entropy(c echo.Context) error {
 
 	req.Size = ctl.getIntParam(c, "bits")
 
-	if req.Size <=0 || req.Size > 4096*8 {
+	if req.Size <= 0 || req.Size > 4096*8 {
 		//return invalid size (exceeded btw) trycatch
 		return api.ErrorStr(c, "provided entropy size is not supported")
 	}
@@ -136,7 +138,7 @@ func (ctl WalletController) entropy(c echo.Context) error {
 		return api.Error(c, err)
 	} else {
 		//success
-		return api.SendSuccess(c, "entropy data generated", response)
+		return api.SendSuccess(c, "Entropy data generated", response)
 	}
 }
 
@@ -148,17 +150,17 @@ func (ctl WalletController) generateSecureEntropy(request protocol.EntropyReques
 }
 
 func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) (protocol.HdWalletResponse, error) {
-	// Generate a mnemonic for memorization or user-friendly seeds
+	// Generate a Mnemonic for memorization or user-friendly seeds
 	entropy, _ := bip39.NewEntropy(256)
 	mnemonic, _ := bip39.NewMnemonic(entropy)
 
-	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
+	// Generate a Bip32 HD wallet for the Mnemonic and a user supplied password
 	seed := bip39.NewSeed(mnemonic, "Secret Passphrase")
 
-	masterKey, _ := bip32.NewMasterKey(seed)
+	masterKey, _ := bip32.NewMasterKey(seed, "Bitcoin seed", sha512.New)
 	publicKey := masterKey.PublicKey()
 
-	// Display mnemonic and keys
+	// Display Mnemonic and keys
 	logger.Debug("Mnemonic: ", mnemonic)
 	logger.Debug("Master private key: ", masterKey)
 	logger.Debug("Master public key: ", publicKey)
@@ -173,9 +175,9 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing wallet controller methods")
-	router.GET("/wallet/entropy/:bits", ctl.entropy)
-	router.POST("/wallet/mnemonic/bip39", ctl.mnemonic)
-	router.POST("/wallet/hd/bip32", ctl.hdWallet)
+	router.GET("/wallet/Entropy/:bits", ctl.Entropy)
+	router.POST("/wallet/Mnemonic/bip39", ctl.Mnemonic)
+	router.POST("/wallet/hd/bip32", ctl.HdWallet)
 }
 
 func (ctl WalletController) getIntParam(c echo.Context, key string) uint16 {

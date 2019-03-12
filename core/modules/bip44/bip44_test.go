@@ -4,6 +4,7 @@
 package bip44
 
 import (
+	"crypto/sha512"
 	"testing"
 
 	"github.com/zerjioang/etherniti/core/modules/bip32"
@@ -37,7 +38,7 @@ func TestNewKeyFromMasterKey(t *testing.T) {
 		t.Error(err)
 	}
 
-	masterKey, mErr := bip32.NewMasterKey(seed)
+	masterKey, mErr := bip32.NewMasterKey(seed, "Bitcoin seed", sha512.New)
 	if mErr != nil {
 		t.Error(err)
 	}

@@ -10,6 +10,8 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/base58"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto/secp256k1"
 
 	"golang.org/x/crypto/ripemd160"
@@ -18,9 +20,6 @@ import (
 var (
 	curve       = secp256k1.S256()
 	curveParams = curve.Params()
-
-	// BitcoinBase58Encoding is the encoding used for bitcoin addresses
-	BitcoinBase58Encoding = NewEncoding("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
 )
 
 // Hashes
@@ -91,11 +90,11 @@ func addChecksumToBytes(data []byte) ([]byte, error) {
 }
 
 func base58Encode(data []byte) string {
-	return BitcoinBase58Encoding.EncodeToString(data)
+	return base58.Base58.EncodeToString(data)
 }
 
 func base58Decode(data string) ([]byte, error) {
-	return BitcoinBase58Encoding.DecodeString(data)
+	return base58.Base58.DecodeString(data)
 }
 
 // Keys

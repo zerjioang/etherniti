@@ -213,37 +213,37 @@ func TestEthRPC_Call(t *testing.T) {
 	})
 	t.Run("install_contract", func(t *testing.T) {
 		/*
-		curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x428a40d2452976feb126bdd272faaab0652f89b3", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}'
+			curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x428a40d2452976feb126bdd272faaab0652f89b3", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}'
 
-		The response should be similar to:
+			The response should be similar to:
 
-		{
-		  "jsonrpc": "2.0",
-		  "id": 1,
-		  "result": "0x6755e3fa3a927b0b0c43764fc014334fd00cc121ec645566776ec2c8c2ae41c2"
-		}
+			{
+			  "jsonrpc": "2.0",
+			  "id": 1,
+			  "result": "0x6755e3fa3a927b0b0c43764fc014334fd00cc121ec645566776ec2c8c2ae41c2"
+			}
 
-		curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0x8290c22bd9b4d61bc57222698799edd7bbc8df5214be44e239a95f679249c59c"],"id":1}'
+			curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0x8290c22bd9b4d61bc57222698799edd7bbc8df5214be44e239a95f679249c59c"],"id":1}'
 
-		Then it returns
+			Then it returns
 
-		{
-		  "jsonrpc": "2.0",
-		  "id": 1,
-		  "result": {
-			"transactionHash": "0x6755e3fa3a927b0b0c43764fc014334fd00cc121ec645566776ec2c8c2ae41c2",
-			"transactionIndex": "0x0",
-			"blockHash": "0xc17d6960b338ef21be44d48208ead2f6d8e8a63d42c89ef61d28ddc4ee7c5d87",
-			"blockNumber": "0x897",
-			"cumulativeGasUsed": "0x015f90",
-			"gasUsed": "0x015f90",
-			"contractAddress": "0x73ec81da0c72dd112e06c09a6ec03b5544d26f05",
-			"logs": [],
-			"from": "0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826",
-			"to": "0x00",
-			"root": "0x9182b4ffc855052ce52ad12d38eb2de42f068f3b6df9c218e7dba46fc404be21"
-		  }
-		}
+			{
+			  "jsonrpc": "2.0",
+			  "id": 1,
+			  "result": {
+				"transactionHash": "0x6755e3fa3a927b0b0c43764fc014334fd00cc121ec645566776ec2c8c2ae41c2",
+				"transactionIndex": "0x0",
+				"blockHash": "0xc17d6960b338ef21be44d48208ead2f6d8e8a63d42c89ef61d28ddc4ee7c5d87",
+				"blockNumber": "0x897",
+				"cumulativeGasUsed": "0x015f90",
+				"gasUsed": "0x015f90",
+				"contractAddress": "0x73ec81da0c72dd112e06c09a6ec03b5544d26f05",
+				"logs": [],
+				"from": "0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826",
+				"to": "0x00",
+				"root": "0x9182b4ffc855052ce52ad12d38eb2de42f068f3b6df9c218e7dba46fc404be21"
+			  }
+			}
 
 		*/
 	})

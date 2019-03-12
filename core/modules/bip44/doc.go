@@ -19,4 +19,11 @@ Purpose is a constant set to 44' (or 0x8000002C) following the BIP43 recommendat
 
 Hardened derivation is used at this level.
 
+## Package performance
+
+* initial analysis results:
+
+BenchmarkBIP44/NewKeyFromMnemonic-4         	     300	   4077059 ns/op	   0.00 MB/s	   16340 B/op	     233 allocs/op
+BenchmarkBIP44/NewKeyFromMasterKey-4        	     300	   4096654 ns/op	   0.00 MB/s	   18100 B/op	     261 allocs/op
+
 */

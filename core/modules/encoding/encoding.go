@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package bip32
+package encoding
 
 import (
 	"crypto/rand"
@@ -11,7 +11,9 @@ import (
 	"unicode/utf8"
 )
 
-var zero = big.NewInt(int64(0))
+var (
+	zero = big.NewInt(0)
+)
 
 // Encoding represents a given base-N encoding.
 type Encoding struct {
@@ -19,16 +21,6 @@ type Encoding struct {
 	index    map[byte]*big.Int
 	base     *big.Int
 }
-
-const base62Alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-// Base62 represents bytes as a base-62 number [0-9A-Za-z].
-var Base62 = NewEncoding(base62Alphabet)
-
-const base58Alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-
-// Base58 represents bytes as a base-58 number [1-9A-GHJ-LM-Za-z].
-var Base58 = NewEncoding(base58Alphabet)
 
 // NewEncoding creates a new base-N representation from the given alphabet.
 // Panics if the alphabet is not unique. Only ASCII characters are supported.

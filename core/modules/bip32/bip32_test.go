@@ -4,6 +4,7 @@
 package bip32
 
 import (
+	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
 	"log"
@@ -118,7 +119,7 @@ func testVectorKeyPairs(t *testing.T, vector testMasterKey) {
 	seed, _ := hex.DecodeString(vector.seed)
 
 	// Generate a master private and public key
-	privKey, err := NewMasterKey(seed)
+	privKey, err := NewMasterKey(seed, "Bitcoin seed", sha512.New)
 	assert.NoError(t, err)
 
 	pubKey := privKey.PublicKey()
@@ -206,7 +207,7 @@ func TestB58SerializeUnserialize(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		key, err := NewMasterKey(test.seed)
+		key, err := NewMasterKey(test.seed, "Bitcoin seed", sha512.New)
 		assert.NoError(t, err)
 		assertKeySerialization(t, key, test.base58)
 	}
@@ -231,7 +232,7 @@ func TestDeserializingInvalidStrings(t *testing.T) {
 }
 
 func TestCantCreateHardenedPublicChild(t *testing.T) {
-	key, err := NewMasterKey([]byte{})
+	key, err := NewMasterKey([]byte{}, "Bitcoin seed", sha512.New)
 	assert.NoError(t, err)
 
 	// Test that it works for private keys
@@ -271,7 +272,7 @@ func TestExample(t *testing.T) {
 	}
 
 	// Create master private key from seed
-	computerVoiceMasterKey, _ := NewMasterKey(seed)
+	computerVoiceMasterKey, _ := NewMasterKey(seed, "Bitcoin seed", sha512.New)
 
 	// Map departments to keys
 	// There is a very small chance a given child index is invalid

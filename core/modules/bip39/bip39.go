@@ -31,6 +31,13 @@ var (
 	bigOne          = big.NewInt(1)
 	bigTwo          = big.NewInt(2)
 
+	//checksum mask values
+	checksum12 = big.NewInt(15)
+	checksum15 = big.NewInt(31)
+	checksum18 = big.NewInt(63)
+	checksum21 = big.NewInt(127)
+	checksum24 = big.NewInt(255)
+
 	// used to use only the desired x of 8 available checksum bits.
 	// 256 bit (word length 24) requires all 8 bits of the checksum,
 	// and thus no shifting is needed for it (we would get a divByZero crash if we did)
@@ -38,11 +45,12 @@ var (
 		12: big.NewInt(16),
 		15: big.NewInt(8),
 		18: big.NewInt(4),
-		21: big.NewInt(2),
+		21: bigTwo,
 	}
 
 	// wordlist lock
 	listLock sync.Mutex
+
 	// wordList is the set of words to use
 	wordList []string
 
@@ -70,6 +78,7 @@ var (
 )
 
 func init() {
+	// set default language to english
 	initializeInternalWordlist(wordlists.English)
 	// initialize list lock
 	listLock = sync.Mutex{}
@@ -116,8 +125,8 @@ func HasWord(word string) bool {
 // so long as the requested size bitSize is an appropriate size.
 //
 // bitSize is the size of entropy bytes requested
-func GenerateSecureEntropy(entropyBits uint16) ([]byte, error){
-	entropyBytes := entropyBits/8
+func GenerateSecureEntropy(entropyBits uint16) ([]byte, error) {
+	entropyBytes := entropyBits / 8
 	raw := make([]byte, entropyBytes)
 	_, rErr := rand.Read(raw)
 	return raw, rErr
@@ -194,15 +203,15 @@ func EntropyFromMnemonic(mnemonic string) ([]byte, trycatch.Error) {
 func resolveChecksumMask(value int) *big.Int {
 	switch value {
 	case 12:
-		return big.NewInt(15)
+		return checksum12
 	case 15:
-		return big.NewInt(31)
+		return checksum15
 	case 18:
-		return big.NewInt(63)
+		return checksum18
 	case 21:
-		return big.NewInt(127)
+		return checksum21
 	case 24:
-		return big.NewInt(255)
+		return checksum24
 	}
 	return nil
 }
@@ -255,7 +264,7 @@ func NewMnemonic(entropy []byte) (string, trycatch.Error) {
 
 // MnemonicToByteArray takes a mnemonic string and turns it into a byte array
 // suitable for creating another mnemonic.
-// An trycatch is returned if the mnemonic is invalid.
+// An error is returned if the mnemonic is invalid.
 func MnemonicToByteArray(mnemonic string, raw ...bool) ([]byte, trycatch.Error) {
 	var (
 		mnemonicSlice    = strings.Split(mnemonic, " ")

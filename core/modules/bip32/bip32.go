@@ -10,6 +10,7 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"errors"
+	"hash"
 	"io"
 )
 
@@ -62,9 +63,9 @@ type Key struct {
 }
 
 // NewMasterKey creates a new master extended key from a seed
-func NewMasterKey(seed []byte) (*Key, error) {
+func NewMasterKey(seed []byte, key string, h func() hash.Hash) (*Key, error) {
 	// Generate key and chaincode
-	hmacSecret := hmac.New(sha512.New, []byte("Bitcoin seed"))
+	hmacSecret := hmac.New(h, []byte(key))
 	_, err := hmacSecret.Write(seed)
 	if err != nil {
 		return nil, err
@@ -82,7 +83,7 @@ func NewMasterKey(seed []byte) (*Key, error) {
 	}
 
 	// Create the key struct
-	key := &Key{
+	genKey := &Key{
 		Version:     PrivateWalletVersion,
 		ChainCode:   chainCode,
 		Key:         keyBytes,
@@ -92,11 +93,11 @@ func NewMasterKey(seed []byte) (*Key, error) {
 		IsPrivate:   true,
 	}
 
-	return key, nil
+	return genKey, nil
 }
 
 // NewChildKey derives a child key from a given parent as outlined by bip32
-func (key *Key) NewChildKey(childIdx uint32) (*Key, error) {
+func (key Key) NewChildKey(childIdx uint32) (*Key, error) {
 	// Fail early if trying to create hardned child from public key
 	if !key.IsPrivate && childIdx >= FirstHardenedChild {
 		return nil, ErrHardnedChildPublicKey
@@ -152,7 +153,7 @@ func (key *Key) NewChildKey(childIdx uint32) (*Key, error) {
 	return childKey, nil
 }
 
-func (key *Key) getIntermediary(childIdx uint32) ([]byte, error) {
+func (key Key) getIntermediary(childIdx uint32) ([]byte, error) {
 	// Get intermediary to create key and chaincode from
 	// Hardened children are based on the private key
 	// NonHardened children are based on the public key
@@ -180,7 +181,7 @@ func (key *Key) getIntermediary(childIdx uint32) ([]byte, error) {
 
 // PublicKey returns the public version of key or return a copy
 // The 'Neuter' function from the bip32 spec
-func (key *Key) PublicKey() *Key {
+func (key Key) PublicKey() *Key {
 	keyBytes := key.Key
 
 	if key.IsPrivate {
@@ -199,7 +200,7 @@ func (key *Key) PublicKey() *Key {
 }
 
 // Serialize a Key to a 78 byte byte slice
-func (key *Key) Serialize() ([]byte, error) {
+func (key Key) Serialize() ([]byte, error) {
 	// Private keys should be prepended with a single null byte
 	keyBytes := key.Key
 	if key.IsPrivate {
@@ -225,7 +226,7 @@ func (key *Key) Serialize() ([]byte, error) {
 }
 
 // B58Serialize encodes the Key in the standard Bitcoin base58 encoding
-func (key *Key) B58Serialize() string {
+func (key Key) B58Serialize() string {
 	serializedKey, err := key.Serialize()
 	if err != nil {
 		return ""
@@ -235,7 +236,7 @@ func (key *Key) B58Serialize() string {
 }
 
 // String encodes the Key in the standard Bitcoin base58 encoding
-func (key *Key) String() string {
+func (key Key) String() string {
 	return key.B58Serialize()
 }
 

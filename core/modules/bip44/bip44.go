@@ -4,6 +4,8 @@
 package bip44
 
 import (
+	"crypto/sha512"
+
 	"github.com/zerjioang/etherniti/core/modules/bip32"
 	"github.com/zerjioang/etherniti/core/modules/bip39"
 )
@@ -25,7 +27,7 @@ func NewKeyFromMnemonic(mnemonic string, coin, account, chain, address uint32) (
 	if err.Occur() {
 		return nil, err
 	}
-	masterKey, mErr := bip32.NewMasterKey(seed)
+	masterKey, mErr := bip32.NewMasterKey(seed, "Bitcoin seed", sha512.New)
 	if mErr != nil {
 		return nil, err
 	}

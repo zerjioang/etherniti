@@ -4,6 +4,7 @@
 package bip32
 
 import (
+	"crypto/sha512"
 	"log"
 	"testing"
 )
@@ -30,7 +31,7 @@ func BenchmarkBip32(b *testing.B) {
 			}
 
 			// Create master private key from seed
-			_, _ = NewMasterKey(seed)
+			_, _ = NewMasterKey(seed, "Bitcoin seed", sha512.New)
 		}
 	})
 	b.Run("new-child-key-600", func(b *testing.B) {
@@ -44,8 +45,8 @@ func BenchmarkBip32(b *testing.B) {
 				log.Fatalln("Error generating seed:", err)
 			}
 
-			_, _ = NewMasterKey(seed)
-			master, _ := NewMasterKey(seed)
+			_, _ = NewMasterKey(seed, "Bitcoin seed", sha512.New)
+			master, _ := NewMasterKey(seed, "Bitcoin seed", sha512.New)
 			_, _ = master.NewChildKey(600)
 		}
 	})
@@ -60,8 +61,8 @@ func BenchmarkBip32(b *testing.B) {
 				log.Fatalln("Error generating seed:", err)
 			}
 
-			_, _ = NewMasterKey(seed)
-			master, _ := NewMasterKey(seed)
+			_, _ = NewMasterKey(seed, "Bitcoin seed", sha512.New)
+			master, _ := NewMasterKey(seed, "Bitcoin seed", sha512.New)
 			_, _ = master.NewChildKey(60000)
 		}
 	})
@@ -77,7 +78,7 @@ func BenchmarkBip32(b *testing.B) {
 			}
 
 			// Create master private key from seed
-			computerVoiceMasterKey, _ := NewMasterKey(seed)
+			computerVoiceMasterKey, _ := NewMasterKey(seed, "Bitcoin seed", sha512.New)
 
 			// Map departments to keys
 			// There is a very small chance a given child index is invalid
