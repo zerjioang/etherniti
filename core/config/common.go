@@ -58,7 +58,7 @@ func IsSocketMode() bool {
 }
 
 func IsProfilingEnabled() bool {
-	return true
+	return false
 }
 
 func ServiceListeningMode() listener.ServiceType {

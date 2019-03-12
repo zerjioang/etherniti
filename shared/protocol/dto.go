@@ -30,11 +30,20 @@ type NewProfileRequest struct {
 	Key     string `json:"key" form:"key" query:"key"`
 }
 
-// new profile request dto
-type NewMnemonicRequest struct {
-
-	// size of initial entropy: 128 to 256 bits
+// new entropy request dto
+type EntropyRequest struct {
+	// size of initial entropy: 128 to 256 bits (for BIP39)
 	Size uint16 `json:"size" form:"size" query:"size"`
+}
+
+// new hd wallet response dto
+type EntropyResponse struct {
+	Raw []byte `json:"entropy" form:"entropy" query:"entropy"`
+}
+
+// new mnemonic request dto
+type NewMnemonicRequest struct {
+	EntropyRequest
 
 	// language
 	Language string `json:"language" form:"language" query:"language"`

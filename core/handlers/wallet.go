@@ -5,10 +5,9 @@ package handlers
 
 import (
 	"crypto/rand"
-	"io"
-	"net/http"
-
 	"github.com/zerjioang/etherniti/core/modules/bip32"
+	"io"
+	"strconv"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -98,9 +97,7 @@ func (ctl WalletController) mnemonic(c echo.Context) error {
 		//return mnemonic error
 		return api.StackError(c, err)
 	} else {
-		//return mnemonic content
-		rawBytes := util.GetJsonBytes(protocol.NewApiResponse("mnemonic successfully created", mnemomic))
-		return c.JSONBlob(http.StatusOK, rawBytes)
+		return api.SendSuccess(c, "mnemonic successfully created", mnemomic)
 	}
 }
 
@@ -115,11 +112,39 @@ func (ctl WalletController) hdWallet(c echo.Context) error {
 	if err != nil {
 		return api.Error(c, err)
 	} else {
-		//hd wallet success
-		logger.Info("hd wallet successfully created")
-		response := api.ToSuccess("hd wallet successfully created", response)
-		return c.JSONBlob(protocol.StatusOK, response)
+		return api.SendSuccess(c, "hd wallet successfully created", response)
 	}
+}
+
+func (ctl WalletController) entropy(c echo.Context) error {
+	req := protocol.EntropyRequest{}
+	if err := c.Bind(&req); err != nil {
+		// return a binding trycatch error
+		logger.Error("failed to bind request data to model:", err)
+		return api.ErrorStr(c, bindErr)
+	}
+
+	req.Size = ctl.getIntParam(c, "bits")
+
+	if req.Size <=0 || req.Size > 4096*8 {
+		//return invalid size (exceeded btw) trycatch
+		return api.ErrorStr(c, "provided entropy size is not supported")
+	}
+
+	response, err := ctl.generateSecureEntropy(req)
+	if err != nil {
+		return api.Error(c, err)
+	} else {
+		//success
+		return api.SendSuccess(c, "entropy data generated", response)
+	}
+}
+
+func (ctl WalletController) generateSecureEntropy(request protocol.EntropyRequest) (protocol.EntropyResponse, error) {
+	raw, err := bip39.GenerateSecureEntropy(request.Size)
+	var response protocol.EntropyResponse
+	response.Raw = raw
+	return response, err
 }
 
 func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) (protocol.HdWalletResponse, error) {
@@ -148,6 +173,16 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing wallet controller methods")
-	router.POST("/mnemonic/bip39", ctl.mnemonic)
-	router.POST("/hd/bip32", ctl.hdWallet)
+	router.GET("/wallet/entropy/:bits", ctl.entropy)
+	router.POST("/wallet/mnemonic/bip39", ctl.mnemonic)
+	router.POST("/wallet/hd/bip32", ctl.hdWallet)
+}
+
+func (ctl WalletController) getIntParam(c echo.Context, key string) uint16 {
+	v := c.Param(key)
+	if v != "" {
+		num, _ := strconv.Atoi(v)
+		return uint16(num)
+	}
+	return 0
 }

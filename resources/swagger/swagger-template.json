@@ -238,7 +238,7 @@
         }
       }
     },
-    "/public/mnemonic/bip39": {
+    "/public/wallet/mnemonic/bip39": {
       "post": {
         "tags": ["wallet"],
         "summary": "Generate a bip39 mnemonic",
@@ -254,7 +254,7 @@
           "schema": {
             "example": {
               "language": "english",
-              "size": 192
+              "size": 128
             }
           }
         }],
@@ -262,7 +262,48 @@
           "200": {
             "description": "mnemonic response",
             "schema": {
-              "example": 10
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "mnemonic successfully created",
+                "result": "acid coin captain hen eyebrow donor surround jar mirror copper leisure shield"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/wallet/entropy/{bits}": {
+      "get": {
+        "tags": ["wallet"],
+        "summary": "Get a entropy of N bits",
+        "description": "Get a entropy data from secured source such as /dev/random",
+        "operationId": "mnemonic-entropy",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "required": true,
+          "name": "bits",
+          "description": "Requested entropy bit size",
+          "type": "number",
+          "schema": {
+            "example": 192
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "entropy data response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "entropy data generated",
+                "result": {
+                  "entropy": "abWCKX7EmwiIWxKTnQMIZjisv5Y="
+                }
+              }
             }
           }
         }

@@ -115,6 +115,17 @@ func HasWord(word string) bool {
 // NewEntropy will create random entropy bytes
 // so long as the requested size bitSize is an appropriate size.
 //
+// bitSize is the size of entropy bytes requested
+func GenerateSecureEntropy(entropyBits uint16) ([]byte, error){
+	entropyBytes := entropyBits/8
+	raw := make([]byte, entropyBytes)
+	_, rErr := rand.Read(raw)
+	return raw, rErr
+}
+
+// NewEntropy will create random entropy bytes
+// so long as the requested size bitSize is an appropriate size.
+//
 // bitSize has to be a multiple 32 and be within the inclusive range of {128, 256}
 func NewEntropy(bitSize int) ([]byte, trycatch.Error) {
 	err := validateEntropyBitSize(bitSize)

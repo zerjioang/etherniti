@@ -3,12 +3,10 @@
 
 package trycatch
 
-type Error struct {
-	err string
-}
+type Error string
 
 var (
-	nilErr = Error{}
+	nilErr = Error("")
 )
 
 func Nil() Error {
@@ -23,16 +21,16 @@ func Ret(e error) Error {
 }
 
 func New(msg string) Error {
-	return Error{err: msg}
+	return Error(msg)
 }
 
 func (stack Error) Error() string {
-	return stack.err
+	return string(stack)
 }
 
 func (stack Error) Occur() bool {
-	return stack.err != ""
+	return stack != ""
 }
 func (stack Error) None() bool {
-	return stack.err == ""
+	return stack == ""
 }

@@ -14,6 +14,13 @@ import (
 	"github.com/zerjioang/etherniti/core/util"
 )
 
+// return success reponse to client context
+func SendSuccess(c echo.Context, logMsg string, response interface{}) error {
+	logger.Info(logMsg)
+	raw := ToSuccess(logMsg, response)
+	return c.JSONBlob(protocol.StatusOK, raw)
+}
+
 func Success(c echo.Context, msg string, result string) error {
 	rawBytes := util.GetJsonBytes(protocol.NewApiResponse(msg, result))
 	return c.JSONBlob(http.StatusOK, rawBytes)
