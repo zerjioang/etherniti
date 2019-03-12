@@ -7,12 +7,8 @@
 package config
 
 import (
-	"net/http"
-	_ "net/http/pprof"
-	"runtime"
+	//_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
-
-	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
@@ -154,9 +150,9 @@ func SetDefaults(env map[string]interface{}) {
 // setup server config
 func Setup() {
 	// enable profile mode if requested
-	if IsProfilingEnabled() {
+	/*if IsProfilingEnabled() {
 		go runProfiler()
-	}
+	}*/
 }
 
 //There are 7 places you can get profiles in the default webserver: the ones mentioned above
@@ -172,10 +168,10 @@ func Setup() {
 //
 //http://localhost:6060/debug/pprof/profile?seconds=5
 //http://localhost:6060/debug/pprof/trace?seconds=5
-func runProfiler() {
+/*func runProfiler() {
 	go func() {
 		logger.Info("starting go profiler on :6060...")
 		runtime.SetBlockProfileRate(1)
 		log.Error(http.ListenAndServe(":6060", nil))
 	}()
-}
+}*/
