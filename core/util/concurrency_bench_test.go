@@ -1,9 +1,12 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package util
 
 import (
-"sync"
-"sync/atomic"
-"testing"
+	"sync"
+	"sync/atomic"
+	"testing"
 )
 
 type Config struct {
@@ -56,4 +59,3 @@ func BenchmarkPAtomicGet(b *testing.B) {
 		}
 	})
 }
-

@@ -4,10 +4,11 @@
 package disk
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/labstack/gommon/log"
 )

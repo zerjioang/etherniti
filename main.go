@@ -5,8 +5,6 @@ package main
 
 import (
 	"github.com/zerjioang/etherniti/core/constants"
-	"github.com/zerjioang/etherniti/core/handlers"
-
 	"github.com/zerjioang/etherniti/core/listener"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -24,7 +22,6 @@ var (
 
 func init() {
 	util.Commit = Build
-	handlers.LoadConstants()
 	println(util.WelcomeBanner())
 	logger.Info("system running with pointers size of: ", constants.PointerSize, "bits")
 }

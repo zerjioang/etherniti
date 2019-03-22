@@ -9,34 +9,40 @@ import (
 )
 
 type ServerStatusResponse struct {
-	Cpus struct {
-		Cores int `json:"cores"`
-	} `json:"cpus"`
-	Runtime struct {
-		Compiler string `json:"compiler"`
-	} `json:"runtime"`
-	Version struct {
-		Etherniti string `json:"etherniti"`
-		HTTP      string `json:"http"`
-		Go        string `json:"go"`
-	} `json:"version"`
-	Disk struct {
-		All  uint64 `json:"all"`
-		Used uint64 `json:"used"`
-		Free uint64 `json:"free"`
-	} `json:"disk"`
-	Memory struct {
-		Frees     uint64 `json:"frees"`
-		Heapalloc uint64 `json:"heapalloc"`
-		Alloc     uint64 `json:"alloc"`
-		Total     uint64 `json:"total"`
-		Sys       uint64 `json:"sys"`
-		Mallocs   uint64 `json:"mallocs"`
-	} `json:"memory"`
-	Gc struct {
-		Numgc       uint32 `json:"numgc"`
-		NumForcedGC uint32 `json:"numForcedGC"`
-	} `json:"gc"`
+	Cpus    Cpus    `json:"cpus"`
+	Runtime Runtime `json:"runtime"`
+	Version Version `json:"version"`
+	Disk    Disk    `json:"disk"`
+	Memory  Memory  `json:"memory"`
+	Gc      Gc      `json:"gc"`
+}
+type Cpus struct {
+	Cores int `json:"cores"`
+}
+type Runtime struct {
+	Compiler string `json:"compiler"`
+}
+type Version struct {
+	Etherniti string `json:"etherniti"`
+	HTTP      string `json:"http"`
+	Go        string `json:"go"`
+}
+type Disk struct {
+	All  uint64 `json:"all"`
+	Used uint64 `json:"used"`
+	Free uint64 `json:"free"`
+}
+type Memory struct {
+	Frees     uint64 `json:"frees"`
+	Heapalloc uint64 `json:"heapalloc"`
+	Alloc     uint64 `json:"alloc"`
+	Total     uint64 `json:"total"`
+	Sys       uint64 `json:"sys"`
+	Mallocs   uint64 `json:"mallocs"`
+}
+type Gc struct {
+	Numgc       uint32 `json:"numgc"`
+	NumForcedGC uint32 `json:"numForcedGC"`
 }
 
 func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {
