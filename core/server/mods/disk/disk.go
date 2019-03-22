@@ -4,6 +4,7 @@
 package disk
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"sync"
 	"syscall"
 	"time"
@@ -45,7 +46,10 @@ func DiskUsagePtr() *DiskStatus {
 // disk usage of path/disk
 func (disk *DiskStatus) Start(path string) {
 	// initialize read values
-	disk.read(path)
+	err := disk.read(path)
+	if err != nil {
+		logger.Error("failed to read disk statistics", err)
+	}
 	// start monitor
 	go disk.monitor(path)
 }
@@ -53,6 +57,7 @@ func (disk *DiskStatus) Start(path string) {
 // internal ticker based monitor
 func (disk *DiskStatus) monitor(path string) {
 	for range ticker.C {
+		logger.Debug("reading node disk space statistics")
 		rErr := disk.read(path)
 		if rErr != nil {
 			log.Error("disk status read error", rErr)

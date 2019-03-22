@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package base64
 
 import (
@@ -6,7 +9,7 @@ import (
 	"testing"
 )
 
-func BenchmarkBase64(b *testing.B){
+func BenchmarkBase64(b *testing.B) {
 	b.Run("iterations", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)

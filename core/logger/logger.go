@@ -16,7 +16,7 @@ func init() {
 	// configure error log
 	customLog = log.New("internal")
 	customLog.SetHeader(defaultHeader)
-	customLog.SetLevel(log.INFO)
+	customLog.SetLevel(log.DEBUG)
 }
 
 // custom warn format logger

@@ -4,8 +4,10 @@
 package mem
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"runtime"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -19,21 +21,39 @@ const (
 )
 
 var (
-	//shared coordinator for all mem reader refresh
+	//shared coordinator for all mem reader instances refresh
 	ticker = time.NewTicker(5 * time.Second)
+	//backend default memory monitor
+	mon MemStatus
 )
+
+func init(){
+	mon = memStatusMonitor()
+}
 
 type MemStatus struct {
 	//mem stats data holder
-	m runtime.MemStats
+	m *runtime.MemStats
 	// locker for concurrent access
 	lock *sync.Mutex
+	//flag indicating whether is running or not
+	monitoring atomic.Value
 }
 
 // constructor like function
+func MemStatusMonitorPtr() *MemStatus {
+	return &mon
+}
+
 func MemStatusMonitor() MemStatus {
+	return mon
+}
+// constructor like function
+func memStatusMonitor() MemStatus {
 	mem := MemStatus{}
 	mem.lock = new(sync.Mutex)
+	mem.m = new(runtime.MemStats)
+	mem.monitoring.Store(false)
 	return mem
 }
 
@@ -44,30 +64,32 @@ func (mem *MemStatus) Start() {
 
 func (mem *MemStatus) Read(wrapper protocol.ServerStatusResponse) protocol.ServerStatusResponse {
 	mem.lock.Lock()
-	wrapper.Memory.Alloc = mem.m.Alloc
-	wrapper.Memory.Total = mem.m.TotalAlloc
-	wrapper.Memory.Sys = mem.m.Sys
-	wrapper.Memory.Mallocs = mem.m.Mallocs
-	wrapper.Memory.Frees = mem.m.Frees
-	wrapper.Memory.Heapalloc = mem.m.HeapAlloc
+	m := *mem.m
+	wrapper.Memory.Alloc = m.Alloc
+	wrapper.Memory.Total = m.TotalAlloc
+	wrapper.Memory.Sys = m.Sys
+	wrapper.Memory.Mallocs = m.Mallocs
+	wrapper.Memory.Frees = m.Frees
+	wrapper.Memory.Heapalloc = m.HeapAlloc
 
-	wrapper.Gc.Numgc = mem.m.NumGC
-	wrapper.Gc.NumForcedGC = mem.m.NumForcedGC
+	wrapper.Gc.Numgc = m.NumGC
+	wrapper.Gc.NumForcedGC = m.NumForcedGC
 	mem.lock.Unlock()
 	return wrapper
 }
 
 func (mem *MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse) {
 	mem.lock.Lock()
-	wrapper.Memory.Alloc = mem.m.Alloc
-	wrapper.Memory.Total = mem.m.TotalAlloc
-	wrapper.Memory.Sys = mem.m.Sys
-	wrapper.Memory.Mallocs = mem.m.Mallocs
-	wrapper.Memory.Frees = mem.m.Frees
-	wrapper.Memory.Heapalloc = mem.m.HeapAlloc
+	m := *mem.m
+	wrapper.Memory.Alloc = m.Alloc
+	wrapper.Memory.Total = m.TotalAlloc
+	wrapper.Memory.Sys = m.Sys
+	wrapper.Memory.Mallocs = m.Mallocs
+	wrapper.Memory.Frees = m.Frees
+	wrapper.Memory.Heapalloc = m.HeapAlloc
 
-	wrapper.Gc.Numgc = mem.m.NumGC
-	wrapper.Gc.NumForcedGC = mem.m.NumForcedGC
+	wrapper.Gc.Numgc = m.NumGC
+	wrapper.Gc.NumForcedGC = m.NumForcedGC
 	mem.lock.Unlock()
 }
 
@@ -75,8 +97,9 @@ func (mem *MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse) {
 func (mem *MemStatus) monitor() {
 	for range ticker.C {
 		//update latest reading information
-		mem.lock.Lock()
-		runtime.ReadMemStats(&mem.m)
-		mem.lock.Unlock()
+		//mem.lock.Lock()
+		logger.Debug("reading node memory statistics")
+		runtime.ReadMemStats(mem.m)
+		//mem.lock.Unlock()
 	}
 }
