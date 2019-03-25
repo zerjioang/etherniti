@@ -40,8 +40,13 @@ RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password
     upx -9 -v $FILE && \
     ls -alh
 
+FROM ethereum/solc:stable as solcompiler
+
 # BEGIN: install modified version of glibc
 FROM alpine:3.9
+
+# generate solc executable file
+COPY --from=solcompiler /usr/bin/solc            /usr/bin/solc
 
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
 ENV LANG=C.UTF-8
