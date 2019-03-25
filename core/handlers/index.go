@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"sync"
 	"time"
-	"unsafe"
+
+	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/server/mods/circular"
 
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -32,8 +32,8 @@ import (
 
 type IndexController struct {
 	// use channels: https://talks.golang.org/2012/concurrency.slide#25
-	statusData    *circular.Circular
-	integrityData *circular.Circular
+	statusData    concurrentbuffer.ConcurrentBuffer
+	integrityData concurrentbuffer.ConcurrentBuffer
 }
 
 var (
@@ -112,26 +112,26 @@ func init() {
 	diskMonitor.Start("/")
 }
 
-func NewIndexController() IndexController {
-	ctl := IndexController{}
-	ctl.statusData = circular.NewCircular(10)
-	ctl.statusData = circular.NewCircular(10)
+func NewIndexController() *IndexController {
+	ctl := new(IndexController)
+	ctl.statusData = concurrentbuffer.NewConcurrentBuffer()
+	ctl.integrityData = concurrentbuffer.NewConcurrentBuffer()
 	// load initial value for integrity bytes
-	ctl.integrityReload()
+	ctl.refreshIntegrityData()
 	// load initial value for status bytes
-	ctl.statusReload()
+	ctl.refreshStatusData()
 
 	go func() {
 		for range integrityTicker.C {
 			// time to update integrity signature
-			ctl.integrityReload()
+			ctl.refreshIntegrityData()
 		}
 	}()
 
 	go func() {
 		for range statusTicker.C {
 			// time to update status health data
-			ctl.statusReload()
+			ctl.refreshStatusData()
 		}
 	}()
 
@@ -145,7 +145,7 @@ func Index(c echo.Context) error {
 	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
 }
 
-func (ctl IndexController) Status(c echo.Context) error {
+func (ctl *IndexController) Status(c echo.Context) error {
 	data := ctl.status()
 	var code int
 	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
@@ -153,11 +153,10 @@ func (ctl IndexController) Status(c echo.Context) error {
 }
 
 func (ctl *IndexController) status() []byte {
-	value := *(*[]byte)(ctl.statusData.Pop())
-	return value
+	return ctl.statusData.Bytes()
 }
 
-func (ctl *IndexController) statusReload() {
+func (ctl *IndexController) refreshStatusData() {
 
 	//get the wrapper from the pool, and cast it
 	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
@@ -179,18 +178,20 @@ func (ctl *IndexController) statusReload() {
 	statusPool.Put(wrapper)
 	bufferBool.Put(buffer)
 
-	ctl.statusData.Push(unsafe.Pointer(&data))
+	ctl.statusData.Reset()
+	_, _ = ctl.statusData.Write(data)
 }
 
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
-func (ctl IndexController) Integrity(c echo.Context) error {
+func (ctl *IndexController) Integrity(c echo.Context) error {
+	data := ctl.integrity()
 	var code int
 	code, c = clientcache.Cached(c, true, 86400) // 24h cache directive
-	return c.JSONBlob(code, ctl.integrity())
+	return c.JSONBlob(code, data)
 }
 
-func (ctl IndexController) integrityReload() {
+func (ctl *IndexController) refreshIntegrityData() {
 	// get current date time
 	currentTime := fastime.Now()
 	millis := currentTime.Unix()
@@ -198,25 +199,26 @@ func (ctl IndexController) integrityReload() {
 	millisStr := strconv.FormatInt(millis, 10)
 
 	//sign message
-	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
+	signMessage := "Hello from Etherniti Proxy. Today message generated at " + timeStr
+	hash, signature := integrity.SignMsgWithIntegrity(signMessage)
 
 	var wrapper protocol.IntegrityResponse
-	wrapper.Message = timeStr
+	wrapper.Message = signMessage
 	wrapper.Millis = millisStr
 	wrapper.Hash = hash
 	wrapper.Signature = signature
 
 	data := util.GetJsonBytes(wrapper)
-	ctl.statusData.Push(unsafe.Pointer(&data))
+	ctl.integrityData.Reset()
+	_, _ = ctl.integrityData.Write(data)
 }
 
 func (ctl *IndexController) integrity() []byte {
-	value := *(*[]byte)(ctl.integrityData.Pop())
-	return value
+	return ctl.integrityData.Bytes()
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl IndexController) RegisterRouters(router *echo.Group) {
+func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", Index)
 	router.GET("/status", ctl.Status)
