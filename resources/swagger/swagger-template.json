@@ -467,6 +467,69 @@
         }
       }
     },
+    "/public/solc/version": {
+      "get": {
+        "tags": ["solc"],
+        "summary": "Solidity compiler version",
+        "description": "Get the version of Solidity compiler",
+        "operationId": "solc-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc Compiler version response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "solc version",
+                "result": {
+                  "Path": "/usr/bin/solc",
+                  "Version": "0.4.24",
+                  "FullVersion": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
+                  "Major": 0,
+                  "Minor": 4,
+                  "Patch": 24
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/solc/compile/{mode}": {
+      "post": {
+        "tags": ["solc"],
+        "summary": "Compile a contract using solc",
+        "description": "Compile a contract using solc",
+        "operationId": "solc-compile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc Compiler compilation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "solc version",
+                "result": {
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/public/{network}/net/version": {
       "get": {
         "tags": ["web3"],

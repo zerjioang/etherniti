@@ -7,11 +7,12 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"errors"
-	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"io"
 	"net/http"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 
 	"github.com/zerjioang/etherniti/core/modules/bip32"
 
@@ -26,7 +27,7 @@ import (
 )
 
 const (
-	defaultPath = "m/44'/60'/0'/0/0"
+	defaultPath      = "m/44'/60'/0'/0/0"
 	invalidAddress   = `{"message": "please, provide a valid ethereum or quorum address"}`
 	accountKeyGenErr = `{"message": "failed to generate ecdsa private key"}`
 )
@@ -184,8 +185,6 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 	response.Mnemonic = mnemonic
 	return response, nil
 }
-
-
 
 // generates an ethereum new account (address+key)
 func (ctl WalletController) generateAddress(c echo.Context) error {
