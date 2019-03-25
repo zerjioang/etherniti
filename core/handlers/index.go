@@ -5,17 +5,14 @@ package handlers
 
 import (
 	"bytes"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/handlers/clientcache"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"runtime"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
-	"unsafe"
-
-	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/server/mods/circular"
-
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
-	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/integrity"
@@ -32,8 +29,8 @@ import (
 
 type IndexController struct {
 	// use channels: https://talks.golang.org/2012/concurrency.slide#25
-	statusData    *circular.Circular
-	integrityData *circular.Circular
+	statusData    atomic.Value
+	integrityData atomic.Value
 }
 
 var (
@@ -46,9 +43,6 @@ var (
 	integrityTicker *time.Ticker
 	// status ticker (5s)
 	statusTicker *time.Ticker
-)
-
-var (
 	//bytes of welcome message
 	IndexWelcomeJson      string
 	indexWelcomeHtml      string
@@ -114,8 +108,6 @@ func init() {
 
 func NewIndexController() IndexController {
 	ctl := IndexController{}
-	ctl.statusData = circular.NewCircular(10)
-	ctl.statusData = circular.NewCircular(10)
 	// load initial value for integrity bytes
 	ctl.integrityReload()
 	// load initial value for status bytes
@@ -145,7 +137,7 @@ func Index(c echo.Context) error {
 	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
 }
 
-func (ctl IndexController) Status(c echo.Context) error {
+func (ctl *IndexController) Status(c echo.Context) error {
 	data := ctl.status()
 	var code int
 	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
@@ -153,8 +145,7 @@ func (ctl IndexController) Status(c echo.Context) error {
 }
 
 func (ctl *IndexController) status() []byte {
-	value := *(*[]byte)(ctl.statusData.Pop())
-	return value
+	return ctl.statusData.Load().([]byte)
 }
 
 func (ctl *IndexController) statusReload() {
@@ -179,21 +170,20 @@ func (ctl *IndexController) statusReload() {
 	statusPool.Put(wrapper)
 	bufferBool.Put(buffer)
 
-	ctl.statusData.Push(unsafe.Pointer(&data))
+	ctl.statusData.Store(data)
 }
 
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
-func (ctl IndexController) Integrity(c echo.Context) error {
+func (ctl *IndexController) Integrity(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 86400) // 24h cache directive
 	return c.JSONBlob(code, ctl.integrity())
 }
 
-func (ctl IndexController) integrityReload() {
+func (ctl *IndexController) integrityReload() {
 	// get current date time
-	currentTime := fastime.Now()
-	millis := currentTime.Unix()
+	millis := fastime.Now().Unix()
 	timeStr := time.Unix(millis, 0).Format(time.RFC3339)
 	millisStr := strconv.FormatInt(millis, 10)
 
@@ -207,12 +197,11 @@ func (ctl IndexController) integrityReload() {
 	wrapper.Signature = signature
 
 	data := util.GetJsonBytes(wrapper)
-	ctl.statusData.Push(unsafe.Pointer(&data))
+	ctl.integrityData.Store(data)
 }
 
 func (ctl *IndexController) integrity() []byte {
-	value := *(*[]byte)(ctl.integrityData.Pop())
-	return value
+	return ctl.integrityData.Load().([]byte)
 }
 
 // implemented method from interface RouterRegistrable

@@ -25,7 +25,7 @@ func NewSecurityController() SecurityController {
 func (ctl SecurityController) domainBlacklist(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.DomainBlacklistRawBytes)
+	return c.JSONBlob(code, security.DomainBlacklistBytesData())
 }
 
 // return a whitelist of non phishing sites,
@@ -34,7 +34,7 @@ func (ctl SecurityController) domainBlacklist(c echo.Context) error {
 func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.PhishingWhitelistRawBytes)
+	return c.JSONBlob(code, security.PhishingWhitelistRawBytes())
 }
 
 // return a blacklist of phishing sites,
@@ -44,7 +44,7 @@ func (ctl SecurityController) phisingWhitelist(c echo.Context) error {
 func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.PhishingBlacklistRawBytes)
+	return c.JSONBlob(code, security.PhishingBlacklistRawBytes())
 }
 
 func (ctl SecurityController) RegisterRouters(router *echo.Group) {

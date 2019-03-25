@@ -5,6 +5,7 @@ package socket
 
 import (
 	"context"
+	"github.com/zerjioang/etherniti/core/util"
 	"io"
 	"net"
 	"net/http"
@@ -147,6 +148,7 @@ func (l UnixSocketListener) foreground() error {
 	if unErr != nil {
 		log.Warn("failed to unlink unix socket: ", unErr)
 	}
+	println(util.WelcomeBanner())
 	ln, err := net.Listen("unix", l.path)
 	if err != nil {
 		log.Error("unix socket listen error: ", err)

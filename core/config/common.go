@@ -17,9 +17,15 @@ var (
 	keyPemBytes         []byte
 	gopath              = os.Getenv("GOPATH")
 	ResourcesDir        = gopath + "/src/github.com/zerjioang/etherniti/resources"
+	// define internal folders
+	ResourcesDirInternal    = ResourcesDir + "/internal"
+	ResourcesDirInternalSecurity    = ResourcesDirInternal + "/security"
 	ResourcesDirRoot    = ResourcesDir + "/root"
-	ResourcesDirPHP     = ResourcesDir + "/root/phpinfo.php"
 	ResourcesDirSwagger = ResourcesDir + "/swagger"
+	// define internal files
+	ResourcesDirPHP     = ResourcesDirRoot + "/phpinfo.php"
+	BlacklistedDomainFile     = ResourcesDirInternalSecurity + "/domains.json"
+	PhishingDomainFile     = ResourcesDirInternalSecurity + "/phishing.json"
 )
 
 //read environment variables

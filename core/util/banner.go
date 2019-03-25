@@ -17,9 +17,7 @@ const (
 _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
 \  ___/|  | |   Y  \  ___/|  | \/   |  \  ||  | |  |
  \___  >__| |___|  /\___  >__|  |___|  /__||__| |__|
-     \/          \/     \/           \/             
-                 
-etherniti loading...
+     \/          \/     \/           \/
 
 arch              : $GOARCH
 goroot            : $GOROOT
@@ -27,6 +25,8 @@ goversion         : $GO_VERSION
 gocompiler        : $GO_COMPILER
 etherniti version : $VER
 etherniti commit  : $COMMIT
+
+Etherniti Proxy is listening!
 `
 )
 

@@ -22,7 +22,6 @@ var (
 
 func init() {
 	util.Commit = Build
-	println(util.WelcomeBanner())
 	logger.Info("system running with pointers size of: ", constants.PointerSize, "bits")
 }
 

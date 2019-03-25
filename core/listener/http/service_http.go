@@ -6,6 +6,7 @@ package http
 import (
 	"context"
 	"crypto/tls"
+	"github.com/zerjioang/etherniti/core/util"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -79,6 +80,7 @@ func (l HttpListener) Listen() error {
 				logger.Error("failed to build http server configuration", err)
 			} else {
 				logger.Info("starting http server...")
+				println(util.WelcomeBanner())
 				err := httpServerInstance.StartServer(s)
 				if err != nil {
 					logger.Error("shutting down http the server", err)
@@ -113,6 +115,7 @@ func (l HttpListener) Listen() error {
 			go func() {
 				logger.Info("starting http server...")
 				configureSwaggerJson()
+				println(util.WelcomeBanner())
 				err := e.StartServer(s)
 				if err != nil {
 					logger.Info("shutting down http server", err)

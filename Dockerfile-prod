@@ -110,6 +110,7 @@ RUN adduser -S ${USER} && \
 # copy proxy resource files
 
 COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root        ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/internal    ${GOPATH}/${BASE}/internal
 COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger     ${GOPATH}/${BASE}/swagger
 
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/${EXEC}     ${EXEC}
