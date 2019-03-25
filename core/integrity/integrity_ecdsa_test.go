@@ -17,7 +17,7 @@ func TestECDSAIntegrity(t *testing.T) {
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	pub := priv.PublicKey
 
-	t.Log(encode(priv, &pub))
+	//t.Log(encode(priv, &pub))
 
 	//create test message
 	str := []byte("Lorem Ipsum dolor sit Amet")

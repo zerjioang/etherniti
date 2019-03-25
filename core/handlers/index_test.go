@@ -143,7 +143,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.SetBytes(1)
 		ctl := NewIndexController()
 		for n := 0; n < b.N; n++ {
-			ctl.statusReload()
+			ctl.refreshStatusData()
 		}
 	})
 
@@ -161,7 +161,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.SetBytes(1)
 		ctl := NewIndexController()
 		for n := 0; n < b.N; n++ {
-			ctl.integrityReload()
+			ctl.refreshIntegrityData()
 		}
 	})
 }

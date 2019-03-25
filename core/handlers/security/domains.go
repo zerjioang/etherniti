@@ -5,14 +5,16 @@ package security
 
 import (
 	"encoding/json"
+	"io/ioutil"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"io/ioutil"
 )
 
 // https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json
 // last update: mar-23-2019
 type DomainBlacklistModel []string
+
 var (
 	domainBlacklist DomainBlacklistModel
 	//domain blacklist as bytes
@@ -20,7 +22,7 @@ var (
 )
 
 // load blacklist information
-func init(){
+func init() {
 	logger.Debug("loading blacklist information")
 	data, err := ioutil.ReadFile(config.BlacklistedDomainFile)
 	if err != nil {
@@ -31,6 +33,6 @@ func init(){
 	json.Unmarshal(data, &domainBlacklist)
 }
 
-func DomainBlacklistBytesData() []byte{
+func DomainBlacklistBytesData() []byte {
 	return domainBlacklistBytes
 }

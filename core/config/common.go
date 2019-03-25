@@ -14,18 +14,18 @@ var (
 	//cert content as bytes readed from filesystem
 	certPemBytes []byte
 	//key content as bytes readed from filesystem
-	keyPemBytes         []byte
-	gopath              = os.Getenv("GOPATH")
-	ResourcesDir        = gopath + "/src/github.com/zerjioang/etherniti/resources"
+	keyPemBytes  []byte
+	gopath       = os.Getenv("GOPATH")
+	ResourcesDir = gopath + "/src/github.com/zerjioang/etherniti/resources"
 	// define internal folders
-	ResourcesDirInternal    = ResourcesDir + "/internal"
-	ResourcesDirInternalSecurity    = ResourcesDirInternal + "/security"
-	ResourcesDirRoot    = ResourcesDir + "/root"
-	ResourcesDirSwagger = ResourcesDir + "/swagger"
+	ResourcesDirInternal         = ResourcesDir + "/internal"
+	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
+	ResourcesDirRoot             = ResourcesDir + "/root"
+	ResourcesDirSwagger          = ResourcesDir + "/swagger"
 	// define internal files
-	ResourcesDirPHP     = ResourcesDirRoot + "/phpinfo.php"
-	BlacklistedDomainFile     = ResourcesDirInternalSecurity + "/domains.json"
-	PhishingDomainFile     = ResourcesDirInternalSecurity + "/phishing.json"
+	ResourcesDirPHP       = ResourcesDirRoot + "/phpinfo.php"
+	BlacklistedDomainFile = ResourcesDirInternalSecurity + "/domains.json"
+	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 )
 
 //read environment variables

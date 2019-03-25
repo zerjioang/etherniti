@@ -6,13 +6,14 @@ package http
 import (
 	"context"
 	"crypto/tls"
-	"github.com/zerjioang/etherniti/core/util"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/zerjioang/etherniti/core/listener/base"
 	"github.com/zerjioang/etherniti/shared/constants"

@@ -5,12 +5,13 @@ package socket
 
 import (
 	"context"
-	"github.com/zerjioang/etherniti/core/util"
 	"io"
 	"net"
 	"net/http"
 	"syscall"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/zerjioang/etherniti/core/listener/base"
 	"github.com/zerjioang/etherniti/shared/def/listener"

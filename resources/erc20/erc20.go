@@ -1,3 +1,5 @@
+// +build ignore
+
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
@@ -10,6 +12,7 @@ import (
 	"math/big"
 	"strings"
 
+	ethereum "github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"

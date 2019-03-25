@@ -5,14 +5,18 @@ package handlers
 
 import (
 	"bytes"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
-	"github.com/zerjioang/etherniti/shared/protocol"
+
 	"runtime"
 	"strconv"
 	"sync"
-	"sync/atomic"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/integrity"
@@ -29,8 +33,8 @@ import (
 
 type IndexController struct {
 	// use channels: https://talks.golang.org/2012/concurrency.slide#25
-	statusData    atomic.Value
-	integrityData atomic.Value
+	statusData    concurrentbuffer.ConcurrentBuffer
+	integrityData concurrentbuffer.ConcurrentBuffer
 }
 
 var (
@@ -106,24 +110,26 @@ func init() {
 	diskMonitor.Start("/")
 }
 
-func NewIndexController() IndexController {
-	ctl := IndexController{}
+func NewIndexController() *IndexController {
+	ctl := new(IndexController)
+	ctl.statusData = concurrentbuffer.NewConcurrentBuffer()
+	ctl.integrityData = concurrentbuffer.NewConcurrentBuffer()
 	// load initial value for integrity bytes
-	ctl.integrityReload()
+	ctl.refreshIntegrityData()
 	// load initial value for status bytes
-	ctl.statusReload()
+	ctl.refreshStatusData()
 
 	go func() {
 		for range integrityTicker.C {
 			// time to update integrity signature
-			ctl.integrityReload()
+			ctl.refreshIntegrityData()
 		}
 	}()
 
 	go func() {
 		for range statusTicker.C {
 			// time to update status health data
-			ctl.statusReload()
+			ctl.refreshStatusData()
 		}
 	}()
 
@@ -145,10 +151,10 @@ func (ctl *IndexController) Status(c echo.Context) error {
 }
 
 func (ctl *IndexController) status() []byte {
-	return ctl.statusData.Load().([]byte)
+	return ctl.statusData.Bytes()
 }
 
-func (ctl *IndexController) statusReload() {
+func (ctl *IndexController) refreshStatusData() {
 
 	//get the wrapper from the pool, and cast it
 	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
@@ -170,42 +176,46 @@ func (ctl *IndexController) statusReload() {
 	statusPool.Put(wrapper)
 	bufferBool.Put(buffer)
 
-	ctl.statusData.Store(data)
+	ctl.statusData.Reset()
+	_, _ = ctl.statusData.Write(data)
 }
 
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
 func (ctl *IndexController) Integrity(c echo.Context) error {
+	data := ctl.integrity()
 	var code int
 	code, c = clientcache.Cached(c, true, 86400) // 24h cache directive
-	return c.JSONBlob(code, ctl.integrity())
+	return c.JSONBlob(code, data)
 }
 
-func (ctl *IndexController) integrityReload() {
+func (ctl *IndexController) refreshIntegrityData() {
 	// get current date time
 	millis := fastime.Now().Unix()
 	timeStr := time.Unix(millis, 0).Format(time.RFC3339)
 	millisStr := strconv.FormatInt(millis, 10)
 
 	//sign message
-	hash, signature := integrity.SignMsgWithIntegrity(timeStr)
+	signMessage := "Hello from Etherniti Proxy. Today message generated at " + timeStr
+	hash, signature := integrity.SignMsgWithIntegrity(signMessage)
 
 	var wrapper protocol.IntegrityResponse
-	wrapper.Message = timeStr
+	wrapper.Message = signMessage
 	wrapper.Millis = millisStr
 	wrapper.Hash = hash
 	wrapper.Signature = signature
 
 	data := util.GetJsonBytes(wrapper)
-	ctl.integrityData.Store(data)
+	ctl.integrityData.Reset()
+	_, _ = ctl.integrityData.Write(data)
 }
 
 func (ctl *IndexController) integrity() []byte {
-	return ctl.integrityData.Load().([]byte)
+	return ctl.integrityData.Bytes()
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl IndexController) RegisterRouters(router *echo.Group) {
+func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", Index)
 	router.GET("/status", ctl.Status)

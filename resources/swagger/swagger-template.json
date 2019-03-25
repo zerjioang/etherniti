@@ -32,15 +32,14 @@
   "produces": [
     "application/json;charset=utf-8"
   ],
-  "tags": [
-    {
-      "name": "public",
-      "description": "Public Ethereum REST API Proxy operations",
-      "externalDocs": {
-        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/api/public-operations/"
-      }
-    },
+  "tags": [{
+    "name": "public",
+    "description": "Public Ethereum REST API Proxy operations",
+    "externalDocs": {
+      "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+      "url": "https://www.etherniti.org/docs/api/public-operations/"
+    }
+  },
     {
       "name": "profile",
       "description": "Ethereum REST API Proxy connection profile management",
@@ -79,6 +78,22 @@
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API web3 implementation at",
         "url": "https://www.etherniti.org/docs/api/web3"
+      }
+    },
+    {
+      "name": "solc",
+      "description": "Ethereum REST API Proxy solc compiler implementation",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API solc compiler implementation at",
+        "url": "https://www.etherniti.org/docs/api/solc"
+      }
+    },
+    {
+      "name": "cns",
+      "description": "Ethereum REST API Contract Name Service implementation",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API Contract Name Service implementation at",
+        "url": "https://www.etherniti.org/docs/api/cns"
       }
     }
   ],
@@ -169,10 +184,10 @@
             "description": "proxy integrity response",
             "schema": {
               "example": {
-                "hash": "7b5812166a5d17d92b8a1fd6b902f93dbbd4f35ab67f1992a299d3425256e5a5",
-                "message": "2019-02-15 19:12:37.335762366 +0000 UTC m=+58.000586724",
-                "millis": 1550257957,
-                "signature": "303d021c1fe29cbd9cb8823a96746be129f88ab0c736e8760da0203a4afb9bbf021d0083a020db2323a3afd1bcef1c8224eeac870548fd9263fb83b141bf68"
+                "message": "Hello from Etherniti Proxy. Today message generated at 2019-03-25T10:46:35+01:00",
+                "millis": "1553507195",
+                "hash": "a9e6b0dd821862e184bfaaa16a6a8af7e802330bef2978267910076acef29500",
+                "signature": "303c021c538c3ac6685239032cbdf64f6d079d48c18da3e536bfe0ced278a132021c10c6acc3bb9b6b745e729544ffb1b19ddd2706095523d152dfeefce6"
               }
             }
           }
@@ -309,8 +324,8 @@
         }
       }
     },
-    "/public/eth/create": {
-      "get": {
+    "/public/wallet/new": {
+      "post": {
         "tags": ["wallet"],
         "summary": "Generate a new Ethereum compatible account",
         "description": "Generate a new Ethereum compatible account and get its address and key",
@@ -337,7 +352,7 @@
         }
       }
     },
-    "/public/eth/verify/{address}": {
+    "/public/wallet/verify/{address}": {
       "get": {
         "tags": ["wallet"],
         "summary": "Verify Ethereum address",
@@ -467,120 +482,284 @@
         }
       }
     },
-    "/public/{network}/net/version": {
+    "/public/solc/version": {
       "get": {
-        "tags": ["web3"],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
-        "operationId": "net-version",
+        "tags": ["solc"],
+        "summary": "Solidity compiler version",
+        "description": "Get the version of Solidity compiler",
+        "operationId": "solc-version",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
-          "example": "ropsten",
-          "required": true
-        }],
+        "parameters": [],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "Solidity Solc Compiler version response",
             "schema": {
               "example": {
                 "id": 0,
                 "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "solc version",
+                "result": {
+                  "Path": "/usr/bin/solc",
+                  "Version": "0.4.24",
+                  "FullVersion": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
+                  "Major": 0,
+                  "Minor": 4,
+                  "Patch": 24
+                }
               }
             }
-          },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
           }
         }
       }
     },
-    "/public/{network}/client/version": {
-      "get": {
-        "tags": ["web3"],
-        "summary": "Get network client version information",
-        "description": "Get target Ethereum or Quorum network client version details",
-        "operationId": "client-version",
+    "/public/solc/compile/{mode}": {
+      "post": {
+        "tags": ["solc"],
+        "summary": "Compile a contract using solc",
+        "description": "Compile a contract using solc",
+        "operationId": "solc-compile",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
         "parameters": [{
           "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
           "type": "string",
-          "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
-          "example": "ropsten",
-          "required": true
+          "name": "mode"
         }],
         "responses": {
           "200": {
-            "description": "ethereum net client version information response",
+            "description": "Solidity Solc Compiler compilation response",
             "schema": {
               "example": {
                 "id": 0,
                 "code": 200,
-                "msg": "web3_clientVersion",
-                "result": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+                "msg": "solc version",
+                "result": {}
               }
             }
-          },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
           }
         }
       }
     },
-    "/public/{network}/net/peers": {
-      "get": {
-        "tags": ["web3"],
-        "summary": "Get network peers",
-        "description": "Get target Ethereum or Quorum network peers details",
-        "operationId": "net-peers",
+    "/public/cns": {
+      "post": {
+        "tags": ["cns"],
+        "summary": "Register new contract details",
+        "description": "Register new contract details",
+        "operationId": "cns-register",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
-          "example": "ropsten",
-          "required": true
-        }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "description": "contract information to be registered",
+            "required": true,
+            "example": {
+              "name": "test-contract",
+              "description": "test contract description",
+              "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+              "version": "1.0"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "ethereum network peer information response",
+            "description": "Contract Name Service registration response",
             "schema": {
               "example": {
                 "id": 0,
                 "code": 200,
-                "msg": "net_peerCount",
-                "result": "0x64"
+                "msg": "contract successfully registered in naming service",
+                "result":"test-contract-1.0"
               }
             }
-          },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
           }
+        }
+      }
+    },
+    "/public/cns/{id}": {
+      "get": {
+        "tags": ["cns"],
+        "summary": "Get existing contract details",
+        "description": "Get existing contract details",
+        "operationId": "cns-resolve",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "id of the contract to be fetch",
+          "name": "id"
+        }],
+        "responses": {
+          "200": {
+            "description": "Contract Name Service response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract information successfully resolved",
+                "result": {
+                  "name": "test-contract",
+                  "description": "test contract description",
+                  "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+                  "version": "1.0"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["cns"],
+        "summary": "Delete existing contract information",
+        "description": "Delete existing contract details",
+        "operationId": "cns-delete",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "id of the contract to be deleted",
+          "name": "id"
+        }],
+        "responses": {
+          "200": {
+            "description": "Contract Name Service record delete response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract successfully unregistered from naming service",
+                "result": "test-contract-1.0"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/public/{network}/net/version": {
+    "get": {
+      "tags": ["web3"],
+      "summary": "Get network version information",
+      "description": "Get target Ethereum or Quorum network version details",
+      "operationId": "net-version",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "connectionProfileToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "network",
+        "description": "target web3 protocol compatible network",
+        "type": "string",
+        "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
+        "example": "ropsten",
+        "required": true
+      }],
+      "responses": {
+        "200": {
+          "description": "ethereum net version information response",
+          "schema": {
+            "example": {
+              "id": 0,
+              "code": 200,
+              "msg": "net_version",
+              "result": "3"
+            }
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    }
+  },
+  "/public/{network}/client/version": {
+    "get": {
+      "tags": ["web3"],
+      "summary": "Get network client version information",
+      "description": "Get target Ethereum or Quorum network client version details",
+      "operationId": "client-version",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "connectionProfileToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "network",
+        "description": "target web3 protocol compatible network",
+        "type": "string",
+        "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
+        "example": "ropsten",
+        "required": true
+      }],
+      "responses": {
+        "200": {
+          "description": "ethereum net client version information response",
+          "schema": {
+            "example": {
+              "id": 0,
+              "code": 200,
+              "msg": "web3_clientVersion",
+              "result": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+            }
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    }
+  },
+  "/public/{network}/net/peers": {
+    "get": {
+      "tags": ["web3"],
+      "summary": "Get network peers",
+      "description": "Get target Ethereum or Quorum network peers details",
+      "operationId": "net-peers",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "connectionProfileToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "network",
+        "description": "target web3 protocol compatible network",
+        "type": "string",
+        "enum": ["ropsten", "rinkeby", "kovan", "mainnet"],
+        "example": "ropsten",
+        "required": true
+      }],
+      "responses": {
+        "200": {
+          "description": "ethereum network peer information response",
+          "schema": {
+            "example": {
+              "id": 0,
+              "code": 200,
+              "msg": "net_peerCount",
+              "result": "0x64"
+            }
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
         }
       }
     }

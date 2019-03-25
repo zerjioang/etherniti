@@ -5,10 +5,11 @@ package security
 
 import (
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/logger"
 	"io/ioutil"
 	"unsafe"
+
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json
@@ -24,11 +25,12 @@ type PhishingModel struct {
 }
 
 var (
-	pm PhishingModel
+	pm        PhishingModel
 	whiteData []byte
 	blackData []byte
 )
-func init(){
+
+func init() {
 	logger.Debug("loading phising model information")
 	data, err := ioutil.ReadFile(config.PhishingDomainFile)
 	if err != nil {
@@ -40,9 +42,9 @@ func init(){
 	whiteData = *(*[]byte)(unsafe.Pointer(&pm.Whitelist))
 }
 
-func PhishingBlacklistRawBytes() []byte{
+func PhishingBlacklistRawBytes() []byte {
 	return blackData
 }
-func PhishingWhitelistRawBytes() []byte{
+func PhishingWhitelistRawBytes() []byte {
 	return whiteData
 }

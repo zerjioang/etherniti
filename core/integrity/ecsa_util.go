@@ -5,17 +5,32 @@ package integrity
 
 import (
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
-	"crypto/x509"
 	"encoding/asn1"
 	"encoding/hex"
-	"encoding/pem"
 	"math/big"
 
-	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/core/logger"
+)
 
-	"github.com/zerjioang/etherniti/core/util"
+const (
+	// private key json marshaled
+	keyData = `{
+		"Curve": {
+			"P": 26959946667150639794667015087019630673557916260026308143510066298881,
+			"N": 26959946667150639794667015087019625940457807714424391721682722368061,
+			"B": 18958286285566608000408668544493926415504680968679321075787234672564,
+			"Gx": 19277929113566293071110308034699488026831934219452440156649784352033,
+			"Gy": 19926808758034470970197974370888749184205991990603949537637343198772,
+			"BitSize": 224,
+			"Name": "P-224"
+		},
+		"X": 9924104907269953551211951017586279157096504725630884119809217880060,
+		"Y": 2305888103526496946328786469202700929478437529547546609149473741759,
+		"D": 4901073595975219053801381639479282785126445966884851835499842583479
+	}`
 )
 
 var (
@@ -25,20 +40,57 @@ var (
 	//decode private key
 	integrityPrivKey *ecdsa.PrivateKey
 	//private integrity key bytes
-	privateBytes = []byte(constants.IntegrityPrivateKeyPem)
-	publicBytes  = []byte(constants.IntegrityPublicKeyPem)
+	//privateBytes = []byte(constants.IntegrityPrivateKeyPem)
+	//publicBytes  = []byte(constants.IntegrityPublicKeyPem)
 )
 
+func newBig(value string) *big.Int {
+	n := new(big.Int)
+	n, ok := n.SetString(value, 10)
+	if !ok {
+		logger.Error("failed to set big int value")
+	}
+	return n
+}
+
 func init() {
-	integrityPrivKey, _ = decode(privateBytes, publicBytes)
+	//integrityPrivKey, _ = decode(privateBytes, publicBytes)
+	//raw, err := json.Marshal(integrityPrivKey)
+	//logger.Debug(string(raw), err)
+	/*
+		{
+			"Curve": {
+				"P": 26959946667150639794667015087019630673557916260026308143510066298881,
+				"N": 26959946667150639794667015087019625940457807714424391721682722368061,
+				"B": 18958286285566608000408668544493926415504680968679321075787234672564,
+				"Gx": 19277929113566293071110308034699488026831934219452440156649784352033,
+				"Gy": 19926808758034470970197974370888749184205991990603949537637343198772,
+				"BitSize": 224,
+				"Name": "P-224"
+			},
+			"X": 9924104907269953551211951017586279157096504725630884119809217880060,
+			"Y": 2305888103526496946328786469202700929478437529547546609149473741759,
+			"D": 4901073595975219053801381639479282785126445966884851835499842583479
+		}
+	*/
+	integrityPrivKey = new(ecdsa.PrivateKey)
+	integrityPrivKey.Curve = elliptic.P224()
+	integrityPrivKey.Curve.Params().P = newBig("26959946667150639794667015087019630673557916260026308143510066298881")
+	integrityPrivKey.Curve.Params().N = newBig("26959946667150639794667015087019625940457807714424391721682722368061")
+	integrityPrivKey.Curve.Params().B = newBig("18958286285566608000408668544493926415504680968679321075787234672564")
+	integrityPrivKey.Curve.Params().Gx = newBig("19277929113566293071110308034699488026831934219452440156649784352033")
+	integrityPrivKey.Curve.Params().Gy = newBig("19926808758034470970197974370888749184205991990603949537637343198772")
+	integrityPrivKey.X = newBig("9924104907269953551211951017586279157096504725630884119809217880060")
+	integrityPrivKey.Y = newBig("2305888103526496946328786469202700929478437529547546609149473741759")
+	integrityPrivKey.D = newBig("4901073595975219053801381639479282785126445966884851835499842583479")
 }
 
 func SignMsgWithIntegrity(message string) (string, string) {
 	//create test message
-	str := util.Bytes(message)
+	//str := util.Bytes(message)
 	// hash test message
 	h.Reset()
-	h.Write(str)
+	h.Write([]byte(message))
 	signhash := h.Sum(nil)
 	hexhash := hex.EncodeToString(signhash)
 	r, s, _ := ecdsaSign(signhash, integrityPrivKey)
@@ -57,31 +109,6 @@ func ecdsaSign(message []byte, priv *ecdsa.PrivateKey) (r, s *big.Int, err error
 // verify given ecdsa signature
 func ecdsaVerify(hash []byte, r *big.Int, s *big.Int, pub *ecdsa.PublicKey) bool {
 	return ecdsa.Verify(pub, hash, r, s)
-}
-
-// encode to pem both keys
-func encode(privateKey *ecdsa.PrivateKey, publicKey *ecdsa.PublicKey) (string, string) {
-	x509Encoded, _ := x509.MarshalECPrivateKey(privateKey)
-	pemEncoded := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE EC KEY", Bytes: x509Encoded})
-
-	x509EncodedPub, _ := x509.MarshalPKIXPublicKey(publicKey)
-	pemEncodedPub := pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: x509EncodedPub})
-
-	return util.ToString(pemEncoded), util.ToString(pemEncodedPub)
-}
-
-// decode private key and public from pem
-func decode(pemEncoded []byte, pemEncodedPub []byte) (*ecdsa.PrivateKey, *ecdsa.PublicKey) {
-	block, _ := pem.Decode(pemEncoded)
-	x509Encoded := block.Bytes
-	privateKey, _ := x509.ParseECPrivateKey(x509Encoded)
-
-	blockPub, _ := pem.Decode(pemEncodedPub)
-	x509EncodedPub := blockPub.Bytes
-	genericPublicKey, _ := x509.ParsePKIXPublicKey(x509EncodedPub)
-	publicKey := genericPublicKey.(*ecdsa.PublicKey)
-
-	return privateKey, publicKey
 }
 
 // Convert an ECDSA signature (points R and S) to a byte array using ASN.1 DER encoding.

@@ -82,8 +82,8 @@ type ApiResponse struct {
 	Id   int `json:"id"`
 	Code int `json:"code"`
 	//Error trycatch
-	Message string      `json:"msg"`
-	Result  interface{} `json:"result"`
+	Message string      `json:"msg,omitempty"`
+	Result  interface{} `json:"result,omitempty"`
 }
 
 // api response constructor like function

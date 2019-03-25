@@ -10,36 +10,38 @@ import (
 )
 
 type Config struct {
-	sync.RWMutex
+	mut *sync.RWMutex
 	endpoint string
 }
 
 func BenchmarkPMutexSet(b *testing.B) {
 	config := Config{}
+	config.mut = new(sync.RWMutex)
 	b.ReportAllocs()
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			config.Lock()
+			config.mut.Lock()
 			config.endpoint = "api.example.com"
-			config.Unlock()
+			config.mut.Unlock()
 		}
 	})
 }
 
 func BenchmarkPMutexGet(b *testing.B) {
 	config := Config{endpoint: "api.example.com"}
+	config.mut = new(sync.RWMutex)
 	b.ReportAllocs()
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			config.RLock()
+			config.mut.RLock()
 			_ = config.endpoint
-			config.RUnlock()
+			config.mut.RUnlock()
 		}
 	})
 }
 
 func BenchmarkPAtomicSet(b *testing.B) {
-	var config atomic.Value
+	var config = new(atomic.Value)
 	c := Config{endpoint: "api.example.com"}
 	b.ReportAllocs()
 	b.RunParallel(func(pb *testing.PB) {
@@ -50,7 +52,7 @@ func BenchmarkPAtomicSet(b *testing.B) {
 }
 
 func BenchmarkPAtomicGet(b *testing.B) {
-	var config atomic.Value
+	var config = new(atomic.Value)
 	config.Store(Config{endpoint: "api.example.com"})
 	b.ReportAllocs()
 	b.RunParallel(func(pb *testing.PB) {
