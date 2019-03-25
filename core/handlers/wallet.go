@@ -59,7 +59,7 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 
 	req := protocol.NewMnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding trycatch error
+		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
 		return api.ErrorStr(c, bindErr)
 	}
@@ -120,7 +120,7 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 func (ctl WalletController) HdWallet(c echo.Context) error {
 	req := protocol.NewHdWalletRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding trycatch error
+		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
 		return api.ErrorStr(c, bindErr)
 	}
@@ -135,7 +135,7 @@ func (ctl WalletController) HdWallet(c echo.Context) error {
 func (ctl WalletController) Entropy(c echo.Context) error {
 	req := protocol.EntropyRequest{}
 	if err := c.Bind(&req); err != nil {
-		// return a binding trycatch error
+		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
 		return api.ErrorStr(c, bindErr)
 	}

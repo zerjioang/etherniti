@@ -1,6 +1,13 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package cns
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/zerjioang/etherniti/core/trycatch"
+)
 
 // solc compiler wrapper using executable from image: stable-alpine 5 MB
 // in order to call solidity from FS, we use the wrapper provided by go-ethereum located at
@@ -20,20 +27,33 @@ import "sync"
 // * xxhash64: https://github.com/cespare/xxhash
 // * xxh3:     https://github.com/dgryski/go-xxh3
 
-// contract name system service
+// contract Name system service
 type ContractNameSystem struct {
 	data *sync.Map
 }
 
 type ContractInfo struct {
-	name string
-	description string
-	address string
-	version string
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Address     string `json:"address"`
+	Version     string `json:"version"`
 }
 
 func (c ContractInfo) Id() string {
-	return c.name+"-"+c.version
+	return c.Name + "-" + c.Version
+}
+
+func (c ContractInfo) Validate() trycatch.Error {
+	if c.Name == "" {
+		return trycatch.New("you must supply a valid contract name")
+	}
+	if c.Address == "" {
+		return trycatch.New("you must supply a valid contract address starting with 0x")
+	}
+	if c.Version == "" {
+		return trycatch.New("you must supply a valid contract version")
+	}
+	return trycatch.Nil()
 }
 
 func NewContractNameSystem() ContractNameSystem {
@@ -59,7 +79,7 @@ func (ns *ContractNameSystem) Unregister(id string) {
 }
 
 func (ns *ContractNameSystem) Resolve(id string) (ContractInfo, bool) {
-	//address, found := ns.data[id]
+	//Address, found := ns.data[id]
 	contractInfo, found := ns.data.Load(id)
 	if found {
 		return contractInfo.(ContractInfo), found

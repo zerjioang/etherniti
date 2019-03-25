@@ -552,12 +552,30 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "description": "contract information to be registered",
+            "required": true,
+            "example": {
+              "name": "test-contract",
+              "description": "test contract description",
+              "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+              "version": "1.0"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Contract Name Service registration response",
             "schema": {
-              "example": {}
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract successfully registered in naming service",
+                "result":"test-contract-1.0"
+              }
             }
           }
         }
@@ -583,7 +601,17 @@
           "200": {
             "description": "Contract Name Service response",
             "schema": {
-              "example": {}
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract information successfully resolved",
+                "result": {
+                  "name": "test-contract",
+                  "description": "test contract description",
+                  "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+                  "version": "1.0"
+                }
+              }
             }
           }
         }
@@ -600,14 +628,19 @@
           "in": "path",
           "type": "string",
           "required": true,
-          "id of the contract to be deleted",
+          "description": "id of the contract to be deleted",
           "name": "id"
         }],
         "responses": {
           "200": {
             "description": "Contract Name Service record delete response",
             "schema": {
-              "example": {}
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract successfully unregistered from naming service",
+                "result": "test-contract-1.0"
+              }
             }
           }
         }

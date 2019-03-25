@@ -4,12 +4,10 @@
 package handlers
 
 import (
-	"errors"
-	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/modules/cns"
-
 	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/cns"
 )
 
 // token controller
@@ -25,13 +23,28 @@ func NewContractNameSpaceController() ContractNameSpaceController {
 }
 
 func (ctl *ContractNameSpaceController) register(c echo.Context) error {
-	return errors.New("not implemented")
+	//new profile request
+	req := cns.ContractInfo{}
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, bindErr)
+	}
+	e := req.Validate()
+	if e.Occur() {
+		logger.Error("failed to validate registration data: ", e.Error())
+		return api.ErrorStr(c, e.Error())
+	} else {
+		// user entered data is valid. register it
+		ctl.ns.Register(req)
+		return api.SendSuccess(c, "contract successfully registered in naming service", req.Id())
+	}
 }
 
 func (ctl *ContractNameSpaceController) unregister(c echo.Context) error {
 	id := c.Param("id")
 	ctl.ns.Unregister(id)
-	return api.Success(c, "contract successfully unregistered from namespace", id)
+	return api.Success(c, "contract successfully unregistered from naming service", id)
 }
 
 func (ctl ContractNameSpaceController) resolve(c echo.Context) error {
