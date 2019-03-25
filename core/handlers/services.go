@@ -46,7 +46,6 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewProfileController().RegisterRouters(publicGroup)
 	NewSecurityController().RegisterRouters(publicGroup)
 	NewWalletController().RegisterRouters(publicGroup)
-	NewEthController().RegisterRouters(publicGroup)
 
 	//register public ethereum network related services
 	NewRopstenController().RegisterRouters(publicGroup)
