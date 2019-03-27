@@ -523,11 +523,26 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
-        "parameters": [{
+        "parameters": [
+          {
           "in": "path",
           "type": "string",
-          "name": "mode"
-        }],
+          "name": "mode",
+          "description": "solc compiler allowed modes",
+          "enum": ["single", "git", "zip", "targz"],
+          "required": true
+          },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "contract",
+            "description": "solidity base64 encoded contract source code",
+            "required": true,
+            "example": {
+              "contract": "cHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjYuMDsKCmNvbnRyYWN0IE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgb3duZXIgb2YgdGhlIHR5cGUgYWRkcmVzcyAqLwogICAgYWRkcmVzcyBvd25lcjsKCiAgICAvKiBUaGlzIGNvbnN0cnVjdG9yIGlzIGV4ZWN1dGVkIGF0IGluaXRpYWxpemF0aW9uIGFuZCBzZXRzIHRoZSBvd25lciBvZiB0aGUgY29udHJhY3QgKi8KICAgIGNvbnN0cnVjdG9yKCkgcHVibGljIHsgb3duZXIgPSBtc2cuc2VuZGVyOyB9CgogICAgLyogRnVuY3Rpb24gdG8gcmVjb3ZlciB0aGUgZnVuZHMgb24gdGhlIGNvbnRyYWN0ICovCiAgICBmdW5jdGlvbiBraWxsKCkgcHVibGljIHsgaWYgKG1zZy5zZW5kZXIgPT0gb3duZXIpIHNlbGZkZXN0cnVjdChtc2cuc2VuZGVyKTsgfQp9Cgpjb250cmFjdCBHcmVldGVyIGlzIE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgZ3JlZXRpbmcgb2YgdGhlIHR5cGUgc3RyaW5nICovCiAgICBzdHJpbmcgZ3JlZXRpbmc7CgogICAgLyogVGhpcyBydW5zIHdoZW4gdGhlIGNvbnRyYWN0IGlzIGV4ZWN1dGVkICovCiAgICBjb25zdHJ1Y3RvcihzdHJpbmcgbWVtb3J5IF9ncmVldGluZykgcHVibGljIHsKICAgICAgICBncmVldGluZyA9IF9ncmVldGluZzsKICAgIH0KCiAgICAvKiBNYWluIGZ1bmN0aW9uICovCiAgICBmdW5jdGlvbiBncmVldCgpIHB1YmxpYyB2aWV3IHJldHVybnMgKHN0cmluZyBtZW1vcnkpIHsKICAgICAgICByZXR1cm4gZ3JlZXRpbmc7CiAgICB9Cn0K"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Solidity Solc Compiler compilation response",
