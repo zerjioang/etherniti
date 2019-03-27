@@ -47,9 +47,18 @@ func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 	return c.JSONBlob(code, security.PhishingBlacklistRawBytes())
 }
 
+// return whether given domain name is dangerous or not
+func (ctl SecurityController) isDangerousDomain(c echo.Context) error {
+	var code int
+	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
+	domainName := c.Param("domain")
+	return c.JSONBlob(code, security.IsDangerousDomain(domainName))
+}
+
 func (ctl SecurityController) RegisterRouters(router *echo.Group) {
-	logger.Info("exposing index controller methods")
-	router.GET("/security/domains/blacklist", ctl.domainBlacklist)
+	logger.Debug("exposing index controller methods")
+	router.GET("/security/domain/check/:domain", ctl.isDangerousDomain)
+	router.GET("/security/domain/blacklist", ctl.domainBlacklist)
 	router.GET("/security/phishing/blacklist", ctl.phisingBlacklist)
 	router.GET("/security/phishing/whitelist", ctl.phisingWhitelist)
 }

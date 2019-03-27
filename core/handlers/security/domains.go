@@ -30,7 +30,11 @@ func init() {
 		return
 	}
 	domainBlacklistBytes = data
-	json.Unmarshal(data, &domainBlacklist)
+	unErr := json.Unmarshal(data, &domainBlacklist)
+	if unErr != nil {
+		logger.Error("could not unmarshal blacklist data")
+		return
+	}
 }
 
 func DomainBlacklistBytesData() []byte {

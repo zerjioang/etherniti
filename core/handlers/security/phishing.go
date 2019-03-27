@@ -5,8 +5,9 @@ package security
 
 import (
 	"encoding/json"
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/util"
 	"io/ioutil"
-	"unsafe"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -37,9 +38,13 @@ func init() {
 		logger.Error("could not read phising model data")
 		return
 	}
-	json.Unmarshal(data, &pm)
-	blackData = *(*[]byte)(unsafe.Pointer(&pm.Blacklist))
-	whiteData = *(*[]byte)(unsafe.Pointer(&pm.Whitelist))
+	unmarshalErr := json.Unmarshal(data, &pm)
+	if unmarshalErr != nil {
+		logger.Error("could not unmarshal phising model data")
+		return
+	}
+	blackData = util.GetJsonBytes(pm.Blacklist)
+	whiteData = util.GetJsonBytes(pm.Whitelist)
 }
 
 func PhishingBlacklistRawBytes() []byte {
@@ -47,4 +52,23 @@ func PhishingBlacklistRawBytes() []byte {
 }
 func PhishingWhitelistRawBytes() []byte {
 	return whiteData
+}
+
+func IsDangerousDomain(domain string) []byte {
+	type response struct {
+		Domain string `json:"domain"`
+		Trust  bool   `json:"trust"`
+		Score  uint8  `json:"score"`
+		//metadata
+		Title   string `json:"title"`
+		Message string `json:"message"`
+	}
+	responseData := response{
+		Title:   "Deceptive domain detected",
+		Domain:  domain,
+		Message: "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
+		Score:   uint8(7),
+		Trust:   false,
+	}
+	return api.ToSuccess("domain verified", responseData)
 }

@@ -482,6 +482,44 @@
         }
       }
     },
+    "/public/security/domain/check/{domain}": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Check domain name status",
+        "description": "Check the trust level of given domain and stop scamming and malware attempts",
+        "operationId": "phishing-check",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "domain",
+          "description": "suspicious domain name to be scanned",
+          "schema": {
+            "example": "my.suspicious.domain.tld"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "suspicious domain analysis results",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "domain analyzed",
+                "result": {
+                  "domain": "my.suspicious.wallet.domain.tld",
+                  "trust": false,
+                  "score": 7,
+                  "title": "Deceptive domain detected",
+                  "message": "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/public/solc/version": {
       "get": {
         "tags": ["solc"],
@@ -494,20 +532,30 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Solidity Solc Compiler version response",
+            "description": "Solidity Solc compiler version response",
             "schema": {
               "example": {
                 "id": 0,
                 "code": 200,
                 "msg": "solc version",
                 "result": {
-                  "Path": "/usr/bin/solc",
-                  "Version": "0.4.24",
-                  "FullVersion": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
-                  "Major": 0,
-                  "Minor": 4,
-                  "Patch": 24
+                  "path": "/usr/bin/solc",
+                  "version": "0.4.24",
+                  "full_version": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
+                  "major": 0,
+                  "minor": 4,
+                  "patch": 24
                 }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "failed to get solc version"
               }
             }
           }
@@ -525,12 +573,12 @@
         "deprecated": false,
         "parameters": [
           {
-          "in": "path",
-          "type": "string",
-          "name": "mode",
-          "description": "solc compiler allowed modes",
-          "enum": ["single", "git", "zip", "targz"],
-          "required": true
+            "in": "path",
+            "type": "string",
+            "name": "mode",
+            "description": "solc compiler allowed modes",
+            "enum": ["single-raw", "single-base64", "git", "zip", "targz"],
+            "required": true
           },
           {
             "in": "body",
@@ -551,7 +599,21 @@
                 "id": 0,
                 "code": 200,
                 "msg": "solc version",
-                "result": {}
+                "result": {
+                  "abi": "",
+                  "bin":"",
+                  "version":""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "unknown mode selected. Allowed modes are: single, git, zip, targz"
               }
             }
           }
@@ -597,7 +659,7 @@
     "/public/cns/{id}": {
       "get": {
         "tags": ["cns"],
-        "summary": "Get existing contract details",
+        "summary": "Get existing contract details given its ID",
         "description": "Get existing contract details",
         "operationId": "cns-resolve",
         "consumes": ["application/json"],
@@ -631,7 +693,7 @@
       },
       "delete": {
         "tags": ["cns"],
-        "summary": "Delete existing contract information",
+        "summary": "Delete existing contract information given its ID",
         "description": "Delete existing contract details",
         "operationId": "cns-delete",
         "consumes": ["application/json"],
