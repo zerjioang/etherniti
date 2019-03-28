@@ -172,7 +172,7 @@ func NewConnectionProfile() ConnectionProfile {
 }
 
 //constructor like function
-func NewConnectionProfileWithData(data protocol.NewProfileRequest) ConnectionProfile {
+func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
 		Id:        util.GenerateUUIDFromEntropy(),

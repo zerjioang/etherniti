@@ -5,9 +5,10 @@ package security
 
 import (
 	"encoding/json"
+	"io/ioutil"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/util"
-	"io/ioutil"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"

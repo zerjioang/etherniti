@@ -11,7 +11,7 @@ type Profile struct {
 }
 
 // new profile request dto
-type NewProfileRequest struct {
+type ProfileRequest struct {
 
 	//network id of target connection
 	NetworkId uint8 `json:"networkId" form:"networkId" query:"networkId"`
@@ -56,9 +56,25 @@ type NewHdWalletRequest struct {
 
 // new hd wallet response dto
 type HdWalletResponse struct {
-	MasterPrivateKey string
-	MasterPublicKey  string
-	Mnemonic         string
+	MasterPrivateKey string `json:"private" form:"private" query:"private"`
+	MasterPublicKey  string `json:"public" form:"public" query:"public"`
+	Mnemonic         string `json:"mnemonic" form:"mnemonic" query:"mnemonic"`
+}
+
+// contract compilation request dto
+type ContractCompileRequest struct {
+	Contract string `json:"contract" form:"contract" query:"contract"`
+}
+
+// contract compilation response dto
+type ContractCompileResponse struct {
+	Code            string      `json:"code"`
+	RuntimeCode     string      `json:"runtime"`
+	Language        string      `json:"language"`
+	LanguageVersion string      `json:"languageVersion"`
+	CompilerVersion string      `json:"compilerVersion"`
+	CompilerOptions string      `json:"compilerOptions"`
+	AbiDefinition   interface{} `json:"abiDefinition"`
 }
 
 // api trycatch model dto

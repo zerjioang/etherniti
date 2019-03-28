@@ -4,7 +4,12 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"errors"
+	"sync/atomic"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
+	constants "github.com/zerjioang/etherniti/shared/solc"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
@@ -13,8 +18,14 @@ import (
 	"github.com/zerjioang/etherniti/core/util"
 )
 
+var (
+	errUnknownMode = errors.New("unknown mode selected. Allowed modes are: single, git, zip, targz")
+)
+
 // token controller
 type SolcController struct {
+	//cached value. concurrent safe that stores []byte
+	solidityVersionResponse atomic.Value
 }
 
 // constructor like function
@@ -23,25 +34,97 @@ func NewSolcController() SolcController {
 	return ctl
 }
 
-func (ctl SolcController) version(c echo.Context) error {
-	solData, err := solc.SolidityVersion()
-	if solData == nil {
-		return errors.New("failed to get solc version")
-	} else if err != nil {
-		return err
+func (ctl *SolcController) version(c echo.Context) error {
+	v := ctl.solidityVersionResponse.Load()
+	if v == nil {
+		// value not set. generate and store in cache
+		// generate value
+		solData, err := solc.SolidityVersion()
+		if solData == nil {
+			return errors.New("failed to get solc version")
+		} else if err != nil {
+			return err
+		} else {
+			// store in cache
+			versionResponse := api.ToSuccess("solc version", solData)
+			// cache response for next request
+			ctl.solidityVersionResponse.Store(versionResponse)
+			// return response to client
+			return api.SendSuccessBlob(c, versionResponse)
+		}
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		//value already set and stored in memory cache
+		versionResponse := v.([]byte)
+		// return response to client
+		return api.SendSuccessBlob(c, versionResponse)
 	}
 }
 
 func (ctl SolcController) compileSingle(c echo.Context) error {
-	solData, err := solc.SolidityVersion()
-	if solData == nil {
-		return errors.New("failed to get solc version")
-	} else if err != nil {
-		return err
+	//read request parameters encoded in the body
+	req := protocol.ContractCompileRequest{}
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, bindErr)
+	}
+
+	if req.Contract == "" {
+		return errors.New("failed to get request contract data")
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		//compile given contract
+		compilerResponse, err := solc.CompileSolidityString(req.Contract)
+		if err != nil {
+			return api.Error(c, err)
+		} else {
+			return api.SendSuccess(c, "solc contract compiled", compilerResponse)
+		}
+	}
+}
+
+func (ctl SolcController) compileSingleFromBase64(c echo.Context) error {
+	//read request parameters encoded in the body
+	req := protocol.ContractCompileRequest{}
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, bindErr)
+	}
+
+	if req.Contract == "" {
+		return errors.New("failed to get request contract data")
+	} else {
+		//decode contract from base64 string to ascii
+		decoded, b64Err := base64.StdEncoding.DecodeString(req.Contract)
+		if b64Err != nil {
+			//decoding error found
+			return api.Error(c, b64Err)
+		} else {
+			//decoding success. compile the contract
+			compilerResponse, err := solc.CompileSolidityString(string(decoded))
+			if err != nil {
+				return api.Error(c, err)
+			} else {
+				//generate the response for the client
+				var contractResp []protocol.ContractCompileResponse
+				contractResp = make([]protocol.ContractCompileResponse, len(compilerResponse))
+				idx := 0
+				for _, v := range compilerResponse {
+					//populate current response
+					current := contractResp[idx]
+					current.Code = v.Code
+					current.RuntimeCode = v.RuntimeCode
+					current.Language = v.Info.Language
+					current.LanguageVersion = v.Info.LanguageVersion
+					current.CompilerVersion = v.Info.CompilerVersion
+					current.CompilerOptions = v.Info.CompilerOptions
+					current.AbiDefinition = v.Info.AbiDefinition
+					contractResp[idx] = current
+					idx++
+				}
+				return api.SendSuccess(c, "solc contract compiled", contractResp)
+			}
+		}
 	}
 }
 
@@ -67,7 +150,18 @@ func (ctl SolcController) compileFromGit(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileFromUpload(c echo.Context) error {
+func (ctl SolcController) compileFromUploadedZip(c echo.Context) error {
+	solData, err := solc.SolidityVersion()
+	if solData == nil {
+		return errors.New("failed to get solc version")
+	} else if err != nil {
+		return err
+	} else {
+		return api.SendSuccess(c, "solc version", solData)
+	}
+}
+
+func (ctl SolcController) compileFromUploadedTargz(c echo.Context) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		return errors.New("failed to get solc version")
@@ -79,21 +173,33 @@ func (ctl SolcController) compileFromUpload(c echo.Context) error {
 }
 
 func (ctl SolcController) compileModeSelector(c echo.Context) error {
-	mode := c.Param("source")
+	mode := c.Param("mode")
 	mode = util.ToLowerAscii(mode)
-	logger.Debug("Compiling ethereum contract with mode: ", mode)
+	logger.Debug("compiling ethereum contract with mode: ", mode)
 	switch mode {
-	case "single":
-		logger.Debug("Compiling ethereum contract with single mode")
+	case constants.SingleRawFile:
+		logger.Debug("compiling ethereum contract from raw solidity source code")
+		return ctl.compileSingle(c)
+	case constants.SingleBase64File:
+		logger.Debug("compiling ethereum contract from raw solidity encoded base64 code")
+		return ctl.compileSingleFromBase64(c)
+	case constants.GitMode:
+		logger.Debug("compiling ethereum contract from remote git repository")
+		return ctl.compileFromGit(c)
+	case constants.ZipMode:
+		logger.Debug("compiling ethereum contract from user provided zip file")
+		return ctl.compileFromUploadedZip(c)
+	case constants.TargzMode:
+		logger.Debug("compiling ethereum contract from user provided targz file")
+		return ctl.compileFromUploadedTargz(c)
 	default:
-		return errors.New("unknown mode selected. Allowed modes are: single, git, zip, targz")
+		return errUnknownMode
 	}
-	return nil
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl SolcController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing solc controller methods")
 	router.GET("/solc/version", ctl.version)
-	router.POST("/solc/compile/:source", ctl.compileModeSelector)
+	router.POST("/solc/compile/:mode", ctl.compileModeSelector)
 }
