@@ -10,10 +10,8 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
-	"github.com/zerjioang/etherniti/core/modules/cache"
-
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
+	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/core/util"
@@ -45,28 +43,14 @@ var (
 
 // eth web3 controller
 type Web3Controller struct {
-	//ethereum interaction cache
-	cache *cache.MemoryCache
-	//main connection peer address/ip
-	peer string
-	//connection name: mainet, ropsten, rinkeby, etc
-	networkName string
+	NetworkController
 }
 
 // constructor like function
 func NewWeb3Controller() Web3Controller {
 	ctl := Web3Controller{}
-	ctl.SetTargetName("eth")
-	ctl.cache = cache.NewMemoryCache()
+	ctl.NetworkController = NewNetworkController()
 	return ctl
-}
-
-func (ctl *Web3Controller) SetPeer(peerLocation string) {
-	ctl.peer = peerLocation
-}
-
-func (ctl *Web3Controller) SetTargetName(networkName string) {
-	ctl.networkName = networkName
 }
 
 // check if an ethereum address is a contract address
