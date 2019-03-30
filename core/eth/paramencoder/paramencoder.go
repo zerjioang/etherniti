@@ -6,6 +6,7 @@ package paramencoder
 import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 )
 
 /*
@@ -60,14 +61,33 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_call","params":[{"to": "0x86
 */
 
 const (
-	erc20Abi = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"tokenOwner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Approval","type":"event"}]`
+	erc20Abi = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"showMeTheMoney","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]`
 )
 
 var (
-	erc20AbiModel                                      *abi.ABI
-	TotalSupplyParams, DecimalsParams, BalanceOfParams []byte
+	erc20AbiModel                     *abi.ABI
+	TotalSupplyParams, DecimalsParams string
 )
 
+/*
+You can use some tool to calculate the function identifier which
+are the first 4 bytes of the keccak hash of the function identifier as shown below.
+These identifiers are for ERC20:
+
+18160ddd -> totalSupply()
+70a08231 -> balanceOf(address)
+dd62ed3e -> allowance(address,address)
+a9059cbb -> transfer(address,uint256)
+095ea7b3 -> approve(address,uint256)
+23b872dd -> transferFrom(address,address,uint256)
+
+When calling json-rpc, params needs to be encoded in 32 bytes long.
+so the full data field should be identifier + "000000000000000000000000" + payload
+
+for example: in the case of total supply (0 params needed), would be:
+0x18160ddd0000000000000000000000000000000000000000000000000000000000000000
+
+*/
 func init() {
 	erc20AbiModel = new(abi.ABI)
 	unmErr := erc20AbiModel.UnmarshalJSON([]byte(erc20Abi))
@@ -76,18 +96,19 @@ func init() {
 	}
 	var err error
 	//preload totalsupply function params
-	TotalSupplyParams, err = erc20AbiModel.Pack("totalSupply")
+	var temp []byte
+	temp, err = erc20AbiModel.Pack("totalSupply")
 	if err != nil {
 		logger.Error("failed to load ERC20 'totalSupply' function interaction model internals")
 	}
+	TotalSupplyParams = hex.ToHex(temp)
 	//preload decimals function params
-	DecimalsParams, err = erc20AbiModel.Pack("decimals")
+	temp, err = erc20AbiModel.Pack("decimals")
 	if err != nil {
 		logger.Error("failed to load ERC20 'decimals' function interaction model internals")
 	}
-	//preload balanceOf function params
-	BalanceOfParams, err = erc20AbiModel.Pack("balanceOf")
-	if err != nil {
-		logger.Error("failed to load ERC20 'balanceOf' function interaction model internals")
-	}
+	DecimalsParams = hex.ToHex(temp)
+
+	//overwrite params
+	TotalSupplyParams = "0x18160ddd0000000000000000000000000000000000000000000000000000000000000000"
 }

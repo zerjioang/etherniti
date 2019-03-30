@@ -29,6 +29,12 @@ func ParseInt(value string) (int, error) {
 // ParseBigInt parse hex string value to big.Int
 func ParseBigInt(value string) (*big.Int, error) {
 	i := new(big.Int)
+	//check if the value starts with 0x. is so, remove that content
+	// 48 decimal is '0' in ascii
+	// 120 decimal is 'x' is ascii
+	if len(value) > 2 && value[0] == 48 && value[1] == 120 {
+		value = value[2:]
+	}
 	i, _ = i.SetString(value, 16)
 	return i, nil
 }

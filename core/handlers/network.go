@@ -22,7 +22,6 @@ type NetworkController struct {
 // constructor like function
 func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
-	ctl.SetTargetName("eth")
 	ctl.cache = cache.NewMemoryCache()
 	return ctl
 }

@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/eth/paramencoder"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
@@ -53,7 +55,7 @@ func NewWeb3Controller() Web3Controller {
 	return ctl
 }
 
-// check if an ethereum address is a contract address
+// get the balance of given ethereum address and target network
 func (ctl *Web3Controller) getBalance(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
@@ -238,12 +240,13 @@ func (ctl *Web3Controller) getAccountsWithBalance(c echo.Context) error {
 	if !ok {
 		return api.ErrorStr(c, "failed to execute requested operation")
 	}
-
+	// get our client context
 	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("web3 request using context id: ", cId)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
+	// list all our accounts
 	list, err := client.EthAccounts()
 
 	type wrapper struct {
@@ -310,29 +313,70 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
 }
 
+// Start ERC20 functions
+// get the total supply of the contract at given target network
+func (ctl *Web3Controller) totalSupply(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Call("totalSupply", paramencoder.TotalSupplyParams)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "totalsupply", raw)
+	}
+}
+
+// END of ERC20 functions
+
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
-	router.GET("/"+ctl.networkName+"/client/version", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/net/version", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/net/peers", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/protocol/version", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/syncing", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/coinbase", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/mining", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/hashrate", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/gasprice", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/accounts", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/block/latest", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/block/current", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/compilers", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/shh/version", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/shh/new", ctl.makeRpcCallNoParams)
-	router.GET("/"+ctl.networkName+"/shh/group", ctl.makeRpcCallNoParams)
+	prefix := "/" + ctl.networkName
+	if ctl.networkName == "" {
+		// no network name set. private network ahead
+		prefix = ctl.networkName
+	}
+	router.GET(prefix+"/client/version", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/net/version", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/net/peers", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/protocol/version", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/syncing", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/coinbase", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/mining", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/hashrate", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/gasprice", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/accounts", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/block/latest", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/block/current", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/compilers", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/shh/version", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/shh/new", ctl.makeRpcCallNoParams)
+	router.GET(prefix+"/shh/group", ctl.makeRpcCallNoParams)
 
-	router.GET("/"+ctl.networkName+"/is/contract/:address", ctl.isContractAddress)
+	router.GET(prefix+"/is/contract/:address", ctl.isContractAddress)
 
-	router.GET("/"+ctl.networkName+"/accountsBalanced", ctl.getAccountsWithBalance)
+	router.GET(prefix+"/accountsBalanced", ctl.getAccountsWithBalance)
 
-	router.GET("/"+ctl.networkName+"/balance/:address", ctl.getBalance)
-	router.GET("/"+ctl.networkName+"/balance/:address/block/:block", ctl.getBalanceAtBlock)
+	router.GET(prefix+"/balance/:address", ctl.getBalance)
+	router.GET(prefix+"/balance/:address/block/:block", ctl.getBalanceAtBlock)
+
+	router.GET(prefix+"/erc20/:contract/totalsupply", ctl.totalSupply)
 }

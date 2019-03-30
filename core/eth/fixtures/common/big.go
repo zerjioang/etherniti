@@ -18,10 +18,6 @@ import "math/big"
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package common
-
-import "math/big"
-
 // Common big integers often used
 var (
 	Big1   = big.NewInt(1)

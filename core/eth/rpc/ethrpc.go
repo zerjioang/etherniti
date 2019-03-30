@@ -6,6 +6,7 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"math/big"
 	"net/http"
@@ -16,14 +17,14 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-// EthError - ethereum trycatch
+// EthError - ethereum error
 type EthError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
 func (err EthError) Error() string {
-	return "Error " + err.Message + " with code " + strconv.Itoa(err.Code)
+	return "an error occurred: " + err.Message + " with code " + strconv.Itoa(err.Code)
 }
 
 var (
@@ -34,7 +35,11 @@ type ethResponse struct {
 	ID      int             `json:"id"`
 	JSONRPC string          `json:"jsonrpc"`
 	Result  json.RawMessage `json:"result"`
-	Error   *EthError       `json:"trycatch"`
+	Error   *EthError       `json:"error"`
+}
+
+func (response ethResponse) Errored() error {
+	return errors.New(response.Error.Message + ". Error code: " + strconv.Itoa(response.Error.Code))
 }
 
 type ethRequest struct {
@@ -58,7 +63,7 @@ func NewDefaultRPC(url string) EthRPC {
 	rpc := EthRPC{
 		url:    url,
 		client: http.Client{},
-		Debug:  false,
+		Debug:  true,
 	}
 	return rpc
 }
@@ -113,13 +118,14 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 		log.Debug("request data", data)
 	}
 
-	resp := new(ethResponse)
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
+	resp := ethResponse{}
+	unmErr := json.Unmarshal(data, &resp)
+	if unmErr != nil {
+		return nil, unmErr
 	}
 
 	if resp.Error != nil {
-		return nil, *resp.Error
+		return nil, resp.Errored()
 	}
 
 	return resp.Result, nil

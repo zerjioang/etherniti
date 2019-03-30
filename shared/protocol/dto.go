@@ -23,7 +23,7 @@ type ProfileRequest struct {
 	Mode string `json:"mode" form:"mode" query:"mode"`
 
 	//connection por if required
-	Port int `json:"port" form:"port" query:"port"`
+	Port uint16 `json:"port" form:"port" query:"port"`
 
 	// default ethereum account for transactioning
 	Address string `json:"address" form:"address" query:"address"`

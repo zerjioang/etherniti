@@ -140,7 +140,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
  26 kB internal/singleflight
  26 kB crypto
  25 kB github.com/zerjioang/etherniti/core/server/mods/disk
- 25 kB github.com/zerjioang/etherniti/core/modules/cns
+ 25 kB github.com/zerjioang/etherniti/core/modules/registry
  23 kB github.com/zerjioang/etherniti/core/handlers/security
  22 kB github.com/zerjioang/etherniti/vendor/github.com/mattn/go-colorable
  20 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/gommon/bytes

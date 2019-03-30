@@ -60,7 +60,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	//add jwt middleware to private group
 	privateGroup.Use(jwt)
 	// add private or context dependant services
-	NewWeb3Controller().RegisterRouters(privateGroup)
+	NewPrivateNetController().RegisterRouters(privateGroup)
 	NewDevOpsController().RegisterRouters(privateGroup)
 	//NewTokenController(deployer.manager).RegisterRouters(privateGroup)
 	return group
