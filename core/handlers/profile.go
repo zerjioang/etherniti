@@ -43,7 +43,7 @@ func NewProfileController() ProfileController {
 // new profile create request
 func (ctl ProfileController) create(c echo.Context) error {
 	//new profile request
-	req := protocol.NewProfileRequest{}
+	req := protocol.ProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)

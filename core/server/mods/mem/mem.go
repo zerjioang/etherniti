@@ -8,8 +8,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/logger"
-
 	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
@@ -91,7 +89,7 @@ func (mem MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse) {
 
 // reads backend memory statistics
 func (mem *MemStatus) ReadMemory() {
-	logger.Debug("reading node memory statistics")
+	// logger.Debug("reading node memory statistics")
 	runtime.ReadMemStats(&mem.m)
 }
 

@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	mut *sync.RWMutex
+	mut      *sync.RWMutex
 	endpoint string
 }
 

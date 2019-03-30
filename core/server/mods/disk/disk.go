@@ -58,7 +58,7 @@ func (disk *DiskStatus) Start(path string) {
 // internal ticker based monitor
 func (disk *DiskStatus) monitor(path string) {
 	for range ticker.C {
-		logger.Debug("reading node disk space statistics")
+		// logger.Debug("reading node disk space statistics")
 		rErr := disk.read(path)
 		if rErr != nil {
 			log.Error("disk status read error", rErr)

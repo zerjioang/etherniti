@@ -13,10 +13,20 @@ import (
 	"strings"
 )
 
+var (
+	ErrVersionParse  = errors.New("can't parse solc version information")
+	ErrEmptySource   = errors.New("solc: empty source string")
+	ErrNoSourceFiles = errors.New("solc: no source files")
+)
+
 // Solidity contains information about the solidity compiler.
 type Solidity struct {
-	Path, Version, FullVersion string
-	Major, Minor, Patch        int
+	Path        string `json:"path"`
+	Version     string `json:"version"`
+	FullVersion string `json:"full_version"`
+	Major       int    `json:"major"`
+	Minor       int    `json:"minor"`
+	Patch       int    `json:"patch"`
 }
 
 // --combined-output format
@@ -26,10 +36,10 @@ type solcOutput struct {
 		SrcMapRuntime                               string `json:"srcmap-runtime"`
 		Bin, SrcMap, Abi, Devdoc, Userdoc, Metadata string
 	}
-	Version string
+	Version string `json:"version"`
 }
 
-func (s *Solidity) makeArgs() []string {
+func (s Solidity) makeArgs() []string {
 	p := []string{
 		"--combined-json", "bin,bin-runtime,srcmap,srcmap-runtime,abi,userdoc,devdoc",
 		"--optimize", // code optimizer switched on
@@ -52,7 +62,7 @@ func SolidityVersion() (*Solidity, error) {
 	}
 	matches := versionRegexp.FindStringSubmatch(out.String())
 	if len(matches) != 4 {
-		return nil, fmt.Errorf("can't parse solc version %q", out.String())
+		return nil, ErrVersionParse
 	}
 	s := &Solidity{Path: cmd.Path, FullVersion: out.String(), Version: matches[0]}
 	if s.Major, err = strconv.Atoi(matches[1]); err != nil {
@@ -70,7 +80,7 @@ func SolidityVersion() (*Solidity, error) {
 // CompileSolidityString builds and returns all the contracts contained within a source string.
 func CompileSolidityString(source string) (map[string]*Contract, error) {
 	if len(source) == 0 {
-		return nil, errors.New("solc: empty source string")
+		return nil, ErrEmptySource
 	}
 	s, err := SolidityVersion()
 	if err != nil {
@@ -85,7 +95,7 @@ func CompileSolidityString(source string) (map[string]*Contract, error) {
 // CompileSolidity compiles all given Solidity source files.
 func CompileSolidity(sourcefiles ...string) (map[string]*Contract, error) {
 	if len(sourcefiles) == 0 {
-		return nil, errors.New("solc: no source files")
+		return nil, ErrNoSourceFiles
 	}
 	source, err := slurpFiles(sourcefiles)
 	if err != nil {

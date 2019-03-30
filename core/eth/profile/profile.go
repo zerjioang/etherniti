@@ -15,10 +15,10 @@ import (
 )
 
 var (
-	emptyProfile            ConnectionProfile
 	tokenSecretBytes        = []byte(config.TokenSecret)
-	errTokenNoValid         = errors.New("invalid fields token provided")
+	errTokenNoValid         = errors.New("provided token contains invalid or missing fields")
 	errInvalidSigningMethod = errors.New("unexpected signing method")
+	errFailedToRead         = errors.New("failed to read token claims")
 )
 
 // default data for connection profile
@@ -35,7 +35,7 @@ type ConnectionProfile struct {
 	Mode string `json:"mode"`
 
 	//connection por if required
-	Port int `json:"port"`
+	Port uint16 `json:"port"`
 
 	// default ethereum account for transactioning
 	Address string `json:"address"`
@@ -89,13 +89,21 @@ func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
 }
 func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfile {
+	profile.NetworkId = uint8(profile.readInt(claims["networkId"]))
 	profile.Peer = profile.readString(claims["peer"])
 	profile.Mode = profile.readString(claims["mode"])
+	profile.Port = profile.readUint16(claims["port"])
 	profile.Address = profile.readString(claims["address"])
 	profile.Key = profile.readString(claims["key"])
 	profile.Version = profile.readInt(claims["version"])
-	profile.Id = profile.readString(claims["id"])
-	profile.Key = profile.readString(claims["key"])
+	profile.Valididity = profile.readBool(claims["validity"])
+	profile.Audience = profile.readString(claims["aud"])
+	profile.ExpiresAt = profile.readInt64(claims["exp"])
+	profile.Id = profile.readString(claims["jti"])
+	profile.IssuedAt = profile.readInt64(claims["iat"])
+	profile.Issuer = profile.readString(claims["iss"])
+	profile.NotBefore = profile.readInt64(claims["nbf"])
+	profile.Subject = profile.readString(claims["sub"])
 	return profile
 }
 
@@ -117,6 +125,36 @@ func (profile ConnectionProfile) readInt(v interface{}) int {
 		}
 	}
 	return 0
+}
+
+func (profile ConnectionProfile) readUint16(v interface{}) uint16 {
+	if v != nil {
+		val, ok := v.(uint16)
+		if ok {
+			return val
+		}
+	}
+	return 0
+}
+
+func (profile ConnectionProfile) readInt64(v interface{}) int64 {
+	if v != nil {
+		val, ok := v.(int64)
+		if ok {
+			return val
+		}
+	}
+	return 0
+}
+
+func (profile ConnectionProfile) readBool(v interface{}) bool {
+	if v != nil {
+		val, ok := v.(bool)
+		if ok {
+			return val
+		}
+	}
+	return false
 }
 
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
@@ -149,19 +187,17 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 
 	mapc, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return profile, errors.New("failed to read token claims")
+		return profile, errFailedToRead
 	}
 	profile = profile.Populate(mapc)
 
 	//check profile validity
-	profile.Valididity = profile.Peer != "" &&
-		profile.Address != "" &&
-		profile.Key != ""
+	profile.Valididity = profile.Peer != ""
 
 	if profile.Valididity {
 		return profile, nil
 	} else {
-		return profile, err
+		return profile, errTokenNoValid
 	}
 }
 
@@ -172,16 +208,16 @@ func NewConnectionProfile() ConnectionProfile {
 }
 
 //constructor like function
-func NewConnectionProfileWithData(data protocol.NewProfileRequest) ConnectionProfile {
+func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
 		Id:        util.GenerateUUIDFromEntropy(),
 		NetworkId: data.NetworkId,
 		Peer:      data.Peer,    //required
-		Address:   data.Address, // required
-		Key:       data.Key,     //required
-		Mode:      data.Mode,    //required
-		Port:      data.Port,
+		Address:   data.Address, //required
+		Key:       data.Key,
+		Mode:      data.Mode, //required
+		Port:      data.Port, //required
 		Issuer:    "etherniti.org",
 		ExpiresAt: now.Add(config.TokenExpiration).Unix(),
 		NotBefore: now.Unix(),
@@ -199,9 +235,9 @@ func NewConnectionProfileWithData(data protocol.NewProfileRequest) ConnectionPro
 func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
-		Peer:    "http://127.0.0.1:8454",
+		Peer:    "http://127.0.0.1:8545",
 		Mode:    "http",
-		Port:    8454,
+		Port:    8545,
 		Address: "0x0",
 		Key:     "0x0",
 		//standard claims

@@ -6,6 +6,7 @@ package handlers
 import (
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/constants"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 )
@@ -37,10 +38,10 @@ func next(next echo.HandlerFunc) echo.HandlerFunc {
 
 // RegisterServices in echo server, allowed routes
 func RegisterServices(e *echo.Echo) *echo.Group {
-	group := e.Group("/v1", next)
+	group := e.Group(constants.ApiVersion, next)
 	logger.Info("registering context free routes")
 
-	publicGroup := group.Group("/public", next)
+	publicGroup := group.Group(constants.PublicApi, next)
 
 	NewIndexController().RegisterRouters(publicGroup)
 	NewProfileController().RegisterRouters(publicGroup)
@@ -55,10 +56,12 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewKovanController().RegisterRouters(publicGroup)
 	NewMainNetController().RegisterRouters(publicGroup)
 
-	privateGroup := group.Group("/private", next)
-	privateGroup.Use(jwt)
+	privateGroup := group.Group(constants.PrivateApi, next)
 	//add jwt middleware to private group
-	NewWeb3Controller().RegisterRouters(privateGroup)
+	privateGroup.Use(jwt)
+	// add private or context dependant services
+	NewPrivateNetController().RegisterRouters(privateGroup)
+	NewDevOpsController().RegisterRouters(privateGroup)
 	//NewTokenController(deployer.manager).RegisterRouters(privateGroup)
 	return group
 }
