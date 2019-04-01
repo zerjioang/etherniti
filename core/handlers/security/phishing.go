@@ -30,6 +30,7 @@ var (
 	pm        PhishingModel
 	whiteData []byte
 	blackData []byte
+	fuzzyData []byte
 )
 
 func init() {
@@ -46,6 +47,7 @@ func init() {
 	}
 	blackData = util.GetJsonBytes(pm.Blacklist)
 	whiteData = util.GetJsonBytes(pm.Whitelist)
+	fuzzyData = util.GetJsonBytes(pm.Fuzzylist)
 }
 
 func PhishingBlacklistRawBytes() []byte {
@@ -55,21 +57,43 @@ func PhishingWhitelistRawBytes() []byte {
 	return whiteData
 }
 
+func FuzzyDataRawBytes() []byte {
+	return fuzzyData
+}
+
+func contains(arr []string, str string) bool {
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
+}
+
 func IsDangerousDomain(domain string) []byte {
 	type response struct {
 		Domain string `json:"domain"`
 		Trust  bool   `json:"trust"`
-		Score  uint8  `json:"score"`
 		//metadata
 		Title   string `json:"title"`
 		Message string `json:"message"`
 	}
-	responseData := response{
-		Title:   "Deceptive domain detected",
-		Domain:  domain,
-		Message: "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
-		Score:   uint8(7),
-		Trust:   false,
+	warn := contains(pm.Blacklist, domain) || contains(DomainBlacklist(), domain)
+	if warn {
+		responseData := response{
+			Title:   "Deceptive domain detected",
+			Domain:  domain,
+			Message: "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
+			Trust:   false,
+		}
+		return api.ToSuccess("domain verified", responseData)
+	} else {
+		responseData := response{
+			Title:   "Clean domain detected",
+			Domain:  domain,
+			Message: "The domain you requested has not been blacklisted.",
+			Trust:   true,
+		}
+		return api.ToSuccess("domain verified", responseData)
 	}
-	return api.ToSuccess("domain verified", responseData)
 }

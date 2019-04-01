@@ -47,10 +47,10 @@ func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl strin
 	// by default, peer url is used to dial
 	if peerUrl == "" {
 		//no peer url found, try to read from user token
-		if context.profileData.Peer == "" {
+		if context.profileData.RpcEndpoint == "" {
 			return client, "", noPeerAddressError
 		}
-		contextId = context.profileData.Peer
+		contextId = context.profileData.RpcEndpoint
 	} else {
 		// use peer url
 		contextId = peerUrl

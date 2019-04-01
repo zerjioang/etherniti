@@ -57,7 +57,7 @@ func NewWalletController() WalletController {
 */
 func (ctl WalletController) Mnemonic(c echo.Context) error {
 
-	req := protocol.NewMnemonicRequest{}
+	req := protocol.MnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
@@ -84,7 +84,7 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	} else if req.Language == "spanish" {
 		bip39.SetWordList(wordlists.Spanish)
 	} else {
-		//return invalid language trycatch
+		//return invalid language error
 		return api.ErrorStr(c, "provided language is not supported")
 	}
 
@@ -93,8 +93,8 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 		req.Size != 192 &&
 		req.Size != 224 &&
 		req.Size != 256 {
-		//return invalid size trycatch
-		return api.ErrorStr(c, "provided size is not supported")
+		//return invalid size error
+		return api.ErrorStr(c, "provided mnemonic size is not supported")
 	}
 
 	// create new Entropy from rand reader
@@ -110,10 +110,18 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	// create Mnemonic based on user config and created Entropy source
 	mnemomic, err := bip39.NewMnemonic(entropy)
 	if err.Occur() {
-		//return Mnemonic error
+		//return mnemonic error
 		return api.StackError(c, err)
 	} else {
-		return api.SendSuccess(c, "Mnemonic successfully created", mnemomic)
+		// hash the seed if requested
+		var response protocol.MnemonicResponse
+		response.Language = req.Language
+		response.Size = req.Size
+		if req.Secret != "" {
+			encryptedSeed := bip39.NewSeed(mnemomic, req.Secret)
+			response.EncryptedSeed = string(encryptedSeed)
+		}
+		return api.SendSuccess(c, "mnemonic successfully created", response)
 	}
 }
 
@@ -143,7 +151,7 @@ func (ctl WalletController) Entropy(c echo.Context) error {
 	req.Size = ctl.getIntParam(c, "bits")
 
 	if req.Size <= 0 || req.Size > 4096*8 {
-		//return invalid size (exceeded btw) trycatch
+		//return invalid size (exceeded btw) error
 		return api.ErrorStr(c, "provided entropy size is not supported")
 	}
 

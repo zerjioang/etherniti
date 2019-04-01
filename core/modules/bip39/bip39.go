@@ -12,6 +12,7 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/binary"
+	"hash"
 	"math/big"
 	"strings"
 	"sync"
@@ -325,7 +326,13 @@ func NewSeedWithErrorChecking(mnemonic string, password string) ([]byte, trycatc
 // NewSeed creates a hashed seed output given a provided string and password.
 // No checking is performed to validate that the string provided is a valid mnemonic.
 func NewSeed(mnemonic string, password string) []byte {
-	return pbkdf2.Key([]byte(mnemonic), []byte("mnemonic"+password), 2048, 64, sha512.New)
+	return NewSeedWithParams([]byte(mnemonic), []byte("mnemonic"+password), 2048, 64, sha512.New)
+}
+
+// NewSeed creates a hashed seed output given a provided string and password.
+// No checking is performed to validate that the string provided is a valid mnemonic.
+func NewSeedWithParams(mnemonic []byte, password []byte, iterations int, keyLength int, hashf func() hash.Hash) []byte {
+	return pbkdf2.Key(mnemonic, password, iterations, keyLength, hashf)
 }
 
 // IsMnemonicValid attempts to verify that the provided mnemonic is valid.

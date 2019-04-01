@@ -24,24 +24,7 @@ var (
 // default data for connection profile
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
-
-	//network id of target connection
-	NetworkId uint8 `json:"networkId"`
-
-	// address of the connection node: ip, domain, infura, etc
-	Peer string `json:"peer"`
-
-	//connection mode: ipc,http,rpc
-	Mode string `json:"mode"`
-
-	//connection por if required
-	Port uint16 `json:"port"`
-
-	// default ethereum account for transactioning
-	Address string `json:"address"`
-
-	// user or device private key
-	Key string `json:"key"`
+	protocol.ProfileRequest
 
 	// service version when profile was generated
 	Version int `json:"version"`
@@ -89,10 +72,7 @@ func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
 }
 func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfile {
-	profile.NetworkId = uint8(profile.readInt(claims["networkId"]))
-	profile.Peer = profile.readString(claims["peer"])
-	profile.Mode = profile.readString(claims["mode"])
-	profile.Port = profile.readUint16(claims["port"])
+	profile.RpcEndpoint = profile.readString(claims["endpoint"])
 	profile.Address = profile.readString(claims["address"])
 	profile.Key = profile.readString(claims["key"])
 	profile.Version = profile.readInt(claims["version"])
@@ -192,7 +172,7 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	profile = profile.Populate(mapc)
 
 	//check profile validity
-	profile.Valididity = profile.Peer != ""
+	profile.Valididity = profile.RpcEndpoint != ""
 
 	if profile.Valididity {
 		return profile, nil
@@ -211,13 +191,12 @@ func NewConnectionProfile() ConnectionProfile {
 func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
-		Id:        util.GenerateUUIDFromEntropy(),
-		NetworkId: data.NetworkId,
-		Peer:      data.Peer,    //required
-		Address:   data.Address, //required
-		Key:       data.Key,
-		Mode:      data.Mode, //required
-		Port:      data.Port, //required
+		Id: util.GenerateUUIDFromEntropy(),
+		ProfileRequest: protocol.ProfileRequest{
+			RpcEndpoint: data.RpcEndpoint,
+			Address:     data.Address, //required
+			Key:         data.Key,
+		},
 		Issuer:    "etherniti.org",
 		ExpiresAt: now.Add(config.TokenExpiration).Unix(),
 		NotBefore: now.Unix(),
@@ -226,7 +205,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 	}
 	//check profile validity
 	p.Valididity = p.Id != "" &&
-		p.Peer != "" &&
+		p.RpcEndpoint != "" &&
 		p.Address != "" &&
 		p.Key != ""
 	return p
@@ -235,11 +214,11 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
-		Peer:    "http://127.0.0.1:8545",
-		Mode:    "http",
-		Port:    8545,
-		Address: "0x0",
-		Key:     "0x0",
+		ProfileRequest: protocol.ProfileRequest{
+			RpcEndpoint: "http://127.0.0.1:8545",
+			Address:     "0x0",
+			Key:         "0x0",
+		},
 		//standard claims
 		Id:         util.GenerateUUIDFromEntropy(),
 		Issuer:     "etherniti",

@@ -37,6 +37,10 @@ func init() {
 	}
 }
 
+func DomainBlacklist() []string {
+	return domainBlacklist
+}
+
 func DomainBlacklistBytesData() []byte {
 	return domainBlacklistBytes
 }

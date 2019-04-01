@@ -41,7 +41,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	group := e.Group(constants.ApiVersion, next)
 	logger.Info("registering context free routes")
 
-	publicGroup := group.Group(constants.PublicApi, next)
+	publicGroup := group.Group(constants.RootApi, next)
 
 	NewIndexController().RegisterRouters(publicGroup)
 	NewProfileController().RegisterRouters(publicGroup)
@@ -51,15 +51,32 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewContractNameSpaceController().RegisterRouters(publicGroup)
 
 	//register public ethereum network related services
-	NewRopstenController().RegisterRouters(publicGroup)
-	NewRinkebyController().RegisterRouters(publicGroup)
-	NewKovanController().RegisterRouters(publicGroup)
-	NewMainNetController().RegisterRouters(publicGroup)
+	ropstenGroup := group.Group("/ropsten", next)
+	ropstenGroup.Use(jwt)
+	NewRopstenController().RegisterRouters(ropstenGroup)
+
+	rinkebyGroup := group.Group("/rinkeby", next)
+	rinkebyGroup.Use(jwt)
+	NewRinkebyController().RegisterRouters(rinkebyGroup)
+
+	kovanGroup := group.Group("/kovan", next)
+	kovanGroup.Use(jwt)
+	NewKovanController().RegisterRouters(kovanGroup)
+
+	mainnetGroup := group.Group("/mainnet", next)
+	mainnetGroup.Use(jwt)
+	NewMainNetController().RegisterRouters(mainnetGroup)
+
+	infuraGroup := group.Group("/infura", next)
+	infuraGroup.Use(jwt)
+	NewInfuraController().RegisterRouters(infuraGroup)
+
+	quiknodeGroup := group.Group("/quiknode", next)
+	quiknodeGroup.Use(jwt)
+	NewQuikNodeController().RegisterRouters(quiknodeGroup)
 
 	privateGroup := group.Group(constants.PrivateApi, next)
-	//add jwt middleware to private group
 	privateGroup.Use(jwt)
-	// add private or context dependant services
 	NewPrivateNetController().RegisterRouters(privateGroup)
 	NewDevOpsController().RegisterRouters(privateGroup)
 	//NewTokenController(deployer.manager).RegisterRouters(privateGroup)

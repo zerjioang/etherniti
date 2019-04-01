@@ -23,6 +23,9 @@ const (
 
 	mainnet       = "mainnet"
 	mainnetInfura = "https://mainnet.infura.io/4f61378203ca4da4a6b6601bc16a22ad"
+
+	infura   = "infura"
+	quiknode = "quiknode"
 )
 
 // constructor like function
@@ -58,6 +61,22 @@ func NewMainNetController() EthereumPublicController {
 	ctl.Web3Controller = NewWeb3Controller()
 	ctl.SetPeer(mainnetInfura)
 	ctl.SetTargetName(mainnet)
+	return ctl
+}
+
+// constructor like function for user provided infura based connection
+func NewInfuraController() EthereumPublicController {
+	ctl := EthereumPublicController{}
+	ctl.Web3Controller = NewWeb3Controller()
+	ctl.SetTargetName(infura)
+	return ctl
+}
+
+// constructor like function for user provided infura based connection
+func NewQuikNodeController() EthereumPublicController {
+	ctl := EthereumPublicController{}
+	ctl.Web3Controller = NewWeb3Controller()
+	ctl.SetTargetName(quiknode)
 	return ctl
 }
 

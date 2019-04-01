@@ -47,6 +47,15 @@ func (ctl SecurityController) phisingBlacklist(c echo.Context) error {
 	return c.JSONBlob(code, security.PhishingBlacklistRawBytes())
 }
 
+// return a list of fuzzy domains
+// This list is maintained by the MetaMask project at
+// https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
+func (ctl SecurityController) fuzzylist(c echo.Context) error {
+	var code int
+	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
+	return c.JSONBlob(code, security.FuzzyDataRawBytes())
+}
+
 // return whether given domain name is dangerous or not
 func (ctl SecurityController) isDangerousDomain(c echo.Context) error {
 	var code int
@@ -57,8 +66,9 @@ func (ctl SecurityController) isDangerousDomain(c echo.Context) error {
 
 func (ctl SecurityController) RegisterRouters(router *echo.Group) {
 	logger.Debug("exposing index controller methods")
-	router.GET("/security/domain/check/:domain", ctl.isDangerousDomain)
-	router.GET("/security/domain/blacklist", ctl.domainBlacklist)
-	router.GET("/security/phishing/blacklist", ctl.phisingBlacklist)
-	router.GET("/security/phishing/whitelist", ctl.phisingWhitelist)
+	router.GET("/security/check/:domain", ctl.isDangerousDomain)
+	router.GET("/security/domain-blacklist", ctl.domainBlacklist)
+	router.GET("/security/phishing-blacklist", ctl.phisingBlacklist)
+	router.GET("/security/phishing-whitelist", ctl.phisingWhitelist)
+	router.GET("/security/phishing-fuzzing", ctl.fuzzylist)
 }

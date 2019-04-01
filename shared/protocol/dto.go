@@ -13,17 +13,8 @@ type Profile struct {
 // new profile request dto
 type ProfileRequest struct {
 
-	//network id of target connection
-	NetworkId uint8 `json:"networkId" form:"networkId" query:"networkId"`
-
 	// address of the connection node: ip, domain, infura, etc
-	Peer string `json:"peer" form:"peer" query:"peer"`
-
-	//connection mode: ipc,http,rpc
-	Mode string `json:"mode" form:"mode" query:"mode"`
-
-	//connection por if required
-	Port uint16 `json:"port" form:"port" query:"port"`
+	RpcEndpoint string `json:"endpoint" form:"endpoint" query:"endpoint"`
 
 	// default ethereum account for transactioning
 	Address string `json:"address" form:"address" query:"address"`
@@ -41,20 +32,32 @@ type EntropyResponse struct {
 	Raw []byte `json:"entropy" form:"entropy" query:"entropy"`
 }
 
-// new mnemonic request dto
-type NewMnemonicRequest struct {
+// mnemonic request dto
+type MnemonicRequest struct {
 	EntropyRequest
 
 	// language
 	Language string `json:"language" form:"language" query:"language"`
+	// Mnemonic secret
+	Secret string `json:"secret" form:"secret" query:"secret"`
 }
 
-// new hd wallet request dto
+// new mnemonic request dto
+type MnemonicResponse struct {
+	EntropyRequest
+
+	// language
+	Language string `json:"language" form:"language" query:"language"`
+	// Mnemonic hashed seed
+	EncryptedSeed string `json:"encSeed" form:"encSeed" query:"encSeed"`
+}
+
+// hd wallet request dto
 type NewHdWalletRequest struct {
-	NewMnemonicRequest
+	MnemonicRequest
 }
 
-// new hd wallet response dto
+// hd wallet response dto
 type HdWalletResponse struct {
 	MasterPrivateKey string `json:"private" form:"private" query:"private"`
 	MasterPublicKey  string `json:"public" form:"public" query:"public"`
