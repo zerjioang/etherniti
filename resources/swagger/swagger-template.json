@@ -1539,10 +1539,10 @@
           {
             "in": "path",
             "name": "contract",
-            "description": "address of the contract to be queried",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
             "type": "string",
-            "example": "0x5699b1a504f139100B889C7280074C028eb318bB",
-            "default": "0x5699b1a504f139100B889C7280074C028eb318bB",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
             "required": true
           }
         ],

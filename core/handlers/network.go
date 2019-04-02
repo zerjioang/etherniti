@@ -23,6 +23,7 @@ type NetworkController struct {
 func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
 	ctl.cache = cache.NewMemoryCache()
+	ctl.networkName = ""
 	return ctl
 }
 

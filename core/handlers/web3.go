@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/eth/paramencoder"
-
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
@@ -188,14 +186,14 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	//try to get this information from the cache
 	// methodName example: /v1/public/ropsten/net/version
 	chunks := strings.Split(methodName, "/")
-	if len(chunks) < 5 {
+	if len(chunks) < 4 {
 		return api.ErrorStr(c, "invalid url or web3 method provided")
 	}
 	var key string
-	if len(chunks) == 5 {
-		key = chunks[4]
-	} else if len(chunks) == 6 {
-		key = chunks[4] + "_" + chunks[5]
+	if len(chunks) == 4 {
+		key = chunks[3]
+	} else if len(chunks) == 5 {
+		key = chunks[3] + "_" + chunks[4]
 	}
 	//resolve method name from key value
 	method := methodMap[key]
@@ -332,7 +330,7 @@ func (ctl *Web3Controller) totalSupply(c echo.Context) error {
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
-	raw, err := client.Call("totalSupply", paramencoder.TotalSupplyParams)
+	raw, err := client.TotalSupply(contractAddress)
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
@@ -345,38 +343,42 @@ func (ctl *Web3Controller) totalSupply(c echo.Context) error {
 	}
 }
 
+func (ctl *Web3Controller) deployContract(c echo.Context) error {
+	var code int
+	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
+	return c.JSONBlob(code, []byte{})
+}
+
 // END of ERC20 functions
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
-	prefix := "/" + ctl.networkName
-	if ctl.networkName == "" {
-		// no network name set. private network ahead
-		prefix = ctl.networkName
-	}
-	router.GET(prefix+"/client/version", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/net/version", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/net/peers", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/protocol/version", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/syncing", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/coinbase", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/mining", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/hashrate", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/gasprice", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/accounts", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/block/latest", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/block/current", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/compilers", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/shh/version", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/shh/new", ctl.makeRpcCallNoParams)
-	router.GET(prefix+"/shh/group", ctl.makeRpcCallNoParams)
+	router.GET("/client/version", ctl.makeRpcCallNoParams)
+	router.GET("/net/version", ctl.makeRpcCallNoParams)
+	router.GET("/net/peers", ctl.makeRpcCallNoParams)
+	router.GET("/protocol/version", ctl.makeRpcCallNoParams)
+	router.GET("/syncing", ctl.makeRpcCallNoParams)
+	router.GET("/coinbase", ctl.makeRpcCallNoParams)
+	router.GET("/mining", ctl.makeRpcCallNoParams)
+	router.GET("/hashrate", ctl.makeRpcCallNoParams)
+	router.GET("/gasprice", ctl.makeRpcCallNoParams)
+	router.GET("/accounts", ctl.makeRpcCallNoParams)
+	router.GET("/block/latest", ctl.makeRpcCallNoParams)
+	router.GET("/block/current", ctl.makeRpcCallNoParams)
+	router.GET("/compilers", ctl.makeRpcCallNoParams)
+	router.GET("/shh/version", ctl.makeRpcCallNoParams)
+	router.GET("/shh/new", ctl.makeRpcCallNoParams)
+	router.GET("/shh/group", ctl.makeRpcCallNoParams)
 
-	router.GET(prefix+"/is/contract/:address", ctl.isContractAddress)
+	router.GET("/is/contract/:address", ctl.isContractAddress)
 
-	router.GET(prefix+"/accountsBalanced", ctl.getAccountsWithBalance)
+	router.GET("/accountsBalanced", ctl.getAccountsWithBalance)
 
-	router.GET(prefix+"/balance/:address", ctl.getBalance)
-	router.GET(prefix+"/balance/:address/block/:block", ctl.getBalanceAtBlock)
+	router.GET("/balance/:address", ctl.getBalance)
+	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
 
-	router.GET(prefix+"/erc20/:contract/totalsupply", ctl.totalSupply)
+	router.GET("/erc20/:contract/totalsupply", ctl.totalSupply)
+
+	// devops calls
+	router.POST("/devops/deploy", ctl.deployContract)
 }

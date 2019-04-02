@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/eth/paramencoder"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 
 	"github.com/labstack/gommon/log"
@@ -87,6 +89,28 @@ func (rpc EthRPC) URL() string {
 }
 
 // Call returns raw response of method call
+/*
+
+eth_call
+
+Executes a new message call immediately without creating a transaction on the block chain.
+Parameters
+
+    Object - The transaction call object
+
+    from: DATA, 20 Bytes - (optional) The address the transaction is sent from.
+    to: DATA, 20 Bytes - The address the transaction is directed to.
+    gas: QUANTITY - (optional) Integer of the gas provided for the transaction execution. eth_call consumes zero gas, but this parameter may be needed by some executions.
+    gasPrice: QUANTITY - (optional) Integer of the gasPrice used for each paid gas
+    value: QUANTITY - (optional) Integer of the value sent with this transaction
+    data: DATA - (optional) Hash of the method signature and encoded parameters. For details see Ethereum Contract ABI
+
+    QUANTITY|TAG - integer block number, or the string "latest", "earliest" or "pending", see the default block parameter
+
+Returns
+
+DATA - the return value of executed contract.
+*/
 func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, error) {
 	request := ethRequest{
 		ID:      1,
@@ -105,21 +129,17 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 		return nil, err
 	}
 
-	data, err := ioutil.ReadAll(response.Body)
+	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
-	//data readed, close body
+	//responseData readed, close body
 	_ = response.Body.Close()
 
-	if rpc.Debug {
-		log.Debug("request method", method)
-		log.Debug("request body", body)
-		log.Debug("request data", data)
-	}
+	log.Info("response received", string(responseData))
 
 	resp := ethResponse{}
-	unmErr := json.Unmarshal(data, &resp)
+	unmErr := json.Unmarshal(responseData, &resp)
 	if unmErr != nil {
 		return nil, unmErr
 	}
@@ -542,6 +562,23 @@ func (rpc EthRPC) EthGetLogs(params FilterParams) ([]Log, error) {
 // Eth1 returns 1 ethereum value (10^18 wei)
 func (rpc EthRPC) Eth1() *big.Int {
 	return Eth1()
+}
+
+func (rpc EthRPC) TotalSupply(contract string) (json.RawMessage, error) {
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":       contract,
+		"data":     paramencoder.TotalSupplyParams,
+		"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,
+	}, "latest")
+}
+
+// curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}
+func (rpc EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawMessage, error) {
+	return rpc.Call("eth_sendTransaction", map[string]string{
+		"from": fromAddress,
+		"data": bytecode,
+	})
 }
 
 // Eth1 returns 1 ethereum value (10^18 wei)

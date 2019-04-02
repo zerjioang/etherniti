@@ -3,6 +3,23 @@
 
 package handlers
 
+const (
+	ropsten       = "ropsten"
+	ropstenInfura = "https://ropsten.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
+
+	rinkeby       = "rinkeby"
+	rinkebyInfura = "https://rinkeby.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
+
+	kovan       = "kovan"
+	kovanInfura = "https://kovan.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
+
+	mainnet       = "mainnet"
+	mainnetInfura = "https://mainnet.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
+
+	infura   = "infura"
+	quiknode = "quiknode"
+)
+
 type EthereumPublicController struct {
 	Web3Controller
 }
@@ -10,23 +27,6 @@ type EthereumPublicController struct {
 type EthereumPrivateController struct {
 	Web3Controller
 }
-
-const (
-	ropsten       = "ropsten"
-	ropstenInfura = "https://ropsten.infura.io/4f61378203ca4da4a6b6601bc16a22ad"
-
-	rinkeby       = "rinkeby"
-	rinkebyInfura = "https://rinkeby.infura.io/4f61378203ca4da4a6b6601bc16a22ad"
-
-	kovan       = "kovan"
-	kovanInfura = "https://kovan.infura.io/4f61378203ca4da4a6b6601bc16a22ad"
-
-	mainnet       = "mainnet"
-	mainnetInfura = "https://mainnet.infura.io/4f61378203ca4da4a6b6601bc16a22ad"
-
-	infura   = "infura"
-	quiknode = "quiknode"
-)
 
 // constructor like function
 func NewRopstenController() EthereumPublicController {
