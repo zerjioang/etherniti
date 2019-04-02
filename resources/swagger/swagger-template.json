@@ -336,7 +336,7 @@
         }
       }
     },
-    "/public/wallet/new": {
+    "/public/wallet": {
       "post": {
         "tags": ["wallet"],
         "summary": "Generate a new Ethereum compatible account",

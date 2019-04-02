@@ -242,7 +242,7 @@ func (ctl WalletController) isValidAddress(c echo.Context) error {
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing wallet controller methods")
-	router.POST("/wallet/new", ctl.generateAddress)
+	router.POST("/wallet", ctl.generateAddress)
 	router.GET("/wallet/verify/:address", ctl.isValidAddress)
 	router.GET("/wallet/entropy/:bits", ctl.Entropy)
 	router.POST("/wallet/mnemonic/bip39", ctl.Mnemonic)
