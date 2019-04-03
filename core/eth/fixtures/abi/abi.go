@@ -63,7 +63,8 @@ func (abi ABI) Pack(name string, args ...interface{}) ([]byte, error) {
 	if !exist {
 		return nil, fmt.Errorf("method '%s' not found", name)
 	}
-	arguments, err := method.Inputs.Pack(args...)
+	mi := method.Inputs
+	arguments, err := mi.Pack(args...)
 	if err != nil {
 		return nil, err
 	}

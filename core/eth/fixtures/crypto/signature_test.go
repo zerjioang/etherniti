@@ -19,6 +19,7 @@ package crypto
 import (
 	"bytes"
 	"crypto/ecdsa"
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"reflect"
 	"testing"
 
@@ -60,13 +61,13 @@ func TestVerifySignature(t *testing.T) {
 	if VerifySignature(testpubkey, testmsg, nil) {
 		t.Errorf("nil signature valid")
 	}
-	if VerifySignature(testpubkey, testmsg, append(fixtures.CopyBytes(sig), 1, 2, 3)) {
+	if VerifySignature(testpubkey, testmsg, append(common.CopyBytes(sig), 1, 2, 3)) {
 		t.Errorf("signature valid with extra bytes at the end")
 	}
 	if VerifySignature(testpubkey, testmsg, sig[:len(sig)-2]) {
 		t.Errorf("signature valid even though it's incomplete")
 	}
-	wrongkey := fixtures.CopyBytes(testpubkey)
+	wrongkey := common.CopyBytes(testpubkey)
 	wrongkey[10]++
 	if VerifySignature(wrongkey, testmsg, sig) {
 		t.Errorf("signature valid with with wrong public key")
@@ -97,7 +98,7 @@ func TestDecompressPubkey(t *testing.T) {
 	if _, err := DecompressPubkey(testpubkeyc[:5]); err == nil {
 		t.Errorf("no error for incomplete pubkey")
 	}
-	if _, err := DecompressPubkey(append(fixtures.CopyBytes(testpubkeyc), 1, 2, 3)); err == nil {
+	if _, err := DecompressPubkey(append(common.CopyBytes(testpubkeyc), 1, 2, 3)); err == nil {
 		t.Errorf("no error for pubkey with extra bytes at the end")
 	}
 }

@@ -69,7 +69,8 @@ func typeCheck(t Type, value reflect.Value) error {
 
 	// Check base type validity. Element types will be checked later on.
 	if t.Kind != value.Kind() {
-		return typeErr(t.Kind, value.Kind())
+		vk := value.Kind()
+		return typeErr(t.Kind, vk)
 	} else if t.T == FixedBytesTy && t.Size != value.Len() {
 		return typeErr(t.Type, value.Type())
 	} else {

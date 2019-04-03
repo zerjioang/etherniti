@@ -12,6 +12,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
+
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
@@ -564,12 +567,68 @@ func (rpc EthRPC) Eth1() *big.Int {
 	return Eth1()
 }
 
-func (rpc EthRPC) TotalSupply(contract string) (json.RawMessage, error) {
+func (rpc EthRPC) Erc20TotalSupply(contract string) (json.RawMessage, error) {
 	return rpc.Call("eth_call", map[string]interface{}{
-		"to":       contract,
-		"data":     paramencoder.TotalSupplyParams,
-		"gas":      "0xaae60", //700000,
-		"gasPrice": "0x15f90", //90000,
+		"to":   contract,
+		"data": paramencoder.TotalSupplyParams,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
+func (rpc EthRPC) Erc20Decimals(contract string) (json.RawMessage, error) {
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": paramencoder.DecimalsParams,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
+func (rpc EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMessage, error) {
+	tokenOwnerAddress, decodeErr := fromStringToAddress(tokenOwner)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
+		return nil, decodeErr
+	}
+	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("balanceOf", tokenOwnerAddress)
+	if encErr != nil {
+		logger.Error("failed to encode ABI parameters for ERC20 balanceof method", encErr)
+		return nil, encErr
+	}
+	// encode to hexadecimal abiparams
+	dataContent := hex.ToEthHex(abiparams)
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": dataContent,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
+func (rpc EthRPC) Erc20Allowance(contract string, tokenOwner string, spender string) (json.RawMessage, error) {
+	tokenOwnerAddress, decodeErr := fromStringToAddress(tokenOwner)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
+		return nil, decodeErr
+	}
+	spenderAddress, decodeErr := fromStringToAddress(spender)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
+		return nil, decodeErr
+	}
+	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("allowance", tokenOwnerAddress, spenderAddress)
+	if encErr != nil {
+		logger.Error("failed to encode ABI parameters for ERC20 allowance method", encErr)
+		return nil, encErr
+	}
+	// encode to hexadecimal abiparams
+	dataContent := hex.ToEthHex(abiparams)
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": dataContent,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
 	}, "latest")
 }
 
@@ -579,6 +638,19 @@ func (rpc EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawM
 		"from": fromAddress,
 		"data": bytecode,
 	})
+}
+
+// helper methods
+
+func fromStringToAddress(addr string) (fixtures.Address, error) {
+	var a fixtures.Address
+	raw, decodeErr := hex.FromEthHex(addr)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
+		return a, decodeErr
+	}
+	a.SetBytes(raw)
+	return a, nil
 }
 
 // Eth1 returns 1 ethereum value (10^18 wei)

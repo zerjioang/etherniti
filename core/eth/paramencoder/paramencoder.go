@@ -5,6 +5,7 @@ package paramencoder
 
 import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 )
@@ -65,7 +66,7 @@ const (
 )
 
 var (
-	erc20AbiModel                     *abi.ABI
+	erc20AbiModel                     abi.ABI
 	TotalSupplyParams, DecimalsParams string
 )
 
@@ -87,28 +88,37 @@ so the full data field should be identifier + "000000000000000000000000" + paylo
 for example: in the case of total supply (0 params needed), would be:
 0x18160ddd0000000000000000000000000000000000000000000000000000000000000000
 
+# The method selector (4 bytes)
+0xee919d5
+# The 1st argument (32 bytes)
+00000000000000000000000000000000000000000000000000000000000000001
+
 */
 func init() {
-	erc20AbiModel = new(abi.ABI)
 	unmErr := erc20AbiModel.UnmarshalJSON([]byte(erc20Abi))
 	if unmErr != nil {
 		logger.Error("failed to load ERC20 interaction model internals")
 	}
 	var err error
+
 	//preload totalsupply function params
 	var temp []byte
 	temp, err = erc20AbiModel.Pack("totalSupply")
 	if err != nil {
 		logger.Error("failed to load ERC20 'totalSupply' function interaction model internals")
 	}
-	TotalSupplyParams = hex.ToHex(temp)
+	// add 32 byte padding to set that this function has no parameters
+	TotalSupplyParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+
 	//preload decimals function params
 	temp, err = erc20AbiModel.Pack("decimals")
 	if err != nil {
 		logger.Error("failed to load ERC20 'decimals' function interaction model internals")
 	}
-	DecimalsParams = hex.ToHex(temp)
+	// add 32 byte padding to set that this function has no parameters
+	DecimalsParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+}
 
-	//overwrite params
-	TotalSupplyParams = "0x18160ddd0000000000000000000000000000000000000000000000000000000000000000"
+func LoadErc20Abi() abi.ABI {
+	return erc20AbiModel
 }

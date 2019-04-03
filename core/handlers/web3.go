@@ -313,7 +313,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 
 // Start ERC20 functions
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) totalSupply(c echo.Context) error {
+func (ctl *Web3Controller) erc20totalSupply(c echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -330,7 +330,7 @@ func (ctl *Web3Controller) totalSupply(c echo.Context) error {
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
-	raw, err := client.TotalSupply(contractAddress)
+	raw, err := client.Erc20TotalSupply(contractAddress)
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
@@ -340,6 +340,114 @@ func (ctl *Web3Controller) totalSupply(c echo.Context) error {
 		)
 	} else {
 		return api.SendSuccess(c, "totalsupply", raw)
+	}
+}
+
+// get the total supply of the contract at given target network
+func (ctl *Web3Controller) erc20decimals(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20Decimals(contractAddress)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "decimals", raw)
+	}
+}
+
+// get the total supply of the contract at given target network
+func (ctl *Web3Controller) erc20Balanceof(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	address := c.Param("address")
+	//input data validation
+	if address == "" {
+		return api.ErrorStr(c, "invalid account address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20BalanceOf(contractAddress, address)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "balanceof", raw)
+	}
+}
+
+// get the allowance status of the contract at given target network
+func (ctl *Web3Controller) erc20Allowance(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract ownerAddress provided")
+	}
+	ownerAddress := c.Param("owner")
+	//input data validation
+	if ownerAddress == "" {
+		return api.ErrorStr(c, "invalid account owner address provided")
+	}
+	spenderAddress := c.Param("spender")
+	//input data validation
+	if spenderAddress == "" {
+		return api.ErrorStr(c, "invalid account spender address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "allowance", raw)
 	}
 }
 
@@ -377,7 +485,10 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/balance/:address", ctl.getBalance)
 	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
 
-	router.GET("/erc20/:contract/totalsupply", ctl.totalSupply)
+	router.GET("/erc20/:contract/totalsupply", ctl.erc20totalSupply)
+	router.GET("/erc20/:contract/decimals", ctl.erc20decimals)
+	router.GET("/erc20/:contract/balanceof/:address", ctl.erc20Balanceof)
+	router.GET("/erc20/:contract/allowance/:owner/to/:spender", ctl.erc20Allowance)
 
 	// devops calls
 	router.POST("/devops/deploy", ctl.deployContract)
