@@ -1514,6 +1514,110 @@
         }
       }
     },
+    "/{network}/erc20/{contract}/name": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the name of ERC 20 smart contract",
+        "description": "Read the name of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-name",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum name information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method name does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/symbol": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the symbol of ERC 20 smart contract",
+        "description": "Read the symbol of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-symbol",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum symbol information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method symbol does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
     "/{network}/erc20/{contract}/totalsupply": {
       "get": {
         "tags": ["erc20", "private"],

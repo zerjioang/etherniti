@@ -66,8 +66,11 @@ const (
 )
 
 var (
-	erc20AbiModel                     abi.ABI
-	TotalSupplyParams, DecimalsParams string
+	erc20AbiModel     abi.ABI
+	NameParams        string
+	DecimalsParams    string
+	TotalSupplyParams string
+	SymbolParams string
 )
 
 /*
@@ -117,6 +120,20 @@ func init() {
 	}
 	// add 32 byte padding to set that this function has no parameters
 	DecimalsParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+
+	//preload name function params
+	temp, err = erc20AbiModel.Pack("name")
+	if err != nil {
+		logger.Error("failed to load ERC20 'name' function interaction model internals")
+	}
+	NameParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+
+	//preload symbol function params
+	temp, err = erc20AbiModel.Pack("symbol")
+	if err != nil {
+		logger.Error("failed to load ERC20 'symbol' function interaction model internals")
+	}
+	SymbolParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
 }
 
 func LoadErc20Abi() abi.ABI {

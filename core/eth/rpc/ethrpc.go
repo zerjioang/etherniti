@@ -39,7 +39,8 @@ var (
 type ethResponse struct {
 	ID      int             `json:"id"`
 	JSONRPC string          `json:"jsonrpc"`
-	Result  json.RawMessage `json:"result"`
+	// Result  json.RawMessage `json:"result"`
+	Result  string `json:"result"`
 	Error   *EthError       `json:"error"`
 }
 
@@ -151,8 +152,7 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 		return nil, resp.Errored()
 	}
 
-	return resp.Result, nil
-
+	return []byte(resp.Result), nil
 }
 
 // RawCall returns raw response of method call (Deprecated)
@@ -576,6 +576,24 @@ func (rpc EthRPC) Erc20TotalSupply(contract string) (json.RawMessage, error) {
 	}, "latest")
 }
 
+func (rpc EthRPC) Erc20Symbol(contract string) (json.RawMessage, error) {
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": paramencoder.SymbolParams,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
+func (rpc EthRPC) Erc20Name(contract string) (json.RawMessage, error) {
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": paramencoder.NameParams,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
 func (rpc EthRPC) Erc20Decimals(contract string) (json.RawMessage, error) {
 	return rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
@@ -620,6 +638,27 @@ func (rpc EthRPC) Erc20Allowance(contract string, tokenOwner string, spender str
 	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("allowance", tokenOwnerAddress, spenderAddress)
 	if encErr != nil {
 		logger.Error("failed to encode ABI parameters for ERC20 allowance method", encErr)
+		return nil, encErr
+	}
+	// encode to hexadecimal abiparams
+	dataContent := hex.ToEthHex(abiparams)
+	return rpc.Call("eth_call", map[string]interface{}{
+		"to":   contract,
+		"data": dataContent,
+		/*"gas":      "0xaae60", //700000,
+		"gasPrice": "0x15f90", //90000,*/
+	}, "latest")
+}
+
+func (rpc EthRPC) Erc20Transfer(contract string, address string, amount int) (json.RawMessage, error) {
+	senderAddress, decodeErr := fromStringToAddress(address)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
+		return nil, decodeErr
+	}
+	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("transfer", senderAddress, amount)
+	if encErr != nil {
+		logger.Error("failed to encode ABI parameters for ERC20 transfer method", encErr)
 		return nil, encErr
 	}
 	// encode to hexadecimal abiparams

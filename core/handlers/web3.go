@@ -4,7 +4,10 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/eth/paramencoder"
+	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -312,6 +315,79 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 }
 
 // Start ERC20 functions
+
+// get the total supply of the contract at given target network
+func (ctl *Web3Controller) erc20Name(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20Name(contractAddress)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "name", raw)
+	}
+}
+
+// get the total supply of the contract at given target network
+func (ctl *Web3Controller) erc20Symbol(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20Symbol(contractAddress)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		unpacked := ""
+		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		if decodeErr != nil {
+			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
+		}
+		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "name", rawBytes)
+		if err != nil {
+			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
+		} else {
+			return api.SendSuccess(c, "symbol", unpacked)
+		}
+	}
+}
+
 // get the total supply of the contract at given target network
 func (ctl *Web3Controller) erc20totalSupply(c echo.Context) error {
 	contractAddress := c.Param("contract")
@@ -415,7 +491,7 @@ func (ctl *Web3Controller) erc20Allowance(c echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, "invalid contract ownerAddress provided")
+		return api.ErrorStr(c, "invalid contract address provided")
 	}
 	ownerAddress := c.Param("owner")
 	//input data validation
@@ -449,6 +525,78 @@ func (ctl *Web3Controller) erc20Allowance(c echo.Context) error {
 	} else {
 		return api.SendSuccess(c, "allowance", raw)
 	}
+}
+
+// transfer(address to, uint tokens) public returns (bool success);
+// ------------------------------------------------------------------------
+// Transfer the balance from token owner's account to `to` account
+// - Owner's account must have sufficient balance to transfer
+// - 0 value transfers are allowed
+// ------------------------------------------------------------------------
+func (ctl *Web3Controller) erc20Transfer(c echo.Context) error {
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
+	receiverAddress := c.Param("address")
+	//input data validation
+	if receiverAddress == "" {
+		return api.ErrorStr(c, "invalid transfer receiver address provided")
+	}
+	amount := c.Param("amount")
+	tokenAmount, pErr := strconv.Atoi(amount)
+	//input data validation
+	if amount == "" || pErr!=nil {
+		return api.ErrorStr(c, "invalid token amount value provided")
+	}
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			util.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "allowance", raw)
+	}
+	return nil
+}
+//approve(address spender, uint tokens) public returns (bool success);
+// ------------------------------------------------------------------------
+// Token owner can approve for `spender` to transferFrom(...) `tokens`
+// from the token owner's account
+//
+// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
+// recommends that there are no checks for the approval double-spend attack
+// as this should be implemented in user interfaces
+// ------------------------------------------------------------------------
+func (ctl *Web3Controller) erc20Approve(c echo.Context) error {
+	return nil
+}
+//transferFrom(address from, address to, uint tokens) public returns (bool success);
+// ------------------------------------------------------------------------
+// Transfer `tokens` from the `from` account to the `to` account
+//
+// The calling account must already have sufficient tokens approve(...)-d
+// for spending from the `from` account and
+// - From account must have sufficient balance to transfer
+// - Spender must have sufficient allowance to transfer
+// - 0 value transfers are allowed
+// ------------------------------------------------------------------------
+func (ctl *Web3Controller) erc20TransferFrom(c echo.Context) error {
+	return nil
 }
 
 func (ctl *Web3Controller) deployContract(c echo.Context) error {
@@ -485,10 +633,13 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/balance/:address", ctl.getBalance)
 	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
 
+	router.GET("/erc20/:contract/name", ctl.erc20Name)
+	router.GET("/erc20/:contract/symbol", ctl.erc20Symbol)
 	router.GET("/erc20/:contract/totalsupply", ctl.erc20totalSupply)
 	router.GET("/erc20/:contract/decimals", ctl.erc20decimals)
 	router.GET("/erc20/:contract/balanceof/:address", ctl.erc20Balanceof)
 	router.GET("/erc20/:contract/allowance/:owner/to/:spender", ctl.erc20Allowance)
+	router.GET("/erc20/:contract/transfer/:address/:amount", ctl.erc20Transfer)
 
 	// devops calls
 	router.POST("/devops/deploy", ctl.deployContract)
