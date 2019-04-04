@@ -28,6 +28,7 @@ func BenchmarkRadixResolve(b *testing.B) {
 	b.SetBytes(1)
 	key := "1.41.132.176"
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = r.Get(key)
 	}
@@ -50,6 +51,7 @@ func BenchmarkMapResolve(b *testing.B) {
 	b.SetBytes(1)
 	// run the Fib function b.N times
 	key := "1.41.132.176"
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = mapper[key]
 	}
@@ -72,6 +74,7 @@ func BenchmarkMapUint32Resolve(b *testing.B) {
 	b.SetBytes(1)
 	key := util.Ip2int("1.41.132.176")
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = mapper[key]
 	}

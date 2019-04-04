@@ -37,11 +37,11 @@ var (
 )
 
 type ethResponse struct {
-	ID      int             `json:"id"`
-	JSONRPC string          `json:"jsonrpc"`
+	ID      int    `json:"id"`
+	JSONRPC string `json:"jsonrpc"`
 	// Result  json.RawMessage `json:"result"`
-	Result  string `json:"result"`
-	Error   *EthError       `json:"error"`
+	Result string    `json:"result"`
+	Error  *EthError `json:"error"`
 }
 
 func (response ethResponse) Errored() error {

@@ -9,6 +9,7 @@ func BenchmarkUnixSocketListener(b *testing.B) {
 	b.Run("instantiation", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			NewSocketListener()
 		}
@@ -17,6 +18,7 @@ func BenchmarkUnixSocketListener(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		l := NewSocketListener()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			l.RunMode("", false)
 		}
@@ -25,6 +27,7 @@ func BenchmarkUnixSocketListener(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		l := NewSocketListener()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			l.RunMode("", true)
 		}

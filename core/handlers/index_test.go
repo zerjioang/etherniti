@@ -125,6 +125,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 	b.Run("instantiation", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = NewIndexController()
 		}
@@ -133,6 +134,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		ctl := NewIndexController()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			ctl.status()
 		}
@@ -142,6 +144,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		ctl := NewIndexController()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			ctl.refreshStatusData()
 		}
@@ -151,6 +154,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		ctl := NewIndexController()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			ctl.integrity()
 		}
@@ -160,6 +164,7 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		ctl := NewIndexController()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			ctl.refreshIntegrityData()
 		}

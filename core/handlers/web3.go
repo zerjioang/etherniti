@@ -4,11 +4,12 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/paramencoder"
-	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/eth/paramencoder"
+	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -547,7 +548,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.Context) error {
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
-	if amount == "" || pErr!=nil {
+	if amount == "" || pErr != nil {
 		return api.ErrorStr(c, "invalid token amount value provided")
 	}
 	cc, ok := c.(*server.EthernitiContext)
@@ -573,6 +574,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.Context) error {
 	}
 	return nil
 }
+
 //approve(address spender, uint tokens) public returns (bool success);
 // ------------------------------------------------------------------------
 // Token owner can approve for `spender` to transferFrom(...) `tokens`
@@ -585,6 +587,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.Context) error {
 func (ctl *Web3Controller) erc20Approve(c echo.Context) error {
 	return nil
 }
+
 //transferFrom(address from, address to, uint tokens) public returns (bool success);
 // ------------------------------------------------------------------------
 // Transfer `tokens` from the `from` account to the `to` account

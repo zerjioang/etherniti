@@ -9,6 +9,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 	b.Run("instantiate", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = DiskUsage()
 		}
@@ -16,6 +17,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 	b.Run("instantiate-concurrent", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			go DiskUsage()
 		}
@@ -24,6 +26,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		disk := DiskUsage()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = disk.IsMonitoring()
 		}
@@ -33,6 +36,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.SetBytes(1)
 		disk := DiskUsage()
 		disk.Start("/")
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = disk.All()
 		}
@@ -43,6 +47,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.SetBytes(1)
 		disk := DiskUsage()
 		disk.Start("/")
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			go disk.All()
 		}
@@ -53,6 +58,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.SetBytes(1)
 		disk := DiskUsage()
 		disk.Start("/")
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = disk.Used()
 		}
@@ -62,6 +68,7 @@ func BenchmarkDiskUsage(b *testing.B) {
 		b.SetBytes(1)
 		disk := DiskUsage()
 		disk.Start("/")
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = disk.Free()
 		}

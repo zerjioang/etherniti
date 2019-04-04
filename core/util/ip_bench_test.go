@@ -13,6 +13,7 @@ func BenchmarkIpToUint32(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		val := "1.41.132.176"
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Ip2int(val)
 		}
@@ -20,6 +21,7 @@ func BenchmarkIpToUint32(b *testing.B) {
 	b.Run("convert-string", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Ip2int("1.41.132.176")
 		}
@@ -27,6 +29,7 @@ func BenchmarkIpToUint32(b *testing.B) {
 	b.Run("convert-string-unsafe-inline", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Ip2int("1.41.132.176")
 		}
@@ -34,6 +37,7 @@ func BenchmarkIpToUint32(b *testing.B) {
 	b.Run("convert-string-unsafe", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Ip2int("1.41.132.176")
 		}
@@ -41,6 +45,7 @@ func BenchmarkIpToUint32(b *testing.B) {
 	b.Run("decode-int-to-string", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Int2ip(1697219760)
 		}

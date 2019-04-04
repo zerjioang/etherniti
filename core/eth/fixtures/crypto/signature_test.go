@@ -19,9 +19,10 @@ package crypto
 import (
 	"bytes"
 	"crypto/ecdsa"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"reflect"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )

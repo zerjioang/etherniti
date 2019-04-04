@@ -13,6 +13,7 @@ func BenchmarkBase64(b *testing.B) {
 	b.Run("iterations", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			msg := "Hello, world"
 			encoded := base64.StdEncoding.EncodeToString([]byte(msg))

@@ -15,6 +15,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		entropy, _ := hex.DecodeString("066dca1a2bb7e8a1db2832148ce9933eea0f3ac9548d793112d9a95c9407efad")
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = NewMnemonic(entropy)
 		}
@@ -22,6 +23,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("is-valid", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = IsMnemonicValid("all hour make first leader extend hole alien behind guard gospel lava path output census museum junior mass reopen famous sing advance salt reform")
 		}
@@ -30,6 +32,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("ChineseSimplified", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.ChineseSimplified)
 			}
@@ -37,6 +40,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("ChineseTraditional", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.ChineseTraditional)
 			}
@@ -44,6 +48,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("English", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.English)
 			}
@@ -51,6 +56,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("French", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.French)
 			}
@@ -58,6 +64,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Italian", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.Italian)
 			}
@@ -65,6 +72,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Japanese", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.Japanese)
 			}
@@ -72,6 +80,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Spanish", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				initializeInternalWordlist(wordlists.Spanish)
 			}
@@ -81,6 +90,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("ChineseSimplified", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.ChineseSimplified)
 			}
@@ -88,6 +98,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("ChineseTraditional", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.ChineseTraditional)
 			}
@@ -95,6 +106,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("English", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.English)
 			}
@@ -102,6 +114,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("French", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.French)
 			}
@@ -109,6 +122,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Italian", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.Italian)
 			}
@@ -116,6 +130,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Japanese", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.Japanese)
 			}
@@ -123,6 +138,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("Spanish", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				SetWordList(wordlists.Spanish)
 			}
@@ -131,6 +147,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("get-word-list", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			GetWordList()
 		}
@@ -138,6 +155,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("get-word-list-from-tree", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			GetWordIndexFromTree("")
 		}
@@ -145,6 +163,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("has-word", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			HasWord("")
 		}
@@ -152,6 +171,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("generate-secure-entropy", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = GenerateSecureEntropy(256)
 		}
@@ -159,6 +179,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("new-entropy", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = NewEntropy(256)
 		}
@@ -166,6 +187,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("entropy-from-mnemonic", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = EntropyFromMnemonic("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
 		}
@@ -174,6 +196,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-12", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(12)
 			}
@@ -181,6 +204,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-15", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(15)
 			}
@@ -188,6 +212,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-18", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(18)
 			}
@@ -195,6 +220,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-21", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(21)
 			}
@@ -202,6 +228,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-24", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(24)
 			}
@@ -209,6 +236,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.Run("case-invalid", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				resolveChecksumMask(99)
 			}
@@ -218,6 +246,7 @@ func BenchmarkBip39(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		entropy, _ := NewEntropy(256)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = NewMnemonic(entropy)
 		}
@@ -225,6 +254,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("new-mnemonic-to-byte-array", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = MnemonicToByteArray("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
 		}
@@ -232,6 +262,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("NewSeedWithErrorChecking", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = NewSeedWithErrorChecking("letter advice cage absurd amount doctor acoustic avoid letter advice cage above", "passw0rd-h3r3")
 		}
@@ -239,6 +270,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("NewSeed", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = NewSeed("letter advice cage absurd amount doctor acoustic avoid letter advice cage above", "passw0rd-h3r3")
 		}
@@ -246,6 +278,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("IsMnemonicValid", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = IsMnemonicValid("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
 		}
@@ -253,6 +286,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("addChecksum", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 		}
 	})
@@ -260,6 +294,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("computeChecksum", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 		}
 	})
@@ -267,6 +302,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("validateEntropyBitSize", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = validateEntropyBitSize(128)
 		}
@@ -275,6 +311,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("padByteSlice", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 		}
 	})
@@ -282,6 +319,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("compareByteSlices", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 		}
 	})
@@ -289,6 +327,7 @@ func BenchmarkBip39(b *testing.B) {
 	b.Run("splitMnemonicWords", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = splitMnemonicWords("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
 		}

@@ -13,6 +13,7 @@ func BenchmarkHexIntUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		test := struct {
 			ID hexInt `json:"id"`
@@ -27,6 +28,7 @@ func BenchmarkHexBigUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		test := struct {
 			ID hexBig `json:"id"`
@@ -45,6 +47,7 @@ func BenchmarkSyncingUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		syncing := new(Syncing)
 		_ = json.Unmarshal([]byte("0"), syncing)
@@ -62,6 +65,7 @@ func BenchmarkTransactionUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		tx := new(Transaction)
 		_ = json.Unmarshal([]byte("111"), tx)
@@ -87,6 +91,7 @@ func BenchmarkLogUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		log := new(Log)
 		_ = json.Unmarshal([]byte("111"), log)
@@ -110,6 +115,7 @@ func BenchmarkTransactionReceiptUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		receipt := new(TransactionReceipt)
 		_ = json.Unmarshal([]byte("[1]"), receipt)

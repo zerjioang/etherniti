@@ -14,6 +14,7 @@ func BenchmarkCounterPtr(b *testing.B) {
 	b.Run("instantiate", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = counter.NewCounter32()
 		}
@@ -22,6 +23,7 @@ func BenchmarkCounterPtr(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		c := counter.NewCounter32()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			c.Increment()
 		}
@@ -30,6 +32,7 @@ func BenchmarkCounterPtr(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		c := counter.NewCounter32()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = c.Get()
 		}

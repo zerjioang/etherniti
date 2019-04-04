@@ -13,6 +13,7 @@ func BenchmarkMemStatus(b *testing.B) {
 	b.Run("instantiate-struct", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = MemStatusMonitor()
 		}
@@ -20,6 +21,7 @@ func BenchmarkMemStatus(b *testing.B) {
 	b.Run("instantiate-ptr", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = MemStatusMonitorPtr()
 		}
@@ -27,6 +29,7 @@ func BenchmarkMemStatus(b *testing.B) {
 	b.Run("instantiate-internal", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = memStatusMonitor()
 		}
@@ -35,6 +38,7 @@ func BenchmarkMemStatus(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		m := MemStatusMonitor()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			m.Start()
 		}
@@ -43,6 +47,7 @@ func BenchmarkMemStatus(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		m := MemStatusMonitorPtr()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			m.Start()
 		}
@@ -53,6 +58,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			m := MemStatusMonitor()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				m.ReadMemory()
 			}
@@ -61,6 +67,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			m := MemStatusMonitorPtr()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				m.ReadMemory()
 			}
@@ -73,6 +80,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.SetBytes(1)
 			m := MemStatusMonitor()
 			wrapper := protocol.ServerStatusResponse{}
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				wrapper = m.Read(wrapper)
 			}
@@ -82,6 +90,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.SetBytes(1)
 			m := MemStatusMonitorPtr()
 			wrapper := protocol.ServerStatusResponse{}
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				wrapper = m.Read(wrapper)
 			}
@@ -93,6 +102,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.SetBytes(1)
 			m := MemStatusMonitor()
 			wrapper := protocol.ServerStatusResponse{}
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				m.ReadPtr(&wrapper)
 			}
@@ -102,6 +112,7 @@ func BenchmarkMemStatus(b *testing.B) {
 			b.SetBytes(1)
 			m := MemStatusMonitorPtr()
 			wrapper := protocol.ServerStatusResponse{}
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				m.ReadPtr(&wrapper)
 			}

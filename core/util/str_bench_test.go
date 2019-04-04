@@ -15,6 +15,7 @@ func BenchmarkStringUtils(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = strings.ToLower(val)
 		}
@@ -23,6 +24,7 @@ func BenchmarkStringUtils(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = ToLowerAscii(val)
 		}

@@ -15,6 +15,7 @@ func BenchmarkBIP44(b *testing.B) {
 	b.Run("NewKeyFromMnemonic", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			mnemonic := "yellow yellow yellow yellow yellow yellow yellow yellow yellow yellow yellow yellow"
 			_, _ = NewKeyFromMnemonic(mnemonic, TypeFactomFactoids, bip32.FirstHardenedChild, 0, 0)
@@ -24,6 +25,7 @@ func BenchmarkBIP44(b *testing.B) {
 	b.Run("NewKeyFromMasterKey", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			mnemonic := "fork mutual wise slush quality ripple purse shiver case whisper derive ball duty fabric autumn drill account kidney case clean hollow food either soul"
 			seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")

@@ -70,7 +70,7 @@ var (
 	NameParams        string
 	DecimalsParams    string
 	TotalSupplyParams string
-	SymbolParams string
+	SymbolParams      string
 )
 
 /*

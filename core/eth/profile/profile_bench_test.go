@@ -11,6 +11,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 	b.Run("create-profile-empty", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = NewConnectionProfile()
 		}
@@ -18,6 +19,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 	b.Run("create-profile", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = NewDefaultConnectionProfile()
 		}
@@ -26,6 +28,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		profile := NewConnectionProfile()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = profile.Valid()
 		}
@@ -38,6 +41,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		profile.Id = "test-id"
 		profile.RpcEndpoint = "node-test-address"
 		profile.Address = "test-account"
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = profile.Valid()
 		}
@@ -46,6 +50,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		profile := NewConnectionProfile()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			profile.Secret()
 		}
@@ -54,6 +59,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		profile := NewDefaultConnectionProfile()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = CreateConnectionProfileToken(profile)
 		}
@@ -61,6 +67,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 	b.Run("parse-token", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = ParseConnectionProfileToken(testToken)
 		}

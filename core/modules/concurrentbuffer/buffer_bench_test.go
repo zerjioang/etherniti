@@ -17,6 +17,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 		b.Run("struct", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = NewConcurrentBuffer()
 			}
@@ -24,6 +25,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 		b.Run("ptr", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = NewConcurrentBufferPtr()
 			}
@@ -35,6 +37,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.Read(testMessage)
 			}
@@ -43,6 +46,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.Read(testMessage)
 			}
@@ -54,6 +58,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.Write(testMessage)
 			}
@@ -62,6 +67,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.Write(testMessage)
 			}
@@ -74,6 +80,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.String()
 			}
@@ -83,6 +90,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.String()
 			}
@@ -95,6 +103,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Bytes()
 			}
@@ -104,6 +113,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Bytes()
 			}
@@ -116,6 +126,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Cap()
 			}
@@ -125,6 +136,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Cap()
 			}
@@ -137,6 +149,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Grow(1)
 			}
@@ -146,6 +159,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Grow(1)
 			}
@@ -158,6 +172,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Len()
 			}
@@ -167,6 +182,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Len()
 			}
@@ -179,6 +195,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Next(0)
 			}
@@ -188,6 +205,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = buf.Next(0)
 			}
@@ -200,6 +218,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadByte()
 			}
@@ -209,6 +228,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadByte()
 			}
@@ -221,6 +241,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadBytes(byte(0))
 			}
@@ -230,6 +251,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadBytes(byte(0))
 			}
@@ -243,6 +265,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			buf := NewConcurrentBuffer()
 			reader := bytes.NewReader(testMessage)
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadFrom(reader)
 			}
@@ -253,6 +276,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			buf := NewConcurrentBufferPtr()
 			reader := bytes.NewReader(testMessage)
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadFrom(reader)
 			}
@@ -265,6 +289,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _, _ = buf.ReadRune()
 			}
@@ -274,6 +299,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _, _ = buf.ReadRune()
 			}
@@ -286,6 +312,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadString(byte(0))
 			}
@@ -295,6 +322,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_, _ = buf.ReadString(byte(0))
 			}
@@ -307,6 +335,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Reset()
 			}
@@ -316,6 +345,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Reset()
 			}
@@ -328,6 +358,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBuffer()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Truncate(0)
 			}
@@ -337,6 +368,7 @@ func BenchmarkConcurrentBuffer(b *testing.B) {
 			b.SetBytes(1)
 			buf := NewConcurrentBufferPtr()
 			_, _ = buf.Write(testMessage)
+			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				buf.Truncate(0)
 			}

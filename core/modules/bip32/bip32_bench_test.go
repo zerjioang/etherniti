@@ -13,6 +13,7 @@ func BenchmarkBip32(b *testing.B) {
 	b.Run("new-seed", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
@@ -22,6 +23,7 @@ func BenchmarkBip32(b *testing.B) {
 	b.Run("new-master", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
@@ -37,6 +39,7 @@ func BenchmarkBip32(b *testing.B) {
 	b.Run("new-child-key-600", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
@@ -53,6 +56,7 @@ func BenchmarkBip32(b *testing.B) {
 	b.Run("new-child-key-60000", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
@@ -69,6 +73,7 @@ func BenchmarkBip32(b *testing.B) {
 	b.Run("example", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured

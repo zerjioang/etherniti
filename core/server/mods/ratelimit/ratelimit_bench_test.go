@@ -12,6 +12,7 @@ func BenchmarkRatelimit(b *testing.B) {
 	b.Run("instantiate", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = NewRateLimitEngine()
 		}
@@ -20,6 +21,7 @@ func BenchmarkRatelimit(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		limiter := NewRateLimitEngine()
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = limiter.Eval("", nil)
 		}
@@ -29,6 +31,7 @@ func BenchmarkRatelimit(b *testing.B) {
 		b.SetBytes(1)
 		limiter := NewRateLimitEngine()
 		h := http.Header{}
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = limiter.Eval("127.0.0.1", h)
 		}

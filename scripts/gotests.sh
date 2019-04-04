@@ -16,7 +16,7 @@ echo "checking if gotests is installed in $GOPATH"
 if [[ ! -f ${GOPATH}/bin/gotests ]]; then
 	#statements
 	echo "gotests not found. Downloading via go get"
-	go get -u github.com/cweill/gotests
+	go get -u -v github.com/cweill/gotests
 fi
 
 #get all files excluding vendors
@@ -24,7 +24,7 @@ filelist=$(find . -type f -name "*.go" | grep -vendor)
 for file in ${filelist}
 do
 	echo "generating gotests for file $file"
-	${GOPATH}/bin/gotests -all ${file}
+	${GOPATH}/bin/gotests -all -w ${file}
 done
 
 echo "Code formatting done!"

@@ -23,6 +23,7 @@ func BenchmarkECDSA(b *testing.B) {
 	b.Run("create", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_, _ = ecdsa.GenerateKey(p224, rns)
 		}
@@ -30,6 +31,7 @@ func BenchmarkECDSA(b *testing.B) {
 	b.Run("sign", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			r, s, _ = ecdsaSign(str, priv)
 		}
@@ -40,6 +42,7 @@ func BenchmarkECDSA(b *testing.B) {
 
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			//now verify
 			_ = ecdsaVerify(str, r, s, &pub)
@@ -48,6 +51,7 @@ func BenchmarkECDSA(b *testing.B) {
 	b.Run("sign-integrity-msg", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			SignMsgWithIntegrity("hello-world")
 		}
