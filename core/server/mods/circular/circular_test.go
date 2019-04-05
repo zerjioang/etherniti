@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
 	"unsafe"
@@ -185,4 +186,298 @@ func TestBufferCustomStruct(t *testing.T) {
 
 func translateFoo(p unsafe.Pointer) foo {
 	return *(*foo)(p)
+}
+
+func TestNewCircular(t *testing.T) {
+	type args struct {
+		size uint64
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Circular
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewCircular(tt.args.size); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewCircular() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_Size(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   uint64
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.Size(); got != tt.want {
+				t.Errorf("Circular.Size() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_Empty(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.Empty(); got != tt.want {
+				t.Errorf("Circular.Empty() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_Full(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.Full(); got != tt.want {
+				t.Errorf("Circular.Full() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_mask(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	type args struct {
+		val uint64
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   uint64
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.mask(tt.args.val); got != tt.want {
+				t.Errorf("Circular.mask() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_Push(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	type args struct {
+		object unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			b.Push(tt.args.object)
+		})
+	}
+}
+
+func TestCircular_Pop(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   unsafe.Pointer
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.Pop(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Circular.Pop() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_PopBoolean(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			if got := b.PopBoolean(); got != tt.want {
+				t.Errorf("Circular.PopBoolean() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCircular_PushBoolean(t *testing.T) {
+	type fields struct {
+		read      uint64
+		write     uint64
+		lastWrite uint64
+		maskVal   uint64
+		data      []unsafe.Pointer
+	}
+	type args struct {
+		val bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &Circular{
+				read:      tt.fields.read,
+				write:     tt.fields.write,
+				lastWrite: tt.fields.lastWrite,
+				maskVal:   tt.fields.maskVal,
+				data:      tt.fields.data,
+			}
+			b.PushBoolean(tt.args.val)
+		})
+	}
+}
+
+func Test_translateFoo(t *testing.T) {
+	type args struct {
+		p unsafe.Pointer
+	}
+	tests := []struct {
+		name string
+		args args
+		want foo
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := translateFoo(tt.args.p); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("translateFoo() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

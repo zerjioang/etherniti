@@ -6,9 +6,13 @@ package bip39
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"hash"
+	"math/big"
+	"reflect"
 	"testing"
 
 	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
+	"github.com/zerjioang/etherniti/core/trycatch"
 )
 
 type vector struct {
@@ -488,5 +492,577 @@ func assertEqualByteSlices(t *testing.T, a, b []byte) {
 			t.Errorf("Byte slices not equal, expected %v and got %v", a, b)
 			return
 		}
+	}
+}
+
+func Test_testEntropyFromMnemonic(t *testing.T) {
+	type args struct {
+		t       *testing.T
+		bitSize int
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testEntropyFromMnemonic(tt.args.t, tt.args.bitSize)
+		})
+	}
+}
+
+func Test_testVectors(t *testing.T) {
+	tests := []struct {
+		name string
+		want []vector
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := testVectors(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("testVectors() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_badMnemonicSentences(t *testing.T) {
+	tests := []struct {
+		name string
+		want []vector
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := badMnemonicSentences(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("badMnemonicSentences() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_assertNil(t *testing.T) {
+	type args struct {
+		t      *testing.T
+		object interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertNil(tt.args.t, tt.args.object)
+		})
+	}
+}
+
+func Test_assertNotNil(t *testing.T) {
+	type args struct {
+		t      *testing.T
+		object interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertNotNil(tt.args.t, tt.args.object)
+		})
+	}
+}
+
+func Test_assertTrue(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a bool
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertTrue(tt.args.t, tt.args.a)
+		})
+	}
+}
+
+func Test_assertFalse(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a bool
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertFalse(tt.args.t, tt.args.a)
+		})
+	}
+}
+
+func Test_assertEqual(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a interface{}
+		b interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertEqual(tt.args.t, tt.args.a, tt.args.b)
+		})
+	}
+}
+
+func Test_assertEqualString(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a string
+		b string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertEqualString(tt.args.t, tt.args.a, tt.args.b)
+		})
+	}
+}
+
+func Test_assertEqualStringSlices(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a []string
+		b []string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertEqualStringSlices(tt.args.t, tt.args.a, tt.args.b)
+		})
+	}
+}
+
+func Test_assertEqualByteSlices(t *testing.T) {
+	type args struct {
+		t *testing.T
+		a []byte
+		b []byte
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertEqualByteSlices(tt.args.t, tt.args.a, tt.args.b)
+		})
+	}
+}
+
+func Test_initializeInternalWordlist(t *testing.T) {
+	type args struct {
+		list []string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			initializeInternalWordlist(tt.args.list)
+		})
+	}
+}
+
+func TestSetWordList(t *testing.T) {
+	type args struct {
+		list []string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			SetWordList(tt.args.list)
+		})
+	}
+}
+
+func TestGetWordIndexFromTree(t *testing.T) {
+	type args struct {
+		word string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  int
+		want1 bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := GetWordIndexFromTree(tt.args.word)
+			if got != tt.want {
+				t.Errorf("GetWordIndexFromTree() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("GetWordIndexFromTree() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestHasWord(t *testing.T) {
+	type args struct {
+		word string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := HasWord(tt.args.word); got != tt.want {
+				t.Errorf("HasWord() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGenerateSecureEntropy(t *testing.T) {
+	type args struct {
+		entropyBits uint16
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []byte
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GenerateSecureEntropy(tt.args.entropyBits)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GenerateSecureEntropy() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GenerateSecureEntropy() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEntropyFromMnemonic(t *testing.T) {
+	type args struct {
+		mnemonic string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  []byte
+		want1 trycatch.Error
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := EntropyFromMnemonic(tt.args.mnemonic)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("EntropyFromMnemonic() got = %v, want %v", got, tt.want)
+			}
+			if !reflect.DeepEqual(got1, tt.want1) {
+				t.Errorf("EntropyFromMnemonic() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func Test_resolveChecksumMask(t *testing.T) {
+	type args struct {
+		value int
+	}
+	tests := []struct {
+		name string
+		args args
+		want *big.Int
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := resolveChecksumMask(tt.args.value); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("resolveChecksumMask() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMnemonicToByteArray(t *testing.T) {
+	type args struct {
+		mnemonic string
+		raw      []bool
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  []byte
+		want1 trycatch.Error
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := MnemonicToByteArray(tt.args.mnemonic, tt.args.raw...)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MnemonicToByteArray() got = %v, want %v", got, tt.want)
+			}
+			if !reflect.DeepEqual(got1, tt.want1) {
+				t.Errorf("MnemonicToByteArray() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestNewSeedWithErrorChecking(t *testing.T) {
+	type args struct {
+		mnemonic string
+		password string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  []byte
+		want1 trycatch.Error
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := NewSeedWithErrorChecking(tt.args.mnemonic, tt.args.password)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewSeedWithErrorChecking() got = %v, want %v", got, tt.want)
+			}
+			if !reflect.DeepEqual(got1, tt.want1) {
+				t.Errorf("NewSeedWithErrorChecking() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestNewSeed(t *testing.T) {
+	type args struct {
+		mnemonic string
+		password string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewSeed(tt.args.mnemonic, tt.args.password); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewSeed() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewSeedWithParams(t *testing.T) {
+	type args struct {
+		mnemonic   []byte
+		password   []byte
+		iterations int
+		keyLength  int
+		hashf      func() hash.Hash
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewSeedWithParams(tt.args.mnemonic, tt.args.password, tt.args.iterations, tt.args.keyLength, tt.args.hashf); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewSeedWithParams() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_addChecksum(t *testing.T) {
+	type args struct {
+		data []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := addChecksum(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("addChecksum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_computeChecksum(t *testing.T) {
+	type args struct {
+		data []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := computeChecksum(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("computeChecksum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_validateEntropyBitSize(t *testing.T) {
+	type args struct {
+		bitSize int
+	}
+	tests := []struct {
+		name string
+		args args
+		want trycatch.Error
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := validateEntropyBitSize(tt.args.bitSize); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("validateEntropyBitSize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_padByteSlice(t *testing.T) {
+	type args struct {
+		slice  []byte
+		length int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := padByteSlice(tt.args.slice, tt.args.length); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("padByteSlice() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_compareByteSlices(t *testing.T) {
+	type args struct {
+		a []byte
+		b []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := compareByteSlices(tt.args.a, tt.args.b); got != tt.want {
+				t.Errorf("compareByteSlices() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_splitMnemonicWords(t *testing.T) {
+	type args struct {
+		mnemonic string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  []string
+		want1 bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := splitMnemonicWords(tt.args.mnemonic)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("splitMnemonicWords() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("splitMnemonicWords() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
 	}
 }

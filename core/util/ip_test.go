@@ -24,3 +24,43 @@ func TestIpToUint32(t *testing.T) {
 		}
 	})
 }
+
+func TestIp2int(t *testing.T) {
+	type args struct {
+		ip string
+	}
+	tests := []struct {
+		name string
+		args args
+		want uint32
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Ip2int(tt.args.ip); got != tt.want {
+				t.Errorf("Ip2int() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInt2ip(t *testing.T) {
+	type args struct {
+		ipInt int64
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Int2ip(tt.args.ipInt); got != tt.want {
+				t.Errorf("Int2ip() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

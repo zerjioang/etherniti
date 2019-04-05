@@ -6,6 +6,7 @@ package bip39_test
 import (
 	"encoding/hex"
 	"fmt"
+	"testing"
 
 	"github.com/zerjioang/etherniti/core/modules/bip39"
 )
@@ -36,4 +37,30 @@ func ExampleNewSeed() {
 	fmt.Println(hex.EncodeToString(seed))
 	// output:
 	// 26e975ec644423f4a4c4f4215ef09b4bd7ef924e85d1d17c4cf3f136c2863cf6df0a475045652c57eb5fb41513ca2a2d67722b77e954b4b3fc11f7590449191d
+}
+
+func TestExampleNewMnemonic(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ExampleNewMnemonic()
+		})
+	}
+}
+
+func TestExampleNewSeed(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ExampleNewSeed()
+		})
+	}
 }

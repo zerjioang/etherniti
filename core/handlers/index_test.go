@@ -4,12 +4,14 @@
 package handlers
 
 import (
+	"reflect"
 	"testing"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/listener/base"
-
+	"github.com/labstack/echo"
 	"github.com/pkg/profile"
+	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
 )
 
 func TestIndexConcurrency(t *testing.T) {
@@ -169,4 +171,218 @@ func BenchmarkIndexMethods(b *testing.B) {
 			ctl.refreshIntegrityData()
 		}
 	})
+}
+
+func TestNewIndexController(t *testing.T) {
+	tests := []struct {
+		name string
+		want *IndexController
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewIndexController(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewIndexController() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIndex(t *testing.T) {
+	type args struct {
+		c echo.Context
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := Index(tt.args.c); (err != nil) != tt.wantErr {
+				t.Errorf("Index() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestIndexController_Status(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	type args struct {
+		c echo.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			if err := ctl.Status(tt.args.c); (err != nil) != tt.wantErr {
+				t.Errorf("IndexController.Status() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestIndexController_status(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			if got := ctl.status(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IndexController.status() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIndexController_refreshStatusData(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			ctl.refreshStatusData()
+		})
+	}
+}
+
+func TestIndexController_Integrity(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	type args struct {
+		c echo.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			if err := ctl.Integrity(tt.args.c); (err != nil) != tt.wantErr {
+				t.Errorf("IndexController.Integrity() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestIndexController_refreshIntegrityData(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			ctl.refreshIntegrityData()
+		})
+	}
+}
+
+func TestIndexController_integrity(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   []byte
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			if got := ctl.integrity(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IndexController.integrity() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIndexController_RegisterRouters(t *testing.T) {
+	type fields struct {
+		statusData    concurrentbuffer.ConcurrentBuffer
+		integrityData concurrentbuffer.ConcurrentBuffer
+	}
+	type args struct {
+		router *echo.Group
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctl := &IndexController{
+				statusData:    tt.fields.statusData,
+				integrityData: tt.fields.integrityData,
+			}
+			ctl.RegisterRouters(tt.args.router)
+		})
+	}
 }

@@ -7,7 +7,9 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
+	"hash"
 	"log"
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -293,5 +295,380 @@ func TestExample(t *testing.T) {
 	// Print public keys
 	for department, pubKey := range departmentAuditKeys {
 		fmt.Println(department, pubKey)
+	}
+}
+
+func Test_testVectorKeyPairs(t *testing.T) {
+	type args struct {
+		t      *testing.T
+		vector testMasterKey
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testVectorKeyPairs(tt.args.t, tt.args.vector)
+		})
+	}
+}
+
+func Test_assertKeySerialization(t *testing.T) {
+	type args struct {
+		t           *testing.T
+		key         *Key
+		knownBase58 string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assertKeySerialization(tt.args.t, tt.args.key, tt.args.knownBase58)
+		})
+	}
+}
+
+func TestNewMasterKey(t *testing.T) {
+	type args struct {
+		seed []byte
+		key  string
+		h    func() hash.Hash
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Key
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewMasterKey(tt.args.seed, tt.args.key, tt.args.h)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewMasterKey() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewMasterKey() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_NewChildKey(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	type args struct {
+		childIdx uint32
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *Key
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			got, err := key.NewChildKey(tt.args.childIdx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Key.NewChildKey() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Key.NewChildKey() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_getIntermediary(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	type args struct {
+		childIdx uint32
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []byte
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			got, err := key.getIntermediary(tt.args.childIdx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Key.getIntermediary() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Key.getIntermediary() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_PublicKey(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   *Key
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			if got := key.PublicKey(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Key.PublicKey() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_Serialize(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		want    []byte
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			got, err := key.Serialize()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Key.Serialize() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Key.Serialize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_B58Serialize(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			if got := key.B58Serialize(); got != tt.want {
+				t.Errorf("Key.B58Serialize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestKey_String(t *testing.T) {
+	type fields struct {
+		Key         []byte
+		Version     []byte
+		ChildNumber []byte
+		FingerPrint []byte
+		ChainCode   []byte
+		Depth       byte
+		IsPrivate   bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := Key{
+				Key:         tt.fields.Key,
+				Version:     tt.fields.Version,
+				ChildNumber: tt.fields.ChildNumber,
+				FingerPrint: tt.fields.FingerPrint,
+				ChainCode:   tt.fields.ChainCode,
+				Depth:       tt.fields.Depth,
+				IsPrivate:   tt.fields.IsPrivate,
+			}
+			if got := key.String(); got != tt.want {
+				t.Errorf("Key.String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDeserialize(t *testing.T) {
+	type args struct {
+		data []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Key
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Deserialize(tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Deserialize() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Deserialize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestB58Deserialize(t *testing.T) {
+	type args struct {
+		data string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Key
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := B58Deserialize(tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("B58Deserialize() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("B58Deserialize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewRandomSeed(t *testing.T) {
+	tests := []struct {
+		name    string
+		want    []byte
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewRandomSeed()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewRandomSeed() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewRandomSeed() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
