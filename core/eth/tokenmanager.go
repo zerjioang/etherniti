@@ -18,7 +18,6 @@ type WalletManager struct {
 func NewWalletManager() WalletManager {
 	man := WalletManager{}
 	man.wallet = memory.NewInMemoryKeyStorage()
-	man.cache = cache.NewMemoryCache()
 	return man
 }
 

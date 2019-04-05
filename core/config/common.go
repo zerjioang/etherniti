@@ -4,6 +4,7 @@
 package config
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"os"
 	"strings"
 
@@ -30,6 +31,7 @@ var (
 
 //read environment variables
 func Read(env map[string]interface{}) {
+	logger.Debug("reading environment variables")
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")
 		if len(pair) == 2 {
@@ -46,28 +48,34 @@ func GetRedirectUrl(host string, path string) string {
 // get SSL certificate cert.pem from proper source:
 // hardcoded value or from local storage file
 func GetCertPem() []byte {
+	logger.Debug("getting .pem cert data")
 	return certPemBytes
 }
 
 // get SSL certificate key.pem from proper source:
 // hardcoded value or from local storage file
 func GetKeyPem() []byte {
+	logger.Debug("getting .pem key data")
 	return keyPemBytes
 }
 
 func IsHttpMode() bool {
+	logger.Debug("checking if http mode is enabled")
 	return listeningMode == "http"
 }
 
 func IsSocketMode() bool {
+	logger.Debug("checking if socket mode is enabled")
 	return listeningMode == "socket"
 }
 
 func IsProfilingEnabled() bool {
+	logger.Debug("checking if profiling mode is enabled")
 	return false
 }
 
 func ServiceListeningMode() listener.ServiceType {
+	logger.Debug("reading service listening mode")
 	switch listeningMode {
 	case "http":
 		return listener.HttpMode

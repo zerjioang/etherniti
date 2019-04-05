@@ -164,7 +164,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 			return api.Error(c, err)
 		} else {
 			// save result in the cache
-			ctl.cache.Set(key, data, clientcache.NoExpiration)
+			ctl.cache.Set(key, data)
 			response := api.ToSuccess(key, data)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
@@ -220,7 +220,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 			return api.ErrorStr(c, "the network peer did not return any response")
 		} else {
 			// save result in the cache
-			ctl.cache.Set(cacheKey, rpcResponse, clientcache.NoExpiration)
+			ctl.cache.Set(cacheKey, rpcResponse)
 			response := api.ToSuccess(method, rpcResponse)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"strconv"
+	"fmt"
 
 	"github.com/labstack/echo"
 )
@@ -90,27 +90,25 @@ func SecureWithConfig(config SecureConfig) echo.MiddlewareFunc {
 
 			req := c.Request()
 			res := c.Response()
-			header := res.Header()
 
 			if config.XSSProtection != "" {
-				header.Set(echo.HeaderXXSSProtection, config.XSSProtection)
+				res.Header().Set(echo.HeaderXXSSProtection, config.XSSProtection)
 			}
 			if config.ContentTypeNosniff != "" {
-				header.Set(echo.HeaderXContentTypeOptions, config.ContentTypeNosniff)
+				res.Header().Set(echo.HeaderXContentTypeOptions, config.ContentTypeNosniff)
 			}
 			if config.XFrameOptions != "" {
-				header.Set(echo.HeaderXFrameOptions, config.XFrameOptions)
+				res.Header().Set(echo.HeaderXFrameOptions, config.XFrameOptions)
 			}
 			if (c.IsTLS() || (req.Header.Get(echo.HeaderXForwardedProto) == "https")) && config.HSTSMaxAge != 0 {
 				subdomains := ""
 				if !config.HSTSExcludeSubdomains {
 					subdomains = "; includeSubdomains"
 				}
-				maxAgeStr := "max-age="+strconv.Itoa(config.HSTSMaxAge)+subdomains
-				header.Set(echo.HeaderStrictTransportSecurity, maxAgeStr)
+				res.Header().Set(echo.HeaderStrictTransportSecurity, fmt.Sprintf("max-age=%d%s", config.HSTSMaxAge, subdomains))
 			}
 			if config.ContentSecurityPolicy != "" {
-				header.Set(echo.HeaderContentSecurityPolicy, config.ContentSecurityPolicy)
+				res.Header().Set(echo.HeaderContentSecurityPolicy, config.ContentSecurityPolicy)
 			}
 			return next(c)
 		}

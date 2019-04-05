@@ -16,6 +16,7 @@ import (
 
 // return success response to client context
 func SendSuccess(c echo.Context, logMsg string, response interface{}) error {
+	logger.Debug("sending success message to client")
 	logger.Info(logMsg)
 	raw := ToSuccess(logMsg, response)
 	return c.JSONBlob(protocol.StatusOK, raw)
@@ -23,15 +24,18 @@ func SendSuccess(c echo.Context, logMsg string, response interface{}) error {
 
 // return success blob response to client context
 func SendSuccessBlob(c echo.Context, raw []byte) error {
+	logger.Debug("sending success BLOB message to client")
 	return c.JSONBlob(protocol.StatusOK, raw)
 }
 
 func Success(c echo.Context, msg string, result string) error {
+	logger.Debug("sending success message to client")
 	rawBytes := util.GetJsonBytes(protocol.NewApiResponse(msg, result))
 	return c.JSONBlob(http.StatusOK, rawBytes)
 }
 
 func ToSuccess(msg string, result interface{}) []byte {
+	logger.Debug("generating success byte array")
 	rawBytes := util.GetJsonBytes(protocol.NewApiResponse(msg, result))
 	return rawBytes
 }

@@ -17,7 +17,7 @@ import (
 
 var (
 	// build commit hash value
-	Build string
+	Build = config.EnvironmentName
 )
 
 func init() {
@@ -44,6 +44,6 @@ func main() {
 	// 3 run listener
 	err := listener.FactoryListener(mode).Listen()
 	if err != nil {
-		log.Error("failed to execute http server:", err)
+		log.Fatal("failed to execute http server:", err)
 	}
 }

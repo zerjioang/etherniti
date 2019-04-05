@@ -37,10 +37,11 @@ Learn more at https://echo.labstack.com
 package echo
 
 import (
+	"bytes"
 	stdContext "context"
 	"crypto/tls"
-	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	stdLog "log"
 	"net"
@@ -55,6 +56,7 @@ import (
 
 	"github.com/labstack/gommon/color"
 	"github.com/labstack/gommon/log"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type (
@@ -72,6 +74,7 @@ type (
 		TLSServer        *http.Server
 		Listener         net.Listener
 		TLSListener      net.Listener
+		AutoTLSManager   autocert.Manager
 		DisableHTTP2     bool
 		Debug            bool
 		HideBanner       bool
@@ -284,6 +287,9 @@ func New() (e *Echo) {
 	e = &Echo{
 		Server:    new(http.Server),
 		TLSServer: new(http.Server),
+		AutoTLSManager: autocert.Manager{
+			Prompt: autocert.AcceptTOS,
+		},
 		Logger:   log.New("echo"),
 		colorer:  color.New(),
 		maxParam: new(int),
@@ -330,7 +336,7 @@ func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
 		code = he.Code
 		msg = he.Message
 		if he.Internal != nil {
-			err = errors.New("he.Internal is not empty")
+			err = fmt.Errorf("%v, %v", err, he.Internal)
 		}
 	} else if e.Debug {
 		msg = err.Error()
@@ -499,6 +505,41 @@ func (e *Echo) Group(prefix string, m ...MiddlewareFunc) (g *Group) {
 	return
 }
 
+// URI generates a URI from handler.
+func (e *Echo) URI(handler HandlerFunc, params ...interface{}) string {
+	name := handlerName(handler)
+	return e.Reverse(name, params...)
+}
+
+// URL is an alias for `URI` function.
+func (e *Echo) URL(h HandlerFunc, params ...interface{}) string {
+	return e.URI(h, params...)
+}
+
+// Reverse generates an URL from route name and provided parameters.
+func (e *Echo) Reverse(name string, params ...interface{}) string {
+	uri := new(bytes.Buffer)
+	ln := len(params)
+	n := 0
+	for _, r := range e.router.routes {
+		if r.Name == name {
+			for i, l := 0, len(r.Path); i < l; i++ {
+				if r.Path[i] == ':' && n < ln {
+					for ; i < l && r.Path[i] != '/'; i++ {
+					}
+					uri.WriteString(fmt.Sprintf("%v", params[n]))
+					n++
+				}
+				if i < l {
+					uri.WriteByte(r.Path[i])
+				}
+			}
+			break
+		}
+	}
+	return uri.String()
+}
+
 // Routes returns the registered routes.
 func (e *Echo) Routes() []*Route {
 	routes := make([]*Route, 0, len(e.router.routes))
@@ -575,6 +616,14 @@ func (e *Echo) StartTLS(address string, certFile, keyFile string) (err error) {
 	if err != nil {
 		return
 	}
+	return e.startTLS(address)
+}
+
+// StartAutoTLS starts an HTTPS server using certificates automatically installed from https://letsencrypt.org.
+func (e *Echo) StartAutoTLS(address string) error {
+	s := e.TLSServer
+	s.TLSConfig = new(tls.Config)
+	s.TLSConfig.GetCertificate = e.AutoTLSManager.GetCertificate
 	return e.startTLS(address)
 }
 
@@ -655,9 +704,7 @@ func NewHTTPError(code int, message ...interface{}) *HTTPError {
 
 // Error makes it compatible with `error` interface.
 func (he *HTTPError) Error() string {
-	data, _ := json.Marshal(he)
-	str := string(data)
-	return str
+	return fmt.Sprintf("code=%d, message=%v", he.Code, he.Message)
 }
 
 // SetInternal sets error to HTTPError.Internal

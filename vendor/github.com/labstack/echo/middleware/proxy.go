@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"net"
@@ -37,11 +37,11 @@ type (
 		// "/users/*/orders/*": "/user/$1/order/$2",
 		Rewrite map[string]string
 
-		// Context key to store selected ProxyTarget into context.
+    // Context key to store selected ProxyTarget into context.
 		// Optional. Default value "target".
 		ContextKey string
 
-		// To customize the transport to remote.
+    // To customize the transport to remote.
 		// Examples: If custom TLS certificates are required.
 		Transport http.RoundTripper
 
@@ -92,14 +92,14 @@ func proxyRaw(t *ProxyTarget, c echo.Context) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		in, _, err := c.Response().Hijack()
 		if err != nil {
-			c.Error(errors.New("proxy raw, hijack error:"+err.Error()+" for url: "+t.URL.String()))
+			c.Error(fmt.Errorf("proxy raw, hijack error=%v, url=%s", t.URL, err))
 			return
 		}
 		defer in.Close()
 
 		out, err := net.Dial("tcp", t.URL.Host)
 		if err != nil {
-			he := echo.NewHTTPError(http.StatusBadGateway, errors.New("proxy raw, dial error"))
+			he := echo.NewHTTPError(http.StatusBadGateway, fmt.Sprintf("proxy raw, dial error=%v, url=%s", t.URL, err))
 			c.Error(he)
 			return
 		}
@@ -108,7 +108,7 @@ func proxyRaw(t *ProxyTarget, c echo.Context) http.Handler {
 		// Write header
 		err = r.Write(out)
 		if err != nil {
-			he := echo.NewHTTPError(http.StatusBadGateway, errors.New("proxy raw, request header copy error"))
+			he := echo.NewHTTPError(http.StatusBadGateway, fmt.Sprintf("proxy raw, request header copy error=%v, url=%s", t.URL, err))
 			c.Error(he)
 			return
 		}

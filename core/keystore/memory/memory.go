@@ -19,7 +19,7 @@ type InMemoryKeyStorage struct {
 
 func (storage *InMemoryKeyStorage) Set(key string, value WalletContent) {
 	logger.Info("adding new account to memory based wallet")
-	storage.cache.Set(key, value, 1)
+	storage.cache.Set(key, value)
 }
 
 func (storage InMemoryKeyStorage) Get(key string) (WalletContent, bool) {

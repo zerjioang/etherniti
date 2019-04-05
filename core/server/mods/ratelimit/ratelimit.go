@@ -82,7 +82,7 @@ func (rte RateLimitEngine) Eval(clientIdentifier string, h http.Header) RateLimi
 	if currentRequestsLimit.value > 0 {
 		//decrease counter limit and save it again
 		currentRequestsLimit.value--
-		rte.rateCache.Set(clientIdentifier, currentRequestsLimit, defaultCacheMeasurementUnit)
+		rte.rateCache.Set(clientIdentifier, currentRequestsLimit)
 
 		// add current user remaining limit
 		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit.value), 10))
