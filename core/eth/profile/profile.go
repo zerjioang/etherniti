@@ -28,10 +28,6 @@ type ConnectionProfile struct {
 
 	// service version when profile was generated
 	Version int `json:"version"`
-
-	// validity of the profile: whether all required data is present or not
-	Valididity bool `json:"validity"`
-
 	//standard claims
 	//Identifies the recipients that the JWT is intended for.
 	// Each principal intended to process the JWT must identify
@@ -58,6 +54,8 @@ type ConnectionProfile struct {
 	NotBefore int64 `json:"nbf,omitempty"`
 	//Identifies the subject of the JWT.
 	Subject string `json:"sub,omitempty"`
+	// validity of the profile: whether all required data is present or not
+	Valididity bool `json:"validity"`
 }
 
 // implementation from Claims

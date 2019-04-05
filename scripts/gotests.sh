@@ -24,7 +24,7 @@ filelist=$(find . -type f -name "*.go" | grep -vendor)
 for file in ${filelist}
 do
 	echo "generating gotests for file $file"
-	${GOPATH}/bin/gotests -all -w ${file}
+	${GOPATH}/bin/gotests -excl Benchmark.* -w ${file}
 done
 
 echo "Code formatting done!"
