@@ -4,8 +4,9 @@
 package cache
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMemoryCache_Get(t *testing.T) {

@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package concurrentmap
 
 import (
@@ -16,7 +19,6 @@ type ConcurrentMapShared struct {
 	items        map[string]interface{}
 	sync.RWMutex // Read Write mutex, guards access to internal map.
 }
-
 
 // Creates a new concurrent map.
 func New() ConcurrentMap {

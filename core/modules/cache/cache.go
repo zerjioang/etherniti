@@ -9,7 +9,7 @@ var (
 	defaultCache *MemoryCache
 )
 
-func init(){
+func init() {
 	logger.Debug("creating shared memory cache for etherniti proxy modules")
 	defaultCache = NewMemoryCache()
 }
