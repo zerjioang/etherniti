@@ -1,3 +1,14 @@
+[metadata]
+    codename = "etherniti"
+    author = "zerjioang"
+
+ignored = [
+    "github.com/zerjioang/etherniti/resources*",
+    "github.com/zerjioang/etherniti/scripts*",
+    "github.com/zerjioang/etherniti/secrets*",
+    "github.com/zerjioang/etherniti/ofus*"
+]
+
 [prune]
   go-tests = true
   unused-packages = true
