@@ -7,12 +7,12 @@
 package config
 
 import (
+	"github.com/zerjioang/etherniti/core/util/str"
 	//_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 // openssl genrsa -out server.key 2048
@@ -107,9 +107,9 @@ var (
 
 func init() {
 	//hardcoded cert content as bytes
-	certPemBytes = util.Bytes(certPem)
+	certPemBytes = str.UnsafeBytes(certPem)
 	//hardcoded key content as bytes
-	keyPemBytes = util.Bytes(keyPem)
+	keyPemBytes = str.UnsafeBytes(keyPem)
 }
 
 //set default environment variables value for current context

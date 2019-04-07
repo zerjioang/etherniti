@@ -6,16 +6,16 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
+	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util"
-
-	"github.com/labstack/echo"
 )
 
 const (
@@ -54,20 +54,20 @@ func (ctl ProfileController) create(c echo.Context) error {
 	// create the token
 	token, err := profile.CreateConnectionProfileToken(userProfile)
 	if err == nil {
-		rawBytes := util.GetJsonBytes(protocol.NewApiResponse("profile token successfully created", token))
+		rawBytes := str.GetJsonBytes(protocol.NewApiResponse("profile token successfully created", token))
 		// increment created counter
 		profilesCreated.Increment()
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
 		//token generation trycatch
-		rawBytes := util.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, err.Error()))
+		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, err.Error()))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }
 
 // profile validation check
 func (ctl ProfileController) validate(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, util.Bytes(readErr))
+	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(readErr))
 }
 
 // profile validation check

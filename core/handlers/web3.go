@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
@@ -18,7 +20,6 @@ import (
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
-	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/eth"
@@ -77,7 +78,7 @@ func (ctl *Web3Controller) getBalance(c echo.Context) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+		return c.JSONBlob(http.StatusOK, str.GetJsonBytes(result))
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
@@ -104,7 +105,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.Context) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+		return c.JSONBlob(http.StatusOK, str.GetJsonBytes(result))
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
@@ -262,7 +263,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusInternalServerError,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusInternalServerError, err.Error()),
 			),
 		)
@@ -283,7 +284,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c echo.Context) error {
 		}
 		return c.JSONBlob(
 			http.StatusOK,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiResponse("ethereum accounts and their balance readed", wrapperList),
 			),
 		)
@@ -309,7 +310,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return c.JSONBlob(http.StatusOK, util.GetJsonBytes(result))
+		return c.JSONBlob(http.StatusOK, str.GetJsonBytes(result))
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
@@ -339,7 +340,7 @@ func (ctl *Web3Controller) erc20Name(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -370,7 +371,7 @@ func (ctl *Web3Controller) erc20Symbol(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -411,7 +412,7 @@ func (ctl *Web3Controller) erc20totalSupply(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -442,7 +443,7 @@ func (ctl *Web3Controller) erc20decimals(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -478,7 +479,7 @@ func (ctl *Web3Controller) erc20Balanceof(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -519,7 +520,7 @@ func (ctl *Web3Controller) erc20Allowance(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)
@@ -565,7 +566,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.Context) error {
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
-			util.GetJsonBytes(
+			str.GetJsonBytes(
 				protocol.NewApiError(http.StatusBadRequest, err.Error()),
 			),
 		)

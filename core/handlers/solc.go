@@ -8,6 +8,8 @@ import (
 	"errors"
 	"sync/atomic"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/shared/protocol"
 	constants "github.com/zerjioang/etherniti/shared/solc"
 
@@ -15,7 +17,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/solc"
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -174,7 +175,7 @@ func (ctl SolcController) compileFromUploadedTargz(c echo.Context) error {
 
 func (ctl SolcController) compileModeSelector(c echo.Context) error {
 	mode := c.Param("mode")
-	mode = util.ToLowerAscii(mode)
+	mode = str.ToLowerAscii(mode)
 	logger.Debug("compiling ethereum contract with mode: ", mode)
 	switch mode {
 	case constants.SingleRawFile:

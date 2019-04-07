@@ -7,8 +7,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/util"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -45,9 +46,9 @@ func init() {
 		logger.Error("could not unmarshal phising model data")
 		return
 	}
-	blackData = util.GetJsonBytes(pm.Blacklist)
-	whiteData = util.GetJsonBytes(pm.Whitelist)
-	fuzzyData = util.GetJsonBytes(pm.Fuzzylist)
+	blackData = str.GetJsonBytes(pm.Blacklist)
+	whiteData = str.GetJsonBytes(pm.Whitelist)
+	fuzzyData = str.GetJsonBytes(pm.Fuzzylist)
 }
 
 func PhishingBlacklistRawBytes() []byte {

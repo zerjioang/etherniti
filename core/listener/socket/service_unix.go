@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/util"
+	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/listener/base"
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -149,7 +149,7 @@ func (l UnixSocketListener) foreground() error {
 	if unErr != nil {
 		log.Warn("failed to unlink unix socket: ", unErr)
 	}
-	println(util.WelcomeBanner())
+	println(banner.WelcomeBanner())
 	ln, err := net.Listen("unix", l.path)
 	if err != nil {
 		log.Error("unix socket listen error: ", err)

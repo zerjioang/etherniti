@@ -6,9 +6,9 @@ package server
 import (
 	"errors"
 
-	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/zerjioang/etherniti/core/util"
+	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/eth/profile"
@@ -75,7 +75,7 @@ func (context EthernitiContext) ReadConnectionProfileToken() string {
 
 //custom json encoder
 func (context EthernitiContext) JSON(code int, i interface{}) (err error) {
-	data, encErr := util.StdMarshal(i)
+	data, encErr := str.StdMarshal(i)
 	if encErr != nil {
 		return encErr
 	}

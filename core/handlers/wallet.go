@@ -13,6 +13,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/modules/bip32"
 
@@ -23,7 +24,6 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/bip39"
 	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 const (
@@ -35,8 +35,8 @@ const (
 var (
 	noConnErrMsg           = "invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
 	errNoConnectionProfile = errors.New(noConnErrMsg)
-	accountKeyGenErrBytes  = util.Bytes(accountKeyGenErr)
-	invalidAddressBytes    = util.Bytes(invalidAddress)
+	accountKeyGenErrBytes  = str.UnsafeBytes(accountKeyGenErr)
+	invalidAddressBytes    = str.UnsafeBytes(invalidAddress)
 )
 
 type WalletController struct {
@@ -65,7 +65,7 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	}
 
 	// lowercase language
-	req.Language = util.ToLowerAscii(req.Language)
+	req.Language = str.ToLowerAscii(req.Language)
 
 	if req.Language == "chinese-simplified" {
 		bip39.SetWordList(wordlists.ChineseSimplified)
@@ -213,7 +213,7 @@ func (ctl WalletController) generateAddress(c echo.Context) error {
 	}
 	return c.JSONBlob(
 		http.StatusOK,
-		util.GetJsonBytes(
+		str.GetJsonBytes(
 			protocol.NewApiResponse("ethereum account created", response),
 		),
 	)
@@ -230,7 +230,7 @@ func (ctl WalletController) isValidAddress(c echo.Context) error {
 	// check if not empty
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
-		return c.JSONBlob(code, util.GetJsonBytes(
+		return c.JSONBlob(code, str.GetJsonBytes(
 			protocol.NewApiResponse("address validation checked", result),
 		),
 		)

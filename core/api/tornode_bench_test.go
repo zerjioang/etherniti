@@ -6,9 +6,9 @@ package api
 import (
 	"testing"
 
-	"github.com/armon/go-radix"
+	"github.com/zerjioang/etherniti/core/util/ip"
 
-	"github.com/zerjioang/etherniti/core/util"
+	"github.com/armon/go-radix"
 )
 
 func BenchmarkRadixResolve(b *testing.B) {
@@ -24,10 +24,10 @@ func BenchmarkRadixResolve(b *testing.B) {
 	r.Insert("1.172.104.133", nil)
 	r.Insert("1.41.132.176", nil)
 
-	b.ReportAllocs()
 	b.SetBytes(1)
 	key := "1.41.132.176"
 	// run the Fib function b.N times
+	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = r.Get(key)
@@ -47,10 +47,10 @@ func BenchmarkMapResolve(b *testing.B) {
 	mapper["1.172.104.133"] = nil
 	mapper["1.41.132.176"] = nil
 
-	b.ReportAllocs()
 	b.SetBytes(1)
 	// run the Fib function b.N times
 	key := "1.41.132.176"
+	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = mapper[key]
@@ -66,14 +66,14 @@ func BenchmarkMapUint32Resolve(b *testing.B) {
 		1.41.132.176
 		100.1.197.216
 	*/
-	mapper[util.Ip2int("1.163.34.119")] = nil
-	mapper[util.Ip2int("1.172.104.133")] = nil
-	mapper[util.Ip2int("1.41.132.176")] = nil
+	mapper[ip.Ip2int("1.163.34.119")] = nil
+	mapper[ip.Ip2int("1.172.104.133")] = nil
+	mapper[ip.Ip2int("1.41.132.176")] = nil
 
-	b.ReportAllocs()
 	b.SetBytes(1)
-	key := util.Ip2int("1.41.132.176")
+	key := ip.Ip2int("1.41.132.176")
 	// run the Fib function b.N times
+	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = mapper[key]

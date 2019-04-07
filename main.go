@@ -6,13 +6,12 @@ package main
 import (
 	"github.com/zerjioang/etherniti/core/constants"
 	"github.com/zerjioang/etherniti/core/listener"
+	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
-
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -21,7 +20,7 @@ var (
 )
 
 func init() {
-	util.Commit = Build
+	banner.Commit = Build
 	logger.Info("system running with pointers size of: ", constants.PointerSize, "bits")
 }
 

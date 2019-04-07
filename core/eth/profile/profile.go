@@ -6,12 +6,13 @@ package profile
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/util/id"
+
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/etherniti/jwt-go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -189,7 +190,7 @@ func NewConnectionProfile() ConnectionProfile {
 func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
-		Id: util.GenerateUUIDFromEntropy(),
+		Id: id.GenerateUUIDFromEntropy(),
 		ProfileRequest: protocol.ProfileRequest{
 			RpcEndpoint: data.RpcEndpoint,
 			Address:     data.Address, //required
@@ -218,7 +219,7 @@ func NewDefaultConnectionProfile() ConnectionProfile {
 			Key:         "0x0",
 		},
 		//standard claims
-		Id:         util.GenerateUUIDFromEntropy(),
+		Id:         id.GenerateUUIDFromEntropy(),
 		Issuer:     "etherniti",
 		ExpiresAt:  now.Add(10 * fastime.Minute).Unix(),
 		NotBefore:  now.Unix(),

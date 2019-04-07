@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package util
+package str
 
 import (
 	"reflect"
@@ -48,8 +48,8 @@ func TestBytes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Bytes(tt.args.data); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Bytes() = %v, want %v", got, tt.want)
+			if got := UnsafeBytes(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("UnsafeBytes() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -68,8 +68,8 @@ func TestToString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToString(tt.args.data); got != tt.want {
-				t.Errorf("ToString() = %v, want %v", got, tt.want)
+			if got := UnsafeString(tt.args.data); got != tt.want {
+				t.Errorf("UnsafeString() = %v, want %v", got, tt.want)
 			}
 		})
 	}

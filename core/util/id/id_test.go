@@ -1,11 +1,9 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package util
+package id
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestGenerateUUID(t *testing.T) {
 	t.Run("uuid-entropy", func(t *testing.T) {

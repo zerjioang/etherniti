@@ -7,6 +7,8 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/labstack/echo/middleware"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
@@ -18,7 +20,6 @@ import (
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
-	"github.com/zerjioang/etherniti/core/util"
 )
 
 var (
@@ -105,7 +106,7 @@ func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add antibots policy
 		ua := c.Request().UserAgent()
-		ua = util.ToLowerAscii(ua)
+		ua = str.ToLowerAscii(ua)
 		if ua == "" {
 			//drop the request
 			logger.Warn("drop request: no user-agent provided")
@@ -163,7 +164,7 @@ func keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// add keep alive headers in the response if requested by the client
 		connectionMode := c.Request().Header.Get("Connection")
-		connectionMode = util.ToLowerAscii(connectionMode)
+		connectionMode = str.ToLowerAscii(connectionMode)
 		if connectionMode == "keep-alive" {
 			// keep alive connection mode requested
 			h := c.Response().Header()
