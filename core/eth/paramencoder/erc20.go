@@ -66,7 +66,8 @@ const (
 )
 
 var (
-	erc20AbiModel     abi.ABI
+	// read only variables for ERC20
+	erc20AbiModel     *abi.ABI
 	NameParams        string
 	DecimalsParams    string
 	TotalSupplyParams string
@@ -98,44 +99,32 @@ for example: in the case of total supply (0 params needed), would be:
 
 */
 func init() {
+	erc20AbiModel = new(abi.ABI)
 	unmErr := erc20AbiModel.UnmarshalJSON([]byte(erc20Abi))
 	if unmErr != nil {
 		logger.Error("failed to load ERC20 interaction model internals")
+		return
 	}
-	var err error
-
-	//preload totalsupply function params
-	var temp []byte
-	temp, err = erc20AbiModel.Pack("totalSupply")
-	if err != nil {
-		logger.Error("failed to load ERC20 'totalSupply' function interaction model internals")
-	}
-	// add 32 byte padding to set that this function has no parameters
-	TotalSupplyParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
-
-	//preload decimals function params
-	temp, err = erc20AbiModel.Pack("decimals")
-	if err != nil {
-		logger.Error("failed to load ERC20 'decimals' function interaction model internals")
-	}
-	// add 32 byte padding to set that this function has no parameters
-	DecimalsParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
-
-	//preload name function params
-	temp, err = erc20AbiModel.Pack("name")
-	if err != nil {
-		logger.Error("failed to load ERC20 'name' function interaction model internals")
-	}
-	NameParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
-
-	//preload symbol function params
-	temp, err = erc20AbiModel.Pack("symbol")
-	if err != nil {
-		logger.Error("failed to load ERC20 'symbol' function interaction model internals")
-	}
-	SymbolParams = hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+	// preload erc20 functions abi encoded data field
+	TotalSupplyParams, _ = generatePayload("totalSupply")
+	DecimalsParams, _ = generatePayload("decimals")
+	NameParams, _ = generatePayload("name")
+	SymbolParams, _ = generatePayload("symbol")
 }
 
-func LoadErc20Abi() abi.ABI {
+func LoadErc20Abi() *abi.ABI {
 	return erc20AbiModel
+}
+
+func generatePayload(functionName string) (string, error) {
+	//preload symbol function params
+	temp, err := erc20AbiModel.Pack(functionName)
+	if err != nil {
+		logger.Error("failed to load ERC20 '", functionName, "' interaction model")
+		return "", err
+	} else {
+		// add 32 byte padding to set that this function has no parameters
+		data := hex.ToEthHex(common.RightPadBytes(temp, 32+len(temp)))
+		return data, err
+	}
 }

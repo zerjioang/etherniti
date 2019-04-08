@@ -7,7 +7,12 @@
 package config
 
 import (
+	"net/http"
+	"runtime"
+
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
+
 	//_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
 
@@ -70,7 +75,6 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	LogLevel                = log.DEBUG
 
 	//for 'local development' deployment
-	listeningMode       = "http" // http or socket
 	HttpListenInterface = "127.0.0.1"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = HttpListenInterface + ":" + HttpPort
@@ -113,7 +117,8 @@ func init() {
 }
 
 //set default environment variables value for current context
-func SetDefaults(env map[string]interface{}) {
+func SetDefaults(data *EnvConfig) {
+	env := data.data
 	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "development"
 	env["X_ETHERNITI_HTTP_PORT"] = "8080"
 	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
@@ -125,12 +130,13 @@ func SetDefaults(env map[string]interface{}) {
 	env["X_ETHERNITI_ENABLE_CORS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
 	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
+	env["X_ETHERNITI_ENABLE_PROFILER"] = true
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true
 	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
 
 	//for 'local development' deployment
-	env["X_ETHERNITI_LISTENING_MODE"] = "socket" // http or socket
+	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
 	env["X_ETHERNITI_LISTENING_INTERFACE"] = "127.0.0.1"
 	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
 	env["X_ETHERNITI_SWAGGER_ADDRESS"] = HttpListenInterface + ":" + HttpPort
@@ -150,9 +156,9 @@ func SetDefaults(env map[string]interface{}) {
 // setup server config
 func Setup() {
 	// enable profile mode if requested
-	/*if IsProfilingEnabled() {
+	if IsProfilingEnabled() {
 		go runProfiler()
-	}*/
+	}
 }
 
 //There are 7 places you can get profiles in the default webserver: the ones mentioned above
@@ -168,10 +174,10 @@ func Setup() {
 //
 //http://localhost:6060/debug/pprof/profile?seconds=5
 //http://localhost:6060/debug/pprof/trace?seconds=5
-/*func runProfiler() {
+func runProfiler() {
 	go func() {
-		logger.Info("starting go profiler on :6060...")
+		logger.Info("starting go profiler on localhost:6060...")
 		runtime.SetBlockProfileRate(1)
-		log.Error(http.ListenAndServe(":6060", nil))
+		log.Error(http.ListenAndServe("localhost:6060", nil))
 	}()
-}*/
+}

@@ -10,7 +10,6 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
-
 function install(){
 	name=$1
 	package=$2
@@ -33,11 +32,15 @@ install "maligned" "github.com/mdempsky/maligned"
 # prealloc is a Go static analysis tool to find slice declarations that could potentially be preallocated.
 install "prealloc" "github.com/alexkohler/prealloc"
 
+project="github.com/zerjioang/etherniti"
+echo "aligncheck of ${project}"
+${GOPATH}/bin/aligncheck ${project}
+
 #get all files excluding vendors
 filelist=$(find . -type f -name "*.go" | grep -vendor)
 for file in ${filelist}
 do
-	#echo "goimports check in file $file"
+	echo "checking file $file"
 	#${GOPATH}/bin/goimports -v -w ${file}
 done
 

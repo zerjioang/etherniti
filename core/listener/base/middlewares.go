@@ -122,12 +122,7 @@ func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 
 // check if user agent string contains bot strings similarities
 func isBotRequest(userAgent string) bool {
-	var lock = false
-	var size = len(api.BadBotsList)
-	for i := 0; i < size && !lock; i++ {
-		lock = strings.Contains(userAgent, api.BadBotsList[i])
-	}
-	return lock
+	return api.BadBotsList.MatchAny(userAgent)
 }
 
 // check if http request host value is allowed or not

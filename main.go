@@ -23,7 +23,7 @@ var (
 func init() {
 	banner.Commit = Build
 	handlers.LoadIndexConstants()
-	logger.Info("system running with pointers size of: ", constants.PointerSize, "bits")
+	logger.Info("system running with pointers size of: ", constants.PointerSize, " bits")
 }
 
 // generate build sha1: git rev-parse --short HEAD
@@ -31,20 +31,16 @@ func init() {
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
 
-	// 1 read environment variables
-	envars := map[string]interface{}{}
-	config.SetDefaults(envars)
-	config.Read(envars)
-
-	// 2 get listening mode from env vars
-	logger.Info("starting etherniti proxy")
-	mode := config.ServiceListeningMode()
-
+	// setup current execution environment
 	config.Setup()
+
+	// 2 get listening mode
+	logger.Info("starting etherniti proxy listener with requested mode")
+	mode := config.ServiceListeningMode()
 
 	// 3 run listener
 	err := listener.FactoryListener(mode).Listen()
 	if err != nil {
-		log.Fatal("failed to execute http server:", err)
+		log.Fatal("failed to execute etherniti proxy:", err)
 	}
 }

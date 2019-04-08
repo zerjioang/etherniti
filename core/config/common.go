@@ -5,7 +5,6 @@ package config
 
 import (
 	"os"
-	"strings"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
@@ -30,17 +29,6 @@ var (
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 )
 
-//read environment variables
-func Read(env map[string]interface{}) {
-	logger.Debug("reading environment variables")
-	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
-		if len(pair) == 2 {
-			env[pair[0]] = pair[1]
-		}
-	}
-}
-
 //simply converts http requests into https
 func GetRedirectUrl(host string, path string) string {
 	return "https://" + ListeningAddress + path
@@ -62,22 +50,22 @@ func GetKeyPem() []byte {
 
 func IsHttpMode() bool {
 	logger.Debug("checking if http mode is enabled")
-	return listeningMode == "http"
+	return ReadEnvironment("X_ETHERNITI_LISTENING_MODE") == "http"
 }
 
 func IsSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
-	return listeningMode == "socket"
+	return ReadEnvironment("X_ETHERNITI_LISTENING_MODE") == "socket"
 }
 
 func IsProfilingEnabled() bool {
 	logger.Debug("checking if profiling mode is enabled")
-	return false
+	return ReadEnvironment("X_ETHERNITI_ENABLE_PROFILER") == true
 }
 
 func ServiceListeningMode() listener.ServiceType {
 	logger.Debug("reading service listening mode")
-	switch listeningMode {
+	switch ReadEnvironment("X_ETHERNITI_LISTENING_MODE") {
 	case "http":
 		return listener.HttpMode
 	case "socket":

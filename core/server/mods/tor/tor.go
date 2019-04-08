@@ -23,7 +23,7 @@ func BlockTorConnections(next echo.HandlerFunc) echo.HandlerFunc {
 		//get current request ip
 		requestIp := c.Request().RemoteAddr
 
-		_, found := api.TornodeList[requestIp]
+		found := api.TornodeSet.Contains(requestIp)
 		if !found {
 			//received request IP is not blacklisted
 			return next(c)

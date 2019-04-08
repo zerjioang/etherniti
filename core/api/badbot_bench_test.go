@@ -11,7 +11,7 @@ func BenchmarkBadBot(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = BadBotsList[0]
+			_ = badBotsList[0]
 		}
 	})
 	b.Run("last-item-access", func(b *testing.B) {
@@ -19,7 +19,7 @@ func BenchmarkBadBot(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = BadBotsList[len(BadBotsList)-1]
+			_ = badBotsList[len(badBotsList)-1]
 		}
 	})
 }

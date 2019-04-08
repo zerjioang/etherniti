@@ -9,12 +9,11 @@ import (
 )
 
 var (
-	TornodeSet *hashset.HashSet
+	BadBotsList *hashset.HashSet
 )
 
 func init() {
-	logger.Info("[module] loading tor nodes hash data")
-	TornodeSet = hashset.NewHashSet()
-	TornodeSet.LoadFromArray(tornodeList)
-	TornodeSet.LoadFromArray(tornodeExitList)
+	logger.Info("[module] loading anti-bots policy data")
+	BadBotsList = hashset.NewHashSet()
+	BadBotsList.LoadFromArray(badBotsList)
 }

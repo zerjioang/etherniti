@@ -59,7 +59,7 @@ func (ctl ContractNameSpaceController) resolve(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl ContractNameSpaceController) RegisterRouters(router *echo.Group) {
-	logger.Info("exposing solc controller methods")
+	logger.Info("exposing cns controller methods")
 	router.POST("/registry", ctl.register)
 	router.DELETE("/registry/:id", ctl.unregister)
 	router.GET("/registry/:id", ctl.resolve)

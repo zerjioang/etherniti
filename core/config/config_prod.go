@@ -101,6 +101,7 @@ func SetDefaults(env map[string]interface{}) map[string]interface{} {
 	env["X_ETHERNITI_ENABLE_CORS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
 	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
+	env["X_ETHERNITI_ENABLE_PROFILER"] = false
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true
 	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
