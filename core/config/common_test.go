@@ -10,23 +10,6 @@ import (
 	"github.com/zerjioang/etherniti/shared/def/listener"
 )
 
-func TestRead(t *testing.T) {
-	type args struct {
-		env map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			Read(tt.args.env)
-		})
-	}
-}
-
 func TestGetRedirectUrl(t *testing.T) {
 	type args struct {
 		host string

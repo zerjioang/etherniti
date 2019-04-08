@@ -3,7 +3,10 @@
 
 package trycatch
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func BenchmarkError(b *testing.B) {
 	b.Run("generate-nil", func(b *testing.B) {
@@ -39,5 +42,24 @@ func BenchmarkError(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			_ = stackErr.Error()
 		}
+	})
+	b.Run("ret", func(b *testing.B) {
+		b.Run("nil", func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_ = Ret(nil)
+			}
+		})
+		b.Run("cause", func(b *testing.B) {
+			cause := errors.New("default cause as example")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_ = Ret(cause)
+			}
+		})
 	})
 }

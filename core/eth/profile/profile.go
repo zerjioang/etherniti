@@ -6,6 +6,9 @@ package profile
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/util/ip"
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/id"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -28,7 +31,7 @@ type ConnectionProfile struct {
 	protocol.ProfileRequest
 
 	// service version when profile was generated
-	Version int `json:"version"`
+	Version string `json:"version"`
 	//standard claims
 	//Identifies the recipients that the JWT is intended for.
 	// Each principal intended to process the JWT must identify
@@ -74,7 +77,7 @@ func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfil
 	profile.RpcEndpoint = profile.readString(claims["endpoint"])
 	profile.Address = profile.readString(claims["address"])
 	profile.Key = profile.readString(claims["key"])
-	profile.Version = profile.readInt(claims["version"])
+	profile.Version = constants.Version
 	profile.Valididity = profile.readBool(claims["validity"])
 	profile.Audience = profile.readString(claims["aud"])
 	profile.ExpiresAt = profile.readInt64(claims["exp"])
@@ -195,12 +198,13 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 			RpcEndpoint: data.RpcEndpoint,
 			Address:     data.Address, //required
 			Key:         data.Key,
+			Source:      ip.Ip2int(data.Ip),
 		},
 		Issuer:    "etherniti.org",
 		ExpiresAt: now.Add(config.TokenExpiration).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
-		Version:   1,
+		Version:   constants.Version,
 	}
 	//check profile validity
 	p.Valididity = p.Id != "" &&

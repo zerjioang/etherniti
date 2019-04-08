@@ -4,10 +4,10 @@
 package main
 
 import (
-	"github.com/zerjioang/etherniti/core/constants"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/listener"
 	"github.com/zerjioang/etherniti/core/util/banner"
+	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/logger"
 

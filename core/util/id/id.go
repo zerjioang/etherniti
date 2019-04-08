@@ -19,7 +19,7 @@ func GenerateUUIDFromEntropy() string {
 	var uuidData [Size]byte
 	_, err := io.ReadAtLeast(rand.Reader, uuidData[:], Size)
 	if err != nil {
-		logger.Error("Error generating UUID. Caused by: ", err)
+		logger.Error("error generating UUID. caused by: ", err)
 		return ""
 	}
 

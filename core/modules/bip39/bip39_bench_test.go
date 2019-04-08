@@ -92,7 +92,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.ChineseSimplified)
+				SetWordList("chinese-simplified")
 			}
 		})
 		b.Run("ChineseTraditional", func(b *testing.B) {
@@ -100,7 +100,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.ChineseTraditional)
+				SetWordList("chinese-traditional")
 			}
 		})
 		b.Run("English", func(b *testing.B) {
@@ -108,7 +108,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.English)
+				SetWordList("english")
 			}
 		})
 		b.Run("French", func(b *testing.B) {
@@ -116,7 +116,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.French)
+				SetWordList("french")
 			}
 		})
 		b.Run("Italian", func(b *testing.B) {
@@ -124,7 +124,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.Italian)
+				SetWordList("italian")
 			}
 		})
 		b.Run("Japanese", func(b *testing.B) {
@@ -132,7 +132,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.Japanese)
+				SetWordList("japanese")
 			}
 		})
 		b.Run("Spanish", func(b *testing.B) {
@@ -140,7 +140,7 @@ func BenchmarkBip39(b *testing.B) {
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
-				SetWordList(wordlists.Spanish)
+				SetWordList("spanish")
 			}
 		})
 	})

@@ -3,10 +3,14 @@
 
 package trycatch
 
-type Error string
+import "github.com/zerjioang/etherniti/core/util/str"
+
+type Error struct {
+	cause []byte
+}
 
 var (
-	nilErr = Error("")
+	nilErr = New("")
 )
 
 func Nil() Error {
@@ -17,20 +21,20 @@ func Ret(e error) Error {
 	if e == nil {
 		return nilErr
 	}
-	return New(e.Error())
+	return Error{str.UnsafeBytes(e.Error())}
 }
 
 func New(msg string) Error {
-	return Error(msg)
+	return Error{str.UnsafeBytes(msg)}
 }
 
 func (stack Error) Error() string {
-	return string(stack)
+	return str.UnsafeString(stack.cause)
 }
 
 func (stack Error) Occur() bool {
-	return stack != ""
+	return len(stack.cause) > 0
 }
 func (stack Error) None() bool {
-	return stack == ""
+	return len(stack.cause) == 0
 }

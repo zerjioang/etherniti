@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 
+	constants2 "github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/listener/base"
@@ -23,7 +25,6 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/release"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 )
 
@@ -202,7 +203,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	//replace hardcoded variables
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti REST API Proxy", -1)
-	str = strings.Replace(str, "$version", release.Version, -1)
+	str = strings.Replace(str, "$version", constants2.Version, -1)
 	str = strings.Replace(str, "$host", config.SwaggerAddress, -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)

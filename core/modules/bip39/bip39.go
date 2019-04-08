@@ -57,13 +57,13 @@ var (
 
 	// wordMap is a reverse lookup map for wordList
 	// wordMap map[string]int
-	radixtree *radix.Tree
+	currentRadixtree *radix.Tree
 )
 
 var (
 	errInvalidWord = trycatch.New("word not found in reverse map")
 	// ErrInvalidMnemonic is returned when trying to use a malformed mnemonic.
-	ErrInvalidMnemonic = trycatch.New("invalid mnenomic")
+	ErrInvalidMnemonic = trycatch.New("invalid mnenomic due to malformed input")
 
 	// ErrEntropyLengthInvalid is returned when trying to use an entropy set with
 	// an invalid size.
@@ -76,31 +76,48 @@ var (
 
 	// ErrChecksumIncorrect is returned when entropy has the incorrect checksum.
 	ErrChecksumIncorrect = trycatch.New("checksum incorrect")
+
+	supportedWordlists map[string]*radix.Tree
 )
 
 func init() {
+	// preload all supported wordlists
+	supportedWordlists = map[string]*radix.Tree{
+		"chinese-simplified":  initializeInternalWordlist(wordlists.ChineseSimplified),
+		"chinese-traditional": initializeInternalWordlist(wordlists.ChineseTraditional),
+		"english":             initializeInternalWordlist(wordlists.English),
+		"french":              initializeInternalWordlist(wordlists.French),
+		"italian":             initializeInternalWordlist(wordlists.Italian),
+		"japanese":            initializeInternalWordlist(wordlists.Japanese),
+		"korean":              initializeInternalWordlist(wordlists.Korean),
+		"spanish":             initializeInternalWordlist(wordlists.Spanish),
+	}
 	// set default language to english
-	initializeInternalWordlist(wordlists.English)
+	currentRadixtree = initializeInternalWordlist(wordlists.English)
 	// initialize list lock
 	listLock = sync.Mutex{}
 }
 
 // SetWordList sets the list of words to use for mnemonics. Currently the list
 // that is set is used package-wide.
-func initializeInternalWordlist(list []string) {
+func initializeInternalWordlist(list []string) *radix.Tree {
 	wordList = list
-	radixtree = radix.New()
+	tree := radix.New()
 	for i, v := range wordList {
-		radixtree.Insert(v, i)
+		tree.Insert(v, i)
 	}
+	return tree
 }
 
 // SetWordList sets the list of words to use for mnemonics. Currently the list
 // that is set is used package-wide.
-func SetWordList(list []string) {
-	listLock.Lock()
-	initializeInternalWordlist(list)
-	listLock.Unlock()
+func SetWordList(language string) {
+	tree, ok := supportedWordlists[language]
+	if ok {
+		listLock.Lock()
+		currentRadixtree = tree
+		listLock.Unlock()
+	}
 }
 
 // GetWordList gets the list of words to use for mnemonics.
@@ -110,7 +127,7 @@ func GetWordList() []string {
 
 // GetWordIndex gets word index in wordMap.
 func GetWordIndexFromTree(word string) (int, bool) {
-	idx, ok := radixtree.Get(word)
+	idx, ok := currentRadixtree.Get(word)
 	if ok {
 		return idx.(int), ok
 	}
@@ -118,7 +135,7 @@ func GetWordIndexFromTree(word string) (int, bool) {
 }
 
 func HasWord(word string) bool {
-	_, ok := radixtree.Get(word)
+	_, ok := currentRadixtree.Get(word)
 	return ok
 }
 

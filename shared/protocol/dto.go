@@ -17,8 +17,11 @@ type ProfileRequest struct {
 	RpcEndpoint string `json:"endpoint" form:"endpoint" query:"endpoint"`
 
 	// default ethereum account for transactioning
-	Address string `json:"address" form:"address" query:"address"`
-	Key     string `json:"key" form:"key" query:"key"`
+	Address string `json:"address,omitempty" form:"address" query:"address"`
+	Key     string `json:"key,omitempty" form:"key" query:"key"`
+	// source IP of the profile requester
+	Source uint32 `json:"source,omitempty" form:"source" query:"source"`
+	Ip     string `json:"ip,omitempty"`
 }
 
 // new entropy request dto

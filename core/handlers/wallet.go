@@ -23,7 +23,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/bip39"
-	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 )
 
 const (
@@ -68,21 +67,21 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	req.Language = str.ToLowerAscii(req.Language)
 
 	if req.Language == "chinese-simplified" {
-		bip39.SetWordList(wordlists.ChineseSimplified)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "chinese-traditional" {
-		bip39.SetWordList(wordlists.ChineseTraditional)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "english" {
-		bip39.SetWordList(wordlists.English)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "french" {
-		bip39.SetWordList(wordlists.French)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "italian" {
-		bip39.SetWordList(wordlists.Italian)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "japanese" {
-		bip39.SetWordList(wordlists.Japanese)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "korean" {
-		bip39.SetWordList(wordlists.Korean)
+		bip39.SetWordList(req.Language)
 	} else if req.Language == "spanish" {
-		bip39.SetWordList(wordlists.Spanish)
+		bip39.SetWordList(req.Language)
 	} else {
 		//return invalid language error
 		return api.ErrorStr(c, "provided language is not supported")

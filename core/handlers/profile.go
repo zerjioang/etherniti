@@ -49,6 +49,8 @@ func (ctl ProfileController) create(c echo.Context) error {
 		logger.Error("failed to bind request data to model: ", err)
 		return api.ErrorStr(c, bindErr)
 	}
+	// add current user IP to request
+	req.Ip = c.RealIP()
 	// create the connection profile
 	userProfile := profile.NewConnectionProfileWithData(req)
 	// create the token
