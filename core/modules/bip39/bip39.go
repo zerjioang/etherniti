@@ -13,6 +13,7 @@ import (
 	"crypto/sha512"
 	"encoding/binary"
 	"hash"
+	"io"
 	"math/big"
 	"strings"
 	"sync"
@@ -25,6 +26,17 @@ import (
 	"golang.org/x/crypto/pbkdf2"
 )
 
+// supported language names
+const (
+	ChineseSimplified = "chinese-simplified"
+	ChineseTraditional = "chinese-traditional"
+	English = "english"
+	French = "french"
+	Italian = "italian"
+	Japanese = "japanese"
+	Korean = "korean"
+	Spanish = "spanish"
+)
 var (
 	// Some bitwise operands for working with big.Ints
 	last11BitsMask  = big.NewInt(2047)
@@ -83,14 +95,14 @@ var (
 func init() {
 	// preload all supported wordlists
 	supportedWordlists = map[string]*radix.Tree{
-		"chinese-simplified":  initializeInternalWordlist(wordlists.ChineseSimplified),
-		"chinese-traditional": initializeInternalWordlist(wordlists.ChineseTraditional),
-		"english":             initializeInternalWordlist(wordlists.English),
-		"french":              initializeInternalWordlist(wordlists.French),
-		"italian":             initializeInternalWordlist(wordlists.Italian),
-		"japanese":            initializeInternalWordlist(wordlists.Japanese),
-		"korean":              initializeInternalWordlist(wordlists.Korean),
-		"spanish":             initializeInternalWordlist(wordlists.Spanish),
+		ChineseSimplified:  initializeInternalWordlist(wordlists.ChineseSimplified),
+		ChineseTraditional: initializeInternalWordlist(wordlists.ChineseTraditional),
+		English:              initializeInternalWordlist(wordlists.English),
+		French:               initializeInternalWordlist(wordlists.French),
+		Italian:              initializeInternalWordlist(wordlists.Italian),
+		Japanese:             initializeInternalWordlist(wordlists.Japanese),
+		Korean:               initializeInternalWordlist(wordlists.Korean),
+		Spanish:              initializeInternalWordlist(wordlists.Spanish),
 	}
 	// set default language to english
 	currentRadixtree = initializeInternalWordlist(wordlists.English)
@@ -146,7 +158,7 @@ func HasWord(word string) bool {
 func GenerateSecureEntropy(entropyBits uint16) ([]byte, error) {
 	entropyBytes := entropyBits / 8
 	raw := make([]byte, entropyBytes)
-	_, rErr := rand.Read(raw)
+	_, rErr := io.ReadFull(rand.Reader, raw)
 	return raw, rErr
 }
 
@@ -382,8 +394,8 @@ func IsMnemonicValid(mnemonic string) bool {
 // Currently only supports data up to 32 bytes
 func addChecksum(data []byte) []byte {
 	// Get first byte of sha256
-	hash := computeChecksum(data)
-	firstChecksumByte := hash[0]
+	checksum := computeChecksum(data)
+	firstChecksumByte := checksum[0]
 
 	// len() is in bytes so we divide by 4
 	checksumBitLength := uint(len(data) / 4)
@@ -449,8 +461,9 @@ func compareByteSlices(a, b []byte) bool {
 
 func splitMnemonicWords(mnemonic string) ([]string, bool) {
 	// Create a list of all the words in the mnemonic sentence
-	var words = []string{}
-	words = strings.Fields(mnemonic)
+	var words []string
+	//words = strings.Fields(mnemonic)
+	words = strings.Split(mnemonic, " ")
 
 	// Get num of words
 	numOfWords := len(words)

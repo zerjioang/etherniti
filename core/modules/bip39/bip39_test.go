@@ -17,6 +17,15 @@ type vector struct {
 	seed     string
 }
 
+func TestSplitData(t *testing.T) {
+	t.Run("default", func(t *testing.T) {
+		result, b := splitMnemonicWords("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
+		assertNotNil(t, result)
+		assertEqual(t, len(result), 12)
+		assertEqual(t, b, true)
+		t.Log(result)
+	})
+}
 func TestGetWordList(t *testing.T) {
 	assertEqualStringSlices(t, wordlists.English, GetWordList())
 }

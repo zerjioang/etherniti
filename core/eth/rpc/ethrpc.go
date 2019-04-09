@@ -22,6 +22,22 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+const (
+	// The default block parameter
+	//	When requests are made that act on the state of ethereum, the last default block parameter determines the height of the block.
+	//
+	//The following options are possible for the defaultBlock parameter:
+	//
+	//HEX String - an integer block number
+	//String "earliest" for the earliest/genesis block
+	//String "latest" - for the latest mined block
+	//String "pending" - for the pending state/transactions
+
+LatestBlockNumber = "latest"
+	EarliestBlockNumber = "earliest"
+	pendingBlockNumber = "pending"
+)
+
 // EthError - ethereum error
 type EthError struct {
 	Code    int    `json:"code"`
@@ -677,6 +693,19 @@ func (rpc EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawM
 		"from": fromAddress,
 		"data": bytecode,
 	})
+}
+
+func (rpc EthRPC) IsSmartContractAddress(addr string) (bool, error) {
+	contractAddress, decodeErr := fromStringToAddress(addr)
+	if decodeErr != nil {
+		logger.Error("failed to read and decode provided Ethereum contract address", decodeErr)
+		return false, decodeErr
+	}
+
+	bytecode, err := rpc.EthGetCode(contractAddress.Hex(), LatestBlockNumber) // empty is latest
+	// if the address has valid bytecode, is a contract
+	// if is not code addres 0x is returned
+	return len(bytecode) > 2, err
 }
 
 // helper methods

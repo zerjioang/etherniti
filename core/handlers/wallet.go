@@ -4,10 +4,9 @@
 package handlers
 
 import (
-	"crypto/rand"
 	"crypto/sha512"
+	"encoding/hex"
 	"errors"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -65,24 +64,17 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 
 	// lowercase language
 	req.Language = str.ToLowerAscii(req.Language)
-
-	if req.Language == "chinese-simplified" {
+	switch req.Language {
+	case bip39.ChineseSimplified,
+		bip39.ChineseTraditional,
+		bip39.English,
+		bip39.French,
+		bip39.Italian,
+		bip39.Japanese,
+		bip39.Korean,
+		bip39.Spanish:
 		bip39.SetWordList(req.Language)
-	} else if req.Language == "chinese-traditional" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "english" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "french" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "italian" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "japanese" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "korean" {
-		bip39.SetWordList(req.Language)
-	} else if req.Language == "spanish" {
-		bip39.SetWordList(req.Language)
-	} else {
+	default:
 		//return invalid language error
 		return api.ErrorStr(c, "provided language is not supported")
 	}
@@ -93,21 +85,19 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 		req.Size != 224 &&
 		req.Size != 256 {
 		//return invalid size error
-		return api.ErrorStr(c, "provided mnemonic size is not supported")
+		return api.ErrorStr(c, "provided mnemonic size is not supported. allowed sizes are: 128,160,192,224,256")
 	}
 
 	// create new Entropy from rand reader
 	// Entropy is measured as bits and size measures bytes
-	var entropyBytes = uint8(req.Size / 8)
-	entropy := make([]byte, entropyBytes)
-	n, readErr := io.ReadFull(rand.Reader, entropy)
-	if readErr != nil || uint8(n) != entropyBytes {
+	entropyBytes, entropyErr := bip39.GenerateSecureEntropy(req.Size)
+	if entropyErr != nil {
 		//failed to get a full Entropy source
-		return api.ErrorStr(c, "failed to get a full Entropy source")
+		return api.ErrorStr(c, "failed to get a full entropy source")
 	}
 
 	// create Mnemonic based on user config and created Entropy source
-	mnemomic, err := bip39.NewMnemonic(entropy)
+	mnemomic, err := bip39.NewMnemonic(entropyBytes)
 	if err.Occur() {
 		//return mnemonic error
 		return api.StackError(c, err)
@@ -116,9 +106,11 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 		var response protocol.MnemonicResponse
 		response.Language = req.Language
 		response.Size = req.Size
-		if req.Secret != "" {
+		response.IsEncrypted = req.Secret != ""
+		response.Mnemonic = mnemomic
+		if response.IsEncrypted {
 			encryptedSeed := bip39.NewSeed(mnemomic, req.Secret)
-			response.EncryptedSeed = string(encryptedSeed)
+			response.EncryptedSeed = hex.EncodeToString(encryptedSeed)
 		}
 		return api.SendSuccess(c, "mnemonic successfully created", response)
 	}

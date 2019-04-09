@@ -324,6 +324,7 @@ func BenchmarkBip39(b *testing.B) {
 		}
 	})
 
+	// BenchmarkBip39/splitMnemonicWords-4         	 3000000	       393 ns/op	   2.54 MB/s	     192 B/op	       1 allocs/op
 	b.Run("splitMnemonicWords", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)

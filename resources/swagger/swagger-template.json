@@ -281,7 +281,8 @@
           "schema": {
             "example": {
               "language": "english",
-              "size": 128
+              "size": 128,
+              "secret": "my-s33d-p4ssw0rd"
             }
           }
         }],
@@ -396,10 +397,10 @@
         }
       }
     },
-    "/private/eth/is/contract/{address}": {
+    "/{network}/is/contract/{address}": {
       "get": {
-        "tags": ["wallet", "private"],
-        "summary": "Verify if Ethereum contract address is a contract",
+        "tags": ["web3"],
+        "summary": "Verify if an Ethereum address belongs to an existing contract",
         "description": "Verify if given Ethereum contract address is a contract holder address or not",
         "operationId": "has-contract",
         "consumes": ["application/json"],
@@ -409,6 +410,14 @@
           "connectionProfileToken": []
         }],
         "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        },{
           "in": "path",
           "name": "address",
           "description": "Ethereum contract address to be validated",
@@ -863,8 +872,8 @@
     "/{network}/protocol/version": {
       "get": {
         "tags": ["web3"],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get network protocol version information",
+        "description": "Get target Ethereum or Quorum network protocol version details",
         "operationId": "web3-protocol-version",
         "consumes": ["application/json"],
         "produces": ["application/json"],
@@ -1620,7 +1629,7 @@
     },
     "/{network}/erc20/{contract}/totalsupply": {
       "get": {
-        "tags": ["erc20", "private"],
+        "tags": ["erc20"],
         "summary": "Read total supply of ERC 20 smart contract",
         "description": "Read total supply of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-totalsupply",

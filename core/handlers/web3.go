@@ -23,7 +23,6 @@ import (
 	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/labstack/echo"
-	"github.com/zerjioang/etherniti/core/eth"
 )
 
 var (
@@ -307,7 +306,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.Context) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
-		result, err := eth.IsSmartContractAddress(clientInstance, targetAddr)
+		result, err := clientInstance.IsSmartContractAddress(targetAddr)
 		if err != nil {
 			return api.Error(c, err)
 		}
