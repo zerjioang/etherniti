@@ -16,7 +16,14 @@ echo "checking if gotests is installed in $GOPATH"
 if [[ ! -f ${GOPATH}/bin/gotests ]]; then
 	#statements
 	echo "gotests not found. Downloading via go get"
-	go get -u -v github.com/cweill/gotests
+	go get -v github.com/cweill/gotests
+	cd ${GOPATH}/src/github.com/cweill/gotests/gotests
+	go build && go install
+fi
+
+if [[ ! -f ${GOPATH}/bin/gotests ]]; then
+	echo "failed to install gotests in ${GOPATH}"
+	return -1
 fi
 
 #get all files excluding vendors
