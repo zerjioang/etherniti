@@ -17,7 +17,7 @@ ARG FILE=proxy
 ARG ETHERNITI_GOOS=linux
 ARG ETHERNITI_GOARCH=amd64
 ARG USER=etherniti
-ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/resources
+ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/testdata
 
 ENV USER                etherniti
 
@@ -94,7 +94,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
 ARG USER=etherniti
 ARG EXEC=proxy
-ARG BASE=src/github.com/zerjioang/etherniti/resources
+ARG BASE=src/github.com/zerjioang/etherniti/testdata
 
 ENV GOPATH=/home/${USER}/go
 ENV PATH="/home/${USER}:${PATH}"
@@ -106,7 +106,7 @@ COPY ./scripts/docker/hardening.sh hardening.sh
 # create user $USER
 RUN adduser -S ${USER} && \
     addgroup -S appgroup && \
-    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/resources && \
+    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/testdata && \
     chmod +x hardening.sh && \
     ./hardening.sh && \
     rm hardening.sh && \

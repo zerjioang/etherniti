@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/shared/protocol"
 )
 

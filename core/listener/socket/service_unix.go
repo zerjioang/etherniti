@@ -16,11 +16,11 @@ import (
 	"github.com/zerjioang/etherniti/core/listener/base"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 // UNIX domain sockets are a method by which processes on the same host can communicate

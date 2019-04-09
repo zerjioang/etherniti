@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewSolcController(t *testing.T) {

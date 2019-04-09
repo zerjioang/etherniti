@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/handlers"
 )

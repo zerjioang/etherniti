@@ -12,7 +12,7 @@ import (
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/logger"

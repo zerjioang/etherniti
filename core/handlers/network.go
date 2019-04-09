@@ -6,7 +6,7 @@ package handlers
 import (
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 // eth network controller

@@ -6,7 +6,7 @@ package ratelimit
 import (
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (

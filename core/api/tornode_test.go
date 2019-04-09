@@ -6,7 +6,7 @@ package api
 import (
 	"testing"
 
-	"github.com/armon/go-radix"
+	"github.com/zerjioang/etherniti/core/modules/radix"
 )
 
 func TestCreateRadix(t *testing.T) {

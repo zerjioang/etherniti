@@ -10,7 +10,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 const (

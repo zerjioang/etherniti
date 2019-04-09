@@ -19,7 +19,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 const (
@@ -33,9 +33,9 @@ const (
 	//String "latest" - for the latest mined block
 	//String "pending" - for the pending state/transactions
 
-LatestBlockNumber = "latest"
+	LatestBlockNumber   = "latest"
 	EarliestBlockNumber = "earliest"
-	pendingBlockNumber = "pending"
+	pendingBlockNumber  = "pending"
 )
 
 // EthError - ethereum error

@@ -52,9 +52,9 @@ type MnemonicResponse struct {
 	// language
 	Language string `json:"language" form:"language" query:"language"`
 	// mnemonic data
-	Mnemonic  string `json:"mnemonic" form:"mnemonic" query:"mnemonic"`
+	Mnemonic string `json:"mnemonic" form:"mnemonic" query:"mnemonic"`
 	// encrypted status
-	IsEncrypted  bool `json:"isEncrypted" form:"isEncrypted" query:"isEncrypted"`
+	IsEncrypted bool `json:"isEncrypted" form:"isEncrypted" query:"isEncrypted"`
 	// Mnemonic hashed seed
 	EncryptedSeed string `json:"encSeed" form:"encSeed" query:"encSeed"`
 }

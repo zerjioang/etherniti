@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  digest = "1:c47f4964978e211c6e566596ec6246c329912ea92e9bb99c00798bb4564c5b09"
-  name = "github.com/armon/go-radix"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "1a2de0c21c94309923825da3df33a4381872c795"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
   digest = "1:093bf93a65962e8191e3e8cd8fc6c363f83d43caca9739c906531ba7210a9904"
   name = "github.com/btcsuite/btcd"
@@ -26,52 +18,12 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
-
-[[projects]]
-  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
-  name = "github.com/etherniti/jwt-go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
-
-[[projects]]
   digest = "1:5499aeb9d8a5c3d99d5f924e05ce1f86bf878cb9885dcf9e71ba0dafdce84d96"
   name = "github.com/jarcoal/httpmock"
   packages = ["."]
   pruneopts = "UT"
   revision = "b43b330ad7ef975a5049e4cc58f948aa6d9cad89"
   version = "v1.0.1"
-
-[[projects]]
-  digest = "1:efd601ad1d1189884f37ed075fadb5bbd17f1f5acf5862827247c6da56d125ba"
-  name = "github.com/labstack/echo"
-  packages = [
-    ".",
-    "middleware",
-  ]
-  pruneopts = "UT"
-  revision = "38772c686c76b501f94bd6cd5b77f5842e93b559"
-  version = "v3.3.10"
-
-[[projects]]
-  digest = "1:764bce605f1c70823a567ac3205a03e6b7f375ca747d8820fded0b0abddda802"
-  name = "github.com/labstack/gommon"
-  packages = [
-    "bytes",
-    "color",
-    "log",
-    "random",
-  ]
-  pruneopts = "UT"
-  revision = "7fd9f68ece0bcb1a905fac8f1549f0083f71c51b"
-  version = "v0.2.8"
 
 [[projects]]
   digest = "1:2fa7b0155cd54479a755c629de26f888a918e13f8857a2c442205d825368e084"
@@ -150,14 +102,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:4d29fdc69817829d8c78473d61613d984ce59675110cee7a2f0314f332cc70a2"
-  name = "github.com/valyala/fasttemplate"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "8b5e4e491ab636663841c42ea3c5a9adebabaf36"
-  version = "v1.0.1"
-
-[[projects]]
   branch = "master"
   digest = "1:0647928d4f872e0aef86177d49db0d660b5ff71a51eb04af25b1698a180ff075"
   name = "golang.org/x/crypto"
@@ -186,18 +130,18 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/armon/go-radix",
     "github.com/btcsuite/btcd/btcec",
-    "github.com/etherniti/jwt-go",
     "github.com/jarcoal/httpmock",
-    "github.com/labstack/echo",
-    "github.com/labstack/echo/middleware",
-    "github.com/labstack/gommon/log",
+    "github.com/mattn/go-colorable",
+    "github.com/mattn/go-isatty",
     "github.com/pkg/profile",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/require",
     "github.com/stretchr/testify/suite",
     "github.com/tidwall/gjson",
+    "github.com/valyala/bytebufferpool",
+    "golang.org/x/crypto/acme",
+    "golang.org/x/crypto/acme/autocert",
     "golang.org/x/crypto/pbkdf2",
     "golang.org/x/crypto/ripemd160",
     "golang.org/x/crypto/sha3",

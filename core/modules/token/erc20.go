@@ -7,7 +7,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 )
 

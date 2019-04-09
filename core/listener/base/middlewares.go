@@ -7,15 +7,17 @@ import (
 	"errors"
 	"strings"
 
+	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/labstack/echo/middleware"
+	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"github.com/zerjioang/etherniti/shared/constants"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -190,7 +192,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	logger.Info("[LAYER] logger level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		e.Use(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
 		}))
 	}

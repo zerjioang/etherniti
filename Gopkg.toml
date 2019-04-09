@@ -3,7 +3,7 @@
     author = "zerjioang"
 
 ignored = [
-    "github.com/zerjioang/etherniti/resources*",
+    "github.com/zerjioang/etherniti/testdata*",
     "github.com/zerjioang/etherniti/scripts*",
     "github.com/zerjioang/etherniti/secrets*",
     "github.com/zerjioang/etherniti/ofus*"

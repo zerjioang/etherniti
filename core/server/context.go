@@ -10,7 +10,7 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 )

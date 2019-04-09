@@ -18,25 +18,27 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/modules/radix"
+
 	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 
 	"github.com/zerjioang/etherniti/core/trycatch"
 
-	"github.com/armon/go-radix"
 	"golang.org/x/crypto/pbkdf2"
 )
 
 // supported language names
 const (
-	ChineseSimplified = "chinese-simplified"
+	ChineseSimplified  = "chinese-simplified"
 	ChineseTraditional = "chinese-traditional"
-	English = "english"
-	French = "french"
-	Italian = "italian"
-	Japanese = "japanese"
-	Korean = "korean"
-	Spanish = "spanish"
+	English            = "english"
+	French             = "french"
+	Italian            = "italian"
+	Japanese           = "japanese"
+	Korean             = "korean"
+	Spanish            = "spanish"
 )
+
 var (
 	// Some bitwise operands for working with big.Ints
 	last11BitsMask  = big.NewInt(2047)
@@ -97,12 +99,12 @@ func init() {
 	supportedWordlists = map[string]*radix.Tree{
 		ChineseSimplified:  initializeInternalWordlist(wordlists.ChineseSimplified),
 		ChineseTraditional: initializeInternalWordlist(wordlists.ChineseTraditional),
-		English:              initializeInternalWordlist(wordlists.English),
-		French:               initializeInternalWordlist(wordlists.French),
-		Italian:              initializeInternalWordlist(wordlists.Italian),
-		Japanese:             initializeInternalWordlist(wordlists.Japanese),
-		Korean:               initializeInternalWordlist(wordlists.Korean),
-		Spanish:              initializeInternalWordlist(wordlists.Spanish),
+		English:            initializeInternalWordlist(wordlists.English),
+		French:             initializeInternalWordlist(wordlists.French),
+		Italian:            initializeInternalWordlist(wordlists.Italian),
+		Japanese:           initializeInternalWordlist(wordlists.Japanese),
+		Korean:             initializeInternalWordlist(wordlists.Korean),
+		Spanish:            initializeInternalWordlist(wordlists.Spanish),
 	}
 	// set default language to english
 	currentRadixtree = initializeInternalWordlist(wordlists.English)

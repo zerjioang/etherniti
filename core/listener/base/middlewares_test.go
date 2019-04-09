@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func Test_customHTTPErrorHandler(t *testing.T) {

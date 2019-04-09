@@ -17,7 +17,7 @@ var (
 	//key content as bytes readed from filesystem
 	keyPemBytes  []byte
 	gopath       = os.Getenv("GOPATH")
-	ResourcesDir = gopath + "/src/github.com/zerjioang/etherniti/resources"
+	ResourcesDir = gopath + "/src/github.com/zerjioang/etherniti/testdata"
 	// define internal folders
 	ResourcesDirInternal         = ResourcesDir + "/internal"
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"

@@ -27,13 +27,13 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   713 kB syscall
   631 kB crypto/x509
   626 kB text/template
-  602 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/echo
+  602 kB github.com/zerjioang/etherniti/vendor/github.com/zerjioang/etherniti/thirdparty/echo
   596 kB encoding/xml
   559 kB github.com/zerjioang/etherniti/core/handlers
   546 kB encoding/json
   510 kB html/template
   509 kB text/template/parse
-  456 kB github.com/zerjioang/etherniti/vendor/github.com/labstack/echo/middleware
+  456 kB github.com/zerjioang/etherniti/vendor/github.com/zerjioang/etherniti/thirdparty/echo/middleware
   447 kB vendor/golang_org/x/text/unicode/norm
   424 kB time
   403 kB regexp/syntax
@@ -57,7 +57,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   224 kB github.com/zerjioang/etherniti/core/server
   219 kB os/exec
   210 kB github.com/zerjioang/etherniti/vendor/github.com/dgrijalva/jwt-go
-  210 kB github.com/zerjioang/etherniti/vendor/github.com/etherniti/jwt-go
+  210 kB github.com/zerjioang/etherniti/vendor/github.com/zerjioang/etherniti/thirdparty/jwt-go
   204 kB math
   200 kB vendor/golang_org/x/net/idna
   189 kB flag

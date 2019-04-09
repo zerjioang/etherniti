@@ -17,7 +17,7 @@ ARG FILE=proxy
 ARG ETHERNITI_GOOS=linux
 ARG ETHERNITI_GOARCH=amd64
 ARG USER=etherniti
-ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/resources
+ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/testdata
 
 ENV USER                etherniti
 
@@ -47,7 +47,7 @@ ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
 ARG USER=etherniti
 ARG GOPATH=/home/${USER}/go
 ARG EXEC=proxy
-ARG BASE=src/github.com/zerjioang/etherniti/resources
+ARG BASE=src/github.com/zerjioang/etherniti/testdata
 
 WORKDIR /home/${USER}
 

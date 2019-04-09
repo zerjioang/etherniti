@@ -6,7 +6,7 @@ package server
 import (
 	"testing"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func Test_jwtFromHeader(t *testing.T) {

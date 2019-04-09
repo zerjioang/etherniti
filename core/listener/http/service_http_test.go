@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/labstack/echo"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 )

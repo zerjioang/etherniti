@@ -200,7 +200,7 @@ func (of Ofuscator) skipPath(file string) bool {
 		strings.Contains(file, "/vendor") ||
 		strings.Contains(file, "/out") ||
 		strings.Contains(file, "/ofus") ||
-		strings.Contains(file, "/resources") ||
+		strings.Contains(file, "/testdata") ||
 		strings.Contains(file, "/scripts")
 }
 

@@ -13,10 +13,10 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	//_ "net/http/pprof" //adds 2,5Mb to final executable when imported
+	_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 )
 

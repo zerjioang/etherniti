@@ -12,7 +12,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/labstack/gommon/log"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 )
 
@@ -116,7 +116,8 @@ func init() {
 }
 
 //set default environment variables value for current context
-func SetDefaults(env map[string]interface{}) map[string]interface{} {
+func SetDefaults(data *EnvConfig) {
+	env := data.data
 	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "beta-stage"
 	env["X_ETHERNITI_HTTP_PORT"] = "8080"
 	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
@@ -149,8 +150,6 @@ func SetDefaults(env map[string]interface{}) map[string]interface{} {
 	// ratelimit configuration
 	env["X_ETHERNITI_RATE_LIMIT"] = 10
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
-
-	return env
 }
 
 // setup server config

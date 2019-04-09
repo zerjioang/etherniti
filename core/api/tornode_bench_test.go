@@ -6,9 +6,9 @@ package api
 import (
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/util/ip"
+	"github.com/zerjioang/etherniti/core/modules/radix"
 
-	"github.com/armon/go-radix"
+	"github.com/zerjioang/etherniti/core/util/ip"
 )
 
 func BenchmarkRadixResolve(b *testing.B) {
