@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/modules/cache"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewNetworkController(t *testing.T) {

@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/shared/def/listener"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestHttpListener(t *testing.T) {

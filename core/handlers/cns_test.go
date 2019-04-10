@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/modules/cns"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewContractNameSpaceController(t *testing.T) {

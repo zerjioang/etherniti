@@ -10,9 +10,9 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 // creating a custom context,

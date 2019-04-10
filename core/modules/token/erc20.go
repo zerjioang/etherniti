@@ -7,8 +7,8 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 const (

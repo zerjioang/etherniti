@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/shared/protocol"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewWalletController(t *testing.T) {

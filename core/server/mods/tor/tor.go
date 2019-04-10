@@ -8,8 +8,8 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (

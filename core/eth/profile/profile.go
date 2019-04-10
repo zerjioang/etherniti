@@ -13,9 +13,9 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
 )
 
 var (

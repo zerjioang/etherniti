@@ -13,10 +13,9 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"reflect"
-	"unsafe"
 
 	"github.com/valyala/bytebufferpool"
+	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 // ExecuteFunc calls f on each template tag (placeholder) occurrence.
@@ -26,9 +25,9 @@ import (
 // This function is optimized for constantly changing templates.
 // Use Template.ExecuteFunc for frozen templates.
 func ExecuteFunc(template, startTag, endTag string, w io.Writer, f TagFunc) (int64, error) {
-	s := unsafeString2Bytes(template)
-	a := unsafeString2Bytes(startTag)
-	b := unsafeString2Bytes(endTag)
+	s := str.UnsafeBytes(template)
+	a := str.UnsafeBytes(startTag)
+	b := str.UnsafeBytes(endTag)
 
 	var nn int64
 	var ni int
@@ -53,7 +52,7 @@ func ExecuteFunc(template, startTag, endTag string, w io.Writer, f TagFunc) (int
 			break
 		}
 
-		ni, err = f(w, unsafeBytes2String(s[:n]))
+		ni, err = f(w, str.UnsafeString(s[:n]))
 		nn += int64(ni)
 		s = s[n+len(b):]
 	}
@@ -87,7 +86,7 @@ func Execute(template, startTag, endTag string, w io.Writer, m map[string]interf
 // This function is optimized for constantly changing templates.
 // Use Template.ExecuteFuncString for frozen templates.
 func ExecuteFuncString(template, startTag, endTag string, f TagFunc) string {
-	tagsCount := bytes.Count(unsafeString2Bytes(template), unsafeString2Bytes(startTag))
+	tagsCount := bytes.Count(str.UnsafeBytes(template), str.UnsafeBytes(startTag))
 	if tagsCount == 0 {
 		return template
 	}
@@ -190,9 +189,9 @@ func (t *Template) Reset(template, startTag, endTag string) error {
 		panic("endTag cannot be empty")
 	}
 
-	s := unsafeString2Bytes(template)
-	a := unsafeString2Bytes(startTag)
-	b := unsafeString2Bytes(endTag)
+	s := str.UnsafeBytes(template)
+	a := str.UnsafeBytes(startTag)
+	b := str.UnsafeBytes(endTag)
 
 	tagsCount := bytes.Count(s, a)
 	if tagsCount == 0 {
@@ -217,10 +216,10 @@ func (t *Template) Reset(template, startTag, endTag string) error {
 		s = s[n+len(a):]
 		n = bytes.Index(s, b)
 		if n < 0 {
-			return fmt.Errorf("Cannot find end tag=%q in the template=%q starting from %q", endTag, template, s)
+			return fmt.Errorf("cannot find end tag=%q in the template=%q starting from %q", endTag, template, s)
 		}
 
-		t.tags = append(t.tags, unsafeBytes2String(s[:n]))
+		t.tags = append(t.tags, str.UnsafeString(s[:n]))
 		s = s[n+len(b):]
 	}
 
@@ -238,7 +237,7 @@ func (t *Template) ExecuteFunc(w io.Writer, f TagFunc) (int64, error) {
 
 	n := len(t.texts) - 1
 	if n == -1 {
-		ni, err := w.Write(unsafeString2Bytes(t.template))
+		ni, err := w.Write(str.UnsafeBytes(t.template))
 		return int64(ni), err
 	}
 
@@ -320,18 +319,4 @@ func stdTagFunc(w io.Writer, tag string, m map[string]interface{}) (int, error) 
 	default:
 		panic(fmt.Sprintf("tag=%q contains unexpected value type=%#v. Expected []byte, string or TagFunc", tag, v))
 	}
-}
-
-func unsafeBytes2String(b []byte) string {
-	return *(*string)(unsafe.Pointer(&b))
-}
-
-func unsafeString2Bytes(s string) []byte {
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	bh := reflect.SliceHeader{
-		Data: sh.Data,
-		Len:  sh.Len,
-		Cap:  sh.Len,
-	}
-	return *(*[]byte)(unsafe.Pointer(&bh))
 }

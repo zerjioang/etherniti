@@ -5,4 +5,4 @@
 etherniti
 eth-temp
 secrets
-resources/swagger/swagger.json
+testdata/swagger/swagger.json

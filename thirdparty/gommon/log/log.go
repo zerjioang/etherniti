@@ -1,10 +1,12 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package log
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/zerjioang/etherniti/thirdparty/template"
 	"io"
 	"os"
 	"path"
@@ -12,6 +14,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/zerjioang/etherniti/thirdparty/template"
 
 	"github.com/mattn/go-isatty"
 

@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package jwt
 
 // Implements the none signing method.  This is required by the spec

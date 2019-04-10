@@ -172,6 +172,47 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.Context) error {
 	}
 }
 
+// this functions detects is web3_clientVersion information is
+// EthereumJS TestRPC/v2.5.5-beta.0/ethereum-js or similar
+func (ctl *Web3Controller) isRunningGanache(c echo.Context) error {
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+
+	//try to get this information from the cache
+	key := "is_ganache"
+	result, found := ctl.cache.Get(key)
+	if found && result != nil {
+		//cache hit
+		logger.Info(key, ": cache hit")
+		response := api.ToSuccess(key, result)
+		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+	} else {
+		//cache miss
+		logger.Info(key, ": cache miss")
+		clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+		logger.Info("web3 request using context id: ", cId)
+		if err != nil {
+			// there was an error recovering client instance
+			return api.Error(c, err)
+		}
+		data, err := clientInstance.Web3ClientVersion()
+		if err != nil {
+			// send invalid response message
+			return api.Error(c, err)
+		} else {
+			// check if response data is similar to ganache response
+			isGanache := strings.Contains(data, "ethereum-js") || strings.Contains(data, "TestRPC")
+			// save result in the cache
+			ctl.cache.Set(key, isGanache)
+			response := api.ToSuccess(key, isGanache)
+			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		}
+	}
+}
+
 func (ctl *Web3Controller) makeRpcCallNoParams(c echo.Context) error {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
@@ -643,6 +684,9 @@ func (ctl *Web3Controller) deployContract(c echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
+
+	router.GET("/is/ganache", ctl.isRunningGanache)
+
 	router.GET("/client/version", ctl.makeRpcCallNoParams)
 	router.GET("/net/version", ctl.makeRpcCallNoParams)
 	router.GET("/net/peers", ctl.makeRpcCallNoParams)

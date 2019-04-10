@@ -11,17 +11,17 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (

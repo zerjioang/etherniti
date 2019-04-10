@@ -5,14 +5,15 @@ package middleware
 
 import (
 	"bytes"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/color"
-	"github.com/zerjioang/etherniti/thirdparty/template"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/zerjioang/etherniti/thirdparty/gommon/color"
+	"github.com/zerjioang/etherniti/thirdparty/template"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 

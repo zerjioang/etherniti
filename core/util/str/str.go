@@ -5,6 +5,7 @@ package str
 
 import (
 	"encoding/json"
+	"reflect"
 	"unsafe"
 )
 
@@ -13,7 +14,14 @@ var (
 )
 
 func UnsafeBytes(data string) []byte {
-	return *(*[]byte)(unsafe.Pointer(&data))
+	//return *(*[]byte)(unsafe.Pointer(&data))
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&data))
+	bh := reflect.SliceHeader{
+		Data: sh.Data,
+		Len:  sh.Len,
+		Cap:  sh.Len,
+	}
+	return *(*[]byte)(unsafe.Pointer(&bh))
 }
 
 func UnsafeString(data []byte) string {

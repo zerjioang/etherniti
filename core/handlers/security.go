@@ -4,10 +4,10 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/handlers/security"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type SecurityController struct {

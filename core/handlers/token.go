@@ -8,8 +8,8 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 // token controller

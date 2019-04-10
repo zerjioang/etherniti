@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package middleware
 
 import (
@@ -8,8 +11,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestGzip(t *testing.T) {

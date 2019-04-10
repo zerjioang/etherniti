@@ -16,8 +16,8 @@ import (
 	_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
 
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 // openssl genrsa -out server.key 2048

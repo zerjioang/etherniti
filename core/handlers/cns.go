@@ -4,10 +4,10 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/cns"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 // token controller

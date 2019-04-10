@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/shared/def/listener"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestUnixSocketListener(t *testing.T) {

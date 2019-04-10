@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewTokenController(t *testing.T) {

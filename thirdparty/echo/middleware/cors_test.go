@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package middleware
 
 import (
@@ -5,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestCORS(t *testing.T) {
@@ -73,7 +76,7 @@ func TestCORS(t *testing.T) {
 	c = e.NewContext(req, rec)
 	req.Header.Set(echo.HeaderOrigin, "http://aaa.example.com")
 	cors = CORSWithConfig(CORSConfig{
-		AllowOrigins:     []string{"http://*.example.com"},
+		AllowOrigins: []string{"http://*.example.com"},
 	})
 	h = cors(echo.NotFoundHandler)
 	h(c)

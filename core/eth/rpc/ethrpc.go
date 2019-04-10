@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
@@ -53,11 +55,11 @@ var (
 )
 
 type ethResponse struct {
-	ID      int    `json:"id"`
-	JSONRPC string `json:"jsonrpc"`
-	// Result  json.RawMessage `json:"result"`
-	Result string    `json:"result"`
-	Error  *EthError `json:"error"`
+	ID      int             `json:"id"`
+	JSONRPC string          `json:"jsonrpc"`
+	Result  json.RawMessage `json:"result"`
+	//Result string    `json:"result"`
+	Error *EthError `json:"error"`
 }
 
 func (response ethResponse) Errored() error {
@@ -143,7 +145,7 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	if err != nil {
 		return nil, err
 	}
-	log.Info("sending request: ", string(body))
+	log.Info("sending request: ", str.UnsafeString(body))
 	response, err := rpc.client.Post(rpc.url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
@@ -156,7 +158,7 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 	//responseData readed, close body
 	_ = response.Body.Close()
 
-	log.Info("response received", string(responseData))
+	log.Info("response received", str.UnsafeString(responseData))
 
 	resp := ethResponse{}
 	unmErr := json.Unmarshal(responseData, &resp)
@@ -168,7 +170,7 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 		return nil, resp.Errored()
 	}
 
-	return []byte(resp.Result), nil
+	return resp.Result, nil
 }
 
 // RawCall returns raw response of method call (Deprecated)

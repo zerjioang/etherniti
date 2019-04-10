@@ -11,8 +11,8 @@ import (
 
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 var (

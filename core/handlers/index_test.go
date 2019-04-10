@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/pkg/profile"
 	"github.com/zerjioang/etherniti/core/listener/base"
 	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestIndexConcurrency(t *testing.T) {

@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestNewEthernitiContext(t *testing.T) {
