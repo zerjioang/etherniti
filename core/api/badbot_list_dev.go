@@ -66,7 +66,7 @@ var (
 		"hmview",
 		"httrack",
 		"httpdown",
-		".*httrack.*",
+		"httrack",
 		"ia_archiver",
 		"image stripper",
 		"image sucker",
