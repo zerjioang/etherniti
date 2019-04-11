@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 
+// +build !wasm !js
+
 // Package secp256k1 wraps the bitcoin secp256k1 C library.
 package secp256k1
 
@@ -25,7 +27,6 @@ extern void secp256k1GoPanicError(const char* msg, void* data);
 import "C"
 
 import (
-	"errors"
 	"math/big"
 	"unsafe"
 )
@@ -38,16 +39,6 @@ func init() {
 	C.secp256k1_context_set_illegal_callback(context, C.callbackFunc(C.secp256k1GoPanicIllegal), nil)
 	C.secp256k1_context_set_error_callback(context, C.callbackFunc(C.secp256k1GoPanicError), nil)
 }
-
-var (
-	ErrInvalidMsgLen       = errors.New("invalid message length, need 32 bytes")
-	ErrInvalidSignatureLen = errors.New("invalid signature length")
-	ErrInvalidRecoveryID   = errors.New("invalid signature recovery id")
-	ErrInvalidKey          = errors.New("invalid private key")
-	ErrInvalidPubkey       = errors.New("invalid public key")
-	ErrSignFailed          = errors.New("signing failed")
-	ErrRecoverFailed       = errors.New("recovery failed")
-)
 
 // Sign creates a recoverable ECDSA signature.
 // The produced signature is in the 65-byte [R || S || V] format where V is 0 or 1.

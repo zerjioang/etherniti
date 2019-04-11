@@ -674,10 +674,14 @@ func (ctl *Web3Controller) erc20TransferFrom(c echo.Context) error {
 	return nil
 }
 
-func (ctl *Web3Controller) deployContract(c echo.Context) error {
+func (ctl *Web3Controller) sendTransaction(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
 	return c.JSONBlob(code, []byte{})
+}
+
+func (ctl *Web3Controller) deployContract(c echo.Context) error {
+	return ctl.sendTransaction(c)
 }
 
 // END of ERC20 functions
@@ -703,6 +707,8 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/shh/version", ctl.makeRpcCallNoParams)
 	router.GET("/shh/new", ctl.makeRpcCallNoParams)
 	router.GET("/shh/group", ctl.makeRpcCallNoParams)
+
+	router.GET("/tx/send", ctl.sendTransaction)
 
 	router.GET("/is/contract/:address", ctl.isContractAddress)
 
