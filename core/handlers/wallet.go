@@ -6,9 +6,10 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
-	"github.com/zerjioang/etherniti/core/handlers/errors"
 	"net/http"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
@@ -25,7 +26,7 @@ import (
 )
 
 const (
-	defaultPath      = "m/44'/60'/0'/0/0"
+	defaultPath = "m/44'/60'/0'/0/0"
 )
 
 type WalletController struct {

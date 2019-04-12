@@ -31,7 +31,7 @@ func (ctl *NetworkController) SetPeer(peerLocation string) {
 	ctl.peer = peerLocation
 }
 
-func (ctl *NetworkController) GetPeer()string {
+func (ctl *NetworkController) GetPeer() string {
 	return ctl.peer
 }
 

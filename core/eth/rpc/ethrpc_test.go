@@ -497,7 +497,7 @@ func (s *EthRPCTestSuite) TestEthSign() {
 }
 
 func (s *EthRPCTestSuite) TestSendTransaction() {
-	t := T{
+	t := TransactionData{
 		From:     "0x3cc1a3c082944b9dba70e490e481dd56",
 		To:       "0x1bf21cb1dc384d019a885a06973f7308",
 		Gas:      24900,
@@ -525,7 +525,7 @@ func (s *EthRPCTestSuite) TestSendTransaction() {
 	s.Require().Nil(err)
 	s.Require().Equal(result, txid)
 
-	t = T{}
+	t = TransactionData{}
 	httpmock.Reset()
 	s.registerResponse(fmt.Sprintf(`"%s"`, result), func(body []byte) {
 		s.methodEqual(body, "eth_sendTransaction")
@@ -802,7 +802,7 @@ func (s *EthRPCTestSuite) TestEthCall() {
 		s.paramsEqual(body, `[{"from":"0x111","to":"0x222"}, "ttt"]`)
 	})
 
-	result, err := s.rpc.EthCall(T{
+	result, err := s.rpc.EthCall(TransactionData{
 		From: "0x111",
 		To:   "0x222",
 	}, "ttt")
@@ -812,7 +812,7 @@ func (s *EthRPCTestSuite) TestEthCall() {
 
 func (s *EthRPCTestSuite) TestEthEstimateGas() {
 	s.registerResponseError(errors.New("trycatch"))
-	result, err := s.rpc.EthEstimateGas(T{
+	result, err := s.rpc.EthEstimateGas(TransactionData{
 		From: "0x111",
 		To:   "0x222",
 	})
@@ -822,7 +822,7 @@ func (s *EthRPCTestSuite) TestEthEstimateGas() {
 		s.methodEqual(body, "eth_estimateGas")
 		s.paramsEqual(body, `[{"from":"0x111","to":"0x222"}]`)
 	})
-	result, err = s.rpc.EthEstimateGas(T{
+	result, err = s.rpc.EthEstimateGas(TransactionData{
 		From: "0x111",
 		To:   "0x222",
 	})

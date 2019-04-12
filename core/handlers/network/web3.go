@@ -4,11 +4,13 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/handlers/errors"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -674,10 +676,45 @@ func (ctl *Web3Controller) erc20TransferFrom(c echo.Context) error {
 	return nil
 }
 
+// eth.sendTransaction({from:sender, to:receiver, value: amount})
 func (ctl *Web3Controller) sendTransaction(c echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
-	return c.JSONBlob(code, []byte{})
+	to := c.Param("to")
+	//input data validation
+	if to == "" {
+		return api.ErrorStr(c, "invalid destination address provided")
+	}
+	amount := c.Param("amount")
+	tokenAmount, pErr := strconv.Atoi(amount)
+	//input data validation
+	if amount == "" || pErr != nil || tokenAmount <= 0 {
+		return api.ErrorStr(c, "invalid ether amount value provided")
+	}
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return api.ErrorStr(c, "failed to execute requested operation")
+	}
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	//build our transaction
+	var transaction ethrpc.TransactionData
+	transaction.To = to
+	transaction.Value = towei
+
+	raw, err := client.EthSendTransaction(transaction)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			str.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		return api.SendSuccess(c, "allowance", raw)
+	}
 }
 
 func (ctl *Web3Controller) deployContract(c echo.Context) error {

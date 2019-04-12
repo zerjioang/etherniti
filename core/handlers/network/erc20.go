@@ -4,11 +4,12 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"math/big"
 	"net/http"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"

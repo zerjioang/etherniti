@@ -31,8 +31,8 @@ func (s *Syncing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// T - input transaction object
-type T struct {
+// TransactionData - input transaction object
+type TransactionData struct {
 	From     string
 	To       string
 	Gas      int
@@ -43,7 +43,7 @@ type T struct {
 }
 
 // MarshalJSON implements the json.Unmarshaler interface.
-func (t T) MarshalJSON() ([]byte, error) {
+func (t TransactionData) MarshalJSON() ([]byte, error) {
 	params := map[string]interface{}{
 		"from": t.From,
 	}

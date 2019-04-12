@@ -24,15 +24,15 @@ const (
 
 	infura   = "infura"
 	quiknode = "quiknode"
-	private = "private"
+	private  = "private"
 )
 
 type RestController struct {
 	network network.NetworkController
-	web3 network.Web3Controller
-	erc20 network.Erc20Controller
-	db network.Web3DbController
-	shh network.Web3ShhController
+	web3    network.Web3Controller
+	erc20   network.Erc20Controller
+	db      network.Web3DbController
+	shh     network.Web3ShhController
 }
 
 // constructor like function

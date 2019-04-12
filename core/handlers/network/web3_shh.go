@@ -23,38 +23,47 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 func (ctl *Web3ShhController) shhVersion(c echo.Context) error {
 	return nil
 }
+
 // ShhPost calls shh protocol shh_post json-rpc call
 func (ctl *Web3ShhController) shhPost(c echo.Context) error {
 	return nil
 }
+
 // ShhNewIdentity calls shh protocol shh_newidentity json-rpc call
 func (ctl *Web3ShhController) shhNewIdentity(c echo.Context) error {
 	return nil
 }
+
 // ShhHasIdentity calls shh protocol shh_hasidentity json-rpc call
 func (ctl *Web3ShhController) shhHasIdentity(c echo.Context) error {
 	return nil
 }
+
 // ShhNewGroup calls shh protocol shh_newgroup json-rpc call
 func (ctl *Web3ShhController) shhNewGroup(c echo.Context) error {
 	return nil
 }
+
 // ShhAddToGroup calls shh protocol shh_addtogroup json-rpc call
 func (ctl *Web3ShhController) shhAddToGroup(c echo.Context) error {
 	return nil
 }
+
 // ShhNewFilter calls shh protocol shh_newfilter json-rpc call
 func (ctl *Web3ShhController) shhNewFilter(c echo.Context) error {
 	return nil
 }
+
 // ShhUninstallFilter calls shh protocol shh_uninstallfilter json-rpc call
 func (ctl *Web3ShhController) shhUninstallFilter(c echo.Context) error {
 	return nil
 }
+
 // ShhGetFilterChanges calls shh protocol shh_getfilterchanges json-rpc call
 func (ctl *Web3ShhController) shhGetFilterChanges(c echo.Context) error {
 	return nil
 }
+
 // ShhGetMessages calls shh protocol shh_getmessages json-rpc call
 func (ctl *Web3ShhController) shhGetMessages(c echo.Context) error {
 	return nil

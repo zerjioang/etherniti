@@ -403,7 +403,7 @@ func (rpc EthRPC) EthSign(address, data string) (string, error) {
 
 // EthSendTransaction creates new message call transaction
 // or a contract creation, if the data field contains code.
-func (rpc EthRPC) EthSendTransaction(transaction T) (string, error) {
+func (rpc EthRPC) EthSendTransaction(transaction TransactionData) (string, error) {
 	var hash string
 	err := rpc.call("eth_sendTransaction", &hash, transaction)
 	return hash, err
@@ -419,7 +419,7 @@ func (rpc EthRPC) EthSendRawTransaction(data string) (string, error) {
 
 // EthCall executes a new message call immediately without
 // creating a transaction on the block chain.
-func (rpc EthRPC) EthCall(transaction T, tag string) (string, error) {
+func (rpc EthRPC) EthCall(transaction TransactionData, tag string) (string, error) {
 	var data string
 	err := rpc.call("eth_call", &data, transaction, tag)
 	return data, err
@@ -428,7 +428,7 @@ func (rpc EthRPC) EthCall(transaction T, tag string) (string, error) {
 // EthEstimateGas makes a call or transaction, which won't be
 // added to the blockchain and returns the used gas, which can
 // be used for estimating the used gas.
-func (rpc EthRPC) EthEstimateGas(transaction T) (int, error) {
+func (rpc EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
 	var response string
 	err := rpc.call("eth_estimateGas", &response, transaction)
 	if err != nil {
@@ -647,7 +647,7 @@ shh_getFilterChanges
 
 shh_getMessages
 
- */
+*/
 func (rpc EthRPC) Erc20TotalSupply(contract string) (json.RawMessage, error) {
 	return rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
