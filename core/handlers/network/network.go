@@ -40,5 +40,10 @@ func (ctl *NetworkController) SetTargetName(networkName string) {
 }
 
 // implemented method from interface RouterRegistrable
-func (ctl NetworkController) RegisterRouters(router *echo.Group) {
+func (ctl *NetworkController) RegisterRouters(router *echo.Group) {
+}
+
+func (ctl *NetworkController) Name() string {
+	return ctl.networkName
+
 }

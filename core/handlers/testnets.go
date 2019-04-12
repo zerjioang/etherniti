@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/handlers/network"
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -49,9 +50,12 @@ func newController(peer string, name string) RestController {
 
 // implemented method from interface RouterRegistrable
 func (ctl RestController) RegisterRouters(router *echo.Group) {
+	logger.Debug("registering rest controller api endpoints for network: ", ctl.network.Name())
 	ctl.network.RegisterRouters(router)
 	ctl.web3.RegisterRouters(router)
 	ctl.erc20.RegisterRouters(router)
+	ctl.db.RegisterRouters(router)
+	ctl.shh.RegisterRouters(router)
 }
 
 // constructor like function

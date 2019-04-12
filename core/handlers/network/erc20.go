@@ -5,12 +5,10 @@ package network
 
 import (
 	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"math/big"
 	"net/http"
 	"strconv"
-	"strings"
-
-	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
@@ -18,7 +16,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 
@@ -35,62 +32,6 @@ func NewErc20Controller(network *NetworkController) Erc20Controller {
 	ctl := Erc20Controller{}
 	ctl.network = network
 	return ctl
-}
-
-func (ctl *Erc20Controller) makeRpcCallNoParams(c echo.Context) error {
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-
-	clientInstance, cId, err := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("web3 request using context id: ", cId)
-	if err != nil {
-		// there was an error recovering client instance
-		return api.Error(c, err)
-	}
-
-	//resolve method name from url
-	methodName := c.Request().URL.Path
-	//try to get this information from the cache
-	// methodName example: /v1/public/ropsten/net/version
-	chunks := strings.Split(methodName, "/")
-	if len(chunks) < 4 {
-		return api.ErrorStr(c, "invalid url or web3 method provided")
-	}
-	var key string
-	if len(chunks) == 4 {
-		key = chunks[3]
-	} else if len(chunks) == 5 {
-		key = chunks[3] + "_" + chunks[4]
-	}
-	//resolve method name from key value
-	method := methodMap[key]
-	cacheKey := cId + ":" + method
-	result, found := ctl.network.cache.Get(cacheKey)
-	if found && result != nil {
-		//cache hit
-		logger.Info(method, ": cache hit")
-		response := api.ToSuccess(method, result)
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
-	} else {
-		//cache miss
-		logger.Info(method, ": cache miss")
-		rpcResponse, err := clientInstance.EthMethodNoParams(method)
-		if err != nil {
-			// send invalid response message
-			return api.Error(c, err)
-		} else if rpcResponse == nil {
-			// send invalid response message
-			return api.ErrorStr(c, "the network peer did not return any response")
-		} else {
-			// save result in the cache
-			ctl.network.cache.Set(cacheKey, rpcResponse)
-			response := api.ToSuccess(method, rpcResponse)
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
-		}
-	}
 }
 
 // get the total supply of the contract at given target network
