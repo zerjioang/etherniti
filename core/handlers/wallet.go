@@ -6,7 +6,7 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
-	"errors"
+	"github.com/zerjioang/etherniti/core/handlers/errors"
 	"net/http"
 	"strconv"
 
@@ -26,15 +26,6 @@ import (
 
 const (
 	defaultPath      = "m/44'/60'/0'/0/0"
-	invalidAddress   = `{"message": "please, provide a valid ethereum or quorum address"}`
-	accountKeyGenErr = `{"message": "failed to generate ecdsa private key"}`
-)
-
-var (
-	noConnErrMsg           = "invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
-	errNoConnectionProfile = errors.New(noConnErrMsg)
-	accountKeyGenErrBytes  = str.UnsafeBytes(accountKeyGenErr)
-	invalidAddressBytes    = str.UnsafeBytes(invalidAddress)
 )
 
 type WalletController struct {
@@ -194,7 +185,7 @@ func (ctl WalletController) generateAddress(c echo.Context) error {
 	if err != nil {
 		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
-		return c.JSONBlob(http.StatusInternalServerError, accountKeyGenErrBytes)
+		return c.JSONBlob(http.StatusInternalServerError, errors.AccountKeyGenErrBytes)
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
@@ -227,7 +218,7 @@ func (ctl WalletController) isValidAddress(c echo.Context) error {
 		)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
+	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
 }
 
 // implemented method from interface RouterRegistrable

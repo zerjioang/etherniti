@@ -18,12 +18,12 @@ import (
 
 // openssl genrsa -out server.key 2048
 // openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
-// Country Name (2 letter code) [AU]:ES
-// State or Province Name (full name) [Some-State]:Biscay
-// Locality Name (eg, city) []:Bilbao
-// Organization Name (eg, company) [Internet Widgits Pty Ltd]:Etherniti Project
-// Organizational Unit Name (eg, section) []:Etherniti CyberSecurity Team
-// Common Name (e.g. server FQDN or YOUR name) []:localhost
+// Country name (2 letter code) [AU]:ES
+// State or Province name (full name) [Some-State]:Biscay
+// Locality name (eg, city) []:Bilbao
+// Organization name (eg, company) [Internet Widgits Pty Ltd]:Etherniti Project
+// Organizational Unit name (eg, section) []:Etherniti CyberSecurity Team
+// Common name (e.g. server FQDN or YOUR name) []:localhost
 // Email Address []:
 
 const (

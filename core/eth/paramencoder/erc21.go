@@ -21,13 +21,13 @@ package paramencoder
 ///// @dev This emits when ownership of any NFT changes by any mechanism.
 /////  This event emits when NFTs are created (`from` == 0) and destroyed
 /////  (`to` == 0). Exception: during contract creation, any number of NFTs
-/////  may be created and assigned without emitting Transfer. At the time of
+/////  may be created and assigned without emitting transfer. At the time of
 /////  any transfer, the approved address for that NFT (if any) is reset to none.
-//event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
+//event transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
 //
 ///// @dev This emits when the approved address for an NFT is changed or
 /////  reaffirmed. The zero address indicates there is no approved address.
-/////  When a Transfer event emits, this also indicates that the approved
+/////  When a transfer event emits, this also indicates that the approved
 /////  address for that NFT (if any) is reset to none.
 //event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
 //
@@ -71,7 +71,7 @@ package paramencoder
 ///// @param _tokenId The NFT to transfer
 //function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable;
 //
-///// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
+///// @notice transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
 /////  TO CONFIRM THAT `_to` IS CAPABLE OF RECEIVING NFTS OR ELSE
 /////  THEY MAY BE PERMANENTLY LOST
 ///// @dev Throws unless `msg.sender` is the current owner, an authorized

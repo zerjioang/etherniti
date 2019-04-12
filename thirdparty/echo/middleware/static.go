@@ -49,7 +49,7 @@ const html = `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{{ .Name }}</title>
+  <title>{{ .name }}</title>
   <style>
     body {
 			font-family: Menlo, Consolas, monospace;
@@ -95,16 +95,16 @@ const html = `
 </head>
 <body>
 	<header>
-		{{ .Name }}
+		{{ .name }}
 	</header>
 	<ul>
 		{{ range .Files }}
 		<li>
 		{{ if .Dir }}
-			{{ $name := print .Name "/" }}
+			{{ $name := print .name "/" }}
 			<a class="dir" href="{{ $name }}">{{ $name }}</a>
 			{{ else }}
-			<a class="file" href="{{ .Name }}">{{ .Name }}</a>
+			<a class="file" href="{{ .name }}">{{ .name }}</a>
 			<span>{{ .Size }}</span>
 		{{ end }}
 		</li>

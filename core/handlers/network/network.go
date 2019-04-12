@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package handlers
+package network
 
 import (
 	"github.com/zerjioang/etherniti/core/modules/cache"
@@ -29,6 +29,10 @@ func NewNetworkController() NetworkController {
 
 func (ctl *NetworkController) SetPeer(peerLocation string) {
 	ctl.peer = peerLocation
+}
+
+func (ctl *NetworkController) GetPeer()string {
+	return ctl.peer
 }
 
 func (ctl *NetworkController) SetTargetName(networkName string) {
