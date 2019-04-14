@@ -128,7 +128,7 @@ func SetDefaults(data *EnvConfig) {
 	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
 	env["X_ETHERNITI_ENABLE_CORS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
-	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
+	env["X_ETHERNITI_ENABLE_RATELIMIT"] = true
 	env["X_ETHERNITI_ENABLE_PROFILER"] = false
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true

@@ -4,10 +4,8 @@
 package config
 
 import (
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
-
-	"github.com/zerjioang/etherniti/shared/def/listener"
 )
 
 func TestGetRedirectUrl(t *testing.T) {
@@ -35,98 +33,26 @@ func TestGetRedirectUrl(t *testing.T) {
 	}
 }
 
-func TestGetCertPem(t *testing.T) {
-	tests := []struct {
-		name string
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := GetCertPem(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetCertPem() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+func TestTLSCryptoData(t *testing.T) {
+	t.Run("check-cert-pem", func(t *testing.T) {
+		assert.NotNil(t, GetCertPem() != nil)
+	})
+	t.Run("check-key-pem", func(t *testing.T) {
+		assert.NotNil(t, GetKeyPem() != nil)
+	})
 }
 
-func TestGetKeyPem(t *testing.T) {
-	tests := []struct {
-		name string
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := GetKeyPem(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetKeyPem() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIsHttpMode(t *testing.T) {
-	tests := []struct {
-		name string
-		want bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IsHttpMode(); got != tt.want {
-				t.Errorf("IsHttpMode() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIsSocketMode(t *testing.T) {
-	tests := []struct {
-		name string
-		want bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IsSocketMode(); got != tt.want {
-				t.Errorf("IsSocketMode() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIsProfilingEnabled(t *testing.T) {
-	tests := []struct {
-		name string
-		want bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IsProfilingEnabled(); got != tt.want {
-				t.Errorf("IsProfilingEnabled() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestServiceListeningMode(t *testing.T) {
-	tests := []struct {
-		name string
-		want listener.ServiceType
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ServiceListeningMode(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ServiceListeningMode() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+func TestConfig(t *testing.T) {
+	t.Run("is-http", func(t *testing.T) {
+		assert.NotNil(t, IsHttpMode())
+	})
+	t.Run("is-socket", func(t *testing.T) {
+		assert.NotNil(t, IsSocketMode())
+	})
+	t.Run("is-profiling-enabled", func(t *testing.T) {
+		assert.NotNil(t, IsProfilingEnabled())
+	})
+	t.Run("is-service-listening-enabled", func(t *testing.T) {
+		assert.NotNil(t, ServiceListeningMode())
+	})
 }
