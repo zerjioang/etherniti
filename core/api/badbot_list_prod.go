@@ -64,7 +64,7 @@ var (
 		"hmview",
 		"httrack",
 		"httpdown",
-		".*httrack.*",
+		"httrack",
 		"ia_archiver",
 		"image stripper",
 		"image sucker",
@@ -83,7 +83,7 @@ var (
 		"leechftp",
 		"lexibot",
 		"lftp",
-		"link*sleuth",
+		"sleuth",
 		"likse",
 		"link",
 		"linkwalker",
@@ -177,6 +177,7 @@ var (
 		"whacker",
 		"widow",
 		"wwwoffle",
+		"wow",
 		"x-tractor",
 		"xaldon webspider",
 		"xenu",
@@ -193,6 +194,8 @@ var (
 		"wget",
 		"libwww-perl",
 		"apachebench",
+		"googlebot",
+		"bot",
 		// "curl",        //allow in development and production mode
 	}
 )
