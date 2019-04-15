@@ -5,9 +5,11 @@ package hashset
 
 import (
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/logger"
 	"io/ioutil"
 	"strings"
+	"sync"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 var (
@@ -16,43 +18,59 @@ var (
 
 type HashSet struct {
 	data map[string]*struct{}
+	lock *sync.Mutex
 }
 
 func NewHashSet() *HashSet {
 	hs := new(HashSet)
+	hs.lock = new(sync.Mutex)
 	hs.Clear()
 	return hs
 }
 
 func (set *HashSet) Add(item string) {
+	set.lock.Lock()
 	set.data[item] = none
+	set.lock.Unlock()
 }
 
 func (set *HashSet) Clear() {
+	set.lock.Lock()
 	set.data = make(map[string]*struct{})
+	set.lock.Unlock()
 }
 
 func (set HashSet) Contains(item string) bool {
+	set.lock.Lock()
 	_, contains := set.data[item]
+	set.lock.Unlock()
 	return contains
 }
 
 func (set HashSet) MatchAny(item string) bool {
+	set.lock.Lock()
+	found := false
 	for k := range set.data {
-		status := strings.Contains(item, k)
-		if status {
-			return true
+		found = strings.Contains(item, k)
+		if found {
+			break
 		}
 	}
-	return false
+	set.lock.Unlock()
+	return found
 }
 
 func (set *HashSet) Remove(item string) {
+	set.lock.Lock()
 	delete(set.data, item)
+	set.lock.Unlock()
 }
 
 func (set HashSet) Count() int {
-	return len(set.data)
+	set.lock.Lock()
+	count := len(set.data)
+	set.lock.Unlock()
+	return count
 }
 
 func (set *HashSet) LoadFromJsonArray(path string) {

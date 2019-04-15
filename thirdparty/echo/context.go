@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -19,6 +18,8 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 )
 
 var (
@@ -497,10 +498,11 @@ func (c *context) Stream(code int, contentType string, r io.Reader) (err error) 
 }
 
 func (c *context) File(file string) (err error) {
+	initialFilePath := file
 	// check if file is cached
 	// check if file was already readed before and saved in our cache
 	// this avoid overhead on disk readings
-	object, found := fileCache.Get(file)
+	object, found := fileCache.Get(initialFilePath)
 	if found && object != nil {
 		// cast
 		buffer, ok := object.(*FileBuffer)
@@ -523,30 +525,30 @@ func (c *context) File(file string) (err error) {
 
 		fi, _ := f.Stat()
 		if fi.IsDir() {
+			//append index.html if directory detected
 			file = filepath.Join(file, indexPage)
-			f, err = os.Open(file)
-			if err != nil {
-				return NotFoundHandler(c)
-			}
-			if fi, err = f.Stat(); err != nil {
-				return f.Close()
-			}
-			// before sending file data to the client, create a filebuffer  for caching purposes
-			raw, _ := ioutil.ReadAll(f)
-			b := bytes.Buffer{}
-			_, _ = b.Write(raw)
-			item := new(FileBuffer)
-			item.name = fi.Name()
-			item.time = fi.ModTime()
-			item.Buffer = b
-			item.Index = 0
-			fileCache.Set(file, item)
-			// add a http cache directive too
-			c.Response().Header().Set("Cache-Control", "public, max-age=86400") // 24h cache = 86400
-			http.ServeContent(c.Response(), c.Request(), fi.Name(), fi.ModTime(), f)
+		}
+		f, err = os.Open(file)
+		if err != nil {
+			return NotFoundHandler(c)
+		}
+		if fi, err = f.Stat(); err != nil {
 			return f.Close()
 		}
-		return nil
+		// before sending file data to the client, create a filebuffer  for caching purposes
+		raw, _ := ioutil.ReadAll(f)
+		b := bytes.Buffer{}
+		_, _ = b.Write(raw)
+		item := new(FileBuffer)
+		item.name = fi.Name()
+		item.time = fi.ModTime()
+		item.Buffer = b
+		item.Index = 0
+		fileCache.Set(initialFilePath, item)
+		// add a http cache directive too
+		c.Response().Header().Set("Cache-Control", "public, max-age=86400") // 24h cache = 86400
+		http.ServeContent(c.Response(), c.Request(), fi.Name(), fi.ModTime(), f)
+		return f.Close()
 	}
 }
 

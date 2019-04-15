@@ -4,9 +4,10 @@
 package http_test
 
 import (
-	"github.com/zerjioang/etherniti/core/listener/http"
 	"testing"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/listener/http"
 )
 
 func TestHttpListener(t *testing.T) {

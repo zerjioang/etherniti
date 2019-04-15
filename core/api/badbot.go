@@ -10,11 +10,11 @@ import (
 )
 
 var (
-	BadBotsList *hashset.HashSet
+	badBotsList *hashset.HashSet
 )
 
 func init() {
 	logger.Info("[module] loading anti-bots policy data")
-	BadBotsList = hashset.NewHashSet()
-	BadBotsList.LoadFromJsonArray(config.AntiBotsFile)
+	badBotsList = hashset.NewHashSet()
+	badBotsList.LoadFromJsonArray(config.AntiBotsFile)
 }

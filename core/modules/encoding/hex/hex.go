@@ -6,10 +6,13 @@ package hex
 import (
 	"encoding/hex"
 	"unsafe"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 const (
-	hextable = "0123456789abcdef"
+	hextable     = "0123456789abcdef"
+	doubleQuotes = 34
 )
 
 func ToEthHex(raw []byte) string {
@@ -38,6 +41,13 @@ func FromHex(raw string) ([]byte, error) {
 }
 
 // decode ethereum 0x hex string
-func FromEthHex(raw string) ([]byte, error) {
-	return hex.DecodeString(raw[2:])
+func FromEthHex(content string) ([]byte, error) {
+	raw := str.UnsafeBytes(content)
+	idx := 2
+	if raw[0] == doubleQuotes {
+		idx = 3
+	}
+	data := raw[idx:]
+	n, err := hex.Decode(data, data)
+	return data[:n], err
 }

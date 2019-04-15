@@ -498,23 +498,6 @@ func TestEchoStartTLSByteString(t *testing.T) {
 	}
 }
 
-func TestEchoStartAutoTLS(t *testing.T) {
-	e := New()
-	errChan := make(chan error, 0)
-
-	go func() {
-		errChan <- e.StartAutoTLS(":0")
-	}()
-	time.Sleep(200 * time.Millisecond)
-
-	select {
-	case err := <-errChan:
-		assert.NoError(t, err)
-	default:
-		assert.NoError(t, e.Close())
-	}
-}
-
 func testMethod(t *testing.T, method, path string, e *Echo) {
 	p := reflect.ValueOf(path)
 	h := reflect.ValueOf(func(c Context) error {

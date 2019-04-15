@@ -5,11 +5,12 @@ package http
 
 import (
 	"context"
-	"github.com/zerjioang/etherniti/core/listener/swagger"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/listener/swagger"
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 

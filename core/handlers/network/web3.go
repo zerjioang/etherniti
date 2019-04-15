@@ -4,11 +4,12 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/eth"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/eth"
 
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/handlers/errors"

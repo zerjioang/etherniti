@@ -1,0 +1,2053 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Etherniti REST API Proxy definition",
+    "version": "0.0.5",
+    "title": "Etherniti REST API Proxy",
+    "termsOfService": "https://www.etherniti.org/docs/terms-of-service/",
+    "contact": {
+      "email": "core@etherniti.org"
+    },
+    "license": {
+      "name": "Etherniti License",
+      "url": "https://www.etherniti.org/docs/license/"
+    },
+    "x-apisguru-categories": [
+      "iot",
+      "ethereum",
+      "blockchain"
+    ],
+    "x-logo": {
+      "url": "/favicon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "x-preferred": true,
+    "x-providerName": "etherniti.org"
+  },
+  "host": "127.0.0.1:8080",
+  "basePath": "/v1",
+  "consumes": [
+    "application/json;charset=utf-8"
+  ],
+  "produces": [
+    "application/json;charset=utf-8"
+  ],
+  "tags": [{
+    "name": "public",
+    "description": "Public Ethereum REST API Proxy operations",
+    "externalDocs": {
+      "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+      "url": "https://www.etherniti.org/docs/api/public-operations/"
+    }
+  },
+    {
+      "name": "profile",
+      "description": "Ethereum REST API Proxy connection profile management",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/api/profile-management/"
+      }
+    },
+    {
+      "name": "wallet",
+      "description": "Ethereum REST API Proxy wallet service",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/api/wallet/"
+      }
+    },
+    {
+      "name": "private",
+      "description": "Ethereum REST API Proxy context dependant services",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/api/private"
+      }
+    },
+    {
+      "name": "security",
+      "description": "Ethereum REST API Proxy security services",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API security services at",
+        "url": "https://www.etherniti.org/docs/api/security"
+      }
+    },
+    {
+      "name": "web3",
+      "description": "Ethereum REST API Proxy web3 implementation",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API web3 implementation at",
+        "url": "https://www.etherniti.org/docs/api/web3"
+      }
+    },
+    {
+      "name": "solc",
+      "description": "Ethereum REST API Proxy solc compiler implementation",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API solc compiler implementation at",
+        "url": "https://www.etherniti.org/docs/api/solc"
+      }
+    },
+    {
+      "name": "registry",
+      "description": "Ethereum REST API Contract Name Service implementation",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API Contract Name Service implementation at",
+        "url": "https://www.etherniti.org/docs/api/contract-name-service"
+      }
+    },
+    {
+      "name": "devops",
+      "description": "Ethereum REST API devops helpers",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST APIdevops helpers implementation at",
+        "url": "https://www.etherniti.org/docs/api/devops"
+      }
+    },
+    {
+      "name": "erc20",
+      "description": "Ethereum REST API ERC20 management",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API ERC20 management at",
+        "url": "https://www.etherniti.org/docs/api/erc20"
+      }
+    }
+  ],
+  "schemes": ["http", "https", "unix"],
+  "paths": {
+    "/public": {
+      "get": {
+        "tags": ["public"],
+        "summary": "Proxy welcome message",
+        "description": "proxy welcome message or index message",
+        "operationId": "index",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy welcome message",
+            "schema": {
+              "example": {
+                "name": "eth-wbapi",
+                "description": "Etherniti: High Performance Ethereum REST API",
+                "cluster_name": "eth-wbapi",
+                "version": "0.0.1",
+                "env": "development",
+                "tagline": "dapps everywhere"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/status": {
+      "get": {
+        "tags": ["public"],
+        "summary": "Proxy health status",
+        "description": "Read proxy instance interal metrics and health status",
+        "operationId": "status",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy internal metrics collection",
+            "schema": {
+              "example": {
+                "alloc": 1843848,
+                "cpus": 2,
+                "disk": {
+                  "all": 45.61288070678711,
+                  "free": 43.18564224243164,
+                  "used": 2.4272384643554688
+                },
+                "frees": 3364,
+                "heapalloc": 1843848,
+                "mallocs": 6574,
+                "numForcedGC": 0,
+                "numgc": 3,
+                "runtime": {
+                  "compiler": "gc",
+                  "version": "go1.11.5"
+                },
+                "sys": 71760120,
+                "total": 8893712,
+                "version": {
+                  "etherniti": "0.0.1",
+                  "http": "3.3.10-dev"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/integrity": {
+      "get": {
+        "tags": ["public"],
+        "summary": "Check remote proxy integrity status",
+        "description": "Get digitally signed integrity message from proxy instance can compare signature validity with provided public key",
+        "operationId": "integrity",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy integrity response",
+            "schema": {
+              "example": {
+                "message": "Hello from Etherniti Proxy. Today message generated at 2019-03-25T10:46:35+01:00",
+                "millis": "1553507195",
+                "hash": "a9e6b0dd821862e184bfaaa16a6a8af7e802330bef2978267910076acef29500",
+                "signature": "303c021c538c3ac6685239032cbdf64f6d079d48c18da3e536bfe0ced278a132021c10c6acc3bb9b6b745e729544ffb1b19ddd2706095523d152dfeefce6"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/profile": {
+      "post": {
+        "tags": ["profile"],
+        "summary": "Create a connection profile using prefered provider",
+        "description": "Create a connection profile using prefered provider. Choose between, public node, private node, infura, etc",
+        "operationId": "profile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "profile",
+          "schema": {
+            "example": {
+              "endpoint": "http://172.168.0.2",
+              "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "profile creation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "profile token successfully created",
+                "result": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmRwb2ludCI6Imh0dHA6Ly8xNzIuMTY4LjAuMiIsImFkZHJlc3MiOiIweEU3MjBjMzQxYmQ2NjRBOEY3ZWJDM2Y3NUNDRTkzQkQ2YmE2ZDc2NTQiLCJrZXkiOiIiLCJ2ZXJzaW9uIjoxLCJ2YWxpZGl0eSI6ZmFsc2UsImV4cCI6MTU1NDQ5MzM0MywianRpIjoiZTMzZjhkNTUtM2YzNS00OWQwLTg5ZTgtOWNiMjMzYThiYmQzIiwiaWF0IjoxNTU0MTMzMzQzLCJpc3MiOiJldGhlcm5pdGkub3JnIiwibmJmIjoxNTU0MTMzMzQzfQ.__b0kA8JnwLv0ceI03LRDzt8m3pemoIf_8_0GX76MJg"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/profile/count": {
+      "get": {
+        "tags": ["profile"],
+        "summary": "Count created profiles",
+        "description": "Get the number of profiles created in last cycle",
+        "operationId": "profile-count",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "profile count response",
+            "schema": {
+              "example": 10
+            }
+          }
+        }
+      }
+    },
+    "/public/wallet/mnemonic/bip39": {
+      "post": {
+        "tags": ["wallet"],
+        "summary": "Generate a bip39 mnemonic",
+        "description": "Generate a bip39 mnemonic with given customization details such as language, length, etc",
+        "operationId": "mnemonic-bip39",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "configuration",
+          "schema": {
+            "example": {
+              "language": "english",
+              "size": 128,
+              "secret": "my-s33d-p4ssw0rd"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "mnemonic response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "mnemonic successfully created",
+                "result": "acid coin captain hen eyebrow donor surround jar mirror copper leisure shield"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/wallet/entropy/{bits}": {
+      "get": {
+        "tags": ["wallet"],
+        "summary": "Get a entropy of N bits",
+        "description": "Get a entropy data from secured source such as /dev/random",
+        "operationId": "mnemonic-entropy",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "required": true,
+          "name": "bits",
+          "description": "Requested entropy bit size",
+          "type": "number",
+          "schema": {
+            "example": 192
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "entropy data response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "entropy data generated",
+                "result": {
+                  "entropy": "abWCKX7EmwiIWxKTnQMIZjisv5Y="
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/wallet": {
+      "post": {
+        "tags": ["wallet"],
+        "summary": "Generate a new Ethereum compatible account",
+        "description": "Generate a new Ethereum compatible account and get its address and key",
+        "operationId": "new-account",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "account creation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "ethereum account created",
+                "result": {
+                  "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
+                  "private": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/wallet/verify/{address}": {
+      "get": {
+        "tags": ["wallet"],
+        "summary": "Verify Ethereum address",
+        "description": "Verify if given Ethereum address is valid or not",
+        "operationId": "verify-address",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "address",
+          "description": "Ethereum address to be validated",
+          "schema": {
+            "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{network}/is/contract/{address}": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Verify if an Ethereum address belongs to an existing contract",
+        "description": "Verify if given Ethereum contract address is a contract holder address or not",
+        "operationId": "has-contract",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        },{
+          "in": "path",
+          "name": "address",
+          "description": "Ethereum contract address to be validated",
+          "schema": {
+            "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/public/security/{source}": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Blacklisted domain list",
+        "description": "Get a list of Blacklisted domain based on OSINT (Open Source Intelligence)",
+        "operationId": "security-domains",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "source",
+          "description": "Source of information",
+          "enum": [
+            "domain-blacklist",
+            "phishing-whitelist",
+            "phishing-blacklist",
+            "phishing-fuzzing"
+          ],
+          "default": "domain-blacklist",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "blacklisted domain list",
+            "schema": {
+              "example": ["a", "b", "..."]
+            }
+          }
+        }
+      }
+    },
+    "/public/security/check/{domain}": {
+      "get": {
+        "tags": ["security"],
+        "summary": "Check domain name status",
+        "description": "Check the trust level of given domain and stop scamming and malware attempts",
+        "operationId": "phishing-check",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "domain",
+          "description": "suspicious domain name to be scanned",
+          "schema": {
+            "example": "my.suspicious.domain.tld"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "suspicious domain analysis results",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "domain analyzed",
+                "result": {
+                  "domain": "my.suspicious.wallet.domain.tld",
+                  "trust": false,
+                  "score": 7,
+                  "title": "Deceptive domain detected",
+                  "message": "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/solc/version": {
+      "get": {
+        "tags": ["solc"],
+        "summary": "Solidity compiler version",
+        "description": "Get the version of Solidity compiler",
+        "operationId": "solc-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc compiler version response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "solc version",
+                "result": {
+                  "path": "/usr/bin/solc",
+                  "version": "0.4.24",
+                  "full_version": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
+                  "major": 0,
+                  "minor": 4,
+                  "patch": 24
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "failed to get solc version"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/solc/compile/{mode}": {
+      "post": {
+        "tags": ["solc"],
+        "summary": "Compile a contract using solc",
+        "description": "Compile a contract using solc",
+        "operationId": "solc-compile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "name": "mode",
+          "description": "solc compiler allowed modes",
+          "enum": ["single-raw", "single-base64", "git", "zip", "targz"],
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "contract",
+            "description": "solidity base64 encoded contract source code",
+            "required": true,
+            "example": {
+              "contract": "cHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjYuMDsKCmNvbnRyYWN0IE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgb3duZXIgb2YgdGhlIHR5cGUgYWRkcmVzcyAqLwogICAgYWRkcmVzcyBvd25lcjsKCiAgICAvKiBUaGlzIGNvbnN0cnVjdG9yIGlzIGV4ZWN1dGVkIGF0IGluaXRpYWxpemF0aW9uIGFuZCBzZXRzIHRoZSBvd25lciBvZiB0aGUgY29udHJhY3QgKi8KICAgIGNvbnN0cnVjdG9yKCkgcHVibGljIHsgb3duZXIgPSBtc2cuc2VuZGVyOyB9CgogICAgLyogRnVuY3Rpb24gdG8gcmVjb3ZlciB0aGUgZnVuZHMgb24gdGhlIGNvbnRyYWN0ICovCiAgICBmdW5jdGlvbiBraWxsKCkgcHVibGljIHsgaWYgKG1zZy5zZW5kZXIgPT0gb3duZXIpIHNlbGZkZXN0cnVjdChtc2cuc2VuZGVyKTsgfQp9Cgpjb250cmFjdCBHcmVldGVyIGlzIE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgZ3JlZXRpbmcgb2YgdGhlIHR5cGUgc3RyaW5nICovCiAgICBzdHJpbmcgZ3JlZXRpbmc7CgogICAgLyogVGhpcyBydW5zIHdoZW4gdGhlIGNvbnRyYWN0IGlzIGV4ZWN1dGVkICovCiAgICBjb25zdHJ1Y3RvcihzdHJpbmcgbWVtb3J5IF9ncmVldGluZykgcHVibGljIHsKICAgICAgICBncmVldGluZyA9IF9ncmVldGluZzsKICAgIH0KCiAgICAvKiBNYWluIGZ1bmN0aW9uICovCiAgICBmdW5jdGlvbiBncmVldCgpIHB1YmxpYyB2aWV3IHJldHVybnMgKHN0cmluZyBtZW1vcnkpIHsKICAgICAgICByZXR1cm4gZ3JlZXRpbmc7CiAgICB9Cn0K"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc Compiler compilation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "solc version",
+                "result": {
+                  "id": 0,
+                  "code": 200,
+                  "msg": "solc contract compiler",
+                  "result": [{
+                    "code": "0x608060405234801561001057600080fd5b506040516102d43803806102d483398101604052805160008054600160a060020a0319163317905501805161004c906001906020840190610053565b50506100ee565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009457805160ff19168380011785556100c1565b828001600101855582156100c1579182015b828111156100c15782518255916020019190600101906100a6565b506100cd9291506100d1565b5090565b6100eb91905b808211156100cd57600081556001016100d7565b90565b6101d7806100fd6000396000f30060806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
+                    "runtime": "0x60806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
+                    "language": "Solidity",
+                    "languageVersion": "0.4.24",
+                    "compilerVersion": "0.4.24",
+                    "compilerOptions": "--combined-json bin,bin-runtime,srcmap,srcmap-runtime,abi,userdoc,devdoc,metadata --optimize",
+                    "abiDefinition": [{
+                      "constant": false,
+                      "inputs": [],
+                      "name": "kill",
+                      "outputs": [],
+                      "payable": false,
+                      "stateMutability": "nonpayable",
+                      "type": "function"
+                    },
+                      {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "greet",
+                        "outputs": [{
+                          "name": "",
+                          "type": "string"
+                        }],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                      },
+                      {
+                        "inputs": [{
+                          "name": "_greeting",
+                          "type": "string"
+                        }],
+                        "payable": false,
+                        "stateMutability": "nonpayable",
+                        "type": "constructor"
+                      }
+                    ]
+                  }]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "unknown mode selected. Allowed modes are: single, git, zip, targz"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/registry": {
+      "post": {
+        "tags": ["registry"],
+        "summary": "Register new contract details",
+        "description": "Register new contract details",
+        "operationId": "registry-register",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "name": "data",
+          "description": "contract information to be registered",
+          "required": true,
+          "example": {
+            "name": "test-contract",
+            "description": "test contract description",
+            "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+            "version": "1.0"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Contract Name Service registration response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract successfully registered in naming service",
+                "result": "test-contract-1.0"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/registry/{id}": {
+      "get": {
+        "tags": ["registry"],
+        "summary": "Get existing contract details given its ID",
+        "description": "Get existing contract details",
+        "operationId": "registry-resolve",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "id of the contract to be fetch",
+          "name": "id"
+        }],
+        "responses": {
+          "200": {
+            "description": "Contract Name Service response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract information successfully resolved",
+                "result": {
+                  "name": "test-contract",
+                  "description": "test contract description",
+                  "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
+                  "version": "1.0"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["registry"],
+        "summary": "Delete existing contract information given its ID",
+        "description": "Delete existing contract details",
+        "operationId": "registry-delete",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "id of the contract to be deleted",
+          "name": "id"
+        }],
+        "responses": {
+          "200": {
+            "description": "Contract Name Service record delete response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "contract successfully unregistered from naming service",
+                "result": "test-contract-1.0"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{network}/is/ganache": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Detect wether target network is Ganache or not",
+        "description": "Detect wether target network is running Truffle Ganache or is a real, disttributed and decentralized Ethereum/Quorum network",
+        "operationId": "is-ganache",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum ganache evaluation response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "is_ganache",
+                "result": false
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/net/version": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-net-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/client/version": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network client version information",
+        "description": "Get target Ethereum or Quorum network client version details",
+        "operationId": "web3-client-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net client version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "web3_clientVersion",
+                "result": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/net/peers": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network peers",
+        "description": "Get target Ethereum or Quorum network peers details",
+        "operationId": "web3-net-peers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum network peer information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_peerCount",
+                "result": "0x64"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/protocol/version": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network protocol version information",
+        "description": "Get target Ethereum or Quorum network protocol version details",
+        "operationId": "web3-protocol-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/syncing": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-syncing",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/coinbase": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-coinbase",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/mining": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-mining",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/hashrate": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-hashrate",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/gasprice": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-gas-price",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "a hex code of an integer representing the current gas price in wei.",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/accounts": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get stored accounts in peer ",
+        "description": "Get stored accounts in peer information",
+        "operationId": "web3-accounts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/accountsBalanced": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get stored accounts in peer with balance information",
+        "description": "Get the details of stored accounts in peer filesystem including the balance data of each account",
+        "operationId": "web3-accounts-balanced",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/block/latest": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-block-latest",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/compilers": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-compilers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/block/current": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-current",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/shh/version": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-shh-version",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/shh/new": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-shh-new",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/shh/group": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get network version information",
+        "description": "Get target Ethereum or Quorum network version details",
+        "operationId": "web3-shh-group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/balance/{address}": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get the balance of an account",
+        "description": "Get target Ethereum account balance",
+        "operationId": "web3-account-balance",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address to be checked",
+            "type": "string",
+            "example": "0x0f220b086ef5Dd45df31D867A36e9d2DF13Ea342",
+            "default": "0x0f220b086ef5Dd45df31D867A36e9d2DF13Ea342",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/balance/{address}/block/{block}": {
+      "get": {
+        "tags": ["web3"],
+        "summary": "Get the balance of an account at given block number",
+        "description": "Get target Ethereum account balance at given block number",
+        "operationId": "web3-account-balance-block",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address to be checked",
+            "type": "string",
+            "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+            "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "block",
+            "description": "Number of the block to be checked",
+            "type": "string",
+            "example": "latest",
+            "default": "latest",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ethereum net version information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/summary": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Get summary of ERC 20 smart contract",
+        "description": "Read the overall information of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-name",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum name information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "name",
+                "result": "Glocoin"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method name does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/name": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the name of ERC 20 smart contract",
+        "description": "Read the name of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-name",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum name information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "name",
+                "result": "Glocoin"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method name does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/symbol": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the symbol of ERC 20 smart contract",
+        "description": "Read the symbol of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-symbol",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum symbol information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "symbol",
+                "result": "GLC"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method symbol does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/totalsupply": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read total supply of ERC 20 smart contract",
+        "description": "Read total supply of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-totalsupply",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum network peer information response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "totalSupply",
+                "result": 1000000
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method totalSupply does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/decimals": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read decimal value of ERC 20 smart contract",
+        "description": "Read decimal value of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-decimals",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum network peer information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method decimals does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/balanceof/{address}": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the balance of given address for selected ERC 20 smart contract",
+        "description": "Read the balance of given address of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-balance",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "address of the account to be readed",
+            "type": "string",
+            "example": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "default": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum network ERC20 contract balanceof response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "balanceof",
+                "result": "0x00000000000000000000000000000000000000000000000000000000000186a0"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method balanceof does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/{network}/erc20/{contract}/allowance/{owner}/to/{spender}": {
+      "get": {
+        "tags": ["erc20"],
+        "summary": "Read the allowance of given address for selected ERC 20 smart contract",
+        "description": "Read the allowance of given address of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-balance",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "description": "owner address of the account to be checked",
+            "type": "string",
+            "example": "0x32C9cbb237538515B20EB5e2ef74836A4334C6Ab",
+            "default": "0x32C9cbb237538515B20EB5e2ef74836A4334C6Ab",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "spender",
+            "description": "spender address allowed to to operations with the funds",
+            "type": "string",
+            "example": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "default": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum network peer ERC20 contract allowance response",
+            "schema": {
+              "example": {
+                "id": 0,
+                "code": 200,
+                "msg": "allowance",
+                "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method allowance does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/private/devops/deploy": {
+      "post": {
+        "tags": ["devops", "private"],
+        "summary": "smart contract deployment devops helper",
+        "description": "Compile, deploy and register your smart contract in just one single call",
+        "operationId": "devops-deploy",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "body",
+          "name": "request",
+          "description": "deployment configuration and parameters",
+          "type": "json",
+          "example": {
+            "contract": "0xaa",
+            "registry": {
+              "register": "true",
+              "name": "cc",
+              "description": "description here",
+              "version": "1.0"
+            }
+          },
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum network peer information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "connectionProfileToken": {
+      "type": "apiKey",
+      "description": "Connection profile configuration token for Etherniti REST API Proxy",
+      "name": "X-Etherniti-Profile",
+      "in": "header"
+    }
+  },
+  "responses": {
+    "ProfileInvalidError": {
+      "description": "Connection Profile token is missing, was expired or is invalid",
+      "schema": {
+        "example": {
+          "code": 400,
+          "msg": "Bad Request",
+          "details": "please provide a connection profile token for this kind of call"
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "externalDocs": {
+    "description": "Find out more about Etherniti, an Ethereum REST API Proxy at https://www.etherniti.org",
+    "url": "https://www.etherniti.org"
+  }
+}

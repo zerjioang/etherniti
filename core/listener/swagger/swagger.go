@@ -1,13 +1,17 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package swagger
 
 import (
+	"io/ioutil"
+	"os"
+	"strings"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
-	"io/ioutil"
-	"os"
-	"strings"
 )
 
 func ConfigureFromTemplate() {

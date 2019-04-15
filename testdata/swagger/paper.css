@@ -749,14 +749,16 @@
     padding: 8px 10px;
     border: 1px solid #d9d9d9;
     border-radius: 4px;
-    background: #fff
+    background: #fff;
+    color: black;
 }
 
 .swagger-ui input[type=email].invalid, .swagger-ui input[type=password].invalid, .swagger-ui input[type=search].invalid, .swagger-ui input[type=text].invalid {
     -webkit-animation: shake .4s 1;
     animation: shake .4s 1;
     border-color: #f93e3e;
-    background: #feebeb
+    background: #feebeb;
+    color: black;
 }
 
 @-webkit-keyframes shake {

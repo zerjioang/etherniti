@@ -1,9 +1,13 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package eth
 
 import (
 	"math/big"
 
-	"github.com/shopspring/decimal"
+	"github.com/zerjioang/etherniti/thirdparty/decimal"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
 )

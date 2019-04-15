@@ -8,7 +8,7 @@ import "testing"
 func BenchmarkBadBot(b *testing.B) {
 	b.Run("first-item-access", func(b *testing.B) {
 
-		l := BadBotsList
+		l := GetBadBotsList()
 
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -19,7 +19,7 @@ func BenchmarkBadBot(b *testing.B) {
 	})
 	b.Run("last-item-access", func(b *testing.B) {
 
-		l := BadBotsList
+		l := GetBadBotsList()
 
 		b.ReportAllocs()
 		b.SetBytes(1)

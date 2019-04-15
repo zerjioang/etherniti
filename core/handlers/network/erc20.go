@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
@@ -63,7 +62,7 @@ func (ctl *Erc20Controller) name(c echo.Context) error {
 		)
 	} else {
 		unpacked := ""
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
 			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
 		}
@@ -104,7 +103,7 @@ func (ctl *Erc20Controller) symbol(c echo.Context) error {
 		)
 	} else {
 		unpacked := ""
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
 			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
 		}
@@ -145,7 +144,7 @@ func (ctl *Erc20Controller) totalSupply(c echo.Context) error {
 		)
 	} else {
 		var unpacked *big.Int
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
 			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
 		}
@@ -185,8 +184,8 @@ func (ctl *Erc20Controller) decimals(c echo.Context) error {
 			),
 		)
 	} else {
-		var unpacked *big.Int
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		var unpacked *uint8
+		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
 			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
 		}
@@ -231,57 +230,59 @@ func (ctl *Erc20Controller) balanceof(c echo.Context) error {
 			),
 		)
 	} else {
-		return api.SendSuccess(c, "balanceof", raw)
+		var unpacked *big.Int
+		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		if decodeErr != nil {
+			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
+		}
+		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+		if err != nil {
+			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
+		} else {
+			return api.SendSuccess(c, "balanceof", unpacked)
+		}
 	}
 }
 
-// get the summary of information of given erc20 contract
+// get the summary of information of given erc20 contract at given target network
 func (ctl *Erc20Controller) summary(c echo.Context) error {
-	targetAddr := c.Param("address")
+	contractAddress := c.Param("contract")
+	//input data validation
+	if contractAddress == "" {
+		return api.ErrorStr(c, "invalid contract address provided")
+	}
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
 		return api.ErrorStr(c, "failed to execute requested operation")
 	}
-	instance, err := eth.InstantiateToken(cc, targetAddr)
-	if err == nil && instance != nil {
-		//todo save token instance in memory
-
-		//show token summary
-		/*bal, err := instance.BalanceOf(&bind.CallOpts{}, ethAddr)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		name, err := instance.name(&bind.CallOpts{})
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		symbol, err := instance.symbol(&bind.CallOpts{})
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		decimals, err := instance.Decimals(&bind.CallOpts{})
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		fmt.Printf("name: %s\n", name)         // "name: Golem Network"
-		fmt.Printf("symbol: %s\n", symbol)     // "symbol: GNT"
-		fmt.Printf("decimals: %v\n", decimals) // "decimals: 18"
-
-		fmt.Printf("wei: %s\n", bal) // "wei: 74605500647408739782407023"
-
-		fbal := new(big.Float)
-		fbal.SetString(bal.String())
-		value := new(big.Float).Quo(fbal, big.NewFloat(math.Pow10(int(decimals))))
-
-		fmt.Printf("balance: %f", value) // "balance: 74605500.647409"
-		*/
+	// get our client context
+	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
+	logger.Info("erc20 controller request using context id: ", cId)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
 	}
-	return nil
+	raw, err := client.Erc20Summary(contractAddress)
+	if err != nil {
+		// send invalid generation message
+		return c.JSONBlob(http.StatusBadRequest,
+			str.GetJsonBytes(
+				protocol.NewApiError(http.StatusBadRequest, err.Error()),
+			),
+		)
+	} else {
+		var unpacked *big.Int
+		rawBytes, decodeErr := hex.FromEthHex(string(raw))
+		if decodeErr != nil {
+			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
+		}
+		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+		if err != nil {
+			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
+		} else {
+			return api.SendSuccess(c, "balanceof", unpacked)
+		}
+	}
 }
 
 // get the allowance status of the contract at given target network

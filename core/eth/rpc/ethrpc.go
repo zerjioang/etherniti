@@ -39,6 +39,17 @@ const (
 	EarliestBlockNumber = "earliest"
 	pendingBlockNumber  = "pending"
 )
+type contractFunction func(string)(string, error)
+
+var (
+	instance = EthRPC{}
+	summaryFunctions = []contractFunction{
+		instance.Erc20Name,
+		instance.Erc20Symbol,
+		instance.Erc20Decimals,
+		instance.Erc20TotalSupply,
+	}
+)
 
 // EthError - ethereum error
 type EthError struct {
@@ -648,40 +659,76 @@ shh_getFilterChanges
 shh_getMessages
 
 */
-func (rpc EthRPC) Erc20TotalSupply(contract string) (json.RawMessage, error) {
-	return rpc.Call("eth_call", map[string]interface{}{
+
+func (rpc EthRPC) Erc20Summary(contract string) (map[string]string, error) {
+	var response map[string]string
+	for i:=0; i<len(summaryFunctions);i++{
+		raw, err := summaryFunctions[i](contract)
+		if err == nil && raw != "" {
+
+		}
+	}
+	return response, nil
+}
+
+func (rpc EthRPC) Erc20TotalSupply(contract string) (string, error) {
+	raw, err := rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
 		"data": paramencoder.TotalSupplyParams,
 		/*"gas":      "0xaae60", //700000,
 		"gasPrice": "0x15f90", //90000,*/
 	}, "latest")
+	if err == nil {
+		var name string
+		unErr := json.Unmarshal(raw, &name)
+		return name, unErr
+	}
+	return "", err
 }
 
-func (rpc EthRPC) Erc20Symbol(contract string) (json.RawMessage, error) {
-	return rpc.Call("eth_call", map[string]interface{}{
+func (rpc EthRPC) Erc20Symbol(contract string) (string, error) {
+	raw, err := rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
 		"data": paramencoder.SymbolParams,
 		/*"gas":      "0xaae60", //700000,
 		"gasPrice": "0x15f90", //90000,*/
 	}, "latest")
+	if err == nil {
+		var name string
+		unErr := json.Unmarshal(raw, &name)
+		return name, unErr
+	}
+	return "", err
 }
 
-func (rpc EthRPC) Erc20Name(contract string) (json.RawMessage, error) {
-	return rpc.Call("eth_call", map[string]interface{}{
+func (rpc EthRPC) Erc20Name(contract string) (string, error) {
+	raw, err := rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
 		"data": paramencoder.NameParams,
 		/*"gas":      "0xaae60", //700000,
 		"gasPrice": "0x15f90", //90000,*/
 	}, "latest")
+	if err == nil {
+		var name string
+		unErr := json.Unmarshal(raw, &name)
+		return name, unErr
+	}
+	return "", err
 }
 
-func (rpc EthRPC) Erc20Decimals(contract string) (json.RawMessage, error) {
-	return rpc.Call("eth_call", map[string]interface{}{
+func (rpc EthRPC) Erc20Decimals(contract string) (string, error) {
+	raw, err := rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
 		"data": paramencoder.DecimalsParams,
 		/*"gas":      "0xaae60", //700000,
 		"gasPrice": "0x15f90", //90000,*/
 	}, "latest")
+	if err == nil {
+		var name string
+		unErr := json.Unmarshal(raw, &name)
+		return name, unErr
+	}
+	return "", err
 }
 
 func (rpc EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMessage, error) {

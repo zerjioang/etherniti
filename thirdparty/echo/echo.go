@@ -60,8 +60,6 @@ import (
 
 	"github.com/zerjioang/etherniti/thirdparty/gommon/color"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
-	"golang.org/x/crypto/acme"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 type (
@@ -79,7 +77,6 @@ type (
 		TLSServer        *http.Server
 		Listener         net.Listener
 		TLSListener      net.Listener
-		AutoTLSManager   autocert.Manager
 		DisableHTTP2     bool
 		Debug            bool
 		HideBanner       bool
@@ -290,12 +287,9 @@ func New() (e *Echo) {
 	e = &Echo{
 		Server:    new(http.Server),
 		TLSServer: new(http.Server),
-		AutoTLSManager: autocert.Manager{
-			Prompt: autocert.AcceptTOS,
-		},
-		Logger:   log.New("echo"),
-		colorer:  color.New(),
-		maxParam: new(int),
+		Logger:    log.New("echo"),
+		colorer:   color.New(),
+		maxParam:  new(int),
 	}
 	e.Server.Handler = e
 	e.TLSServer.Handler = e
@@ -567,7 +561,7 @@ func (e *Echo) ReleaseContext(c Context) {
 // ServeHTTP implements `http.Handler` interface, which serves HTTP requests.
 func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Acquire context
-	c := e.pool.Get().(*context)
+	c := e.AcquireContext()
 	c.Reset(r, w)
 
 	h := NotFoundHandler
@@ -592,7 +586,7 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Release context
-	e.pool.Put(c)
+	e.ReleaseContext(c)
 }
 
 // Start starts an HTTP server.
@@ -634,15 +628,6 @@ func filepathOrContent(fileOrContent interface{}) (content []byte, err error) {
 	default:
 		return nil, ErrInvalidCertOrKeyType
 	}
-}
-
-// StartAutoTLS starts an HTTPS server using certificates automatically installed from https://letsencrypt.org.
-func (e *Echo) StartAutoTLS(address string) error {
-	s := e.TLSServer
-	s.TLSConfig = new(tls.Config)
-	s.TLSConfig.GetCertificate = e.AutoTLSManager.GetCertificate
-	s.TLSConfig.NextProtos = append(s.TLSConfig.NextProtos, acme.ALPNProto)
-	return e.startTLS(address)
 }
 
 func (e *Echo) startTLS(address string) error {
@@ -753,11 +738,11 @@ func WrapMiddleware(m func(http.Handler) http.Handler) MiddlewareFunc {
 }
 
 func getPath(r *http.Request) string {
-	path := r.URL.RawPath
-	if path == "" {
-		path = r.URL.Path
+	p := r.URL.RawPath
+	if p == "" {
+		p = r.URL.Path
 	}
-	return path
+	return p
 }
 
 func handlerName(h HandlerFunc) string {
