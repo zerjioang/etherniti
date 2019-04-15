@@ -6,8 +6,11 @@ package echo
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -16,6 +19,10 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+)
+
+var (
+	errInvalidateCache = errors.New("failed to get item from internal cache, cache invalidation issues around")
 )
 
 type (
@@ -195,6 +202,14 @@ type (
 		lock     sync.RWMutex
 	}
 )
+
+var (
+	fileCache concurrentmap.ConcurrentMap
+)
+
+func init() {
+	fileCache = concurrentmap.New()
+}
 
 const (
 	defaultMemory = 32 << 20 // 32 MB
@@ -482,26 +497,57 @@ func (c *context) Stream(code int, contentType string, r io.Reader) (err error) 
 }
 
 func (c *context) File(file string) (err error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return NotFoundHandler(c)
-	}
-	defer f.Close()
-
-	fi, _ := f.Stat()
-	if fi.IsDir() {
-		file = filepath.Join(file, indexPage)
-		f, err = os.Open(file)
+	// check if file is cached
+	// check if file was already readed before and saved in our cache
+	// this avoid overhead on disk readings
+	object, found := fileCache.Get(file)
+	if found && object != nil {
+		// cast
+		buffer, ok := object.(*FileBuffer)
+		if ok {
+			//casting was ok
+			// add a http cache directive too
+			c.Response().Header().Set("Cache-Control", "public, max-age=86400") // 24h cache = 86400
+			http.ServeContent(c.Response(), c.Request(), buffer.name, buffer.time, buffer)
+			return nil
+		} else {
+			// some cache and data error occured.
+			return errInvalidateCache
+		}
+	} else {
+		// file not cached
+		f, err := os.Open(file)
 		if err != nil {
 			return NotFoundHandler(c)
 		}
-		defer f.Close()
-		if fi, err = f.Stat(); err != nil {
-			return
+
+		fi, _ := f.Stat()
+		if fi.IsDir() {
+			file = filepath.Join(file, indexPage)
+			f, err = os.Open(file)
+			if err != nil {
+				return NotFoundHandler(c)
+			}
+			if fi, err = f.Stat(); err != nil {
+				return f.Close()
+			}
+			// before sending file data to the client, create a filebuffer  for caching purposes
+			raw, _ := ioutil.ReadAll(f)
+			b := bytes.Buffer{}
+			_, _ = b.Write(raw)
+			item := new(FileBuffer)
+			item.name = fi.Name()
+			item.time = fi.ModTime()
+			item.Buffer = b
+			item.Index = 0
+			fileCache.Set(file, item)
+			// add a http cache directive too
+			c.Response().Header().Set("Cache-Control", "public, max-age=86400") // 24h cache = 86400
+			http.ServeContent(c.Response(), c.Request(), fi.Name(), fi.ModTime(), f)
+			return f.Close()
 		}
+		return nil
 	}
-	http.ServeContent(c.Response(), c.Request(), fi.Name(), fi.ModTime(), f)
-	return
 }
 
 func (c *context) Attachment(file, name string) error {

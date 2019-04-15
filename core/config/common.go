@@ -21,14 +21,15 @@ var (
 	// define internal folders
 	ResourcesDirInternal         = ResourcesDir + "/internal"
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
-	ResourcesDirInternalBots = ResourcesDirInternal + "/bots"
+	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
+	ResourcesDirLanding          = ResourcesDir + "/landing"
 	ResourcesDirRoot             = ResourcesDir + "/root"
 	ResourcesDirSwagger          = ResourcesDir + "/swagger"
 	// define internal files
 	ResourcesDirPHP       = ResourcesDirRoot + "/phpinfo.php"
 	BlacklistedDomainFile = ResourcesDirInternalSecurity + "/domains.json"
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
-	AntiBotsFile    = ResourcesDirInternalBots + "/bots.json"
+	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
 )
 
 //simply converts http requests into https

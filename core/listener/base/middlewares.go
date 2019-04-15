@@ -261,7 +261,8 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 	logger.Info("[LAYER] / static files")
 	//load root static folder
-	e.Static("/", config.ResourcesDirRoot)
+	e.Static("/", config.ResourcesDirLanding)
+
 	e.Static("/phpinfo.php", config.ResourcesDirPHP)
 
 	// load swagger ui files
@@ -274,7 +275,6 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 // RegisterServices in echo server, allowed routes
 func RegisterRoot(e *echo.Echo) {
-	e.GET("/", handlers.Index)
 	e.GET("/v1", handlers.Index)
 	e.GET("/v1/public", handlers.Index)
 }
