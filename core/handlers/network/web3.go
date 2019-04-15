@@ -4,6 +4,7 @@
 package network
 
 import (
+	"github.com/zerjioang/etherniti/core/eth"
 	"math/big"
 	"net/http"
 	"strconv"
@@ -702,7 +703,7 @@ func (ctl *Web3Controller) sendTransaction(c echo.Context) error {
 	//build our transaction
 	var transaction ethrpc.TransactionData
 	transaction.To = to
-	transaction.Value = towei
+	transaction.Value = eth.ToWei(tokenAmount, 0)
 
 	raw, err := client.EthSendTransaction(transaction)
 	if err != nil {

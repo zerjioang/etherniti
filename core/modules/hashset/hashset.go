@@ -4,6 +4,9 @@
 package hashset
 
 import (
+	"encoding/json"
+	"github.com/zerjioang/etherniti/core/logger"
+	"io/ioutil"
 	"strings"
 )
 
@@ -50,6 +53,25 @@ func (set *HashSet) Remove(item string) {
 
 func (set HashSet) Count() int {
 	return len(set.data)
+}
+
+func (set *HashSet) LoadFromJsonArray(path string) {
+	if path != "" {
+		logger.Debug("loading hashset with data")
+		data, err := ioutil.ReadFile(path)
+		if err != nil {
+			logger.Error("could not read source data")
+			return
+		}
+		var itemList []string
+		unErr := json.Unmarshal(data, &itemList)
+		if unErr != nil {
+			logger.Error("could not unmarshal source data")
+			return
+		} else {
+			set.LoadFromArray(itemList)
+		}
+	}
 }
 
 func (set *HashSet) LoadFromArray(data []string) {

@@ -184,7 +184,7 @@ func customContext(next echo.HandlerFunc) echo.HandlerFunc {
 // configure deployer internal configuration
 func ConfigureServerRoutes(e *echo.Echo) {
 	// add a custom trycatch handler
-	logger.Info("[LAYER] custom trycatch handler")
+	logger.Info("[LAYER] custom error handler")
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
 	// log all single request

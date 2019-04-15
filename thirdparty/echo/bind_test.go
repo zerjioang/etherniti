@@ -6,7 +6,6 @@ package echo
 import (
 	"bytes"
 	"encoding/json"
-	"encoding/xml"
 	"errors"
 	"io"
 	"mime/multipart"

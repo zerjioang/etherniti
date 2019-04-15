@@ -6,7 +6,6 @@ package echo
 import (
 	"bytes"
 	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -139,15 +138,6 @@ type (
 		// JSONPBlob sends a JSONP blob response with status code. It uses `callback`
 		// to construct the JSONP payload.
 		JSONPBlob(code int, callback string, b []byte) error
-
-		// XML sends an XML response with status code.
-		XML(code int, i interface{}) error
-
-		// XMLPretty sends a pretty-print XML with status code.
-		XMLPretty(code int, i interface{}, indent string) error
-
-		// XMLBlob sends an XML blob response with status code.
-		XMLBlob(code int, b []byte) error
 
 		// Blob sends a blob response with status code and content type.
 		Blob(code int, contentType string, b []byte) error
@@ -474,41 +464,6 @@ func (c *context) JSONPBlob(code int, callback string, b []byte) (err error) {
 		return
 	}
 	_, err = c.response.Write([]byte(");"))
-	return
-}
-
-func (c *context) xml(code int, i interface{}, indent string) (err error) {
-	c.writeContentType(MIMEApplicationXMLCharsetUTF8)
-	c.response.WriteHeader(code)
-	enc := xml.NewEncoder(c.response)
-	if indent != "" {
-		enc.Indent("", indent)
-	}
-	if _, err = c.response.Write([]byte(xml.Header)); err != nil {
-		return
-	}
-	return enc.Encode(i)
-}
-
-func (c *context) XML(code int, i interface{}) (err error) {
-	indent := ""
-	if _, pretty := c.QueryParams()["pretty"]; c.echo.Debug || pretty {
-		indent = defaultIndent
-	}
-	return c.xml(code, i, indent)
-}
-
-func (c *context) XMLPretty(code int, i interface{}, indent string) (err error) {
-	return c.xml(code, i, indent)
-}
-
-func (c *context) XMLBlob(code int, b []byte) (err error) {
-	c.writeContentType(MIMEApplicationXMLCharsetUTF8)
-	c.response.WriteHeader(code)
-	if _, err = c.response.Write([]byte(xml.Header)); err != nil {
-		return
-	}
-	_, err = c.response.Write(b)
 	return
 }
 

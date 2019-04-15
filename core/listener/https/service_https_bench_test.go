@@ -1,9 +1,12 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package http
+package https_test
 
-import "testing"
+import (
+	"github.com/zerjioang/etherniti/core/listener/https"
+	"testing"
+)
 
 func BenchmarkHttpListener(b *testing.B) {
 	b.Run("instantiation", func(b *testing.B) {
@@ -11,7 +14,7 @@ func BenchmarkHttpListener(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = NewHttpListener()
+			https.NewHttpsListener()
 		}
 	})
 }

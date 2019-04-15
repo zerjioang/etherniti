@@ -1,20 +1,20 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package http_test
+package https_test
 
 import (
-	"github.com/zerjioang/etherniti/core/listener/http"
+	"github.com/zerjioang/etherniti/core/listener/https"
 	"testing"
 	"time"
 )
 
 func TestHttpListener(t *testing.T) {
 	t.Run("instantiation", func(t *testing.T) {
-		http.NewHttpListener()
+		https.NewHttpsListener()
 	})
 	t.Run("run", func(t *testing.T) {
-		s := http.NewHttpListener()
+		s := https.NewHttpsListener()
 		err := s.Listen()
 		if err != nil {
 			t.Error(err)
@@ -22,7 +22,7 @@ func TestHttpListener(t *testing.T) {
 		time.Sleep(200000 * time.Second)
 	})
 	t.Run("request-status", func(t *testing.T) {
-		s := http.NewHttpListener()
+		s := https.NewHttpsListener()
 		// run the socket server
 		err := s.Listen()
 		if err != nil {

@@ -7,19 +7,25 @@ import "testing"
 
 func BenchmarkBadBot(b *testing.B) {
 	b.Run("first-item-access", func(b *testing.B) {
+
+		l := BadBotsList
+
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = badBotsList[0]
+			_ = l.Contains("almaden")
 		}
 	})
 	b.Run("last-item-access", func(b *testing.B) {
+
+		l := BadBotsList
+
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = badBotsList[len(badBotsList)-1]
+			_ = l.Contains("googlebot")
 		}
 	})
 }

@@ -4,6 +4,7 @@
 package api
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/hashset"
 )
@@ -15,5 +16,5 @@ var (
 func init() {
 	logger.Info("[module] loading anti-bots policy data")
 	BadBotsList = hashset.NewHashSet()
-	BadBotsList.LoadFromArray(badBotsList)
+	BadBotsList.LoadFromJsonArray(config.AntiBotsFile)
 }
