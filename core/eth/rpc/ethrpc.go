@@ -42,12 +42,15 @@ const (
 type contractFunction func(string)(string, error)
 
 var (
-	instance = EthRPC{}
+	instance = new(EthRPC)
 	summaryFunctions = []contractFunction{
 		instance.Erc20Name,
 		instance.Erc20Symbol,
 		instance.Erc20Decimals,
 		instance.Erc20TotalSupply,
+	}
+	summaryFunctionsNames = []string{
+		"name", "symbol", "decimals", "totalsupply",
 	}
 )
 
@@ -94,6 +97,12 @@ type EthRPC struct {
 }
 
 // New create new rpc client with given url
+func NewDefaultRPCPtr(url string) *EthRPC {
+	c := NewDefaultRPC(url)
+	return &c
+}
+
+// New create new rpc client with given url
 func NewDefaultRPC(url string) EthRPC {
 	rpc := EthRPC{
 		url:    url,
@@ -103,7 +112,7 @@ func NewDefaultRPC(url string) EthRPC {
 	return rpc
 }
 
-func (rpc EthRPC) call(method string, target interface{}, params ...interface{}) error {
+func (rpc *EthRPC) call(method string, target interface{}, params ...interface{}) error {
 	result, err := rpc.Call(method, params...)
 	if err != nil {
 		return err
@@ -117,7 +126,7 @@ func (rpc EthRPC) call(method string, target interface{}, params ...interface{})
 }
 
 // URL returns client url
-func (rpc EthRPC) URL() string {
+func (rpc *EthRPC) URL() string {
 	return rpc.url
 }
 
@@ -144,7 +153,7 @@ Returns
 
 DATA - the return value of executed contract.
 */
-func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, error) {
+func (rpc *EthRPC) Call(method string, params ...interface{}) (json.RawMessage, error) {
 	request := ethRequest{
 		ID:      1,
 		JSONRPC: "2.0",
@@ -185,18 +194,18 @@ func (rpc EthRPC) Call(method string, params ...interface{}) (json.RawMessage, e
 }
 
 // RawCall returns raw response of method call (Deprecated)
-func (rpc EthRPC) RawCall(method string, params ...interface{}) (json.RawMessage, error) {
+func (rpc *EthRPC) RawCall(method string, params ...interface{}) (json.RawMessage, error) {
 	return rpc.Call(method, params...)
 }
 
-func (rpc EthRPC) EthMethodNoParams(methodName string) (interface{}, error) {
+func (rpc *EthRPC) EthMethodNoParams(methodName string) (interface{}, error) {
 	var response interface{}
 	err := rpc.call(methodName, &response)
 	return response, err
 }
 
 // returns ethereum node information
-func (rpc EthRPC) EthNodeInfo() (string, error) {
+func (rpc *EthRPC) EthNodeInfo() (string, error) {
 	var response string
 
 	err := rpc.call("eth_info", &response)
@@ -204,7 +213,7 @@ func (rpc EthRPC) EthNodeInfo() (string, error) {
 }
 
 // Web3ClientVersion returns the current client version.
-func (rpc EthRPC) Web3ClientVersion() (string, error) {
+func (rpc *EthRPC) Web3ClientVersion() (string, error) {
 	var clientVersion string
 
 	err := rpc.call("web3_clientVersion", &clientVersion)
@@ -212,7 +221,7 @@ func (rpc EthRPC) Web3ClientVersion() (string, error) {
 }
 
 // Web3Sha3 returns Keccak-256 (not the standardized SHA3-256) of the given data.
-func (rpc EthRPC) Web3Sha3(data []byte) (string, error) {
+func (rpc *EthRPC) Web3Sha3(data []byte) (string, error) {
 	var hash string
 
 	hashData := fixtures.Encode(data)
@@ -221,7 +230,7 @@ func (rpc EthRPC) Web3Sha3(data []byte) (string, error) {
 }
 
 // NetVersion returns the current network protocol version.
-func (rpc EthRPC) NetVersion() (string, error) {
+func (rpc *EthRPC) NetVersion() (string, error) {
 	var version string
 
 	err := rpc.call("net_version", &version)
@@ -229,7 +238,7 @@ func (rpc EthRPC) NetVersion() (string, error) {
 }
 
 // NetListening returns true if client is actively listening for network connections.
-func (rpc EthRPC) NetListening() (bool, error) {
+func (rpc *EthRPC) NetListening() (bool, error) {
 	var listening bool
 
 	err := rpc.call("net_listening", &listening)
@@ -237,7 +246,7 @@ func (rpc EthRPC) NetListening() (bool, error) {
 }
 
 // NetPeerCount returns number of peers currently connected to the client.
-func (rpc EthRPC) NetPeerCount() (int, error) {
+func (rpc *EthRPC) NetPeerCount() (int, error) {
 	var response int
 	if err := rpc.call("net_peerCount", &response); err != nil {
 		return 0, err
@@ -247,7 +256,7 @@ func (rpc EthRPC) NetPeerCount() (int, error) {
 }
 
 // EthProtocolVersion returns the current ethereum protocol version.
-func (rpc EthRPC) EthProtocolVersion() (string, error) {
+func (rpc *EthRPC) EthProtocolVersion() (string, error) {
 	var protocolVersion string
 
 	err := rpc.call("eth_protocolVersion", &protocolVersion)
@@ -255,7 +264,7 @@ func (rpc EthRPC) EthProtocolVersion() (string, error) {
 }
 
 // EthSyncing returns an object with data about the sync status or false.
-func (rpc EthRPC) EthSyncing() (*Syncing, error) {
+func (rpc *EthRPC) EthSyncing() (*Syncing, error) {
 	result, err := rpc.RawCall("eth_syncing")
 	if err != nil {
 		return nil, err
@@ -269,7 +278,7 @@ func (rpc EthRPC) EthSyncing() (*Syncing, error) {
 }
 
 // returns ethereum node information
-func (rpc EthRPC) EthNetVersion() (string, error) {
+func (rpc *EthRPC) EthNetVersion() (string, error) {
 	var response string
 
 	err := rpc.call("net_version", &response)
@@ -277,7 +286,7 @@ func (rpc EthRPC) EthNetVersion() (string, error) {
 }
 
 // EthCoinbase returns the client coinbase address
-func (rpc EthRPC) EthCoinbase() (string, error) {
+func (rpc *EthRPC) EthCoinbase() (string, error) {
 	var address string
 
 	err := rpc.call("eth_coinbase", &address)
@@ -285,7 +294,7 @@ func (rpc EthRPC) EthCoinbase() (string, error) {
 }
 
 // EthMining returns true if client is actively mining new blocks.
-func (rpc EthRPC) EthMining() (bool, error) {
+func (rpc *EthRPC) EthMining() (bool, error) {
 	var mining bool
 
 	err := rpc.call("eth_mining", &mining)
@@ -293,7 +302,7 @@ func (rpc EthRPC) EthMining() (bool, error) {
 }
 
 // EthHashrate returns the number of hashes per second that the node is mining with.
-func (rpc EthRPC) EthHashrate() (int, error) {
+func (rpc *EthRPC) EthHashrate() (int, error) {
 	var response string
 
 	if err := rpc.call("eth_hashrate", &response); err != nil {
@@ -304,7 +313,7 @@ func (rpc EthRPC) EthHashrate() (int, error) {
 }
 
 // EthGasPrice returns the current price per gas in wei.
-func (rpc EthRPC) EthGasPrice() (int64, error) {
+func (rpc *EthRPC) EthGasPrice() (int64, error) {
 	var response string
 	if err := rpc.call("eth_gasPrice", &response); err != nil {
 		return 0, err
@@ -319,14 +328,14 @@ func (rpc EthRPC) EthGasPrice() (int64, error) {
 }
 
 // EthAccounts returns a list of addresses owned by client.
-func (rpc EthRPC) EthAccounts() ([]string, error) {
+func (rpc *EthRPC) EthAccounts() ([]string, error) {
 	var accounts []string
 	err := rpc.call("eth_accounts", &accounts)
 	return accounts, err
 }
 
 // EthBlockNumber returns the number of most recent block.
-func (rpc EthRPC) EthBlockNumber() (int, error) {
+func (rpc *EthRPC) EthBlockNumber() (int, error) {
 	var response string
 	if err := rpc.call("eth_blockNumber", &response); err != nil {
 		return 0, err
@@ -336,7 +345,7 @@ func (rpc EthRPC) EthBlockNumber() (int, error) {
 }
 
 // EthGetBalance returns the balance of the account of given address in wei.
-func (rpc EthRPC) EthGetBalance(address, block string) (*big.Int, error) {
+func (rpc *EthRPC) EthGetBalance(address, block string) (*big.Int, error) {
 	var response string
 	if err := rpc.call("eth_getBalance", &response, address, block); err != nil {
 		return new(big.Int), err
@@ -345,14 +354,14 @@ func (rpc EthRPC) EthGetBalance(address, block string) (*big.Int, error) {
 }
 
 // EthGetStorageAt returns the value from a storage position at a given address.
-func (rpc EthRPC) EthGetStorageAt(data string, position int, tag string) (string, error) {
+func (rpc *EthRPC) EthGetStorageAt(data string, position int, tag string) (string, error) {
 	var result string
 	err := rpc.call("eth_getStorageAt", &result, data, IntToHex(position), tag)
 	return result, err
 }
 
 // EthGetTransactionCount returns the number of transactions sent from an address.
-func (rpc EthRPC) EthGetTransactionCount(address, block string) (int, error) {
+func (rpc *EthRPC) EthGetTransactionCount(address, block string) (int, error) {
 	var response string
 	if err := rpc.call("eth_getTransactionCount", &response, address, block); err != nil {
 		return 0, err
@@ -361,7 +370,7 @@ func (rpc EthRPC) EthGetTransactionCount(address, block string) (int, error) {
 }
 
 // EthGetBlockTransactionCountByHash returns the number of transactions in a block from a block matching the given block hash.
-func (rpc EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
+func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
 	var response string
 	if err := rpc.call("eth_getBlockTransactionCountByHash", &response, hash); err != nil {
 		return 0, err
@@ -370,7 +379,7 @@ func (rpc EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
 }
 
 // EthGetBlockTransactionCountByNumber returns the number of transactions in a block from a block matching the given block
-func (rpc EthRPC) EthGetBlockTransactionCountByNumber(number int) (int, error) {
+func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(number int) (int, error) {
 	var response string
 	if err := rpc.call("eth_getBlockTransactionCountByNumber", &response, IntToHex(number)); err != nil {
 		return 0, err
@@ -379,7 +388,7 @@ func (rpc EthRPC) EthGetBlockTransactionCountByNumber(number int) (int, error) {
 }
 
 // EthGetUncleCountByBlockHash returns the number of uncles in a block from a block matching the given block hash.
-func (rpc EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
+func (rpc *EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
 	var response string
 	if err := rpc.call("eth_getUncleCountByBlockHash", &response, hash); err != nil {
 		return 0, err
@@ -388,7 +397,7 @@ func (rpc EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
 }
 
 // EthGetUncleCountByBlockNumber returns the number of uncles in a block from a block matching the given block number.
-func (rpc EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
+func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
 	var response string
 	if err := rpc.call("eth_getUncleCountByBlockNumber", &response, IntToHex(number)); err != nil {
 		return 0, err
@@ -397,7 +406,7 @@ func (rpc EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
 }
 
 // EthGetCode returns code at a given address.
-func (rpc EthRPC) EthGetCode(address, block string) (string, error) {
+func (rpc *EthRPC) EthGetCode(address, block string) (string, error) {
 	var code string
 	err := rpc.call("eth_getCode", &code, address, block)
 	return code, err
@@ -406,7 +415,7 @@ func (rpc EthRPC) EthGetCode(address, block string) (string, error) {
 // EthSign signs data with a given address.
 // Calculates an Ethereum specific signature
 // with: sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
-func (rpc EthRPC) EthSign(address, data string) (string, error) {
+func (rpc *EthRPC) EthSign(address, data string) (string, error) {
 	var signature string
 	err := rpc.call("eth_sign", &signature, address, data)
 	return signature, err
@@ -414,7 +423,7 @@ func (rpc EthRPC) EthSign(address, data string) (string, error) {
 
 // EthSendTransaction creates new message call transaction
 // or a contract creation, if the data field contains code.
-func (rpc EthRPC) EthSendTransaction(transaction TransactionData) (string, error) {
+func (rpc *EthRPC) EthSendTransaction(transaction TransactionData) (string, error) {
 	var hash string
 	err := rpc.call("eth_sendTransaction", &hash, transaction)
 	return hash, err
@@ -422,7 +431,7 @@ func (rpc EthRPC) EthSendTransaction(transaction TransactionData) (string, error
 
 // EthSendRawTransaction creates new message call transaction
 // or a contract creation for signed transactions.
-func (rpc EthRPC) EthSendRawTransaction(data string) (string, error) {
+func (rpc *EthRPC) EthSendRawTransaction(data string) (string, error) {
 	var hash string
 	err := rpc.call("eth_sendRawTransaction", &hash, data)
 	return hash, err
@@ -430,7 +439,7 @@ func (rpc EthRPC) EthSendRawTransaction(data string) (string, error) {
 
 // EthCall executes a new message call immediately without
 // creating a transaction on the block chain.
-func (rpc EthRPC) EthCall(transaction TransactionData, tag string) (string, error) {
+func (rpc *EthRPC) EthCall(transaction TransactionData, tag string) (string, error) {
 	var data string
 	err := rpc.call("eth_call", &data, transaction, tag)
 	return data, err
@@ -439,7 +448,7 @@ func (rpc EthRPC) EthCall(transaction TransactionData, tag string) (string, erro
 // EthEstimateGas makes a call or transaction, which won't be
 // added to the blockchain and returns the used gas, which can
 // be used for estimating the used gas.
-func (rpc EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
+func (rpc *EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
 	var response string
 	err := rpc.call("eth_estimateGas", &response, transaction)
 	if err != nil {
@@ -449,7 +458,7 @@ func (rpc EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
 }
 
 // getBlock gets current block information
-func (rpc EthRPC) getBlock(method string, withTransactions bool, params ...interface{}) (*Block, error) {
+func (rpc *EthRPC) getBlock(method string, withTransactions bool, params ...interface{}) (*Block, error) {
 	result, err := rpc.RawCall(method, params...)
 	if err != nil {
 		return nil, err
@@ -475,16 +484,16 @@ func (rpc EthRPC) getBlock(method string, withTransactions bool, params ...inter
 }
 
 // EthGetBlockByHash returns information about a block by hash.
-func (rpc EthRPC) EthGetBlockByHash(hash string, withTransactions bool) (*Block, error) {
+func (rpc *EthRPC) EthGetBlockByHash(hash string, withTransactions bool) (*Block, error) {
 	return rpc.getBlock("eth_getBlockByHash", withTransactions, hash, withTransactions)
 }
 
 // EthGetBlockByNumber returns information about a block by block number.
-func (rpc EthRPC) EthGetBlockByNumber(number int, withTransactions bool) (*Block, error) {
+func (rpc *EthRPC) EthGetBlockByNumber(number int, withTransactions bool) (*Block, error) {
 	return rpc.getBlock("eth_getBlockByNumber", withTransactions, IntToHex(number), withTransactions)
 }
 
-func (rpc EthRPC) getTransaction(method string, params ...interface{}) (*Transaction, error) {
+func (rpc *EthRPC) getTransaction(method string, params ...interface{}) (*Transaction, error) {
 	transaction := new(Transaction)
 
 	err := rpc.call(method, transaction, params...)
@@ -492,23 +501,23 @@ func (rpc EthRPC) getTransaction(method string, params ...interface{}) (*Transac
 }
 
 // EthGetTransactionByHash returns the information about a transaction requested by transaction hash.
-func (rpc EthRPC) EthGetTransactionByHash(hash string) (*Transaction, error) {
+func (rpc *EthRPC) EthGetTransactionByHash(hash string) (*Transaction, error) {
 	return rpc.getTransaction("eth_getTransactionByHash", hash)
 }
 
 // EthGetTransactionByBlockHashAndIndex returns information about a transaction by block hash and transaction index position.
-func (rpc EthRPC) EthGetTransactionByBlockHashAndIndex(blockHash string, transactionIndex int) (*Transaction, error) {
+func (rpc *EthRPC) EthGetTransactionByBlockHashAndIndex(blockHash string, transactionIndex int) (*Transaction, error) {
 	return rpc.getTransaction("eth_getTransactionByBlockHashAndIndex", blockHash, IntToHex(transactionIndex))
 }
 
 // EthGetTransactionByBlockNumberAndIndex returns information about a transaction by block number and transaction index position.
-func (rpc EthRPC) EthGetTransactionByBlockNumberAndIndex(blockNumber, transactionIndex int) (*Transaction, error) {
+func (rpc *EthRPC) EthGetTransactionByBlockNumberAndIndex(blockNumber, transactionIndex int) (*Transaction, error) {
 	return rpc.getTransaction("eth_getTransactionByBlockNumberAndIndex", IntToHex(blockNumber), IntToHex(transactionIndex))
 }
 
 // EthGetTransactionReceipt returns the receipt of a transaction by transaction hash.
 // Note That the receipt is not available for pending transactions.
-func (rpc EthRPC) EthGetTransactionReceipt(hash string) (*TransactionReceipt, error) {
+func (rpc *EthRPC) EthGetTransactionReceipt(hash string) (*TransactionReceipt, error) {
 	transactionReceipt := new(TransactionReceipt)
 	err := rpc.call("eth_getTransactionReceipt", transactionReceipt, hash)
 	if err != nil {
@@ -519,7 +528,7 @@ func (rpc EthRPC) EthGetTransactionReceipt(hash string) (*TransactionReceipt, er
 
 // TODO implement
 // EthGetPendingTransactions returns the list of pending transactions
-func (rpc EthRPC) EthGetPendingTransactions(hash string) (*TransactionReceipt, error) {
+func (rpc *EthRPC) EthGetPendingTransactions(hash string) (*TransactionReceipt, error) {
 	transactionReceipt := new(TransactionReceipt)
 	err := rpc.call("eth_pendingTransactions", transactionReceipt, hash)
 	if err != nil {
@@ -530,7 +539,7 @@ func (rpc EthRPC) EthGetPendingTransactions(hash string) (*TransactionReceipt, e
 
 // EthGetCompilers returns a list of available compilers in the client.
 // @deprecated
-func (rpc EthRPC) EthGetCompilers() ([]string, error) {
+func (rpc *EthRPC) EthGetCompilers() ([]string, error) {
 	var compilers []string
 	err := rpc.call("eth_getCompilers", &compilers)
 	return compilers, err
@@ -539,14 +548,14 @@ func (rpc EthRPC) EthGetCompilers() ([]string, error) {
 // TODO implement
 // eth_compileSolidity
 // @deprecated
-func (rpc EthRPC) EthCompileSolidity() ([]string, error) {
+func (rpc *EthRPC) EthCompileSolidity() ([]string, error) {
 	var compilers []string
 	err := rpc.call("eth_compileSolidity", &compilers)
 	return compilers, err
 }
 
 // EthNewFilter creates a new filter object.
-func (rpc EthRPC) EthNewFilter(params FilterParams) (string, error) {
+func (rpc *EthRPC) EthNewFilter(params FilterParams) (string, error) {
 	var filterID string
 	err := rpc.call("eth_newFilter", &filterID, params)
 	return filterID, err
@@ -554,7 +563,7 @@ func (rpc EthRPC) EthNewFilter(params FilterParams) (string, error) {
 
 // EthNewBlockFilter creates a filter in the node, to notify when a new block arrives.
 // To check if the state has changed, call EthGetFilterChanges.
-func (rpc EthRPC) EthNewBlockFilter() (string, error) {
+func (rpc *EthRPC) EthNewBlockFilter() (string, error) {
 	var filterID string
 	err := rpc.call("eth_newBlockFilter", &filterID)
 	return filterID, err
@@ -562,35 +571,35 @@ func (rpc EthRPC) EthNewBlockFilter() (string, error) {
 
 // EthNewPendingTransactionFilter creates a filter in the node, to notify when new pending transactions arrive.
 // To check if the state has changed, call EthGetFilterChanges.
-func (rpc EthRPC) EthNewPendingTransactionFilter() (string, error) {
+func (rpc *EthRPC) EthNewPendingTransactionFilter() (string, error) {
 	var filterID string
 	err := rpc.call("eth_newPendingTransactionFilter", &filterID)
 	return filterID, err
 }
 
 // EthUninstallFilter uninstalls a filter with given id.
-func (rpc EthRPC) EthUninstallFilter(filterID string) (bool, error) {
+func (rpc *EthRPC) EthUninstallFilter(filterID string) (bool, error) {
 	var res bool
 	err := rpc.call("eth_uninstallFilter", &res, filterID)
 	return res, err
 }
 
 // EthGetFilterChanges polling method for a filter, which returns an array of logs which occurred since last poll.
-func (rpc EthRPC) EthGetFilterChanges(filterID string) ([]Log, error) {
+func (rpc *EthRPC) EthGetFilterChanges(filterID string) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_getFilterChanges", &logs, filterID)
 	return logs, err
 }
 
 // EthGetFilterLogs returns an array of all logs matching filter with given id.
-func (rpc EthRPC) EthGetFilterLogs(filterID string) ([]Log, error) {
+func (rpc *EthRPC) EthGetFilterLogs(filterID string) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_getFilterLogs", &logs, filterID)
 	return logs, err
 }
 
 // EthGetLogs returns an array of all logs matching a given filter object.
-func (rpc EthRPC) EthGetLogs(params FilterParams) ([]Log, error) {
+func (rpc *EthRPC) EthGetLogs(params FilterParams) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_getLogs", &logs, params)
 	return logs, err
@@ -598,7 +607,7 @@ func (rpc EthRPC) EthGetLogs(params FilterParams) ([]Log, error) {
 
 // TODO implement
 // EthGetWork returns an array of all logs matching a given filter object.
-func (rpc EthRPC) EthGetWork(params FilterParams) ([]Log, error) {
+func (rpc *EthRPC) EthGetWork(params FilterParams) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_getWork", &logs, params)
 	return logs, err
@@ -606,7 +615,7 @@ func (rpc EthRPC) EthGetWork(params FilterParams) ([]Log, error) {
 
 // TODO implement
 // EthSubmitWork
-func (rpc EthRPC) EthSubmitWork(params FilterParams) ([]Log, error) {
+func (rpc *EthRPC) EthSubmitWork(params FilterParams) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_submitWork", &logs, params)
 	return logs, err
@@ -614,7 +623,7 @@ func (rpc EthRPC) EthSubmitWork(params FilterParams) ([]Log, error) {
 
 // TODO implement
 // EthSubmitHashrate
-func (rpc EthRPC) EthSubmitHashrate(params FilterParams) ([]Log, error) {
+func (rpc *EthRPC) EthSubmitHashrate(params FilterParams) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_submitHashrate", &logs, params)
 	return logs, err
@@ -622,7 +631,7 @@ func (rpc EthRPC) EthSubmitHashrate(params FilterParams) ([]Log, error) {
 
 // TODO implement
 // EthGetProof
-func (rpc EthRPC) EthGetProof(params FilterParams) ([]Log, error) {
+func (rpc *EthRPC) EthGetProof(params FilterParams) ([]Log, error) {
 	var logs []Log
 	err := rpc.call("eth_getProof", &logs, params)
 	return logs, err
@@ -660,24 +669,33 @@ shh_getMessages
 
 */
 
-func (rpc EthRPC) Erc20Summary(contract string) (map[string]string, error) {
-	var response map[string]string
+func (rpc *EthRPC) Erc20Summary(contract string) (map[string]string, error) {
+	var response = map[string]string{
+		summaryFunctionsNames[0]: "",
+		summaryFunctionsNames[1]: "",
+		summaryFunctionsNames[2]: "",
+		summaryFunctionsNames[3]: "",
+	}
+	// copy target url to summary functions
+	instance.url = rpc.url
+	// execute erc20 summary functions
 	for i:=0; i<len(summaryFunctions);i++{
 		raw, err := summaryFunctions[i](contract)
 		if err == nil && raw != "" {
-
+			response[summaryFunctionsNames[i]] = raw
 		}
 	}
 	return response, nil
 }
 
-func (rpc EthRPC) Erc20TotalSupply(contract string) (string, error) {
+
+func (rpc *EthRPC) erc20NoParamsCall(contract string, params string, block string) (string, error) {
 	raw, err := rpc.Call("eth_call", map[string]interface{}{
 		"to":   contract,
-		"data": paramencoder.TotalSupplyParams,
+		"data": params,
 		/*"gas":      "0xaae60", //700000,
 		"gasPrice": "0x15f90", //90000,*/
-	}, "latest")
+	}, block)
 	if err == nil {
 		var name string
 		unErr := json.Unmarshal(raw, &name)
@@ -686,52 +704,23 @@ func (rpc EthRPC) Erc20TotalSupply(contract string) (string, error) {
 	return "", err
 }
 
-func (rpc EthRPC) Erc20Symbol(contract string) (string, error) {
-	raw, err := rpc.Call("eth_call", map[string]interface{}{
-		"to":   contract,
-		"data": paramencoder.SymbolParams,
-		/*"gas":      "0xaae60", //700000,
-		"gasPrice": "0x15f90", //90000,*/
-	}, "latest")
-	if err == nil {
-		var name string
-		unErr := json.Unmarshal(raw, &name)
-		return name, unErr
-	}
-	return "", err
+func (rpc *EthRPC) Erc20TotalSupply(contract string) (string, error) {
+	return rpc.erc20NoParamsCall(contract, paramencoder.TotalSupplyParams, LatestBlockNumber)
 }
 
-func (rpc EthRPC) Erc20Name(contract string) (string, error) {
-	raw, err := rpc.Call("eth_call", map[string]interface{}{
-		"to":   contract,
-		"data": paramencoder.NameParams,
-		/*"gas":      "0xaae60", //700000,
-		"gasPrice": "0x15f90", //90000,*/
-	}, "latest")
-	if err == nil {
-		var name string
-		unErr := json.Unmarshal(raw, &name)
-		return name, unErr
-	}
-	return "", err
+func (rpc *EthRPC) Erc20Symbol(contract string) (string, error) {
+	return rpc.erc20NoParamsCall(contract, paramencoder.SymbolParams, LatestBlockNumber)
 }
 
-func (rpc EthRPC) Erc20Decimals(contract string) (string, error) {
-	raw, err := rpc.Call("eth_call", map[string]interface{}{
-		"to":   contract,
-		"data": paramencoder.DecimalsParams,
-		/*"gas":      "0xaae60", //700000,
-		"gasPrice": "0x15f90", //90000,*/
-	}, "latest")
-	if err == nil {
-		var name string
-		unErr := json.Unmarshal(raw, &name)
-		return name, unErr
-	}
-	return "", err
+func (rpc *EthRPC) Erc20Name(contract string) (string, error) {
+	return rpc.erc20NoParamsCall(contract, paramencoder.NameParams, LatestBlockNumber)
 }
 
-func (rpc EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMessage, error) {
+func (rpc *EthRPC) Erc20Decimals(contract string) (string, error) {
+	return rpc.erc20NoParamsCall(contract, paramencoder.DecimalsParams, LatestBlockNumber)
+}
+
+func (rpc *EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMessage, error) {
 	tokenOwnerAddress, decodeErr := fromStringToAddress(tokenOwner)
 	if decodeErr != nil {
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
@@ -752,7 +741,7 @@ func (rpc EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMe
 	}, "latest")
 }
 
-func (rpc EthRPC) Erc20Allowance(contract string, tokenOwner string, spender string) (json.RawMessage, error) {
+func (rpc *EthRPC) Erc20Allowance(contract string, tokenOwner string, spender string) (json.RawMessage, error) {
 	tokenOwnerAddress, decodeErr := fromStringToAddress(tokenOwner)
 	if decodeErr != nil {
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
@@ -778,7 +767,7 @@ func (rpc EthRPC) Erc20Allowance(contract string, tokenOwner string, spender str
 	}, "latest")
 }
 
-func (rpc EthRPC) Erc20Transfer(contract string, address string, amount int) (json.RawMessage, error) {
+func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (json.RawMessage, error) {
 	senderAddress, decodeErr := fromStringToAddress(address)
 	if decodeErr != nil {
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
@@ -800,14 +789,14 @@ func (rpc EthRPC) Erc20Transfer(contract string, address string, amount int) (js
 }
 
 // curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}
-func (rpc EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawMessage, error) {
+func (rpc *EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawMessage, error) {
 	return rpc.Call("eth_sendTransaction", map[string]string{
 		"from": fromAddress,
 		"data": bytecode,
 	})
 }
 
-func (rpc EthRPC) IsSmartContractAddress(addr string) (bool, error) {
+func (rpc *EthRPC) IsSmartContractAddress(addr string) (bool, error) {
 	contractAddress, decodeErr := fromStringToAddress(addr)
 	if decodeErr != nil {
 		logger.Error("failed to read and decode provided Ethereum contract address", decodeErr)
@@ -834,7 +823,7 @@ func fromStringToAddress(addr string) (fixtures.Address, error) {
 }
 
 // Eth1 returns 1 ethereum value (10^18 wei)
-func (rpc EthRPC) Eth1() *big.Int {
+func (rpc *EthRPC) Eth1() *big.Int {
 	return Eth1()
 }
 

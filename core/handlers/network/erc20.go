@@ -34,25 +34,15 @@ func NewErc20Controller(network *NetworkController) Erc20Controller {
 	return ctl
 }
 
-// get the total supply of the contract at given target network
-func (ctl *Erc20Controller) name(c echo.Context) error {
+
+// generic method that executes queries against erc20 contract
+func (ctl *Erc20Controller) queryContract(c echo.Context, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
 		return api.ErrorStr(c, "invalid contract address provided")
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
-	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
-	raw, err := client.Erc20Name(contractAddress)
+	raw, err := f(contractAddress)
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,
@@ -61,141 +51,55 @@ func (ctl *Erc20Controller) name(c echo.Context) error {
 			),
 		)
 	} else {
-		unpacked := ""
 		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
 			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "name", rawBytes)
+		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, methodName, rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
 		} else {
-			return api.SendSuccess(c, "name", unpacked)
+			return api.SendSuccess(c, methodName, unpacked)
 		}
 	}
+}
+
+// get the total supply of the contract at given target network
+func (ctl *Erc20Controller) name(c echo.Context) error {
+	rpcClient, err := ctl.network.getRpcClient(c)
+	if err == nil {
+		return ctl.queryContract(c, "name", rpcClient.Erc20Name, new(string))
+	}
+	return nil
 }
 
 // get the total supply of the contract at given target network
 func (ctl *Erc20Controller) symbol(c echo.Context) error {
-	contractAddress := c.Param("contract")
-	//input data validation
-	if contractAddress == "" {
-		return api.ErrorStr(c, "invalid contract address provided")
+	rpcClient, err := ctl.network.getRpcClient(c)
+	if err == nil {
+		return ctl.queryContract(c, "symbol", rpcClient.Erc20Symbol, new(string))
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
-	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
-	raw, err := client.Erc20Symbol(contractAddress)
-	if err != nil {
-		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
-	} else {
-		unpacked := ""
-		rawBytes, decodeErr := hex.FromEthHex(raw)
-		if decodeErr != nil {
-			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
-		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "symbol", rawBytes)
-		if err != nil {
-			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
-		} else {
-			return api.SendSuccess(c, "symbol", unpacked)
-		}
-	}
+	return nil
 }
 
 // get the total supply of the contract at given target network
 func (ctl *Erc20Controller) totalSupply(c echo.Context) error {
-	contractAddress := c.Param("contract")
-	//input data validation
-	if contractAddress == "" {
-		return api.ErrorStr(c, "invalid contract address provided")
-	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
-	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
-	raw, err := client.Erc20TotalSupply(contractAddress)
-	if err != nil {
-		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
-	} else {
+	rpcClient, err := ctl.network.getRpcClient(c)
+	if err == nil {
 		var unpacked *big.Int
-		rawBytes, decodeErr := hex.FromEthHex(raw)
-		if decodeErr != nil {
-			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
-		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "totalSupply", rawBytes)
-		if err != nil {
-			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
-		} else {
-			return api.SendSuccess(c, "totalSupply", unpacked)
-		}
+		return ctl.queryContract(c, "totalSupply", rpcClient.Erc20TotalSupply, &unpacked)
 	}
+	return nil
 }
 
 // get the total supply of the contract at given target network
 func (ctl *Erc20Controller) decimals(c echo.Context) error {
-	contractAddress := c.Param("contract")
-	//input data validation
-	if contractAddress == "" {
-		return api.ErrorStr(c, "invalid contract address provided")
+	rpcClient, err := ctl.network.getRpcClient(c)
+	if err == nil {
+		var unpacked *big.Int
+		return ctl.queryContract(c, "decimals", rpcClient.Erc20Decimals, &unpacked)
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
-	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
-	raw, err := client.Erc20Decimals(contractAddress)
-	if err != nil {
-		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
-	} else {
-		var unpacked *uint8
-		rawBytes, decodeErr := hex.FromEthHex(raw)
-		if decodeErr != nil {
-			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
-		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
-		if err != nil {
-			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
-		} else {
-			return api.SendSuccess(c, "decimals", unpacked)
-		}
-	}
+	return nil
 }
 
 // get the total supply of the contract at given target network
@@ -210,36 +114,30 @@ func (ctl *Erc20Controller) balanceof(c echo.Context) error {
 	if address == "" {
 		return api.ErrorStr(c, "invalid account address provided")
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
-	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
+	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
-	raw, err := client.Erc20BalanceOf(contractAddress, address)
-	if err != nil {
-		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
+		return nil
 	} else {
-		var unpacked *big.Int
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
-		if decodeErr != nil {
-			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
-		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+		raw, err := client.Erc20BalanceOf(contractAddress, address)
 		if err != nil {
-			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
+			// send invalid generation message
+			return c.JSONBlob(http.StatusBadRequest,
+				str.GetJsonBytes(
+					protocol.NewApiError(http.StatusBadRequest, err.Error()),
+				),
+			)
 		} else {
-			return api.SendSuccess(c, "balanceof", unpacked)
+			var unpacked *big.Int
+			rawBytes, decodeErr := hex.FromEthHex(string(raw))
+			if decodeErr != nil {
+				return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
+			}
+			err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+			if err != nil {
+				return api.ErrorStr(c, "failed to decode network response: "+err.Error())
+			} else {
+				return api.SendSuccess(c, "balanceof", unpacked)
+			}
 		}
 	}
 }
@@ -271,16 +169,10 @@ func (ctl *Erc20Controller) summary(c echo.Context) error {
 			),
 		)
 	} else {
-		var unpacked *big.Int
-		rawBytes, decodeErr := hex.FromEthHex(string(raw))
-		if decodeErr != nil {
-			return api.ErrorStr(c, "failed to hex decode network response: "+decodeErr.Error())
-		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
 		} else {
-			return api.SendSuccess(c, "balanceof", unpacked)
+			return api.SendSuccess(c, "balanceof", raw)
 		}
 	}
 }

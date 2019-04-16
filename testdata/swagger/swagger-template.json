@@ -1567,7 +1567,7 @@
         "tags": ["erc20"],
         "summary": "Get summary of ERC 20 smart contract",
         "description": "Read the overall information of ERC 20 smart contract providing contract address and target network specification",
-        "operationId": "erc20-name",
+        "operationId": "erc20-summary",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "deprecated": false,
