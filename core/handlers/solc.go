@@ -8,6 +8,8 @@ import (
 	"errors"
 	"sync/atomic"
 
+	constants2 "github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -67,7 +69,7 @@ func (ctl SolcController) compileSingle(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants2.BindErr)
 	}
 
 	if req.Contract == "" {
@@ -89,7 +91,7 @@ func (ctl SolcController) compileSingleFromBase64(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants2.BindErr)
 	}
 
 	if req.Contract == "" {

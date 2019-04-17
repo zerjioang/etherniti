@@ -6,6 +6,8 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -18,13 +20,7 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
-const (
-	readErr = `there was an error during execution`
-	bindErr = `there was an error while processing your request information`
-)
-
 type ProfileController struct {
-	//cache *cache.Cache
 }
 
 var (
@@ -47,7 +43,7 @@ func (ctl ProfileController) create(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 	// add current user IP to request
 	req.Ip = c.RealIP()
@@ -69,10 +65,10 @@ func (ctl ProfileController) create(c echo.Context) error {
 
 // profile validation check
 func (ctl ProfileController) validate(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(readErr))
+	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(constants.ReadErr))
 }
 
-// profile validation check
+// profile validation counter
 func (ctl ProfileController) count(c echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds

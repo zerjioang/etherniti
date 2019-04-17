@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/eth"
@@ -51,7 +53,7 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 
 	// lowercase language
@@ -113,7 +115,7 @@ func (ctl WalletController) HdWallet(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 	response, err := ctl.createHdWallet(req)
 	if err != nil {
@@ -128,7 +130,7 @@ func (ctl WalletController) Entropy(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 
 	req.Size = ctl.getIntParam(c, "bits")

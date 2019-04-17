@@ -3,6 +3,8 @@
 
 package protocol
 
+import "encoding/json"
+
 // profile model dto
 type Profile struct {
 	Address    string `json:"address"`
@@ -70,6 +72,9 @@ type HdWalletResponse struct {
 	MasterPublicKey  string `json:"public" form:"public" query:"public"`
 	Mnemonic         string `json:"mnemonic" form:"mnemonic" query:"mnemonic"`
 }
+
+// abi link request dto
+type AbiLinkRequest json.RawMessage
 
 // contract compilation request dto
 type ContractCompileRequest struct {

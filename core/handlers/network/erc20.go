@@ -34,7 +34,6 @@ func NewErc20Controller(network *NetworkController) Erc20Controller {
 	return ctl
 }
 
-
 // generic method that executes queries against erc20 contract
 func (ctl *Erc20Controller) queryContract(c echo.Context, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
 	contractAddress := c.Param("contract")
@@ -172,7 +171,7 @@ func (ctl *Erc20Controller) summary(c echo.Context) error {
 		if err != nil {
 			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
 		} else {
-			return api.SendSuccess(c, "balanceof", raw)
+			return api.SendSuccess(c, "summary", raw)
 		}
 	}
 }

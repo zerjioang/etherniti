@@ -7,6 +7,7 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/cns"
+	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -28,7 +29,7 @@ func (ctl *ContractNameSpaceController) register(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 	e := req.Validate()
 	if e.Occur() {

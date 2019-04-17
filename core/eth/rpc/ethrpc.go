@@ -39,10 +39,11 @@ const (
 	EarliestBlockNumber = "earliest"
 	pendingBlockNumber  = "pending"
 )
-type contractFunction func(string)(string, error)
+
+type contractFunction func(string) (string, error)
 
 var (
-	instance = new(EthRPC)
+	instance         = new(EthRPC)
 	summaryFunctions = []contractFunction{
 		instance.Erc20Name,
 		instance.Erc20Symbol,
@@ -679,7 +680,7 @@ func (rpc *EthRPC) Erc20Summary(contract string) (map[string]string, error) {
 	// copy target url to summary functions
 	instance.url = rpc.url
 	// execute erc20 summary functions
-	for i:=0; i<len(summaryFunctions);i++{
+	for i := 0; i < len(summaryFunctions); i++ {
 		raw, err := summaryFunctions[i](contract)
 		if err == nil && raw != "" {
 			response[summaryFunctionsNames[i]] = raw
@@ -687,7 +688,6 @@ func (rpc *EthRPC) Erc20Summary(contract string) (map[string]string, error) {
 	}
 	return response, nil
 }
-
 
 func (rpc *EthRPC) erc20NoParamsCall(contract string, params string, block string) (string, error) {
 	raw, err := rpc.Call("eth_call", map[string]interface{}{
