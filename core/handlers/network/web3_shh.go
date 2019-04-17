@@ -19,34 +19,36 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 	return ctl
 }
 
+// BEGIN of web3 shh functions
+
 // ShhVersion calls shh protocol shh_version json-rpc call
 func (ctl *Web3ShhController) shhVersion(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhPost calls shh protocol shh_post json-rpc call
 func (ctl *Web3ShhController) shhPost(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhNewIdentity calls shh protocol shh_newidentity json-rpc call
 func (ctl *Web3ShhController) shhNewIdentity(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhHasIdentity calls shh protocol shh_hasidentity json-rpc call
 func (ctl *Web3ShhController) shhHasIdentity(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhNewGroup calls shh protocol shh_newgroup json-rpc call
 func (ctl *Web3ShhController) shhNewGroup(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhAddToGroup calls shh protocol shh_addtogroup json-rpc call
 func (ctl *Web3ShhController) shhAddToGroup(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhNewFilter calls shh protocol shh_newfilter json-rpc call
@@ -56,29 +58,35 @@ func (ctl *Web3ShhController) shhNewFilter(c echo.Context) error {
 
 // ShhUninstallFilter calls shh protocol shh_uninstallfilter json-rpc call
 func (ctl *Web3ShhController) shhUninstallFilter(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhGetFilterChanges calls shh protocol shh_getfilterchanges json-rpc call
 func (ctl *Web3ShhController) shhGetFilterChanges(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
 
 // ShhGetMessages calls shh protocol shh_getmessages json-rpc call
 func (ctl *Web3ShhController) shhGetMessages(c echo.Context) error {
-	return nil
+	return errNotImplemented
 }
+
+// END of web3 shh functions
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3ShhController) RegisterRouters(router *echo.Group) {
 	router.GET("/shh/version", ctl.shhVersion)
-	router.GET("/shh/post", ctl.shhPost)
-	router.GET("/shh/newidentity", ctl.shhNewIdentity)
-	router.GET("/shh/hasidentity", ctl.shhHasIdentity)
-	router.GET("/shh/newgroup", ctl.shhNewGroup)
-	router.GET("/shh/addtogroup", ctl.shhAddToGroup)
-	router.GET("/shh/newfilter", ctl.shhNewFilter)
-	router.GET("/shh/uninstallfilter", ctl.shhUninstallFilter)
-	router.GET("/shh/getfilterchanges", ctl.shhGetFilterChanges)
-	router.GET("/shh/getmessages", ctl.shhGetMessages)
+
+	router.POST("/shh", ctl.shhPost)
+	router.POST("/shh/identity", ctl.shhNewIdentity)
+	router.GET("/shh/identity", ctl.shhHasIdentity)
+
+	router.POST("/shh/group", ctl.shhNewGroup)
+	router.POST("/shh/group/add", ctl.shhAddToGroup)
+
+	router.POST("/shh/filter", ctl.shhNewFilter)
+	router.DELETE("/shh/filter", ctl.shhUninstallFilter)
+	router.GET("/shh/filter/changes", ctl.shhGetFilterChanges)
+
+	router.GET("/shh/messages", ctl.shhGetMessages)
 }

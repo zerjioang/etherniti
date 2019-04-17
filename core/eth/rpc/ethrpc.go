@@ -697,9 +697,9 @@ func (rpc *EthRPC) erc20NoParamsCall(contract string, params string, block strin
 		"gasPrice": "0x15f90", //90000,*/
 	}, block)
 	if err == nil {
-		var name string
-		unErr := json.Unmarshal(raw, &name)
-		return name, unErr
+		var data string
+		unErr := json.Unmarshal(raw, &data)
+		return data, unErr
 	}
 	return "", err
 }
