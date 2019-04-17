@@ -54,6 +54,14 @@ func Error(c echo.Context, err error) error {
 	return c.JSONBlob(http.StatusBadRequest, rawBytes)
 }
 
+func ErrorCode(c echo.Context, code int, err error) error {
+	logger.Error(err)
+	apierr := protocol.NewApiError(code, err.Error())
+	rawBytes := str.GetJsonBytes(apierr)
+	return c.JSONBlob(code, rawBytes)
+}
+
+
 func StackError(c echo.Context, stackErr trycatch.Error) error {
 	logger.Error(stackErr)
 	rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, stackErr.Error()))

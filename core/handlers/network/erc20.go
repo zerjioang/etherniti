@@ -8,17 +8,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zerjioang/etherniti/core/util/str"
-
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/shared/protocol"
-
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server"
-
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -44,11 +38,7 @@ func (ctl *Erc20Controller) queryContract(c echo.Context, methodName string, f f
 	raw, err := f(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
+		return api.ErrorCode(c, http.StatusBadRequest, err)
 	} else {
 		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
@@ -120,11 +110,7 @@ func (ctl *Erc20Controller) balanceof(c echo.Context) error {
 		raw, err := client.Erc20BalanceOf(contractAddress, address)
 		if err != nil {
 			// send invalid generation message
-			return c.JSONBlob(http.StatusBadRequest,
-				str.GetJsonBytes(
-					protocol.NewApiError(http.StatusBadRequest, err.Error()),
-				),
-			)
+			return api.ErrorCode(c, http.StatusBadRequest, err)
 		} else {
 			var unpacked *big.Int
 			rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -148,25 +134,16 @@ func (ctl *Erc20Controller) summary(c echo.Context) error {
 	if contractAddress == "" {
 		return api.ErrorStr(c, "invalid contract address provided")
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
 	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
+	client, cliErr := ctl.network.getRpcClient(c)
+	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
 	raw, err := client.Erc20Summary(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
+		return api.ErrorCode(c, http.StatusBadRequest, err)
 	} else {
 		if err != nil {
 			return api.ErrorStr(c, "failed to decode network response: "+err.Error())
@@ -193,25 +170,16 @@ func (ctl *Erc20Controller) allowance(c echo.Context) error {
 	if spenderAddress == "" {
 		return api.ErrorStr(c, "invalid account spender address provided")
 	}
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
 	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
+	client, cliErr := ctl.network.getRpcClient(c)
+	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
 	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
+		return api.ErrorCode(c, http.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, "allowance", raw)
 	}
@@ -240,24 +208,16 @@ func (ctl *Erc20Controller) transfer(c echo.Context) error {
 	if amount == "" || pErr != nil {
 		return api.ErrorStr(c, "invalid token amount value provided")
 	}
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return api.ErrorStr(c, "failed to execute requested operation")
-	}
 	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.network.peer)
-	logger.Info("erc20 controller request using context id: ", cId)
+	client, cliErr := ctl.network.getRpcClient(c)
+	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
 	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, err.Error()),
-			),
-		)
+		return api.ErrorCode(c, http.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, "allowance", raw)
 	}

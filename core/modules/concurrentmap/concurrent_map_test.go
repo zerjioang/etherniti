@@ -386,7 +386,7 @@ func TestConcurrent(t *testing.T) {
 
 			// Write to channel inserted value.
 			ch <- val.(int)
-		} // Call go routine with current index.
+		} // makePost go routine with current index.
 	}()
 
 	go func() {
@@ -399,7 +399,7 @@ func TestConcurrent(t *testing.T) {
 
 			// Write to channel inserted value.
 			ch <- val.(int)
-		} // Call go routine with current index.
+		} // makePost go routine with current index.
 	}()
 
 	// Wait for all go routines to finish.

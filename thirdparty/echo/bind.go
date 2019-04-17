@@ -114,7 +114,7 @@ func (b *DefaultBinder) bindData(ptr interface{}, data map[string][]string, tag 
 			continue
 		}
 
-		// Call this first, in case we're dealing with an alias to an array type
+		// makePost this first, in case we're dealing with an alias to an array type
 		if ok, err := unmarshalField(typeField.Type.Kind(), inputValue[0], structField); ok {
 			if err != nil {
 				return err

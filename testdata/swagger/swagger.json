@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "Etherniti REST API Proxy definition",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "title": "Etherniti REST API Proxy",
     "termsOfService": "https://www.etherniti.org/docs/terms-of-service/",
     "contact": {

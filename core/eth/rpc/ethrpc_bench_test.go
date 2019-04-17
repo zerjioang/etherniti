@@ -102,7 +102,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 		return nil, errors.New("Error")
 	})
 
-	_, err := s.rpc.Call("test")
+	_, err := s.rpc.makePost("test")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -110,7 +110,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, "{213"), nil
 	})
-	_, err = s.rpc.Call("test")
+	_, err = s.rpc.makePost("test")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -118,7 +118,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, `{"trycatch": {"code": 21, "message": "eee"}}`), nil
 	})
-	_, err = s.rpc.Call("test")
+	_, err = s.rpc.makePost("test")
 	s.Require().NotNil(err)
 	ethError, ok := err.(EthError)
 	s.Require().True(ok)
