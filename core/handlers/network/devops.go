@@ -4,7 +4,7 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 	"github.com/zerjioang/etherniti/core/util/str"
 	"net/http"
 
@@ -27,12 +27,12 @@ func NewDevOpsController(network *NetworkController) DevOpsController {
 	return ctl
 }
 
-func (ctl *DevOpsController) deployContract(c echo.Context) error {
+func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
 	//return ctl.sendTransaction(c)
 	return errNotImplemented
 }
 
-func (ctl *DevOpsController) callContract(c echo.Context) error {
+func (ctl *DevOpsController) callContract(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -54,7 +54,7 @@ func (ctl *DevOpsController) callContract(c echo.Context) error {
 
 	}
 
-	raw, err := client.ContractCall(contractAddress, methodName, params, ethrpc.LatestBlockNumber, "", "")
+	raw, err := client.ContractCall(contractAddress, methodName, params, model.LatestBlockNumber, "", "")
 	if err != nil {
 		// send invalid generation message
 		return c.JSONBlob(http.StatusBadRequest,

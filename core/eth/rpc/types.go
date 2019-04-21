@@ -129,6 +129,10 @@ type FilterParams struct {
 	Topics    [][]string `json:"topics,omitempty"`
 }
 
+func (params FilterParams) String() string {
+	return ""
+}
+
 // TransactionReceipt - transaction receipt object
 type TransactionReceipt struct {
 	TransactionHash   string

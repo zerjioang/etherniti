@@ -6,6 +6,7 @@ package ethrpc
 import (
 	"errors"
 	"fmt"
+	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 	"io/ioutil"
 	"math/big"
 	"net/http"
@@ -102,7 +103,7 @@ func (s *EthRPCTestSuite) TestCall() {
 		return nil, errors.New("Error")
 	})
 
-	_, err := s.rpc.makePost("test")
+	_, err := s.rpc.makePost("test", "")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -110,7 +111,7 @@ func (s *EthRPCTestSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, "{213"), nil
 	})
-	_, err = s.rpc.makePost("test")
+	_, err = s.rpc.makePost("test", "")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -118,9 +119,9 @@ func (s *EthRPCTestSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, `{"trycatch": {"code": 21, "message": "eee"}}`), nil
 	})
-	_, err = s.rpc.makePost("test")
+	_, err = s.rpc.makePost("test", "")
 	s.Require().NotNil(err)
-	ethError, ok := err.(EthError)
+	ethError, ok := err.(model.EthError)
 	s.Require().True(ok)
 	s.Require().Equal(21, ethError.Code)
 	s.Require().Equal("eee", ethError.Message)
@@ -131,17 +132,17 @@ func (s *EthRPCTestSuite) Test_call() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return nil, fmt.Errorf("error")
 	})
-	err := s.rpc.call("test", nil)
+	err := s.rpc.post("test", nil, nil)
 	s.Require().NotNil(err)
 
 	// Test target is nil
 	s.registerResponse(`{"foo": "bar"}`, func([]byte) {})
-	err = s.rpc.call("test", nil)
+	err = s.rpc.post("test", nil, nil)
 	s.Require().Nil(err)
 
 	// Test invalid target
 	target := ""
-	err = s.rpc.call("test", &target)
+	err = s.rpc.post("test", &target, nil)
 	s.Require().NotNil(err)
 }
 
@@ -567,7 +568,7 @@ func (s *EthRPCTestSuite) TestEthGetCompilers() {
 
 func (s *EthRPCTestSuite) TestGetBlock() {
 	s.registerResponseError(errors.New("Error"))
-	block, err := s.rpc.getBlock("eth_getBlockByHash", true)
+	block, err := s.rpc.getBlock("eth_getBlockByHash", true, "")
 	s.Require().NotNil(err)
 
 	// Test with transactions
@@ -624,7 +625,7 @@ func (s *EthRPCTestSuite) TestGetBlock() {
 		s.methodEqual(body, "eth_getBlockByHash")
 	})
 
-	block, err = s.rpc.getBlock("eth_getBlockByHash", true)
+	block, err = s.rpc.getBlock("eth_getBlockByHash", true, "")
 	s.Require().Nil(err)
 	s.Require().NotNil(block)
 	s.Require().Equal(hash, block.Hash)
@@ -706,7 +707,7 @@ func (s *EthRPCTestSuite) TestGetBlock() {
 		s.methodEqual(body, "eth_getBlockByHash")
 	})
 
-	block, err = s.rpc.getBlock("eth_getBlockByHash", false)
+	block, err = s.rpc.getBlock("eth_getBlockByHash", false, "")
 	s.Require().Nil(err)
 	s.Require().NotNil(block)
 	s.Require().Equal(hash, block.Hash)
@@ -743,7 +744,7 @@ func (s *EthRPCTestSuite) TestGetBlock() {
 
 	s.registerResponse("null", func(body []byte) {})
 
-	block, err = s.rpc.getBlock("eth_getBlockByHash", false)
+	block, err = s.rpc.getBlock("eth_getBlockByHash", false, "")
 	s.Require().Nil(block)
 	s.Require().Nil(err)
 }
@@ -909,7 +910,7 @@ func (s *EthRPCTestSuite) TestGetTransaction() {
 		s.methodEqual(body, "ggg")
 	})
 
-	transaction, err := s.rpc.getTransaction("ggg")
+	transaction, err := s.rpc.getTransaction("ggg", nil)
 	s.Require().Nil(err)
 	s.Require().NotNil(transaction)
 	s.Require().Equal("0x3068bb24a6c65a80eb350b89b2ef2f4d0605f59e5d07fd3467eb76511c4408e7", transaction.Hash)
@@ -1157,10 +1158,10 @@ func TestEthRPCTestSuite(t *testing.T) {
 
 func TestEthError(t *testing.T) {
 	var err error
-	err = EthError{-32555, "Messg"}
+	err = model.EthError{Code: -32555, Message: "Messg"}
 	require.Equal(t, "Error -32555 (Messg)", err.Error())
 
-	err = EthError{32847, "Kuku"}
+	err = model.EthError{Code: 32847, Message: "Kuku"}
 	require.Equal(t, "Error 32847 (Kuku)", err.Error())
 }
 

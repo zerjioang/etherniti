@@ -32,7 +32,7 @@ func TestSolcController_version(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -59,7 +59,7 @@ func TestSolcController_compileSingle(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -86,7 +86,7 @@ func TestSolcController_compileSingleFromBase64(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -113,7 +113,7 @@ func TestSolcController_compileMultiple(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -140,7 +140,7 @@ func TestSolcController_compileFromGit(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -167,7 +167,7 @@ func TestSolcController_compileFromUploadedZip(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -194,7 +194,7 @@ func TestSolcController_compileFromUploadedTargz(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -221,7 +221,7 @@ func TestSolcController_compileModeSelector(t *testing.T) {
 		solidityVersionResponse atomic.Value
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string

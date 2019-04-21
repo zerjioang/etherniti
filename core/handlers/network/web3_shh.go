@@ -22,52 +22,52 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 // BEGIN of web3 shh functions
 
 // ShhVersion calls shh protocol shh_version json-rpc call
-func (ctl *Web3ShhController) shhVersion(c echo.Context) error {
+func (ctl *Web3ShhController) shhVersion(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhPost calls shh protocol shh_post json-rpc call
-func (ctl *Web3ShhController) shhPost(c echo.Context) error {
+func (ctl *Web3ShhController) shhPost(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhNewIdentity calls shh protocol shh_newidentity json-rpc call
-func (ctl *Web3ShhController) shhNewIdentity(c echo.Context) error {
+func (ctl *Web3ShhController) shhNewIdentity(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhHasIdentity calls shh protocol shh_hasidentity json-rpc call
-func (ctl *Web3ShhController) shhHasIdentity(c echo.Context) error {
+func (ctl *Web3ShhController) shhHasIdentity(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhNewGroup calls shh protocol shh_newgroup json-rpc call
-func (ctl *Web3ShhController) shhNewGroup(c echo.Context) error {
+func (ctl *Web3ShhController) shhNewGroup(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhAddToGroup calls shh protocol shh_addtogroup json-rpc call
-func (ctl *Web3ShhController) shhAddToGroup(c echo.Context) error {
+func (ctl *Web3ShhController) shhAddToGroup(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhNewFilter calls shh protocol shh_newfilter json-rpc call
-func (ctl *Web3ShhController) shhNewFilter(c echo.Context) error {
+func (ctl *Web3ShhController) shhNewFilter(c echo.ContextInterface) error {
 	return nil
 }
 
 // ShhUninstallFilter calls shh protocol shh_uninstallfilter json-rpc call
-func (ctl *Web3ShhController) shhUninstallFilter(c echo.Context) error {
+func (ctl *Web3ShhController) shhUninstallFilter(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhGetFilterChanges calls shh protocol shh_getfilterchanges json-rpc call
-func (ctl *Web3ShhController) shhGetFilterChanges(c echo.Context) error {
+func (ctl *Web3ShhController) shhGetFilterChanges(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // ShhGetMessages calls shh protocol shh_getmessages json-rpc call
-func (ctl *Web3ShhController) shhGetMessages(c echo.Context) error {
+func (ctl *Web3ShhController) shhGetMessages(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 

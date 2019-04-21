@@ -31,7 +31,7 @@ func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
 
 // jwt middleware function.
 func jwt(next echo.HandlerFunc, errorMsg string) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c echo.ContextInterface) error {
 		// convert context in etherniti context
 		cc := c.(*server.EthernitiContext)
 		token := cc.ReadConnectionProfileToken()
@@ -48,7 +48,7 @@ func jwt(next echo.HandlerFunc, errorMsg string) echo.HandlerFunc {
 
 // create a group for all /api/v1 functions
 func next(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c echo.ContextInterface) error {
 		return next(c)
 	}
 }

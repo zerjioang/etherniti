@@ -18,7 +18,7 @@ import (
 // creating a custom context,
 // allow us to add new features in a clean way
 type EthernitiContext struct {
-	echo.Context
+	echo.ContextInterface
 	// connection profile data for interaction
 	profileData profile.ConnectionProfile
 }
@@ -89,6 +89,17 @@ func (context *EthernitiContext) writeContentType(value string) {
 	}
 }
 
+func (context *EthernitiContext) FastBlob(code int, contentType string, b []byte) (err error) {
+	response := context.Response()
+	header := response.Header()
+	if header.Get(echo.HeaderContentType) == "" {
+		header.Set(echo.HeaderContentType, contentType)
+	}
+	response.WriteHeader(code)
+	_, err = response.Write(b)
+	return
+}
+
 func (context *EthernitiContext) Blob(code int, contentType string, b []byte) (err error) {
 	context.writeContentType(contentType)
 	response := context.Response()
@@ -102,8 +113,8 @@ func (context *EthernitiContext) HTMLBlob(code int, b []byte) (err error) {
 }
 
 // constructor like function
-func NewEthernitiContext(c echo.Context) *EthernitiContext {
+func NewEthernitiContext(c echo.ContextInterface) *EthernitiContext {
 	ctx := new(EthernitiContext)
-	ctx.Context = c
+	ctx.ContextInterface = c
 	return ctx
 }

@@ -508,11 +508,11 @@ func TestRouterStatic(t *testing.T) {
 	e := New()
 	r := e.router
 	path := "/folders/a/files/echo.gif"
-	r.Add(http.MethodGet, path, func(c Context) error {
+	r.Add(http.MethodGet, path, func(c ContextInterface) error {
 		c.Set("path", path)
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, path, c)
 	c.handler(c)
 	assert.Equal(t, path, c.Get("path"))
@@ -521,10 +521,10 @@ func TestRouterStatic(t *testing.T) {
 func TestRouterParam(t *testing.T) {
 	e := New()
 	r := e.router
-	r.Add(http.MethodGet, "/users/:id", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id", func(c ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, "/users/1", c)
 	assert.Equal(t, "1", c.Param("id"))
 }
@@ -532,10 +532,10 @@ func TestRouterParam(t *testing.T) {
 func TestRouterTwoParam(t *testing.T) {
 	e := New()
 	r := e.router
-	r.Add(http.MethodGet, "/users/:uid/files/:fid", func(Context) error {
+	r.Add(http.MethodGet, "/users/:uid/files/:fid", func(ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	r.Find(http.MethodGet, "/users/1/files/1", c)
 	assert.Equal(t, "1", c.Param("uid"))
@@ -547,15 +547,15 @@ func TestRouterParamWithSlash(t *testing.T) {
 	e := New()
 	r := e.router
 
-	r.Add(http.MethodGet, "/a/:b/c/d/:e", func(c Context) error {
+	r.Add(http.MethodGet, "/a/:b/c/d/:e", func(c ContextInterface) error {
 		return nil
 	})
 
-	r.Add(http.MethodGet, "/a/:b/c/:d/:f", func(c Context) error {
+	r.Add(http.MethodGet, "/a/:b/c/:d/:f", func(c ContextInterface) error {
 		return nil
 	})
 
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	assert.NotPanics(t, func() {
 		r.Find(http.MethodGet, "/a/1/c/d/2/3", c)
 	})
@@ -566,16 +566,16 @@ func TestRouterMatchAny(t *testing.T) {
 	r := e.router
 
 	// Routes
-	r.Add(http.MethodGet, "/", func(Context) error {
+	r.Add(http.MethodGet, "/", func(ContextInterface) error {
 		return nil
 	})
-	r.Add(http.MethodGet, "/*", func(Context) error {
+	r.Add(http.MethodGet, "/*", func(ContextInterface) error {
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/*", func(Context) error {
+	r.Add(http.MethodGet, "/users/*", func(ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	r.Find(http.MethodGet, "/", c)
 	assert.Equal(t, "", c.Param("*"))
@@ -590,7 +590,7 @@ func TestRouterMatchAny(t *testing.T) {
 func TestRouterMatchAnyMultiLevel(t *testing.T) {
 	e := New()
 	r := e.router
-	handler := func(c Context) error {
+	handler := func(c ContextInterface) error {
 		c.Set("path", c.Path())
 		return nil
 	}
@@ -600,7 +600,7 @@ func TestRouterMatchAnyMultiLevel(t *testing.T) {
 	r.Add(http.MethodGet, "/api/users/jill", handler)
 	r.Add(http.MethodGet, "/*", handler)
 
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, "/api/users/jack", c)
 	c.handler(c)
 	assert.Equal(t, "/api/users/jack", c.Get("path"))
@@ -617,10 +617,10 @@ func TestRouterMatchAnyMultiLevel(t *testing.T) {
 func TestRouterMicroParam(t *testing.T) {
 	e := New()
 	r := e.router
-	r.Add(http.MethodGet, "/:a/:b/:c", func(c Context) error {
+	r.Add(http.MethodGet, "/:a/:b/:c", func(c ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, "/1/2/3", c)
 	assert.Equal(t, "1", c.Param("a"))
 	assert.Equal(t, "2", c.Param("b"))
@@ -632,10 +632,10 @@ func TestRouterMixParamMatchAny(t *testing.T) {
 	r := e.router
 
 	// Route
-	r.Add(http.MethodGet, "/users/:id/*", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id/*", func(c ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	r.Find(http.MethodGet, "/users/joe/comments", c)
 	c.handler(c)
@@ -647,14 +647,14 @@ func TestRouterMultiRoute(t *testing.T) {
 	r := e.router
 
 	// Routes
-	r.Add(http.MethodGet, "/users", func(c Context) error {
+	r.Add(http.MethodGet, "/users", func(c ContextInterface) error {
 		c.Set("path", "/users")
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/:id", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id", func(c ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	// Route > /users
 	r.Find(http.MethodGet, "/users", c)
@@ -666,7 +666,7 @@ func TestRouterMultiRoute(t *testing.T) {
 	assert.Equal(t, "1", c.Param("id"))
 
 	// Route > /user
-	c = e.NewContext(nil, nil).(*context)
+	c = e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, "/user", c)
 	he := c.handler(c).(*HTTPError)
 	assert.Equal(t, http.StatusNotFound, he.Code)
@@ -677,35 +677,35 @@ func TestRouterPriority(t *testing.T) {
 	r := e.router
 
 	// Routes
-	r.Add(http.MethodGet, "/users", func(c Context) error {
+	r.Add(http.MethodGet, "/users", func(c ContextInterface) error {
 		c.Set("a", 1)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/new", func(c Context) error {
+	r.Add(http.MethodGet, "/users/new", func(c ContextInterface) error {
 		c.Set("b", 2)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/:id", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id", func(c ContextInterface) error {
 		c.Set("c", 3)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/dew", func(c Context) error {
+	r.Add(http.MethodGet, "/users/dew", func(c ContextInterface) error {
 		c.Set("d", 4)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/:id/files", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id/files", func(c ContextInterface) error {
 		c.Set("e", 5)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/newsee", func(c Context) error {
+	r.Add(http.MethodGet, "/users/newsee", func(c ContextInterface) error {
 		c.Set("f", 6)
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/*", func(c Context) error {
+	r.Add(http.MethodGet, "/users/*", func(c ContextInterface) error {
 		c.Set("g", 7)
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	// Route > /users
 	r.Find(http.MethodGet, "/users", c)
@@ -748,14 +748,14 @@ func TestRouterPriority(t *testing.T) {
 func TestRouterPriorityNotFound(t *testing.T) {
 	e := New()
 	r := e.router
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	// Add
-	r.Add(http.MethodGet, "/a/foo", func(c Context) error {
+	r.Add(http.MethodGet, "/a/foo", func(c ContextInterface) error {
 		c.Set("a", 1)
 		return nil
 	})
-	r.Add(http.MethodGet, "/a/bar", func(c Context) error {
+	r.Add(http.MethodGet, "/a/bar", func(c ContextInterface) error {
 		c.Set("b", 2)
 		return nil
 	})
@@ -769,7 +769,7 @@ func TestRouterPriorityNotFound(t *testing.T) {
 	c.handler(c)
 	assert.Equal(t, 2, c.Get("b"))
 
-	c = e.NewContext(nil, nil).(*context)
+	c = e.NewContext(nil, nil).(*Context)
 	r.Find(http.MethodGet, "/abc/def", c)
 	he := c.handler(c).(*HTTPError)
 	assert.Equal(t, http.StatusNotFound, he.Code)
@@ -780,17 +780,17 @@ func TestRouterParamNames(t *testing.T) {
 	r := e.router
 
 	// Routes
-	r.Add(http.MethodGet, "/users", func(c Context) error {
+	r.Add(http.MethodGet, "/users", func(c ContextInterface) error {
 		c.Set("path", "/users")
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/:id", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:id", func(c ContextInterface) error {
 		return nil
 	})
-	r.Add(http.MethodGet, "/users/:uid/files/:fid", func(c Context) error {
+	r.Add(http.MethodGet, "/users/:uid/files/:fid", func(c ContextInterface) error {
 		return nil
 	})
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 
 	// Route > /users
 	r.Find(http.MethodGet, "/users", c)
@@ -816,15 +816,15 @@ func TestRouterStaticDynamicConflict(t *testing.T) {
 	r := e.router
 	c := e.NewContext(nil, nil)
 
-	r.Add(http.MethodGet, "/dictionary/skills", func(c Context) error {
+	r.Add(http.MethodGet, "/dictionary/skills", func(c ContextInterface) error {
 		c.Set("a", 1)
 		return nil
 	})
-	r.Add(http.MethodGet, "/dictionary/:name", func(c Context) error {
+	r.Add(http.MethodGet, "/dictionary/:name", func(c ContextInterface) error {
 		c.Set("b", 2)
 		return nil
 	})
-	r.Add(http.MethodGet, "/server", func(c Context) error {
+	r.Add(http.MethodGet, "/server", func(c ContextInterface) error {
 		c.Set("c", 3)
 		return nil
 	})
@@ -847,11 +847,11 @@ func testRouterAPI(t *testing.T, api []*Route) {
 	r := e.router
 
 	for _, route := range api {
-		r.Add(route.Method, route.Path, func(c Context) error {
+		r.Add(route.Method, route.Path, func(c ContextInterface) error {
 			return nil
 		})
 	}
-	c := e.NewContext(nil, nil).(*context)
+	c := e.NewContext(nil, nil).(*Context)
 	for _, route := range api {
 		r.Find(route.Method, route.Path, c)
 		tokens := strings.Split(route.Path[1:], "/")
@@ -920,7 +920,7 @@ func benchmarkRouterRoutes(b *testing.B, routes []*Route) {
 
 	// Add routes
 	for _, route := range routes {
-		r.Add(route.Method, route.Path, func(c Context) error {
+		r.Add(route.Method, route.Path, func(c ContextInterface) error {
 			return nil
 		})
 	}
@@ -928,7 +928,7 @@ func benchmarkRouterRoutes(b *testing.B, routes []*Route) {
 	// Find routes
 	for i := 0; i < b.N; i++ {
 		for _, route := range gitHubAPI {
-			c := e.pool.Get().(*context)
+			c := e.pool.Get().(*Context)
 			r.Find(route.Method, route.Path, c)
 			e.pool.Put(c)
 		}

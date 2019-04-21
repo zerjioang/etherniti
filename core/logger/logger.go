@@ -19,6 +19,13 @@ func init() {
 	customLog.SetLevel(log.DEBUG)
 }
 
+func Enabled(status bool){
+	if status {
+		customLog.SetLevel(log.DEBUG)
+	} else {
+		customLog.SetLevel(log.OFF)
+	}
+}
 // custom warn format logger
 func Warn(i ...interface{}) {
 	customLog.Warn(i...)

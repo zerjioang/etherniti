@@ -106,7 +106,7 @@ func TestEchoMiddleware(t *testing.T) {
 	buf := new(bytes.Buffer)
 
 	e.Pre(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			assert.Empty(t, c.Path())
 			buf.WriteString("-1")
 			return next(c)
@@ -114,28 +114,28 @@ func TestEchoMiddleware(t *testing.T) {
 	})
 
 	e.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("1")
 			return next(c)
 		}
 	})
 
 	e.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("2")
 			return next(c)
 		}
 	})
 
 	e.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("3")
 			return next(c)
 		}
 	})
 
 	// Route
-	e.GET("/", func(c Context) error {
+	e.GET("/", func(c ContextInterface) error {
 		return c.String(http.StatusOK, "OK")
 	})
 
@@ -148,7 +148,7 @@ func TestEchoMiddleware(t *testing.T) {
 func TestEchoMiddlewareError(t *testing.T) {
 	e := New()
 	e.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			return errors.New("error")
 		}
 	})
@@ -161,7 +161,7 @@ func TestEchoHandler(t *testing.T) {
 	e := New()
 
 	// HandlerFunc
-	e.GET("/ok", func(c Context) error {
+	e.GET("/ok", func(c ContextInterface) error {
 		return c.String(http.StatusOK, "OK")
 	})
 
@@ -197,7 +197,7 @@ func TestEchoWrapMiddleware(t *testing.T) {
 			h.ServeHTTP(w, r)
 		})
 	})
-	h := mw(func(c Context) error {
+	h := mw(func(c ContextInterface) error {
 		return c.String(http.StatusOK, "OK")
 	})
 	if assert.NoError(t, h(c)) {
@@ -254,23 +254,23 @@ func TestEchoTrace(t *testing.T) {
 
 func TestEchoAny(t *testing.T) { // JFC
 	e := New()
-	e.Any("/", func(c Context) error {
+	e.Any("/", func(c ContextInterface) error {
 		return c.String(http.StatusOK, "Any")
 	})
 }
 
 func TestEchoMatch(t *testing.T) { // JFC
 	e := New()
-	e.Match([]string{http.MethodGet, http.MethodPost}, "/", func(c Context) error {
+	e.Match([]string{http.MethodGet, http.MethodPost}, "/", func(c ContextInterface) error {
 		return c.String(http.StatusOK, "Match")
 	})
 }
 
 func TestEchoURL(t *testing.T) {
 	e := New()
-	static := func(Context) error { return nil }
-	getUser := func(Context) error { return nil }
-	getFile := func(Context) error { return nil }
+	static := func(ContextInterface) error { return nil }
+	getUser := func(ContextInterface) error { return nil }
+	getFile := func(ContextInterface) error { return nil }
 
 	e.GET("/static/file", static)
 	e.GET("/users/:id", getUser)
@@ -295,7 +295,7 @@ func TestEchoRoutes(t *testing.T) {
 		{http.MethodPost, "/repos/:owner/:repo/git/tags", ""},
 	}
 	for _, r := range routes {
-		e.Add(r.Method, r.Path, func(c Context) error {
+		e.Add(r.Method, r.Path, func(c ContextInterface) error {
 			return c.String(http.StatusOK, "OK")
 		})
 	}
@@ -318,7 +318,7 @@ func TestEchoRoutes(t *testing.T) {
 
 func TestEchoEncodedPath(t *testing.T) {
 	e := New()
-	e.GET("/:id", func(c Context) error {
+	e.GET("/:id", func(c ContextInterface) error {
 		return c.NoContent(http.StatusOK)
 	})
 	req := httptest.NewRequest(http.MethodGet, "/with%2Fslash", nil)
@@ -331,12 +331,12 @@ func TestEchoGroup(t *testing.T) {
 	e := New()
 	buf := new(bytes.Buffer)
 	e.Use(MiddlewareFunc(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("0")
 			return next(c)
 		}
 	}))
-	h := func(c Context) error {
+	h := func(c ContextInterface) error {
 		return c.NoContent(http.StatusOK)
 	}
 
@@ -349,7 +349,7 @@ func TestEchoGroup(t *testing.T) {
 	// Group
 	g1 := e.Group("/group1")
 	g1.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("1")
 			return next(c)
 		}
@@ -359,14 +359,14 @@ func TestEchoGroup(t *testing.T) {
 	// Nested groups with middleware
 	g2 := e.Group("/group2")
 	g2.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("2")
 			return next(c)
 		}
 	})
 	g3 := g2.Group("/group3")
 	g3.Use(func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+		return func(c ContextInterface) error {
 			buf.WriteString("3")
 			return next(c)
 		}
@@ -395,7 +395,7 @@ func TestEchoNotFound(t *testing.T) {
 
 func TestEchoMethodNotAllowed(t *testing.T) {
 	e := New()
-	e.GET("/", func(c Context) error {
+	e.GET("/", func(c ContextInterface) error {
 		return c.String(http.StatusOK, "Echo!")
 	})
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -407,7 +407,7 @@ func TestEchoMethodNotAllowed(t *testing.T) {
 func TestEchoContext(t *testing.T) {
 	e := New()
 	c := e.AcquireContext()
-	assert.IsType(t, new(context), c)
+	assert.IsType(t, new(Context), c)
 	e.ReleaseContext(c)
 }
 
@@ -500,7 +500,7 @@ func TestEchoStartTLSByteString(t *testing.T) {
 
 func testMethod(t *testing.T, method, path string, e *Echo) {
 	p := reflect.ValueOf(path)
-	h := reflect.ValueOf(func(c Context) error {
+	h := reflect.ValueOf(func(c ContextInterface) error {
 		return c.String(http.StatusOK, method)
 	})
 	i := interface{}(e)

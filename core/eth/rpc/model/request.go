@@ -17,15 +17,21 @@ type EthRequestParams struct {
 	Value string `json:"value,omitempty"`
 	// DATA - (optional) Hash of the method signature and encoded parameters.
 	Data string `json:"data,omitempty"`
+	// DATA target block name or hexadecimal value
+	Tag string
+}
+
+func (params EthRequestParams) String() string {
+	return ""
 }
 
 type EthRequest struct {
 	ID      int               `json:"id"`
 	JSONRPC string            `json:"jsonrpc"`
 	Method  string            `json:"method"`
-	Params  *EthRequestParams `json:"params"`
+	Params  string `json:"params"`
 }
 
-func (request *EthRequest) SetBlockPeriod(period BlockPeriod) {
+func (request *EthRequest) SetBlockPeriod(period string) {
 	// todo append block period
 }

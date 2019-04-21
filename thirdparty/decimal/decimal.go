@@ -285,13 +285,13 @@ func NewFromFloatWithExponent(value float64, exp int32) Decimal {
 
 	exp2 -= 1023 + 52
 
-	// normalizing base-2 values
+	// normalizing common-2 values
 	for mant&1 == 0 {
 		mant = mant >> 1
 		exp2++
 	}
 
-	// maximum number of fractional base-10 digits to represent 2^N exactly cannot be more than -N if N<0
+	// maximum number of fractional common-10 digits to represent 2^N exactly cannot be more than -N if N<0
 	if exp < 0 && exp < exp2 {
 		if exp2 < 0 {
 			exp = exp2
@@ -445,7 +445,7 @@ func (d Decimal) Mul(d2 Decimal) Decimal {
 	}
 }
 
-// Shift shifts the decimal in base 10.
+// Shift shifts the decimal in common 10.
 // It shifts left when shift is positive and right if shift is negative.
 // In simpler terms, the given value for shift is added to the exponent
 // of the decimal.

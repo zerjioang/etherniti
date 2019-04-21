@@ -58,7 +58,7 @@ func (of *Ofuscator) ofuscate() error {
 		return createErr
 	}
 	for k, v := range of.internalMapper {
-		// read ofuscated base dir path, and create if not exists
+		// read ofuscated common dir path, and create if not exists
 		createErr := v.createDstOfuscatedDir()
 		if createErr != nil {
 			return createErr

@@ -37,7 +37,7 @@ func NewSolcController() SolcController {
 	return ctl
 }
 
-func (ctl *SolcController) version(c echo.Context) error {
+func (ctl *SolcController) version(c echo.ContextInterface) error {
 	v := ctl.solidityVersionResponse.Load()
 	if v == nil {
 		// value not set. generate and store in cache
@@ -63,7 +63,7 @@ func (ctl *SolcController) version(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileSingle(c echo.Context) error {
+func (ctl SolcController) compileSingle(c echo.ContextInterface) error {
 	//read request parameters encoded in the body
 	req := protocol.ContractCompileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -85,7 +85,7 @@ func (ctl SolcController) compileSingle(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileSingleFromBase64(c echo.Context) error {
+func (ctl SolcController) compileSingleFromBase64(c echo.ContextInterface) error {
 	//read request parameters encoded in the body
 	req := protocol.ContractCompileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -131,7 +131,7 @@ func (ctl SolcController) compileSingleFromBase64(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileMultiple(c echo.Context) error {
+func (ctl SolcController) compileMultiple(c echo.ContextInterface) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		return errors.New("failed to get solc version")
@@ -142,7 +142,7 @@ func (ctl SolcController) compileMultiple(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileFromGit(c echo.Context) error {
+func (ctl SolcController) compileFromGit(c echo.ContextInterface) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		return errors.New("failed to get solc version")
@@ -153,7 +153,7 @@ func (ctl SolcController) compileFromGit(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileFromUploadedZip(c echo.Context) error {
+func (ctl SolcController) compileFromUploadedZip(c echo.ContextInterface) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		return errors.New("failed to get solc version")
@@ -164,7 +164,7 @@ func (ctl SolcController) compileFromUploadedZip(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileFromUploadedTargz(c echo.Context) error {
+func (ctl SolcController) compileFromUploadedTargz(c echo.ContextInterface) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		return errors.New("failed to get solc version")
@@ -175,7 +175,7 @@ func (ctl SolcController) compileFromUploadedTargz(c echo.Context) error {
 	}
 }
 
-func (ctl SolcController) compileModeSelector(c echo.Context) error {
+func (ctl SolcController) compileModeSelector(c echo.ContextInterface) error {
 	mode := c.Param("mode")
 	mode = str.ToLowerAscii(mode)
 	logger.Debug("compiling ethereum contract with mode: ", mode)

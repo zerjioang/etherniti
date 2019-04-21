@@ -11,7 +11,7 @@ import (
 func BenchmarkParseInt(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = ParseInt("0x143")
@@ -24,7 +24,7 @@ func BenchmarkParseInt(b *testing.B) {
 func BenchmarkParseBigInt(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = ParseBigInt("0xabc")
@@ -35,7 +35,7 @@ func BenchmarkParseBigInt(b *testing.B) {
 func BenchmarkIntToHex(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		IntToHex(1000000000000000000)
@@ -46,7 +46,7 @@ func BenchmarkIntToHex(b *testing.B) {
 func BenchmarkBigToHex(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		_, _ = big.NewInt(0).SetString("1000000000000000000", 10)

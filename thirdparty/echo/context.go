@@ -27,9 +27,9 @@ var (
 )
 
 type (
-	// Context represents the context of the current HTTP request. It holds request and
+	// ContextInterface represents the Context of the current HTTP request. It holds request and
 	// response objects, path, path parameters, data and registered handler.
-	Context interface {
+	ContextInterface interface {
 		// Request returns `*http.Request`.
 		Request() *http.Request
 
@@ -103,17 +103,17 @@ type (
 		// Cookies returns the HTTP cookies sent with the request.
 		Cookies() []*http.Cookie
 
-		// Get retrieves data from the context.
+		// Get retrieves data from the Context.
 		Get(key string) interface{}
 
-		// Set saves data in the context.
+		// Set saves data in the Context.
 		Set(key string, val interface{})
 
 		// Bind binds the request body into provided type `i`. The default binder
 		// does it based on Content-Type header.
 		Bind(i interface{}) error
 
-		// Validate validates provided `i`. It is usually called after `Context#Bind()`.
+		// Validate validates provided `i`. It is usually called after `ContextInterface#Bind()`.
 		// Validator must be registered using `Echo#Validator`.
 		Validate(i interface{}) error
 
@@ -150,6 +150,9 @@ type (
 		// Blob sends a blob response with status code and content type.
 		Blob(code int, contentType string, b []byte) error
 
+		// Blob sends a blob response with status code and content type.
+		FastBlob(code int, contentType string, b []byte) error
+
 		// Stream sends a streaming response with status code and content type.
 		Stream(code int, contentType string, r io.Reader) error
 
@@ -184,13 +187,13 @@ type (
 		// Echo returns the `Echo` instance.
 		Echo() *Echo
 
-		// Reset resets the context after request completes. It must be called along
+		// Reset resets the Context after request completes. It must be called along
 		// with `Echo#AcquireContext()` and `Echo#ReleaseContext()`.
 		// See `Echo#ServeHTTP()`
 		Reset(r *http.Request, w http.ResponseWriter)
 	}
 
-	context struct {
+	Context struct {
 		request  *http.Request
 		response *Response
 		path     string
@@ -218,35 +221,35 @@ const (
 	defaultIndent = "  "
 )
 
-func (c *context) writeContentType(value string) {
+func (c *Context) writeContentType(value string) {
 	header := c.Response().Header()
 	if header.Get(HeaderContentType) == "" {
 		header.Set(HeaderContentType, value)
 	}
 }
 
-func (c *context) Request() *http.Request {
+func (c *Context) Request() *http.Request {
 	return c.request
 }
 
-func (c *context) SetRequest(r *http.Request) {
+func (c *Context) SetRequest(r *http.Request) {
 	c.request = r
 }
 
-func (c *context) Response() *Response {
+func (c *Context) Response() *Response {
 	return c.response
 }
 
-func (c *context) IsTLS() bool {
+func (c *Context) IsTLS() bool {
 	return c.request.TLS != nil
 }
 
-func (c *context) IsWebSocket() bool {
+func (c *Context) IsWebSocket() bool {
 	upgrade := c.request.Header.Get(HeaderUpgrade)
 	return strings.ToLower(upgrade) == "websocket"
 }
 
-func (c *context) Scheme() string {
+func (c *Context) Scheme() string {
 	// Can't use `r.Request.URL.Scheme`
 	// See: https://groups.google.com/forum/#!topic/golang-nuts/pMUkBlQBDF0
 	if c.IsTLS() {
@@ -267,7 +270,7 @@ func (c *context) Scheme() string {
 	return "http"
 }
 
-func (c *context) RealIP() string {
+func (c *Context) RealIP() string {
 	if ip := c.request.Header.Get(HeaderXForwardedFor); ip != "" {
 		return strings.Split(ip, ", ")[0]
 	}
@@ -278,15 +281,15 @@ func (c *context) RealIP() string {
 	return ra
 }
 
-func (c *context) Path() string {
+func (c *Context) Path() string {
 	return c.path
 }
 
-func (c *context) SetPath(p string) {
+func (c *Context) SetPath(p string) {
 	c.path = p
 }
 
-func (c *context) Param(name string) string {
+func (c *Context) Param(name string) string {
 	for i, n := range c.pnames {
 		if i < len(c.pvalues) {
 			if n == name {
@@ -297,45 +300,45 @@ func (c *context) Param(name string) string {
 	return ""
 }
 
-func (c *context) ParamNames() []string {
+func (c *Context) ParamNames() []string {
 	return c.pnames
 }
 
-func (c *context) SetParamNames(names ...string) {
+func (c *Context) SetParamNames(names ...string) {
 	c.pnames = names
 }
 
-func (c *context) ParamValues() []string {
+func (c *Context) ParamValues() []string {
 	return c.pvalues[:len(c.pnames)]
 }
 
-func (c *context) SetParamValues(values ...string) {
+func (c *Context) SetParamValues(values ...string) {
 	c.pvalues = values
 }
 
-func (c *context) QueryParam(name string) string {
+func (c *Context) QueryParam(name string) string {
 	if c.query == nil {
 		c.query = c.request.URL.Query()
 	}
 	return c.query.Get(name)
 }
 
-func (c *context) QueryParams() url.Values {
+func (c *Context) QueryParams() url.Values {
 	if c.query == nil {
 		c.query = c.request.URL.Query()
 	}
 	return c.query
 }
 
-func (c *context) QueryString() string {
+func (c *Context) QueryString() string {
 	return c.request.URL.RawQuery
 }
 
-func (c *context) FormValue(name string) string {
+func (c *Context) FormValue(name string) string {
 	return c.request.FormValue(name)
 }
 
-func (c *context) FormParams() (url.Values, error) {
+func (c *Context) FormParams() (url.Values, error) {
 	if strings.HasPrefix(c.request.Header.Get(HeaderContentType), MIMEMultipartForm) {
 		if err := c.request.ParseMultipartForm(defaultMemory); err != nil {
 			return nil, err
@@ -348,35 +351,35 @@ func (c *context) FormParams() (url.Values, error) {
 	return c.request.Form, nil
 }
 
-func (c *context) FormFile(name string) (*multipart.FileHeader, error) {
+func (c *Context) FormFile(name string) (*multipart.FileHeader, error) {
 	_, fh, err := c.request.FormFile(name)
 	return fh, err
 }
 
-func (c *context) MultipartForm() (*multipart.Form, error) {
+func (c *Context) MultipartForm() (*multipart.Form, error) {
 	err := c.request.ParseMultipartForm(defaultMemory)
 	return c.request.MultipartForm, err
 }
 
-func (c *context) Cookie(name string) (*http.Cookie, error) {
+func (c *Context) Cookie(name string) (*http.Cookie, error) {
 	return c.request.Cookie(name)
 }
 
-func (c *context) SetCookie(cookie *http.Cookie) {
+func (c *Context) SetCookie(cookie *http.Cookie) {
 	http.SetCookie(c.Response(), cookie)
 }
 
-func (c *context) Cookies() []*http.Cookie {
+func (c *Context) Cookies() []*http.Cookie {
 	return c.request.Cookies()
 }
 
-func (c *context) Get(key string) interface{} {
+func (c *Context) Get(key string) interface{} {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 	return c.store[key]
 }
 
-func (c *context) Set(key string, val interface{}) {
+func (c *Context) Set(key string, val interface{}) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
@@ -386,18 +389,18 @@ func (c *context) Set(key string, val interface{}) {
 	c.store[key] = val
 }
 
-func (c *context) Bind(i interface{}) error {
+func (c *Context) Bind(i interface{}) error {
 	return c.echo.Binder.Bind(i, c)
 }
 
-func (c *context) Validate(i interface{}) error {
+func (c *Context) Validate(i interface{}) error {
 	if c.echo.Validator == nil {
 		return ErrValidatorNotRegistered
 	}
 	return c.echo.Validator.Validate(i)
 }
 
-func (c *context) Render(code int, name string, data interface{}) (err error) {
+func (c *Context) Render(code int, name string, data interface{}) (err error) {
 	if c.echo.Renderer == nil {
 		return ErrRendererNotRegistered
 	}
@@ -408,19 +411,19 @@ func (c *context) Render(code int, name string, data interface{}) (err error) {
 	return c.HTMLBlob(code, buf.Bytes())
 }
 
-func (c *context) HTML(code int, html string) (err error) {
+func (c *Context) HTML(code int, html string) (err error) {
 	return c.HTMLBlob(code, []byte(html))
 }
 
-func (c *context) HTMLBlob(code int, b []byte) (err error) {
+func (c *Context) HTMLBlob(code int, b []byte) (err error) {
 	return c.Blob(code, MIMETextHTMLCharsetUTF8, b)
 }
 
-func (c *context) String(code int, s string) (err error) {
+func (c *Context) String(code int, s string) (err error) {
 	return c.Blob(code, MIMETextPlainCharsetUTF8, []byte(s))
 }
 
-func (c *context) jsonPBlob(code int, callback string, i interface{}) (err error) {
+func (c *Context) jsonPBlob(code int, callback string, i interface{}) (err error) {
 	enc := json.NewEncoder(c.response)
 	_, pretty := c.QueryParams()["pretty"]
 	if c.echo.Debug || pretty {
@@ -440,7 +443,7 @@ func (c *context) jsonPBlob(code int, callback string, i interface{}) (err error
 	return
 }
 
-func (c *context) json(code int, i interface{}, indent string) error {
+func (c *Context) json(code int, i interface{}, indent string) error {
 	enc := json.NewEncoder(c.response)
 	if indent != "" {
 		enc.SetIndent("", indent)
@@ -450,7 +453,7 @@ func (c *context) json(code int, i interface{}, indent string) error {
 	return enc.Encode(i)
 }
 
-func (c *context) JSON(code int, i interface{}) (err error) {
+func (c *Context) JSON(code int, i interface{}) (err error) {
 	indent := ""
 	if _, pretty := c.QueryParams()["pretty"]; c.echo.Debug || pretty {
 		indent = defaultIndent
@@ -458,19 +461,19 @@ func (c *context) JSON(code int, i interface{}) (err error) {
 	return c.json(code, i, indent)
 }
 
-func (c *context) JSONPretty(code int, i interface{}, indent string) (err error) {
+func (c *Context) JSONPretty(code int, i interface{}, indent string) (err error) {
 	return c.json(code, i, indent)
 }
 
-func (c *context) JSONBlob(code int, b []byte) (err error) {
+func (c *Context) JSONBlob(code int, b []byte) (err error) {
 	return c.Blob(code, MIMEApplicationJSONCharsetUTF8, b)
 }
 
-func (c *context) JSONP(code int, callback string, i interface{}) (err error) {
+func (c *Context) JSONP(code int, callback string, i interface{}) (err error) {
 	return c.jsonPBlob(code, callback, i)
 }
 
-func (c *context) JSONPBlob(code int, callback string, b []byte) (err error) {
+func (c *Context) JSONPBlob(code int, callback string, b []byte) (err error) {
 	c.writeContentType(MIMEApplicationJavaScriptCharsetUTF8)
 	c.response.WriteHeader(code)
 	if _, err = c.response.Write([]byte(callback + "(")); err != nil {
@@ -483,21 +486,28 @@ func (c *context) JSONPBlob(code int, callback string, b []byte) (err error) {
 	return
 }
 
-func (c *context) Blob(code int, contentType string, b []byte) (err error) {
+func (c *Context) Blob(code int, contentType string, b []byte) (err error) {
 	c.writeContentType(contentType)
 	c.response.WriteHeader(code)
 	_, err = c.response.Write(b)
 	return
 }
 
-func (c *context) Stream(code int, contentType string, r io.Reader) (err error) {
+func (c *Context) FastBlob(code int, contentType string, b []byte) (err error) {
+	c.writeContentType(contentType)
+	c.response.WriteHeader(code)
+	_, err = c.response.Write(b)
+	return
+}
+
+func (c *Context) Stream(code int, contentType string, r io.Reader) (err error) {
 	c.writeContentType(contentType)
 	c.response.WriteHeader(code)
 	_, err = io.Copy(c.response, r)
 	return
 }
 
-func (c *context) File(file string) (err error) {
+func (c *Context) File(file string) (err error) {
 	initialFilePath := file
 	// check if file is cached
 	// check if file was already readed before and saved in our cache
@@ -552,25 +562,25 @@ func (c *context) File(file string) (err error) {
 	}
 }
 
-func (c *context) Attachment(file, name string) error {
+func (c *Context) Attachment(file, name string) error {
 	return c.contentDisposition(file, name, "attachment")
 }
 
-func (c *context) Inline(file, name string) error {
+func (c *Context) Inline(file, name string) error {
 	return c.contentDisposition(file, name, "inline")
 }
 
-func (c *context) contentDisposition(file, name, dispositionType string) error {
+func (c *Context) contentDisposition(file, name, dispositionType string) error {
 	c.response.Header().Set(HeaderContentDisposition, fmt.Sprintf("%s; filename=%q", dispositionType, name))
 	return c.File(file)
 }
 
-func (c *context) NoContent(code int) error {
+func (c *Context) NoContent(code int) error {
 	c.response.WriteHeader(code)
 	return nil
 }
 
-func (c *context) Redirect(code int, url string) error {
+func (c *Context) Redirect(code int, url string) error {
 	if code < 300 || code > 308 {
 		return ErrInvalidRedirectCode
 	}
@@ -579,27 +589,27 @@ func (c *context) Redirect(code int, url string) error {
 	return nil
 }
 
-func (c *context) Error(err error) {
+func (c *Context) Error(err error) {
 	c.echo.HTTPErrorHandler(err, c)
 }
 
-func (c *context) Echo() *Echo {
+func (c *Context) Echo() *Echo {
 	return c.echo
 }
 
-func (c *context) Handler() HandlerFunc {
+func (c *Context) Handler() HandlerFunc {
 	return c.handler
 }
 
-func (c *context) SetHandler(h HandlerFunc) {
+func (c *Context) SetHandler(h HandlerFunc) {
 	c.handler = h
 }
 
-func (c *context) Logger() Logger {
+func (c *Context) Logger() Logger {
 	return c.echo.Logger
 }
 
-func (c *context) Reset(r *http.Request, w http.ResponseWriter) {
+func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.request = r
 	c.response.reset(w)
 	c.query = nil

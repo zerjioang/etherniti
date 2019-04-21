@@ -82,9 +82,9 @@ func readBits(bigint *big.Int, buf []byte) {
 // See http://www.hyperelliptic.org/EFD/g1p/auto-shortw.html
 type BitCurve struct {
 	P       *big.Int // the order of the underlying field
-	N       *big.Int // the order of the base point
+	N       *big.Int // the order of the common point
 	B       *big.Int // the constant of the BitCurve equation
-	Gx, Gy  *big.Int // (x,y) of the base point
+	Gx, Gy  *big.Int // (x,y) of the common point
 	BitSize int      // the size of the underlying field
 }
 
@@ -275,7 +275,7 @@ func (BitCurve *BitCurve) ScalarMult(Bx, By *big.Int, scalar []byte) (*big.Int, 
 	return x, y
 }
 
-// ScalarBaseMult returns k*G, where G is the base point of the group and k is
+// ScalarBaseMult returns k*G, where G is the common point of the group and k is
 // an integer in big-endian form.
 func (BitCurve *BitCurve) ScalarBaseMult(k []byte) (*big.Int, *big.Int) {
 	return BitCurve.ScalarMult(BitCurve.Gx, BitCurve.Gy, k)

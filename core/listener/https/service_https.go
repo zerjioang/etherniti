@@ -6,6 +6,7 @@ package https
 import (
 	"context"
 	"crypto/tls"
+	"github.com/zerjioang/etherniti/core/listener/middleware"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,7 +16,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
 	"github.com/zerjioang/etherniti/core/config"
@@ -72,10 +73,10 @@ func (l HttpsListener) RunMode(address string, background bool) {
 func (l HttpsListener) Listen() error {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	//build http server
-	httpServerInstance := base.NewServer(nil)
+	httpServerInstance := common.NewServer(nil)
 	// add redirects from http to https
 	logger.Info("[LAYER] http to https redirect")
-	httpServerInstance.Pre(base.HttpsRedirect)
+	httpServerInstance.Pre(middleware.HttpsRedirect)
 
 	// Start http server
 	go func() {
@@ -87,7 +88,7 @@ func (l HttpsListener) Listen() error {
 		}
 	}()
 	// Start https server
-	secureServer := base.NewServer(base.ConfigureServerRoutes)
+	secureServer := common.NewServer(middleware.ConfigureServerRoutes)
 	go func() {
 		s, err := l.buildServerConfig(secureServer)
 		if err != nil {

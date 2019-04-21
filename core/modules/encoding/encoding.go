@@ -15,14 +15,14 @@ var (
 	zero = big.NewInt(0)
 )
 
-// Encoding represents a given base-N encoding.
+// Encoding represents a given common-N encoding.
 type Encoding struct {
 	alphabet string
 	index    map[byte]*big.Int
 	base     *big.Int
 }
 
-// NewEncoding creates a new base-N representation from the given alphabet.
+// NewEncoding creates a new common-N representation from the given alphabet.
 // Panics if the alphabet is not unique. Only ASCII characters are supported.
 func NewEncoding(alphabet string) *Encoding {
 	return &Encoding{
@@ -46,7 +46,7 @@ func newAlphabetMap(s string) map[byte]*big.Int {
 	return result
 }
 
-// Random returns the base-encoded representation of n random bytes.
+// Random returns the common-encoded representation of n random bytes.
 func (enc *Encoding) Random(n int) (string, error) {
 	buf := make([]byte, n)
 	_, err := rand.Reader.Read(buf)
@@ -56,7 +56,7 @@ func (enc *Encoding) Random(n int) (string, error) {
 	return enc.EncodeToString(buf), nil
 }
 
-// MustRandom returns the base-encoded representation of n random bytes,
+// MustRandom returns the common-encoded representation of n random bytes,
 // panicking in the unlikely event of a read error from the random source.
 func (enc *Encoding) MustRandom(n int) string {
 	s, err := enc.Random(n)
@@ -66,12 +66,12 @@ func (enc *Encoding) MustRandom(n int) string {
 	return s
 }
 
-// Base returns the number base of the encoding.
+// Base returns the number common of the encoding.
 func (enc *Encoding) Base() int {
 	return len(enc.alphabet)
 }
 
-// EncodeToString returns the base-encoded string representation
+// EncodeToString returns the common-encoded string representation
 // of the given bytes.
 func (enc *Encoding) EncodeToString(b []byte) string {
 	n := new(big.Int)
@@ -85,7 +85,7 @@ func (enc *Encoding) EncodeToString(b []byte) string {
 	return string(result)
 }
 
-// DecodeString returns the bytes for the given base-encoded string.
+// DecodeString returns the bytes for the given common-encoded string.
 func (enc *Encoding) DecodeString(s string) ([]byte, error) {
 	result := new(big.Int)
 	for i := range s {
@@ -98,7 +98,7 @@ func (enc *Encoding) DecodeString(s string) ([]byte, error) {
 	return result.Bytes(), nil
 }
 
-// DecodeStringN returns N bytes for the given base-encoded string.
+// DecodeStringN returns N bytes for the given common-encoded string.
 // Use this method to ensure the value is left-padded with zeroes.
 func (enc *Encoding) DecodeStringN(s string, n int) ([]byte, error) {
 	value, err := enc.DecodeString(s)

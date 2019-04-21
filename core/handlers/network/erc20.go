@@ -29,7 +29,7 @@ func NewErc20Controller(network *NetworkController) Erc20Controller {
 }
 
 // generic method that executes queries against erc20 contract
-func (ctl *Erc20Controller) queryContract(c echo.Context, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
+func (ctl *Erc20Controller) queryContract(c echo.ContextInterface, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -54,7 +54,7 @@ func (ctl *Erc20Controller) queryContract(c echo.Context, methodName string, f f
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) name(c echo.Context) error {
+func (ctl *Erc20Controller) name(c echo.ContextInterface) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		return ctl.queryContract(c, "name", rpcClient.Erc20Name, new(string))
@@ -63,7 +63,7 @@ func (ctl *Erc20Controller) name(c echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) symbol(c echo.Context) error {
+func (ctl *Erc20Controller) symbol(c echo.ContextInterface) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		return ctl.queryContract(c, "symbol", rpcClient.Erc20Symbol, new(string))
@@ -72,7 +72,7 @@ func (ctl *Erc20Controller) symbol(c echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) totalSupply(c echo.Context) error {
+func (ctl *Erc20Controller) totalSupply(c echo.ContextInterface) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		var unpacked *big.Int
@@ -82,7 +82,7 @@ func (ctl *Erc20Controller) totalSupply(c echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) decimals(c echo.Context) error {
+func (ctl *Erc20Controller) decimals(c echo.ContextInterface) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		var unpacked *big.Int
@@ -92,7 +92,7 @@ func (ctl *Erc20Controller) decimals(c echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) balanceof(c echo.Context) error {
+func (ctl *Erc20Controller) balanceof(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -128,7 +128,7 @@ func (ctl *Erc20Controller) balanceof(c echo.Context) error {
 }
 
 // get the summary of information of given erc20 contract at given target network
-func (ctl *Erc20Controller) summary(c echo.Context) error {
+func (ctl *Erc20Controller) summary(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -154,7 +154,7 @@ func (ctl *Erc20Controller) summary(c echo.Context) error {
 }
 
 // get the allowance status of the contract at given target network
-func (ctl *Erc20Controller) allowance(c echo.Context) error {
+func (ctl *Erc20Controller) allowance(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -191,7 +191,7 @@ func (ctl *Erc20Controller) allowance(c echo.Context) error {
 // - Owner's account must have sufficient balance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) transfer(c echo.Context) error {
+func (ctl *Erc20Controller) transfer(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -232,7 +232,7 @@ func (ctl *Erc20Controller) transfer(c echo.Context) error {
 // recommends that there are no checks for the approval double-spend attack
 // as this should be implemented in user interfaces
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) Approve(c echo.Context) error {
+func (ctl *Erc20Controller) Approve(c echo.ContextInterface) error {
 	return nil
 }
 
@@ -246,7 +246,7 @@ func (ctl *Erc20Controller) Approve(c echo.Context) error {
 // - Spender must have sufficient allowance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) TransferFrom(c echo.Context) error {
+func (ctl *Erc20Controller) TransferFrom(c echo.ContextInterface) error {
 	return nil
 }
 

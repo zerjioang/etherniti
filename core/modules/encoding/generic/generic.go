@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// encode buffer to given base
+// encode buffer to given common
 func NbaseEncode(nb uint64, buf *bytes.Buffer, base string) {
 	l := uint64(len(base))
 	if nb/l != 0 {
@@ -17,7 +17,7 @@ func NbaseEncode(nb uint64, buf *bytes.Buffer, base string) {
 	buf.WriteByte(base[nb%l])
 }
 
-//decode string to given base
+//decode string to given common
 func NbaseDecode(enc, base string) uint64 {
 	var nb uint64
 	lbase := len(base)

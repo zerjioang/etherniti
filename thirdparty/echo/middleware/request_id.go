@@ -44,7 +44,7 @@ func RequestIDWithConfig(config RequestIDConfig) echo.MiddlewareFunc {
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+		return func(c echo.ContextInterface) error {
 			if config.Skipper(c) {
 				return next(c)
 			}

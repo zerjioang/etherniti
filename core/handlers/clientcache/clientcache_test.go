@@ -12,7 +12,7 @@ import (
 
 func TestCached(t *testing.T) {
 	type args struct {
-		c          echo.Context
+		c          echo.ContextInterface
 		cacheValid bool
 		seconds    uint
 	}
@@ -20,7 +20,7 @@ func TestCached(t *testing.T) {
 		name  string
 		args  args
 		want  int
-		want1 echo.Context
+		want1 echo.ContextInterface
 	}{
 		// TODO: Add test cases.
 	}
@@ -39,7 +39,7 @@ func TestCached(t *testing.T) {
 
 func TestCachedHtml(t *testing.T) {
 	type args struct {
-		c           echo.Context
+		c           echo.ContextInterface
 		cacheValid  bool
 		seconds     uint
 		htmlContent []byte
@@ -62,7 +62,7 @@ func TestCachedHtml(t *testing.T) {
 
 func TestCachedJsonBlob(t *testing.T) {
 	type args struct {
-		c          echo.Context
+		c          echo.ContextInterface
 		cacheValid bool
 		seconds    uint
 		data       []byte

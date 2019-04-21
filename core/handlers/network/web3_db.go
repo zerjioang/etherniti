@@ -34,22 +34,22 @@ db_getHex
 */
 
 // dbPutString calls db protocol db_putString json-rpc call
-func (ctl *Web3DbController) dbPutString(c echo.Context) error {
+func (ctl *Web3DbController) dbPutString(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // dbGetString calls db protocol db_getString json-rpc call
-func (ctl *Web3DbController) dbGetString(c echo.Context) error {
+func (ctl *Web3DbController) dbGetString(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // dbPutHex calls db protocol db_putHex json-rpc call
-func (ctl *Web3DbController) dbPutHex(c echo.Context) error {
+func (ctl *Web3DbController) dbPutHex(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 
 // dbGetHex calls db protocol db_getHex json-rpc call
-func (ctl *Web3DbController) dbGetHex(c echo.Context) error {
+func (ctl *Web3DbController) dbGetHex(c echo.ContextInterface) error {
 	return errNotImplemented
 }
 

@@ -12,6 +12,6 @@ const (
 )
 
 var (
-	// Base62 represents bytes as a base-62 number [0-9A-Za-z].
+	// Base62 represents bytes as a common-62 number [0-9A-Za-z].
 	Base62 = encoding.NewEncoding(base62Alphabet)
 )

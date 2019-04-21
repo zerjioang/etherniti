@@ -52,7 +52,7 @@ func (ctl *NetworkController) Name() string {
 
 }
 
-func (ctl *NetworkController) getRpcClient(c echo.Context) (*ethrpc.EthRPC, error) {
+func (ctl *NetworkController) getRpcClient(c echo.ContextInterface) (*ethrpc.EthRPC, error) {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {

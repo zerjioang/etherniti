@@ -12,7 +12,7 @@ import (
 func BenchmarkHexIntUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		test := struct {
@@ -27,7 +27,7 @@ func BenchmarkHexIntUnmarshal(b *testing.B) {
 func BenchmarkHexBigUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		test := struct {
@@ -46,7 +46,7 @@ func BenchmarkHexBigUnmarshal(b *testing.B) {
 func BenchmarkSyncingUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		syncing := new(Syncing)
@@ -64,7 +64,7 @@ func BenchmarkSyncingUnmarshal(b *testing.B) {
 func BenchmarkTransactionUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		tx := new(Transaction)
@@ -90,7 +90,7 @@ func BenchmarkTransactionUnmarshal(b *testing.B) {
 func BenchmarkLogUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		log := new(Log)
@@ -114,7 +114,7 @@ func BenchmarkLogUnmarshal(b *testing.B) {
 func BenchmarkTransactionReceiptUnmarshal(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(1)
-	// run the Fib function b.N times
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		receipt := new(TransactionReceipt)

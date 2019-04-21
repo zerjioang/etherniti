@@ -28,7 +28,7 @@ func TestNewSecurityController(t *testing.T) {
 
 func TestSecurityController_domainBlacklist(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -50,7 +50,7 @@ func TestSecurityController_domainBlacklist(t *testing.T) {
 
 func TestSecurityController_phisingWhitelist(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -72,7 +72,7 @@ func TestSecurityController_phisingWhitelist(t *testing.T) {
 
 func TestSecurityController_phisingBlacklist(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -94,7 +94,7 @@ func TestSecurityController_phisingBlacklist(t *testing.T) {
 
 func TestSecurityController_fuzzylist(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -116,7 +116,7 @@ func TestSecurityController_fuzzylist(t *testing.T) {
 
 func TestSecurityController_isDangerousDomain(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string

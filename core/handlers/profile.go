@@ -37,7 +37,7 @@ func NewProfileController() ProfileController {
 }
 
 // new profile create request
-func (ctl ProfileController) create(c echo.Context) error {
+func (ctl ProfileController) create(c echo.ContextInterface) error {
 	//new profile request
 	req := protocol.ProfileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -64,12 +64,12 @@ func (ctl ProfileController) create(c echo.Context) error {
 }
 
 // profile validation check
-func (ctl ProfileController) validate(c echo.Context) error {
+func (ctl ProfileController) validate(c echo.ContextInterface) error {
 	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(constants.ReadErr))
 }
 
 // profile validation counter
-func (ctl ProfileController) count(c echo.Context) error {
+func (ctl ProfileController) count(c echo.ContextInterface) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
 	return c.JSON(code, profilesCreated.Get())

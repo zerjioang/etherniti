@@ -141,14 +141,14 @@ func NewIndexController() *IndexController {
 	return ctl
 }
 
-func Index(c echo.Context) error {
+func Index(c echo.ContextInterface) error {
 	if c.Request().Header.Get("Accept") == "application/json" {
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, indexWelcomeBytes)
 	}
 	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
 }
 
-func (ctl *IndexController) Status(c echo.Context) error {
+func (ctl *IndexController) Status(c echo.ContextInterface) error {
 	data := ctl.status()
 	var code int
 	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
@@ -187,7 +187,7 @@ func (ctl *IndexController) refreshStatusData() {
 
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
-func (ctl *IndexController) Integrity(c echo.Context) error {
+func (ctl *IndexController) Integrity(c echo.ContextInterface) error {
 	data := ctl.integrity()
 	var code int
 	code, c = clientcache.Cached(c, true, 86400) // 24h cache directive

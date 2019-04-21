@@ -291,15 +291,15 @@ func (n *node) checkMethodNotAllowed() HandlerFunc {
 }
 
 // Find lookup a handler registered for method and path. It also parses URL for path
-// parameters and load them into context.
+// parameters and load them into Context.
 //
 // For performance:
 //
-// - Get context from `Echo#AcquireContext()`
-// - Reset it `Context#Reset()`
+// - Get Context from `Echo#AcquireContext()`
+// - Reset it `ContextInterface#Reset()`
 // - Return it `Echo#ReleaseContext()`.
-func (r *Router) Find(method, path string, c Context) {
-	ctx := c.(*context)
+func (r *Router) Find(method, path string, c ContextInterface) {
+	ctx := c.(*Context)
 	ctx.path = path
 	cn := r.tree // Current node as root
 

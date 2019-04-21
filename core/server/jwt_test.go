@@ -11,7 +11,7 @@ import (
 
 func Test_jwtFromHeader(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -37,7 +37,7 @@ func Test_jwtFromHeader(t *testing.T) {
 
 func Test_jwtFromQuery(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -63,7 +63,7 @@ func Test_jwtFromQuery(t *testing.T) {
 
 func Test_jwtFromCookie(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string

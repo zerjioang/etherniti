@@ -5,6 +5,7 @@ package http
 
 import (
 	"context"
+	"github.com/zerjioang/etherniti/core/listener/middleware"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,7 +15,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
 	"github.com/zerjioang/etherniti/core/config"
@@ -42,7 +43,7 @@ func (l HttpListener) RunMode(address string, background bool) {
 func (l HttpListener) Listen() error {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	//deploy http server only
-	e := base.NewServer(base.ConfigureServerRoutes)
+	e := common.NewServer(middleware.ConfigureServerRoutes)
 	// Start server
 	go func() {
 		logger.Info("starting http server...")

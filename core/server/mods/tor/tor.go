@@ -4,11 +4,11 @@
 package tor
 
 import (
+	"github.com/zerjioang/etherniti/core/modules/tor"
 	"net/http"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -18,12 +18,12 @@ var (
 
 // REST API style Tor IP blocker
 func BlockTorConnections(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c echo.ContextInterface) error {
 
 		//get current request ip
 		requestIp := c.Request().RemoteAddr
 
-		found := api.TornodeSet.Contains(requestIp)
+		found := tor.TornodeSet.Contains(requestIp)
 		if !found {
 			//received request IP is not blacklisted
 			return next(c)
