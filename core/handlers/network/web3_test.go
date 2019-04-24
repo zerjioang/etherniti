@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package network
+package network_test
 
 import (
 	"testing"

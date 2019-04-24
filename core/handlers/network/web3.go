@@ -63,23 +63,38 @@ func NewWeb3Controller(network *NetworkController) Web3Controller {
 
 // get the balance of given ethereum address and target network
 func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
-	// get our client context
-	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
-	if cliErr != nil {
-		return api.Error(c, cliErr)
-	}
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
-		result, err := client.EthGetBalance(targetAddr, "latest")
-		if err != nil {
-			return api.Error(c, err)
+		//try to get this information from the cache
+		key := ctl.network.peer+"get_balance"+targetAddr
+		result, found := ctl.network.cache.Get(key)
+		if found && result != nil {
+			//cache hit
+			logger.Info(key, ": cache hit")
+			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, result.([]byte))
+		} else {
+			//cache miss
+			logger.Info(key, ": cache miss")
+			// get our client context
+			client, cliErr := ctl.network.getRpcClient(c)
+			logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+			if cliErr != nil {
+				return api.Error(c, cliErr)
+			}
+			result, err := client.EthGetBalance(targetAddr, "latest")
+			if err != nil {
+				return api.Error(c, err)
+			}
+			// save result in the cache
+			response := api.ToSuccess("balance", result)
+			ctl.network.cache.Set(key, response)
+			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
-		return api.SendSuccess(c, "balance", result)
+	} else {
+		// send invalid address message
+		return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
 	}
-	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
 }
 
 // check if an ethereum address is a contract address

@@ -48,6 +48,7 @@ func (l HttpListener) Listen() error {
 	// Start server
 	go func() {
 		logger.Info("starting http server...")
+		logger.Info("interface: ", config.HttpListenInterface)
 		swagger.ConfigureFromTemplate()
 		println(banner.WelcomeBanner())
 		err := e.StartServer(&defaultHttpServerConfig)
