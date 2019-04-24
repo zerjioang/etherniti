@@ -44,10 +44,12 @@ func FromHex(raw string) ([]byte, error) {
 func FromEthHex(content string) ([]byte, error) {
 	raw := str.UnsafeBytes(content)
 	idx := 2
+	end := len(raw)
 	if raw[0] == doubleQuotes {
 		idx = 3
+		end -= 1
 	}
-	data := raw[idx:]
+	data := raw[idx:end]
 	n, err := hex.Decode(data, data)
 	return data[:n], err
 }

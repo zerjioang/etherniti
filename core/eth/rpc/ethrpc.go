@@ -6,11 +6,13 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
-	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 	"io/ioutil"
 	"math/big"
 	"net/http"
+	"strings"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
+	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -42,7 +44,7 @@ var (
 )
 
 var (
-	oneEth = big.NewInt(1000000000000000000)
+	oneEth      = big.NewInt(1000000000000000000)
 	oneEthInt64 = oneEth.Int64()
 )
 
@@ -76,7 +78,7 @@ func (rpc *EthRPC) post(method string, target interface{}, params ParamsCallback
 	if params != nil {
 		paramsStr = params()
 	}
-	result, err := rpc.makePost(method, paramsStr)
+	result, err := rpc.makePostWithMethodParams(method, paramsStr)
 	if err != nil {
 		return err
 	}
@@ -93,7 +95,7 @@ func (rpc *EthRPC) URL() string {
 	return rpc.url
 }
 
-// makePost returns raw response of method post
+// makePostWithMethodParams returns raw response of method post
 /*
 
 eth_call
@@ -116,26 +118,20 @@ Returns
 
 DATA - the return value of executed contract.
 */
-func (rpc *EthRPC) makePost(method string, params string) (json.RawMessage, error) {
-	request := model.EthRequest{
-		ID:      1,
-		JSONRPC: "2.0",
-		Method:  method,
-		Params:  params,
+func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.RawMessage, error) {
+	if params == "" {
+		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `"}`
+		return rpc.makePostRaw(request)
+	} else {
+		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params": ` + params + `}`
+		return rpc.makePostRaw(request)
 	}
-	// request.SetBlockPeriod(params.Tag)
-
-	body, err := json.Marshal(request)
-	if err != nil {
-		return nil, err
-	}
-	return rpc.makePostRaw(body)
 }
 
-func (rpc *EthRPC) makePostRaw(data []byte) (json.RawMessage, error) {
+func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
 
-	log.Info("sending request: ", str.UnsafeString(data))
-	response, err := rpc.client.Post(rpc.url, "application/json", bytes.NewBuffer(data))
+	log.Info("sending request: ", data)
+	response, err := rpc.client.Post(rpc.url, "application/json", strings.NewReader(data))
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +160,7 @@ func (rpc *EthRPC) makePostRaw(data []byte) (json.RawMessage, error) {
 
 // RawCall returns raw response of method post (Deprecated)
 func (rpc *EthRPC) RawCall(method string, params string) (json.RawMessage, error) {
-	return rpc.makePost(method, params)
+	return rpc.makePostWithMethodParams(method, params)
 }
 
 func (rpc *EthRPC) EthMethodNoParams(methodName string) (interface{}, error) {
@@ -187,6 +183,17 @@ func (rpc *EthRPC) Web3ClientVersion() (string, error) {
 
 	err := rpc.post("web3_clientVersion", &clientVersion, nil)
 	return clientVersion, err
+}
+
+func (rpc *EthRPC) IsGanache() (bool, error) {
+	data, err := rpc.Web3ClientVersion()
+	if err != nil {
+		return false, err
+	} else {
+		// check if response data is similar to ganache response
+		isGanache := strings.Contains(data, "ethereum-js") || strings.Contains(data, "TestRPC")
+		return isGanache, nil
+	}
 }
 
 // Web3Sha3 returns Keccak-256 (not the standardized SHA3-256) of the given data.
@@ -236,7 +243,7 @@ func (rpc *EthRPC) EthProtocolVersion() (string, error) {
 
 // EthSyncing returns an object with data about the sync status or false.
 func (rpc *EthRPC) EthSyncing() (*Syncing, error) {
-	result, err := rpc.makePost("eth_syncing" ,"")
+	result, err := rpc.makePostWithMethodParams("eth_syncing", "")
 	if err != nil {
 		return nil, err
 	}
@@ -320,7 +327,7 @@ func (rpc *EthRPC) EthGetBalance(address string, block string) (*big.Int, error)
 	var response string
 	//prepare the params of the get balance function
 	params := func() string {
-		return address+","+block
+		return "[" + rpc.doubleQuote(address) + "," + rpc.doubleQuote(block) + "]"
 	}
 	if err := rpc.post("eth_getBalance", &response, params); err != nil {
 		return new(big.Int), err
@@ -333,7 +340,7 @@ func (rpc *EthRPC) EthGetStorageAt(data string, position int, tag string) (strin
 	var result string
 	//prepare the params of the function
 	params := func() string {
-		return data+","+IntToHex(position)+","+tag
+		return "[" + rpc.doubleQuote(data) + "," + rpc.doubleQuote(IntToHex(position)) + "," + rpc.doubleQuote(tag) + "]"
 	}
 	err := rpc.post("eth_getStorageAt", &result, params)
 	return result, err
@@ -344,7 +351,7 @@ func (rpc *EthRPC) EthGetTransactionCount(address string, block string) (int, er
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return address+","+block
+		return "[" + rpc.doubleQuote(address) + "," + rpc.doubleQuote(block) + "]"
 	}
 	if err := rpc.post("eth_getTransactionCount", &response, params); err != nil {
 		return 0, err
@@ -357,7 +364,7 @@ func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return hash
+		return "[" + rpc.doubleQuote(hash) + "]"
 	}
 	if err := rpc.post("eth_getBlockTransactionCountByHash", &response, params); err != nil {
 		return 0, err
@@ -370,7 +377,7 @@ func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(number int) (int, error) 
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return IntToHex(number)
+		return "[" + rpc.doubleQuote(IntToHex(number)) + "]"
 	}
 	if err := rpc.post("eth_getBlockTransactionCountByNumber", &response, params); err != nil {
 		return 0, err
@@ -383,7 +390,7 @@ func (rpc *EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return hash
+		return "[" + rpc.doubleQuote(hash) + "]"
 	}
 	if err := rpc.post("eth_getUncleCountByBlockHash", &response, params); err != nil {
 		return 0, err
@@ -396,7 +403,7 @@ func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return IntToHex(number)
+		return "[" + rpc.doubleQuote(IntToHex(number)) + "]"
 	}
 	if err := rpc.post("eth_getUncleCountByBlockNumber", &response, params); err != nil {
 		return 0, err
@@ -404,12 +411,17 @@ func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
 	return ParseInt(response)
 }
 
+// double quotes given string
+func (rpc *EthRPC) doubleQuote(data string) string {
+	return `"` + data + `"`
+}
+
 // EthGetCode returns code at a given address.
 func (rpc *EthRPC) EthGetCode(address string, block string) (string, error) {
 	var code string
 	//prepare the params of the function
 	params := func() string {
-		return address+","+block
+		return "[" + rpc.doubleQuote(address) + "," + rpc.doubleQuote(block) + "]"
 	}
 	err := rpc.post("eth_getCode", &code, params)
 	return code, err
@@ -422,7 +434,7 @@ func (rpc *EthRPC) EthSign(address, data string) (string, error) {
 	var signature string
 	//prepare the params of the function
 	params := func() string {
-		return address+","+data
+		return "[" + rpc.doubleQuote(address) + "," + rpc.doubleQuote(data) + "]"
 	}
 	err := rpc.post("eth_sign", &signature, params)
 	return signature, err
@@ -466,7 +478,7 @@ func (rpc *EthRPC) EthCall(transaction TransactionData, tag string) (string, err
 		if err != nil {
 			logger.Error("failed to marshal transaction data: ", err)
 		}
-		return string(raw)+","+tag
+		return string(raw) + "," + tag
 	}
 	err := rpc.post("eth_call", &data, params)
 	return data, err
@@ -494,7 +506,7 @@ func (rpc *EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
 
 // getBlock gets current block information
 func (rpc *EthRPC) getBlock(method string, withTransactions bool, params string) (*Block, error) {
-	result, err := rpc.makePost(method, params)
+	result, err := rpc.makePostWithMethodParams(method, params)
 	if err != nil {
 		return nil, err
 	}
@@ -539,7 +551,7 @@ func (rpc *EthRPC) getTransaction(method string, params ParamsCallback) (*Transa
 // EthGetTransactionByHash returns the information about a transaction requested by transaction hash.
 func (rpc *EthRPC) EthGetTransactionByHash(hash string) (*Transaction, error) {
 	params := func() string {
-		return hash
+		return "[" + rpc.doubleQuote(hash) + "]"
 	}
 	return rpc.getTransaction("eth_getTransactionByHash", params)
 }
@@ -547,7 +559,7 @@ func (rpc *EthRPC) EthGetTransactionByHash(hash string) (*Transaction, error) {
 // EthGetTransactionByBlockHashAndIndex returns information about a transaction by block hash and transaction index position.
 func (rpc *EthRPC) EthGetTransactionByBlockHashAndIndex(blockHash string, transactionIndex int) (*Transaction, error) {
 	params := func() string {
-		return blockHash+","+IntToHex(transactionIndex)
+		return blockHash + "," + IntToHex(transactionIndex)
 	}
 	return rpc.getTransaction("eth_getTransactionByBlockHashAndIndex", params)
 }
@@ -555,7 +567,7 @@ func (rpc *EthRPC) EthGetTransactionByBlockHashAndIndex(blockHash string, transa
 // EthGetTransactionByBlockNumberAndIndex returns information about a transaction by block number and transaction index position.
 func (rpc *EthRPC) EthGetTransactionByBlockNumberAndIndex(blockNumber, transactionIndex int) (*Transaction, error) {
 	params := func() string {
-		return IntToHex(blockNumber)+","+IntToHex(transactionIndex)
+		return IntToHex(blockNumber) + "," + IntToHex(transactionIndex)
 	}
 	return rpc.getTransaction("eth_getTransactionByBlockNumberAndIndex", params)
 }
@@ -565,7 +577,7 @@ func (rpc *EthRPC) EthGetTransactionByBlockNumberAndIndex(blockNumber, transacti
 func (rpc *EthRPC) EthGetTransactionReceipt(hash string) (*TransactionReceipt, error) {
 	transactionReceipt := new(TransactionReceipt)
 	params := func() string {
-		return hash
+		return rpc.doubleQuote(hash)
 	}
 	err := rpc.post("eth_getTransactionReceipt", transactionReceipt, params)
 	if err != nil {
@@ -732,40 +744,38 @@ func (rpc *EthRPC) generateTransactionPayload(contract string, data string, bloc
 		"to":   contract,
 		"data": data,
 		/*
-		"gas":      "0xaae60", //700000,
-		"gasPrice": "0x15f90", //90000,
+			"gas":      "0xaae60", //700000,
+			"gasPrice": "0x15f90", //90000,
 		*/
 	}
 	if gas != "" {
-		requestParams["gas"]=gas
+		requestParams["gas"] = gas
 	}
 	if gasprice != "" {
-		requestParams["gasPrice"]=gasprice
+		requestParams["gasPrice"] = gasprice
 	}
 	raw, _ := json.Marshal(requestParams)
 	paramsStr := str.UnsafeString(raw)
-	request := `{"id":1, "jsonrpc":"2.0","method":"eth_call","params":[`+paramsStr+`]}`
+	request := `{"id":1, "jsonrpc":"2.0","method":"eth_call","params":[` + paramsStr + `]}`
 	return request
 }
 
-func (rpc *EthRPC) generateCallPayload(contract string, data string, block string) []byte {
-	params := model.EthRequestParams{
-		To:contract,
-		Data:data,
-		Tag:block,
+// todo add from field
+func (rpc *EthRPC) generateCallPayload(contract string, data string, block string) string {
+	if block != model.NoPeriod {
+		request := `{"id": 1,"jsonrpc": "2.0","method": "eth_call",
+"params":[{
+"to": ` + rpc.doubleQuote(contract) + `,
+"data": ` + rpc.doubleQuote(data) + `},
+` + rpc.doubleQuote(block) + `]}`
+		return request
+	} else {
+		request := `{"id": 1,"jsonrpc": "2.0","method": "eth_call",
+"params":[{
+"to": ` + rpc.doubleQuote(contract) + `,
+"data": ` + rpc.doubleQuote(data) + `}]}`
+		return request
 	}
-	paramsStr := params.String()
-
-	request := model.EthRequest{
-		ID:      1,
-		JSONRPC: "2.0",
-		Method:  "eth_call",
-		Params: paramsStr,
-	}
-	// todo add block data
-
-	body, _ := json.Marshal(request)
-	return body
 }
 
 // this method converts standard contract params to abi encoded params given a
@@ -785,7 +795,7 @@ func (rpc *EthRPC) ContractCall(contract string, methodName string, params strin
 		return "", abiEncErr
 	} else {
 		paramsStr := str.UnsafeString(abiparams)
-		data := paramsStr+","+","+gas+","+gasprice
+		data := paramsStr + "," + "," + gas + "," + gasprice
 		payload := rpc.generateCallPayload(contract, data, block)
 		raw, err := rpc.makePostRaw(payload)
 		if err == nil {
@@ -857,12 +867,8 @@ func (rpc *EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawM
 	}
 	// encode to hexadecimal abiparams
 	dataContent := hex.ToEthHex(abiparams)
-	params := model.EthRequestParams{
-		To:   contract,
-		Data: dataContent,
-		Tag: model.LatestBlockNumber,
-	}
-	return rpc.makePost("eth_call", params.String())
+	req := rpc.generateCallPayload(contract, dataContent, model.LatestBlockNumber)
+	return rpc.makePostRaw(req)
 }
 
 func (rpc *EthRPC) Erc20Allowance(contract string, tokenOwner string, spender string) (json.RawMessage, error) {
@@ -886,9 +892,9 @@ func (rpc *EthRPC) Erc20Allowance(contract string, tokenOwner string, spender st
 	params := model.EthRequestParams{
 		To:   contract,
 		Data: dataContent,
-		Tag: model.LatestBlockNumber,
+		Tag:  model.LatestBlockNumber,
 	}
-	return rpc.makePost("eth_call", params.String())
+	return rpc.makePostWithMethodParams("eth_call", params.String())
 }
 
 func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (json.RawMessage, error) {
@@ -907,29 +913,22 @@ func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (j
 	params := model.EthRequestParams{
 		To:   contract,
 		Data: dataContent,
-		Tag: model.LatestBlockNumber,
+		Tag:  model.LatestBlockNumber,
 	}
-	return rpc.makePost("eth_sendTransaction", params.String())
+	return rpc.makePostWithMethodParams("eth_sendTransaction", params.String())
 }
 
 // curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}
-func (rpc *EthRPC) DeployContract(fromAddress string, bytecode string) (json.RawMessage, error) {
-	params := model.EthRequestParams{
-		From:   fromAddress,
-		Data: bytecode,
-		Tag: model.LatestBlockNumber,
-	}
-	return rpc.makePost("eth_sendTransaction", params.String())
+func (rpc *EthRPC) DeployContract(fromAddress string, bytecode string, gas string, gasPrice string) (json.RawMessage, error) {
+	payload := `[{"from":` + rpc.doubleQuote(fromAddress) + `,
+"data":` + rpc.doubleQuote(bytecode) + `,
+"gasprice":` + rpc.doubleQuote(gasPrice) + `,
+"gas":` + rpc.doubleQuote(gas) + `}]`
+	return rpc.makePostWithMethodParams("eth_sendTransaction", payload)
 }
 
 func (rpc *EthRPC) IsSmartContractAddress(addr string) (bool, error) {
-	contractAddress, decodeErr := fromStringToAddress(addr)
-	if decodeErr != nil {
-		logger.Error("failed to read and decode provided Ethereum contract address", decodeErr)
-		return false, decodeErr
-	}
-
-	bytecode, err := rpc.EthGetCode(contractAddress.Hex(), model.LatestBlockNumber)
+	bytecode, err := rpc.EthGetCode(addr, model.LatestBlockNumber)
 	// if the address has valid bytecode, is a contract
 	// if is not code addres 0x is returned
 	return len(bytecode) > 2, err
@@ -958,6 +957,7 @@ func (rpc *EthRPC) Eth1() *big.Int {
 func Eth1() *big.Int {
 	return oneEth
 }
+
 // Eth1 returns 1 ethereum value (10^18 wei)
 func Eth1Int64() int64 {
 	return oneEthInt64

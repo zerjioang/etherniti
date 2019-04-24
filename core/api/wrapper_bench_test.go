@@ -1,13 +1,18 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package api
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/trycatch"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-	"testing"
 )
+
 func BenchmarkWrapper(b *testing.B) {
 	b.Run("send-success", func(b *testing.B) {
 		ctx := common.NewContext(echo.New())

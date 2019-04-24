@@ -5,6 +5,7 @@ package server
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -20,6 +21,7 @@ import (
 type EthernitiContext struct {
 	echo.ContextInterface
 	// connection profile data for interaction
+	profileLock *sync.Mutex
 	profileData profile.ConnectionProfile
 }
 
@@ -33,9 +35,19 @@ func (context *EthernitiContext) ConnectionProfileSetup() (profile.ConnectionPro
 	readedProfile, err := profile.ParseConnectionProfileToken(requestProfileKeyContent)
 	if err == nil {
 		//save profile data
+		context.profileLock.Lock()
 		context.profileData = readedProfile
+		context.profileLock.Unlock()
 	}
 	return readedProfile, err
+}
+
+// get caller eth address
+func (context *EthernitiContext) CallerEthAddress() string {
+	context.profileLock.Lock()
+	from := context.profileData.Address
+	context.profileLock.Unlock()
+	return from
 }
 
 // it recovers the eth client linked to it
@@ -116,5 +128,6 @@ func (context *EthernitiContext) HTMLBlob(code int, b []byte) (err error) {
 func NewEthernitiContext(c echo.ContextInterface) *EthernitiContext {
 	ctx := new(EthernitiContext)
 	ctx.ContextInterface = c
+	ctx.profileLock = new(sync.Mutex)
 	return ctx
 }

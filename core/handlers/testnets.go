@@ -34,6 +34,7 @@ type RestController struct {
 	db      network.Web3DbController
 	shh     network.Web3ShhController
 	abi     network.AbiController
+	devops  network.DevOpsController
 }
 
 // constructor like function
@@ -44,6 +45,7 @@ func newController(peer string, name string) RestController {
 	ctl.web3 = network.NewWeb3Controller(&ctl.network)
 	ctl.db = network.NewWeb3DbController(&ctl.network)
 	ctl.shh = network.NewWeb3ShhController(&ctl.network)
+	ctl.devops = network.NewDevOpsController(&ctl.network)
 	ctl.abi = network.NewAbiController()
 	ctl.network.SetPeer(peer)
 	ctl.network.SetTargetName(name)
@@ -58,6 +60,7 @@ func (ctl RestController) RegisterRouters(router *echo.Group) {
 	ctl.erc20.RegisterRouters(router)
 	ctl.db.RegisterRouters(router)
 	ctl.shh.RegisterRouters(router)
+	ctl.devops.RegisterRouters(router)
 	ctl.abi.RegisterRouters(router)
 }
 

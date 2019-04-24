@@ -45,7 +45,6 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/shared/protocol"
 	"io"
 	"io/ioutil"
 	stdLog "log"
@@ -58,6 +57,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/thirdparty/gommon/color"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
@@ -325,7 +326,7 @@ func (e *Echo) Router() *Router {
 // DefaultHTTPErrorHandler is the default HTTP error handler. It sends a JSON response
 // with status code.
 func (e *Echo) DefaultHTTPErrorHandler(err error, c ContextInterface) {
-	var msg  interface{}
+	var msg interface{}
 	code := protocol.StatusInternalServerError
 
 	if he, ok := err.(*HTTPError); ok {

@@ -1,5 +1,7 @@
-package model
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
 
+package model
 
 // Object - The transaction call object
 type EthRequestParams struct {
@@ -26,9 +28,9 @@ func (params EthRequestParams) String() string {
 }
 
 type EthRequest struct {
-	ID      int               `json:"id"`
-	JSONRPC string            `json:"jsonrpc"`
-	Method  string            `json:"method"`
+	ID      int    `json:"id"`
+	JSONRPC string `json:"jsonrpc"`
+	Method  string `json:"method"`
 	Params  string `json:"params"`
 }
 

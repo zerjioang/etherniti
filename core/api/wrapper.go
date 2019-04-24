@@ -64,7 +64,6 @@ func ErrorCode(c echo.ContextInterface, code int, err error) error {
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-
 func StackError(c echo.ContextInterface, stackErr trycatch.Error) error {
 	logger.Error(stackErr)
 	rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, stackErr.Error()))

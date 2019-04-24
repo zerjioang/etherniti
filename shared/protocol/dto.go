@@ -32,6 +32,17 @@ type EntropyRequest struct {
 	Size uint16 `json:"size" form:"size" query:"size"`
 }
 
+// new deploy request dto
+type DeployRequest struct {
+	Contract string `json:"contract"`
+	Registry struct {
+		Register    string `json:"register"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Version     string `json:"version"`
+	} `json:"registry"`
+}
+
 // new hd wallet response dto
 type EntropyResponse struct {
 	Raw []byte `json:"entropy" form:"entropy" query:"entropy"`

@@ -6,12 +6,13 @@ package ethrpc
 import (
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 	"io/ioutil"
 	"math/big"
 	"net/http"
 	"strconv"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/require"
@@ -103,7 +104,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 		return nil, errors.New("Error")
 	})
 
-	_, err := s.rpc.makePost("test", "")
+	_, err := s.rpc.makePostWithMethodParams("test", "")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -111,7 +112,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, "{213"), nil
 	})
-	_, err = s.rpc.makePost("test", "")
+	_, err = s.rpc.makePostWithMethodParams("test", "")
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
@@ -119,7 +120,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return httpmock.NewStringResponse(200, `{"trycatch": {"code": 21, "message": "eee"}}`), nil
 	})
-	_, err = s.rpc.makePost("test", "")
+	_, err = s.rpc.makePostWithMethodParams("test", "")
 	s.Require().NotNil(err)
 	ethError, ok := err.(model.EthError)
 	s.Require().True(ok)

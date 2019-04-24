@@ -5,8 +5,9 @@ package middleware
 
 import (
 	"errors"
-	"github.com/zerjioang/etherniti/core/modules/bots"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/modules/bots"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 

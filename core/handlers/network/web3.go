@@ -76,7 +76,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return c.JSONBlob(http.StatusOK, str.GetJsonBytes(result))
+		return api.SendSuccess(c, "balance", result)
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
@@ -98,7 +98,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return c.JSONBlob(http.StatusOK, str.GetJsonBytes(result))
+		return api.SendSuccess(c, "balance_at_block", result)
 	}
 	// send invalid address message
 	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
@@ -174,16 +174,12 @@ func (ctl *Web3Controller) isRunningGanache(c echo.ContextInterface) error {
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}
-		data, err := client.Web3ClientVersion()
+		data, err := client.IsGanache()
 		if err != nil {
 			// send invalid response message
 			return api.Error(c, err)
 		} else {
-			// check if response data is similar to ganache response
-			isGanache := strings.Contains(data, "ethereum-js") || strings.Contains(data, "TestRPC")
-			// save result in the cache
-			ctl.network.cache.Set(key, isGanache)
-			response := api.ToSuccess("is_ganache", isGanache)
+			response := api.ToSuccess("is_ganache", data)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	}
@@ -636,11 +632,29 @@ func (ctl *Web3Controller) sendTransaction(c echo.ContextInterface) error {
 	}
 }
 
-func (ctl *Web3Controller) deployContract(c echo.ContextInterface) error {
-	return ctl.sendTransaction(c)
-}
-
 // END of ERC20 functions
+
+func (ctl *Web3Controller) getTransactionByHash(c echo.ContextInterface) error {
+	txhash := c.Param("hash")
+	// check if not empty
+	if txhash != "" {
+
+		// get our client context
+		client, cliErr := ctl.network.getRpcClient(c)
+		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+		if cliErr != nil {
+			return api.Error(c, cliErr)
+		}
+
+		result, err := client.EthGetTransactionReceipt(txhash)
+		if err != nil {
+			return api.Error(c, err)
+		}
+		return api.SendSuccess(c, "transaction_receipt", result)
+	}
+	// send invalid address message
+	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+}
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
@@ -660,12 +674,9 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/block/latest", ctl.makeRpcCallNoParams)
 	router.GET("/block/current", ctl.makeRpcCallNoParams)
 	router.GET("/compilers", ctl.makeRpcCallNoParams)
-	router.GET("/shh/version", ctl.makeRpcCallNoParams)
-	router.GET("/shh/new", ctl.makeRpcCallNoParams)
-	router.GET("/shh/group", ctl.makeRpcCallNoParams)
 
 	router.GET("/tx/send", ctl.sendTransaction)
-
+	router.GET("/tx/hash/:hash", ctl.getTransactionByHash)
 	router.GET("/is/contract/:address", ctl.isContractAddress)
 
 	router.GET("/accountsBalanced", ctl.getAccountsWithBalance)
@@ -680,7 +691,4 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/erc20/:contract/balanceof/:address", ctl.erc20Balanceof)
 	router.GET("/erc20/:contract/allowance/:owner/to/:spender", ctl.erc20Allowance)
 	router.GET("/erc20/:contract/transfer/:address/:amount", ctl.erc20Transfer)
-
-	// devops calls
-	router.POST("/devops/deploy", ctl.deployContract)
 }

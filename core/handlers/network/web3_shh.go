@@ -4,6 +4,9 @@
 package network
 
 import (
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/handlers/clientcache"
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -23,6 +26,23 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 
 // ShhVersion calls shh protocol shh_version json-rpc call
 func (ctl *Web3ShhController) shhVersion(c echo.ContextInterface) error {
+
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	logger.Info("web3 shh controller request using context id: ", ctl.network.networkName)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+
+	data, err := client.EthMethodNoParams("shh_version")
+	if err != nil {
+		// send invalid response message
+		return api.Error(c, err)
+	} else {
+		ctl.network.cache.Set("shh_version", data)
+		response := api.ToSuccess("shh_version", data)
+		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+	}
 	return errNotImplemented
 }
 
@@ -75,6 +95,7 @@ func (ctl *Web3ShhController) shhGetMessages(c echo.ContextInterface) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3ShhController) RegisterRouters(router *echo.Group) {
+
 	router.GET("/shh/version", ctl.shhVersion)
 
 	router.POST("/shh", ctl.shhPost)

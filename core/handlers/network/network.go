@@ -4,7 +4,10 @@
 package network
 
 import (
+	"errors"
+
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/cache"
@@ -65,4 +68,17 @@ func (ctl *NetworkController) getRpcClient(c echo.ContextInterface) (*ethrpc.Eth
 		return nil, api.Error(c, cliErr)
 	}
 	return client, nil
+}
+
+func (ctl *NetworkController) getCallerAddress(c echo.ContextInterface) (string, error) {
+	// cast to our context
+	cc, ok := c.(*server.EthernitiContext)
+	if !ok {
+		return "", errors.New("failed to execute requested operation")
+	}
+	from := cc.CallerEthAddress()
+	if !eth.IsValidAddress(from) {
+		return "", errors.New("invalid ethereum address setup when creating connection profile. Please provide a alid address as 'from'")
+	}
+	return from, nil
 }

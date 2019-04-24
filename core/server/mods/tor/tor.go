@@ -4,8 +4,9 @@
 package tor
 
 import (
-	"github.com/zerjioang/etherniti/core/modules/tor"
 	"net/http"
+
+	"github.com/zerjioang/etherniti/core/modules/tor"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 

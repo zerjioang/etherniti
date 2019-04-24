@@ -4,10 +4,11 @@
 package api
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-	"testing"
 )
 
 func TestWrapper(t *testing.T) {

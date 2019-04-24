@@ -6,11 +6,12 @@ package https
 import (
 	"context"
 	"crypto/tls"
-	"github.com/zerjioang/etherniti/core/listener/middleware"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/listener/middleware"
 
 	"github.com/zerjioang/etherniti/core/listener/swagger"
 
