@@ -91,6 +91,7 @@ var (
 	AllowedCorsOriginList = []string{
 		"*",
 		"0.0.0.0",
+		"localhost",
 		"127.0.0.1",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
@@ -98,6 +99,8 @@ var (
 	//allowed hostnames
 	AllowedHostnames = []string{
 		"127.0.0.1",
+		"localhost",
+		"0.0.0.0",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
 		"dev-proxy.etherniti.org",

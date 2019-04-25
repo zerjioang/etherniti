@@ -132,7 +132,7 @@ func isBotRequest(userAgent string) bool {
 // check if http request host value is allowed or not
 func hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
-		// add Host policy
+		// add host policy
 		h := c.Request().Host
 		chunks := strings.Split(h, ":")
 		var hostname = ""

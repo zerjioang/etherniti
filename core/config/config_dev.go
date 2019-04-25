@@ -1,6 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
+// +build dev !dev
 // +build !pre
 // +build !prod
 
@@ -94,6 +95,7 @@ var (
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
+		"localhost",
 		"0.0.0.0",
 		"127.0.0.1",
 		"api.etherniti.org",
@@ -101,7 +103,9 @@ var (
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
+		"localhost",
 		"127.0.0.1",
+		"0.0.0.0",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
 		"dev-proxy.etherniti.org",

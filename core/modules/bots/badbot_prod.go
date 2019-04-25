@@ -1,9 +1,9 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build prod
-// +build !pre
 // +build !dev
+// +build !pre
+// +build prod
 
 package bots
 

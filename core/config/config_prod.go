@@ -55,13 +55,13 @@ var (
 	// allowed cors domains
 	AllowedCorsOriginList = []string{
 		"*",
-		"api.etherniti.org",
 		"proxy.etherniti.org",
+		"dev-proxy.etherniti.org",
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
-		"api.etherniti.org",
 		"proxy.etherniti.org",
+		"dev-proxy.etherniti.org",
 	}
 	//swagger.json injected params
 	SwaggerApiDomain = "dev-proxy.etherniti.org"
