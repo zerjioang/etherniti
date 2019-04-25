@@ -164,7 +164,7 @@ func keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 		// add keep alive headers in the response if requested by the client
 		connectionMode := c.Request().Header.Get("Connection")
 		connectionMode = str.ToLowerAscii(connectionMode)
-		if connectionMode == "keep-alive" {
+		if strings.Contains(connectionMode ,"keep-alive") {
 			// keep alive connection mode requested
 			h := c.Response().Header()
 			h.Set("Connection", "Keep-Alive")
@@ -194,7 +194,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	logger.Info("[LAYER] logger level")
 	if config.EnableLogging {
 		e.Logger.SetLevel(config.LogLevel)
-		e.Use(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
+		e.Pre(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
 		}))
 	}
@@ -230,6 +230,9 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		logger.Info("[LAYER] fake server http header")
 		// add fake server header
 		e.Use(fakeServer)
+
+		//add keep alive policty
+		e.Use(keepalive)
 
 		if config.BlockTorConnections {
 			// add rate limit control

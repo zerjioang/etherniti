@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"bytes"
+	"io/ioutil"
 	"strings"
 
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -54,7 +55,6 @@ var (
 	statusTicker *time.Ticker
 	//bytes of welcome message
 	IndexWelcomeJson      string
-	indexWelcomeHtml      string
 	indexWelcomeBytes     []byte
 	indexWelcomeHtmlBytes []byte
 	// internally used struct pools to reduce GC
@@ -114,6 +114,7 @@ func LoadIndexConstants() {
 	// load constants
 	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Ethereum REST API Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.EnvironmentName + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
+	indexWelcomeHtmlBytes , _ = ioutil.ReadFile(config.ResourcesIndexHtml)
 }
 
 func NewIndexController() *IndexController {

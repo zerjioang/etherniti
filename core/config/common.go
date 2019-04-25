@@ -23,6 +23,7 @@ var (
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
 	ResourcesDirLanding          = ResourcesDir + "/landing"
+	ResourcesIndexHtml         = ResourcesDirLanding + "/index.html"
 	ResourcesDirRoot             = ResourcesDir + "/root"
 	ResourcesDirSwagger          = ResourcesDir + "/swagger"
 	// define internal files
