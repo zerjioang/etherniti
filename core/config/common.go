@@ -71,6 +71,8 @@ func ServiceListeningMode() listener.ServiceType {
 	switch ReadEnvironment("X_ETHERNITI_LISTENING_MODE") {
 	case "http":
 		return listener.HttpMode
+	case "https":
+		return listener.HttpsMode
 	case "socket":
 		return listener.UnixMode
 	default:

@@ -58,8 +58,6 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnvironmentName         = "beta-stage"
 	HttpPort                = "8080"
 	HttpsPort               = "4430"
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = false
 	HideServerDataInConsole = true
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
@@ -70,10 +68,9 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnableRateLimit         = false
 	BlockTorConnections     = false
 	EnableLogging           = true
-	LogLevel                = log.DEBUG
+	LogLevel                = log.INFO
 
 	//for pre-stage deployment
-	listeningMode       = "http" // http or socket
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = "dev-proxy.etherniti.org"
@@ -95,12 +92,11 @@ var (
 		"*",
 		"0.0.0.0",
 		"127.0.0.1",
-		"localhost",
 		"api.etherniti.org",
+		"proxy.etherniti.org",
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
-		"localhost",
 		"127.0.0.1",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
@@ -128,7 +124,7 @@ func SetDefaults(data *EnvConfig) {
 	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
 	env["X_ETHERNITI_ENABLE_CORS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
-	env["X_ETHERNITI_ENABLE_RATELIMIT"] = true
+	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
 	env["X_ETHERNITI_ENABLE_PROFILER"] = false
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true

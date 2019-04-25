@@ -36,7 +36,6 @@ const (
 	LogLevel                = log.DEBUG
 
 	// production required listen mode
-	listeningMode       = "http" // http or socket
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = "dev-proxy.etherniti.org"

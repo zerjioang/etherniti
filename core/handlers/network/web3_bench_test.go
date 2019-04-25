@@ -43,7 +43,7 @@ func BenchmarkWeb3Controller(b *testing.B) {
 func makeRequest() []byte {
 	//make http request
 	client := &http.Client{}
-	req, _ := http.NewRequest("GET", "http://localhost:8080/v1/private/balance/0x3DEB1894DC2d3e1B4a073f520e516C2DF6f45B88", nil)
+	req, _ := http.NewRequest("GET", "http://127.0.0.1:8080/v1/private/balance/0x3DEB1894DC2d3e1B4a073f520e516C2DF6f45B88", nil)
 	req.Header.Set(constants.HttpProfileHeaderkey, token)
 	resp, _ := client.Do(req)
 

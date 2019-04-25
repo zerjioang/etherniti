@@ -50,7 +50,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
     ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
+    apk add --no-cache --virtual=.build-dependencies curl wget ca-certificates && \
     echo \
         "-----BEGIN PUBLIC KEY-----\
         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApZ2u1KJKUu/fW4A25y9m\
@@ -118,7 +118,7 @@ COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
 
 # change to non root user for execution
-USER ${USER}
+# USER ${USER}
 
 # set container entrypoint
 CMD ["proxy"]
