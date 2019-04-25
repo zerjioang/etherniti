@@ -26,6 +26,19 @@ type ProfileRequest struct {
 	Ip     string `json:"ip,omitempty"`
 }
 
+// new login request dto
+type LoginRequest struct {
+	Email string `json:"email" form:"email" query:"email"`
+	Password string `json:"pwd" form:"pwd" query:"pwd"`
+}
+
+// new register request dto
+type RegisterRequest struct {
+	Username string `json:"user" form:"user" query:"user"`
+	Email string `json:"email" form:"email" query:"email"`
+	Password string `json:"pwd" form:"pwd" query:"pwd"`
+}
+
 // new entropy request dto
 type EntropyRequest struct {
 	// size of initial entropy: 128 to 256 bits (for BIP39)

@@ -69,6 +69,9 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewSolcController().RegisterRouters(publicGroup)
 	NewContractNameSpaceController().RegisterRouters(publicGroup)
 
+	// register ui rest
+	NewUIController().RegisterRouters(publicGroup)
+
 	//register public ethereum network related services
 	// /v1/ropsten
 	ropstenGroup := groupV1.Group("/ropsten", next)

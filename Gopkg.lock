@@ -3,6 +3,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:6716c9fe6333591128e72848f246fc01dc72240e1e64185d8b4e124e7280b35d"
+  name = "github.com/AndreasBriese/bbloom"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e2d15f34fcf99d5dbb871c820ec73f710fca9815"
+
+[[projects]]
+  branch = "master"
   digest = "1:093bf93a65962e8191e3e8cd8fc6c363f83d43caca9739c906531ba7210a9904"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
@@ -16,6 +24,37 @@
   pruneopts = "UT"
   revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
   version = "v1.1.1"
+
+[[projects]]
+  digest = "1:5f5090f05382959db941fa45acbeb7f4c5241aa8ac0f8f4393dec696e5953f53"
+  name = "github.com/dgraph-io/badger"
+  packages = [
+    ".",
+    "options",
+    "protos",
+    "skl",
+    "table",
+    "y",
+  ]
+  pruneopts = "UT"
+  revision = "99233d725dbdd26d156c61b2f42ae1671b794656"
+  version = "v1.5.4"
+
+[[projects]]
+  branch = "master"
+  digest = "1:6e8109ce247a59ab1eeb5330166c12735f6590de99c9647b6162d11518d32c9a"
+  name = "github.com/dgryski/go-farm"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "6a90982ecee230ff6cba02d5bd386acc030be9d3"
+
+[[projects]]
+  digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  pruneopts = "UT"
+  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
+  version = "v1.3.1"
 
 [[projects]]
   digest = "1:5499aeb9d8a5c3d99d5f924e05ce1f86bf878cb9885dcf9e71ba0dafdce84d96"
@@ -40,6 +79,36 @@
   pruneopts = "UT"
   revision = "c2a7a6ca930a4cd0bc33a3f298eb71960732a3a7"
   version = "v0.0.7"
+
+[[projects]]
+  branch = "master"
+  digest = "1:ae08d850ba158ea3ba4a7bb90f8372608172d8920644e5a6693b940a1f4e5d01"
+  name = "github.com/mmcloughlin/avo"
+  packages = [
+    "attr",
+    "build",
+    "buildtags",
+    "gotypes",
+    "internal/prnt",
+    "internal/stack",
+    "ir",
+    "operand",
+    "pass",
+    "printer",
+    "reg",
+    "src",
+    "x86",
+  ]
+  pruneopts = "UT"
+  revision = "2e7d06bc7ada2979f17ccf8ebf486dba23b84fc7"
+
+[[projects]]
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
 
 [[projects]]
   digest = "1:447ab23604df9681aabfc6e48dbded59cb933b6eb4224e64d9d037318534b1bd"
@@ -110,16 +179,37 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "develop"
+  digest = "1:4692e8a31c173ed896308a2a48339c80992317acda1300abad4f14a68f00e343"
+  name = "github.com/zerjioang/helix"
+  packages = ["impl/util/str"]
+  pruneopts = "UT"
+  revision = "8d671acab686e88961660e035b99c4175b25ac44"
+
+[[projects]]
   branch = "master"
-  digest = "1:d9a9f5973aa0fc14c3f00940aa5896b786d7a756440c686215fd30f8b3674d7c"
+  digest = "1:40b0221836d35cb0b039d9705021601f357d23303e1306e9b5b412876a848aa7"
   name = "golang.org/x/crypto"
   packages = [
+    "bcrypt",
+    "blowfish",
     "pbkdf2",
     "ripemd160",
     "sha3",
   ]
   pruneopts = "UT"
   revision = "38d8ce5564a5b71b2e3a00553993f1b9a7ae852f"
+
+[[projects]]
+  branch = "master"
+  digest = "1:e0efd295a10a5703f556a97b7f90f9b3a02ee5080b26ee5374d100a6131aea68"
+  name = "golang.org/x/net"
+  packages = [
+    "internal/timeseries",
+    "trace",
+  ]
+  pruneopts = "UT"
+  revision = "4829fb13d2c62012c17688fa7f629f371014946d"
 
 [[projects]]
   branch = "master"
@@ -132,11 +222,30 @@
   pruneopts = "UT"
   revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
 
+[[projects]]
+  branch = "master"
+  digest = "1:f5ce0b59aeb99ebb725de7b7a35483600e5f119b4daf081e88329322a2de95bc"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/gcexportdata",
+    "go/internal/gcimporter",
+    "go/internal/packagesdriver",
+    "go/packages",
+    "go/types/typeutil",
+    "internal/fastwalk",
+    "internal/gopathwalk",
+    "internal/semver",
+  ]
+  pruneopts = "UT"
+  revision = "31fd60d6bfdcfb2861856aa5b333bb135f6bbfd8"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/btcsuite/btcd/btcec",
+    "github.com/dgraph-io/badger",
     "github.com/jarcoal/httpmock",
     "github.com/mattn/go-colorable",
     "github.com/mattn/go-isatty",
@@ -147,6 +256,8 @@
     "github.com/stretchr/testify/suite",
     "github.com/tidwall/gjson",
     "github.com/valyala/bytebufferpool",
+    "github.com/zerjioang/helix/impl/util/str",
+    "golang.org/x/crypto/bcrypt",
     "golang.org/x/crypto/pbkdf2",
     "golang.org/x/crypto/ripemd160",
     "golang.org/x/crypto/sha3",

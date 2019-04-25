@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"bytes"
+	"strings"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -142,7 +143,7 @@ func NewIndexController() *IndexController {
 }
 
 func Index(c echo.ContextInterface) error {
-	if c.Request().Header.Get("Accept") == "application/json" {
+	if strings.Contains(c.Request().Header.Get("Accept"), "application/json") {
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, indexWelcomeBytes)
 	}
 	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
