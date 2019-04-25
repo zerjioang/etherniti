@@ -27,7 +27,7 @@ import (
 // * xxhash64: https://github.com/cespare/xxhash
 // * xxh3:     https://github.com/dgryski/go-xxh3
 
-// contract Name system service
+// contract name system service
 type ContractNameSystem struct {
 	data *sync.Map
 }

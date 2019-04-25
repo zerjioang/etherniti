@@ -18,12 +18,12 @@ import (
 
 // openssl genrsa -out server.key 2048
 // openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
-// Country Name (2 letter code) [AU]:ES
-// State or Province Name (full name) [Some-State]:Biscay
-// Locality Name (eg, city) []:Bilbao
-// Organization Name (eg, company) [Internet Widgits Pty Ltd]:Etherniti Project
-// Organizational Unit Name (eg, section) []:Etherniti CyberSecurity Team
-// Common Name (e.g. server FQDN or YOUR name) []:localhost
+// Country name (2 letter code) [AU]:ES
+// State or Province name (full name) [Some-State]:Biscay
+// Locality name (eg, city) []:Bilbao
+// Organization name (eg, company) [Internet Widgits Pty Ltd]:Etherniti Project
+// Organizational Unit name (eg, section) []:Etherniti CyberSecurity Team
+// Common name (e.g. server FQDN or YOUR name) []:localhost
 // Email Address []:
 
 const (
@@ -58,8 +58,6 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnvironmentName         = "beta-stage"
 	HttpPort                = "8080"
 	HttpsPort               = "4430"
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
 	DebugServer             = false
 	HideServerDataInConsole = true
 	TokenSecret             = "t0k3n-s3cr3t-h3r3"
@@ -70,10 +68,9 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	EnableRateLimit         = false
 	BlockTorConnections     = false
 	EnableLogging           = true
-	LogLevel                = log.DEBUG
+	LogLevel                = log.INFO
 
 	//for pre-stage deployment
-	listeningMode       = "http" // http or socket
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
 	SwaggerAddress      = "dev-proxy.etherniti.org"
@@ -94,14 +91,16 @@ var (
 	AllowedCorsOriginList = []string{
 		"*",
 		"0.0.0.0",
-		"127.0.0.1",
 		"localhost",
+		"127.0.0.1",
 		"api.etherniti.org",
+		"proxy.etherniti.org",
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
-		"localhost",
 		"127.0.0.1",
+		"localhost",
+		"0.0.0.0",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
 		"dev-proxy.etherniti.org",

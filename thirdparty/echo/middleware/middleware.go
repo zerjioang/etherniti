@@ -10,13 +10,13 @@ import (
 type (
 	// Skipper defines a function to skip middleware. Returning true skips processing
 	// the middleware.
-	Skipper func(echo.Context) bool
+	Skipper func(echo.ContextInterface) bool
 
 	// BeforeFunc defines a function which is executed just before the middleware.
-	BeforeFunc func(echo.Context)
+	BeforeFunc func(echo.ContextInterface)
 )
 
 // DefaultSkipper returns false which processes the middleware.
-func DefaultSkipper(echo.Context) bool {
+func DefaultSkipper(echo.ContextInterface) bool {
 	return false
 }

@@ -12,6 +12,7 @@ type ServiceType uint8
 
 const (
 	HttpMode ServiceType = iota
+	HttpsMode
 	UnixMode
 	UnknownMode
 )

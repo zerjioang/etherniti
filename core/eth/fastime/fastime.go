@@ -37,9 +37,12 @@ func (fastTime FastTime) Add(duration Duration) FastTime {
 
 func Now() FastTime {
 	t := time.Now()
-	ft := FastTime{
-		nsec: uint32(t.Nanosecond()),
-		sec:  t.Unix(),
+	return FromTime(t.Nanosecond(), t.Unix())
+}
+
+func FromTime(nanos int, unix int64) FastTime {
+	return FastTime{
+		nsec: uint32(nanos),
+		sec:  unix,
 	}
-	return ft
 }

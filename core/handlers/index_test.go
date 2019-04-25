@@ -9,15 +9,15 @@ import (
 	"time"
 
 	"github.com/pkg/profile"
-	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestIndexConcurrency(t *testing.T) {
 	t.Run("index-single-echo", func(t *testing.T) {
-		testServer := base.NewServer(nil)
-		ctx := base.NewContext(testServer)
+		testServer := common.NewServer(nil)
+		ctx := common.NewContext(testServer)
 		err := Index(ctx)
 		if err != nil {
 			t.Log(err)
@@ -25,10 +25,10 @@ func TestIndexConcurrency(t *testing.T) {
 	})
 	t.Run("index-concurrency-echo", func(t *testing.T) {
 		times := 100
-		testServer := base.NewServer(nil)
+		testServer := common.NewServer(nil)
 		for i := 0; i < times; i++ {
 			go func() {
-				ctx := base.NewContext(testServer)
+				ctx := common.NewContext(testServer)
 				err := Index(ctx)
 				if err != nil {
 					t.Log(err)
@@ -39,9 +39,9 @@ func TestIndexConcurrency(t *testing.T) {
 	})
 
 	t.Run("status-single-echo", func(t *testing.T) {
-		testServer := base.NewServer(nil)
+		testServer := common.NewServer(nil)
 		ctl := NewIndexController()
-		ctx := base.NewContext(testServer)
+		ctx := common.NewContext(testServer)
 		err := ctl.Status(ctx)
 		if err != nil {
 			t.Log(err)
@@ -49,11 +49,11 @@ func TestIndexConcurrency(t *testing.T) {
 	})
 	t.Run("status-concurrency-echo", func(t *testing.T) {
 		times := 100
-		testServer := base.NewServer(nil)
+		testServer := common.NewServer(nil)
 		ctl := NewIndexController()
 		for i := 0; i < times; i++ {
 			go func() {
-				ctx := base.NewContext(testServer)
+				ctx := common.NewContext(testServer)
 				err := ctl.Status(ctx)
 				if err != nil {
 					t.Log(err)
@@ -191,7 +191,7 @@ func TestNewIndexController(t *testing.T) {
 
 func TestIndex(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -215,7 +215,7 @@ func TestIndexController_Status(t *testing.T) {
 		integrityData concurrentbuffer.ConcurrentBuffer
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -291,7 +291,7 @@ func TestIndexController_Integrity(t *testing.T) {
 		integrityData concurrentbuffer.ConcurrentBuffer
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string

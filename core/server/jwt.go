@@ -21,7 +21,7 @@ var (
 )
 
 // jwtFromHeader returns a `jwtExtractor` that extracts token from the request header.
-func jwtFromHeader(c echo.Context) (string, error) {
+func jwtFromHeader(c echo.ContextInterface) (string, error) {
 	auth := c.Request().Header.Get(jwtHeader)
 	l := len(authScheme)
 	if len(auth) > l+1 && auth[:l] == authScheme {
@@ -31,7 +31,7 @@ func jwtFromHeader(c echo.Context) (string, error) {
 }
 
 // jwtFromQuery returns a `jwtExtractor` that extracts token from the query string.
-func jwtFromQuery(c echo.Context) (string, error) {
+func jwtFromQuery(c echo.ContextInterface) (string, error) {
 	token := c.QueryParam(jwtParam)
 	if token == "" {
 		return "", ErrJWTMissing
@@ -40,7 +40,7 @@ func jwtFromQuery(c echo.Context) (string, error) {
 }
 
 // jwtFromCookie returns a `jwtExtractor` that extracts token from the named cookie.
-func jwtFromCookie(c echo.Context) (string, error) {
+func jwtFromCookie(c echo.ContextInterface) (string, error) {
 	cookie, err := c.Cookie(jwtCookieName)
 	if err != nil {
 		return "", ErrJWTMissing

@@ -5,6 +5,7 @@ package server
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -18,8 +19,9 @@ import (
 // creating a custom context,
 // allow us to add new features in a clean way
 type EthernitiContext struct {
-	echo.Context
+	echo.ContextInterface
 	// connection profile data for interaction
+	profileLock *sync.Mutex
 	profileData profile.ConnectionProfile
 }
 
@@ -33,16 +35,26 @@ func (context *EthernitiContext) ConnectionProfileSetup() (profile.ConnectionPro
 	readedProfile, err := profile.ParseConnectionProfileToken(requestProfileKeyContent)
 	if err == nil {
 		//save profile data
+		context.profileLock.Lock()
 		context.profileData = readedProfile
+		context.profileLock.Unlock()
 	}
 	return readedProfile, err
+}
+
+// get caller eth address
+func (context *EthernitiContext) CallerEthAddress() string {
+	context.profileLock.Lock()
+	from := context.profileData.Address
+	context.profileLock.Unlock()
+	return from
 }
 
 // it recovers the eth client linked to it
 // if peer url is provided, this peer address is used to dial
 // otherwise, token information is readed in order to custom peer dial
-func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl string) (ethrpc.EthRPC, string, error) {
-	var client ethrpc.EthRPC
+func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl string) (*ethrpc.EthRPC, string, error) {
+	client := new(ethrpc.EthRPC)
 	var contextId string
 	// by default, peer url is used to dial
 	if peerUrl == "" {
@@ -55,7 +67,7 @@ func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl strin
 		// use peer url
 		contextId = peerUrl
 	}
-	client = ethrpc.NewDefaultRPC(contextId)
+	client = ethrpc.NewDefaultRPCPtr(contextId)
 	return client, contextId, nil
 }
 
@@ -89,6 +101,17 @@ func (context *EthernitiContext) writeContentType(value string) {
 	}
 }
 
+func (context *EthernitiContext) FastBlob(code int, contentType string, b []byte) (err error) {
+	response := context.Response()
+	header := response.Header()
+	if header.Get(echo.HeaderContentType) == "" {
+		header.Set(echo.HeaderContentType, contentType)
+	}
+	response.WriteHeader(code)
+	_, err = response.Write(b)
+	return
+}
+
 func (context *EthernitiContext) Blob(code int, contentType string, b []byte) (err error) {
 	context.writeContentType(contentType)
 	response := context.Response()
@@ -102,8 +125,9 @@ func (context *EthernitiContext) HTMLBlob(code int, b []byte) (err error) {
 }
 
 // constructor like function
-func NewEthernitiContext(c echo.Context) *EthernitiContext {
+func NewEthernitiContext(c echo.ContextInterface) *EthernitiContext {
 	ctx := new(EthernitiContext)
-	ctx.Context = c
+	ctx.ContextInterface = c
+	ctx.profileLock = new(sync.Mutex)
 	return ctx
 }

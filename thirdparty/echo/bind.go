@@ -5,7 +5,6 @@ package echo
 
 import (
 	"encoding/json"
-	"encoding/xml"
 	"errors"
 	"fmt"
 	"net/http"
@@ -17,7 +16,7 @@ import (
 type (
 	// Binder is the interface that wraps the Bind method.
 	Binder interface {
-		Bind(i interface{}, c Context) error
+		Bind(i interface{}, c ContextInterface) error
 	}
 
 	// DefaultBinder is the default implementation of the Binder interface.
@@ -31,7 +30,7 @@ type (
 )
 
 // Bind implements the `Binder#Bind` function.
-func (b *DefaultBinder) Bind(i interface{}, c Context) (err error) {
+func (b *DefaultBinder) Bind(i interface{}, c ContextInterface) (err error) {
 	req := c.Request()
 	if req.ContentLength == 0 {
 		if req.Method == http.MethodGet || req.Method == http.MethodDelete {
@@ -50,15 +49,6 @@ func (b *DefaultBinder) Bind(i interface{}, c Context) (err error) {
 				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Unmarshal type error: expected=%v, got=%v, field=%v, offset=%v", ute.Type, ute.Value, ute.Field, ute.Offset)).SetInternal(err)
 			} else if se, ok := err.(*json.SyntaxError); ok {
 				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Syntax error: offset=%v, error=%v", se.Offset, se.Error())).SetInternal(err)
-			}
-			return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
-		}
-	case strings.HasPrefix(ctype, MIMEApplicationXML), strings.HasPrefix(ctype, MIMETextXML):
-		if err = xml.NewDecoder(req.Body).Decode(i); err != nil {
-			if ute, ok := err.(*xml.UnsupportedTypeError); ok {
-				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Unsupported type error: type=%v, error=%v", ute.Type, ute.Error())).SetInternal(err)
-			} else if se, ok := err.(*xml.SyntaxError); ok {
-				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Syntax error: line=%v, error=%v", se.Line, se.Error())).SetInternal(err)
 			}
 			return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
 		}
@@ -124,7 +114,7 @@ func (b *DefaultBinder) bindData(ptr interface{}, data map[string][]string, tag 
 			continue
 		}
 
-		// Call this first, in case we're dealing with an alias to an array type
+		// makePost this first, in case we're dealing with an alias to an array type
 		if ok, err := unmarshalField(typeField.Type.Kind(), inputValue[0], structField); ok {
 			if err != nil {
 				return err

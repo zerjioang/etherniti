@@ -11,7 +11,7 @@ func BenchmarkHttpListener(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			NewHttpListener()
+			_ = NewHttpListener()
 		}
 	})
 }

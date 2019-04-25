@@ -6,14 +6,11 @@ package echo
 import (
 	"bytes"
 	"encoding/json"
-	"encoding/xml"
-	"errors"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -127,19 +124,6 @@ func TestBindJSON(t *testing.T) {
 	testBindOkay(assert, strings.NewReader(userJSON), MIMEApplicationJSON)
 	testBindError(assert, strings.NewReader(invalidContent), MIMEApplicationJSON, &json.SyntaxError{})
 	testBindError(assert, strings.NewReader(userJSONInvalidType), MIMEApplicationJSON, &json.UnmarshalTypeError{})
-}
-
-func TestBindXML(t *testing.T) {
-	assert := assert.New(t)
-
-	testBindOkay(assert, strings.NewReader(userXML), MIMEApplicationXML)
-	testBindError(assert, strings.NewReader(invalidContent), MIMEApplicationXML, errors.New(""))
-	testBindError(assert, strings.NewReader(userXMLConvertNumberError), MIMEApplicationXML, &strconv.NumError{})
-	testBindError(assert, strings.NewReader(userXMLUnsupportedTypeError), MIMEApplicationXML, &xml.SyntaxError{})
-	testBindOkay(assert, strings.NewReader(userXML), MIMETextXML)
-	testBindError(assert, strings.NewReader(invalidContent), MIMETextXML, errors.New(""))
-	testBindError(assert, strings.NewReader(userXMLConvertNumberError), MIMETextXML, &strconv.NumError{})
-	testBindError(assert, strings.NewReader(userXMLUnsupportedTypeError), MIMETextXML, &xml.SyntaxError{})
 }
 
 func TestBindForm(t *testing.T) {
@@ -389,7 +373,7 @@ func testBindError(assert *assert.Assertions, r io.Reader, ctype string, expecte
 	err := c.Bind(u)
 
 	switch {
-	case strings.HasPrefix(ctype, MIMEApplicationJSON), strings.HasPrefix(ctype, MIMEApplicationXML), strings.HasPrefix(ctype, MIMETextXML),
+	case strings.HasPrefix(ctype, MIMEApplicationJSON),
 		strings.HasPrefix(ctype, MIMEApplicationForm), strings.HasPrefix(ctype, MIMEMultipartForm):
 		if assert.IsType(new(HTTPError), err) {
 			assert.Equal(http.StatusBadRequest, err.(*HTTPError).Code)

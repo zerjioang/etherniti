@@ -24,7 +24,7 @@ func init() {
 // REST API style rate limit middleware function.
 // flood and abuse limit policy middleware
 func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c echo.ContextInterface) error {
 		header := c.Response().Header()
 		clientIdentifier := c.RealIP()
 		result := rateLimitEngine.Eval(clientIdentifier, header)

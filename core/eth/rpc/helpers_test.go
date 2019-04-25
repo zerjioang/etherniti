@@ -16,24 +16,24 @@ func TestSizeOf(t *testing.T) {
 	t.Run("size-of-big.Int", func(t *testing.T) {
 		i := new(big.Int)
 		i.SetString("644", 8) // octal
-		fmt.Printf("size of %T:, %d\n", i, unsafe.Sizeof(i))
-		fmt.Printf("align of %T:, %d\n", i, unsafe.Alignof(i))
+		fmt.Printf("size of %TransactionData:, %d\n", i, unsafe.Sizeof(i))
+		fmt.Printf("align of %TransactionData:, %d\n", i, unsafe.Alignof(i))
 	})
 	t.Run("size-of-int64", func(t *testing.T) {
 		var i int64
 		i = 55465474
-		fmt.Printf("size of %T:, %d\n", i, unsafe.Sizeof(i))
-		fmt.Printf("align of %T:, %d\n", i, unsafe.Alignof(i))
+		fmt.Printf("size of %TransactionData:, %d\n", i, unsafe.Sizeof(i))
+		fmt.Printf("align of %TransactionData:, %d\n", i, unsafe.Alignof(i))
 	})
 	t.Run("size-of-*int64", func(t *testing.T) {
 		var i *int64
-		fmt.Printf("size of %T:, %d\n", i, unsafe.Sizeof(i))
-		fmt.Printf("align of %T:, %d\n", i, unsafe.Alignof(i))
+		fmt.Printf("size of %TransactionData:, %d\n", i, unsafe.Sizeof(i))
+		fmt.Printf("align of %TransactionData:, %d\n", i, unsafe.Alignof(i))
 	})
 	t.Run("size-of-pointer", func(t *testing.T) {
 		var i uintptr
-		fmt.Printf("size of %T:, %d\n", i, unsafe.Sizeof(i))
-		fmt.Printf("align of %T:, %d\n", i, unsafe.Alignof(i))
+		fmt.Printf("size of %TransactionData:, %d\n", i, unsafe.Sizeof(i))
+		fmt.Printf("align of %TransactionData:, %d\n", i, unsafe.Alignof(i))
 	})
 	t.Run("size-of-pointer", func(t *testing.T) {
 		const ptrSize = 32 + int(^uintptr(0)>>63<<5)

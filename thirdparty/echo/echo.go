@@ -16,7 +16,7 @@ Example:
   )
 
   // Handler
-  func hello(c echo.Context) error {
+  func hello(c echo.ContextInterface) error {
     return c.String(http.StatusOK, "Hello, World!")
   }
 
@@ -58,10 +58,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
+
 	"github.com/zerjioang/etherniti/thirdparty/gommon/color"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
-	"golang.org/x/crypto/acme"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 type (
@@ -79,7 +79,6 @@ type (
 		TLSServer        *http.Server
 		Listener         net.Listener
 		TLSListener      net.Listener
-		AutoTLSManager   autocert.Manager
 		DisableHTTP2     bool
 		Debug            bool
 		HideBanner       bool
@@ -109,10 +108,10 @@ type (
 	MiddlewareFunc func(HandlerFunc) HandlerFunc
 
 	// HandlerFunc defines a function to serve HTTP requests.
-	HandlerFunc func(Context) error
+	HandlerFunc func(ContextInterface) error
 
 	// HTTPErrorHandler is a centralized HTTP error handler.
-	HTTPErrorHandler func(error, Context)
+	HTTPErrorHandler func(error, ContextInterface)
 
 	// Validator is the interface that wraps the Validate function.
 	Validator interface {
@@ -121,7 +120,7 @@ type (
 
 	// Renderer is the interface that wraps the Render function.
 	Renderer interface {
-		Render(io.Writer, string, interface{}, Context) error
+		Render(io.Writer, string, interface{}, ContextInterface) error
 	}
 
 	// Map defines a generic map of type `map[string]interface{}`.
@@ -154,10 +153,6 @@ const (
 	MIMEApplicationJSONCharsetUTF8       = MIMEApplicationJSON + "; " + charsetUTF8
 	MIMEApplicationJavaScript            = "application/javascript"
 	MIMEApplicationJavaScriptCharsetUTF8 = MIMEApplicationJavaScript + "; " + charsetUTF8
-	MIMEApplicationXML                   = "application/xml"
-	MIMEApplicationXMLCharsetUTF8        = MIMEApplicationXML + "; " + charsetUTF8
-	MIMETextXML                          = "text/xml"
-	MIMETextXMLCharsetUTF8               = MIMETextXML + "; " + charsetUTF8
 	MIMEApplicationForm                  = "application/x-www-form-urlencoded"
 	MIMEApplicationProtobuf              = "application/protobuf"
 	MIMEApplicationMsgpack               = "application/msgpack"
@@ -280,11 +275,11 @@ var (
 
 // Error handlers
 var (
-	NotFoundHandler = func(c Context) error {
+	NotFoundHandler = func(c ContextInterface) error {
 		return ErrNotFound
 	}
 
-	MethodNotAllowedHandler = func(c Context) error {
+	MethodNotAllowedHandler = func(c ContextInterface) error {
 		return ErrMethodNotAllowed
 	}
 )
@@ -294,12 +289,9 @@ func New() (e *Echo) {
 	e = &Echo{
 		Server:    new(http.Server),
 		TLSServer: new(http.Server),
-		AutoTLSManager: autocert.Manager{
-			Prompt: autocert.AcceptTOS,
-		},
-		Logger:   log.New("echo"),
-		colorer:  color.New(),
-		maxParam: new(int),
+		Logger:    log.New("echo"),
+		colorer:   color.New(),
+		maxParam:  new(int),
 	}
 	e.Server.Handler = e
 	e.TLSServer.Handler = e
@@ -314,9 +306,9 @@ func New() (e *Echo) {
 	return
 }
 
-// NewContext returns a Context instance.
-func (e *Echo) NewContext(r *http.Request, w http.ResponseWriter) Context {
-	return &context{
+// NewContext returns a ContextInterface instance.
+func (e *Echo) NewContext(r *http.Request, w http.ResponseWriter) ContextInterface {
+	return &Context{
 		request:  r,
 		response: NewResponse(w, e),
 		store:    make(Map),
@@ -333,11 +325,9 @@ func (e *Echo) Router() *Router {
 
 // DefaultHTTPErrorHandler is the default HTTP error handler. It sends a JSON response
 // with status code.
-func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
-	var (
-		code = http.StatusInternalServerError
-		msg  interface{}
-	)
+func (e *Echo) DefaultHTTPErrorHandler(err error, c ContextInterface) {
+	var msg interface{}
+	code := protocol.StatusInternalServerError
 
 	if he, ok := err.(*HTTPError); ok {
 		code = he.Code
@@ -348,7 +338,7 @@ func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
 	} else if e.Debug {
 		msg = err.Error()
 	} else {
-		msg = http.StatusText(code)
+		msg = protocol.StatusText(code)
 	}
 	if _, ok := msg.(string); ok {
 		msg = Map{"message": msg}
@@ -356,10 +346,11 @@ func (e *Echo) DefaultHTTPErrorHandler(err error, c Context) {
 
 	// Send response
 	if !c.Response().Committed {
+		httpcode := int(code)
 		if c.Request().Method == http.MethodHead { // Issue #608
-			err = c.NoContent(code)
+			err = c.NoContent(httpcode)
 		} else {
-			err = c.JSON(code, msg)
+			err = c.JSON(httpcode, msg)
 		}
 		if err != nil {
 			e.Logger.Error(err)
@@ -461,7 +452,7 @@ func (e *Echo) Static(prefix, root string) *Route {
 }
 
 func static(i i, prefix, root string) *Route {
-	h := func(c Context) error {
+	h := func(c ContextInterface) error {
 		p, err := url.PathUnescape(c.Param("*"))
 		if err != nil {
 			return err
@@ -479,7 +470,7 @@ func static(i i, prefix, root string) *Route {
 
 // File registers a new route with path to serve a static file with optional route-level middleware.
 func (e *Echo) File(path, file string, m ...MiddlewareFunc) *Route {
-	return e.GET(path, func(c Context) error {
+	return e.GET(path, func(c ContextInterface) error {
 		return c.File(file)
 	}, m...)
 }
@@ -488,7 +479,7 @@ func (e *Echo) File(path, file string, m ...MiddlewareFunc) *Route {
 // in the router with optional route-level middleware.
 func (e *Echo) Add(method, path string, handler HandlerFunc, middleware ...MiddlewareFunc) *Route {
 	name := handlerName(handler)
-	e.router.Add(method, path, func(c Context) error {
+	e.router.Add(method, path, func(c ContextInterface) error {
 		h := handler
 		// Chain middleware
 		for i := len(middleware) - 1; i >= 0; i-- {
@@ -556,22 +547,22 @@ func (e *Echo) Routes() []*Route {
 	return routes
 }
 
-// AcquireContext returns an empty `Context` instance from the pool.
-// You must return the context by calling `ReleaseContext()`.
-func (e *Echo) AcquireContext() Context {
-	return e.pool.Get().(Context)
+// AcquireContext returns an empty `ContextInterface` instance from the pool.
+// You must return the Context by calling `ReleaseContext()`.
+func (e *Echo) AcquireContext() ContextInterface {
+	return e.pool.Get().(ContextInterface)
 }
 
-// ReleaseContext returns the `Context` instance back to the pool.
+// ReleaseContext returns the `ContextInterface` instance back to the pool.
 // You must call it after `AcquireContext()`.
-func (e *Echo) ReleaseContext(c Context) {
+func (e *Echo) ReleaseContext(c ContextInterface) {
 	e.pool.Put(c)
 }
 
 // ServeHTTP implements `http.Handler` interface, which serves HTTP requests.
 func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// Acquire context
-	c := e.pool.Get().(*context)
+	// Acquire Context
+	c := e.AcquireContext()
 	c.Reset(r, w)
 
 	h := NotFoundHandler
@@ -581,7 +572,7 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h = c.Handler()
 		h = applyMiddleware(h, e.middleware...)
 	} else {
-		h = func(c Context) error {
+		h = func(c ContextInterface) error {
 			e.router.Find(r.Method, getPath(r), c)
 			h := c.Handler()
 			h = applyMiddleware(h, e.middleware...)
@@ -595,8 +586,8 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		e.HTTPErrorHandler(err, c)
 	}
 
-	// Release context
-	e.pool.Put(c)
+	// Release Context
+	e.ReleaseContext(c)
 }
 
 // Start starts an HTTP server.
@@ -638,15 +629,6 @@ func filepathOrContent(fileOrContent interface{}) (content []byte, err error) {
 	default:
 		return nil, ErrInvalidCertOrKeyType
 	}
-}
-
-// StartAutoTLS starts an HTTPS server using certificates automatically installed from https://letsencrypt.org.
-func (e *Echo) StartAutoTLS(address string) error {
-	s := e.TLSServer
-	s.TLSConfig = new(tls.Config)
-	s.TLSConfig.GetCertificate = e.AutoTLSManager.GetCertificate
-	s.TLSConfig.NextProtos = append(s.TLSConfig.NextProtos, acme.ALPNProto)
-	return e.startTLS(address)
 }
 
 func (e *Echo) startTLS(address string) error {
@@ -737,7 +719,7 @@ func (he *HTTPError) SetInternal(err error) *HTTPError {
 
 // WrapHandler wraps `http.Handler` into `echo.HandlerFunc`.
 func WrapHandler(h http.Handler) HandlerFunc {
-	return func(c Context) error {
+	return func(c ContextInterface) error {
 		h.ServeHTTP(c.Response(), c.Request())
 		return nil
 	}
@@ -746,7 +728,7 @@ func WrapHandler(h http.Handler) HandlerFunc {
 // WrapMiddleware wraps `func(http.Handler) http.Handler` into `echo.MiddlewareFunc`
 func WrapMiddleware(m func(http.Handler) http.Handler) MiddlewareFunc {
 	return func(next HandlerFunc) HandlerFunc {
-		return func(c Context) (err error) {
+		return func(c ContextInterface) (err error) {
 			m(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				c.SetRequest(r)
 				err = next(c)
@@ -757,11 +739,11 @@ func WrapMiddleware(m func(http.Handler) http.Handler) MiddlewareFunc {
 }
 
 func getPath(r *http.Request) string {
-	path := r.URL.RawPath
-	if path == "" {
-		path = r.URL.Path
+	p := r.URL.RawPath
+	if p == "" {
+		p = r.URL.Path
 	}
-	return path
+	return p
 }
 
 func handlerName(h HandlerFunc) string {

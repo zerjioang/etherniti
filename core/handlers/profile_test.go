@@ -81,7 +81,7 @@ func TestNewProfileController(t *testing.T) {
 
 func TestProfileController_create(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -103,7 +103,7 @@ func TestProfileController_create(t *testing.T) {
 
 func TestProfileController_validate(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -125,7 +125,7 @@ func TestProfileController_validate(t *testing.T) {
 
 func TestProfileController_count(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string

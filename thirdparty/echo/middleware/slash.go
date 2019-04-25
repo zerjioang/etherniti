@@ -4,8 +4,6 @@
 package middleware
 
 import (
-	"strings"
-
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -45,7 +43,7 @@ func AddTrailingSlashWithConfig(config TrailingSlashConfig) echo.MiddlewareFunc 
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+		return func(c echo.ContextInterface) error {
 			if config.Skipper(c) {
 				return next(c)
 			}
@@ -54,7 +52,7 @@ func AddTrailingSlashWithConfig(config TrailingSlashConfig) echo.MiddlewareFunc 
 			url := req.URL
 			path := url.Path
 			qs := c.QueryString()
-			if !strings.HasSuffix(path, "/") {
+			if !HasSuffix(path, "/") {
 				path += "/"
 				uri := path
 				if qs != "" {
@@ -75,6 +73,11 @@ func AddTrailingSlashWithConfig(config TrailingSlashConfig) echo.MiddlewareFunc 
 	}
 }
 
+// HasSuffix tests whether the string s ends with suffix.
+func HasSuffix(s, suffix string) bool {
+	return len(s) >= len(suffix) && s[len(s)-len(suffix):] == suffix
+}
+
 // RemoveTrailingSlash returns a root level (before router) middleware which removes
 // a trailing slash from the request URI.
 //
@@ -92,7 +95,7 @@ func RemoveTrailingSlashWithConfig(config TrailingSlashConfig) echo.MiddlewareFu
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+		return func(c echo.ContextInterface) error {
 			if config.Skipper(c) {
 				return next(c)
 			}
@@ -102,7 +105,7 @@ func RemoveTrailingSlashWithConfig(config TrailingSlashConfig) echo.MiddlewareFu
 			path := url.Path
 			qs := c.QueryString()
 			l := len(path) - 1
-			if l > 0 && strings.HasSuffix(path, "/") {
+			if l > 0 && HasSuffix(path, "/") {
 				path = path[:l]
 				uri := path
 				if qs != "" {

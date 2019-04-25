@@ -13,7 +13,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"github.com/zerjioang/etherniti/core/listener/base"
+	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -38,7 +38,7 @@ func (l UnixSocketListener) RunMode(socketPath string, background bool) {
 
 func (l UnixSocketListener) Listen() error {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI via unix sockets")
-	l.e = base.NewDefaultServer()
+	l.e = common.NewDefaultServer()
 	if l.mode {
 		l.background()
 	} else {
@@ -112,7 +112,7 @@ func (l UnixSocketListener) unixServerListener(c net.Conn) {
 		log.Debug("server got:", string(data))
 
 		//build request
-		req, rec, _ := base.NewContextFromSocket(l.e, data)
+		req, rec, _ := common.NewContextFromSocket(l.e, data)
 		// execute appropiare handler for current request
 		l.e.ServeHTTP(rec, req)
 		responseBytes := rec.Body.Bytes()

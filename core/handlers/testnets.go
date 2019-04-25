@@ -3,6 +3,12 @@
 
 package handlers
 
+import (
+	"github.com/zerjioang/etherniti/core/handlers/network"
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
+)
+
 const (
 	ropsten       = "ropsten"
 	ropstenInfura = "https://ropsten.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
@@ -18,71 +24,77 @@ const (
 
 	infura   = "infura"
 	quiknode = "quiknode"
+	private  = "private"
 )
 
-type EthereumPublicController struct {
-	Web3Controller
-}
-
-type EthereumPrivateController struct {
-	Web3Controller
-}
-
-// constructor like function
-func NewRopstenController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetPeer(ropstenInfura)
-	ctl.SetTargetName(ropsten)
-	return ctl
+type RestController struct {
+	network network.NetworkController
+	web3    network.Web3Controller
+	erc20   network.Erc20Controller
+	db      network.Web3DbController
+	shh     network.Web3ShhController
+	abi     network.AbiController
+	devops  network.DevOpsController
 }
 
 // constructor like function
-func NewRinkebyController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetPeer(rinkebyInfura)
-	ctl.SetTargetName(rinkeby)
+func newController(peer string, name string) RestController {
+	ctl := RestController{}
+	ctl.network = network.NewNetworkController()
+	ctl.erc20 = network.NewErc20Controller(&ctl.network)
+	ctl.web3 = network.NewWeb3Controller(&ctl.network)
+	ctl.db = network.NewWeb3DbController(&ctl.network)
+	ctl.shh = network.NewWeb3ShhController(&ctl.network)
+	ctl.devops = network.NewDevOpsController(&ctl.network)
+	ctl.abi = network.NewAbiController()
+	ctl.network.SetPeer(peer)
+	ctl.network.SetTargetName(name)
 	return ctl
 }
 
-// constructor like function
-func NewKovanController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetPeer(kovanInfura)
-	ctl.SetTargetName(kovan)
-	return ctl
+// implemented method from interface RouterRegistrable
+func (ctl RestController) RegisterRouters(router *echo.Group) {
+	logger.Debug("registering rest controller api endpoints for network: ", ctl.network.Name())
+	ctl.network.RegisterRouters(router)
+	ctl.web3.RegisterRouters(router)
+	ctl.erc20.RegisterRouters(router)
+	ctl.db.RegisterRouters(router)
+	ctl.shh.RegisterRouters(router)
+	ctl.devops.RegisterRouters(router)
+	ctl.abi.RegisterRouters(router)
 }
 
 // constructor like function
-func NewMainNetController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetPeer(mainnetInfura)
-	ctl.SetTargetName(mainnet)
-	return ctl
+func NewRopstenController() RestController {
+	return newController(ropstenInfura, ropsten)
+}
+
+// constructor like function
+func NewRinkebyController() RestController {
+	return newController(rinkebyInfura, rinkeby)
+}
+
+// constructor like function
+func NewKovanController() RestController {
+	return newController(kovanInfura, kovan)
+}
+
+// constructor like function
+func NewMainNetController() RestController {
+	return newController(mainnetInfura, mainnet)
 }
 
 // constructor like function for user provided infura based connection
-func NewInfuraController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetTargetName(infura)
-	return ctl
+func NewInfuraController() RestController {
+	return newController("", infura)
 }
 
 // constructor like function for user provided infura based connection
-func NewQuikNodeController() EthereumPublicController {
-	ctl := EthereumPublicController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	ctl.SetTargetName(quiknode)
-	return ctl
+func NewQuikNodeController() RestController {
+	return newController("", quiknode)
 }
 
 // constructor like function
-func NewPrivateNetController() EthereumPrivateController {
-	ctl := EthereumPrivateController{}
-	ctl.Web3Controller = NewWeb3Controller()
-	return ctl
+func NewPrivateNetController() RestController {
+	return newController("", private)
 }

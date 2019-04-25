@@ -113,7 +113,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) (err error) {
+		return func(c echo.ContextInterface) (err error) {
 			if config.Skipper(c) {
 				return next(c)
 			}

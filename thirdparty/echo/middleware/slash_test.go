@@ -18,7 +18,7 @@ func TestAddTrailingSlash(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/add-slash", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := AddTrailingSlash()(func(c echo.Context) error {
+	h := AddTrailingSlash()(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -29,7 +29,7 @@ func TestAddTrailingSlash(t *testing.T) {
 	req = httptest.NewRequest(http.MethodConnect, "", nil)
 	rec = httptest.NewRecorder()
 	c = e.NewContext(req, rec)
-	h = AddTrailingSlash()(func(c echo.Context) error {
+	h = AddTrailingSlash()(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -42,7 +42,7 @@ func TestAddTrailingSlash(t *testing.T) {
 	c = e.NewContext(req, rec)
 	h = AddTrailingSlashWithConfig(TrailingSlashConfig{
 		RedirectCode: http.StatusMovedPermanently,
-	})(func(c echo.Context) error {
+	})(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -56,7 +56,7 @@ func TestRemoveTrailingSlash(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/remove-slash/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := RemoveTrailingSlash()(func(c echo.Context) error {
+	h := RemoveTrailingSlash()(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -67,7 +67,7 @@ func TestRemoveTrailingSlash(t *testing.T) {
 	req = httptest.NewRequest(http.MethodConnect, "", nil)
 	rec = httptest.NewRecorder()
 	c = e.NewContext(req, rec)
-	h = RemoveTrailingSlash()(func(c echo.Context) error {
+	h = RemoveTrailingSlash()(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -80,7 +80,7 @@ func TestRemoveTrailingSlash(t *testing.T) {
 	c = e.NewContext(req, rec)
 	h = RemoveTrailingSlashWithConfig(TrailingSlashConfig{
 		RedirectCode: http.StatusMovedPermanently,
-	})(func(c echo.Context) error {
+	})(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))
@@ -91,7 +91,7 @@ func TestRemoveTrailingSlash(t *testing.T) {
 	req = httptest.NewRequest(http.MethodGet, "http://localhost", nil)
 	rec = httptest.NewRecorder()
 	c = e.NewContext(req, rec)
-	h = RemoveTrailingSlash()(func(c echo.Context) error {
+	h = RemoveTrailingSlash()(func(c echo.ContextInterface) error {
 		return nil
 	})
 	is.NoError(h(c))

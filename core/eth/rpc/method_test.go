@@ -24,7 +24,7 @@ func TestEthRPC_Call(t *testing.T) {
 		// Returns the current client version.
 		result, err := client.Web3ClientVersion()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != ganacheExpectedVersion {
@@ -37,7 +37,7 @@ func TestEthRPC_Call(t *testing.T) {
 		// Returns Keccak-256 (not the standardized SHA3-256) of the given data.
 		result, err := client.Web3Sha3([]byte("hello-world"))
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			// test with https://emn178.github.io/online-tools/keccak_256.html
@@ -50,7 +50,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.NetVersion()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != ganacheNetVersion {
@@ -62,7 +62,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.NetListening()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			// test with https://emn178.github.io/online-tools/keccak_256.html
@@ -75,7 +75,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.NetPeerCount()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != 0 {
@@ -87,7 +87,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthProtocolVersion()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != "62" && result != "63" {
@@ -99,7 +99,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthSyncing()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result == nil || result.IsSyncing == true {
@@ -111,7 +111,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthCoinbase()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if len(result) != 42 {
@@ -125,7 +125,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthHashrate()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result > 0 {
@@ -137,7 +137,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthGasPrice()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != 20000000000 {
@@ -149,7 +149,7 @@ func TestEthRPC_Call(t *testing.T) {
 		client := NewDefaultRPC(localGanache)
 		result, err := client.EthAccounts()
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if len(result) != 10 {
@@ -162,7 +162,7 @@ func TestEthRPC_Call(t *testing.T) {
 		// send sign nrequest of plain text
 		result, err := client.EthSign(address0, "foo-bar")
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != "0x0cbef474e48d6429dbc27f356cdd3e92086972415b7329cdbf2b7c1d4d314889279db69d702530620b2b46578483114b977035eaa39058b6f006208e1704465801" {
@@ -190,7 +190,7 @@ func TestEthRPC_Call(t *testing.T) {
 		t.Log(message)
 		result, err := client.EthSign(address0, fixtures.Encode(hashed))
 		if err != nil {
-			t.Error("failed to call", err)
+			t.Error("failed to post", err)
 		} else {
 			t.Log(result)
 			if result != "0x2398cc14454bf83a74ab0dba8a34e3cedc640b3c1380751363bbbd69742b87b52512d2dff71baf4a27a234dfd6f26a2e22b008cba0af08bba65694f2f81524a701" {

@@ -3,6 +3,8 @@
 
 package protocol
 
+import "encoding/json"
+
 // profile model dto
 type Profile struct {
 	Address    string `json:"address"`
@@ -24,10 +26,34 @@ type ProfileRequest struct {
 	Ip     string `json:"ip,omitempty"`
 }
 
+// new login request dto
+type LoginRequest struct {
+	Email string `json:"email" form:"email" query:"email"`
+	Password string `json:"pwd" form:"pwd" query:"pwd"`
+}
+
+// new register request dto
+type RegisterRequest struct {
+	Username string `json:"user" form:"user" query:"user"`
+	Email string `json:"email" form:"email" query:"email"`
+	Password string `json:"pwd" form:"pwd" query:"pwd"`
+}
+
 // new entropy request dto
 type EntropyRequest struct {
 	// size of initial entropy: 128 to 256 bits (for BIP39)
 	Size uint16 `json:"size" form:"size" query:"size"`
+}
+
+// new deploy request dto
+type DeployRequest struct {
+	Contract string `json:"contract"`
+	Registry struct {
+		Register    string `json:"register"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Version     string `json:"version"`
+	} `json:"registry"`
 }
 
 // new hd wallet response dto
@@ -70,6 +96,9 @@ type HdWalletResponse struct {
 	MasterPublicKey  string `json:"public" form:"public" query:"public"`
 	Mnemonic         string `json:"mnemonic" form:"mnemonic" query:"mnemonic"`
 }
+
+// abi link request dto
+type AbiLinkRequest json.RawMessage
 
 // contract compilation request dto
 type ContractCompileRequest struct {

@@ -6,9 +6,12 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
-	"errors"
 	"net/http"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/shared/constants"
+
+	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
@@ -25,16 +28,7 @@ import (
 )
 
 const (
-	defaultPath      = "m/44'/60'/0'/0/0"
-	invalidAddress   = `{"message": "please, provide a valid ethereum or quorum address"}`
-	accountKeyGenErr = `{"message": "failed to generate ecdsa private key"}`
-)
-
-var (
-	noConnErrMsg           = "invalid connection profile key provided in the request header. Please, make sure you have created a connection profile indicating your peer node IP address or domain name."
-	errNoConnectionProfile = errors.New(noConnErrMsg)
-	accountKeyGenErrBytes  = str.UnsafeBytes(accountKeyGenErr)
-	invalidAddressBytes    = str.UnsafeBytes(invalidAddress)
+	defaultPath = "m/44'/60'/0'/0/0"
 )
 
 type WalletController struct {
@@ -53,13 +47,13 @@ func NewWalletController() WalletController {
 	224 bits -> 21 words
 	256 bits -> 24 words
 */
-func (ctl WalletController) Mnemonic(c echo.Context) error {
+func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 
 	req := protocol.MnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 
 	// lowercase language
@@ -116,12 +110,12 @@ func (ctl WalletController) Mnemonic(c echo.Context) error {
 	}
 }
 
-func (ctl WalletController) HdWallet(c echo.Context) error {
+func (ctl WalletController) HdWallet(c echo.ContextInterface) error {
 	req := protocol.NewHdWalletRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 	response, err := ctl.createHdWallet(req)
 	if err != nil {
@@ -131,12 +125,12 @@ func (ctl WalletController) HdWallet(c echo.Context) error {
 	}
 }
 
-func (ctl WalletController) Entropy(c echo.Context) error {
+func (ctl WalletController) Entropy(c echo.ContextInterface) error {
 	req := protocol.EntropyRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 
 	req.Size = ctl.getIntParam(c, "bits")
@@ -186,7 +180,7 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 }
 
 // generates an ethereum new account (address+key)
-func (ctl WalletController) generateAddress(c echo.Context) error {
+func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 
 	// Create an account
 	private, err := eth.GenerateNewKey()
@@ -194,7 +188,7 @@ func (ctl WalletController) generateAddress(c echo.Context) error {
 	if err != nil {
 		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
-		return c.JSONBlob(http.StatusInternalServerError, accountKeyGenErrBytes)
+		return c.JSONBlob(http.StatusInternalServerError, errors.AccountKeyGenErrBytes)
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
@@ -211,7 +205,7 @@ func (ctl WalletController) generateAddress(c echo.Context) error {
 }
 
 // check if an ethereum address is valid
-func (ctl WalletController) isValidAddress(c echo.Context) error {
+func (ctl WalletController) isValidAddress(c echo.ContextInterface) error {
 	//since this method checks address as string, cache always
 	var code int
 	code, c = clientcache.Cached(c, true, clientcache.CacheInfinite) // 24h cache directive
@@ -227,7 +221,7 @@ func (ctl WalletController) isValidAddress(c echo.Context) error {
 		)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, invalidAddressBytes)
+	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
 }
 
 // implemented method from interface RouterRegistrable
@@ -240,7 +234,7 @@ func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	router.POST("/wallet/hd/bip32", ctl.HdWallet)
 }
 
-func (ctl WalletController) getIntParam(c echo.Context, key string) uint16 {
+func (ctl WalletController) getIntParam(c echo.ContextInterface, key string) uint16 {
 	v := c.Param(key)
 	if v != "" {
 		num, _ := strconv.Atoi(v)

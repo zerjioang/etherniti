@@ -39,6 +39,11 @@ func (r *Response) Header() http.Header {
 	return r.Writer.Header()
 }
 
+func (r *Response) HeaderPtr() *http.Header {
+	h := r.Writer.Header()
+	return &h
+}
+
 // Before registers a function which is called just before the response is written.
 func (r *Response) Before(fn func()) {
 	r.beforeFuncs = append(r.beforeFuncs, fn)

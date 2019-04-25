@@ -6,6 +6,8 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -18,13 +20,7 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
-const (
-	readErr = `there was an error during execution`
-	bindErr = `there was an error while processing your request information`
-)
-
 type ProfileController struct {
-	//cache *cache.Cache
 }
 
 var (
@@ -41,13 +37,13 @@ func NewProfileController() ProfileController {
 }
 
 // new profile create request
-func (ctl ProfileController) create(c echo.Context) error {
+func (ctl ProfileController) create(c echo.ContextInterface) error {
 	//new profile request
 	req := protocol.ProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, bindErr)
+		return api.ErrorStr(c, constants.BindErr)
 	}
 	// add current user IP to request
 	req.Ip = c.RealIP()
@@ -68,12 +64,12 @@ func (ctl ProfileController) create(c echo.Context) error {
 }
 
 // profile validation check
-func (ctl ProfileController) validate(c echo.Context) error {
-	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(readErr))
+func (ctl ProfileController) validate(c echo.ContextInterface) error {
+	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(constants.ReadErr))
 }
 
-// profile validation check
-func (ctl ProfileController) count(c echo.Context) error {
+// profile validation counter
+func (ctl ProfileController) count(c echo.ContextInterface) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
 	return c.JSON(code, profilesCreated.Get())

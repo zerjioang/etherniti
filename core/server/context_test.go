@@ -20,7 +20,7 @@ func TestNewEthernitiContext(t *testing.T) {
 
 func TestEthernitiContext_ConnectionProfileSetup(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	tests := []struct {
@@ -34,8 +34,8 @@ func TestEthernitiContext_ConnectionProfileSetup(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := &EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			got, err := context.ConnectionProfileSetup()
 			if (err != nil) != tt.wantErr {
@@ -51,7 +51,7 @@ func TestEthernitiContext_ConnectionProfileSetup(t *testing.T) {
 
 func TestEthernitiContext_RecoverEthClientFromTokenOrPeerUrl(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	type args struct {
@@ -70,8 +70,8 @@ func TestEthernitiContext_RecoverEthClientFromTokenOrPeerUrl(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			got, got1, err := context.RecoverEthClientFromTokenOrPeerUrl(tt.args.peerUrl)
 			if (err != nil) != tt.wantErr {
@@ -90,7 +90,7 @@ func TestEthernitiContext_RecoverEthClientFromTokenOrPeerUrl(t *testing.T) {
 
 func TestEthernitiContext_ReadConnectionProfileToken(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	tests := []struct {
@@ -103,8 +103,8 @@ func TestEthernitiContext_ReadConnectionProfileToken(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			if got := context.ReadConnectionProfileToken(); got != tt.want {
 				t.Errorf("EthernitiContext.ReadConnectionProfileToken() = %v, want %v", got, tt.want)
@@ -115,7 +115,7 @@ func TestEthernitiContext_ReadConnectionProfileToken(t *testing.T) {
 
 func TestEthernitiContext_JSON(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	type args struct {
@@ -133,8 +133,8 @@ func TestEthernitiContext_JSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			if err := context.JSON(tt.args.code, tt.args.i); (err != nil) != tt.wantErr {
 				t.Errorf("EthernitiContext.JSON() error = %v, wantErr %v", err, tt.wantErr)
@@ -145,7 +145,7 @@ func TestEthernitiContext_JSON(t *testing.T) {
 
 func TestEthernitiContext_writeContentType(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	type args struct {
@@ -161,8 +161,8 @@ func TestEthernitiContext_writeContentType(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := &EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			context.writeContentType(tt.args.value)
 		})
@@ -171,7 +171,7 @@ func TestEthernitiContext_writeContentType(t *testing.T) {
 
 func TestEthernitiContext_Blob(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	type args struct {
@@ -190,8 +190,8 @@ func TestEthernitiContext_Blob(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := &EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			if err := context.Blob(tt.args.code, tt.args.contentType, tt.args.b); (err != nil) != tt.wantErr {
 				t.Errorf("EthernitiContext.Blob() error = %v, wantErr %v", err, tt.wantErr)
@@ -202,7 +202,7 @@ func TestEthernitiContext_Blob(t *testing.T) {
 
 func TestEthernitiContext_HTMLBlob(t *testing.T) {
 	type fields struct {
-		Context     echo.Context
+		Context     echo.ContextInterface
 		profileData profile.ConnectionProfile
 	}
 	type args struct {
@@ -220,8 +220,8 @@ func TestEthernitiContext_HTMLBlob(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			context := &EthernitiContext{
-				Context:     tt.fields.Context,
-				profileData: tt.fields.profileData,
+				ContextInterface: tt.fields.Context,
+				profileData:      tt.fields.profileData,
 			}
 			if err := context.HTMLBlob(tt.args.code, tt.args.b); (err != nil) != tt.wantErr {
 				t.Errorf("EthernitiContext.HTMLBlob() error = %v, wantErr %v", err, tt.wantErr)

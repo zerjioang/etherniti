@@ -36,7 +36,7 @@ func BenchmarkConnectionProfile(b *testing.B) {
 	b.Run("valid-true", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		// run the Fib function b.N times
+
 		profile := NewConnectionProfile()
 		profile.Id = "test-id"
 		profile.RpcEndpoint = "node-test-address"

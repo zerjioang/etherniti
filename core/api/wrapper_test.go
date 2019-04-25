@@ -5,28 +5,19 @@ package api
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/core/listener/common"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 func TestWrapper(t *testing.T) {
-}
-
-func TestSendSuccess(t *testing.T) {
-}
-
-func TestSendSuccessBlob(t *testing.T) {
-}
-
-func TestSuccess(t *testing.T) {
-}
-
-func TestToSuccess(t *testing.T) {
-}
-
-func TestErrorStr(t *testing.T) {
-}
-
-func TestError(t *testing.T) {
-}
-
-func TestStackError(t *testing.T) {
+	t.Run("send-success", func(t *testing.T) {
+		err := SendSuccess(common.NewContext(echo.New()), "message", "")
+		assert.Nil(t, err)
+	})
+	t.Run("send-success-blob", func(t *testing.T) {
+		err := SendSuccessBlob(common.NewContext(echo.New()), nil)
+		assert.Nil(t, err)
+	})
 }

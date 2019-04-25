@@ -29,7 +29,7 @@ func TestNewWalletController(t *testing.T) {
 
 func TestWalletController_Mnemonic(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -51,7 +51,7 @@ func TestWalletController_Mnemonic(t *testing.T) {
 
 func TestWalletController_HdWallet(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -73,7 +73,7 @@ func TestWalletController_HdWallet(t *testing.T) {
 
 func TestWalletController_Entropy(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -151,7 +151,7 @@ func TestWalletController_createHdWallet(t *testing.T) {
 
 func TestWalletController_generateAddress(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -173,7 +173,7 @@ func TestWalletController_generateAddress(t *testing.T) {
 
 func TestWalletController_isValidAddress(t *testing.T) {
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -214,7 +214,7 @@ func TestWalletController_RegisterRouters(t *testing.T) {
 
 func TestWalletController_getIntParam(t *testing.T) {
 	type args struct {
-		c   echo.Context
+		c   echo.ContextInterface
 		key string
 	}
 	tests := []struct {

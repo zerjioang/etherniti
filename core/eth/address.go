@@ -10,6 +10,10 @@ import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
 
+// an ethereum address is represented as 20 bytes
+// in 1Gb (1000000000 bytes), 50.000.000 addresses can be stored
+// as individual addresses.
+// using a database or radix tree, b-tree or similar this space can be reduced
 var (
 	addressRegex = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
 	ctx          = context.Background()
@@ -24,4 +28,9 @@ func ConvertAddress(addr string) fixtures.Address {
 // check if an address is syntactically valid or not
 func IsValidAddress(addr string) bool {
 	return addressRegex.MatchString(addr)
+}
+
+// IsZeroAddress validate if it's a 0 address
+func IsZeroAddress(addr string) bool {
+	return addr == "0x0000000000000000000000000000000000000000"
 }

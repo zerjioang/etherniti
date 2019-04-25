@@ -32,7 +32,7 @@ func TestContractNameSpaceController_register(t *testing.T) {
 		ns cns.ContractNameSystem
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -59,7 +59,7 @@ func TestContractNameSpaceController_unregister(t *testing.T) {
 		ns cns.ContractNameSystem
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
@@ -86,7 +86,7 @@ func TestContractNameSpaceController_resolve(t *testing.T) {
 		ns cns.ContractNameSystem
 	}
 	type args struct {
-		c echo.Context
+		c echo.ContextInterface
 	}
 	tests := []struct {
 		name    string
