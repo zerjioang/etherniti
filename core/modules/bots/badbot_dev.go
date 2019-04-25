@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache License 2.0
 
 // +build dev pre !dev
+// +build !prod
 
 package bots
 
