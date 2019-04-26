@@ -17,8 +17,7 @@ echo "deploying proxy container"
 docker run \
         -d \
         -t \
-        -p 80:8080 \
-        -p 443:4430 \
+        --network host \
         --cpus=2 \
         --hostname apollo \
         --memory=2gb \

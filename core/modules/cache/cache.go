@@ -3,35 +3,41 @@
 
 package cache
 
-import "github.com/zerjioang/etherniti/core/logger"
+import (
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
+)
 
 var (
 	defaultCache *MemoryCache
 )
 
 func init() {
-	logger.Debug("creating shared memory cache for etherniti proxy modules")
 	defaultCache = NewMemoryCache()
 }
 
 type MemoryCache struct {
-	c map[string]interface{}
+	c concurrentmap.ConcurrentMap
 }
 
 func (cache MemoryCache) Get(key string) (interface{}, bool) {
-	logger.Debug("reading value from shared memory cache")
-	v, ok := cache.c[key]
+	logger.Debug("reading value from global memory cache")
+	v, ok := cache.c.Get(key)
 	return v, ok
 }
 
 func (cache *MemoryCache) Set(key string, value interface{}) {
-	logger.Debug("settings new value on shared memory cache")
-	cache.c[key] = value
+	logger.Debug("settings new value on global memory cache")
+	cache.c.Set(key, value)
 }
 
 func NewMemoryCache() *MemoryCache {
-	logger.Debug("creating new memory cache")
+	logger.Debug("creating new global cache")
 	m := new(MemoryCache)
-	m.c = make(map[string]interface{}, 0)
+	m.c = concurrentmap.New()
 	return m
+}
+
+func Instance() *MemoryCache {
+	return defaultCache
 }

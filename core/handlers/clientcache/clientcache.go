@@ -37,7 +37,7 @@ proxies and can only be cached by the end-client.
 The max-age value sets a timespan for how
 long to cache the resource (in seconds).
 */
-func Cached(c echo.ContextInterface, cacheValid bool, seconds uint) (int, echo.ContextInterface) {
+func Cached(c echo.ContextInterface, cacheHit bool, seconds uint) (int, echo.ContextInterface) {
 	// add cache headers
 	edit := sync.Mutex{}
 	edit.Lock()
@@ -47,11 +47,13 @@ func Cached(c echo.ContextInterface, cacheValid bool, seconds uint) (int, echo.C
 		timeStr := strconv.Itoa(int(seconds))
 		h.Set("Cache-Control", "public, max-age="+timeStr) // 24h cache = 86400
 		//h.Set("Cache-Control", "private")
-		if cacheValid {
+		if cacheHit {
 			//cached item is still valid, so return a not modified
+			h.Set("x-cache", "hit")
 			r.Status = http.StatusOK // http.StatusNotModified
 		} else {
 			// cached data set as invalid, return 200 ok in order to update
+			h.Set("x-cache", "miss")
 			r.Status = http.StatusOK
 		}
 	}
@@ -59,14 +61,14 @@ func Cached(c echo.ContextInterface, cacheValid bool, seconds uint) (int, echo.C
 	return r.Status, c
 }
 
-func CachedHtml(c echo.ContextInterface, cacheValid bool, seconds uint, htmlContent []byte) error {
+func CachedHtml(c echo.ContextInterface, cacheHit bool, seconds uint, htmlContent []byte) error {
 	var code int
-	code, c = Cached(c, cacheValid, seconds)
+	code, c = Cached(c, cacheHit, seconds)
 	return c.HTMLBlob(code, htmlContent)
 }
 
-func CachedJsonBlob(c echo.ContextInterface, cacheValid bool, seconds uint, data []byte) error {
+func CachedJsonBlob(c echo.ContextInterface, cacheHit bool, seconds uint, data []byte) error {
 	var code int
-	code, c = Cached(c, cacheValid, seconds)
+	code, c = Cached(c, cacheHit, seconds)
 	return c.JSONBlob(code, data)
 }

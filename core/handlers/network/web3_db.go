@@ -21,18 +21,6 @@ func NewWeb3DbController(network *NetworkController) Web3DbController {
 
 // BEGIN of web3 db functions
 
-/*
-
-db_putString
-
-db_getString
-
-db_putHex
-
-db_getHex
-
-*/
-
 // dbPutString calls db protocol db_putString json-rpc call
 func (ctl *Web3DbController) dbPutString(c echo.ContextInterface) error {
 	return errNotImplemented

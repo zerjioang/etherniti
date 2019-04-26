@@ -4,7 +4,6 @@
 package eth
 
 import (
-	"context"
 	"regexp"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
@@ -16,7 +15,6 @@ import (
 // using a database or radix tree, b-tree or similar this space can be reduced
 var (
 	addressRegex = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
-	ctx          = context.Background()
 )
 
 // converts an string ethereum address to eth address

@@ -9,20 +9,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMemoryCache_Get(t *testing.T) {
-	c := NewMemoryCache()
-	c.Set("foo", "bar")
-	v, ok := c.Get("foo")
-	assert.Equal(t, v, "bar")
-	assert.True(t, ok)
-}
-
-func TestMemoryCache_Set(t *testing.T) {
-	c := NewMemoryCache()
-	c.Set("foo", "bar")
-}
-
-func TestNewMemoryCache(t *testing.T) {
-	c := NewMemoryCache()
-	assert.NotNil(t, c)
+func TestMemoryCache(t *testing.T) {
+	t.Run("instantiate", func(t *testing.T) {
+		c := NewMemoryCache()
+		assert.NotNil(t, c)
+	})
+	t.Run("get", func(t *testing.T) {
+		c := NewMemoryCache()
+		c.Set("foo", "bar")
+		v, ok := c.Get("foo")
+		assert.Equal(t, v, "bar")
+		assert.True(t, ok)
+	})
+	t.Run("set", func(t *testing.T) {
+		c := NewMemoryCache()
+		c.Set("foo", "bar")
+	})
 }

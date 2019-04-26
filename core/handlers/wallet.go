@@ -6,12 +6,9 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
-	"net/http"
 	"strconv"
 
 	"github.com/zerjioang/etherniti/shared/constants"
-
-	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
@@ -188,7 +185,7 @@ func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 	if err != nil {
 		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
-		return c.JSONBlob(http.StatusInternalServerError, errors.AccountKeyGenErrBytes)
+		return api.ErrorStr(c, "failed to generate ecdsa private key")
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
@@ -196,32 +193,23 @@ func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 		"address": address.Hex(),
 		"private": privateKey,
 	}
-	return c.JSONBlob(
-		http.StatusOK,
-		str.GetJsonBytes(
-			protocol.NewApiResponse("ethereum account created", response),
-		),
-	)
+	return api.SendSuccess(c, "ethereum account created", response)
 }
 
 // check if an ethereum address is valid
 func (ctl WalletController) isValidAddress(c echo.ContextInterface) error {
 	//since this method checks address as string, cache always
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheInfinite) // 24h cache directive
+	_, c = clientcache.Cached(c, true, clientcache.CacheInfinite) // 24h cache directive
 
 	//read user entered address
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
-		return c.JSONBlob(code, str.GetJsonBytes(
-			protocol.NewApiResponse("address validation checked", result),
-		),
-		)
+		return api.SendSuccess(c, "address validation checked", result)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+	return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
 }
 
 // implemented method from interface RouterRegistrable
