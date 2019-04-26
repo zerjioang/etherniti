@@ -104,25 +104,28 @@ WORKDIR /home/${USER}
 COPY ./scripts/docker/hardening.sh hardening.sh
 
 # create user $USER
-RUN adduser -S ${USER} && \
-    addgroup -S appgroup && \
+RUN addgroup -S appgroup && \
+    adduser -S ${USER} -G appgroup && \
     mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/testdata && \
-    chmod +x hardening.sh && \
-    ./hardening.sh && \
-    rm hardening.sh && \
-    ls -alh
+    mkdir -p $HOME/.etherniti && chmod +rwx -R $HOME && \
+    chmod +x hardening.sh && ./hardening.sh && rm hardening.sh
+
+EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
 # copy proxy resource files
 
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root        ${GOPATH}/${BASE}/root
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/internal    ${GOPATH}/${BASE}/internal
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger     ${GOPATH}/${BASE}/swagger
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/landing     ${GOPATH}/${BASE}/landing
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root            ${GOPATH}/${BASE}/root
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/internal        ${GOPATH}/${BASE}/internal
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger         ${GOPATH}/${BASE}/swagger
+COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/landing         ${GOPATH}/${BASE}/landing
 
-COPY --from=compiler /go/src/github.com/zerjioang/etherniti/${EXEC}     ${EXEC}
-COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                 /etc/ssl/certs/ca-certificates.crt
+COPY --from=compiler --chown=etherniti:appgroup /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
+COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
+
+RUN chown -R etherniti:appgroup * && \
+    ls -alh
 
 # change to non root user for execution
 USER ${USER}

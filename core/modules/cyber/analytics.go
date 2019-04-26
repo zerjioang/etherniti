@@ -17,7 +17,7 @@ func init(){
 	var err error
 	collection, err = db.NewCollection("access")
 	if err != nil {
-		logger.Error("failed to initialize analytics db collection: ", err)
+		logger.Error("failed to initialize access analytics db collection: ", err)
 	}
 }
 // check if http request host value is allowed or not
