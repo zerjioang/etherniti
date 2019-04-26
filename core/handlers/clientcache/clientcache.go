@@ -50,7 +50,7 @@ func Cached(c echo.ContextInterface, cacheHit bool, seconds uint) (int, echo.Con
 		if cacheHit {
 			//cached item is still valid, so return a not modified
 			h.Set("x-cache", "hit")
-			r.Status = http.StatusNotModified
+			r.Status = http.StatusOK // http.StatusNotModified
 		} else {
 			// cached data set as invalid, return 200 ok in order to update
 			h.Set("x-cache", "miss")
