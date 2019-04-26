@@ -29,7 +29,7 @@ type NetworkController struct {
 // constructor like function
 func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
-	ctl.cache = cache.Instance()
+	ctl.cache = cache.NewMemoryCache()
 	return ctl
 }
 

@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-	defaultCache = newMemoryCache()
+	defaultCache = NewMemoryCache()
 }
 
 type MemoryCache struct {
@@ -31,7 +31,7 @@ func (cache *MemoryCache) Set(key string, value interface{}) {
 	cache.c.Set(key, value)
 }
 
-func newMemoryCache() *MemoryCache {
+func NewMemoryCache() *MemoryCache {
 	logger.Debug("creating new global cache")
 	m := new(MemoryCache)
 	m.c = concurrentmap.New()
