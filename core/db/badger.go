@@ -13,6 +13,7 @@ import (
 var (
 	defaultConfig = badger.DefaultOptions
 	home = os.Getenv("HOME")
+	baseData = home+"/.etherniti/"
 	duplicateKeyErr = errors.New("duplicate key found on database. cannot store")
 )
 
@@ -24,9 +25,24 @@ var instance *Db
 var once sync.Once
 
 func init(){
-	defaultConfig.Dir = home+"/.etherniti/data"
-	defaultConfig.ValueDir = home + "/.etherniti/data"
+	createData(baseData+ "data")
+}
+
+func createData(path string) {
+	defaultConfig.Dir = path
+	defaultConfig.ValueDir = path
 	os.MkdirAll(defaultConfig.Dir, os.ModePerm)
+}
+
+func NewCollection(name string) (*Db, error) {
+	collection := new(Db)
+	createData(baseData + name)
+	var err error
+	collection.instance, err = badger.Open(defaultConfig)
+	if err != nil {
+		return nil, err
+	}
+	return collection, nil
 }
 
 func (db *Db) Init() error {
@@ -78,6 +94,9 @@ func (db *Db) GetKeyValue(key []byte) ([]byte, error){
 		return err
 	})
 	return readedVal, err
+}
+func (db *Db) Add(key, data []byte) error {
+	return db.PutKeyValue(key, data)
 }
 
 func GetInstance() *Db {

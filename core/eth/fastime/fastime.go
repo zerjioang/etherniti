@@ -3,7 +3,10 @@
 
 package fastime
 
-import "time"
+import (
+	"encoding/binary"
+	"time"
+)
 
 type Duration int64
 
@@ -28,6 +31,17 @@ type FastTime struct {
 func (fastTime FastTime) Unix() int64 {
 	return fastTime.sec
 }
+
+func (fastTime FastTime) Nanos() uint32 {
+	return fastTime.nsec
+}
+
+func (fastTime FastTime) NanosByte() []byte {
+	buf := make([]byte, binary.MaxVarintLen64)
+	n := binary.PutVarint(buf, fastTime.sec)
+	return buf[:n]
+}
+
 func (fastTime FastTime) Add(duration Duration) FastTime {
 	ns := duration.Nanoseconds()
 	fastTime.nsec += uint32(ns)

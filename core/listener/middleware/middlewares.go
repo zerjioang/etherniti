@@ -5,6 +5,7 @@ package middleware
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/modules/cyber"
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/modules/bots"
@@ -261,6 +262,8 @@ func ConfigureServerRoutes(e *echo.Echo) {
 			logger.Info("[LAYER] rest api rate limit middleware added")
 			e.Use(ratelimit.RateLimit)
 		}
+
+		e.Use(cyber.Analytics)
 	}
 
 	// Request ID middleware generates a unique id for a request.
