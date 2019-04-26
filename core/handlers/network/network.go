@@ -5,12 +5,12 @@ package network
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/modules/cache"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/cache"
 	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -29,8 +29,7 @@ type NetworkController struct {
 // constructor like function
 func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
-	ctl.cache = cache.NewMemoryCache()
-	ctl.networkName = ""
+	ctl.cache = cache.Instance()
 	return ctl
 }
 

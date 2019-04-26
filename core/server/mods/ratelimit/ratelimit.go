@@ -52,7 +52,7 @@ type RateLimitEngine struct {
 // constructor like function
 func NewRateLimitEngine() RateLimitEngine {
 	rle := RateLimitEngine{}
-	rle.rateCache = cache.NewMemoryCache()
+	rle.rateCache = cache.Instance()
 	return rle
 }
 

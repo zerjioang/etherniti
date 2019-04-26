@@ -12,7 +12,6 @@ import (
 	"github.com/zerjioang/etherniti/core/eth"
 
 	"github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/core/handlers/errors"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -93,7 +92,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 		}
 	} else {
 		// send invalid address message
-		return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+		return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
 	}
 }
 
@@ -116,7 +115,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 		return api.SendSuccess(c, "balance_at_block", result)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+	return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
 }
 
 // get node information
@@ -325,7 +324,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.ContextInterface) error {
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+	return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
 }
 
 // Start ERC20 functions
@@ -668,7 +667,7 @@ func (ctl *Web3Controller) getTransactionByHash(c echo.ContextInterface) error {
 		return api.SendSuccess(c, "transaction_receipt", result)
 	}
 	// send invalid address message
-	return c.JSONBlob(http.StatusBadRequest, errors.InvalidAddressBytes)
+	return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
 }
 
 // implemented method from interface RouterRegistrable

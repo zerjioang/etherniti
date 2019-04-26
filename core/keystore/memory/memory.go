@@ -40,6 +40,6 @@ func NewInMemoryKeyStorage() *InMemoryKeyStorage {
 	s := new(InMemoryKeyStorage)
 	// Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
-	s.cache = cache.NewMemoryCache()
+	s.cache = cache.Instance()
 	return s
 }
