@@ -108,7 +108,7 @@ var (
 		"0.0.0.0",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
-		"dev-proxy.etherniti.org",
+		"dev.proxy.etherniti.org",
 	}
 )
 

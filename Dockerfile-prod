@@ -124,7 +124,7 @@ COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/eth
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
-RUN cd $HOME/etherniti && chown -R etherniti:appgroup * && \
+RUN cd $HOME && chown -R etherniti:appgroup * && \
     ls -alh
 
 # change to non root user for execution

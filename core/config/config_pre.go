@@ -73,7 +73,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 	//for pre-stage deployment
 	HttpListenInterface = "0.0.0.0"
 	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress      = "dev-proxy.etherniti.org"
+	SwaggerAddress      = "dev.proxy.etherniti.org"
 
 	//connection profile params
 	TokenExpiration = 10 * fastime.Minute
@@ -103,7 +103,7 @@ var (
 		"0.0.0.0",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
-		"dev-proxy.etherniti.org",
+		"dev.proxy.etherniti.org",
 	}
 )
 
@@ -137,7 +137,7 @@ func SetDefaults(data *EnvConfig) {
 	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
 	env["X_ETHERNITI_LISTENING_INTERFACE"] = "0.0.0.0"
 	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
-	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "dev-proxy.etherniti.org"
+	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "dev.proxy.etherniti.org"
 
 	//connection profile params
 	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 10 * fastime.Minute

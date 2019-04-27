@@ -1,0 +1,58 @@
+echo "configuring arm server"
+apt install sudo -y
+
+echo "creating non root user"
+username="eth"
+adduser --gecos "" ${username} 
+usermod -aG sudo ${username}
+
+https://linux-audit.com/audit-and-harden-your-ssh-configuration/
+vi /etc/ssh/sshd_config
+Port 22 5900
+sshd -t
+service sshd restart
+
+echo "max ram user processes"
+ps --sort -rss -eo pid,pmem,rss,vsz,comm
+ps --sort -rss -eo pid,pmem,rss,vsz,comm | head -16
+
+cat /etc/systemd/journald.conf
+SystemMaxUse=50M
+....
+SystemMaxFileSize=10M
+
+echo "analzing systems logs for hacking attempts"
+journalctl -af
+journalctl -afb -p info -n1 -o cat SYSLOG_FACILITY=4 SYSLOG_FACILITY=10
+
+
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get update && sudo apt-get upgrade -y
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+
+echo "adding ssh key for current user"
+
+mkdir -p "/$USER/.ssh/"
+touch "/$USER/.ssh/instance_keys"
+
+echo "#
+# WARNING: Automatically generated file
+# This file will be erased at every boot
+# This file was generated with '/usr/local/sbin/scw-fetch-ssh-keys'
+#
+# To add a new key, you can:
+#   -- Add keys on your Scaleway account https://cloud.scaleway.com/#/credentials
+#   -- Add keys using server tags - https://cloud.scaleway.com/#/servers/e3a5c199-e022-426f-be1d-0f8e10f180bc
+#        - i.e: "AUTHORIZED_KEY=ssh-rsa_XXXXXXXXXXX AUTHORIZED_KEY=ssh-rsa_YYYYYYYYYYYYYYY"
+#        - Be sure to replace all spaces with underscores
+#        - $> sed 's/ /_/g' ~/.ssh/id_rsa.pub
+#   -- Add the keys to '/root/.ssh/instance_keys' which will be imported
+#
+# And recreate your 'authorized_keys' file with the new keys:
+#   -- Run 'scw-fetch-ssh-keys --upgrade'
+#
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCrlJlR/V+M60UXD7ZI/VL7xdkQpfdQuUw3xKMBg48KwOizHNMHumGE9bT7AxViDVdQT80WSS1mfCEBa/EY+GSKmdZY5m1ESwRgPgja0XS5SeimG6+8GemRLOW4SwOGZeP2HGjHN3Z9wT6sh7OjEjAsM47DY5dXvxugeA3lUsloBMKSJG3VVTPJ3uqHsmHEToYCIGFFOlkIllSHyB+g2pmhrTdo3ku1QMfFCO4hm5DERdGMIVp30+kQ+Yqflp2fJxCm4ABsstRbjuQZZJGUp5xjv2qSkkF0Ldz9ctCqWJle74OO9TlAF+y5WITZEhj4dWKm7PXgt6mGHixXAGnTqwcOJjC14t2fp7FylSF98GXFLouTNIH80LZh4Hve9IyXi26JLtC27Wsm0W1XfMAyIVvufjjDGRD1/xe6WBg8aJcokaHsO1XTextHyI2RPLaYcG3Jo9sTriTycBiJObFsPSyctllUoOiWEYmbyTwK7cuKZJdDJn9U9Od+7tTziYTefRicaQT9wbI5yynLNRxuWHZyO+4UkqIii/NC/mSeHPhVQCV2reaQx9JXFmAVpG22yKUw3EJemAjC7yUv4XcQYcZnAOLSdGPr0J4grYzXlhdZlcJdosoLvvRzG8z/hXMZGlfg5tM9Lye39e214YY3ZuFR/eTbHi1nWyTKvDynBZHkCQ== core@etherniti.org
+# Below your custom ssh keys from '/root/.ssh/instance_keys'" > "/$USER/.ssh/instance_keys"

@@ -1,0 +1,5 @@
+Host proxy
+  User root
+  Port 5900
+  HostName proxy.etherniti.org
+  ServerAliveInterval 240

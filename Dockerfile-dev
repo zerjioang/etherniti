@@ -31,7 +31,6 @@ RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password
     rm -rf .git && \
     chmod +x ${FILE} && \
     chown ${USER} ${FILE} && \
-    upx -9 -v $FILE && \
     ls -alh
 
 FROM ethereum/solc:stable as solcompiler
@@ -114,7 +113,10 @@ COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/eth
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 
-RUN cd $HOME/etherniti && chown -R etherniti:appgroup * && \
+RUN pwd && \
+    ls -alh && \
+    cd $HOME && \
+    chown -R etherniti:appgroup . && \
     ls -alh
 
 # change to non root user for execution
