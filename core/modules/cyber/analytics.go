@@ -23,27 +23,29 @@ func init(){
 // check if http request host value is allowed or not
 func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
-		// save request analytics data:
-		// time
-		// ip
-		// host
-		// method
-		// referer
-		// uri
-		// ua
-		n := fastime.Now()
-		r := c.Request()
-		var record = map[string]string{
-			"time":   strconv.Itoa(int(n.Unix())),
-			"ip":     c.RealIP(),
-			"host":   r.Host,
-			"method": r.Method,
-			"ref":    r.Referer(),
-			"remote": r.RemoteAddr,
-			"ua":    r.UserAgent(),
-			"uri":    r.URL.RequestURI(),
+		if collection != nil {
+			// save request analytics data:
+			// time
+			// ip
+			// host
+			// method
+			// referer
+			// uri
+			// ua
+			n := fastime.Now()
+			r := c.Request()
+			var record = map[string]string{
+				"time":   strconv.Itoa(int(n.Unix())),
+				"ip":     c.RealIP(),
+				"host":   r.Host,
+				"method": r.Method,
+				"ref":    r.Referer(),
+				"remote": r.RemoteAddr,
+				"ua":    r.UserAgent(),
+				"uri":    r.URL.RequestURI(),
+			}
+			collection.PutKeyValue(n.NanosByte(), str.GetJsonBytes(record))
 		}
-		collection.PutKeyValue(n.NanosByte(), str.GetJsonBytes(record))
 		// fordward request to next middleware
 		return next(c)
 	}

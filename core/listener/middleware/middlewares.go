@@ -5,10 +5,9 @@ package middleware
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/modules/bots"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
 	"strings"
-
-	"github.com/zerjioang/etherniti/core/modules/bots"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
@@ -126,8 +125,9 @@ func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 // check if user agent string contains bot strings similarities
+// it also needs to be more than 4 chars (curl, wget, etc)
 func isBotRequest(userAgent string) bool {
-	return bots.GetBadBotsList().MatchAny(userAgent)
+	return len(userAgent) > 4 && bots.GetBadBotsList().MatchAny(userAgent)
 }
 
 // check if http request host value is allowed or not
