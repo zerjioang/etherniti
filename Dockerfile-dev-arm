@@ -40,7 +40,7 @@ FROM armhf/alpine:3.5
 # FROM containerstack/alpine:3.7.0
 
 ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
-ARG USER=etherniti
+ARG USER=root
 ARG EXEC=proxy
 ARG BASE=src/github.com/zerjioang/etherniti/testdata
 

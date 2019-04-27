@@ -83,7 +83,8 @@ func hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		h.Set("strict-transport-security", "max-age=63072000; includeSubDomains; preload ") //2 years
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' *.etherniti.org; font-src fonts.googleapis.com fonts.gstatic.com; report-uri http://reportcollector.example.com/collector.cgi")
+		// report-uri http://reportcollector.example.com/collector.cgi
+		h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.etherniti.org cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com")
 		h.Set("Expect-CT", "enforce, max-age=30")
 		h.Set("X-UA-Compatible", "IE=Edge,chrome=1")
 		h.Set("x-frame-options", "SAMEORIGIN")
