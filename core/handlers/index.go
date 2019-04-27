@@ -66,6 +66,8 @@ var (
 			// Pools often contain things like *bytes.Buffer, which are
 			// temporary and re-usable.
 			wrapper := protocol.ServerStatusResponse{}
+			wrapper.Architecture = runtime.GOARCH
+			wrapper.Os = runtime.GOOS
 			wrapper.Runtime.Compiler = runtime.Compiler
 
 			wrapper.Version.Etherniti = constants.Version

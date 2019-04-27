@@ -9,6 +9,8 @@ import (
 )
 
 type ServerStatusResponse struct {
+	Architecture string `json:"arch"`
+	Os string `json:"os"`
 	Cpus    Cpus    `json:"cpus"`
 	Runtime Runtime `json:"runtime"`
 	Version Version `json:"version"`
