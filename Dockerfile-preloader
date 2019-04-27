@@ -13,6 +13,19 @@ LABEL PROJECT etherniti
 # install pre-reqs
 RUN echo "Installing dependencies..." && \
     apt-get update && \
-    apt-get install -y musl ca-certificates upx musl git curl && \
+    apt-get install -y musl \
+    	ca-certificates \
+        file \
+    	upx \
+    	musl \
+    	git \
+    	curl \
+		gcc \
+		make \
+		libc6-armel-cross \
+		libc6-dev-armel-cross \
+		binutils-arm-linux-gnueabi \
+		libncurses5-dev \
+		gccgo-arm-linux-gnueabi && \
     echo "installing dep..." && \
     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh

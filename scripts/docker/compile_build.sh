@@ -61,6 +61,9 @@ ETHERNITI_GOGCCFLAGS:       $ETHERNITI_GOGCCFLAGS
 ETHERNITI_CGO_ENABLED:      $ETHERNITI_CGO_ENABLED
 "
 
+# core=$(uname -m)
+# armv7l is 32 bit processor.
+
 # Disabling CGO also removes the need for the cross-compile dependencies
 # forced a rebuild with -a
 # netgo to make sure we use built-in net package and not the system’s one
@@ -88,42 +91,57 @@ function compile(){
         echo "no compilation filename found. setting default to: etherniti"
         outputname="etherniti"
     fi
-    if [[ "$ETHERNITI_GOARCH" = "arm" ]]; then
+    if [[ "$ETHERNITI_GOARCH" = "arm" || "$ETHERNITI_GOARCH" = "arm64" ]]; then
         echo "compiling for arm..."
-        ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-7
+        #ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-7
+        ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabi-gcc-6
         # compile for arm-v7
-        sudo apt-get install gcc \
-        make \
-        libc6-armel-cross \
-        libc6-dev-armel-cross \
-        binutils-arm-linux-gnueabi \
-        libncurses5-dev \
-        gccgo-7-arm-linux-gnueabihf \
-        gcc-arm-linux-gnueabi
         # trigger the compilation
-        GOARCH=arm \
-        GOARM=7 \
+        env CGO_ENABLED=${ETHERNITI_CGO_ENABLED} \
+        CC=${ETHERNITI_COMPILER} \
+        GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
+        GOOS=${ETHERNITI_GOOS} \
+        GOARCH=${ETHERNITI_GOARCH} \
         go build \
+            -tags ${BUILD_MODE} \
+            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags '-static'" \
             -o $outputname
+        ls -alh && file $outputname
+        # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
     else
         echo "compiling for $ETHERNITI_GOARCH..."
         if [[ "$BUILD_MODE" = "dev" ]]; then
             echo "compiling dev-stage version..."
             echo "Using commit hash '$hash' for current build"
+            env CGO_ENABLED=${ETHERNITI_CGO_ENABLED} \
+            CC=${ETHERNITI_COMPILER} \
+            GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags dev \
-                -ldflags "-X 'main.Build=$hash'" \
+                -tags ${BUILD_MODE} \
+                -ldflags "-s -w -X 'main.Build=$hash'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
             echo "Using commit hash '$hash' for current build"
+            env CGO_ENABLED=${ETHERNITI_CGO_ENABLED} \
+            CC=${ETHERNITI_COMPILER} \
+            GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags pre \
-                -ldflags "-X 'main.Build=$hash'" \
+                -tags ${BUILD_MODE} \
+                -ldflags "-s -w -X 'main.Build=$hash'" \
                 -o $outputname
         else
             echo "compiling production version..."
             echo "Using commit hash '$hash' for current build"
+            env CGO_ENABLED=${ETHERNITI_CGO_ENABLED} \
+            CC=${ETHERNITI_COMPILER} \
+            GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
+            GOOS=${ETHERNITI_GOOS} \
+            GOARCH=${ETHERNITI_GOARCH} \
             go build \
             -a \
             -tags 'netgo prod' \

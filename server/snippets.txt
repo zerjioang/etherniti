@@ -6,11 +6,17 @@ username="eth"
 adduser --gecos "" ${username} 
 usermod -aG sudo ${username}
 
-https://linux-audit.com/audit-and-harden-your-ssh-configuration/
+# https://linux-audit.com/audit-and-harden-your-ssh-configuration/
+# https://medium.com/@jasonrigden/hardening-ssh-1bcb99cd4cef
+
 vi /etc/ssh/sshd_config
 Port 22 5900
 sshd -t
+sshd -T
 service sshd restart
+
+echo "checking for active ssh connections"
+ss | grep ssh
 
 echo "max ram user processes"
 ps --sort -rss -eo pid,pmem,rss,vsz,comm

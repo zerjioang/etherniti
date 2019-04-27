@@ -1,5 +1,7 @@
 Host proxy
-  User root
+  User eth
   Port 5900
-  HostName proxy.etherniti.org
+  Hostname 51.15.136.122
+  # HostName proxy.etherniti.org
   ServerAliveInterval 240
+  IdentityFile ~/.ssh/core-etherniti.org_id_rsa

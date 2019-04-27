@@ -28,19 +28,26 @@ func init(){
 	createData(baseData+ "data")
 }
 
-func createData(path string) {
+func createData(path string) error {
 	defaultConfig.Dir = path
 	defaultConfig.ValueDir = path
-	os.MkdirAll(defaultConfig.Dir, os.ModePerm)
+	err := os.MkdirAll(defaultConfig.Dir, os.ModePerm)
+	if err != nil {
+		logger.Error("failed to create database dir:", err)
+	}
+	return err
 }
 
 func NewCollection(name string) (*Db, error) {
 	collection := new(Db)
-	createData(baseData + name)
-	var err error
-	collection.instance, err = badger.Open(defaultConfig)
+	err := createData(baseData + name)
 	if err != nil {
 		return nil, err
+	}
+	var openErr error
+	collection.instance, openErr = badger.Open(defaultConfig)
+	if err != nil {
+		return nil, openErr
 	}
 	return collection, nil
 }

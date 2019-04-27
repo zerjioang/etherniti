@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 
-// +build !wasm !js
-
 // Package secp256k1 wraps the bitcoin secp256k1 C library.
 package secp256k1
 
@@ -77,7 +75,7 @@ func Sign(msg []byte, seckey []byte) ([]byte, error) {
 	return sig, nil
 }
 
-// RecoverPubkey returns the public key of the signer.
+// RecoverPubkey returns the the public key of the signer.
 // msg must be the 32-byte hash of the message to be signed.
 // sig must be a 65-byte compact ECDSA signature containing the
 // recovery id as the last element.

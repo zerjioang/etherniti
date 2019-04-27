@@ -30,8 +30,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// +build !wasm !js
-
 package secp256k1
 
 import (
@@ -82,9 +80,9 @@ func readBits(bigint *big.Int, buf []byte) {
 // See http://www.hyperelliptic.org/EFD/g1p/auto-shortw.html
 type BitCurve struct {
 	P       *big.Int // the order of the underlying field
-	N       *big.Int // the order of the common point
+	N       *big.Int // the order of the base point
 	B       *big.Int // the constant of the BitCurve equation
-	Gx, Gy  *big.Int // (x,y) of the common point
+	Gx, Gy  *big.Int // (x,y) of the base point
 	BitSize int      // the size of the underlying field
 }
 
@@ -275,7 +273,7 @@ func (BitCurve *BitCurve) ScalarMult(Bx, By *big.Int, scalar []byte) (*big.Int, 
 	return x, y
 }
 
-// ScalarBaseMult returns k*G, where G is the common point of the group and k is
+// ScalarBaseMult returns k*G, where G is the base point of the group and k is
 // an integer in big-endian form.
 func (BitCurve *BitCurve) ScalarBaseMult(k []byte) (*big.Int, *big.Int) {
 	return BitCurve.ScalarMult(BitCurve.Gx, BitCurve.Gy, k)
@@ -312,7 +310,7 @@ var theCurve = new(BitCurve)
 func init() {
 	// See SEC 2 section 2.7.1
 	// curve parameters taken from:
-	// http://www.secg.org/sec2-v2.pdf
+	// http://www.secg.org/collateral/sec2_final.pdf
 	theCurve.P, _ = new(big.Int).SetString("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F", 0)
 	theCurve.N, _ = new(big.Int).SetString("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 0)
 	theCurve.B, _ = new(big.Int).SetString("0x0000000000000000000000000000000000000000000000000000000000000007", 0)
