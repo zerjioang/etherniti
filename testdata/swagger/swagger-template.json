@@ -157,27 +157,37 @@
             "description": "proxy internal metrics collection",
             "schema": {
               "example": {
-                "alloc": 1843848,
-                "cpus": 2,
-                "disk": {
-                  "all": 45.61288070678711,
-                  "free": 43.18564224243164,
-                  "used": 2.4272384643554688
+                "system": {
+                  "os": "linux",
+                  "arch": "amd64"
                 },
-                "frees": 3364,
-                "heapalloc": 1843848,
-                "mallocs": 6574,
-                "numForcedGC": 0,
-                "numgc": 3,
+                "cpus": {
+                  "cores": 4
+                },
                 "runtime": {
-                  "compiler": "gc",
-                  "version": "go1.11.5"
+                  "compiler": "gc"
                 },
-                "sys": 71760120,
-                "total": 8893712,
                 "version": {
                   "etherniti": "0.0.1",
-                  "http": "3.3.10-dev"
+                  "http": "4.0.0",
+                  "go": "go1.11.4"
+                },
+                "disk": {
+                  "all": 147,
+                  "used": 133,
+                  "free": 14
+                },
+                "memory": {
+                  "frees": 45976,
+                  "heapalloc": 94896448,
+                  "alloc": 94896448,
+                  "total": 98310760,
+                  "sys": 210827512,
+                  "mallocs": 143339
+                },
+                "gc": {
+                  "numgc": 4,
+                  "numForcedGC": 0
                 }
               }
             }

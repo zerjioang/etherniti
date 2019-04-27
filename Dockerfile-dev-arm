@@ -44,9 +44,9 @@ ARG USER=root
 ARG EXEC=proxy
 ARG BASE=src/github.com/zerjioang/etherniti/testdata
 
-ENV GOPATH=/home/${USER}/go
-ENV PATH="/home/${USER}:${PATH}"
-WORKDIR /home/${USER}
+ENV GOPATH=/${USER}/go
+ENV PATH="/${USER}:${PATH}"
+WORKDIR /${USER}
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 

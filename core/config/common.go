@@ -80,3 +80,7 @@ func ServiceListeningMode() listener.ServiceType {
 		return listener.UnknownMode
 	}
 }
+
+func IsDevelopment() bool {
+	return EnvironmentName == "development"
+}

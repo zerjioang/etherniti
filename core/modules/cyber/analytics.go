@@ -1,6 +1,7 @@
 package cyber
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -23,7 +24,7 @@ func init(){
 // check if http request host value is allowed or not
 func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
-		if collection != nil {
+		if !config.IsDevelopment() && collection != nil {
 			// save request analytics data:
 			// time
 			// ip

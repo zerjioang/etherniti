@@ -104,7 +104,7 @@ function compile(){
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
             -tags ${BUILD_MODE} \
-            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags '-static'" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
@@ -145,7 +145,7 @@ function compile(){
             go build \
             -a \
             -tags 'netgo prod' \
-            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags '-static'" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags -static" \
             -o $outputname && \
             ls -alh
         fi

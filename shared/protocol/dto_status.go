@@ -48,7 +48,12 @@ type Gc struct {
 }
 
 func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {
-	buffer.WriteString(`{"cpus":{"cores":`)
+	buffer.WriteString(`{"system":{"os":"`)
+	buffer.WriteString(r.Os)
+	buffer.WriteString(`","arch":"`)
+	buffer.WriteString(r.Architecture)
+	buffer.WriteString(`"},`)
+	buffer.WriteString(`"cpus":{"cores":`)
 	buffer.WriteString(itoa(r.Cpus.Cores))
 	buffer.WriteString(`},"runtime":{"compiler":"`)
 	buffer.WriteString(r.Runtime.Compiler)
