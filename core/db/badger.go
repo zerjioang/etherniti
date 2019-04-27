@@ -7,6 +7,7 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"golang.org/x/crypto/bcrypt"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -23,6 +24,8 @@ type Db struct {
 
 var instance *Db
 var once sync.Once
+var uid = os.Getuid()
+var gid = os.Getgid()
 
 func init(){
 	createData(baseData+ "data")
@@ -31,9 +34,17 @@ func init(){
 func createData(path string) error {
 	defaultConfig.Dir = path
 	defaultConfig.ValueDir = path
-	err := os.MkdirAll(defaultConfig.Dir, os.ModePerm)
+	logger.Debug("creating dir: ", path)
+	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
 		logger.Error("failed to create database dir:", err)
+	} else {
+		logger.Debug("setting dir permissions and ownership: ", path)
+		permErr := chownR(path, uid, gid, os.ModePerm)
+		if permErr != nil {
+			logger.Error("failed to set permissions: ", permErr)
+		}
+		return permErr
 	}
 	return err
 }
@@ -150,4 +161,14 @@ func Serialize(item interface{}) []byte{
 
 func Unserialize(data []byte, item interface{}) error {
 	return json.Unmarshal(data, item)
+}
+
+func chownR(path string, uid, gid int, mode os.FileMode) error {
+	return filepath.Walk(path, func(name string, info os.FileInfo, err error) error {
+		if err == nil {
+			err = os.Chown(name, uid, gid)
+			err = os.Chmod(name, mode)
+		}
+		return err
+	})
 }
