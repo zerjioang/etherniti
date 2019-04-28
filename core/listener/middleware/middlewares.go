@@ -7,15 +7,16 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/modules/bots"
+	"github.com/zerjioang/etherniti/core/modules/badips"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
+	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 
+	"github.com/zerjioang/etherniti/core/modules/bots"
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/handlers"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
 	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
@@ -28,8 +29,8 @@ import (
 )
 
 var (
-	userAgentErr = errors.New("not authorized. security policy not satisfied")
-	corsConfig   = middleware.CORSConfig{
+	securityErr = errors.New("not authorized. security policy not satisfied")
+	corsConfig  = middleware.CORSConfig{
 		AllowOrigins: config.AllowedCorsOriginList,
 		AllowHeaders: []string{
 			echo.HeaderOrigin,
@@ -109,6 +110,24 @@ func fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// ip blacklist function
+func badIps(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.ContextInterface) error {
+		// add antibots policy
+		ip := c.RealIP()
+		if ip == "" {
+			//drop the request
+			logger.Warn("drop request: no IP provided")
+			return securityErr
+		} else if badips.IsBackListedIp(ip) {
+			//drop the request
+			logger.Warn("drop request: blacklisted IP detected", ip)
+			return securityErr
+		}
+		return next(c)
+	}
+}
+
 // bots blacklist function.
 func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
@@ -118,11 +137,11 @@ func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
 		if ua == "" {
 			//drop the request
 			logger.Warn("drop request: no user-agent provided")
-			return userAgentErr
+			return securityErr
 		} else if isBotRequest(ua) {
 			//drop the request
 			logger.Warn("drop request: provided user-agent is considered as a bot: ", ua)
-			return userAgentErr
+			return securityErr
 		}
 		return next(c)
 	}
@@ -158,7 +177,8 @@ func hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(c)
 		} else {
 			// drop the request
-			return nil
+			logger.Warn("drop request: provided request does not specifies a valid host name in http headers")
+			return securityErr
 		}
 	}
 }
@@ -234,6 +254,10 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		logger.Info("[LAYER] antibots")
 		e.Pre(antiBots)
 
+		// bad ip blacklist filter
+		logger.Info("[LAYER] bad IPs")
+		e.Pre(badIps)
+
 		// avoid bots and crawlers checking origin host value
 		logger.Info("[LAYER] hostname check")
 		e.Pre(hostnameCheck)
@@ -252,7 +276,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		// add fake server header
 		e.Use(fakeServer)
 
-		//add keep alive policty
+		//add keep alive policy
 		e.Use(keepalive)
 
 		if config.BlockTorConnections {
@@ -260,15 +284,15 @@ func ConfigureServerRoutes(e *echo.Echo) {
 			logger.Info("[LAYER] tor connections blocker middleware added")
 			e.Use(tor.BlockTorConnections)
 		}
-
-		if config.EnableRateLimit {
-			// add rate limit control
-			logger.Info("[LAYER] rest api rate limit middleware added")
-			e.Use(ratelimit.RateLimit)
-		}
-
-		e.Use(cyber.Analytics)
 	}
+
+	if config.EnableRateLimit {
+		// add rate limit control
+		logger.Info("[LAYER] rest api rate limit middleware added")
+		e.Use(ratelimit.RateLimit)
+	}
+
+	e.Use(cyber.Analytics)
 
 	// Request ID middleware generates a unique id for a request.
 	if config.UseUniqueRequestId {

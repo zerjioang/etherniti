@@ -100,6 +100,7 @@ var (
 		"127.0.0.1",
 		"api.etherniti.org",
 		"proxy.etherniti.org",
+		"cloud.etherniti.org",
 	}
 	//allowed hostnames
 	AllowedHostnames = []string{
@@ -109,6 +110,7 @@ var (
 		"api.etherniti.org",
 		"proxy.etherniti.org",
 		"dev.proxy.etherniti.org",
+		"cloud.etherniti.org",
 	}
 )
 

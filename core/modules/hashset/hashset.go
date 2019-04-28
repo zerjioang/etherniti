@@ -9,6 +9,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
@@ -89,6 +91,20 @@ func (set *HashSet) LoadFromJsonArray(path string) {
 		} else {
 			set.LoadFromArray(itemList)
 		}
+	}
+}
+
+func (set *HashSet) LoadFromRaw(path string, splitChar string) {
+	if path != "" {
+		logger.Debug("loading hashset with data")
+		data, err := ioutil.ReadFile(path)
+		if err != nil {
+			logger.Error("could not read source data")
+			return
+		}
+		var itemList []string
+		itemList = strings.Split(str.UnsafeString(data), splitChar)
+		set.LoadFromArray(itemList)
 	}
 }
 

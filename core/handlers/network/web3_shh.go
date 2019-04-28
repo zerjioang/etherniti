@@ -26,7 +26,6 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 
 // ShhVersion calls shh protocol shh_version json-rpc call
 func (ctl *Web3ShhController) shhVersion(c echo.ContextInterface) error {
-
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	logger.Info("web3 shh controller request using context id: ", ctl.network.networkName)
@@ -43,7 +42,6 @@ func (ctl *Web3ShhController) shhVersion(c echo.ContextInterface) error {
 		response := api.ToSuccess("shh_version", data)
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 	}
-	return errNotImplemented
 }
 
 // ShhPost calls shh protocol shh_post json-rpc call

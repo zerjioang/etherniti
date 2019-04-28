@@ -22,6 +22,7 @@ var (
 	ResourcesDirInternal         = ResourcesDir + "/internal"
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
+	ResourcesDirInternalBadIps   = ResourcesDirInternal + "/badips"
 	ResourcesDirInternalEmail    = ResourcesDirInternal + "/templates/mail"
 	ResourcesDirLanding          = ResourcesDir + "/landing"
 	ResourcesIndexHtml           = ResourcesDirLanding + "/index.html"
@@ -32,6 +33,7 @@ var (
 	BlacklistedDomainFile = ResourcesDirInternalSecurity + "/domains.json"
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
+	BadIpsFile            = ResourcesDirInternalBadIps + "/list_any_5"
 )
 
 //simply converts http requests into https
