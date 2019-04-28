@@ -28,7 +28,10 @@ var uid = os.Getuid()
 var gid = os.Getgid()
 
 func init(){
-	createData(baseData+ "data")
+	err := createData(baseData+ "data")
+	if err != nil {
+		logger.Error("failed to create shared database dir:", err)
+	}
 }
 
 func createData(path string) error {
