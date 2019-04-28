@@ -1,0 +1,445 @@
+-- The CXX compiler identification is GNU 7.3.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- boost version: 106501
+-- boost headers: /usr/include
+-- boost lib   : /usr/lib/arm-linux-gnueabihf/libboost_regex.a;/usr/lib/arm-linux-gnueabihf/libboost_filesystem.a;/usr/lib/arm-linux-gnueabihf/libboost_unit_test_framework.a;/usr/lib/arm-linux-gnueabihf/libboost_program_options.a;/usr/lib/arm-linux-gnueabihf/libboost_system.a
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Performing Test fstack-protector-strong
+-- Performing Test fstack-protector-strong - Success
+-- Performing Test Wimplicit-fallthrough
+-- Performing Test Wimplicit-fallthrough - Success
+
+------------------------------------------------------------------------
+-- Configuring solidity 0.5.8
+------------------------------------------------------------------------
+--                  CMake Version                            3.10.2
+-- CMAKE_BUILD_TYPE Build type                               Release
+-- TARGET_PLATFORM  Target platform                          Linux
+--------------------------------------------------------------- features
+-- COVERAGE         Coverage support                         OFF
+------------------------------------------------------------- components
+-- TESTS            Build tests                              ON
+------------------------------------------------------------------ flags
+-- OSSFUZZ                                                   OFF
+-- LLL                                                       OFF
+------------------------------------------------------------------------
+
+-- Found Z3: /usr/lib/arm-linux-gnueabihf/libz3.so (Required is at least version "4.6.0") 
+Z3 SMT solver found. This enables optional SMT checking with Z3.
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/eth/solidity/build
+Scanning dependencies of target solidity_BuildInfo.h
+Scanning dependencies of target jsoncpp-project
+[  0%] Creating directories for 'jsoncpp-project'
+[  0%] Built target solidity_BuildInfo.h
+[  1%] Performing download step (download, verify and extract) for 'jsoncpp-project'
+-- Downloading...
+   dst='/home/eth/solidity/deps/downloads/jsoncpp-1.8.4.tar.gz'
+   timeout='none'
+-- Using src='https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz'
+-- verifying file...
+       file='/home/eth/solidity/deps/downloads/jsoncpp-1.8.4.tar.gz'
+-- Downloading... done
+-- extracting...
+     src='/home/eth/solidity/deps/downloads/jsoncpp-1.8.4.tar.gz'
+     dst='/home/eth/solidity/build/deps/src/jsoncpp-project'
+-- extracting... [tar xfz]
+-- extracting... [analysis]
+-- extracting... [rename]
+-- extracting... [clean up]
+-- extracting... done
+[  1%] No update step for 'jsoncpp-project'
+[  1%] No patch step for 'jsoncpp-project'
+[  2%] Performing configure step for 'jsoncpp-project'
+-- The C compiler identification is GNU 7.3.0
+-- The CXX compiler identification is GNU 7.3.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- JsonCpp Version: 1.8.4
+-- Looking for C++ include clocale
+-- Looking for C++ include clocale - found
+-- Looking for localeconv
+-- Looking for localeconv - found
+-- Looking for C++ include sys/types.h
+-- Looking for C++ include sys/types.h - found
+-- Looking for C++ include stdint.h
+-- Looking for C++ include stdint.h - found
+-- Looking for C++ include stddef.h
+-- Looking for C++ include stddef.h - found
+-- Check size of lconv
+-- Check size of lconv - done
+-- Performing Test HAVE_DECIMAL_POINT
+-- Performing Test HAVE_DECIMAL_POINT - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/eth/solidity/build/deps/src/jsoncpp-project-build
+[  2%] Performing build step for 'jsoncpp-project'
+Scanning dependencies of target jsoncpp_lib_static
+[ 25%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib_static.dir/json_reader.cpp.o
+[ 50%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib_static.dir/json_value.cpp.o
+In file included from /usr/include/c++/7/map:60:0,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/include/json/value.h:17,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/src/lib_json/json_value.cpp:8:
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_emplace_hint_unique(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator, _Args&& ...) [with _Args = {const std::piecewise_construct_t&, std::tuple<const Json::Value::CZString&>, std::tuple<>}; _Key = Json::Value::CZString; _Val = std::pair<const Json::Value::CZString, Json::Value>; _KeyOfValue = std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >; _Compare = std::less<Json::Value::CZString>; _Alloc = std::allocator<std::pair<const Json::Value::CZString, Json::Value> >]’:
+/usr/include/c++/7/bits/stl_tree.h:2395:7: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+       _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/stl_tree.h:2395:7: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_tree.h: In function ‘std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_insert_unique_(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator, _Arg&&, _NodeGen&) [with _Arg = std::pair<const Json::Value::CZString, Json::Value>&; _NodeGen = std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::_Alloc_node; _Key = Json::Value::CZString; _Val = std::pair<const Json::Value::CZString, Json::Value>; _KeyOfValue = std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >; _Compare = std::less<Json::Value::CZString>; _Alloc = std::allocator<std::pair<const Json::Value::CZString, Json::Value> >]’:
+/usr/include/c++/7/bits/stl_tree.h:2191:7: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+       _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘Json::Value& Json::Value::operator[](Json::Value::ArrayIndex)’:
+/usr/include/c++/7/bits/stl_tree.h:1026:65: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+    return _M_insert_unique_(__pos, std::forward<_Arg>(__x), __an);
+                                                                 ^
+In file included from /usr/include/c++/7/map:61:0,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/include/json/value.h:17,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/src/lib_json/json_value.cpp:8:
+/usr/include/c++/7/bits/stl_map.h: In member function ‘bool Json::Value::removeIndex(Json::Value::ArrayIndex, Json::Value*)’:
+/usr/include/c++/7/bits/stl_map.h:493:4: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+    __i = _M_t._M_emplace_hint_unique(__i, std::piecewise_construct,
+    ^~~
+In file included from /usr/include/c++/7/map:60:0,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/include/json/value.h:17,
+                 from /home/eth/solidity/build/deps/src/jsoncpp-project/src/lib_json/json_value.cpp:8:
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘Json::Value& Json::Value::resolveReference(const char*)’:
+/usr/include/c++/7/bits/stl_tree.h:1026:65: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+    return _M_insert_unique_(__pos, std::forward<_Arg>(__x), __an);
+                                                                 ^
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘Json::Value& Json::Value::resolveReference(const char*, const char*)’:
+/usr/include/c++/7/bits/stl_tree.h:1026:65: note: parameter passing for argument of type ‘std::_Rb_tree<Json::Value::CZString, std::pair<const Json::Value::CZString, Json::Value>, std::_Select1st<std::pair<const Json::Value::CZString, Json::Value> >, std::less<Json::Value::CZString>, std::allocator<std::pair<const Json::Value::CZString, Json::Value> > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const Json::Value::CZString, Json::Value> >}’ changed in GCC 7.1
+    return _M_insert_unique_(__pos, std::forward<_Arg>(__x), __an);
+                                                                 ^
+[ 75%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib_static.dir/json_writer.cpp.o
+[100%] Linking CXX static library libjsoncpp.a
+[100%] Built target jsoncpp_lib_static
+[  3%] Performing install step for 'jsoncpp-project'
+[100%] Built target jsoncpp_lib_static
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /home/eth/solidity/build/deps/lib/libjsoncpp.a
+-- Installing: /home/eth/solidity/build/deps/include/json/allocator.h
+-- Installing: /home/eth/solidity/build/deps/include/json/assertions.h
+-- Installing: /home/eth/solidity/build/deps/include/json/autolink.h
+-- Installing: /home/eth/solidity/build/deps/include/json/config.h
+-- Installing: /home/eth/solidity/build/deps/include/json/features.h
+-- Installing: /home/eth/solidity/build/deps/include/json/forwards.h
+-- Installing: /home/eth/solidity/build/deps/include/json/json.h
+-- Installing: /home/eth/solidity/build/deps/include/json/reader.h
+-- Installing: /home/eth/solidity/build/deps/include/json/value.h
+-- Installing: /home/eth/solidity/build/deps/include/json/version.h
+-- Installing: /home/eth/solidity/build/deps/include/json/writer.h
+[  3%] Completed 'jsoncpp-project'
+[  3%] Built target jsoncpp-project
+Scanning dependencies of target devcore
+[  3%] Building CXX object libdevcore/CMakeFiles/devcore.dir/CommonData.cpp.o
+[  3%] Building CXX object libdevcore/CMakeFiles/devcore.dir/CommonIO.cpp.o
+[  4%] Building CXX object libdevcore/CMakeFiles/devcore.dir/Exceptions.cpp.o
+[  4%] Building CXX object libdevcore/CMakeFiles/devcore.dir/IndentedWriter.cpp.o
+[  4%] Building CXX object libdevcore/CMakeFiles/devcore.dir/JSON.cpp.o
+[  5%] Building CXX object libdevcore/CMakeFiles/devcore.dir/Keccak256.cpp.o
+[  5%] Building CXX object libdevcore/CMakeFiles/devcore.dir/StringUtils.cpp.o
+[  6%] Building CXX object libdevcore/CMakeFiles/devcore.dir/SwarmHash.cpp.o
+[  6%] Building CXX object libdevcore/CMakeFiles/devcore.dir/UTF8.cpp.o
+[  6%] Building CXX object libdevcore/CMakeFiles/devcore.dir/Whiskers.cpp.o
+[  7%] Linking CXX static library libdevcore.a
+[  7%] Built target devcore
+Scanning dependencies of target langutil
+Scanning dependencies of target evmasm
+[  7%] Building CXX object liblangutil/CMakeFiles/langutil.dir/CharStream.cpp.o
+[  7%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/Assembly.cpp.o
+[  8%] Building CXX object liblangutil/CMakeFiles/langutil.dir/ErrorReporter.cpp.o
+[  8%] Building CXX object liblangutil/CMakeFiles/langutil.dir/Exceptions.cpp.o
+[  9%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/AssemblyItem.cpp.o
+[ 10%] Building CXX object liblangutil/CMakeFiles/langutil.dir/ParserBase.cpp.o
+[ 10%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/BlockDeduplicator.cpp.o
+[ 10%] Building CXX object liblangutil/CMakeFiles/langutil.dir/Scanner.cpp.o
+[ 10%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/CommonSubexpressionEliminator.cpp.o
+[ 10%] Building CXX object liblangutil/CMakeFiles/langutil.dir/SemVerHandler.cpp.o
+[ 11%] Building CXX object liblangutil/CMakeFiles/langutil.dir/SourceReferenceExtractor.cpp.o
+[ 12%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/ConstantOptimiser.cpp.o
+[ 12%] Building CXX object liblangutil/CMakeFiles/langutil.dir/SourceReferenceFormatter.cpp.o
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libdevcore/vector_ref.h:6,
+                 from /home/eth/solidity/libdevcore/Common.h:40,
+                 from /home/eth/solidity/libdevcore/CommonData.h:26,
+                 from /home/eth/solidity/libevmasm/ConstantOptimiser.h:29,
+                 from /home/eth/solidity/libevmasm/ConstantOptimiser.cpp:22:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void>, (boost::multiprecision::expression_template_option)0>&}; _Tp = boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >; _Alloc = std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >::iterator {aka __gnu_cxx::__normal_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >*, std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+[ 13%] Building CXX object liblangutil/CMakeFiles/langutil.dir/SourceReferenceFormatterHuman.cpp.o
+In file included from /usr/include/c++/7/vector:64:0,
+                 from /home/eth/solidity/libdevcore/vector_ref.h:6,
+                 from /home/eth/solidity/libdevcore/Common.h:40,
+                 from /home/eth/solidity/libdevcore/CommonData.h:26,
+                 from /home/eth/solidity/libevmasm/ConstantOptimiser.h:29,
+                 from /home/eth/solidity/libevmasm/ConstantOptimiser.cpp:22:
+/usr/include/c++/7/bits/stl_vector.h: In member function ‘bool dev::eth::ComputeMethod::checkRepresentation(const u256&, const AssemblyItems&) const’:
+/usr/include/c++/7/bits/stl_vector.h:948:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >*, std::vector<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >’ changed in GCC 7.1
+    _M_realloc_insert(end(), __x);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+[ 13%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/ControlFlowGraph.cpp.o
+[ 13%] Building CXX object liblangutil/CMakeFiles/langutil.dir/Token.cpp.o
+[ 14%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/ExpressionClasses.cpp.o
+[ 14%] Linking CXX static library liblangutil.a
+[ 14%] Built target langutil
+[ 14%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/GasMeter.cpp.o
+[ 14%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/Instruction.cpp.o
+[ 15%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/JumpdestRemover.cpp.o
+[ 15%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/KnownState.cpp.o
+[ 16%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/LinkerObject.cpp.o
+[ 16%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/PathGasMeter.cpp.o
+In file included from /usr/include/c++/7/map:60:0,
+                 from /home/eth/solidity/libevmasm/KnownState.h:27,
+                 from /home/eth/solidity/libevmasm/KnownState.cpp:24:
+/usr/include/c++/7/bits/stl_tree.h: In function ‘std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_insert_unique_(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator, _Arg&&, _NodeGen&) [with _Arg = const boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >&; _NodeGen = std::_Rb_tree<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, std::_Identity<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::less<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >::_Alloc_node; _Key = boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >; _Val = boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >; _KeyOfValue = std::_Identity<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >; _Compare = std::less<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >; _Alloc = std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >]’:
+/usr/include/c++/7/bits/stl_tree.h:2191:7: note: parameter passing for argument of type ‘std::_Rb_tree<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, std::_Identity<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::less<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >::const_iterator {aka std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >}’ changed in GCC 7.1
+       _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘std::set<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > dev::eth::KnownState::tagsInExpression(dev::eth::KnownState::Id)’:
+/usr/include/c++/7/bits/stl_tree.h:2452:21: note: parameter passing for argument of type ‘std::_Rb_tree<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, std::_Identity<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::less<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >::const_iterator {aka std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >}’ changed in GCC 7.1
+    _M_insert_unique_(end(), *__first, __an);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/vector:60:0,
+                 from /home/eth/solidity/libevmasm/KnownState.h:26,
+                 from /home/eth/solidity/libevmasm/KnownState.cpp:24:
+/usr/include/c++/7/bits/stl_algobase.h: In function ‘bool std::__lexicographical_compare_aux(_II1, _II1, _II2, _II2) [with _II1 = std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >; _II2 = std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >]’:
+/usr/include/c++/7/bits/stl_algobase.h:928:5: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+     __lexicographical_compare_aux(_II1 __first1, _II1 __last1,
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/stl_algobase.h:928:5: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:928:5: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:928:5: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h: In member function ‘dev::eth::KnownState::Id dev::eth::KnownState::tagUnion(std::set<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >)’:
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+       std::__niter_base(__last2));
+                                 ^
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+       std::__niter_base(__last2));
+                                 ^
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+       std::__niter_base(__last2));
+                                 ^
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+       std::__niter_base(__last2));
+                                 ^
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+/usr/include/c++/7/bits/stl_algobase.h:1221:33: note: parameter passing for argument of type ‘std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >’ changed in GCC 7.1
+In file included from /usr/include/c++/7/map:60:0,
+                 from /home/eth/solidity/libevmasm/KnownState.h:27,
+                 from /home/eth/solidity/libevmasm/KnownState.cpp:24:
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘void dev::eth::KnownState::reduceToCommonKnowledge(const dev::eth::KnownState&, bool)’:
+/usr/include/c++/7/bits/stl_tree.h:2452:21: note: parameter passing for argument of type ‘std::_Rb_tree<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> >, std::_Identity<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::less<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >, std::allocator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > > >::const_iterator {aka std::_Rb_tree_const_iterator<boost::multiprecision::number<boost::multiprecision::backends::cpp_int_backend<256, 256, (boost::multiprecision::cpp_integer_type)0, (boost::multiprecision::cpp_int_check_type)0, void> > >}’ changed in GCC 7.1
+    _M_insert_unique_(end(), *__first, __an);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+[ 16%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/PeepholeOptimiser.cpp.o
+[ 17%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/SemanticInformation.cpp.o
+[ 17%] Building CXX object libevmasm/CMakeFiles/evmasm.dir/SimplificationRules.cpp.o
+[ 17%] Linking CXX static library libevmasm.a
+[ 17%] Built target evmasm
+Scanning dependencies of target yul
+[ 18%] Building CXX object libyul/CMakeFiles/yul.dir/AsmAnalysis.cpp.o
+[ 18%] Building CXX object libyul/CMakeFiles/yul.dir/AsmParser.cpp.o
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/liblangutil/Exceptions.h:27,
+                 from /home/eth/solidity/libyul/AsmAnalysis.h:23,
+                 from /home/eth/solidity/libyul/AsmAnalysis.cpp:21:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const yul::TypedName&}; _Tp = yul::TypedName; _Alloc = std::allocator<yul::TypedName>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::TypedName>::iterator {aka __gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/vector:64:0,
+                 from /home/eth/solidity/liblangutil/Exceptions.h:27,
+                 from /home/eth/solidity/libyul/AsmAnalysis.h:23,
+                 from /home/eth/solidity/libyul/AsmAnalysis.cpp:21:
+/usr/include/c++/7/bits/stl_vector.h: In member function ‘bool yul::AsmAnalyzer::operator()(const yul::FunctionDefinition&)’:
+/usr/include/c++/7/bits/stl_vector.h:948:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), __x);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libyul/YulString.h:27,
+                 from /home/eth/solidity/libyul/AsmData.h:26,
+                 from /home/eth/solidity/libyul/AsmParser.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.cpp:23:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal>}; _Tp = boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal>; _Alloc = std::allocator<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal> >]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal> >::iterator {aka __gnu_cxx::__normal_iterator<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal>*, std::vector<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal> > >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+[ 18%] Building CXX object libyul/CMakeFiles/yul.dir/AsmPrinter.cpp.o
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block>}; _Tp = boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block>; _Alloc = std::allocator<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block> >]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block> >::iterator {aka __gnu_cxx::__normal_iterator<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block>*, std::vector<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block> > >}’ changed in GCC 7.1
+In file included from /usr/include/c++/7/memory:65:0,
+                 from /usr/include/boost/move/algorithm.hpp:33,
+                 from /usr/include/boost/move/move.hpp:32,
+                 from /usr/include/boost/variant/detail/move.hpp:28,
+                 from /usr/include/boost/variant/detail/initializer.hpp:23,
+                 from /usr/include/boost/variant/variant.hpp:30,
+                 from /usr/include/boost/variant.hpp:17,
+                 from /home/eth/solidity/libyul/AsmDataForward.h:25,
+                 from /home/eth/solidity/libyul/AsmData.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.cpp:23:
+/usr/include/c++/7/bits/stl_uninitialized.h: In static member function ‘static _ForwardIterator std::__uninitialized_copy<_TrivialValueTypes>::__uninit_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = std::move_iterator<yul::TypedName*>; _ForwardIterator = yul::TypedName*; bool _TrivialValueTypes = false]’:
+/usr/include/c++/7/bits/stl_uninitialized.h:76:9: note: parameter passing for argument of type ‘std::move_iterator<yul::TypedName*>’ changed in GCC 7.1
+         __uninit_copy(_InputIterator __first, _InputIterator __last,
+         ^~~~~~~~~~~~~
+/usr/include/c++/7/bits/stl_uninitialized.h:76:9: note: parameter passing for argument of type ‘std::move_iterator<yul::TypedName*>’ changed in GCC 7.1
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libyul/YulString.h:27,
+                 from /home/eth/solidity/libyul/AsmData.h:26,
+                 from /home/eth/solidity/libyul/AsmParser.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.cpp:23:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {yul::TypedName}; _Tp = yul::TypedName; _Alloc = std::allocator<yul::TypedName>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::TypedName>::iterator {aka __gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:65:0,
+                 from /usr/include/boost/move/algorithm.hpp:33,
+                 from /usr/include/boost/move/move.hpp:32,
+                 from /usr/include/boost/variant/detail/move.hpp:28,
+                 from /usr/include/boost/variant/detail/initializer.hpp:23,
+                 from /usr/include/boost/variant/variant.hpp:30,
+                 from /usr/include/boost/variant.hpp:17,
+                 from /home/eth/solidity/libyul/AsmDataForward.h:25,
+                 from /home/eth/solidity/libyul/AsmData.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.cpp:23:
+/usr/include/c++/7/bits/stl_uninitialized.h:134:41: note: parameter passing for argument of type ‘std::move_iterator<yul::TypedName*>’ changed in GCC 7.1
+  __uninit_copy(__first, __last, __result);
+                                         ^
+/usr/include/c++/7/bits/stl_uninitialized.h:134:41: note: parameter passing for argument of type ‘std::move_iterator<yul::TypedName*>’ changed in GCC 7.1
+  __uninit_copy(__first, __last, __result);
+                                         ^
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libyul/YulString.h:27,
+                 from /home/eth/solidity/libyul/AsmData.h:26,
+                 from /home/eth/solidity/libyul/AsmParser.h:25,
+                 from /home/eth/solidity/libyul/AsmParser.cpp:23:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {yul::TypedName}; _Tp = yul::TypedName; _Alloc = std::allocator<yul::TypedName>]’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘yul::Expression yul::Parser::parseCall(yul::Parser::ElementaryOperation&&)’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal>*, std::vector<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal> > >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal>*, std::vector<boost::variant<yul::FunctionalInstruction, yul::FunctionCall, yul::Identifier, yul::Literal> > >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘yul::Block yul::Parser::parseBlock()’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block>*, std::vector<boost::variant<yul::ExpressionStatement, yul::Instruction, yul::Label, yul::StackAssignment, yul::Assignment, yul::VariableDeclaration, yul::FunctionDefinition, yul::If, yul::Switch, yul::ForLoop, yul::Break, yul::Continue, yul::Block> > >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 19%] Building CXX object libyul/CMakeFiles/yul.dir/AsmScope.cpp.o
+In file included from /usr/include/c++/7/map:60:0,
+                 from /usr/include/boost/exception/info.hpp:14,
+                 from /home/eth/solidity/libdevcore/Exceptions.h:21,
+                 from /home/eth/solidity/liblangutil/Exceptions.h:29,
+                 from /home/eth/solidity/libyul/AsmScope.h:23,
+                 from /home/eth/solidity/libyul/AsmScope.cpp:21:
+/usr/include/c++/7/bits/stl_tree.h: In member function ‘std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_emplace_hint_unique(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator, _Args&& ...) [with _Args = {const std::piecewise_construct_t&, std::tuple<const yul::YulString&>, std::tuple<>}; _Key = yul::YulString; _Val = std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> >; _KeyOfValue = std::_Select1st<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >; _Compare = std::less<yul::YulString>; _Alloc = std::allocator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >]’:
+/usr/include/c++/7/bits/stl_tree.h:2395:7: note: parameter passing for argument of type ‘std::_Rb_tree<yul::YulString, std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> >, std::_Select1st<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >, std::less<yul::YulString>, std::allocator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >}’ changed in GCC 7.1
+       _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/map:61:0,
+                 from /usr/include/boost/exception/info.hpp:14,
+                 from /home/eth/solidity/libdevcore/Exceptions.h:21,
+                 from /home/eth/solidity/liblangutil/Exceptions.h:29,
+                 from /home/eth/solidity/libyul/AsmScope.h:23,
+                 from /home/eth/solidity/libyul/AsmScope.cpp:21:
+/usr/include/c++/7/bits/stl_map.h: In member function ‘std::map<_Key, _Tp, _Compare, _Alloc>::mapped_type& std::map<_Key, _Tp, _Compare, _Alloc>::operator[](const key_type&) [with _Key = yul::YulString; _Tp = boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function>; _Compare = std::less<yul::YulString>; _Alloc = std::allocator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >]’:
+/usr/include/c++/7/bits/stl_map.h:493:4: note: parameter passing for argument of type ‘std::_Rb_tree<yul::YulString, std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> >, std::_Select1st<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >, std::less<yul::YulString>, std::allocator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > > >::const_iterator {aka std::_Rb_tree_const_iterator<std::pair<const yul::YulString, boost::variant<yul::Scope::Variable, yul::Scope::Label, yul::Scope::Function> > >}’ changed in GCC 7.1
+    __i = _M_t._M_emplace_hint_unique(__i, std::piecewise_construct,
+    ^~~
+[ 19%] Building CXX object libyul/CMakeFiles/yul.dir/AsmScopeFiller.cpp.o
+[ 20%] Building CXX object libyul/CMakeFiles/yul.dir/AssemblyStack.cpp.o
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libyul/YulString.h:27,
+                 from /home/eth/solidity/libyul/AsmData.h:26,
+                 from /home/eth/solidity/libyul/AsmScopeFiller.cpp:23:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const yul::TypedName&}; _Tp = yul::TypedName; _Alloc = std::allocator<yul::TypedName>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::TypedName>::iterator {aka __gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = yul::YulString; _Alloc = std::allocator<yul::YulString>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::YulString>::iterator {aka __gnu_cxx::__normal_iterator<yul::YulString*, std::vector<yul::YulString> >}’ changed in GCC 7.1
+/usr/include/c++/7/bits/vector.tcc: In member function ‘bool yul::ScopeFiller::registerFunction(const yul::FunctionDefinition&)’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::YulString*, std::vector<yul::YulString> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::YulString*, std::vector<yul::YulString> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/vector:64:0,
+                 from /home/eth/solidity/libyul/YulString.h:27,
+                 from /home/eth/solidity/libyul/AsmData.h:26,
+                 from /home/eth/solidity/libyul/AsmScopeFiller.cpp:23:
+/usr/include/c++/7/bits/stl_vector.h: In member function ‘bool yul::ScopeFiller::operator()(const yul::FunctionDefinition&)’:
+/usr/include/c++/7/bits/stl_vector.h:948:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::TypedName*, std::vector<yul::TypedName> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), __x);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+[ 20%] Building CXX object libyul/CMakeFiles/yul.dir/CompilabilityChecker.cpp.o
+[ 20%] Building CXX object libyul/CMakeFiles/yul.dir/Object.cpp.o
+[ 21%] Building CXX object libyul/CMakeFiles/yul.dir/ObjectParser.cpp.o
+[ 21%] Building CXX object libyul/CMakeFiles/yul.dir/Utilities.cpp.o
+[ 22%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/AsmCodeGen.cpp.o
+[ 22%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/EVMAssembly.cpp.o
+[ 22%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/EVMCodeTransform.cpp.o
+[ 23%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/EVMDialect.cpp.o
+[ 23%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/EVMObjectCompiler.cpp.o
+In file included from /usr/include/c++/7/vector:69:0,
+                 from /home/eth/solidity/libdevcore/vector_ref.h:6,
+                 from /home/eth/solidity/libdevcore/Common.h:40,
+                 from /home/eth/solidity/libyul/backends/evm/AbstractAssembly.h:25,
+                 from /home/eth/solidity/libyul/backends/evm/EVMAssembly.h:23,
+                 from /home/eth/solidity/libyul/backends/evm/EVMCodeTransform.h:23,
+                 from /home/eth/solidity/libyul/backends/evm/EVMCodeTransform.cpp:21:
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {yul::StackTooDeepError}; _Tp = yul::StackTooDeepError; _Alloc = std::allocator<yul::StackTooDeepError>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::StackTooDeepError>::iterator {aka __gnu_cxx::__normal_iterator<yul::StackTooDeepError*, std::vector<yul::StackTooDeepError> >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void yul::CodeTransform::stackError(yul::StackTooDeepError, int)’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::StackTooDeepError*, std::vector<yul::StackTooDeepError> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {yul::YulString&, int}; _Tp = yul::StackTooDeepError; _Alloc = std::allocator<yul::StackTooDeepError>]’:
+/usr/include/c++/7/bits/vector.tcc:394:7: note: parameter passing for argument of type ‘std::vector<yul::StackTooDeepError>::iterator {aka __gnu_cxx::__normal_iterator<yul::StackTooDeepError*, std::vector<yul::StackTooDeepError> >}’ changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/vector.tcc: In member function ‘void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {yul::YulString&, int}; _Tp = yul::StackTooDeepError; _Alloc = std::allocator<yul::StackTooDeepError>]’:
+/usr/include/c++/7/bits/vector.tcc:105:21: note: parameter passing for argument of type ‘__gnu_cxx::__normal_iterator<yul::StackTooDeepError*, std::vector<yul::StackTooDeepError> >’ changed in GCC 7.1
+    _M_realloc_insert(end(), std::forward<_Args>(__args)...);
+    ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 23%] Building CXX object libyul/CMakeFiles/yul.dir/backends/evm/NoOutputAssembly.cpp.o
+

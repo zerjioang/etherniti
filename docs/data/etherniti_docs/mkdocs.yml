@@ -1,0 +1,117 @@
+# Project information
+site_name: Etherniti documentation
+site_description: Official documentation of Etherniti
+site_author: Etherniti
+site_url: https://docs.etherniti.org
+
+# Repository
+repo_name: Etherniti
+repo_url: https://github.com/etherniti/docs
+edit_uri: ""
+
+# Copyright
+copyright: 'Copyright &copy; 2019 Etherniti Project'
+
+# https://squidfunk.github.io/mkdocs-material/getting-started/
+
+# Configuration
+theme:
+  name: 'material'
+  shortcuts:
+    help: 191    # ?
+    next: 78     # n
+    previous: 80 # p
+    search: 83   # s
+
+  # 404 page
+  static_templates:
+    - 404.html
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: true
+  search_index_only: false
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  feature:
+    tabs: true
+  palette:
+    primary: blue
+    accent: light blue
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: images/favicon.png
+  logo:
+    icon: "cloud"
+
+# Customization
+extra:
+  social:
+    - type: globe
+      link: https://github.com/etherniti
+    - type: github-alt
+      link: https://github.com/etherniti
+    #- type: twitter
+    #  link: https://twitter.com/squidfunk
+    #- type: linkedin
+    # link: https://linkedin.com/in/squidfunk
+
+extra_css: 
+  - css/extra.css
+    
+# Extensions
+markdown_extensions:
+  - admonition
+  - markdown.extensions.codehilite:
+      guess_lang: false
+      linenums: true
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Page tree
+pages:
+  - Etherniti: 
+    - Introduction: index.md
+    - Overview: overview.md
+  - Architecture:
+    - Architecture introduction: architecture/index.md
+    - Benchmarks: architecture/benchmarks/performance_test.md
+  - Tutorials:
+    - Tutorial listing: tutorials/index.md
+  - Development: 
+    - Development introduction: development/index.md
+    - Environment setup: development/setup.md
+  - Contributing:
+    - First step: contribution/contributing.md
+    - Guide: contribution/contributing-guide.md
+    - Code of conduct: contribution/conduct.md
+  - About:
+    - License: about/license.md
+    - Privacy: about/privacy.md
+    - Release notes: about/notes.md
+
+# Google Analytics
+google_analytics:
+  - !!python/object/apply:os.getenv ["GOOGLE_ANALYTICS_KEY"]
+  - auto
