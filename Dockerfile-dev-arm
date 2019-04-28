@@ -33,10 +33,10 @@ RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password
     chown ${USER} ${FILE} && \
     ls -alh
 
-FROM ethereum/solc:stable as solcompiler
+FROM etherniti/solc-armv7l:latest
 
 # generate final image
-FROM armhf/alpine:3.5
+# FROM armhf/alpine:3.5
 # FROM containerstack/alpine:3.7.0
 
 ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
@@ -49,9 +49,6 @@ ENV PATH="/${USER}:${PATH}"
 WORKDIR /${USER}
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
-
-# generate solc executable file
-COPY --from=solcompiler /usr/bin/solc            /usr/bin/solc
 
 # copy proxy resource files
 
