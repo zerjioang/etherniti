@@ -1,20 +1,24 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package db
 
 import (
 	"encoding/json"
 	"errors"
-	"github.com/dgraph-io/badger"
-	"github.com/zerjioang/etherniti/core/logger"
-	"golang.org/x/crypto/bcrypt"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"github.com/dgraph-io/badger"
+	"github.com/zerjioang/etherniti/core/logger"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
-	defaultConfig = badger.DefaultOptions
-	home = os.Getenv("HOME")
-	baseData = home+"/.etherniti/"
+	defaultConfig   = badger.DefaultOptions
+	home            = os.Getenv("HOME")
+	baseData        = home + "/.etherniti/"
 	duplicateKeyErr = errors.New("duplicate key found on database. cannot store")
 )
 
@@ -27,8 +31,8 @@ var once sync.Once
 var uid = os.Getuid()
 var gid = os.Getgid()
 
-func init(){
-	err := createData(baseData+ "data")
+func init() {
+	err := createData(baseData + "data")
 	if err != nil {
 		logger.Error("failed to create shared database dir:", err)
 	}
@@ -93,7 +97,11 @@ func (db *Db) PutKeyValue(key []byte, value []byte) error {
 	return err
 }
 
-func (db *Db) PutUniqueKeyValue(key []byte, value []byte) (error){
+func (db *Db) Close() error {
+	return db.instance.Close()
+}
+
+func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
 		if err == nil && item != nil {
@@ -105,7 +113,7 @@ func (db *Db) PutUniqueKeyValue(key []byte, value []byte) (error){
 	return err
 }
 
-func (db *Db) GetKeyValue(key []byte) ([]byte, error){
+func (db *Db) GetKeyValue(key []byte) ([]byte, error) {
 	var readedVal []byte
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
@@ -152,7 +160,7 @@ func CompareHash(plainPwd, hash string) bool {
 	return err == nil
 }
 
-func Serialize(item interface{}) []byte{
+func Serialize(item interface{}) []byte {
 	if item != nil {
 		raw, err := json.Marshal(item)
 		if err == nil {

@@ -6,11 +6,12 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/modules/cache"
 	"io/ioutil"
 	"math/big"
 	"net/http"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/modules/cache"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
 	"github.com/zerjioang/etherniti/core/eth/rpc/model"
@@ -52,7 +53,7 @@ var (
 // EthRPC - Ethereum rpc client
 type EthRPC struct {
 	//ethereum or quorum node endpoint
-	url    string
+	url string
 	//ethereum interaction cache
 	cache *cache.MemoryCache
 	// http client
@@ -71,7 +72,7 @@ func NewDefaultRPCPtr(url string) *EthRPC {
 func NewDefaultRPC(url string) EthRPC {
 	rpc := EthRPC{
 		url:    url,
-		cache : cache.Instance(),
+		cache:  cache.Instance(),
 		client: http.Client{},
 		Debug:  true,
 	}

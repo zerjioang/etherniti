@@ -5,6 +5,7 @@ package str
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"reflect"
 	"unsafe"
 )
@@ -12,6 +13,19 @@ import (
 var (
 	empty []byte
 )
+
+func ReadFileAsString(path string) string {
+	data, _ := ReadFileData(path)
+	return data
+}
+
+func ReadFileData(path string) (string, error) {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
 
 func UnsafeBytes(data string) []byte {
 	//return *(*[]byte)(unsafe.Pointer(&data))

@@ -66,7 +66,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 	// check if not empty
 	if targetAddr != "" {
 		//try to get this information from the cache
-		key := ctl.network.peer+"get_balance"+targetAddr
+		key := ctl.network.peer + "get_balance" + targetAddr
 		result, found := ctl.network.cache.Get(key)
 		if found && result != nil {
 			//cache hit

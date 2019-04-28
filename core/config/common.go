@@ -22,8 +22,9 @@ var (
 	ResourcesDirInternal         = ResourcesDir + "/internal"
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
+	ResourcesDirInternalEmail    = ResourcesDirInternal + "/templates/mail"
 	ResourcesDirLanding          = ResourcesDir + "/landing"
-	ResourcesIndexHtml         = ResourcesDirLanding + "/index.html"
+	ResourcesIndexHtml           = ResourcesDirLanding + "/index.html"
 	ResourcesDirRoot             = ResourcesDir + "/root"
 	ResourcesDirSwagger          = ResourcesDir + "/swagger"
 	// define internal files
@@ -65,6 +66,19 @@ func IsSocketMode() bool {
 func IsProfilingEnabled() bool {
 	logger.Debug("checking if profiling mode is enabled")
 	return ReadEnvironment("X_ETHERNITI_ENABLE_PROFILER") == true
+}
+
+func GetEmailUsername() string {
+	return ReadEnvironment("X_EMAIL_USERNAME").(string)
+}
+func GetEmailPassword() string {
+	return ReadEnvironment("X_GMAIL_ACCESS_TOKEN").(string)
+}
+func GetEmailServer() string {
+	return ReadEnvironment("X_EMAIL_SERVER").(string)
+}
+func GetEmailServerOnly() string {
+	return ReadEnvironment("X_EMAIL_SERVER_ONLY").(string)
 }
 
 func ServiceListeningMode() listener.ServiceType {

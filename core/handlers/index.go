@@ -101,7 +101,7 @@ func init() {
 
 	/*IndexWelcomeJson = `{
 	  "name": "eth-wbapi",
-	  "description": "Ethereum REST API Proxy",
+	  "description": "Web3 REST Proxy",
 	  "cluster_name": "eth-wbapi",
 	  "version": "` + constants.Version + `",
 	  "env": "` + config.EnvironmentName + `",
@@ -114,9 +114,9 @@ func init() {
 
 func LoadIndexConstants() {
 	// load constants
-	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Ethereum REST API Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.EnvironmentName + `","tagline":"dapps everywhere"}`
+	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Web3 REST Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.EnvironmentName + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
-	indexWelcomeHtmlBytes , _ = ioutil.ReadFile(config.ResourcesIndexHtml)
+	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
 }
 
 func NewIndexController() *IndexController {

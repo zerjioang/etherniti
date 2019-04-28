@@ -28,15 +28,20 @@ type ProfileRequest struct {
 
 // new login request dto
 type LoginRequest struct {
-	Email string `json:"email" form:"email" query:"email"`
+	Email    string `json:"email" form:"email" query:"email"`
 	Password string `json:"pwd" form:"pwd" query:"pwd"`
 }
 
 // new register request dto
 type RegisterRequest struct {
 	Username string `json:"user" form:"user" query:"user"`
-	Email string `json:"email" form:"email" query:"email"`
+	Email    string `json:"email" form:"email" query:"email"`
 	Password string `json:"pwd" form:"pwd" query:"pwd"`
+}
+
+// new recovery request dto
+type RecoveryRequest struct {
+	Email string `json:"email" form:"email" query:"email"`
 }
 
 // new entropy request dto

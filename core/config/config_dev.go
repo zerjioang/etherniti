@@ -154,6 +154,12 @@ func SetDefaults(data *EnvConfig) {
 	// ratelimit configuration
 	env["X_ETHERNITI_RATE_LIMIT"] = 10
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
+
+	// email sender configuration
+	env["X_EMAIL_USERNAME"] = "faktorialabs@gmail.com"
+	env["X_GMAIL_ACCESS_TOKEN"] = "vhlpmtrvskzxdebh"
+	env["X_EMAIL_SERVER"] = "smtp.gmail.com:587"
+	env["X_EMAIL_SERVER_ONLY"] = "smtp.gmail.com"
 }
 
 // setup server config

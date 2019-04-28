@@ -9,14 +9,14 @@ import (
 )
 
 type ServerStatusResponse struct {
-	Architecture string `json:"arch"`
-	Os string `json:"os"`
-	Cpus    Cpus    `json:"cpus"`
-	Runtime Runtime `json:"runtime"`
-	Version Version `json:"version"`
-	Disk    Disk    `json:"disk"`
-	Memory  Memory  `json:"memory"`
-	Gc      Gc      `json:"gc"`
+	Architecture string  `json:"arch"`
+	Os           string  `json:"os"`
+	Cpus         Cpus    `json:"cpus"`
+	Runtime      Runtime `json:"runtime"`
+	Version      Version `json:"version"`
+	Disk         Disk    `json:"disk"`
+	Memory       Memory  `json:"memory"`
+	Gc           Gc      `json:"gc"`
 }
 type Cpus struct {
 	Cores int `json:"cores"`

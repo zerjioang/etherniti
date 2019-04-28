@@ -5,9 +5,10 @@ package middleware
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/zerjioang/etherniti/core/modules/bots"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
-	"strings"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
@@ -84,7 +85,7 @@ func hardening(next echo.HandlerFunc) echo.HandlerFunc {
 		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 		h.Set("X-Content-Type-Options", "nosniff")
 		// report-uri http://reportcollector.example.com/collector.cgi
-		if !config.IsDevelopment(){
+		if !config.IsDevelopment() {
 			h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.etherniti.org cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com")
 		}
 		h.Set("Expect-CT", "enforce, max-age=30")
@@ -170,21 +171,21 @@ func keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 		connectionMode := h.Get("Connection")
 		connectionMode = str.ToLowerAscii(connectionMode)
 		/*
-		Lista de parámetros separados por coma,
-		cada uno consiste en un identificador y un valor separado por el signo igual ('=').
-		Es posible establecer los siguientes identificadores:
-		* timeout: indica la cantidad de  tiempo mínima  en la cual una conexión ociosa
-		se debe mantener abierta (en segundos).
-		Nótese que los timeouts mas largos que el timeout de TCP
-		pueden ser ignorados si no se establece un mensaje de TCP
-		keep-alive  en la capa de transporte.
-		* max: indica el número máximo de peticiones que pueden ser
-		enviadas en esta conexión antes de que sea cerrada. Si es  0,
-		este valor es ignorado para las conexiones no segmentadas,
-		ya que se enviara otra solicitud en la próxima respuesta.
-		Una canalización de HTTP puede ser usada para limitar la división.
-		 */
-		if strings.Contains(connectionMode ,"keep-alive") {
+			Lista de parámetros separados por coma,
+			cada uno consiste en un identificador y un valor separado por el signo igual ('=').
+			Es posible establecer los siguientes identificadores:
+			* timeout: indica la cantidad de  tiempo mínima  en la cual una conexión ociosa
+			se debe mantener abierta (en segundos).
+			Nótese que los timeouts mas largos que el timeout de TCP
+			pueden ser ignorados si no se establece un mensaje de TCP
+			keep-alive  en la capa de transporte.
+			* max: indica el número máximo de peticiones que pueden ser
+			enviadas en esta conexión antes de que sea cerrada. Si es  0,
+			este valor es ignorado para las conexiones no segmentadas,
+			ya que se enviara otra solicitud en la próxima respuesta.
+			Una canalización de HTTP puede ser usada para limitar la división.
+		*/
+		if strings.Contains(connectionMode, "keep-alive") {
 			// keep alive connection mode requested
 			h := c.Response().Header()
 			h.Set("Connection", "Keep-Alive")

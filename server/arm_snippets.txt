@@ -1,0 +1,67 @@
+ls -l /lib/ld-linux.so.3
+
+cp -ra /etc/ld.so.conf ld.so.conf
+cp -ra /etc/ld.so.conf.d/ ld.so.conf.d
+
+inside dockerfile
+
+ln -s /lib/arm-linux-gnueabihf/ld-2.27.so /lib/ld-linux-armhf.so.3
+
+
+COPY ld.so.conf /etc/ld.so.conf
+COPY ld.so.conf.d /etc/ld.so.conf.d
+
+/usr/local/lib/arm-linux-gnueabihf
+/lib/arm-linux-gnueabihf
+/usr/lib/arm-linux-gnueabihf
+
+
+cp -ra /usr/lib/arm-linux-gnueabihf usr-lib-arm-linux-gnueabihf
+
+eth@apollo-arm:~$ ldd /usr/local/bin/solc
+	libpthread.so.0 => /lib/arm-linux-gnueabihf/libpthread.so.0 (0xb6a93000)
+	libstdc++.so.6 => /usr/lib/arm-linux-gnueabihf/libstdc++.so.6 (0xb6980000)
+	libm.so.6 => /lib/arm-linux-gnueabihf/libm.so.6 (0xb68ff000)
+	libgcc_s.so.1 => /lib/arm-linux-gnueabihf/libgcc_s.so.1 (0xb68d6000)
+	libc.so.6 => /lib/arm-linux-gnueabihf/libc.so.6 (0xb67de000)
+	/lib/ld-linux-armhf.so.3 (0xb6f37000)
+
+
+COPY libpthread.so.0 /lib/arm-linux-gnueabihf/libpthread.so.0
+COPY libstdc++.so.6 /usr/lib/arm-linux-gnueabihf/libstdc++.so.6
+COPY libm.so.6 /lib/arm-linux-gnueabihf/libm.so.6
+COPY libgcc_s.so.1 /lib/arm-linux-gnueabihf/libgcc_s.so.1
+COPY libc.so.6 /lib/arm-linux-gnueabihf/libc.so.6
+COPY ld-linux-armhf.so.3 /lib/ld-linux-armhf.so.3
+
+sudo cp -lra /lib/arm-linux-gnueabihf/libpthread.so.0 libpthread.so.0
+sudo cp -lra /usr/lib/arm-linux-gnueabihf/libstdc++.so.6 libstdc++.so.6
+sudo cp -lra /lib/arm-linux-gnueabihf/libm.so.6 libm.so.6
+sudo cp -lra /lib/arm-linux-gnueabihf/libgcc_s.so.1 libgcc_s.so.1
+sudo cp -lra /lib/arm-linux-gnueabihf/libc.so.6 libc.so.6
+sudo cp -lra /lib/ld-linux-armhf.so.3 ld-linux-armhf.so.3
+
+we still need to resolve symlinks and get the appropiate files, so lets fix them with current information
+
+total 6.6M
+drwxrwxr-x  5 eth eth 4.0K Apr 28 14:02 .
+drwxr-xr-x 11 eth eth 4.0K Apr 28 13:06 ..
+-rw-rw-r--  1 eth eth 1.2K Apr 28 14:01 Dockerfile
+-rwxr-xr-x  1 eth eth 105K Apr 16  2018 ld-linux-armhf.so.3
+-rw-r--r--  1 eth eth   34 Jan 27  2016 ld.so.conf
+drwxr-xr-x  2 eth eth 4.0K Apr 27 22:34 ld.so.conf.d
+drwxr-xr-x  4 eth eth  12K Apr 27 22:32 lib-arm-linux-gnueabihf
+lrwxrwxrwx  1 eth eth   12 Apr 16  2018 libc.so.6 -> libc-2.27.so
+-rw-r--r--  1 eth eth  98K Jul 28  2018 libgcc_s.so.1
+lrwxrwxrwx  1 eth eth   12 Apr 16  2018 libm.so.6 -> libm-2.27.so
+lrwxrwxrwx  1 eth eth   18 Apr 16  2018 libpthread.so.0 -> libpthread-2.27.so
+lrwxrwxrwx  1 eth eth   19 Jul 28  2018 libstdc++.so.6 -> libstdc++.so.6.0.25
+-rwxr-xr-x  1 eth eth 6.3M Apr 28 11:50 solc
+drwxr-xr-x 30 eth eth  28K Apr 27 22:34 usr-lib-arm-linux-gnueabihf
+
+cp -ra /lib/arm-linux-gnueabihf/libpthread-2.27.so libpthread.so.0
+cp -ra /usr/lib/arm-linux-gnueabihf/libstdc++.so.6.0.25 libstdc++.so.6
+cp -ra /lib/arm-linux-gnueabihf/libm-2.27.so libm.so.6
+cp -ra /lib/arm-linux-gnueabihf/libgcc_s.so.1 libgcc_s.so.1
+cp -ra /lib/arm-linux-gnueabihf/libc-2.27.so libc.so.6
+cp -ra /lib/arm-linux-gnueabihf/ld-2.27.so ld-linux-armhf.so.3
