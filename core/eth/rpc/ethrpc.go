@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
@@ -63,18 +64,23 @@ type EthRPC struct {
 }
 
 // New create new rpc client with given url
-func NewDefaultRPCPtr(url string) *EthRPC {
-	c := NewDefaultRPC(url)
+func NewDefaultRPCPtr(url string, debug bool) *EthRPC {
+	c := NewDefaultRPC(url, debug)
 	return &c
 }
 
 // New create new rpc client with given url
-func NewDefaultRPC(url string) EthRPC {
+func NewDefaultRPC(url string, debug bool) EthRPC {
 	rpc := EthRPC{
-		url:    url,
-		cache:  cache.Instance(),
-		client: http.Client{},
-		Debug:  true,
+		url:   url,
+		cache: cache.Instance(),
+		client: http.Client{
+			Timeout: time.Second * 3,
+			Transport: &http.Transport{
+				TLSHandshakeTimeout: 3 * time.Second,
+			},
+		},
+		Debug: debug,
 	}
 	return rpc
 }

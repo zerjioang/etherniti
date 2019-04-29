@@ -12,9 +12,9 @@ cd ..
 
 echo "Preparing code for production..."
 
-# remove logging liness with just text
+# remove logging lines with just text strings
 coreFiles=$(find . -type f -name "*.go" | grep -vendor)
-regex="log\.(Debug|Info|Error|Warn|Critical){1}\(\"(\w|\s)*\"\)"
+regex="(log|logger)\.(Debug|Info|Error|Warn|Critical){1}\(\"(\w|\s)*\"\)"
 for file in ${coreFiles}
 do
 	echo "optimizing file: $file"

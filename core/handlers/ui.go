@@ -7,10 +7,10 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-	"github.com/zerjioang/helix/impl/util/str"
 )
 
 type UIController struct {
@@ -72,7 +72,7 @@ func (ctl UIController) register(c echo.ContextInterface) error {
 		logger.Info("registering user with email: ", req.Email)
 		// hash user password
 		req.Password = db.Hash(req.Password)
-		saveErr := db.GetInstance().PutUniqueKeyValue(str.ToBytes(req.Email), db.Serialize(req))
+		saveErr := db.GetInstance().PutUniqueKeyValue(str.UnsafeBytes(req.Email), db.Serialize(req))
 		if saveErr != nil {
 			logger.Error("failed to register new user due to: ", saveErr)
 			return api.ErrorStr(c, "failed to register new user account")

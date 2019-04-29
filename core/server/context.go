@@ -7,6 +7,8 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/config"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -23,10 +25,14 @@ type EthernitiContext struct {
 	// connection profile data for interaction
 	profileLock *sync.Mutex
 	profileData profile.ConnectionProfile
+
+	// http response data
+	response *echo.Response
 }
 
 var (
 	noPeerAddressError = errors.New("no peer address to connect defined")
+	isDebug            = config.IsDevelopment()
 )
 
 // returns connection profile from token information
@@ -67,7 +73,7 @@ func (context EthernitiContext) RecoverEthClientFromTokenOrPeerUrl(peerUrl strin
 		// use peer url
 		contextId = peerUrl
 	}
-	client = ethrpc.NewDefaultRPCPtr(contextId)
+	client = ethrpc.NewDefaultRPCPtr(contextId, isDebug)
 	return client, contextId, nil
 }
 
@@ -103,7 +109,7 @@ func (context *EthernitiContext) writeContentType(value string) {
 
 func (context *EthernitiContext) FastBlob(code int, contentType string, b []byte) (err error) {
 	response := context.Response()
-	header := response.Header()
+	header := response.HeaderPtr()
 	if header.Get(echo.HeaderContentType) == "" {
 		header.Set(echo.HeaderContentType, contentType)
 	}

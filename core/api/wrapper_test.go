@@ -4,6 +4,7 @@
 package api
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,8 +13,12 @@ import (
 )
 
 func TestWrapper(t *testing.T) {
+	t.Run("send-error", func(t *testing.T) {
+		err := Error(common.NewContext(echo.New()), errors.New("test-error"))
+		assert.Nil(t, err)
+	})
 	t.Run("send-success", func(t *testing.T) {
-		err := SendSuccess(common.NewContext(echo.New()), "message", "")
+		err := SendSuccess(common.NewContext(echo.New()), []byte("message"), "")
 		assert.Nil(t, err)
 	})
 	t.Run("send-success-blob", func(t *testing.T) {

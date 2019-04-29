@@ -4,7 +4,9 @@
 package api
 
 import (
+	"bytes"
 	"net/http"
+	"sync"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -15,8 +17,32 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	errorPool   *sync.Pool
+	successPool *sync.Pool
+	bufferPool  *sync.Pool
+)
+
+func init() {
+	errorPool = &sync.Pool{
+		New: func() interface{} {
+			return protocol.NewApiError(http.StatusBadRequest, []byte{})
+		},
+	}
+	successPool = &sync.Pool{
+		New: func() interface{} {
+			return protocol.NewApiResponse([]byte{}, nil)
+		},
+	}
+	bufferPool = &sync.Pool{
+		New: func() interface{} {
+			return new(bytes.Buffer)
+		},
+	}
+}
+
 // return success response to client context
-func SendSuccess(c echo.ContextInterface, logMsg string, response interface{}) error {
+func SendSuccess(c echo.ContextInterface, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
 	logger.Info(logMsg)
 	return c.FastBlob(
@@ -26,46 +52,107 @@ func SendSuccess(c echo.ContextInterface, logMsg string, response interface{}) e
 	)
 }
 
+func SendSuccessPool(c echo.ContextInterface, logMsg []byte, response interface{}) error {
+	logger.Debug("sending success message to client")
+	logger.Info(logMsg)
+	return c.FastBlob(
+		protocol.StatusOK,
+		echo.MIMEApplicationJSONCharsetUTF8,
+		ToSuccessPool(logMsg, response),
+	)
+}
+
 // return success blob response to client context
 func SendSuccessBlob(c echo.ContextInterface, raw []byte) error {
 	logger.Debug("sending success BLOB message to client")
 	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, raw)
 }
 
-func Success(c echo.ContextInterface, msg string, result string) error {
+func Success(c echo.ContextInterface, msg []byte, result []byte) error {
 	logger.Debug("sending success message to client")
-	rawBytes := str.GetJsonBytes(protocol.NewApiResponse(msg, result))
+	//get item from pool
+	item := successPool.Get().(*protocol.ApiResponse)
+	item.Message = msg
+	item.Result = result
+	b := bufferPool.Get().(*bytes.Buffer)
+	rawBytes := item.Bytes(b)
+	// put item back to the pool
+	bufferPool.Put(b)
+	successPool.Put(item)
 	return c.FastBlob(http.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-func ToSuccess(msg string, result interface{}) []byte {
-	logger.Debug("generating success byte array")
-	rawBytes := str.GetJsonBytes(protocol.NewApiResponse(msg, result))
+func ToSuccessPool(msg []byte, result interface{}) []byte {
+	//logger.Debug("generating success byte array")
+
+	//get item from pool
+	item := successPool.Get().(*protocol.ApiResponse)
+	item.Message = msg
+	item.Result = result
+	b := bufferPool.Get().(*bytes.Buffer)
+	rawBytes := item.Bytes(b)
+	// put item back to the pool
+	bufferPool.Put(b)
+	successPool.Put(item)
+
 	return rawBytes
 }
 
-func ErrorStr(c echo.ContextInterface, msg string) error {
+func ToSuccess(msg []byte, result interface{}) []byte {
+	//logger.Debug("generating success byte array")
+
+	//get item from pool
+	var item protocol.ApiResponse
+	item.Message = msg
+	item.Result = result
+	b := bufferPool.Get().(*bytes.Buffer)
+	rawBytes := item.Bytes(b)
+	// put item back to the pool
+	bufferPool.Put(b)
+	return rawBytes
+}
+
+func toErrorPool(msg []byte) []byte {
+	//get item from pool
+	item := errorPool.Get().(*protocol.ApiError)
+	item.Message = msg
+	b := bufferPool.Get().(*bytes.Buffer)
+	rawBytes := item.Bytes(b)
+	// put item back to the pool
+	bufferPool.Put(b)
+	errorPool.Put(item)
+	return rawBytes
+}
+
+func toError(code int, msg []byte) []byte {
+	var item protocol.ApiError
+	item.Message = msg
+	item.Code = code
+	b := bufferPool.Get().(*bytes.Buffer)
+	rawBytes := item.Bytes(b)
+	// put item back to the pool
+	bufferPool.Put(b)
+	return rawBytes
+}
+
+func ErrorStr(c echo.ContextInterface, msg []byte) error {
 	logger.Error(msg)
-	rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, msg))
+	rawBytes := toErrorPool(msg)
 	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func Error(c echo.ContextInterface, err error) error {
-	logger.Error(err)
-	apierr := protocol.NewApiError(http.StatusBadRequest, err.Error())
-	rawBytes := str.GetJsonBytes(apierr)
-	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	return ErrorStr(c, str.UnsafeBytes(err.Error()))
 }
 
 func ErrorCode(c echo.ContextInterface, code int, err error) error {
 	logger.Error(err)
-	apierr := protocol.NewApiError(code, err.Error())
-	rawBytes := str.GetJsonBytes(apierr)
+	rawBytes := toError(code, str.UnsafeBytes(err.Error()))
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func StackError(c echo.ContextInterface, stackErr trycatch.Error) error {
 	logger.Error(stackErr)
-	rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, stackErr.Error()))
+	rawBytes := toError(http.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
 	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }

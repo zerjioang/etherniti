@@ -4,10 +4,12 @@
 package ethrpc
 
 import (
-	"fmt"
+	"bytes"
 	"math/big"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -77,10 +79,14 @@ func HexToBigInt(hex string) *big.Int {
 //
 // This gives context to the signed message and prevents signing of transactions.
 func TextAndHash(data []byte) ([]byte, string) {
-	msg := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), string(data))
+	var b bytes.Buffer
+	b.WriteString("\x19Ethereum Signed Message:\n")
+	b.Write(str.IntToByte(len(data)))
+	b.Write(data)
+	msg := b.Bytes()
 	hasher := sha3.NewLegacyKeccak256()
-	hasher.Write([]byte(msg))
-	return hasher.Sum(nil), msg
+	hasher.Write(msg)
+	return hasher.Sum(nil), string(msg)
 }
 
 func LocalSigning(addrHex string, privHex string, plainMessage string) ([]byte, error) {

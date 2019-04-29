@@ -7,11 +7,16 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"reflect"
+	"strconv"
 	"unsafe"
+
+	"github.com/json-iterator/go"
 )
 
 var (
-	empty []byte
+	empty    []byte
+	jsonfast = jsoniter.ConfigFastest
+	jsonstd  = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 func ReadFileAsString(path string) string {
@@ -45,9 +50,18 @@ func UnsafeString(data []byte) string {
 func StdMarshal(data interface{}) ([]byte, error) {
 	return json.Marshal(&data)
 }
+
+func FastMarshal(data interface{}) ([]byte, error) {
+	return jsonfast.Marshal(&data)
+}
+
+func StdJsoniterMarshal(data interface{}) ([]byte, error) {
+	return jsonstd.Marshal(&data)
+}
+
 func GetJsonBytes(data interface{}) []byte {
 	if data != nil {
-		raw, _ := StdMarshal(data)
+		raw, _ := FastMarshal(data)
 		return raw
 	}
 	return empty
@@ -66,4 +80,9 @@ func ToLowerAscii(src string) string {
 		}
 	}
 	return string(rawBytes)
+}
+
+func IntToByte(v int) []byte {
+	b := []byte(strconv.FormatInt(int64(v), 10))
+	return b
 }

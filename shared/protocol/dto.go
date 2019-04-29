@@ -3,7 +3,12 @@
 
 package protocol
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+
+	"github.com/zerjioang/etherniti/core/util/str"
+)
 
 // profile model dto
 type Profile struct {
@@ -124,17 +129,30 @@ type ContractCompileResponse struct {
 // api trycatch model dto
 type ApiError struct {
 	Code    int    `json:"code"`
-	Message string `json:"msg"`
-	Details string `json:"details"`
+	Message []byte `json:"msg"`
+	Details []byte `json:"details"`
+}
+
+func (e ApiError) Bytes(b *bytes.Buffer) []byte {
+	b.Reset()
+	// {"code":400,"msg":"test-error","details":""}
+	b.Write(str.UnsafeBytes(`{"code":`))
+	b.Write(str.IntToByte(e.Code))
+	b.Write(str.UnsafeBytes(`,"msg":"`))
+	b.Write(e.Message)
+	b.Write(str.UnsafeBytes(`","details":"`))
+	b.Write(e.Details)
+	b.Write(str.UnsafeBytes(`"}`))
+	return b.Bytes()
 }
 
 // api trycatch constructor like function
-func NewApiError(code int, details string) ApiError {
+func NewApiError(code int, details []byte) *ApiError {
 	ae := ApiError{}
 	ae.Code = code
-	ae.Message = StatusText(code)
+	ae.Message = str.UnsafeBytes(StatusText(code))
 	ae.Details = details
-	return ae
+	return &ae
 }
 
 // api response model dto
@@ -142,16 +160,31 @@ type ApiResponse struct {
 	Id   int `json:"id"`
 	Code int `json:"code"`
 	//Error trycatch
-	Message string      `json:"msg,omitempty"`
+	Message []byte      `json:"msg,omitempty"`
 	Result  interface{} `json:"result,omitempty"`
 }
 
 // api response constructor like function
-func NewApiResponse(message string, payload interface{}) ApiResponse {
+func NewApiResponse(message []byte, payload interface{}) *ApiResponse {
 	ae := ApiResponse{}
 	ae.Id = 0
 	ae.Code = 200
 	ae.Message = message
 	ae.Result = payload
-	return ae
+	return &ae
+}
+
+func (e ApiResponse) Bytes(b *bytes.Buffer) []byte {
+	b.Reset()
+	// {"code":400,"msg":"test-error","details":""}
+	b.WriteString(`{"code":`)
+	b.Write(str.IntToByte(e.Code))
+	b.WriteString(`,"id":"`)
+	b.Write(str.IntToByte(e.Id))
+	b.WriteString(`,"msg":"`)
+	b.Write(e.Message)
+	b.WriteString(`","details":"`)
+	b.Write(str.GetJsonBytes(e.Result))
+	b.WriteString(`"}`)
+	return b.Bytes()
 }
