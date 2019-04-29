@@ -32,6 +32,7 @@ var (
 	whiteData []byte
 	blackData []byte
 	fuzzyData []byte
+	responseName = []byte("domain analyzed")
 )
 
 func init() {
@@ -87,7 +88,7 @@ func IsDangerousDomain(domain string) []byte {
 			Message: "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
 			Trust:   false,
 		}
-		return api.ToSuccess("domain verified", responseData)
+		return api.ToSuccess(responseName, responseData)
 	} else {
 		responseData := response{
 			Title:   "Clean domain detected",
@@ -95,6 +96,6 @@ func IsDangerousDomain(domain string) []byte {
 			Message: "The domain you requested has not been blacklisted.",
 			Trust:   true,
 		}
-		return api.ToSuccess("domain verified", responseData)
+		return api.ToSuccess(responseName, responseData)
 	}
 }

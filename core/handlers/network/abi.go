@@ -5,6 +5,7 @@ package network
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
@@ -18,6 +19,8 @@ import (
 type AbiController struct {
 	abiData concurrentmap.ConcurrentMap
 }
+
+
 
 // constructor like function
 func NewAbiController() AbiController {
@@ -33,13 +36,13 @@ func (ctl *AbiController) getAbi(c echo.ContextInterface) error {
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {
-		return api.ErrorStr(c, "provide a valid contract address")
+		return api.ErrorStr(c, data.ProvideContractName)
 	} else {
-		data, found := ctl.abiData.Get(contractAddress)
+		d, found := ctl.abiData.Get(contractAddress)
 		if found {
-			return c.JSON(code, data)
+			return c.JSON(code, d)
 		} else {
-			return api.ErrorStr(c, "no results found for given contract address")
+			return api.ErrorStr(c, data.NoResults)
 		}
 	}
 }
@@ -50,7 +53,7 @@ func (ctl *AbiController) setAbi(c echo.ContextInterface) error {
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {
-		return api.ErrorStr(c, "provide a valid contract address")
+		return api.ErrorStr(c, data.ProvideContractAddress)
 	} else {
 		// read body abi data, if exists
 		req := abi.ABI{}
@@ -61,9 +64,9 @@ func (ctl *AbiController) setAbi(c echo.ContextInterface) error {
 		}
 		if req.Methods != nil && len(req.Methods) > 0 {
 			ctl.abiData.Set(contractAddress, req)
-			return api.Success(c, "abi successfully linked to contract", "")
+			return api.Success(c, data.LinkSuccess, nil)
 		} else {
-			return api.ErrorStr(c, "invalid abi data provided on field 'abi'")
+			return api.ErrorStr(c, data.InvalidAbi)
 		}
 	}
 }

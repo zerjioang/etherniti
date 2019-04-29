@@ -4,6 +4,7 @@
 package network
 
 import (
+	"github.com/zerjioang/etherniti/core/data"
 	"strconv"
 
 	"github.com/zerjioang/etherniti/core/eth"
@@ -65,7 +66,7 @@ func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
 	if err != nil {
 		return api.Error(c, err)
 	} else {
-		return api.SendSuccess(c, "deploy", raw)
+		return api.SendSuccess(c, data.Deploy, raw)
 	}
 }
 
@@ -74,13 +75,13 @@ func (ctl *DevOpsController) sendTransaction(c echo.ContextInterface) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
-		return api.ErrorStr(c, "invalid destination address provided")
+		return api.ErrorStr(c, data.InvalidDstAddress)
 	}
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
 	if amount == "" || pErr != nil || tokenAmount <= 0 {
-		return api.ErrorStr(c, "invalid ether amount value provided")
+		return api.ErrorStr(c, data.InvalidEtherValue)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -97,7 +98,7 @@ func (ctl *DevOpsController) sendTransaction(c echo.ContextInterface) error {
 	if err != nil {
 		return api.Error(c, err)
 	} else {
-		return api.SendSuccess(c, "allowance", raw)
+		return api.SendSuccess(c, data.Allowance, raw)
 	}
 }
 
@@ -105,11 +106,11 @@ func (ctl *DevOpsController) callContract(c echo.ContextInterface) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, "invalid contract address provided")
+		return api.ErrorStr(c, data.InvalidContractAddress)
 	}
 	methodName := c.Param("method")
 	if methodName == "" {
-		return api.ErrorStr(c, "invalid contract method name provided")
+		return api.ErrorStr(c, data.InvalidMethodName)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -127,7 +128,7 @@ func (ctl *DevOpsController) callContract(c echo.ContextInterface) error {
 	if err != nil {
 		return api.Error(c, err)
 	} else {
-		return api.SendSuccess(c, "allowance", raw)
+		return api.SendSuccess(c, data.Allowance, raw)
 	}
 }
 

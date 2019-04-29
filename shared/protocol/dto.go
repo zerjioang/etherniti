@@ -146,7 +146,7 @@ func (e ApiError) Bytes(b *bytes.Buffer) []byte {
 	return b.Bytes()
 }
 
-// api trycatch constructor like function
+// api error constructor like function
 func NewApiError(code int, details []byte) *ApiError {
 	ae := ApiError{}
 	ae.Code = code

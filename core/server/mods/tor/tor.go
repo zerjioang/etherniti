@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	torBlockedError = protocol.NewApiError(http.StatusNotAcceptable, "Tor based connection blocked")
+	torBlockedError = protocol.NewApiError(http.StatusNotAcceptable, []byte("tor based connection blocked"))
 )
 
 // REST API style Tor IP blocker

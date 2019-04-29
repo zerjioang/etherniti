@@ -3,7 +3,7 @@
 
 package constants
 
-const (
-	ReadErr = `there was an error during execution`
-	BindErr = `there was an error while processing your request information`
+var (
+	ReadErr = []byte("there was an error during execution")
+	BindErr = []byte("there was an error while processing your request information")
 )

@@ -4,6 +4,7 @@
 package protocol
 
 import (
+	"github.com/zerjioang/etherniti/core/util/str"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,7 +12,7 @@ import (
 
 func TestNewApiError(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		apiErr := NewApiError(200, "test-trycatch")
+		apiErr := NewApiError(200, str.UnsafeBytes("test-trycatch"))
 		require.NotNil(t, apiErr)
 		require.Equal(t, apiErr.Code, 200)
 		require.Equal(t, apiErr.Details, "test-trycatch")
@@ -20,7 +21,7 @@ func TestNewApiError(t *testing.T) {
 
 func TestNewApiResponse(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		msg := NewApiResponse("success", 12345)
+		msg := NewApiResponse(str.UnsafeBytes("success"), 12345)
 		require.NotNil(t, msg)
 		require.Equal(t, msg.Code, 200)
 		require.Equal(t, msg.Message, "success")

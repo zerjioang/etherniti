@@ -5,6 +5,7 @@ package network
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
@@ -15,6 +16,11 @@ import (
 	"github.com/zerjioang/etherniti/core/server"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
+)
+
+var (
+	errGetCaller = errors.New(data.DataBindFailedStr)
+	errInvalidAddress = errors.New(data.AddressNoSetupStr)
 )
 
 // eth network controller
@@ -52,14 +58,13 @@ func (ctl *NetworkController) RegisterRouters(router *echo.Group) {
 
 func (ctl *NetworkController) Name() string {
 	return ctl.networkName
-
 }
 
 func (ctl *NetworkController) getRpcClient(c echo.ContextInterface) (*ethrpc.EthRPC, error) {
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return nil, api.ErrorStr(c, "failed to execute requested operation")
+		return nil, api.ErrorStr(c, data.DataBindFailed)
 	}
 	// get our client context
 	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
@@ -74,11 +79,11 @@ func (ctl *NetworkController) getCallerAddress(c echo.ContextInterface) (string,
 	// cast to our context
 	cc, ok := c.(*server.EthernitiContext)
 	if !ok {
-		return "", errors.New("failed to execute requested operation")
+		return "", errGetCaller
 	}
 	from := cc.CallerEthAddress()
 	if !eth.IsValidAddress(from) {
-		return "", errors.New("invalid ethereum address setup when creating connection profile. Please provide a alid address as 'from'")
+		return "", errInvalidAddress
 	}
 	return from, nil
 }

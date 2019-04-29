@@ -36,7 +36,7 @@ const (
 )
 
 var (
-	rateExcedeed                  = protocol.NewApiError(http.StatusTooManyRequests, "rate limit reached")
+	rateExcedeed                  = protocol.NewApiError(http.StatusTooManyRequests, []byte("rate limit reached"))
 	defaultCacheMeasurementUnit   = config.RateLimitUnits
 	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt
 )

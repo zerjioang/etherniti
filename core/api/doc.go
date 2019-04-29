@@ -24,7 +24,7 @@ BenchmarkWrapper/error-4                	  500000	      3642 ns/op	   0.27 MB/s	
 BenchmarkWrapper/error-code-4           	  500000	      3619 ns/op	   0.28 MB/s	     266 B/op	       4 allocs/op
 BenchmarkWrapper/stack-error-4          	  500000	      3695 ns/op	   0.27 MB/s	     298 B/op	       5 allocs/op
 
-after adding some sync pools and replacing json serializer with *bytes.buffer
+after adding some sync pools and replacing json serializer with *bytes.buffer and manual marshalling
 
 BenchmarkWrapper/to-success-4         	 3000000	       525 ns/op	   1.90 MB/s	      26 B/op	       3 allocs/op
 BenchmarkWrapper/to-success-pool-4    	 3000000	       602 ns/op	   1.66 MB/s	      30 B/op	       4 allocs/op
