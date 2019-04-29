@@ -57,7 +57,7 @@ func NewRateLimitEngine() RateLimitEngine {
 }
 
 // ratelimit evaluation function
-func (rte RateLimitEngine) Eval(clientIdentifier string, h http.Header) RateLimitResult {
+func (rte RateLimitEngine) Eval(clientIdentifier []byte, h http.Header) RateLimitResult {
 	if h == nil {
 		return Deny
 	}

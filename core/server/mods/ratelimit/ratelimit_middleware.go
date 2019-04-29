@@ -4,6 +4,7 @@
 package ratelimit
 
 import (
+	"github.com/zerjioang/etherniti/core/util/str"
 	"net/http"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -27,7 +28,8 @@ func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
 		header := c.Response().Header()
 		clientIdentifier := c.RealIP()
-		result := rateLimitEngine.Eval(clientIdentifier, header)
+		clientIdentifierBytes := str.UnsafeBytes(clientIdentifier)
+		result := rateLimitEngine.Eval(clientIdentifierBytes, header)
 		if result == Allow {
 			return next(c)
 		}

@@ -6,23 +6,16 @@ package handlers
 import (
 	"encoding/base64"
 	"errors"
+	"github.com/zerjioang/etherniti/core/data"
 	"sync/atomic"
 
-	constants2 "github.com/zerjioang/etherniti/shared/constants"
-
 	"github.com/zerjioang/etherniti/core/util/str"
-
 	"github.com/zerjioang/etherniti/shared/protocol"
-	constants "github.com/zerjioang/etherniti/shared/solc"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/solc"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-)
-
-var (
-	errUnknownMode = errors.New("unknown mode selected. Allowed modes are: single, git, zip, targz")
 )
 
 // token controller
@@ -49,7 +42,7 @@ func (ctl *SolcController) version(c echo.ContextInterface) error {
 			return err
 		} else {
 			// store in cache
-			versionResponse := api.ToSuccess("solc version", solData)
+			versionResponse := api.ToSuccess(data.SolcVersion, solData)
 			// cache response for next request
 			ctl.solidityVersionResponse.Store(versionResponse)
 			// return response to client
@@ -69,7 +62,7 @@ func (ctl SolcController) compileSingle(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants2.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 
 	if req.Contract == "" {
@@ -80,7 +73,7 @@ func (ctl SolcController) compileSingle(c echo.ContextInterface) error {
 		if err != nil {
 			return api.Error(c, err)
 		} else {
-			return api.SendSuccess(c, "solc contract compiled", compilerResponse)
+			return api.SendSuccess(c, data.SolcCompiled, compilerResponse)
 		}
 	}
 }
@@ -91,7 +84,7 @@ func (ctl SolcController) compileSingleFromBase64(c echo.ContextInterface) error
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants2.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 
 	if req.Contract == "" {
@@ -125,7 +118,7 @@ func (ctl SolcController) compileSingleFromBase64(c echo.ContextInterface) error
 					contractResp[idx] = current
 					idx++
 				}
-				return api.SendSuccess(c, "solc contract compiled", contractResp)
+				return api.SendSuccess(c, data.SolcCompiled, contractResp)
 			}
 		}
 	}
@@ -138,7 +131,7 @@ func (ctl SolcController) compileMultiple(c echo.ContextInterface) error {
 	} else if err != nil {
 		return err
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		return api.SendSuccess(c, data.SolcVersion, solData)
 	}
 }
 
@@ -149,7 +142,7 @@ func (ctl SolcController) compileFromGit(c echo.ContextInterface) error {
 	} else if err != nil {
 		return err
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		return api.SendSuccess(c, data.SolcVersion, solData)
 	}
 }
 
@@ -160,18 +153,18 @@ func (ctl SolcController) compileFromUploadedZip(c echo.ContextInterface) error 
 	} else if err != nil {
 		return err
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		return api.SendSuccess(c, data.SolcVersion, solData)
 	}
 }
 
 func (ctl SolcController) compileFromUploadedTargz(c echo.ContextInterface) error {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
-		return errors.New("failed to get solc version")
+		return data.ErrCannotReadSolcVersion
 	} else if err != nil {
 		return err
 	} else {
-		return api.SendSuccess(c, "solc version", solData)
+		return api.SendSuccess(c, data.SolcVersion, solData)
 	}
 }
 
@@ -180,23 +173,23 @@ func (ctl SolcController) compileModeSelector(c echo.ContextInterface) error {
 	mode = str.ToLowerAscii(mode)
 	logger.Debug("compiling ethereum contract with mode: ", mode)
 	switch mode {
-	case constants.SingleRawFile:
+	case data.SingleRawFile:
 		logger.Debug("compiling ethereum contract from raw solidity source code")
 		return ctl.compileSingle(c)
-	case constants.SingleBase64File:
+	case data.SingleBase64File:
 		logger.Debug("compiling ethereum contract from raw solidity encoded base64 code")
 		return ctl.compileSingleFromBase64(c)
-	case constants.GitMode:
+	case data.GitMode:
 		logger.Debug("compiling ethereum contract from remote git repository")
 		return ctl.compileFromGit(c)
-	case constants.ZipMode:
+	case data.ZipMode:
 		logger.Debug("compiling ethereum contract from user provided zip file")
 		return ctl.compileFromUploadedZip(c)
-	case constants.TargzMode:
+	case data.TargzMode:
 		logger.Debug("compiling ethereum contract from user provided targz file")
 		return ctl.compileFromUploadedTargz(c)
 	default:
-		return errUnknownMode
+		return data.ErrUnknownMode
 	}
 }
 

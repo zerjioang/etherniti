@@ -9,7 +9,6 @@ import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
-	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -60,7 +59,7 @@ func (ctl *AbiController) setAbi(c echo.ContextInterface) error {
 		if err := c.Bind(&req); err != nil {
 			// return a binding error
 			logger.Error("failed to bind request data to model: ", err)
-			return api.ErrorStr(c, constants.BindErr)
+			return api.ErrorStr(c, data.BindErr)
 		}
 		if req.Methods != nil && len(req.Methods) > 0 {
 			ctl.abiData.Set(contractAddress, req)

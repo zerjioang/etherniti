@@ -5,10 +5,10 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
-	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -30,7 +30,7 @@ func (ctl UIController) login(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" {
 		logger.Info("logging user with email: ", req.Email)
@@ -39,23 +39,23 @@ func (ctl UIController) login(c echo.ContextInterface) error {
 			dto := new(protocol.RegisterRequest)
 			pErr := db.Unserialize(item, dto)
 			if pErr != nil {
-				return api.ErrorStr(c, "Failed to process your login request at this moment. Please try it later")
+				return api.ErrorStr(c, data.DatabaseError)
 			} else {
 				// check if email and password matches
 				matches := req.Email == dto.Email && db.CompareHash(req.Password, dto.Password)
 				if matches {
-					return api.Success(c, "login", "token")
+					return api.Success(c, data.UserLogin, str.UnsafeBytes("token"))
 				} else {
-					return api.ErrorStr(c, "Invalid username or password provided")
+					return api.ErrorStr(c, data.InvalidLoginData)
 				}
 			}
 		} else {
 			//db read error
 			// this code is trigger each time user fails a login attempt
-			return api.ErrorStr(c, "Failed to verify your login information at this time. Please try it few minutes later.")
+			return api.ErrorStr(c, data.FailedLoginVerification)
 		}
 	} else {
-		return api.ErrorStr(c, "Invalid login data provided. please fill all required fields")
+		return api.ErrorStr(c, data.MissingLoginFields)
 	}
 }
 
@@ -66,7 +66,7 @@ func (ctl UIController) register(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" && req.Username != "" {
 		logger.Info("registering user with email: ", req.Email)
@@ -75,9 +75,9 @@ func (ctl UIController) register(c echo.ContextInterface) error {
 		saveErr := db.GetInstance().PutUniqueKeyValue(str.UnsafeBytes(req.Email), db.Serialize(req))
 		if saveErr != nil {
 			logger.Error("failed to register new user due to: ", saveErr)
-			return api.ErrorStr(c, "failed to register new user account")
+			return api.ErrorStr(c, data.UserRegisterFailed)
 		} else {
-			return api.Success(c, "user registered", req.Email)
+			return api.Success(c, data.UserRegistered, data.RegistrationSuccess)
 		}
 	}
 	return nil

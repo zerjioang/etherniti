@@ -4,9 +4,8 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/data"
 	"net/http"
-
-	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -43,7 +42,7 @@ func (ctl ProfileController) create(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 	// add current user IP to request
 	req.Ip = c.RealIP()
@@ -52,20 +51,20 @@ func (ctl ProfileController) create(c echo.ContextInterface) error {
 	// create the token
 	token, err := profile.CreateConnectionProfileToken(userProfile)
 	if err == nil {
-		rawBytes := str.GetJsonBytes(protocol.NewApiResponse("profile token successfully created", token))
+		rawBytes := str.GetJsonBytes(protocol.NewApiResponse(data.ProfileTokenSuccess, token))
 		// increment created counter
 		profilesCreated.Increment()
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
 		//token generation trycatch
-		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, err.Error()))
+		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error()) ))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }
 
 // profile validation check
 func (ctl ProfileController) validate(c echo.ContextInterface) error {
-	return c.JSONBlob(http.StatusOK, str.UnsafeBytes(constants.ReadErr))
+	return c.JSONBlob(http.StatusOK, data.ReadErr)
 }
 
 // profile validation counter

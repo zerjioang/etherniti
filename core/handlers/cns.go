@@ -5,9 +5,10 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/cns"
-	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -29,32 +30,32 @@ func (ctl *ContractNameSpaceController) register(c echo.ContextInterface) error 
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 	e := req.Validate()
 	if e.Occur() {
 		logger.Error("failed to validate registration data: ", e.Error())
-		return api.ErrorStr(c, e.Error())
+		return api.ErrorStr(c, str.UnsafeBytes(e.Error()))
 	} else {
 		// user entered data is valid. register it
 		ctl.ns.Register(req)
-		return api.SendSuccess(c, "contract successfully registered in naming service", req.Id())
+		return api.SendSuccess(c, data.ContractNameSpaceRegistered, req.Id())
 	}
 }
 
 func (ctl *ContractNameSpaceController) unregister(c echo.ContextInterface) error {
 	id := c.Param("id")
 	ctl.ns.Unregister(id)
-	return api.Success(c, "contract successfully unregistered from naming service", id)
+	return api.Success(c, data.ContractNameSpaceUnregistered, str.UnsafeBytes(id))
 }
 
 func (ctl ContractNameSpaceController) resolve(c echo.ContextInterface) error {
 	id := c.Param("id")
-	data, found := ctl.ns.Resolve(id)
+	response, found := ctl.ns.Resolve(id)
 	if !found {
-		return api.ErrorStr(c, "failed to resolve given contract id")
+		return api.ErrorStr(c, data.ContractResolutionFailed)
 	} else {
-		return api.SendSuccess(c, "contract information successfully resolved", data)
+		return api.SendSuccess(c, data.ContractNameSpaceResolved, response)
 	}
 }
 

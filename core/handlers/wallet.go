@@ -6,9 +6,8 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
+	"github.com/zerjioang/etherniti/core/data"
 	"strconv"
-
-	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
@@ -50,7 +49,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 
 	// lowercase language
@@ -67,7 +66,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 		bip39.SetWordList(req.Language)
 	default:
 		//return invalid language error
-		return api.ErrorStr(c, "provided language is not supported")
+		return api.ErrorStr(c, data.MnemonicLanguageNotProvided)
 	}
 
 	if req.Size != 128 &&
@@ -76,7 +75,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 		req.Size != 224 &&
 		req.Size != 256 {
 		//return invalid size error
-		return api.ErrorStr(c, "provided mnemonic size is not supported. allowed sizes are: 128,160,192,224,256")
+		return api.ErrorStr(c, data.MnemonicSizeNotSupported)
 	}
 
 	// create new Entropy from rand reader
@@ -84,7 +83,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 	entropyBytes, entropyErr := bip39.GenerateSecureEntropy(req.Size)
 	if entropyErr != nil {
 		//failed to get a full Entropy source
-		return api.ErrorStr(c, "failed to get a full entropy source")
+		return api.ErrorStr(c, data.InvalidEntropySource)
 	}
 
 	// create Mnemonic based on user config and created Entropy source
@@ -103,7 +102,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 			encryptedSeed := bip39.NewSeed(mnemomic, req.Secret)
 			response.EncryptedSeed = hex.EncodeToString(encryptedSeed)
 		}
-		return api.SendSuccess(c, "mnemonic successfully created", response)
+		return api.SendSuccess(c, data.MnemonicSuccess, response)
 	}
 }
 
@@ -112,13 +111,13 @@ func (ctl WalletController) HdWallet(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 	response, err := ctl.createHdWallet(req)
 	if err != nil {
 		return api.Error(c, err)
 	} else {
-		return api.SendSuccess(c, "hd wallet successfully created", response)
+		return api.SendSuccess(c, data.HDWalletSuccess, response)
 	}
 }
 
@@ -127,14 +126,14 @@ func (ctl WalletController) Entropy(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 
 	req.Size = ctl.getIntParam(c, "bits")
 
 	if req.Size <= 0 || req.Size > 4096*8 {
 		//return invalid size (exceeded btw) error
-		return api.ErrorStr(c, "provided entropy size is not supported")
+		return api.ErrorStr(c, data.EntropySizeNotSupported)
 	}
 
 	response, err := ctl.generateSecureEntropy(req)
@@ -142,7 +141,7 @@ func (ctl WalletController) Entropy(c echo.ContextInterface) error {
 		return api.Error(c, err)
 	} else {
 		//success
-		return api.SendSuccess(c, "Entropy data generated", response)
+		return api.SendSuccess(c, data.EntropySuccess, response)
 	}
 }
 
@@ -185,7 +184,7 @@ func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 	if err != nil {
 		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
-		return api.ErrorStr(c, "failed to generate ecdsa private key")
+		return api.ErrorStr(c, data.EthAccountFailed)
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
@@ -193,7 +192,7 @@ func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 		"address": address.Hex(),
 		"private": privateKey,
 	}
-	return api.SendSuccess(c, "ethereum account created", response)
+	return api.SendSuccess(c, data.EthAccountSuccess, response)
 }
 
 // check if an ethereum address is valid
@@ -206,10 +205,10 @@ func (ctl WalletController) isValidAddress(c echo.ContextInterface) error {
 	// check if not empty
 	if targetAddr != "" {
 		result := eth.IsValidAddress(targetAddr)
-		return api.SendSuccess(c, "address validation checked", result)
+		return api.SendSuccess(c, data.EthAddressValidation, result)
 	}
 	// send invalid address message
-	return api.ErrorStr(c, "please, provide a valid ethereum or quorum address")
+	return api.ErrorStr(c, data.MissingAddress)
 }
 
 // implemented method from interface RouterRegistrable

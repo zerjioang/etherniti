@@ -68,7 +68,8 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 	if targetAddr != "" {
 		//try to get this information from the cache
 		key := ctl.network.peer + "get_balance" + targetAddr
-		result, found := ctl.network.cache.Get(key)
+		keyBytes := str.UnsafeBytes(key)
+		result, found := ctl.network.cache.Get(keyBytes)
 		if found && result != nil {
 			//cache hit
 			logger.Info(key, ": cache hit")
@@ -78,7 +79,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 			logger.Info(key, ": cache miss")
 			// get our client context
 			client, cliErr := ctl.network.getRpcClient(c)
-			logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 			if cliErr != nil {
 				return api.Error(c, cliErr)
 			}
@@ -88,7 +89,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 			}
 			// save result in the cache
 			response := api.ToSuccess(data.Balance, result)
-			ctl.network.cache.Set(key, response)
+			ctl.network.cache.Set(keyBytes, response)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	} else {
@@ -101,7 +102,6 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -113,7 +113,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		return api.SendSuccess(c, "balance_at_block", result)
+		return api.SendSuccess(c, data.BalanceAtBlock, result)
 	}
 	// send invalid address message
 	return api.ErrorStr(c, data.MissingAddress)
@@ -123,16 +123,16 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 func (ctl *Web3Controller) getNodeInfo(c echo.ContextInterface) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
-	data, err := client.EthNodeInfo()
+	d, err := client.EthNodeInfo()
 	if err != nil {
 		// send invalid response message
 		return api.Error(c, err)
 	} else {
-		return api.Success(c, "eth_info", data)
+		return api.Success(c, data.EthInfo, str.UnsafeBytes(d))
 	}
 }
 
@@ -140,7 +140,7 @@ func (ctl *Web3Controller) getNodeInfo(c echo.ContextInterface) error {
 func (ctl *Web3Controller) getNetworkVersion(c echo.ContextInterface) error {
 
 	//try to get this information from the cache
-	key := "net_version"
+	key := data.NetVersion
 	result, found := ctl.network.cache.Get(key)
 	if found && result != nil {
 		//cache hit
@@ -152,18 +152,18 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.ContextInterface) error {
 		logger.Info(key, ": cache miss")
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
-		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}
-		data, err := client.EthNetVersion()
+		response, err := client.EthNetVersion()
 		if err != nil {
 			// send invalid response message
 			return api.Error(c, err)
 		} else {
 			// save result in the cache
-			ctl.network.cache.Set(key, data)
-			response := api.ToSuccess(key, data)
+			ctl.network.cache.Set(key, response)
+			response := api.ToSuccess(key, response)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	}
@@ -173,7 +173,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.ContextInterface) error {
 // EthereumJS TestRPC/v2.5.5-beta.0/ethereum-js or similar
 func (ctl *Web3Controller) isRunningGanache(c echo.ContextInterface) error {
 	//try to get this information from the cache
-	key := "is_ganache"
+	key := data.IsGanache
 	result, found := ctl.network.cache.Get(key)
 	if found && result != nil {
 		//cache hit
@@ -185,7 +185,7 @@ func (ctl *Web3Controller) isRunningGanache(c echo.ContextInterface) error {
 		logger.Info(key, ": cache miss")
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
-		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}
@@ -207,7 +207,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
 	// methodName example: /v1/public/ropsten/net/version
 	chunks := strings.Split(methodName, "/")
 	if len(chunks) < 4 {
-		return api.ErrorStr(c, "invalid url or web3 method provided")
+		return api.ErrorStr(c, data.InvalidUrlWeb3)
 	}
 	var key string
 	if len(chunks) == 4 {
@@ -217,19 +217,21 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
 	}
 	//resolve method name from key value
 	method := methodMap[key]
+	methodBytes := str.UnsafeBytes(method)
 	cacheKey := ctl.network.peer + ":" + method
-	result, found := ctl.network.cache.Get(cacheKey)
+	cacheKeyBytes := str.UnsafeBytes(cacheKey)
+	result, found := ctl.network.cache.Get(cacheKeyBytes)
 	if found && result != nil {
 		//cache hit
 		logger.Info(method, ": cache hit")
-		response := api.ToSuccess(method, result)
+		response := api.ToSuccess(methodBytes, result)
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 	} else {
 		//cache miss
 		logger.Info(method, ": cache miss")
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
-		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}
@@ -239,11 +241,11 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
 			return api.Error(c, err)
 		} else if rpcResponse == nil {
 			// send invalid response message
-			return api.ErrorStr(c, "the network peer did not return any response")
+			return api.ErrorStr(c, data.NetworkNoResponse)
 		} else {
 			// save result in the cache
-			ctl.network.cache.Set(cacheKey, rpcResponse)
-			response := api.ToSuccess(method, rpcResponse)
+			ctl.network.cache.Set(cacheKeyBytes, rpcResponse)
+			response := api.ToSuccess(methodBytes, rpcResponse)
 			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
 		}
 	}
@@ -260,7 +262,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
 func (ctl *Web3Controller) getAccountsWithBalance(c echo.ContextInterface) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -313,7 +315,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.ContextInterface) error {
 	if targetAddr != "" {
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
-		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}
@@ -339,7 +341,7 @@ func (ctl *Web3Controller) erc20Name(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -375,7 +377,7 @@ func (ctl *Web3Controller) erc20Symbol(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -411,7 +413,7 @@ func (ctl *Web3Controller) erc20totalSupply(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -447,7 +449,7 @@ func (ctl *Web3Controller) erc20decimals(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -488,7 +490,7 @@ func (ctl *Web3Controller) erc20Balanceof(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -524,7 +526,7 @@ func (ctl *Web3Controller) erc20Allowance(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -566,7 +568,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -625,7 +627,7 @@ func (ctl *Web3Controller) sendTransaction(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -656,7 +658,7 @@ func (ctl *Web3Controller) getTransactionByHash(c echo.ContextInterface) error {
 
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
-		logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 		if cliErr != nil {
 			return api.Error(c, cliErr)
 		}

@@ -5,32 +5,27 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
-const (
-	infuraJwtErrorMessage   = "please provide an Infura connection profile token including provided Infura endpoint URL (https://$NETWORK.infura.io/v3/$PROJECT_ID) for this kind of call."
-	quiknodeJwtErrorMessage = "please provide a QuikNode connection profile token including provided full peer endpoint URL"
-	jwtErrorMessage         = "please provide a connection profile token for this kind of call"
-)
-
 func infuraJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, infuraJwtErrorMessage)
+	return jwt(next, data.InfuraJwtErrorMessage)
 }
 
 func quiknodeJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, quiknodeJwtErrorMessage)
+	return jwt(next, data.QuiknodeJwtErrorMessage)
 }
 
 func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, jwtErrorMessage)
+	return jwt(next, data.JwtErrorMessage)
 }
 
 // jwt middleware function.
-func jwt(next echo.HandlerFunc, errorMsg string) echo.HandlerFunc {
+func jwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
 		// convert context in etherniti context
 		cc := c.(*server.EthernitiContext)

@@ -38,10 +38,10 @@ func InstantiateToken(cc *server.EthernitiContext, address string) (interface{},
 }
 
 // proxy methods
-func (wm WalletManager) Get(key string) (memory.WalletContent, bool) {
+func (wm WalletManager) Get(key []byte) (memory.WalletContent, bool) {
 	return wm.wallet.Get(key)
 }
 
-func (wm *WalletManager) Set(key string, value memory.WalletContent) {
+func (wm *WalletManager) Set(key []byte, value memory.WalletContent) {
 	wm.wallet.Set(key, value)
 }

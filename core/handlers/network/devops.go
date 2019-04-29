@@ -9,7 +9,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -37,7 +36,7 @@ func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, constants.BindErr)
+		return api.ErrorStr(c, data.BindErr)
 	}
 
 	// read from value
@@ -48,7 +47,7 @@ func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
 
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -85,7 +84,7 @@ func (ctl *DevOpsController) sendTransaction(c echo.ContextInterface) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 controller request using context id: ", ctl.network.networkName)
+
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
