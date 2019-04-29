@@ -268,7 +268,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 	logger.Info("[LAYER] / static files")
 	//load root static folder
-	e.Static("/", config.ResourcesDirLanding)
+	e.Static("/", config.ResourcesDirRoot)
 
 	e.Static("/phpinfo.php", config.ResourcesDirPHP)
 
