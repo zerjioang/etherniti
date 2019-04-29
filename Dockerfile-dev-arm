@@ -55,7 +55,6 @@ EXPOSE $X_ETHERNITI_INTERACTION_PORT
 COPY --from=compiler /go/${BASE}/root            ${GOPATH}/${BASE}/root
 COPY --from=compiler /go/${BASE}/internal        ${GOPATH}/${BASE}/internal
 COPY --from=compiler /go/${BASE}/swagger         ${GOPATH}/${BASE}/swagger
-COPY --from=compiler /go/${BASE}/landing         ${GOPATH}/${BASE}/landing
 
 COPY --from=compiler /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
 COPY --from=compiler /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}

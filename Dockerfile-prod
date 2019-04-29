@@ -117,7 +117,6 @@ EXPOSE $X_ETHERNITI_INTERACTION_PORT
 COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root            ${GOPATH}/${BASE}/root
 COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/internal        ${GOPATH}/${BASE}/internal
 COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger         ${GOPATH}/${BASE}/swagger
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/landing         ${GOPATH}/${BASE}/landing
 
 COPY --from=compiler --chown=etherniti:appgroup /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
 COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
