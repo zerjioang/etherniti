@@ -34,7 +34,7 @@
   ],
   "tags": [{
     "name": "public",
-    "description": "Public Ethereum REST API Proxy operations",
+    "description": "Public Etherniti Web3 Proxy operations",
     "externalDocs": {
       "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
       "url": "https://www.etherniti.org/docs/api/public-operations/"
@@ -42,7 +42,7 @@
   },
     {
       "name": "profile",
-      "description": "Ethereum REST API Proxy connection profile management",
+      "description": "Etherniti Web3 Proxy connection profile management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/api/profile-management/"
@@ -50,7 +50,7 @@
     },
     {
       "name": "wallet",
-      "description": "Ethereum REST API Proxy wallet service",
+      "description": "Etherniti Web3 Proxy wallet service",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/api/wallet/"
@@ -58,7 +58,7 @@
     },
     {
       "name": "private",
-      "description": "Ethereum REST API Proxy context dependant services",
+      "description": "Etherniti Web3 Proxy context dependant services",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://www.etherniti.org/docs/api/private"
@@ -66,7 +66,7 @@
     },
     {
       "name": "security",
-      "description": "Ethereum REST API Proxy security services",
+      "description": "Etherniti Web3 Proxy security services",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API security services at",
         "url": "https://www.etherniti.org/docs/api/security"
@@ -74,7 +74,7 @@
     },
     {
       "name": "web3",
-      "description": "Ethereum REST API Proxy web3 implementation",
+      "description": "Etherniti Web3 Proxy web3 implementation",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API web3 implementation at",
         "url": "https://www.etherniti.org/docs/api/web3"
@@ -82,7 +82,7 @@
     },
     {
       "name": "solc",
-      "description": "Ethereum REST API Proxy solc compiler implementation",
+      "description": "Etherniti Web3 Proxy solc compiler implementation",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API solc compiler implementation at",
         "url": "https://www.etherniti.org/docs/api/solc"
@@ -98,7 +98,7 @@
     },
     {
       "name": "devops",
-      "description": "Ethereum REST API devops helpers",
+      "description": "Etherniti Web3 Proxy devops helpers",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST APIdevops helpers implementation at",
         "url": "https://www.etherniti.org/docs/api/devops"
@@ -106,7 +106,7 @@
     },
     {
       "name": "erc20",
-      "description": "Ethereum REST API ERC20 management",
+      "description": "Etherniti Web3 Proxy ERC20 management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API ERC20 management at",
         "url": "https://www.etherniti.org/docs/api/erc20"
@@ -2226,7 +2226,7 @@
   },
   "definitions": {},
   "externalDocs": {
-    "description": "Find out more about Etherniti, an Ethereum REST API Proxy at https://www.etherniti.org",
+    "description": "Find out more about Etherniti, an Etherniti Web3 Proxy at https://www.etherniti.org",
     "url": "https://www.etherniti.org"
   }
 }
