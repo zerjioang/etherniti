@@ -5,6 +5,8 @@ package middleware
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/modules/tor"
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/modules/badips"
@@ -17,7 +19,6 @@ import (
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/handlers"
-	"github.com/zerjioang/etherniti/core/server/mods/tor"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 
@@ -74,46 +75,9 @@ func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// hardening middleware function.
-func hardening(next echo.HandlerFunc) echo.HandlerFunc {
+func secure(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.ContextInterface) error {
-		// add security headers
-		h := c.Response().Header()
-		h.Set("server", "Apache")
-		// h.Set("access-control-allow-credentials", "true")
-		h.Set("x-xss-protection", "1; mode=block")
-		h.Set("strict-transport-security", "max-age=63072000; includeSubDomains; preload ") //2 years
-		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
-		h.Set("X-Content-Type-Options", "nosniff")
-		// report-uri http://reportcollector.example.com/collector.cgi
-		if !config.IsDevelopment() {
-			h.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.etherniti.org cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com")
-		}
-		h.Set("Expect-CT", "enforce, max-age=30")
-		h.Set("X-UA-Compatible", "IE=Edge,chrome=1")
-		h.Set("x-frame-options", "SAMEORIGIN")
-		h.Set("Referrer-Policy", "same-origin")
-		h.Set("Feature-Policy", "microphone 'none'; payment 'none'; sync-xhr 'self'")
-		h.Set("x-firefox-spdy", "h2")
-		return next(c)
-	}
-}
-
-// fake server headers middleware function.
-func fakeServer(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
-		// add fake server header
-		h := c.Response().Header()
-		h.Set("server", "Apache/2.0.54")
-		h.Set("x-powered-by", "PHP/5.1.6")
-		return next(c)
-	}
-}
-
-// ip blacklist function
-func badIps(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
-		// add antibots policy
+		// add abuseIP policy
 		ip := c.RealIP()
 		if ip == "" {
 			//drop the request
@@ -124,45 +88,29 @@ func badIps(next echo.HandlerFunc) echo.HandlerFunc {
 			logger.Warn("drop request: blacklisted IP detected", ip)
 			return securityErr
 		}
-		return next(c)
-	}
-}
 
-// bots blacklist function.
-func antiBots(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+		request := c.Request()
+
 		// add antibots policy
-		ua := c.Request().UserAgent()
+		ua := request.UserAgent()
 		ua = str.ToLowerAscii(ua)
 		if ua == "" {
 			//drop the request
 			logger.Warn("drop request: no user-agent provided")
 			return securityErr
-		} else if isBotRequest(ua) {
+		} else if len(ua) < 4 || bots.GetBadBotsList().MatchAny(ua) {
 			//drop the request
 			logger.Warn("drop request: provided user-agent is considered as a bot: ", ua)
 			return securityErr
 		}
-		return next(c)
-	}
-}
 
-// check if user agent string contains bot strings similarities
-// it also needs to be more than 4 chars (curl, wget, etc)
-func isBotRequest(userAgent string) bool {
-	return len(userAgent) < 4 || bots.GetBadBotsList().MatchAny(userAgent)
-}
-
-// check if http request host value is allowed or not
-func hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
-		// add host policy
-		h := c.Request().Host
-		chunks := strings.Split(h, ":")
+		// add hostname policy
+		host := request.Host
+		chunks := strings.Split(host, ":")
 		var hostname = ""
 		if len(chunks) == 1 {
 			//no port defined in host header
-			hostname = h
+			hostname = host
 		} else if len(chunks) == 2 {
 			//port defined in host header
 			hostname = chunks[0]
@@ -172,22 +120,30 @@ func hostnameCheck(next echo.HandlerFunc) echo.HandlerFunc {
 		for i := 0; i < size && !allowed; i++ {
 			allowed = strings.Compare(hostname, config.AllowedHostnames[i]) == 0
 		}
-		if allowed {
-			// fordward request to next middleware
-			return next(c)
-		} else {
+		if !allowed {
 			// drop the request
 			logger.Warn("drop request: provided request does not specifies a valid host name in http headers")
 			return securityErr
 		}
-	}
-}
 
-// keepalive middleware function.
-func keepalive(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+		if config.BlockTorConnections {
+			// add rate limit control
+			logger.Info("[LAYER] tor connections blocker middleware added")
+			//get current request ip
+			requestIp := request.RemoteAddr
+			found := tor.TornodeSet.Contains(requestIp)
+			if !found {
+				//received request IP is not blacklisted
+				return next(c)
+			} else {
+				// received request is done using on of the blacklisted tor nodes
+				//return rate limit excedeed message
+				return c.FastBlob(200, echo.MIMEApplicationJSON, data.ErrBlockTorConnection)
+			}
+		}
+
 		// add keep alive headers in the response if requested by the client
-		h := c.Request().Header
+		h := request.Header
 		connectionMode := h.Get("Connection")
 		connectionMode = str.ToLowerAscii(connectionMode)
 		/*
@@ -205,12 +161,36 @@ func keepalive(next echo.HandlerFunc) echo.HandlerFunc {
 			ya que se enviara otra solicitud en la próxima respuesta.
 			Una canalización de HTTP puede ser usada para limitar la división.
 		*/
+		response := c.Response()
+		rh := response.Header()
 		if strings.Contains(connectionMode, "keep-alive") {
 			// keep alive connection mode requested
-			h := c.Response().Header()
-			h.Set("Connection", "Keep-Alive")
-			h.Set("Keep-Alive", "timeout=5, max=1000")
+			rh.Set("Connection", "Keep-Alive")
+			rh.Set("Keep-Alive", "timeout=5, max=1000")
 		}
+
+		// add security headers
+		rh.Set("server", "Apache")
+		// h.Set("access-control-allow-credentials", "true")
+		rh.Set("x-xss-protection", "1; mode=block")
+		rh.Set("strict-transport-security", "max-age=63072000; includeSubDomains; preload ") //2 years
+		//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
+		rh.Set("X-Content-Type-Options", "nosniff")
+		// report-uri http://reportcollector.example.com/collector.cgi
+		if !config.IsDevelopment() {
+			rh.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.etherniti.org cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com")
+		}
+		rh.Set("Expect-CT", "enforce, max-age=30")
+		rh.Set("X-UA-Compatible", "IE=Edge,chrome=1")
+		rh.Set("x-frame-options", "SAMEORIGIN")
+		rh.Set("Referrer-Policy", "same-origin")
+		rh.Set("Feature-Policy", "microphone 'none'; payment 'none'; sync-xhr 'self'")
+		rh.Set("x-firefox-spdy", "h2")
+
+		// add fake server header
+		rh.Set("server", "Apache/2.0.54")
+		rh.Set("x-powered-by", "PHP/5.1.6")
+
 		return next(c)
 	}
 }
@@ -251,38 +231,13 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 		// antibots, crawler middleware
 		// avoid bots and crawlers
-		logger.Info("[LAYER] antibots")
-		e.Pre(antiBots)
-
-		// bad ip blacklist filter
-		logger.Info("[LAYER] bad IPs")
-		e.Pre(badIps)
-
-		// avoid bots and crawlers checking origin host value
-		logger.Info("[LAYER] hostname check")
-		e.Pre(hostnameCheck)
+		logger.Info("[LAYER] security")
+		e.Pre(secure)
 
 		// add CORS support
 		if config.EnableCors {
 			logger.Info("[LAYER] cors support")
 			e.Use(middleware.CORSWithConfig(corsConfig))
-		}
-
-		logger.Info("[LAYER] server http headers hardening")
-		// add server api request hardening using http headers
-		e.Use(hardening)
-
-		logger.Info("[LAYER] fake server http header")
-		// add fake server header
-		e.Use(fakeServer)
-
-		//add keep alive policy
-		e.Use(keepalive)
-
-		if config.BlockTorConnections {
-			// add rate limit control
-			logger.Info("[LAYER] tor connections blocker middleware added")
-			e.Use(tor.BlockTorConnections)
 		}
 	}
 

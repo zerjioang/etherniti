@@ -90,6 +90,8 @@ var(
 	EthAccountSuccess = []byte("ethereum account created")
 	EthAccountFailed = []byte("failed to generate ecdsa private key")
 	EthAddressValidation = []byte("address validation")
+
+	ErrBlockTorConnection = []byte("invalid connection address")
 )
 
 var(

@@ -44,7 +44,7 @@ func init() {
 // return success response to client context
 func SendSuccess(c echo.ContextInterface, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
-	logger.Info(logMsg)
+	logger.Info(str.UnsafeString(logMsg), response)
 	return c.FastBlob(
 		protocol.StatusOK,
 		echo.MIMEApplicationJSONCharsetUTF8,
@@ -54,7 +54,7 @@ func SendSuccess(c echo.ContextInterface, logMsg []byte, response interface{}) e
 
 func SendSuccessPool(c echo.ContextInterface, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
-	logger.Info(logMsg)
+	logger.Info(str.UnsafeString(logMsg), response)
 	return c.FastBlob(
 		protocol.StatusOK,
 		echo.MIMEApplicationJSONCharsetUTF8,
@@ -64,12 +64,14 @@ func SendSuccessPool(c echo.ContextInterface, logMsg []byte, response interface{
 
 // return success blob response to client context
 func SendSuccessBlob(c echo.ContextInterface, raw []byte) error {
-	logger.Debug("sending success BLOB message to client")
+	logger.Debug("sending success blob message to client")
+	logger.Info( str.UnsafeString(raw) )
 	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, raw)
 }
 
 func Success(c echo.ContextInterface, msg []byte, result []byte) error {
 	logger.Debug("sending success message to client")
+	logger.Debug(str.UnsafeString(msg), str.UnsafeString(result))
 	//get item from pool
 	item := successPool.Get().(*protocol.ApiResponse)
 	item.Message = msg
@@ -83,8 +85,6 @@ func Success(c echo.ContextInterface, msg []byte, result []byte) error {
 }
 
 func ToSuccessPool(msg []byte, result interface{}) []byte {
-	//logger.Debug("generating success byte array")
-
 	//get item from pool
 	item := successPool.Get().(*protocol.ApiResponse)
 	item.Message = msg
@@ -99,10 +99,9 @@ func ToSuccessPool(msg []byte, result interface{}) []byte {
 }
 
 func ToSuccess(msg []byte, result interface{}) []byte {
-	//logger.Debug("generating success byte array")
-
 	//get item from pool
 	var item protocol.ApiResponse
+	item.Code = 200
 	item.Message = msg
 	item.Result = result
 	b := bufferPool.Get().(*bytes.Buffer)
@@ -136,7 +135,7 @@ func toError(code int, msg []byte) []byte {
 }
 
 func ErrorStr(c echo.ContextInterface, msg []byte) error {
-	logger.Error(msg)
+	logger.Error(str.UnsafeString(msg))
 	rawBytes := toErrorPool(msg)
 	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }

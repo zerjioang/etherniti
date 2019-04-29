@@ -179,12 +179,12 @@ func (e ApiResponse) Bytes(b *bytes.Buffer) []byte {
 	// {"code":400,"msg":"test-error","details":""}
 	b.WriteString(`{"code":`)
 	b.Write(str.IntToByte(e.Code))
-	b.WriteString(`,"id":"`)
+	b.WriteString(`,"id":`)
 	b.Write(str.IntToByte(e.Id))
 	b.WriteString(`,"msg":"`)
 	b.Write(e.Message)
-	b.WriteString(`","details":"`)
+	b.WriteString(`","details":`)
 	b.Write(str.GetJsonBytes(e.Result))
-	b.WriteString(`"}`)
+	b.WriteString(`}`)
 	return b.Bytes()
 }
