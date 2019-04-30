@@ -13,7 +13,7 @@ import (
 func Test_customHTTPErrorHandler(t *testing.T) {
 	type args struct {
 		err error
-		c   echo.ContextInterface
+		c   echo.Context
 	}
 	tests := []struct {
 		name string

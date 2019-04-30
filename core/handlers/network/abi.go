@@ -19,8 +19,6 @@ type AbiController struct {
 	abiData concurrentmap.ConcurrentMap
 }
 
-
-
 // constructor like function
 func NewAbiController() AbiController {
 	ctl := AbiController{}
@@ -29,7 +27,7 @@ func NewAbiController() AbiController {
 }
 
 // profile abi data getter
-func (ctl *AbiController) getAbi(c echo.ContextInterface) error {
+func (ctl *AbiController) getAbi(c *echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
 
@@ -47,7 +45,7 @@ func (ctl *AbiController) getAbi(c echo.ContextInterface) error {
 }
 
 // profile abi data setter
-func (ctl *AbiController) setAbi(c echo.ContextInterface) error {
+func (ctl *AbiController) setAbi(c *echo.Context) error {
 	_, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
 
 	contractAddress := c.Param("contract")

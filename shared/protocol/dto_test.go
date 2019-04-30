@@ -4,8 +4,9 @@
 package protocol
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/stretchr/testify/require"
 )

@@ -5,6 +5,7 @@ package network
 
 import (
 	"errors"
+
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
@@ -13,13 +14,11 @@ import (
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server"
-
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (
-	errGetCaller = errors.New(data.DataBindFailedStr)
+	errGetCaller      = errors.New(data.DataBindFailedStr)
 	errInvalidAddress = errors.New(data.AddressNoSetupStr)
 )
 
@@ -60,14 +59,9 @@ func (ctl *NetworkController) Name() string {
 	return ctl.networkName
 }
 
-func (ctl *NetworkController) getRpcClient(c echo.ContextInterface) (*ethrpc.EthRPC, error) {
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return nil, api.ErrorStr(c, data.DataBindFailed)
-	}
+func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, error) {
 	// get our client context
-	client, cId, cliErr := cc.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
 	logger.Info("controller request using context id: ", cId)
 	if cliErr != nil {
 		return nil, api.Error(c, cliErr)
@@ -75,13 +69,8 @@ func (ctl *NetworkController) getRpcClient(c echo.ContextInterface) (*ethrpc.Eth
 	return client, nil
 }
 
-func (ctl *NetworkController) getCallerAddress(c echo.ContextInterface) (string, error) {
-	// cast to our context
-	cc, ok := c.(*server.EthernitiContext)
-	if !ok {
-		return "", errGetCaller
-	}
-	from := cc.CallerEthAddress()
+func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) {
+	from := c.CallerEthAddress()
 	if !eth.IsValidAddress(from) {
 		return "", errInvalidAddress
 	}

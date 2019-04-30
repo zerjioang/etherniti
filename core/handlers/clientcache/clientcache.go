@@ -37,7 +37,7 @@ proxies and can only be cached by the end-client.
 The max-age value sets a timespan for how
 long to cache the resource (in seconds).
 */
-func Cached(c echo.ContextInterface, cacheHit bool, seconds uint) (int, echo.ContextInterface) {
+func Cached(c *echo.Context, cacheHit bool, seconds uint) (int, *echo.Context) {
 	// add cache headers
 	edit := sync.Mutex{}
 	edit.Lock()
@@ -61,13 +61,13 @@ func Cached(c echo.ContextInterface, cacheHit bool, seconds uint) (int, echo.Con
 	return r.Status, c
 }
 
-func CachedHtml(c echo.ContextInterface, cacheHit bool, seconds uint, htmlContent []byte) error {
+func CachedHtml(c *echo.Context, cacheHit bool, seconds uint, htmlContent []byte) error {
 	var code int
 	code, c = Cached(c, cacheHit, seconds)
 	return c.HTMLBlob(code, htmlContent)
 }
 
-func CachedJsonBlob(c echo.ContextInterface, cacheHit bool, seconds uint, data []byte) error {
+func CachedJsonBlob(c *echo.Context, cacheHit bool, seconds uint, data []byte) error {
 	var code int
 	code, c = Cached(c, cacheHit, seconds)
 	return c.JSONBlob(code, data)

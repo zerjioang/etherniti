@@ -23,7 +23,7 @@ func NewUIController() UIController {
 }
 
 // logins user data and returns access token
-func (ctl UIController) login(c echo.ContextInterface) error {
+func (ctl UIController) login(c *echo.Context) error {
 
 	//new login request
 	req := protocol.LoginRequest{}
@@ -60,7 +60,7 @@ func (ctl UIController) login(c echo.ContextInterface) error {
 }
 
 // registers new user data in the api sever
-func (ctl UIController) register(c echo.ContextInterface) error {
+func (ctl UIController) register(c *echo.Context) error {
 	//new login request
 	req := protocol.RegisterRequest{}
 	if err := c.Bind(&req); err != nil {

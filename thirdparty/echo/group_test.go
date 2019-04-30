@@ -13,7 +13,7 @@ import (
 // TODO: Fix me
 func TestGroup(t *testing.T) {
 	g := New().Group("/group")
-	h := func(ContextInterface) error { return nil }
+	h := func(Context) error { return nil }
 	g.CONNECT("/", h)
 	g.DELETE("/", h)
 	g.GET("/", h)
@@ -33,7 +33,7 @@ func TestGroupRouteMiddleware(t *testing.T) {
 	// Ensure middleware slices are not re-used
 	e := New()
 	g := e.Group("/group")
-	h := func(ContextInterface) error { return nil }
+	h := func(Context) error { return nil }
 	m1 := func(next HandlerFunc) HandlerFunc {
 		return func(c ContextInterface) error {
 			return next(c)

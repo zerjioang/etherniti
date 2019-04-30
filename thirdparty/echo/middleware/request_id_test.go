@@ -17,7 +17,7 @@ func TestRequestID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	handler := func(c echo.ContextInterface) error {
+	handler := func(c *echo.Context) error {
 		return c.String(http.StatusOK, "test")
 	}
 

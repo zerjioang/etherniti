@@ -191,7 +191,7 @@ func TestNewIndexController(t *testing.T) {
 
 func TestIndex(t *testing.T) {
 	type args struct {
-		c echo.ContextInterface
+		c echo.Context
 	}
 	tests := []struct {
 		name    string
@@ -215,7 +215,7 @@ func TestIndexController_Status(t *testing.T) {
 		integrityData concurrentbuffer.ConcurrentBuffer
 	}
 	type args struct {
-		c echo.ContextInterface
+		c echo.Context
 	}
 	tests := []struct {
 		name    string
@@ -291,7 +291,7 @@ func TestIndexController_Integrity(t *testing.T) {
 		integrityData concurrentbuffer.ConcurrentBuffer
 	}
 	type args struct {
-		c echo.ContextInterface
+		c echo.Context
 	}
 	tests := []struct {
 		name    string

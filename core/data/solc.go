@@ -1,3 +1,6 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package data
 
 type CompilerMode string
@@ -9,4 +12,3 @@ const (
 	ZipMode          = "zip"
 	TargzMode        = "targz"
 )
-

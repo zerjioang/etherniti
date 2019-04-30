@@ -5,9 +5,10 @@ package middleware
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/modules/tor"
-	"strings"
 
 	"github.com/zerjioang/etherniti/core/modules/badips"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
@@ -25,7 +26,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -51,7 +51,7 @@ var (
 )
 
 // custom http error handler. returns error messages as json
-func customHTTPErrorHandler(err error, c echo.ContextInterface) {
+func customHTTPErrorHandler(err error, c *echo.Context) {
 	// use code snippet below to customize http return code
 	/*
 		code := http.StatusInternalServerError
@@ -64,7 +64,7 @@ func customHTTPErrorHandler(err error, c echo.ContextInterface) {
 
 // http to http redirect function
 func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		req := c.Request()
 		scheme := c.Scheme()
 		// host := req.Host
@@ -76,7 +76,7 @@ func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func secure(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		// add abuseIP policy
 		ip := c.RealIP()
 		if ip == "" {
@@ -85,7 +85,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			return securityErr
 		} else if badips.IsBackListedIp(ip) {
 			//drop the request
-			logger.Warn("drop request: blacklisted IP detected", ip)
+			logger.Warn("drop request: blacklisted IP detected: ", ip)
 			return securityErr
 		}
 
@@ -138,6 +138,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			} else {
 				// received request is done using on of the blacklisted tor nodes
 				//return rate limit excedeed message
+				logger.Warn("drop request: provided request is done using on of the blacklisted tor nodes")
 				return c.FastBlob(200, echo.MIMEApplicationJSON, data.ErrBlockTorConnection)
 			}
 		}
@@ -195,15 +196,6 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// jwt middleware function.
-func customContext(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
-		// convert context in etherniti context
-		cc := server.NewEthernitiContext(c)
-		return next(cc)
-	}
-}
-
 // configure deployer internal configuration
 func ConfigureServerRoutes(e *echo.Echo) {
 	// add a custom trycatch handler
@@ -219,10 +211,6 @@ func ConfigureServerRoutes(e *echo.Echo) {
 			Format: accessLogFormat,
 		}))
 	}
-
-	// custom context
-	logger.Info("[LAYER] custom context")
-	e.Use(customContext)
 
 	if config.IsHttpMode() {
 		// remove trailing slash for better usage

@@ -20,7 +20,7 @@ func TestRecover(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Recover()(echo.HandlerFunc(func(c echo.ContextInterface) error {
+	h := Recover()(echo.HandlerFunc(func(c *echo.Context) error {
 		panic("test")
 	}))
 	h(c)

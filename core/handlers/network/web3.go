@@ -4,11 +4,12 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/data"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/eth"
 
@@ -62,7 +63,7 @@ func NewWeb3Controller(network *NetworkController) Web3Controller {
 }
 
 // get the balance of given ethereum address and target network
-func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
@@ -99,7 +100,7 @@ func (ctl *Web3Controller) getBalance(c echo.ContextInterface) error {
 }
 
 // check if an ethereum address is a contract address
-func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -120,7 +121,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c echo.ContextInterface) error {
 }
 
 // get node information
-func (ctl *Web3Controller) getNodeInfo(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getNodeInfo(c *echo.Context) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 
@@ -137,7 +138,7 @@ func (ctl *Web3Controller) getNodeInfo(c echo.ContextInterface) error {
 }
 
 // get node information
-func (ctl *Web3Controller) getNetworkVersion(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 
 	//try to get this information from the cache
 	key := data.NetVersion
@@ -171,7 +172,7 @@ func (ctl *Web3Controller) getNetworkVersion(c echo.ContextInterface) error {
 
 // this functions detects is web3_clientVersion information is
 // EthereumJS TestRPC/v2.5.5-beta.0/ethereum-js or similar
-func (ctl *Web3Controller) isRunningGanache(c echo.ContextInterface) error {
+func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 	//try to get this information from the cache
 	key := data.IsGanache
 	result, found := ctl.network.cache.Get(key)
@@ -200,7 +201,7 @@ func (ctl *Web3Controller) isRunningGanache(c echo.ContextInterface) error {
 	}
 }
 
-func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
+func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	//resolve method name from url
 	methodName := c.Request().URL.Path
 	//try to get this information from the cache
@@ -259,7 +260,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c echo.ContextInterface) error {
   "id": 1
 }
 */
-func (ctl *Web3Controller) getAccountsWithBalance(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 
@@ -309,7 +310,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c echo.ContextInterface) error
 }
 
 // check if an ethereum address is a contract address
-func (ctl *Web3Controller) isContractAddress(c echo.ContextInterface) error {
+func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
@@ -333,7 +334,7 @@ func (ctl *Web3Controller) isContractAddress(c echo.ContextInterface) error {
 // Start ERC20 functions
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Name(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -369,7 +370,7 @@ func (ctl *Web3Controller) erc20Name(c echo.ContextInterface) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Symbol(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -405,7 +406,7 @@ func (ctl *Web3Controller) erc20Symbol(c echo.ContextInterface) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20totalSupply(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -441,7 +442,7 @@ func (ctl *Web3Controller) erc20totalSupply(c echo.ContextInterface) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20decimals(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -477,7 +478,7 @@ func (ctl *Web3Controller) erc20decimals(c echo.ContextInterface) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Balanceof(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -508,7 +509,7 @@ func (ctl *Web3Controller) erc20Balanceof(c echo.ContextInterface) error {
 }
 
 // get the allowance status of the contract at given target network
-func (ctl *Web3Controller) erc20Allowance(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -549,7 +550,7 @@ func (ctl *Web3Controller) erc20Allowance(c echo.ContextInterface) error {
 // - Owner's account must have sufficient balance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20Transfer(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -594,7 +595,7 @@ func (ctl *Web3Controller) erc20Transfer(c echo.ContextInterface) error {
 // recommends that there are no checks for the approval double-spend attack
 // as this should be implemented in user interfaces
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20Approve(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20Approve(c *echo.Context) error {
 	return nil
 }
 
@@ -608,12 +609,12 @@ func (ctl *Web3Controller) erc20Approve(c echo.ContextInterface) error {
 // - Spender must have sufficient allowance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20TransferFrom(c echo.ContextInterface) error {
+func (ctl *Web3Controller) erc20TransferFrom(c *echo.Context) error {
 	return nil
 }
 
 // eth.sendTransaction({from:sender, to:receiver, value: amount})
-func (ctl *Web3Controller) sendTransaction(c echo.ContextInterface) error {
+func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
@@ -651,7 +652,7 @@ func (ctl *Web3Controller) sendTransaction(c echo.ContextInterface) error {
 
 // END of ERC20 functions
 
-func (ctl *Web3Controller) getTransactionByHash(c echo.ContextInterface) error {
+func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 	txhash := c.Param("hash")
 	// check if not empty
 	if txhash != "" {

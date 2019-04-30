@@ -36,7 +36,7 @@ func init() {
 
 // check if http request host value is allowed or not
 func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		go processAnalytics(
 			c.RealIP(),
 			c.Request(),

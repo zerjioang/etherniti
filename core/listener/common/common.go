@@ -8,7 +8,6 @@ import (
 	"net/http/httptest"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -33,18 +32,18 @@ func NewServer(configurator func(e *echo.Echo)) *echo.Echo {
 }
 
 // creates a new echo context
-func NewContext(e *echo.Echo) echo.ContextInterface {
+func NewContext(e *echo.Echo) *echo.Context {
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	return server.NewEthernitiContext(c)
+	return c
 }
 
-func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.ResponseRecorder, echo.ContextInterface) {
+func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.ResponseRecorder, *echo.Context) {
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	return req, rec, server.NewEthernitiContext(c)
+	return req, rec, c
 }

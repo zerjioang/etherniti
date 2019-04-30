@@ -16,7 +16,7 @@ import (
 type (
 	// Binder is the interface that wraps the Bind method.
 	Binder interface {
-		Bind(i interface{}, c ContextInterface) error
+		Bind(i interface{}, c *Context) error
 	}
 
 	// DefaultBinder is the default implementation of the Binder interface.
@@ -30,7 +30,7 @@ type (
 )
 
 // Bind implements the `Binder#Bind` function.
-func (b *DefaultBinder) Bind(i interface{}, c ContextInterface) (err error) {
+func (b *DefaultBinder) Bind(i interface{}, c *Context) (err error) {
 	req := c.Request()
 	if req.ContentLength == 0 {
 		if req.Method == http.MethodGet || req.Method == http.MethodDelete {

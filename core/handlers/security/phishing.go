@@ -28,10 +28,10 @@ type PhishingModel struct {
 }
 
 var (
-	pm        PhishingModel
-	whiteData []byte
-	blackData []byte
-	fuzzyData []byte
+	pm           PhishingModel
+	whiteData    []byte
+	blackData    []byte
+	fuzzyData    []byte
 	responseName = []byte("domain analyzed")
 )
 

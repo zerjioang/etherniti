@@ -85,7 +85,7 @@ func CORSWithConfig(config CORSConfig) echo.MiddlewareFunc {
 	maxAge := strconv.Itoa(config.MaxAge)
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.ContextInterface) error {
+		return func(c *echo.Context) error {
 			if config.Skipper(c) {
 				return next(c)
 			}

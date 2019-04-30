@@ -4,8 +4,9 @@
 package handlers
 
 import (
-	"github.com/zerjioang/etherniti/core/data"
 	"net/http"
+
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -36,7 +37,7 @@ func NewProfileController() ProfileController {
 }
 
 // new profile create request
-func (ctl ProfileController) create(c echo.ContextInterface) error {
+func (ctl ProfileController) create(c *echo.Context) error {
 	//new profile request
 	req := protocol.ProfileRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -57,18 +58,18 @@ func (ctl ProfileController) create(c echo.ContextInterface) error {
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	} else {
 		//token generation trycatch
-		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error()) ))
+		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())))
 		return c.JSONBlob(http.StatusOK, rawBytes)
 	}
 }
 
 // profile validation check
-func (ctl ProfileController) validate(c echo.ContextInterface) error {
+func (ctl ProfileController) validate(c *echo.Context) error {
 	return c.JSONBlob(http.StatusOK, data.ReadErr)
 }
 
 // profile validation counter
-func (ctl ProfileController) count(c echo.ContextInterface) error {
+func (ctl ProfileController) count(c *echo.Context) error {
 	var code int
 	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
 	return c.JSON(code, profilesCreated.Get())

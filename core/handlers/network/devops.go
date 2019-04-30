@@ -4,8 +4,9 @@
 package network
 
 import (
-	"github.com/zerjioang/etherniti/core/data"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
@@ -29,7 +30,7 @@ func NewDevOpsController(network *NetworkController) DevOpsController {
 	return ctl
 }
 
-func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
+func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 
 	//new deploy contract request
 	req := protocol.DeployRequest{}
@@ -70,7 +71,7 @@ func (ctl *DevOpsController) deployContract(c echo.ContextInterface) error {
 }
 
 // eth.sendTransaction({from:sender, to:receiver, value: amount})
-func (ctl *DevOpsController) sendTransaction(c echo.ContextInterface) error {
+func (ctl *DevOpsController) sendTransaction(c *echo.Context) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
@@ -101,7 +102,7 @@ func (ctl *DevOpsController) sendTransaction(c echo.ContextInterface) error {
 	}
 }
 
-func (ctl *DevOpsController) callContract(c echo.ContextInterface) error {
+func (ctl *DevOpsController) callContract(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {

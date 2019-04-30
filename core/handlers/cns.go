@@ -24,7 +24,7 @@ func NewContractNameSpaceController() ContractNameSpaceController {
 	return ctl
 }
 
-func (ctl *ContractNameSpaceController) register(c echo.ContextInterface) error {
+func (ctl *ContractNameSpaceController) register(c *echo.Context) error {
 	//new profile request
 	req := cns.ContractInfo{}
 	if err := c.Bind(&req); err != nil {
@@ -43,13 +43,13 @@ func (ctl *ContractNameSpaceController) register(c echo.ContextInterface) error 
 	}
 }
 
-func (ctl *ContractNameSpaceController) unregister(c echo.ContextInterface) error {
+func (ctl *ContractNameSpaceController) unregister(c *echo.Context) error {
 	id := c.Param("id")
 	ctl.ns.Unregister(id)
 	return api.Success(c, data.ContractNameSpaceUnregistered, str.UnsafeBytes(id))
 }
 
-func (ctl ContractNameSpaceController) resolve(c echo.ContextInterface) error {
+func (ctl ContractNameSpaceController) resolve(c *echo.Context) error {
 	id := c.Param("id")
 	response, found := ctl.ns.Resolve(id)
 	if !found {

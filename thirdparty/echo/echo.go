@@ -16,7 +16,7 @@ Example:
   )
 
   // Handler
-  func hello(c echo.ContextInterface) error {
+  func hello(c echo.Context) error {
     return c.String(http.StatusOK, "Hello, World!")
   }
 
@@ -108,10 +108,10 @@ type (
 	MiddlewareFunc func(HandlerFunc) HandlerFunc
 
 	// HandlerFunc defines a function to serve HTTP requests.
-	HandlerFunc func(ContextInterface) error
+	HandlerFunc func(*Context) error
 
 	// HTTPErrorHandler is a centralized HTTP error handler.
-	HTTPErrorHandler func(error, ContextInterface)
+	HTTPErrorHandler func(error, *Context)
 
 	// Validator is the interface that wraps the Validate function.
 	Validator interface {
@@ -120,7 +120,7 @@ type (
 
 	// Renderer is the interface that wraps the Render function.
 	Renderer interface {
-		Render(io.Writer, string, interface{}, ContextInterface) error
+		Render(io.Writer, string, interface{}, *Context) error
 	}
 
 	// Map defines a generic map of type `map[string]interface{}`.
@@ -275,11 +275,11 @@ var (
 
 // Error handlers
 var (
-	NotFoundHandler = func(c ContextInterface) error {
+	NotFoundHandler = func(c *Context) error {
 		return ErrNotFound
 	}
 
-	MethodNotAllowedHandler = func(c ContextInterface) error {
+	MethodNotAllowedHandler = func(c *Context) error {
 		return ErrMethodNotAllowed
 	}
 )
@@ -306,15 +306,16 @@ func New() (e *Echo) {
 	return
 }
 
-// NewContext returns a ContextInterface instance.
-func (e *Echo) NewContext(r *http.Request, w http.ResponseWriter) ContextInterface {
+// NewContext returns a Context instance.
+func (e *Echo) NewContext(r *http.Request, w http.ResponseWriter) *Context {
 	return &Context{
-		request:  r,
-		response: NewResponse(w, e),
-		store:    make(Map),
-		echo:     e,
-		pvalues:  make([]string, *e.maxParam),
-		handler:  NotFoundHandler,
+		request:     r,
+		response:    NewResponse(w, e),
+		store:       make(Map),
+		echo:        e,
+		pvalues:     make([]string, *e.maxParam),
+		handler:     NotFoundHandler,
+		profileLock: new(sync.Mutex),
 	}
 }
 
@@ -325,7 +326,7 @@ func (e *Echo) Router() *Router {
 
 // DefaultHTTPErrorHandler is the default HTTP error handler. It sends a JSON response
 // with status code.
-func (e *Echo) DefaultHTTPErrorHandler(err error, c ContextInterface) {
+func (e *Echo) DefaultHTTPErrorHandler(err error, c *Context) {
 	var msg interface{}
 	code := protocol.StatusInternalServerError
 
@@ -452,7 +453,7 @@ func (e *Echo) Static(prefix, root string) *Route {
 }
 
 func static(i i, prefix, root string) *Route {
-	h := func(c ContextInterface) error {
+	h := func(c *Context) error {
 		p, err := url.PathUnescape(c.Param("*"))
 		if err != nil {
 			return err
@@ -470,7 +471,7 @@ func static(i i, prefix, root string) *Route {
 
 // File registers a new route with path to serve a static file with optional route-level middleware.
 func (e *Echo) File(path, file string, m ...MiddlewareFunc) *Route {
-	return e.GET(path, func(c ContextInterface) error {
+	return e.GET(path, func(c *Context) error {
 		return c.File(file)
 	}, m...)
 }
@@ -479,7 +480,7 @@ func (e *Echo) File(path, file string, m ...MiddlewareFunc) *Route {
 // in the router with optional route-level middleware.
 func (e *Echo) Add(method, path string, handler HandlerFunc, middleware ...MiddlewareFunc) *Route {
 	name := handlerName(handler)
-	e.router.Add(method, path, func(c ContextInterface) error {
+	e.router.Add(method, path, func(c *Context) error {
 		h := handler
 		// Chain middleware
 		for i := len(middleware) - 1; i >= 0; i-- {
@@ -547,15 +548,15 @@ func (e *Echo) Routes() []*Route {
 	return routes
 }
 
-// AcquireContext returns an empty `ContextInterface` instance from the pool.
+// AcquireContext returns an empty `Context` instance from the pool.
 // You must return the Context by calling `ReleaseContext()`.
-func (e *Echo) AcquireContext() ContextInterface {
-	return e.pool.Get().(ContextInterface)
+func (e *Echo) AcquireContext() *Context {
+	return e.pool.Get().(*Context)
 }
 
-// ReleaseContext returns the `ContextInterface` instance back to the pool.
+// ReleaseContext returns the `Context` instance back to the pool.
 // You must call it after `AcquireContext()`.
-func (e *Echo) ReleaseContext(c ContextInterface) {
+func (e *Echo) ReleaseContext(c *Context) {
 	e.pool.Put(c)
 }
 
@@ -572,7 +573,7 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h = c.Handler()
 		h = applyMiddleware(h, e.middleware...)
 	} else {
-		h = func(c ContextInterface) error {
+		h = func(c *Context) error {
 			e.router.Find(r.Method, getPath(r), c)
 			h := c.Handler()
 			h = applyMiddleware(h, e.middleware...)
@@ -719,7 +720,7 @@ func (he *HTTPError) SetInternal(err error) *HTTPError {
 
 // WrapHandler wraps `http.Handler` into `echo.HandlerFunc`.
 func WrapHandler(h http.Handler) HandlerFunc {
-	return func(c ContextInterface) error {
+	return func(c *Context) error {
 		h.ServeHTTP(c.Response(), c.Request())
 		return nil
 	}
@@ -728,7 +729,7 @@ func WrapHandler(h http.Handler) HandlerFunc {
 // WrapMiddleware wraps `func(http.Handler) http.Handler` into `echo.MiddlewareFunc`
 func WrapMiddleware(m func(http.Handler) http.Handler) MiddlewareFunc {
 	return func(next HandlerFunc) HandlerFunc {
-		return func(c ContextInterface) (err error) {
+		return func(c *Context) (err error) {
 			m(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				c.SetRequest(r)
 				err = next(c)

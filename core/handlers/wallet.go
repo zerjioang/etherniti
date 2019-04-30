@@ -6,8 +6,9 @@ package handlers
 import (
 	"crypto/sha512"
 	"encoding/hex"
-	"github.com/zerjioang/etherniti/core/data"
 	"strconv"
+
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
@@ -43,7 +44,7 @@ func NewWalletController() WalletController {
 	224 bits -> 21 words
 	256 bits -> 24 words
 */
-func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
+func (ctl WalletController) Mnemonic(c *echo.Context) error {
 
 	req := protocol.MnemonicRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -106,7 +107,7 @@ func (ctl WalletController) Mnemonic(c echo.ContextInterface) error {
 	}
 }
 
-func (ctl WalletController) HdWallet(c echo.ContextInterface) error {
+func (ctl WalletController) HdWallet(c *echo.Context) error {
 	req := protocol.NewHdWalletRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
@@ -121,7 +122,7 @@ func (ctl WalletController) HdWallet(c echo.ContextInterface) error {
 	}
 }
 
-func (ctl WalletController) Entropy(c echo.ContextInterface) error {
+func (ctl WalletController) Entropy(c *echo.Context) error {
 	req := protocol.EntropyRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
@@ -176,7 +177,7 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 }
 
 // generates an ethereum new account (address+key)
-func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
+func (ctl WalletController) generateAddress(c *echo.Context) error {
 
 	// Create an account
 	private, err := eth.GenerateNewKey()
@@ -196,7 +197,7 @@ func (ctl WalletController) generateAddress(c echo.ContextInterface) error {
 }
 
 // check if an ethereum address is valid
-func (ctl WalletController) isValidAddress(c echo.ContextInterface) error {
+func (ctl WalletController) isValidAddress(c *echo.Context) error {
 	//since this method checks address as string, cache always
 	_, c = clientcache.Cached(c, true, clientcache.CacheInfinite) // 24h cache directive
 
@@ -221,7 +222,7 @@ func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	router.POST("/wallet/hd/bip32", ctl.HdWallet)
 }
 
-func (ctl WalletController) getIntParam(c echo.ContextInterface, key string) uint16 {
+func (ctl WalletController) getIntParam(c *echo.Context, key string) uint16 {
 	v := c.Param(key)
 	if v != "" {
 		num, _ := strconv.Atoi(v)

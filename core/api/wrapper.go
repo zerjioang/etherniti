@@ -42,7 +42,7 @@ func init() {
 }
 
 // return success response to client context
-func SendSuccess(c echo.ContextInterface, logMsg []byte, response interface{}) error {
+func SendSuccess(c *echo.Context, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
 	logger.Info(str.UnsafeString(logMsg), response)
 	return c.FastBlob(
@@ -52,7 +52,7 @@ func SendSuccess(c echo.ContextInterface, logMsg []byte, response interface{}) e
 	)
 }
 
-func SendSuccessPool(c echo.ContextInterface, logMsg []byte, response interface{}) error {
+func SendSuccessPool(c *echo.Context, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
 	logger.Info(str.UnsafeString(logMsg), response)
 	return c.FastBlob(
@@ -63,13 +63,13 @@ func SendSuccessPool(c echo.ContextInterface, logMsg []byte, response interface{
 }
 
 // return success blob response to client context
-func SendSuccessBlob(c echo.ContextInterface, raw []byte) error {
+func SendSuccessBlob(c *echo.Context, raw []byte) error {
 	logger.Debug("sending success blob message to client")
-	logger.Info( str.UnsafeString(raw) )
+	logger.Info(str.UnsafeString(raw))
 	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, raw)
 }
 
-func Success(c echo.ContextInterface, msg []byte, result []byte) error {
+func Success(c *echo.Context, msg []byte, result []byte) error {
 	logger.Debug("sending success message to client")
 	logger.Debug(str.UnsafeString(msg), str.UnsafeString(result))
 	//get item from pool
@@ -134,23 +134,23 @@ func toError(code int, msg []byte) []byte {
 	return rawBytes
 }
 
-func ErrorStr(c echo.ContextInterface, msg []byte) error {
+func ErrorStr(c *echo.Context, msg []byte) error {
 	logger.Error(str.UnsafeString(msg))
 	rawBytes := toErrorPool(msg)
 	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-func Error(c echo.ContextInterface, err error) error {
+func Error(c *echo.Context, err error) error {
 	return ErrorStr(c, str.UnsafeBytes(err.Error()))
 }
 
-func ErrorCode(c echo.ContextInterface, code int, err error) error {
+func ErrorCode(c *echo.Context, code int, err error) error {
 	logger.Error(err)
 	rawBytes := toError(code, str.UnsafeBytes(err.Error()))
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-func StackError(c echo.ContextInterface, stackErr trycatch.Error) error {
+func StackError(c *echo.Context, stackErr trycatch.Error) error {
 	logger.Error(stackErr)
 	rawBytes := toError(http.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
 	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)

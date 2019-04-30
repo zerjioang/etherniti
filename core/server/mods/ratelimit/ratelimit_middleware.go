@@ -4,8 +4,9 @@
 package ratelimit
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
 	"net/http"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -25,7 +26,7 @@ func init() {
 // REST API style rate limit middleware function.
 // flood and abuse limit policy middleware
 func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		header := c.Response().Header()
 		clientIdentifier := c.RealIP()
 		clientIdentifierBytes := str.UnsafeBytes(clientIdentifier)

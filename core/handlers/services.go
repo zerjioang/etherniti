@@ -7,7 +7,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -26,24 +25,23 @@ func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
 
 // jwt middleware function.
 func jwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		// convert context in etherniti context
-		cc := c.(*server.EthernitiContext)
-		token := cc.ReadConnectionProfileToken()
+		token := c.ReadConnectionProfileToken()
 		if token == "" {
 			return api.ErrorStr(c, errorMsg)
 		}
-		_, parseErr := cc.ConnectionProfileSetup()
+		_, parseErr := c.ConnectionProfileSetup()
 		if parseErr != nil {
 			return api.Error(c, parseErr)
 		}
-		return next(cc)
+		return next(c)
 	}
 }
 
 // create a group for all /api/v1 functions
 func next(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.ContextInterface) error {
+	return func(c *echo.Context) error {
 		return next(c)
 	}
 }
