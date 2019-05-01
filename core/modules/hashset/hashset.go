@@ -36,6 +36,13 @@ func (set *HashSet) Add(item string) {
 	set.lock.Unlock()
 }
 
+func (set *HashSet) Size() int {
+	set.lock.Lock()
+	l := len(set.data)
+	set.lock.Unlock()
+	return l
+}
+
 func (set *HashSet) Clear() {
 	set.lock.Lock()
 	set.data = make(map[string]*struct{})

@@ -32,7 +32,7 @@ type HttpListener struct {
 var (
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.ListeningAddress,
+		Addr:         config.GetListeningAddress(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -48,7 +48,7 @@ func (l HttpListener) Listen() error {
 	// Start server
 	go func() {
 		logger.Info("starting http server...")
-		logger.Info("interface: ", config.HttpListenInterface)
+		logger.Info("interface: ", config.GetHttpInterface())
 		swagger.ConfigureFromTemplate()
 		println(banner.WelcomeBanner())
 		err := e.StartServer(&defaultHttpServerConfig)

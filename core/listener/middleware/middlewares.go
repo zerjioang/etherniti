@@ -32,7 +32,6 @@ import (
 var (
 	securityErr = errors.New("not authorized. security policy not satisfied")
 	corsConfig  = middleware.CORSConfig{
-		AllowOrigins: config.AllowedCorsOriginList,
 		AllowHeaders: []string{
 			echo.HeaderOrigin,
 			echo.HeaderContentType,
@@ -115,18 +114,14 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			//port defined in host header
 			hostname = chunks[0]
 		}
-		var allowed = false
-		var size = len(config.AllowedHostnames)
-		for i := 0; i < size && !allowed; i++ {
-			allowed = strings.Compare(hostname, config.AllowedHostnames[i]) == 0
-		}
+		allowed := config.AllowedHostnames.Contains(hostname)
 		if !allowed {
 			// drop the request
 			logger.Warn("drop request: provided request does not specifies a valid host name in http headers")
 			return securityErr
 		}
 
-		if config.BlockTorConnections {
+		if config.BlockTorConnections() {
 			// add rate limit control
 			logger.Info("[LAYER] tor connections blocker middleware added")
 			//get current request ip
@@ -204,9 +199,9 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 	// log all single request
 	// configure logging level
-	logger.Info("[LAYER] logger level")
-	if config.EnableLogging {
-		e.Logger.SetLevel(config.LogLevel)
+	if config.EnableLogging() {
+		logger.Info("[LAYER] logger level")
+		e.Logger.SetLevel( config.LogLevel() )
 		e.Pre(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
 		}))
@@ -217,28 +212,33 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		logger.Info("[LAYER] trailing slash remover")
 		e.Pre(middleware.RemoveTrailingSlash())
 
-		// antibots, crawler middleware
-		// avoid bots and crawlers
-		logger.Info("[LAYER] security")
-		e.Pre(secure)
+		if config.EnableSecureMode() {
+			// antibots, crawler middleware
+			// avoid bots and crawlers
+			logger.Info("[LAYER] security")
+			e.Pre(secure)
+		}
 
 		// add CORS support
-		if config.EnableCors {
+		if config.EnableCors() {
 			logger.Info("[LAYER] cors support")
 			e.Use(middleware.CORSWithConfig(corsConfig))
 		}
 	}
 
-	if config.EnableRateLimit {
+	if config.EnableRateLimit() {
 		// add rate limit control
 		logger.Info("[LAYER] rest api rate limit middleware added")
 		e.Use(ratelimit.RateLimit)
 	}
 
-	e.Use(cyber.Analytics)
+	if config.EnableAnalytics() {
+		logger.Info("[LAYER] analytics")
+		e.Use(cyber.Analytics)
+	}
 
 	// Request ID middleware generates a unique id for a request.
-	if config.UseUniqueRequestId {
+	if config.UseUniqueRequestId() {
 		logger.Info("[LAYER] unique request id")
 		e.Use(middleware.RequestID())
 	}

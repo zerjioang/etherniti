@@ -64,7 +64,7 @@ func (s *EthRPCBenchSuite) paramsEqual(body []byte, expected string) {
 }
 
 func (s *EthRPCBenchSuite) SetupSuite() {
-	client := NewDefaultRPC("http://127.0.0.1:8545")
+	client := NewDefaultRPC("http://127.0.0.1:8545", true)
 	s.rpc = &client
 
 	httpmock.Activate()
@@ -1155,10 +1155,10 @@ func (s *EthRPCBenchSuite) TestEthUninstallFilter() {
 
 func BenchmarkEthError(b *testing.B) {
 	var err error
-	err = model.EthError{-32555, "Messg"}
+	err = model.EthError{Code: -32555, Message: "Messg"}
 	require.Equal(b, "Error -32555 (Messg)", err.Error())
 
-	err = model.EthError{32847, "Kuku"}
+	err = model.EthError{Code: 32847, Message: "Kuku"}
 	require.Equal(b, "Error 32847 (Kuku)", err.Error())
 }
 
@@ -1173,7 +1173,7 @@ func BenchmarkEth1(b *testing.B) {
 		}
 	})
 	b.Run("eth1-client", func(b *testing.B) {
-		client := NewDefaultRPC("")
+		client := NewDefaultRPC("", false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 

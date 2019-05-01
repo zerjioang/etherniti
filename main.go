@@ -12,7 +12,7 @@ import (
 
 var (
 	// build commit hash value
-	Build = config.EnvironmentName
+	Build = config.GetEnvironmentName()
 )
 
 func init() {

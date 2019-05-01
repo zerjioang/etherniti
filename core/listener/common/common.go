@@ -16,10 +16,10 @@ func NewDefaultServer() *echo.Echo {
 	// build a the server
 	e := echo.New()
 	// enable debug mode
-	e.Debug = config.DebugServer
-	e.HidePort = config.HideServerDataInConsole
+	e.Debug = config.DebugServer()
+	e.HidePort = config.DebugServer()
 	//hide the banner
-	e.HideBanner = config.HideServerDataInConsole
+	e.HideBanner = config.DebugServer()
 	return e
 }
 func NewServer(configurator func(e *echo.Echo)) *echo.Echo {

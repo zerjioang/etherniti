@@ -59,59 +59,6 @@ k/KrFNcDz+v6O4eqz7rlRID5WwKTnAxpNbFOricxOic67f7OqTJJrUX+46nscFtM
 ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 -----END EC PRIVATE KEY-----
 `
-
-	EnvironmentName         = "development"
-	HttpPort                = "8080"
-	HttpsPort               = "4430"
-	DebugServer             = true
-	HideServerDataInConsole = true
-	TokenSecret             = "t0k3n-s3cr3t-h3r3"
-	EnableHttpsRedirect     = false
-	UseUniqueRequestId      = false
-	EnableCors              = true
-	EnableCache             = true
-	EnableRateLimit         = false
-	BlockTorConnections     = false
-	EnableLogging           = true
-	LogLevel                = log.DEBUG
-
-	//for 'local development' deployment
-	HttpListenInterface = "127.0.0.1"
-	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress      = HttpListenInterface + ":" + HttpPort
-
-	//connection profile params
-	TokenExpiration = 100 * fastime.Hour
-
-	//rate limit units must be the same in both variables
-	RateLimitUnits   = 5 * time.Second
-	RateLimitUnitsFt = 5 * fastime.Second
-	// ratelimit configuration
-	RateLimit    = 10
-	RateLimitStr = "10"
-)
-
-var (
-	// allowed cors domains
-	AllowedCorsOriginList = []string{
-		"*",
-		"localhost",
-		"0.0.0.0",
-		"127.0.0.1",
-		"api.etherniti.org",
-		"proxy.etherniti.org",
-		"cloud.etherniti.org",
-	}
-	//allowed hostnames
-	AllowedHostnames = []string{
-		"localhost",
-		"127.0.0.1",
-		"0.0.0.0",
-		"api.etherniti.org",
-		"proxy.etherniti.org",
-		"dev.proxy.etherniti.org",
-		"cloud.etherniti.org",
-	}
 )
 
 func init() {
@@ -122,8 +69,9 @@ func init() {
 }
 
 //set default environment variables value for current context
-func SetDefaults(data *EnvConfig) {
-	env := data.data
+func (c *EnvConfig) SetDefaults() {
+	env := c.data
+	env["X_ETHERNITI_LOG_LEVEL"] = "debug"
 	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "development"
 	env["X_ETHERNITI_HTTP_PORT"] = "8080"
 	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
@@ -133,18 +81,19 @@ func SetDefaults(data *EnvConfig) {
 	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = false
 	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
 	env["X_ETHERNITI_ENABLE_CORS"] = true
+	env["X_ETHERNITI_ENABLE_SECURITY"] = true
+	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
 	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
 	env["X_ETHERNITI_ENABLE_PROFILER"] = true
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true
-	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
 
 	//for 'local development' deployment
 	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
 	env["X_ETHERNITI_LISTENING_INTERFACE"] = "127.0.0.1"
-	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
-	env["X_ETHERNITI_SWAGGER_ADDRESS"] = HttpListenInterface + ":" + HttpPort
+	env["X_ETHERNITI_LISTENING_ADDRESS"] = env["X_ETHERNITI_LISTENING_INTERFACE"].(string) + ":" + env["X_ETHERNITI_HTTP_PORT"].(string)
+	env["X_ETHERNITI_SWAGGER_ADDRESS"] = env["X_ETHERNITI_LISTENING_ADDRESS"]
 
 	//connection profile params
 	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 100 * fastime.Hour
@@ -152,8 +101,6 @@ func SetDefaults(data *EnvConfig) {
 	//rate limit units must be the same in both variables
 	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 5 * time.Second
 	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 5 * fastime.Second
-
-	// ratelimit configuration
 	env["X_ETHERNITI_RATE_LIMIT"] = 10
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
 

@@ -30,7 +30,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti REST API Proxy", -1)
 	str = strings.Replace(str, "$version", constants.Version, -1)
-	str = strings.Replace(str, "$host", config.SwaggerAddress, -1)
+	str = strings.Replace(str, "$host", config.GetSwaggerAddress(), -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)
 	//write swagger.json file

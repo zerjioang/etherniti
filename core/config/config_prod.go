@@ -17,52 +17,7 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
-const (
-	EnvironmentName         = "production"
-	HttpPort                = "80"
-	HttpsPort               = "443"
-	HttpAddress             = HttpListenInterface + HttpPort
-	HttpsAddress            = HttpListenInterface + HttpsPort
-	DebugServer             = false
-	HideServerDataInConsole = true
-	TokenSecret             = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
-	EnableHttpsRedirect     = false
-	UseUniqueRequestId      = false
-	EnableCors              = true
-	EnableCache             = true
-	EnableRateLimit         = true
-	BlockTorConnections     = true
-	EnableLogging           = true
-	LogLevel                = log.DEBUG
-
-	// production required listen mode
-	HttpListenInterface = "0.0.0.0"
-	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress      = "proxy.etherniti.org"
-
-	//connection profile params
-	TokenExpiration = 10 * fastime.Minute
-
-	//rate limit units must be the same in both variables
-	RateLimitUnits   = 1 * time.Hour
-	RateLimitUnitsFt = 1 * fastime.Hour
-	// ratelimit configuration
-	RateLimit    = 100
-	RateLimitStr = "100"
-)
-
 var (
-	// allowed cors domains
-	AllowedCorsOriginList = []string{
-		"*",
-		"proxy.etherniti.org",
-		"dev.proxy.etherniti.org",
-	}
-	//allowed hostnames
-	AllowedHostnames = []string{
-		"proxy.etherniti.org",
-		"dev.proxy.etherniti.org",
-	}
 	//swagger.json injected params
 	SwaggerApiDomain = "proxy.etherniti.org"
 )
@@ -88,28 +43,30 @@ func loadCertBytes(path string) []byte {
 }
 
 //set default environment variables value for current context
-func SetDefaults(data *EnvConfig) {
-	env := data.data
-	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "beta-stage"
-	env["X_ETHERNITI_HTTP_PORT"] = "8080"
-	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
+func (c *EnvConfig) SetDefaults() {
+	env := c.data
+	env["X_ETHERNITI_LOG_LEVEL"] = "warn"
+	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "production"
+	env["X_ETHERNITI_HTTP_PORT"] = "80"
+	env["X_ETHERNITI_HTTPS_PORT"] = "443"
 	env["X_ETHERNITI_DEBUG_SERVER"] = false
 	env["X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"] = true
-	env["X_ETHERNITI_TOKEN_SECRET"] = "t0k3n-s3cr3t-h3r3"
-	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = false
+	env["X_ETHERNITI_TOKEN_SECRET"] = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
+	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = true
 	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
 	env["X_ETHERNITI_ENABLE_CORS"] = true
+	env["X_ETHERNITI_ENABLE_SECURITY"] = true
+	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
-	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
+	env["X_ETHERNITI_ENABLE_RATELIMIT"] = true
 	env["X_ETHERNITI_ENABLE_PROFILER"] = false
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true
-	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
 
 	//for 'local development' deployment
-	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
+	env["X_ETHERNITI_LISTENING_MODE"] = "https"
 	env["X_ETHERNITI_LISTENING_INTERFACE"] = "0.0.0.0"
-	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
+	env["X_ETHERNITI_LISTENING_ADDRESS"] = env["X_ETHERNITI_LISTENING_INTERFACE"].(string) + ":" + env["X_ETHERNITI_HTTP_PORT"].(string)
 	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "proxy.etherniti.org"
 
 	//connection profile params

@@ -27,7 +27,7 @@ import (
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/fastime"
-	"github.com/zerjioang/etherniti/core/integrity"
+	"github.com/zerjioang/etherniti/core/modules/integrity"
 	"github.com/zerjioang/etherniti/core/server/mods/mem"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -114,7 +114,7 @@ func init() {
 
 func LoadIndexConstants() {
 	// load constants
-	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Web3 REST Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.EnvironmentName + `","tagline":"dapps everywhere"}`
+	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Web3 REST Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.GetEnvironmentName() + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
 }

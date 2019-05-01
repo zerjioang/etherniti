@@ -13,7 +13,6 @@ import (
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/fastime"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 // openssl genrsa -out server.key 2048
@@ -54,56 +53,6 @@ k/KrFNcDz+v6O4eqz7rlRID5WwKTnAxpNbFOricxOic67f7OqTJJrUX+46nscFtM
 ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 -----END EC PRIVATE KEY-----
 `
-
-	EnvironmentName         = "beta-stage"
-	HttpPort                = "8080"
-	HttpsPort               = "4430"
-	DebugServer             = false
-	HideServerDataInConsole = true
-	TokenSecret             = "t0k3n-s3cr3t-h3r3"
-	EnableHttpsRedirect     = false
-	UseUniqueRequestId      = false
-	EnableCors              = true
-	EnableCache             = true
-	EnableRateLimit         = false
-	BlockTorConnections     = false
-	EnableLogging           = true
-	LogLevel                = log.INFO
-
-	//for pre-stage deployment
-	HttpListenInterface = "0.0.0.0"
-	ListeningAddress    = HttpListenInterface + ":" + HttpPort
-	SwaggerAddress      = "proxy.etherniti.org"
-
-	//connection profile params
-	TokenExpiration = 10 * fastime.Minute
-
-	//rate limit units must be the same in both variables
-	RateLimitUnits   = 1 * time.Hour
-	RateLimitUnitsFt = 1 * fastime.Hour
-	// ratelimit configuration
-	RateLimit    = 100
-	RateLimitStr = "100"
-)
-
-var (
-	// allowed cors domains
-	AllowedCorsOriginList = []string{
-		"*",
-		"0.0.0.0",
-		"localhost",
-		"127.0.0.1",
-		"api.etherniti.org",
-		"proxy.etherniti.org",
-		"cloud.etherniti.org",
-	}
-	//allowed hostnames
-	AllowedHostnames = []string{
-		"api.etherniti.org",
-		"proxy.etherniti.org",
-		"dev.proxy.etherniti.org",
-		"cloud.etherniti.org",
-	}
 )
 
 func init() {
@@ -114,8 +63,9 @@ func init() {
 }
 
 //set default environment variables value for current context
-func SetDefaults(data *EnvConfig) {
-	env := data.data
+func (c *EnvConfig) SetDefaults() {
+	env := c.data
+	env["X_ETHERNITI_LOG_LEVEL"] = "debug"
 	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "beta-stage"
 	env["X_ETHERNITI_HTTP_PORT"] = "8080"
 	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
@@ -125,27 +75,27 @@ func SetDefaults(data *EnvConfig) {
 	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = false
 	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
 	env["X_ETHERNITI_ENABLE_CORS"] = true
+	env["X_ETHERNITI_ENABLE_SECURITY"] = true
+	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
 	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
 	env["X_ETHERNITI_ENABLE_PROFILER"] = false
 	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
 	env["X_ETHERNITI_ENABLE_LOGGING"] = true
-	env["X_ETHERNITI_LOG_LEVEL"] = log.DEBUG
 
 	//for 'local development' deployment
 	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
 	env["X_ETHERNITI_LISTENING_INTERFACE"] = "0.0.0.0"
-	env["X_ETHERNITI_LISTENING_ADDRESS"] = HttpListenInterface + ":" + HttpPort
+	env["X_ETHERNITI_LISTENING_ADDRESS"] = env["X_ETHERNITI_LISTENING_INTERFACE"].(string) + ":" + env["X_ETHERNITI_HTTP_PORT"].(string)
 	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "proxy.etherniti.org"
 
 	//connection profile params
 	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 10 * fastime.Minute
 
 	//rate limit units must be the same in both variables
-	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 10 * time.Second
-	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 10 * time.Second
-
-	// ratelimit configuration
+	//rate limit units must be the same in both variables
+	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 5 * time.Second
+	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 5 * fastime.Second
 	env["X_ETHERNITI_RATE_LIMIT"] = 10
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
 }

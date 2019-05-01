@@ -4,7 +4,11 @@
 package config
 
 import (
+	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/hashset"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"os"
+	"strings"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
@@ -23,6 +27,8 @@ var (
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
 	ResourcesDirInternalBadIps   = ResourcesDirInternal + "/badips"
+	ResourcesDirInternalCors   = ResourcesDirInternal + "/cors"
+	ResourcesDirInternalHosts   = ResourcesDirInternal + "/hosts"
 	ResourcesDirInternalEmail    = ResourcesDirInternal + "/templates/mail"
 	ResourcesDirLanding          = ResourcesDir + "/landing"
 	ResourcesIndexHtml           = ResourcesDirLanding + "/index.html"
@@ -34,11 +40,127 @@ var (
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
 	BadIpsFile            = ResourcesDirInternalBadIps + "/list_any_5"
+	CorsFile            = ResourcesDirInternalCors + "/cors"
+	HostsFile            = ResourcesDirInternalHosts + "/hosts"
 )
+
+var (
+	// allowed cors domains
+	AllowedCorsOriginList *hashset.HashSet
+	AllowedHostnames *hashset.HashSet
+)
+
+func init(){
+	AllowedCorsOriginList = hashset.NewHashSet()
+	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
+	AllowedHostnames = hashset.NewHashSet()
+	AllowedHostnames.LoadFromRaw(HostsFile, "\n")
+}
+func BlockTorConnections() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_BLOCK_TOR_CONNECTIONS")
+	return found && v == true
+}
+
+func LogLevel() log.Lvl {
+	value := ReadEnvironmentString("X_ETHERNITI_LOG_LEVEL")
+	value = strings.ToLower(value)
+	switch value {
+	case "debug":
+		return log.DEBUG
+	case "info":
+		return log.INFO
+	case "warn":
+		return log.WARN
+	case "error":
+		return log.ERROR
+	case "off":
+		return log.OFF
+	default:
+		return log.DEBUG
+	}
+}
+
+func EnableLogging() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_LOGGING")
+	return found && v == true
+}
+func EnableSecureMode() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_SECURITY")
+	return found && v == true
+}
+func EnableCors() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_CORS")
+	return found && v == true
+}
+func EnableRateLimit() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_RATE_LIMIT")
+	return found && v == true
+}
+func EnableAnalytics() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_ANALYTICS")
+	return found && v == true
+}
+func UseUniqueRequestId() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_USE_UNIQUE_REQUEST_ID")
+	return found && v == true
+}
+
+func RateLimit() uint32 {
+	v, found := ReadEnvironment("X_ETHERNITI_RATE_LIMIT")
+	if found && v != nil {
+		return v.(uint32)
+	}
+	return 100
+}
+
+func RateLimitUnitsFt() fastime.Duration {
+	v, found := ReadEnvironment("X_ETHERNITI_RATE_LIMIT_UNITS_FT")
+	if found && v != nil {
+		return v.(fastime.Duration)
+	}
+	return 100 * fastime.Hour
+}
+
+func RateLimitUnitsStr() string {
+	return ReadEnvironmentString("X_ETHERNITI_RATE_LIMIT_UNITS")
+}
+
+func TokenSecret() string {
+	return ReadEnvironmentString("X_ETHERNITI_TOKEN_SECRET")
+}
+
+func DebugServer() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_DEBUG_SERVER")
+	return found && v == true
+}
+
+func TokenExpiration() fastime.Duration {
+	v, found := ReadEnvironment("X_ETHERNITI_TOKEN_EXPIRATION")
+	if found && v != nil {
+		return v.(fastime.Duration)
+	}
+	return 100 * fastime.Hour
+}
+
+func GetSwaggerAddress() string {
+	return ReadEnvironmentString("X_ETHERNITI_SWAGGER_ADDRESS")
+}
+
+func GetEnvironmentName() string {
+	return ReadEnvironmentString("X_ETHERNITI_ENVIRONMENT_NAME")
+}
+
+func GetListeningAddress() string {
+	return ReadEnvironmentString("X_ETHERNITI_LISTENING_ADDRESS")
+}
+
+func GetHttpInterface() string {
+	return ReadEnvironmentString("X_ETHERNITI_HTTP_LISTEN_INTERFACE")
+}
 
 //simply converts http requests into https
 func GetRedirectUrl(host string, path string) string {
-	return "https://" + ListeningAddress + path
+	return "https://" + GetListeningAddress() + path
 }
 
 // get SSL certificate cert.pem from proper source:
@@ -57,35 +179,42 @@ func GetKeyPem() []byte {
 
 func IsHttpMode() bool {
 	logger.Debug("checking if http mode is enabled")
-	return ReadEnvironment("X_ETHERNITI_LISTENING_MODE") == "http"
+	return ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") == "http"
 }
 
 func IsSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
-	return ReadEnvironment("X_ETHERNITI_LISTENING_MODE") == "socket"
+	return ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") == "socket"
 }
 
 func IsProfilingEnabled() bool {
 	logger.Debug("checking if profiling mode is enabled")
-	return ReadEnvironment("X_ETHERNITI_ENABLE_PROFILER") == true
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_PROFILER")
+	return found && v == true
 }
 
 func GetEmailUsername() string {
-	return ReadEnvironment("X_EMAIL_USERNAME").(string)
+	return ReadEnvironmentString("X_ETHERNITI_EMAIL_USERNAME")
 }
+
 func GetEmailPassword() string {
-	return ReadEnvironment("X_GMAIL_ACCESS_TOKEN").(string)
+	return ReadEnvironmentString("X_ETHERNITI_GMAIL_ACCESS_TOKEN")
 }
 func GetEmailServer() string {
-	return ReadEnvironment("X_EMAIL_SERVER").(string)
+	return ReadEnvironmentString("X_ETHERNITI_EMAIL_SERVER")
 }
 func GetEmailServerOnly() string {
-	return ReadEnvironment("X_EMAIL_SERVER_ONLY").(string)
+	return ReadEnvironmentString("X_ETHERNITI_EMAIL_SERVER_ONLY")
+}
+
+// sendgrid service configuration
+func SendGridApiKey() string {
+	return ReadEnvironmentString("SENDGRID_API_KEY")
 }
 
 func ServiceListeningMode() listener.ServiceType {
 	logger.Debug("reading service listening mode")
-	switch ReadEnvironment("X_ETHERNITI_LISTENING_MODE") {
+	switch ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") {
 	case "http":
 		return listener.HttpMode
 	case "https":
@@ -98,5 +227,5 @@ func ServiceListeningMode() listener.ServiceType {
 }
 
 func IsDevelopment() bool {
-	return EnvironmentName == "development"
+	return GetEnvironmentName() == "development"
 }

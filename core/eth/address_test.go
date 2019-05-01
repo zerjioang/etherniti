@@ -30,7 +30,7 @@ func TestConvertAddress(t *testing.T) {
 
 func TestGetAccountBalance(t *testing.T) {
 	// define the client
-	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, false)
 	expected := big.NewInt(0)
 	expected, _ = expected.SetString("100000000000000000000", 10)
 	balance, err := cli.EthGetBalance(address0, "latest")
@@ -46,7 +46,7 @@ func TestGetAccountBalance(t *testing.T) {
 
 func TestGetAccountBalanceAtBlock(t *testing.T) {
 	// define the client
-	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, true)
 	expected := big.NewInt(0)
 	expected, _ = expected.SetString("100000000000000000000", 10)
 	balance, err := cli.EthGetBalance(address0, "0")

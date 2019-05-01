@@ -4,21 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width"/>
     <title>{{title}}</title>
-    <script type="application/ld+json">
-         {
-           "@context": "http://schema.org",
-           "@type": "EmailMessage",
-           "potentialAction": {
-             "@type": "ConfirmAction",
-             "name": "Confirm registration",
-             "handler": {
-               "@type": "HttpActionHandler",
-               "url": "{{confirm_url}}"
-             }
-           },
-           "description": "{{appname}} registration confirmation"
-         }
-      </script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <style type="text/css">
         /* /\/\/\/\/\/\/\/\/ CLIENT-SPECIFIC STYLES /\/\/\/\/\/\/\/\/ */
@@ -426,6 +411,28 @@
         html,body,h1,h2,h3,h4,h5,h6,p,a,tr,td,ul,li {
             font-family:'Open Sans', Helvetica, Arial, sans-serif;
         }
+        b{
+            color: #232323;
+        }
+        li{
+            padding-top: 4px;
+        }
+        .warning{
+            color: #820000;
+            font-weight: bold;
+            font-size: 9pt;
+            padding-top: 30px;
+            text-align: justify !important;
+        }
+        .btn-warning{
+            color: #white !important;
+            border-top: 10px solid #820017 !important;
+            border-bottom: 10px solid #820017 !important;
+            border-bottom: 10px solid #820017 !important;
+            border-left: 20px solid #820017 !important;
+            border-right: 20px solid #820017 !important;
+            background:  #820017 !important;
+        }
     </style>
 </head>
 <body yahoo bgcolor="#ffffff">
@@ -451,7 +458,7 @@
                             <tr>
                                 <td valign="top" class="bodyContentImageFull" mc:edit="body_content_01">
                                     <p style="text-align:center;margin:0;padding:0;">
-                                        <img src="{{headerlogo}}" style="display:block;" />
+                                        <img src="https://user-images.githubusercontent.com/6706342/48156595-1055d100-e2ce-11e8-9f1b-e356cb6e861e.png" style="display:block;" />
                                     </p>
                                 </td>
                             </tr>
@@ -464,14 +471,7 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
                             <tr>
                                 <td valign="top" class="bodyContent" mc:edit="body_content">
-                                    <h5>{{footnote}}</h5>
-                                    <h3><b>{{msgtitle}}</b></h3>
-                                    <p style="text-align: justify">
-                                        We are proud of having YOU as new member in our <tt>ethereum</tt> community.
-                                        Almost ready to bootstrap your work and future <tt>dapps.</tt>
-                                        <br/>
-                                        Let's start activating your account to finish registration process.
-                                    </p>
+                                    <h5>"Monitoring your account, even when you sleep"</h5>
                                 </td>
                             </tr>
                         </table>
@@ -484,7 +484,28 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
                             <tr>
                                 <td valign="top" class="bodyContentCenter" mc:edit="body_content_centered">
-                                    <a class="blue-btn" target="blank" href="{{confirm_url}}"><strong>Activate account</strong></a>
+                                    <p style="text-align: justify">
+                                        Hi <b>{{username}}</b>,
+                                        </br>
+                                        a new login was detected on your account.
+                                    </p>
+                                    </br>
+                                    <h3>Details:</h3>
+                                    <ul style="text-align: left">
+                                        <li>
+                                            Time: <tt>{{time}}</tt>
+                                        </li>
+                                        <li>
+                                            Location: <tt>{{location}}</tt>
+                                        </li>
+                                        <li>
+                                            Device: <tt>{{device}}</tt>
+                                        </li>
+                                        <li>
+                                            IP: <tt>{{ip}}</tt>
+                                        </li>
+                                    </ul>
+                                    <p class="warning">If it was not you, your account might be under a <strong>cyberattack</strong> (hacking attempt, hijack, etc), so please lockdown your account while you contact us.</p>
                                 </td>
                             </tr>
                         </table>
@@ -494,23 +515,10 @@
                 <tr>
                     <td align="center" valign="top">
                         <!-- BEGIN BODY // -->
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddleBtm">
-                            <tr align="top">
-                                <td valign="top" class="bodyContentImage">
-                                    <table border="0" cellpadding="0" cellspacing="0" valign="top">
-                                        <tr>
-                                            <td align="left" width="50" valign="top" mc:edit="footer_sigimage" style="margin:0;padding:0;">
-                                                <p style="margin-bottom:10px"padding:0;display:block;>
-                                                    <img src="{{founderlogo}}" style="display:block; border-radius: 8px;" />
-                                                </p>
-                                            </td>
-                                            <td width="15" align="left" valign="top" style="width:15px;margin:0;padding:0;">&nbsp;</td>
-                                            <td align="left" valign="top" mc:edit="footer_sig" valign="top" style="margin:0;padding-top:10px;line-height:1;">
-                                                <h4><strong>Sergio</strong></h4>
-                                                <h5>Founder</h5>
-                                            </td>
-                                        </tr>
-                                    </table>
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
+                            <tr>
+                                <td valign="top" style="text-align: center;" mc:edit="body_content_centered">
+                                    <a class="blue-btn btn-warning" target="blank" href="{{lockdown_url}}"><strong>LOCKDOWN</strong></a>
                                 </td>
                             </tr>
                         </table>
@@ -523,7 +531,7 @@
                             <tr>
                                 <td valign="top" width="100%" mc:edit="footer_unsubscribe">
                                     <p style="text-align:center;">
-                                        <img src="{{appicon}}" style="margin:0 auto 0 auto;display:inline-block;" />
+                                        <img src="{{applogo}}" style="margin:0 auto 0 auto;display:inline-block;" />
                                     </p>
 
                                     <h6 style="text-align:center;margin-top: 9px;"><b>{{domain}}</b></h6>

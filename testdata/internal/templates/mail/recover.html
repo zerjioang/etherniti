@@ -10,13 +10,13 @@
            "@type": "EmailMessage",
            "potentialAction": {
              "@type": "ConfirmAction",
-             "name": "Confirm registration",
+             "name": "Recover account",
              "handler": {
                "@type": "HttpActionHandler",
-               "url": "{{confirm_url}}"
+               "url": "{{recovery_url}}"
              }
            },
-           "description": "{{appname}} registration confirmation"
+           "description": "{{appname}} account recovery"
          }
       </script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -426,6 +426,28 @@
         html,body,h1,h2,h3,h4,h5,h6,p,a,tr,td,ul,li {
             font-family:'Open Sans', Helvetica, Arial, sans-serif;
         }
+        b{
+            color: #232323;
+        }
+        li{
+            padding-top: 4px;
+        }
+        .warning{
+            color: #820000;
+            font-weight: bold;
+            font-size: 9pt;
+            padding-top: 30px;
+            text-align: justify !important;
+        }
+        .btn-warning{
+            color: #white !important;
+            border-top: 10px solid #820017 !important;
+            border-bottom: 10px solid #820017 !important;
+            border-bottom: 10px solid #820017 !important;
+            border-left: 20px solid #820017 !important;
+            border-right: 20px solid #820017 !important;
+            background:  #820017 !important;
+        }
     </style>
 </head>
 <body yahoo bgcolor="#ffffff">
@@ -451,7 +473,7 @@
                             <tr>
                                 <td valign="top" class="bodyContentImageFull" mc:edit="body_content_01">
                                     <p style="text-align:center;margin:0;padding:0;">
-                                        <img src="{{headerlogo}}" style="display:block;" />
+                                        <img src="https://user-images.githubusercontent.com/6706342/48154113-1e085800-e2c8-11e8-9d76-39eace6368f3.png" style="display:block;" />
                                     </p>
                                 </td>
                             </tr>
@@ -464,14 +486,7 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
                             <tr>
                                 <td valign="top" class="bodyContent" mc:edit="body_content">
-                                    <h5>{{footnote}}</h5>
-                                    <h3><b>{{msgtitle}}</b></h3>
-                                    <p style="text-align: justify">
-                                        We are proud of having YOU as new member in our <tt>ethereum</tt> community.
-                                        Almost ready to bootstrap your work and future <tt>dapps.</tt>
-                                        <br/>
-                                        Let's start activating your account to finish registration process.
-                                    </p>
+                                    <h5>"Always protecting you and your data"</h5>
                                 </td>
                             </tr>
                         </table>
@@ -484,7 +499,72 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
                             <tr>
                                 <td valign="top" class="bodyContentCenter" mc:edit="body_content_centered">
-                                    <a class="blue-btn" target="blank" href="{{confirm_url}}"><strong>Activate account</strong></a>
+                                    <p style="text-align: justify">
+                                        Hi <b>{{username}}</b>,
+                                        </br>
+                                        A new account recovery process was started for your account using an application such as mobile device or web browser.
+                                    </p>
+                                    </br>
+                                    <h3>Details:</h3>
+                                    <ul style="text-align: left">
+                                        <li>
+                                            Time: <tt>{{time}}</tt>
+                                        </li>
+                                        <li>
+                                            Location: <tt>{{location}}</tt>
+                                        </li>
+                                        <li>
+                                            Device: <tt>{{device}}</tt>
+                                        </li>
+                                        <li>
+                                            IP: <tt>{{ip}}</tt>
+                                        </li>
+                                    </ul>
+                                    <p class="warning">If it was not you, your account might be under a <strong>cyberattack</strong> (hacking attempt, hijack, etc), so please lockdown your account while you contact us. Otherwise, follow recovery steps below.</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- // END BODY -->
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <!-- BEGIN BODY // -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
+                            <tr>
+                                <td valign="top" style="text-align: center;" mc:edit="body_content_centered">
+                                    <a class="blue-btn btn-warning" target="blank" href="{{lockdown_url}}"><strong>LOCKDOWN</strong></a>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- // END BODY -->
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <!-- BEGIN BODY // -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
+                            <tr>
+                                <td valign="top" class="bodyContent" mc:edit="body_content">
+                                    <h2><strong>Please follow the next steps to recover your <b>{{appname}}</b> account</strong></h2>
+                                    <ul>
+                                        <li>Keep calm</li>
+                                        <li>Make sure your account was not hacked. In that case, use <b>LOCKDOWN</b> button above to freeze the account.</li>
+                                        <li>If you just want to recover your account, follow recovery wizard.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- // END BODY -->
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <!-- BEGIN BODY // -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainerMiddle">
+                            <tr>
+                                <td valign="top" class="bodyContentCenter" mc:edit="body_content_centered">
+                                    <a class="blue-btn" target="blank" href="{{recovery_url}}"><strong>Recover my account</strong></a>
                                 </td>
                             </tr>
                         </table>
@@ -501,7 +581,7 @@
                                         <tr>
                                             <td align="left" width="50" valign="top" mc:edit="footer_sigimage" style="margin:0;padding:0;">
                                                 <p style="margin-bottom:10px"padding:0;display:block;>
-                                                    <img src="{{founderlogo}}" style="display:block; border-radius: 8px;" />
+                                                    <img src="https://avatars3.githubusercontent.com/u/6706342?s=60&v=4" style="display:block; border-radius: 8px;" />
                                                 </p>
                                             </td>
                                             <td width="15" align="left" valign="top" style="width:15px;margin:0;padding:0;">&nbsp;</td>
@@ -523,11 +603,11 @@
                             <tr>
                                 <td valign="top" width="100%" mc:edit="footer_unsubscribe">
                                     <p style="text-align:center;">
-                                        <img src="{{appicon}}" style="margin:0 auto 0 auto;display:inline-block;" />
+                                        <img src="h{{applogo}}" style="margin:0 auto 0 auto;display:inline-block;" />
                                     </p>
 
                                     <h6 style="text-align:center;margin-top: 9px;"><b>{{domain}}</b></h6>
-                                    <h6 style="text-align:center;">{{applocation}}</h6>
+                                    <h6 style="text-align:center;">{{location}}</h6>
 
                                     <div class="flag-wrapper">
                                         <div class="flag">
@@ -540,7 +620,7 @@
                                                   L256,227.217L51.431,90.838h-7.756c-17.423,0-31.897,12.585-34.855,29.158l204.006,136.004L8.821,392.004
                                                   c2.957,16.572,17.432,29.156,34.855,29.156h7.756L256,284.782l204.569,136.379h7.756
                                                   C485.747,421.161,500.222,408.576,503.179,392.004z"/>
-                                                <polygon style="fill:#FFFFFF;" points="8.258,279.947 232.052,279.947 232.052,421.161 279.948,421.161 279.948,279.947
+                                                <polygon style="fill:#FFFFFF;" points="8.258,279.947 232.052,279.947 232.052,421.161 279.948,421.161 279.948,279.947 
                                                   503.742,279.947 503.742,232.05 279.948,232.05 279.948,90.838 232.052,90.838 232.052,232.05 8.258,232.05 "/>
                                                 <path style="fill:#1A1C20;" d="M512,126.256c0-1.573-0.088-3.125-0.251-4.654c0.537-2.172,0.203-4.553-1.136-6.561
                                                   c-0.041-0.062-0.087-0.115-0.129-0.174c-5.024-18.575-22.017-32.286-42.16-32.286h-7.71c-0.002,0-0.004,0-0.006,0H51.405

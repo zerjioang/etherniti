@@ -6,6 +6,8 @@ package cache
 import (
 	"testing"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,13 +18,13 @@ func TestMemoryCache(t *testing.T) {
 	})
 	t.Run("get", func(t *testing.T) {
 		c := NewMemoryCache()
-		c.Set("foo", "bar")
-		v, ok := c.Get("foo")
+		c.Set(str.UnsafeBytes("foo"), "bar")
+		v, ok := c.Get(str.UnsafeBytes("foo"))
 		assert.Equal(t, v, "bar")
 		assert.True(t, ok)
 	})
 	t.Run("set", func(t *testing.T) {
 		c := NewMemoryCache()
-		c.Set("foo", "bar")
+		c.Set(str.UnsafeBytes("foo"), "bar")
 	})
 }

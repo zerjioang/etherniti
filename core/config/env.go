@@ -20,7 +20,7 @@ func GetEnvironment() EnvConfig {
 	doOnce.Do(func() {
 		logger.Debug("reading environment configuration")
 		globalCfg = newEnvironment()
-		SetDefaults(globalCfg)
+		globalCfg.SetDefaults()
 		// override default values with user provided data
 		globalCfg.read()
 	})
@@ -28,8 +28,17 @@ func GetEnvironment() EnvConfig {
 	return *globalCfg
 }
 
-func ReadEnvironment(key string) interface{} {
-	return GetEnvironment().data[key]
+func ReadEnvironment(key string) (interface{}, bool) {
+	v, ok := GetEnvironment().data[key]
+	return v, ok
+}
+
+func ReadEnvironmentString(key string) string {
+	v, found := ReadEnvironment(key)
+	if !found {
+		return ""
+	}
+	return v.(string)
 }
 
 // configuration data type
@@ -45,7 +54,7 @@ func newEnvironment() *EnvConfig {
 }
 
 //read environment variables
-func (env EnvConfig) read() {
+func (c EnvConfig) read() {
 	logger.Debug("reading environment variables from current operating system")
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")
@@ -53,7 +62,7 @@ func (env EnvConfig) read() {
 			k := pair[0]
 			v := pair[1]
 			logger.Debug(k, " = ", v)
-			env.data[k] = v
+			c.data[k] = v
 		}
 	}
 }

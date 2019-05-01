@@ -6,11 +6,12 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
 	"math/big"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/httpclient"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
@@ -25,8 +26,6 @@ import (
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
-
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 // https://documenter.getpostman.com/view/4117254/ethereum-json-rpc/RVu7CT5J
@@ -43,6 +42,9 @@ var (
 	}
 	summaryFunctionsNames = []string{
 		"name", "symbol", "decimals", "totalsupply",
+	}
+	defaultRpcHeader = http.Header{
+		"Content-Type": []string{httpclient.ApplicationJson},
 	}
 )
 
@@ -142,20 +144,10 @@ func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.
 
 func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
 
-	log.Info("sending request: ", data)
-	response, err := rpc.client.Post(rpc.url, "application/json", strings.NewReader(data))
-	if err != nil {
-		return nil, err
+	responseData, postErr := httpclient.MakePost(&rpc.client, rpc.url, defaultRpcHeader, data)
+	if postErr != nil {
+		return nil, postErr
 	}
-
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-	//responseData readed, close body
-	_ = response.Body.Close()
-
-	log.Info("response received", str.UnsafeString(responseData))
 
 	resp := model.EthResponse{}
 	unmErr := json.Unmarshal(responseData, &resp)

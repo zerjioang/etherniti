@@ -15,7 +15,7 @@
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "aa6e0f35703c1438cc45860ddc0c3f6e6c633c93"
+  revision = "96897255fd17525dd12426345d279533780bc4e1"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -57,12 +57,12 @@
   version = "v1.3.1"
 
 [[projects]]
-  digest = "1:5499aeb9d8a5c3d99d5f924e05ce1f86bf878cb9885dcf9e71ba0dafdce84d96"
+  digest = "1:e77a03f1e4f1e4e035e46dc3cd79b1e33acbf651540aaa5e148caf1296884d18"
   name = "github.com/jarcoal/httpmock"
   packages = ["."]
   pruneopts = "UT"
-  revision = "b43b330ad7ef975a5049e4cc58f948aa6d9cad89"
-  version = "v1.0.1"
+  revision = "e598472b238f5d2a505e1316886da2171f86bfa4"
+  version = "v1.0.3"
 
 [[projects]]
   digest = "1:f5a2051c55d05548d2d4fd23d244027b59fbd943217df8aa3b5e170ac2fd6e1b"
@@ -204,7 +204,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:40b0221836d35cb0b039d9705021601f357d23303e1306e9b5b412876a848aa7"
+  digest = "1:632c217b28c26732c941072e0c6b9f679e409da02e547352341591160b7ecb57"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -214,7 +214,7 @@
     "sha3",
   ]
   pruneopts = "UT"
-  revision = "38d8ce5564a5b71b2e3a00553993f1b9a7ae852f"
+  revision = "a29dc8fdc73485234dbef99ebedb95d2eced08de"
 
 [[projects]]
   branch = "master"
@@ -225,18 +225,18 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "4829fb13d2c62012c17688fa7f629f371014946d"
+  revision = "9ce7a6920f093fc0b908c4a5f66ae049110f417e"
 
 [[projects]]
   branch = "master"
-  digest = "1:d78755393cc6ee9bd63b4debeed9be209517adc3296e61ecdf97590b15260f45"
+  digest = "1:8acf841d7417aa2621a2b923f6262673033d407053ab49a4db9ec34378e1b49b"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
     "unix",
   ]
   pruneopts = "UT"
-  revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
+  revision = "d89cdac9e8725f2aefce25fcbfef41134c9ad412"
 
 [[projects]]
   branch = "master"
@@ -254,7 +254,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "31fd60d6bfdcfb2861856aa5b333bb135f6bbfd8"
+  revision = "23463209683dad3f2b9cc7f7c2663e1847c59017"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -266,6 +266,7 @@
     "github.com/json-iterator/go",
     "github.com/mattn/go-colorable",
     "github.com/mattn/go-isatty",
+    "github.com/pkg/errors",
     "github.com/pkg/profile",
     "github.com/shopspring/decimal",
     "github.com/stretchr/testify/assert",

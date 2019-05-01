@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	tokenSecretBytes        = []byte(config.TokenSecret)
+	tokenSecretBytes        = []byte(config.TokenSecret())
 	errTokenNoValid         = errors.New("provided token contains invalid or missing fields")
 	errInvalidSigningMethod = errors.New("unexpected signing method")
 	errFailedToRead         = errors.New("failed to read token claims")
@@ -201,7 +201,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 			Source:      ip.Ip2int(data.Ip),
 		},
 		Issuer:    "etherniti.org",
-		ExpiresAt: now.Add(config.TokenExpiration).Unix(),
+		ExpiresAt: now.Add(config.TokenExpiration()).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
 		Version:   constants.Version,

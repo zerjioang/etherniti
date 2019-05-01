@@ -37,8 +37,7 @@ const (
 
 var (
 	rateExcedeed                  = protocol.NewApiError(http.StatusTooManyRequests, []byte("rate limit reached"))
-	defaultCacheMeasurementUnit   = config.RateLimitUnits
-	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt
+	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt()
 )
 
 type limit struct {
@@ -67,14 +66,14 @@ func (rte RateLimitEngine) Eval(clientIdentifier []byte, h http.Header) RateLimi
 	resetTime := timeNow.Add(defaultCacheMeasurementUnitFt)
 
 	//inject rate limit header: X-Rate-Limit-Limit
-	h.Set(XRateLimit, config.RateLimitStr)
+	h.Set(XRateLimit, config.RateLimitUnitsStr())
 
 	// read current limit
 	var currentRequestsLimit limit
 	rateRemaining, found := rte.rateCache.Get(clientIdentifier)
 	if !found {
 		// initialize client max allowed rate limit
-		currentRequestsLimit = limit{value: config.RateLimit, reset: resetTime.Unix()}
+		currentRequestsLimit = limit{value: config.RateLimit(), reset: resetTime.Unix()}
 	} else {
 		currentRequestsLimit = rateRemaining.(limit)
 	}

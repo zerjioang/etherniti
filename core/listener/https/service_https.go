@@ -33,7 +33,7 @@ var (
 	certEtr       error
 	// define http server config for http to https redirection
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.ListeningAddress,
+		Addr:         config.GetListeningAddress(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -150,7 +150,7 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 
 	//configure custom secure server
 	return &http.Server{
-		Addr:         config.ListeningAddress,
+		Addr:         config.GetListeningAddress(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    &tlsConf,
