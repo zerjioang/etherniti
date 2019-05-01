@@ -201,7 +201,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// configure logging level
 	if config.EnableLogging() {
 		logger.Info("[LAYER] logger level")
-		e.Logger.SetLevel( config.LogLevel() )
+		e.Logger.SetLevel(config.LogLevel())
 		e.Pre(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
 		}))

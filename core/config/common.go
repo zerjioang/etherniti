@@ -4,11 +4,12 @@
 package config
 
 import (
+	"os"
+	"strings"
+
 	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/modules/hashset"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
-	"os"
-	"strings"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
@@ -27,8 +28,8 @@ var (
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
 	ResourcesDirInternalBadIps   = ResourcesDirInternal + "/badips"
-	ResourcesDirInternalCors   = ResourcesDirInternal + "/cors"
-	ResourcesDirInternalHosts   = ResourcesDirInternal + "/hosts"
+	ResourcesDirInternalCors     = ResourcesDirInternal + "/cors"
+	ResourcesDirInternalHosts    = ResourcesDirInternal + "/hosts"
 	ResourcesDirInternalEmail    = ResourcesDirInternal + "/templates/mail"
 	ResourcesDirLanding          = ResourcesDir + "/landing"
 	ResourcesIndexHtml           = ResourcesDirLanding + "/index.html"
@@ -40,17 +41,17 @@ var (
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
 	BadIpsFile            = ResourcesDirInternalBadIps + "/list_any_5"
-	CorsFile            = ResourcesDirInternalCors + "/cors"
-	HostsFile            = ResourcesDirInternalHosts + "/hosts"
+	CorsFile              = ResourcesDirInternalCors + "/cors"
+	HostsFile             = ResourcesDirInternalHosts + "/hosts"
 )
 
 var (
 	// allowed cors domains
 	AllowedCorsOriginList *hashset.HashSet
-	AllowedHostnames *hashset.HashSet
+	AllowedHostnames      *hashset.HashSet
 )
 
-func init(){
+func init() {
 	AllowedCorsOriginList = hashset.NewHashSet()
 	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
 	AllowedHostnames = hashset.NewHashSet()
