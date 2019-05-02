@@ -23,11 +23,16 @@ type HashSet struct {
 	lock *sync.Mutex
 }
 
-func NewHashSet() *HashSet {
-	hs := new(HashSet)
+func NewHashSet() HashSet {
+	hs := HashSet{}
 	hs.lock = new(sync.Mutex)
-	hs.Clear()
+	hs.data = make(map[string]*struct{})
 	return hs
+}
+
+func NewHashSetPtr() *HashSet {
+	hs := NewHashSet()
+	return &hs
 }
 
 func (set *HashSet) Add(item string) {

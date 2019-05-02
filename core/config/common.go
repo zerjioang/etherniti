@@ -52,9 +52,9 @@ var (
 )
 
 func init() {
-	AllowedCorsOriginList = hashset.NewHashSet()
+	AllowedCorsOriginList = hashset.NewHashSetPtr()
 	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
-	AllowedHostnames = hashset.NewHashSet()
+	AllowedHostnames = hashset.NewHashSetPtr()
 	AllowedHostnames.LoadFromRaw(HostsFile, "\n")
 }
 func BlockTorConnections() bool {

@@ -12,7 +12,7 @@ import (
 var (
 	// https://www.howtoforge.com/tutorial/protect-your-server-computer-with-badips-and-fail2ban/
 	// loaded from https://www.badips.com/get/list/any/5
-	badIpList *hashset.HashSet
+	badIpList hashset.HashSet
 )
 
 func init() {
@@ -21,7 +21,7 @@ func init() {
 	badIpList.LoadFromRaw(config.BadIpsFile, "\n")
 }
 
-func GetBadIPList() *hashset.HashSet {
+func GetBadIPList() hashset.HashSet {
 	return badIpList
 }
 
