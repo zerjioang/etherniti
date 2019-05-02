@@ -17,7 +17,6 @@ func BenchmarkStringbank(b *testing.B) {
 	index := make([]int, b.N)
 
 	b.ReportAllocs()
-	b.SetBytes(1)
 	b.ResetTimer()
 	sb := Stringbank{}
 	for i, v := range s {

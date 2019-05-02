@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 var (
@@ -669,7 +670,7 @@ func TestRouterMultiRoute(t *testing.T) {
 	c = e.NewContext(nil, nil)
 	r.Find(http.MethodGet, "/user", c)
 	he := c.handler(c).(*HTTPError)
-	assert.Equal(t, http.StatusNotFound, he.Code)
+	assert.Equal(t, protocol.StatusNotFound, he.Code)
 }
 
 func TestRouterPriority(t *testing.T) {
@@ -772,7 +773,7 @@ func TestRouterPriorityNotFound(t *testing.T) {
 	c = e.NewContext(nil, nil)
 	r.Find(http.MethodGet, "/abc/def", c)
 	he := c.handler(c).(*HTTPError)
-	assert.Equal(t, http.StatusNotFound, he.Code)
+	assert.Equal(t, protocol.StatusNotFound, he.Code)
 }
 
 func TestRouterParamNames(t *testing.T) {

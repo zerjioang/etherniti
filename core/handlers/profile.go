@@ -4,8 +4,6 @@
 package handlers
 
 import (
-	"net/http"
-
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -55,17 +53,17 @@ func (ctl ProfileController) create(c *echo.Context) error {
 		rawBytes := str.GetJsonBytes(protocol.NewApiResponse(data.ProfileTokenSuccess, token))
 		// increment created counter
 		profilesCreated.Increment()
-		return c.JSONBlob(http.StatusOK, rawBytes)
+		return c.JSONBlob(protocol.StatusOK, rawBytes)
 	} else {
 		//token generation trycatch
-		rawBytes := str.GetJsonBytes(protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())))
-		return c.JSONBlob(http.StatusOK, rawBytes)
+		rawBytes := str.GetJsonBytes(protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())))
+		return c.JSONBlob(protocol.StatusOK, rawBytes)
 	}
 }
 
 // profile validation check
 func (ctl ProfileController) validate(c *echo.Context) error {
-	return c.JSONBlob(http.StatusOK, data.ReadErr)
+	return c.JSONBlob(protocol.StatusOK, data.ReadErr)
 }
 
 // profile validation counter

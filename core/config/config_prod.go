@@ -57,6 +57,7 @@ func (c *EnvConfig) SetDefaults() {
 	env["X_ETHERNITI_ENABLE_CORS"] = true
 	env["X_ETHERNITI_ENABLE_SECURITY"] = true
 	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
+	env["X_ETHERNITI_ENABLE_METRICS"] = true
 	env["X_ETHERNITI_ENABLE_CACHE"] = true
 	env["X_ETHERNITI_ENABLE_RATELIMIT"] = true
 	env["X_ETHERNITI_ENABLE_PROFILER"] = false

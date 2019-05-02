@@ -7,6 +7,8 @@ import (
 	"bufio"
 	"net"
 	"net/http"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 type (
@@ -57,7 +59,7 @@ func (r *Response) After(fn func()) {
 
 // WriteHeader sends an HTTP response header with status code. If WriteHeader is
 // not called explicitly, the first call to Write will trigger an implicit
-// WriteHeader(http.StatusOK). Thus explicit calls to WriteHeader are mainly
+// WriteHeader(protocol.StatusOK). Thus explicit calls to WriteHeader are mainly
 // used to send error codes.
 func (r *Response) WriteHeader(code int) {
 	if r.Committed {
@@ -75,7 +77,7 @@ func (r *Response) WriteHeader(code int) {
 // Write writes the data to the connection as part of an HTTP reply.
 func (r *Response) Write(b []byte) (n int, err error) {
 	if !r.Committed {
-		r.WriteHeader(http.StatusOK)
+		r.WriteHeader(protocol.StatusOK)
 	}
 	n, err = r.Writer.Write(b)
 	r.Size += int64(n)
@@ -104,6 +106,6 @@ func (r *Response) reset(w http.ResponseWriter) {
 	r.afterFuncs = nil
 	r.Writer = w
 	r.Size = 0
-	r.Status = http.StatusOK
+	r.Status = protocol.StatusOK
 	r.Committed = false
 }

@@ -11,6 +11,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 type (
@@ -35,30 +37,30 @@ func (b *DefaultBinder) Bind(i interface{}, c *Context) (err error) {
 	if req.ContentLength == 0 {
 		if req.Method == http.MethodGet || req.Method == http.MethodDelete {
 			if err = b.bindData(i, c.QueryParams(), "query"); err != nil {
-				return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
+				return NewHTTPError(protocol.StatusBadRequest, err.Error()).SetInternal(err)
 			}
 			return
 		}
-		return NewHTTPError(http.StatusBadRequest, "Request body can't be empty")
+		return NewHTTPError(protocol.StatusBadRequest, "Request body can't be empty")
 	}
 	ctype := req.Header.Get(HeaderContentType)
 	switch {
 	case strings.HasPrefix(ctype, MIMEApplicationJSON):
 		if err = json.NewDecoder(req.Body).Decode(i); err != nil {
 			if ute, ok := err.(*json.UnmarshalTypeError); ok {
-				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Unmarshal type error: expected=%v, got=%v, field=%v, offset=%v", ute.Type, ute.Value, ute.Field, ute.Offset)).SetInternal(err)
+				return NewHTTPError(protocol.StatusBadRequest, fmt.Sprintf("Unmarshal type error: expected=%v, got=%v, field=%v, offset=%v", ute.Type, ute.Value, ute.Field, ute.Offset)).SetInternal(err)
 			} else if se, ok := err.(*json.SyntaxError); ok {
-				return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Syntax error: offset=%v, error=%v", se.Offset, se.Error())).SetInternal(err)
+				return NewHTTPError(protocol.StatusBadRequest, fmt.Sprintf("Syntax error: offset=%v, error=%v", se.Offset, se.Error())).SetInternal(err)
 			}
-			return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
+			return NewHTTPError(protocol.StatusBadRequest, err.Error()).SetInternal(err)
 		}
 	case strings.HasPrefix(ctype, MIMEApplicationForm), strings.HasPrefix(ctype, MIMEMultipartForm):
 		params, err := c.FormParams()
 		if err != nil {
-			return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
+			return NewHTTPError(protocol.StatusBadRequest, err.Error()).SetInternal(err)
 		}
 		if err = b.bindData(i, params, "form"); err != nil {
-			return NewHTTPError(http.StatusBadRequest, err.Error()).SetInternal(err)
+			return NewHTTPError(protocol.StatusBadRequest, err.Error()).SetInternal(err)
 		}
 	default:
 		return ErrUnsupportedMediaType

@@ -4,10 +4,10 @@
 package clientcache
 
 import (
-	"net/http"
 	"strconv"
 	"sync"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -50,11 +50,11 @@ func Cached(c *echo.Context, cacheHit bool, seconds uint) (int, *echo.Context) {
 		if cacheHit {
 			//cached item is still valid, so return a not modified
 			h.Set("x-cache", "hit")
-			r.Status = http.StatusOK // http.StatusNotModified
+			r.Status = protocol.StatusOK // protocol.StatusNotModified
 		} else {
 			// cached data set as invalid, return 200 ok in order to update
 			h.Set("x-cache", "miss")
-			r.Status = http.StatusOK
+			r.Status = protocol.StatusOK
 		}
 	}
 	edit.Unlock()

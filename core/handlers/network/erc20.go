@@ -5,11 +5,11 @@ package network
 
 import (
 	"math/big"
-	"net/http"
 	"strconv"
 
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
@@ -41,7 +41,7 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 	raw, err := f(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, http.StatusBadRequest, err)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
@@ -113,7 +113,7 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 		raw, err := client.Erc20BalanceOf(contractAddress, address)
 		if err != nil {
 			// send invalid generation message
-			return api.ErrorCode(c, http.StatusBadRequest, err)
+			return api.ErrorCode(c, protocol.StatusBadRequest, err)
 		} else {
 			var unpacked *big.Int
 			rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -146,7 +146,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 	raw, err := client.Erc20Summary(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, http.StatusBadRequest, err)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
@@ -182,7 +182,7 @@ func (ctl *Erc20Controller) allowance(c *echo.Context) error {
 	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, http.StatusBadRequest, err)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}
@@ -220,7 +220,7 @@ func (ctl *Erc20Controller) transfer(c *echo.Context) error {
 	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, http.StatusBadRequest, err)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}

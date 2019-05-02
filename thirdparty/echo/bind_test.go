@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 type (
@@ -253,7 +254,7 @@ func TestBindUnmarshalTypeError(t *testing.T) {
 
 	err := c.Bind(u)
 
-	he := &HTTPError{Code: http.StatusBadRequest, Message: "Unmarshal type error: expected=int, got=string, field=id, offset=14", Internal: err.(*HTTPError).Internal}
+	he := &HTTPError{Code: protocol.StatusBadRequest, Message: "Unmarshal type error: expected=int, got=string, field=id, offset=14", Internal: err.(*HTTPError).Internal}
 
 	assert.Equal(t, he, err)
 }
@@ -376,7 +377,7 @@ func testBindError(assert *assert.Assertions, r io.Reader, ctype string, expecte
 	case strings.HasPrefix(ctype, MIMEApplicationJSON),
 		strings.HasPrefix(ctype, MIMEApplicationForm), strings.HasPrefix(ctype, MIMEMultipartForm):
 		if assert.IsType(new(HTTPError), err) {
-			assert.Equal(http.StatusBadRequest, err.(*HTTPError).Code)
+			assert.Equal(protocol.StatusBadRequest, err.(*HTTPError).Code)
 			assert.IsType(expectedInternal, err.(*HTTPError).Internal)
 		}
 	default:

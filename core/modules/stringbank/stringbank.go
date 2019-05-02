@@ -12,7 +12,7 @@ import (
 	"unsafe"
 )
 
-const stringbankSize = 1 << 6 //1 << 18 // about 250k as a power of 2
+const stringbankSize = 1 << 18 // about 250k as a power of 2
 
 var packageBank Stringbank
 
@@ -34,11 +34,6 @@ func Save(val string) Index {
 type Stringbank struct {
 	current     []byte
 	allocations [][]byte
-}
-
-func NewStringbank() Stringbank {
-	sb := Stringbank{}
-	return sb
 }
 
 // Size returns the approximate number of bytes in the string bank. The estimate includes currently unused and
@@ -85,8 +80,8 @@ func spaceForLength(len int) int {
 	// 7 bits => 1 byte
 	// 8 bits => 2 byte
 	// 1
-	bitsNum := bits.Len(uint(len))
-	return (bitsNum + 6) / 7
+	bits := bits.Len(uint(len))
+	return (bits + 6) / 7
 }
 
 func writeLength(len int, buf []byte) int {

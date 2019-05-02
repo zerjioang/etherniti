@@ -7,6 +7,8 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/modules/tor"
 
@@ -53,7 +55,7 @@ var (
 func customHTTPErrorHandler(err error, c *echo.Context) {
 	// use code snippet below to customize http return code
 	/*
-		code := http.StatusInternalServerError
+		code := protocol.StatusInternalServerError
 		if he, ok := err.(*echo.HTTPError); ok {
 			code = he.Code
 		}
@@ -205,6 +207,11 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.Pre(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
 		}))
+	}
+
+	if config.EnableMetrics() {
+		logger.Info("[LAYER] metrics")
+		e.Pre(prometheus_metrics.MetricsCollector)
 	}
 
 	if config.IsHttpMode() {

@@ -4,9 +4,8 @@
 package ratelimit
 
 import (
-	"net/http"
-
 	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -34,6 +33,6 @@ func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
 		if result == Allow {
 			return next(c)
 		}
-		return c.JSON(http.StatusTooManyRequests, rateExcedeed)
+		return c.JSON(protocol.StatusTooManyRequests, rateExcedeed)
 	}
 }

@@ -17,7 +17,7 @@ Example:
 
   // Handler
   func hello(c echo.Context) error {
-    return c.String(http.StatusOK, "Hello, World!")
+    return c.String(protocol.StatusOK, "Hello, World!")
   }
 
   func main() {
@@ -254,18 +254,18 @@ var (
 
 // Errors
 var (
-	ErrUnsupportedMediaType        = NewHTTPError(http.StatusUnsupportedMediaType)
-	ErrNotFound                    = NewHTTPError(http.StatusNotFound)
-	ErrUnauthorized                = NewHTTPError(http.StatusUnauthorized)
-	ErrForbidden                   = NewHTTPError(http.StatusForbidden)
-	ErrMethodNotAllowed            = NewHTTPError(http.StatusMethodNotAllowed)
-	ErrStatusRequestEntityTooLarge = NewHTTPError(http.StatusRequestEntityTooLarge)
-	ErrTooManyRequests             = NewHTTPError(http.StatusTooManyRequests)
-	ErrBadRequest                  = NewHTTPError(http.StatusBadRequest)
-	ErrBadGateway                  = NewHTTPError(http.StatusBadGateway)
-	ErrInternalServerError         = NewHTTPError(http.StatusInternalServerError)
-	ErrRequestTimeout              = NewHTTPError(http.StatusRequestTimeout)
-	ErrServiceUnavailable          = NewHTTPError(http.StatusServiceUnavailable)
+	ErrUnsupportedMediaType        = NewHTTPError(protocol.StatusUnsupportedMediaType)
+	ErrNotFound                    = NewHTTPError(protocol.StatusNotFound)
+	ErrUnauthorized                = NewHTTPError(protocol.StatusUnauthorized)
+	ErrForbidden                   = NewHTTPError(protocol.StatusForbidden)
+	ErrMethodNotAllowed            = NewHTTPError(protocol.StatusMethodNotAllowed)
+	ErrStatusRequestEntityTooLarge = NewHTTPError(protocol.StatusRequestEntityTooLarge)
+	ErrTooManyRequests             = NewHTTPError(protocol.StatusTooManyRequests)
+	ErrBadRequest                  = NewHTTPError(protocol.StatusBadRequest)
+	ErrBadGateway                  = NewHTTPError(protocol.StatusBadGateway)
+	ErrInternalServerError         = NewHTTPError(protocol.StatusInternalServerError)
+	ErrRequestTimeout              = NewHTTPError(protocol.StatusRequestTimeout)
+	ErrServiceUnavailable          = NewHTTPError(protocol.StatusServiceUnavailable)
 	ErrValidatorNotRegistered      = errors.New("validator not registered")
 	ErrRendererNotRegistered       = errors.New("renderer not registered")
 	ErrInvalidRedirectCode         = errors.New("invalid redirect status code")

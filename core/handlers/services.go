@@ -4,7 +4,9 @@
 package handlers
 
 import (
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -48,9 +50,16 @@ func next(next echo.HandlerFunc) echo.HandlerFunc {
 
 // RegisterServices in echo server, allowed routes
 func RegisterServices(e *echo.Echo) *echo.Group {
+
 	// /v1
 	groupV1 := e.Group(constants.ApiVersion, next)
-	logger.Info("registering context free routes")
+	if config.EnableMetrics() {
+		logger.Info("registering prometheus_metrics metrics collector endpoint")
+		e.GET("/metrics", echo.WrapHandler(
+			promhttp.Handler(),
+		),
+		)
+	}
 	// /v1/
 	publicGroup := groupV1.Group(constants.PublicApi, next)
 

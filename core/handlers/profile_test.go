@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -28,7 +29,7 @@ func TestProfile(t *testing.T) {
 
 			// Assertions
 			if assert.NoError(t, ctl.create(c)) {
-				assert.Equal(t, http.StatusBadRequest, rec.Code)
+				assert.Equal(t, protocol.StatusBadRequest, rec.Code)
 			}
 		})
 	})
@@ -42,7 +43,7 @@ func TestProfile(t *testing.T) {
 
 			// Assertions
 			if assert.NoError(t, ctl.create(c)) {
-				assert.Equal(t, http.StatusBadRequest, rec.Code)
+				assert.Equal(t, protocol.StatusBadRequest, rec.Code)
 			}
 		})
 	})
@@ -56,7 +57,7 @@ func TestProfile(t *testing.T) {
 
 			// Assertions
 			if assert.NoError(t, ctl.create(c)) {
-				assert.Equal(t, http.StatusBadRequest, rec.Code)
+				assert.Equal(t, protocol.StatusBadRequest, rec.Code)
 			}
 		})
 	})

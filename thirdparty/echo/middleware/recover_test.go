@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -24,6 +25,6 @@ func TestRecover(t *testing.T) {
 		panic("test")
 	}))
 	h(c)
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+	assert.Equal(t, protocol.StatusInternalServerError, rec.Code)
 	assert.Contains(t, buf.String(), "PANIC RECOVER")
 }

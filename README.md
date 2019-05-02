@@ -15,34 +15,36 @@ A multitenant High Performance Ethereum WebAPI for smart contract inter-communic
 Following, **etherniti** dependencies are listed, orderer by impact on final executable size:
 
 ```bash
- 3.8 MB net/http
+  3.8 MB net/http
   3.3 MB runtime
+  2.1 MB github.com/zerjioang/etherniti/vendor/github.com/json-iterator/go
   1.8 MB github.com/zerjioang/etherniti/vendor/github.com/golang/protobuf/proto
   1.8 MB net
   1.8 MB crypto/tls
   1.4 MB github.com/zerjioang/etherniti/vendor/golang.org/x/sys/unix
   1.3 MB reflect
+  1.3 MB github.com/zerjioang/etherniti/vendor/github.com/modern-go/reflect2
   1.2 MB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger
   940 kB math/big
   799 kB syscall
   770 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto/secp256k1
   740 kB crypto/x509
   671 kB text/template
-  668 kB github.com/zerjioang/etherniti/thirdparty/echo
+  658 kB github.com/zerjioang/etherniti/thirdparty/echo
   631 kB encoding/json
   568 kB text/template/parse
   551 kB html/template
   529 kB github.com/zerjioang/etherniti/core/modules/tor
   469 kB internal/x/text/unicode/norm
   452 kB time
-  437 kB github.com/zerjioang/etherniti/core/handlers/network
   436 kB fmt
-  430 kB github.com/zerjioang/etherniti/core/handlers
   423 kB regexp/syntax
+  418 kB github.com/zerjioang/etherniti/core/eth/rpc
   412 kB internal/x/net/dns/dnsmessage
-  402 kB github.com/zerjioang/etherniti/core/eth/rpc
   399 kB os
+  396 kB github.com/zerjioang/etherniti/core/handlers/network
   396 kB regexp
+  393 kB github.com/zerjioang/etherniti/core/handlers
   384 kB github.com/zerjioang/etherniti/core/eth/fixtures/abi
   353 kB github.com/zerjioang/etherniti/vendor/golang.org/x/net/trace
   346 kB compress/flate
@@ -53,7 +55,6 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   279 kB internal/x/crypto/cryptobyte
   266 kB strings
   263 kB strconv
-  250 kB github.com/zerjioang/etherniti/core/server
   249 kB internal/x/text/unicode/bidi
   243 kB os/exec
   237 kB github.com/zerjioang/etherniti/thirdparty/jwt-go
@@ -63,72 +64,72 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   223 kB math
   222 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/table
   210 kB internal/x/net/idna
-  207 kB github.com/zerjioang/etherniti/core/listener/middleware
   207 kB mime
   199 kB bytes
   186 kB crypto/rsa
   185 kB net/http/httptest
+  184 kB github.com/zerjioang/etherniti/thirdparty/echo/middleware
   182 kB html
   179 kB internal/x/net/http2/hpack
   178 kB encoding/binary
   177 kB bufio
   173 kB mime/multipart
   169 kB net/url
-  168 kB github.com/zerjioang/etherniti/thirdparty/echo/middleware
   166 kB net/textproto
   165 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/y
+  160 kB github.com/zerjioang/etherniti/core/listener/middleware
   151 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/protos
   148 kB github.com/zerjioang/etherniti/core/modules/bip39/wordlists
   141 kB github.com/zerjioang/etherniti/vendor/golang.org/x/net/internal/timeseries
   141 kB crypto/cipher
-  140 kB github.com/zerjioang/etherniti/core/listener/common
   140 kB io
   128 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/skl
+  125 kB github.com/zerjioang/etherniti/core/listener/https
   124 kB sync
   121 kB sort
-  116 kB github.com/zerjioang/etherniti/core/eth
   116 kB github.com/zerjioang/etherniti/thirdparty/gommon/log
-  114 kB github.com/zerjioang/etherniti/core/listener/https
   112 kB math/rand
+  111 kB github.com/zerjioang/etherniti/shared/protocol
   111 kB runtime/cgo
+  110 kB github.com/zerjioang/etherniti/thirdparty/middleware/logger
+  108 kB github.com/zerjioang/etherniti/core/listener/socket
   107 kB github.com/zerjioang/etherniti/core/eth/fixtures
   105 kB github.com/zerjioang/etherniti/thirdparty/gommon/color
   105 kB github.com/zerjioang/etherniti/core/modules/concurrentmap
+  105 kB github.com/zerjioang/etherniti/core/api
   104 kB crypto/ecdsa
   104 kB crypto/aes
   103 kB expvar
   102 kB net/http/pprof
   102 kB internal/x/text/transform
   101 kB path/filepath
-  100 kB github.com/zerjioang/etherniti/shared/protocol
-   99 kB github.com/zerjioang/etherniti/core/api
+  100 kB github.com/zerjioang/etherniti/core/listener/common
+   98 kB github.com/zerjioang/etherniti/core/handlers/clientcache
    98 kB context
    97 kB internal/x/crypto/chacha20poly1305
-   97 kB github.com/zerjioang/etherniti/core/listener/socket
-   96 kB github.com/zerjioang/etherniti/thirdparty/middleware/logger
    92 kB github.com/zerjioang/etherniti/core/modules/radix
+   91 kB github.com/zerjioang/etherniti/core/listener/http
    91 kB github.com/zerjioang/etherniti/core/modules/solc
+   90 kB github.com/zerjioang/etherniti/core/server/mods/ratelimit
+   88 kB github.com/zerjioang/etherniti/core/config
+   88 kB github.com/zerjioang/etherniti/core/eth
    86 kB github.com/zerjioang/etherniti/vendor/github.com/dgryski/go-farm
-   84 kB github.com/zerjioang/etherniti/core/handlers/clientcache
+   85 kB github.com/zerjioang/etherniti/core/modules/cyber
    84 kB github.com/zerjioang/etherniti/core/modules/bip39
    84 kB github.com/zerjioang/etherniti/core/modules/bip32
    81 kB github.com/zerjioang/etherniti/core/db
-   80 kB github.com/zerjioang/etherniti/core/listener/http
    79 kB crypto/sha512
    78 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/sha3
    77 kB encoding/base64
-   75 kB github.com/zerjioang/etherniti/core/server/mods/ratelimit
    75 kB compress/gzip
    74 kB crypto/x509/pkix
    74 kB internal/x/net/http/httpproxy
    72 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto
    71 kB crypto/sha256
    71 kB github.com/zerjioang/etherniti/vendor/github.com/pkg/errors
-   69 kB github.com/zerjioang/etherniti/core/config
    69 kB io/ioutil
    69 kB crypto/sha1
    67 kB github.com/zerjioang/etherniti/core/eth/profile
-   66 kB github.com/zerjioang/etherniti/core/modules/cyber
    65 kB crypto/rand
    64 kB net/http/internal
    63 kB github.com/zerjioang/etherniti/thirdparty/template
@@ -136,11 +137,11 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    60 kB text/tabwriter
    60 kB net/http/httptrace
    59 kB github.com/zerjioang/etherniti/core/keystore/memory
+   59 kB github.com/zerjioang/etherniti/vendor/github.com/modern-go/concurrent
    58 kB hash/crc32
    57 kB encoding/pem
    57 kB container/list
    56 kB log
-   55 kB github.com/zerjioang/etherniti/core/server/mods/tor
    55 kB github.com/zerjioang/etherniti/core/modules/concurrentbuffer
    52 kB internal/fmtsort
    52 kB crypto/des
@@ -151,15 +152,18 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    47 kB github.com/zerjioang/etherniti/vendor/github.com/AndreasBriese/bbloom
    46 kB crypto/dsa
    46 kB github.com/zerjioang/etherniti/core/eth/fixtures/common/math
+   42 kB github.com/zerjioang/etherniti/core/util/str
    42 kB os/signal
    42 kB internal/x/crypto/internal/chacha20
    40 kB internal/cpu
+   39 kB runtime/debug
    39 kB internal/x/text/secure/bidirule
    39 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/blowfish
    39 kB math/bits
+   38 kB github.com/zerjioang/etherniti/core/modules/httpclient
    38 kB github.com/zerjioang/etherniti/core/modules/encoding
-   35 kB github.com/zerjioang/etherniti/core/modules/hashset
-   35 kB github.com/zerjioang/etherniti/core/integrity
+   36 kB github.com/zerjioang/etherniti/core/modules/hashset
+   35 kB github.com/zerjioang/etherniti/core/modules/integrity
    34 kB path
    33 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/ripemd160
    32 kB github.com/zerjioang/etherniti/core/server/mods/mem
@@ -168,7 +172,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    30 kB github.com/zerjioang/etherniti/core/eth/fixtures/common
    30 kB internal/x/net/http/httpguts
    29 kB github.com/zerjioang/etherniti/core/eth/paramencoder
-   27 kB github.com/zerjioang/etherniti/core/handlers/security
+   28 kB github.com/zerjioang/etherniti/core/handlers/security
    27 kB github.com/zerjioang/etherniti/core/modules/cns
    27 kB unicode/utf8
    26 kB github.com/zerjioang/etherniti/core/eth/rpc/model
@@ -180,24 +184,24 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    19 kB sync/atomic
    18 kB internal/x/crypto/poly1305
    17 kB crypto/rc4
-   15 kB github.com/zerjioang/etherniti/core/modules/cache
+   16 kB github.com/zerjioang/etherniti/core/modules/cache
+   15 kB github.com/zerjioang/etherniti/core/listener/swagger
    15 kB github.com/zerjioang/etherniti/core/logger
    15 kB hash
    15 kB internal/bytealg
-   15 kB github.com/zerjioang/etherniti/core/listener/swagger
    15 kB container/heap
    14 kB internal/syscall/unix
+   14 kB github.com/zerjioang/etherniti/core/data
    14 kB crypto/hmac
    14 kB internal/testlog
    14 kB internal/x/crypto/hkdf
    12 kB github.com/zerjioang/etherniti/core/trycatch
    12 kB runtime/internal/atomic
-   12 kB github.com/zerjioang/etherniti/core/cmd
    12 kB github.com/zerjioang/etherniti/core/util/ip
-   11 kB github.com/zerjioang/etherniti/core/util/str
    11 kB runtime/internal/sys
    10 kB github.com/zerjioang/etherniti/thirdparty/gommon/random
   9.9 kB github.com/zerjioang/etherniti/core/util/id
+  9.6 kB github.com/zerjioang/etherniti/core/cmd
   9.5 kB github.com/zerjioang/etherniti/core/modules/encoding/hex
   9.0 kB github.com/zerjioang/etherniti/core/modules/encoding/base58
   8.6 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/pbkdf2
@@ -217,11 +221,20 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   3.6 kB internal/race
   3.5 kB github.com/zerjioang/etherniti/vendor/github.com/mattn/go-isatty
   3.1 kB crypto/internal/subtle
-  1.7 kB github.com/zerjioang/etherniti/shared/constants
   1.6 kB runtime/internal/math
   1.5 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/options
-  1.0 kB github.com/zerjioang/etherniti/shared/solc
+  1.5 kB github.com/zerjioang/etherniti/shared/constants
 ```
+
+## Performance tips
+
+### Avoid the use of pointers in large heap scenarios
+
+ * Strings, slices and time.Time all contain pointers
+   * Lots of strings
+   * Timestamps on objects using time.Time
+   * Maps with slice values
+   * Maps with string keys
 
 ## License
 

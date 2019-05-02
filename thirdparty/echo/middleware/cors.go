@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -144,7 +145,7 @@ func CORSWithConfig(config CORSConfig) echo.MiddlewareFunc {
 			if config.MaxAge > 0 {
 				res.Header().Set(echo.HeaderAccessControlMaxAge, maxAge)
 			}
-			return c.NoContent(http.StatusNoContent)
+			return c.NoContent(protocol.StatusNoContent)
 		}
 	}
 }

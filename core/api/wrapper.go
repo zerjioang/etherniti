@@ -5,7 +5,6 @@ package api
 
 import (
 	"bytes"
-	"net/http"
 	"sync"
 
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -26,7 +25,7 @@ var (
 func init() {
 	errorPool = &sync.Pool{
 		New: func() interface{} {
-			return protocol.NewApiError(http.StatusBadRequest, []byte{})
+			return protocol.NewApiError(protocol.StatusBadRequest, []byte{})
 		},
 	}
 	successPool = &sync.Pool{
@@ -81,7 +80,7 @@ func Success(c *echo.Context, msg []byte, result []byte) error {
 	// put item back to the pool
 	bufferPool.Put(b)
 	successPool.Put(item)
-	return c.FastBlob(http.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func ToSuccessPool(msg []byte, result interface{}) []byte {
@@ -137,7 +136,7 @@ func toError(code int, msg []byte) []byte {
 func ErrorStr(c *echo.Context, msg []byte) error {
 	logger.Error(str.UnsafeString(msg))
 	rawBytes := toErrorPool(msg)
-	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func Error(c *echo.Context, err error) error {
@@ -152,6 +151,6 @@ func ErrorCode(c *echo.Context, code int, err error) error {
 
 func StackError(c *echo.Context, stackErr trycatch.Error) error {
 	logger.Error(stackErr)
-	rawBytes := toError(http.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
-	return c.FastBlob(http.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	rawBytes := toError(protocol.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
+	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }

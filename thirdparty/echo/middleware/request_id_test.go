@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -18,7 +19,7 @@ func TestRequestID(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	handler := func(c *echo.Context) error {
-		return c.String(http.StatusOK, "test")
+		return c.String(protocol.StatusOK, "test")
 	}
 
 	rid := RequestIDWithConfig(RequestIDConfig{})

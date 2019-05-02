@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -41,12 +42,12 @@ func TestAddTrailingSlash(t *testing.T) {
 	rec = httptest.NewRecorder()
 	c = e.NewContext(req, rec)
 	h = AddTrailingSlashWithConfig(TrailingSlashConfig{
-		RedirectCode: http.StatusMovedPermanently,
+		RedirectCode: protocol.StatusMovedPermanently,
 	})(func(c *echo.Context) error {
 		return nil
 	})
 	is.NoError(h(c))
-	is.Equal(http.StatusMovedPermanently, rec.Code)
+	is.Equal(protocol.StatusMovedPermanently, rec.Code)
 	is.Equal("/add-slash/?key=value", rec.Header().Get(echo.HeaderLocation))
 }
 
@@ -79,12 +80,12 @@ func TestRemoveTrailingSlash(t *testing.T) {
 	rec = httptest.NewRecorder()
 	c = e.NewContext(req, rec)
 	h = RemoveTrailingSlashWithConfig(TrailingSlashConfig{
-		RedirectCode: http.StatusMovedPermanently,
+		RedirectCode: protocol.StatusMovedPermanently,
 	})(func(c *echo.Context) error {
 		return nil
 	})
 	is.NoError(h(c))
-	is.Equal(http.StatusMovedPermanently, rec.Code)
+	is.Equal(protocol.StatusMovedPermanently, rec.Code)
 	is.Equal("/remove-slash?key=value", rec.Header().Get(echo.HeaderLocation))
 
 	// With bare URL

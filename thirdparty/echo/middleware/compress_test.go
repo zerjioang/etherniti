@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -56,7 +57,7 @@ func TestGzipNoContent(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	h := Gzip()(func(c *echo.Context) error {
-		return c.NoContent(http.StatusNoContent)
+		return c.NoContent(protocol.StatusNoContent)
 	})
 	if assert.NoError(t, h(c)) {
 		assert.Empty(t, rec.Header().Get(echo.HeaderContentEncoding))
@@ -75,7 +76,7 @@ func TestGzipErrorReturned(t *testing.T) {
 	req.Header.Set(echo.HeaderAcceptEncoding, gzipScheme)
 	rec := httptest.NewRecorder()
 	e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, protocol.StatusNotFound, rec.Code)
 	assert.Empty(t, rec.Header().Get(echo.HeaderContentEncoding))
 }
 
@@ -88,7 +89,7 @@ func TestGzipWithStatic(t *testing.T) {
 	req.Header.Set(echo.HeaderAcceptEncoding, gzipScheme)
 	rec := httptest.NewRecorder()
 	e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, protocol.StatusOK, rec.Code)
 	// Data is written out in chunks when Content-Length == "", so only
 	// validate the content length if it's not set.
 	if cl := rec.Header().Get("Content-Length"); cl != "" {

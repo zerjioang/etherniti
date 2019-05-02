@@ -101,6 +101,10 @@ func EnableAnalytics() bool {
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_ANALYTICS")
 	return found && v == true
 }
+func EnableMetrics() bool {
+	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_METRICS")
+	return found && v == true
+}
 func UseUniqueRequestId() bool {
 	v, found := ReadEnvironment("X_ETHERNITI_USE_UNIQUE_REQUEST_ID")
 	return found && v == true

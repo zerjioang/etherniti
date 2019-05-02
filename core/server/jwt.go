@@ -4,8 +4,7 @@
 package server
 
 import (
-	"net/http"
-
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -17,7 +16,7 @@ const (
 )
 
 var (
-	ErrJWTMissing = echo.NewHTTPError(http.StatusBadRequest, "missing or malformed jwt")
+	ErrJWTMissing = echo.NewHTTPError(protocol.StatusBadRequest, "missing or malformed jwt")
 )
 
 // jwtFromHeader returns a `jwtExtractor` that extracts token from the request header.

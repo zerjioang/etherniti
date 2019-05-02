@@ -17,6 +17,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 type (
@@ -57,7 +58,7 @@ func TestEcho(t *testing.T) {
 
 	// DefaultHTTPErrorHandler
 	e.DefaultHTTPErrorHandler(errors.New("error"), c)
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+	assert.Equal(t, protocol.StatusInternalServerError, rec.Code)
 }
 
 func TestEchoStatic(t *testing.T) {
@@ -68,28 +69,28 @@ func TestEchoStatic(t *testing.T) {
 	// OK
 	e.Static("/images", "_fixture/images")
 	c, b := request(http.MethodGet, "/images/walle.png", e)
-	assert.Equal(http.StatusOK, c)
+	assert.Equal(protocol.StatusOK, c)
 	assert.NotEmpty(b)
 
 	// No file
 	e.Static("/images", "_fixture/scripts")
 	c, _ = request(http.MethodGet, "/images/bolt.png", e)
-	assert.Equal(http.StatusNotFound, c)
+	assert.Equal(protocol.StatusNotFound, c)
 
 	// Directory
 	e.Static("/images", "_fixture/images")
 	c, _ = request(http.MethodGet, "/images", e)
-	assert.Equal(http.StatusNotFound, c)
+	assert.Equal(protocol.StatusNotFound, c)
 
 	// Directory with index.html
 	e.Static("/", "_fixture")
 	c, r := request(http.MethodGet, "/", e)
-	assert.Equal(http.StatusOK, c)
+	assert.Equal(protocol.StatusOK, c)
 	assert.Equal(true, strings.HasPrefix(r, "<!doctype html>"))
 
 	// Sub-directory with index.html
 	c, r = request(http.MethodGet, "/folder", e)
-	assert.Equal(http.StatusOK, c)
+	assert.Equal(protocol.StatusOK, c)
 	assert.Equal(true, strings.HasPrefix(r, "<!doctype html>"))
 }
 
@@ -97,7 +98,7 @@ func TestEchoFile(t *testing.T) {
 	e := New()
 	e.File("/walle", "_fixture/images/walle.png")
 	c, b := request(http.MethodGet, "/walle", e)
-	assert.Equal(t, http.StatusOK, c)
+	assert.Equal(t, protocol.StatusOK, c)
 	assert.NotEmpty(t, b)
 }
 
@@ -136,12 +137,12 @@ func TestEchoMiddleware(t *testing.T) {
 
 	// Route
 	e.GET("/", func(c *Context) error {
-		return c.String(http.StatusOK, "OK")
+		return c.String(protocol.StatusOK, "OK")
 	})
 
 	c, b := request(http.MethodGet, "/", e)
 	assert.Equal(t, "-1123", buf.String())
-	assert.Equal(t, http.StatusOK, c)
+	assert.Equal(t, protocol.StatusOK, c)
 	assert.Equal(t, "OK", b)
 }
 
@@ -154,7 +155,7 @@ func TestEchoMiddlewareError(t *testing.T) {
 	})
 	e.GET("/", NotFoundHandler)
 	c, _ := request(http.MethodGet, "/", e)
-	assert.Equal(t, http.StatusInternalServerError, c)
+	assert.Equal(t, protocol.StatusInternalServerError, c)
 }
 
 func TestEchoHandler(t *testing.T) {
@@ -162,11 +163,11 @@ func TestEchoHandler(t *testing.T) {
 
 	// HandlerFunc
 	e.GET("/ok", func(c *Context) error {
-		return c.String(http.StatusOK, "OK")
+		return c.String(protocol.StatusOK, "OK")
 	})
 
 	c, b := request(http.MethodGet, "/ok", e)
-	assert.Equal(t, http.StatusOK, c)
+	assert.Equal(t, protocol.StatusOK, c)
 	assert.Equal(t, "OK", b)
 }
 
@@ -176,11 +177,11 @@ func TestEchoWrapHandler(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	h := WrapHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(protocol.StatusOK)
 		w.Write([]byte("test"))
 	}))
 	if assert.NoError(t, h(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, protocol.StatusOK, rec.Code)
 		assert.Equal(t, "test", rec.Body.String())
 	}
 }
@@ -198,11 +199,11 @@ func TestEchoWrapMiddleware(t *testing.T) {
 		})
 	})
 	h := mw(func(c *Context) error {
-		return c.String(http.StatusOK, "OK")
+		return c.String(protocol.StatusOK, "OK")
 	})
 	if assert.NoError(t, h(c)) {
 		assert.Equal(t, "mw", buf.String())
-		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, protocol.StatusOK, rec.Code)
 		assert.Equal(t, "OK", rec.Body.String())
 	}
 }
@@ -255,14 +256,14 @@ func TestEchoTrace(t *testing.T) {
 func TestEchoAny(t *testing.T) { // JFC
 	e := New()
 	e.Any("/", func(c *Context) error {
-		return c.String(http.StatusOK, "Any")
+		return c.String(protocol.StatusOK, "Any")
 	})
 }
 
 func TestEchoMatch(t *testing.T) { // JFC
 	e := New()
 	e.Match([]string{http.MethodGet, http.MethodPost}, "/", func(c *Context) error {
-		return c.String(http.StatusOK, "Match")
+		return c.String(protocol.StatusOK, "Match")
 	})
 }
 
@@ -296,7 +297,7 @@ func TestEchoRoutes(t *testing.T) {
 	}
 	for _, r := range routes {
 		e.Add(r.Method, r.Path, func(c *Context) error {
-			return c.String(http.StatusOK, "OK")
+			return c.String(protocol.StatusOK, "OK")
 		})
 	}
 
@@ -319,12 +320,12 @@ func TestEchoRoutes(t *testing.T) {
 func TestEchoEncodedPath(t *testing.T) {
 	e := New()
 	e.GET("/:id", func(c *Context) error {
-		return c.NoContent(http.StatusOK)
+		return c.NoContent(protocol.StatusOK)
 	})
 	req := httptest.NewRequest(http.MethodGet, "/with%2Fslash", nil)
 	rec := httptest.NewRecorder()
 	e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, protocol.StatusOK, rec.Code)
 }
 
 func TestEchoGroup(t *testing.T) {
@@ -337,7 +338,7 @@ func TestEchoGroup(t *testing.T) {
 		}
 	}))
 	h := func(c *Context) error {
-		return c.NoContent(http.StatusOK)
+		return c.NoContent(protocol.StatusOK)
 	}
 
 	//--------
@@ -390,18 +391,18 @@ func TestEchoNotFound(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/files", nil)
 	rec := httptest.NewRecorder()
 	e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, protocol.StatusNotFound, rec.Code)
 }
 
 func TestEchoMethodNotAllowed(t *testing.T) {
 	e := New()
 	e.GET("/", func(c *Context) error {
-		return c.String(http.StatusOK, "Echo!")
+		return c.String(protocol.StatusOK, "Echo!")
 	})
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	rec := httptest.NewRecorder()
 	e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusMethodNotAllowed, rec.Code)
+	assert.Equal(t, protocol.StatusMethodNotAllowed, rec.Code)
 }
 
 func TestEchoContext(t *testing.T) {
@@ -501,7 +502,7 @@ func TestEchoStartTLSByteString(t *testing.T) {
 func testMethod(t *testing.T, method, path string, e *Echo) {
 	p := reflect.ValueOf(path)
 	h := reflect.ValueOf(func(c *Context) error {
-		return c.String(http.StatusOK, method)
+		return c.String(protocol.StatusOK, method)
 	})
 	i := interface{}(e)
 	reflect.ValueOf(i).MethodByName(method).Call([]reflect.Value{p, h})
@@ -517,7 +518,7 @@ func request(method, path string, e *Echo) (int, string) {
 }
 
 func TestHTTPError(t *testing.T) {
-	err := NewHTTPError(http.StatusBadRequest, map[string]interface{}{
+	err := NewHTTPError(protocol.StatusBadRequest, map[string]interface{}{
 		"code": 12,
 	})
 	assert.Equal(t, "code=400, message=map[code:12]", err.Error())

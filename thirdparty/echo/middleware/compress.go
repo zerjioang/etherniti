@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -98,7 +99,7 @@ func GzipWithConfig(config GzipConfig) echo.MiddlewareFunc {
 }
 
 func (w *gzipResponseWriter) WriteHeader(code int) {
-	if code == http.StatusNoContent { // Issue #489
+	if code == protocol.StatusNoContent { // Issue #489
 		w.ResponseWriter.Header().Del(echo.HeaderContentEncoding)
 	}
 	w.Header().Del(echo.HeaderContentLength) // Issue #444

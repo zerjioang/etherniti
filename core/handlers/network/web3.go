@@ -280,9 +280,9 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusInternalServerError,
+		return c.JSONBlob(protocol.StatusInternalServerError,
 			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusInternalServerError, str.UnsafeBytes(err.Error())),
+				protocol.NewApiError(protocol.StatusInternalServerError, str.UnsafeBytes(err.Error())),
 			),
 		)
 	} else {
@@ -301,7 +301,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 			}
 		}
 		return c.JSONBlob(
-			http.StatusOK,
+			protocol.StatusOK,
 			str.GetJsonBytes(
 				protocol.NewApiResponse(data.AccountsBalanced, wrapperList),
 			),
@@ -349,9 +349,9 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 	raw, err := client.Erc20Name(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
+		return c.JSONBlob(protocol.StatusBadRequest,
 			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
+				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
 			),
 		)
 	} else {
@@ -385,9 +385,9 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 	raw, err := client.Erc20Symbol(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
+		return c.JSONBlob(protocol.StatusBadRequest,
 			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
+				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
 			),
 		)
 	} else {
@@ -421,9 +421,9 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 	raw, err := client.Erc20TotalSupply(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
+		return c.JSONBlob(protocol.StatusBadRequest,
 			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
+				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
 			),
 		)
 	} else {
