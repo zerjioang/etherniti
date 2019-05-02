@@ -6,7 +6,6 @@ package handlers
 import (
 	"bytes"
 	"io/ioutil"
-	"strings"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -39,8 +38,6 @@ import (
 
 type IndexController struct {
 	// use channels: https://talks.golang.org/2012/concurrency.slide#25
-	statusData    concurrentbuffer.ConcurrentBuffer
-	integrityData concurrentbuffer.ConcurrentBuffer
 }
 
 var (
@@ -87,6 +84,8 @@ var (
 			return new(bytes.Buffer)
 		},
 	}
+	statusData    concurrentbuffer.ConcurrentBuffer
+	integrityData concurrentbuffer.ConcurrentBuffer
 )
 
 func init() {
@@ -110,6 +109,26 @@ func init() {
 	LoadIndexConstants()
 
 	diskMonitor.Start("/")
+
+	// load initial value for integrity bytes
+	refreshIntegrityData()
+	// load initial value for status bytes
+	refreshStatusData()
+
+	go func() {
+		for range integrityTicker.C {
+			// time to update integrity signature
+			refreshIntegrityData()
+		}
+	}()
+
+	go func() {
+		for range statusTicker.C {
+			// time to update status health data
+			refreshStatusData()
+		}
+	}()
+
 }
 
 func LoadIndexConstants() {
@@ -121,32 +140,11 @@ func LoadIndexConstants() {
 
 func NewIndexController() *IndexController {
 	ctl := new(IndexController)
-	ctl.statusData = concurrentbuffer.NewConcurrentBuffer()
-	ctl.integrityData = concurrentbuffer.NewConcurrentBuffer()
-	// load initial value for integrity bytes
-	ctl.refreshIntegrityData()
-	// load initial value for status bytes
-	ctl.refreshStatusData()
-
-	go func() {
-		for range integrityTicker.C {
-			// time to update integrity signature
-			ctl.refreshIntegrityData()
-		}
-	}()
-
-	go func() {
-		for range statusTicker.C {
-			// time to update status health data
-			ctl.refreshStatusData()
-		}
-	}()
-
 	return ctl
 }
 
 func Index(c *echo.Context) error {
-	if strings.Contains(c.Request().Header.Get("Accept"), "application/json") {
+	if c.IsJsonRequest() {
 		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, indexWelcomeBytes)
 	}
 	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
@@ -160,10 +158,10 @@ func (ctl *IndexController) Status(c *echo.Context) error {
 }
 
 func (ctl *IndexController) status() []byte {
-	return ctl.statusData.Bytes()
+	return statusData.Bytes()
 }
 
-func (ctl *IndexController) refreshStatusData() {
+func refreshStatusData() {
 
 	//get the wrapper from the pool, and cast it
 	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
@@ -185,8 +183,8 @@ func (ctl *IndexController) refreshStatusData() {
 	statusPool.Put(wrapper)
 	bufferBool.Put(buffer)
 
-	ctl.statusData.Reset()
-	_, _ = ctl.statusData.Write(data)
+	statusData.Reset()
+	_, _ = statusData.Write(data)
 }
 
 // return server side integrity message signed with private ecdsa key
@@ -198,7 +196,7 @@ func (ctl *IndexController) Integrity(c *echo.Context) error {
 	return c.JSONBlob(code, data)
 }
 
-func (ctl *IndexController) refreshIntegrityData() {
+func refreshIntegrityData() {
 	// get current date time
 	millis := fastime.Now().Unix()
 	timeStr := time.Unix(millis, 0).Format(time.RFC3339)
@@ -215,12 +213,12 @@ func (ctl *IndexController) refreshIntegrityData() {
 	wrapper.Signature = signature
 
 	data := str.GetJsonBytes(wrapper)
-	ctl.integrityData.Reset()
-	_, _ = ctl.integrityData.Write(data)
+	integrityData.Reset()
+	_, _ = integrityData.Write(data)
 }
 
 func (ctl *IndexController) integrity() []byte {
-	return ctl.integrityData.Bytes()
+	return integrityData.Bytes()
 }
 
 // implemented method from interface RouterRegistrable

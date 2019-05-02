@@ -84,7 +84,6 @@ type (
 		HideBanner       bool
 		HidePort         bool
 		HTTPErrorHandler HTTPErrorHandler
-		Binder           Binder
 		Validator        Validator
 		Renderer         Renderer
 		Logger           Logger
@@ -296,7 +295,6 @@ func New() (e *Echo) {
 	e.Server.Handler = e
 	e.TLSServer.Handler = e
 	e.HTTPErrorHandler = e.DefaultHTTPErrorHandler
-	e.Binder = &DefaultBinder{}
 	e.Logger.SetLevel(log.ERROR)
 	e.StdLogger = stdLog.New(e.Logger.Output(), e.Logger.Prefix()+": ", 0)
 	e.pool.New = func() interface{} {

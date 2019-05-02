@@ -107,4 +107,34 @@ core/eth/fastime/fastime_test.go:34:8: TestStandardTime.func2 ... argument does 
 ```
 
 As can be seen our fastime variables tm1 and tm2 are not scaped to Heap.
+
+go test -bench=. -benchmem -benchtime=2s -cpu=1,2,4
+
+BenchmarkFastTime/fastime-now                   50000000                59.5 ns/op        16.80 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-2                 50000000                59.2 ns/op        16.90 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-4                 50000000                62.6 ns/op        15.97 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-unix              50000000                53.8 ns/op        18.58 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-unix-2            50000000                55.8 ns/op        17.91 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-unix-4            50000000                54.2 ns/op        18.44 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-nanos             50000000                54.6 ns/op        18.30 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-nanos-2           50000000                52.9 ns/op        18.90 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-now-nanos-4           50000000                52.5 ns/op        19.03 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-1           3000000000               0.62 ns/op     1603.94 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-1-2         3000000000               0.66 ns/op     1525.52 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-1-4         3000000000               0.63 ns/op     1590.14 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-2           3000000000               0.34 ns/op     2981.54 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-2-2         3000000000               0.32 ns/op     3110.56 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-2-4         3000000000               0.32 ns/op     3095.06 MB/s           0 B/op          0 allocs/op
+BenchmarkFastTime/fastime-from-time-3-4         	20000000	        51.3 ns/op	  19.49 MB/s	       0 B/op	       0 allocs/op
+
+BenchmarkStandardTime/standard-now              50000000                48.6 ns/op        20.56 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-2            50000000                48.8 ns/op        20.49 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-4            50000000                51.2 ns/op        19.52 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-unix                 50000000                51.7 ns/op        19.33 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-unix-2               50000000                52.3 ns/op        19.13 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-unix-4               50000000                51.5 ns/op        19.40 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-nanos                50000000                52.1 ns/op        19.20 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-nanos-2              50000000                52.4 ns/op        19.07 MB/s           0 B/op          0 allocs/op
+BenchmarkStandardTime/standard-now-nanos-4              50000000                52.6 ns/op        19.00 MB/s           0 B/op          0 allocs/op
+
 */

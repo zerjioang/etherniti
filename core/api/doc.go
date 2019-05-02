@@ -4,6 +4,12 @@
 package api
 
 /*
+go test -bench=. -benchmem -cpu=1,2,4
+go test -bench=. -benchmem -benchtime=5s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
+go tool -web pprof profile.out
+go tool -web pprof memprofile.out
+go tool pprof -http=localhost:6060 memprofile.out
+
 package functions performance:
 
 BenchmarkWrapper/send-success-4         	  200000	      6131 ns/op	   0.16 MB/s	     289 B/op	       5 allocs/op

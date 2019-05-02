@@ -6,8 +6,6 @@ package hex
 import (
 	"encoding/hex"
 	"unsafe"
-
-	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 const (
@@ -42,8 +40,12 @@ func FromHex(raw string) ([]byte, error) {
 
 // decode ethereum 0x hex string
 func FromEthHex(content string) ([]byte, error) {
-	raw := str.UnsafeBytes(content)
-	idx := 2
+	raw := []byte(content)
+	idx := 0
+	if raw[0]==48 && raw[1]==120 {
+		//starts with 0x
+		idx = 2
+	}
 	end := len(raw)
 	if raw[0] == doubleQuotes {
 		idx = 3

@@ -4,28 +4,27 @@
 package listener
 
 import (
-	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 )
 
 func TestFactoryListener(t *testing.T) {
-	type args struct {
-		typeof listener.ServiceType
-	}
-	tests := []struct {
-		name string
-		args args
-		want listener.ListenerInterface
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := FactoryListener(tt.args.typeof); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FactoryListener() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	t.Run("factory-http", func(t *testing.T) {
+		ln := FactoryListener(listener.HttpMode)
+		assert.NotNil(t, ln)
+	})
+	t.Run("factory-https", func(t *testing.T) {
+		ln := FactoryListener(listener.HttpsMode)
+		assert.NotNil(t, ln)
+	})
+	t.Run("factory-unix", func(t *testing.T) {
+		ln := FactoryListener(listener.UnixMode)
+		assert.NotNil(t, ln)
+	})
+	t.Run("factory-other", func(t *testing.T) {
+		ln := FactoryListener(listener.UnknownMode)
+		assert.NotNil(t, ln)
+	})
 }

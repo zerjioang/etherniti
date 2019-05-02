@@ -9,4 +9,7 @@ in order to have a modular an extensible design, this information is provided vi
 
 * X_ETHERNITI_SSL_CERT_FILE: /path/to/cert/file.pem
 * X_ETHERNITI_SSL_KEY_FILE: /path/to/cert/key.pem
+
+
+BenchmarkCommon/BlockTorConnections-4         	 1000000	      1014 ns/op	   0.99 MB/s	     184 B/op	       2 allocs/op
 */

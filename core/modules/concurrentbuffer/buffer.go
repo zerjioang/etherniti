@@ -12,13 +12,15 @@ import (
 type ConcurrentBuffer struct {
 	b bytes.Buffer
 	// mutual-exclusion lock
-	m *sync.Mutex
+	m sync.RWMutex
+	//b *bytes.Buffer
+	//m *sync.RWMutex
 }
 
 func (b *ConcurrentBuffer) Read(p []byte) (n int, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	n, err = b.b.Read(p)
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) Write(p []byte) (n int, err error) {
@@ -28,21 +30,21 @@ func (b *ConcurrentBuffer) Write(p []byte) (n int, err error) {
 	return
 }
 func (b *ConcurrentBuffer) String() string {
-	b.m.Lock()
+	b.m.RLock()
 	raw := b.b.String()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return raw
 }
 func (b *ConcurrentBuffer) Bytes() []byte {
-	b.m.Lock()
+	b.m.RLock()
 	raw := b.b.Bytes()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return raw
 }
 func (b *ConcurrentBuffer) Cap() int {
-	b.m.Lock()
+	b.m.RLock()
 	raw := b.b.Cap()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return raw
 }
 func (b *ConcurrentBuffer) Grow(n int) {
@@ -51,9 +53,9 @@ func (b *ConcurrentBuffer) Grow(n int) {
 	b.m.Unlock()
 }
 func (b *ConcurrentBuffer) Len() int {
-	b.m.Lock()
+	b.m.RLock()
 	raw := b.b.Len()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return raw
 }
 func (b *ConcurrentBuffer) Next(n int) []byte {
@@ -63,33 +65,33 @@ func (b *ConcurrentBuffer) Next(n int) []byte {
 	return raw
 }
 func (b *ConcurrentBuffer) ReadByte() (c byte, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	c, err = b.b.ReadByte()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) ReadBytes(delim byte) (line []byte, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	line, err = b.b.ReadBytes(delim)
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) ReadFrom(r io.Reader) (n int64, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	n, err = b.b.ReadFrom(r)
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) ReadRune() (r rune, size int, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	r, size, err = b.b.ReadRune()
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) ReadString(delim byte) (line string, err error) {
-	b.m.Lock()
+	b.m.RLock()
 	line, err = b.b.ReadString(delim)
-	b.m.Unlock()
+	b.m.RUnlock()
 	return
 }
 func (b *ConcurrentBuffer) Reset() {
@@ -142,13 +144,13 @@ func (b *ConcurrentBuffer) WriteTo(w io.Writer) (n int64, err error) {
 // constructor like function for concurrent buffer
 func NewConcurrentBuffer() ConcurrentBuffer {
 	cb := ConcurrentBuffer{}
-	cb.m = new(sync.Mutex)
+	//cb.m = new(sync.RWMutex)
+	//cb.b = new(bytes.Buffer)
 	return cb
 }
 
 // constructor like function for concurrent buffer
 func NewConcurrentBufferPtr() *ConcurrentBuffer {
-	cb := new(ConcurrentBuffer)
-	cb.m = new(sync.Mutex)
-	return cb
+	cb := NewConcurrentBuffer()
+	return &cb
 }

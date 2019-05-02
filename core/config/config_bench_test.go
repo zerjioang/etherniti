@@ -3,10 +3,15 @@
 
 package config
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/zerjioang/etherniti/core/logger"
+)
 
 func BenchmarkGetRedirectUrl(b *testing.B) {
 	b.Run("redirect", func(b *testing.B) {
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 
@@ -16,6 +21,7 @@ func BenchmarkGetRedirectUrl(b *testing.B) {
 		}
 	})
 	b.Run("cert-pem", func(b *testing.B) {
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 
@@ -25,6 +31,7 @@ func BenchmarkGetRedirectUrl(b *testing.B) {
 		}
 	})
 	b.Run("key-pem", func(b *testing.B) {
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 

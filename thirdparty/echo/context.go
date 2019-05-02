@@ -237,7 +237,8 @@ func (c *Context) Set(key string, val interface{}) {
 }
 
 func (c *Context) Bind(i interface{}) error {
-	return c.echo.Binder.Bind(i, c)
+	err := json.NewDecoder(c.request.Body).Decode(i)
+	return err
 }
 
 func (c *Context) Validate(i interface{}) error {
@@ -527,4 +528,8 @@ func (c *Context) ReadConnectionProfileToken() string {
 		}
 	}
 	return tokenDataStr
+}
+
+func (c *Context) IsJsonRequest() bool {
+	return strings.Contains(c.request.Header.Get("Accept"), "application/json")
 }

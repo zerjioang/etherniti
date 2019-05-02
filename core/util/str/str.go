@@ -55,6 +55,10 @@ func FastMarshal(data interface{}) ([]byte, error) {
 	return jsonfast.Marshal(&data)
 }
 
+func FastUnMarshal(data []byte, v interface{}) error {
+	return jsonfast.Unmarshal(data, v)
+}
+
 func StdJsoniterMarshal(data interface{}) ([]byte, error) {
 	return jsonstd.Marshal(&data)
 }

@@ -88,6 +88,7 @@ func (l HttpsListener) Listen() error {
 			logger.Error("shutting down http the server", err)
 		}
 	}()
+
 	// Start https server
 	secureServer := common.NewServer(middleware.ConfigureServerRoutes)
 	go func() {
