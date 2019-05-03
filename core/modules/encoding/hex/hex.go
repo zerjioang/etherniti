@@ -42,7 +42,7 @@ func FromHex(raw string) ([]byte, error) {
 func FromEthHex(content string) ([]byte, error) {
 	raw := []byte(content)
 	idx := 0
-	if raw[0]==48 && raw[1]==120 {
+	if raw[0] == 48 && raw[1] == 120 {
 		//starts with 0x
 		idx = 2
 	}

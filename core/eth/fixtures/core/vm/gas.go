@@ -17,8 +17,9 @@
 package vm
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
 )
 
 // Gas costs

@@ -17,23 +17,23 @@ import (
 )
 
 var (
-	errorPool   *sync.Pool
-	successPool *sync.Pool
-	bufferPool  *sync.Pool
+	errorPool   sync.Pool
+	successPool sync.Pool
+	bufferPool  sync.Pool
 )
 
 func init() {
-	errorPool = &sync.Pool{
+	errorPool = sync.Pool{
 		New: func() interface{} {
 			return protocol.NewApiError(protocol.StatusBadRequest, []byte{})
 		},
 	}
-	successPool = &sync.Pool{
+	successPool = sync.Pool{
 		New: func() interface{} {
 			return protocol.NewApiResponse([]byte{}, nil)
 		},
 	}
-	bufferPool = &sync.Pool{
+	bufferPool = sync.Pool{
 		New: func() interface{} {
 			return new(bytes.Buffer)
 		},

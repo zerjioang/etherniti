@@ -21,8 +21,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/modules/concurrentbuffer"
-
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/fastime"
@@ -41,8 +39,6 @@ type IndexController struct {
 }
 
 var (
-	//read only once, the number of server cpus
-	numcpus int
 	// monitor disk usage and get basic stats
 	diskMonitor *disk.DiskStatus
 	memMonitor  mem.MemStatus
@@ -71,7 +67,7 @@ var (
 			wrapper.Version.Go = runtime.Version()
 			wrapper.Version.HTTP = echo.Version
 
-			wrapper.Cpus.Cores = numcpus
+			wrapper.Cpus.Cores = runtime.NumCPU()
 
 			return wrapper
 		},
@@ -84,18 +80,18 @@ var (
 			return new(bytes.Buffer)
 		},
 	}
-	statusData    concurrentbuffer.ConcurrentBuffer
-	integrityData concurrentbuffer.ConcurrentBuffer
+	statusData    bytes.Buffer
+	integrityData bytes.Buffer
 )
 
 func init() {
-	//read only once, the number of server cpus
-	numcpus = runtime.NumCPU()
 	// monitor disk usage and get basic stats
 	diskMonitor = disk.DiskUsagePtr()
+	// monitor memory usage and get basic stats
 	memMonitor = mem.MemStatusMonitor()
 	// integrity ticker (24h)
-	integrityTicker = time.NewTicker(25 * time.Hour)
+	integrityTicker = time.NewTicker(24 * time.Hour)
+	// status ticker update each 5s
 	statusTicker = time.NewTicker(5 * time.Second)
 
 	/*IndexWelcomeJson = `{
@@ -107,28 +103,8 @@ func init() {
 	  "tagline": "dapps everywhere"
 	}`*/
 	LoadIndexConstants()
-
+	// start monitoring root path
 	diskMonitor.Start("/")
-
-	// load initial value for integrity bytes
-	refreshIntegrityData()
-	// load initial value for status bytes
-	refreshStatusData()
-
-	go func() {
-		for range integrityTicker.C {
-			// time to update integrity signature
-			refreshIntegrityData()
-		}
-	}()
-
-	go func() {
-		for range statusTicker.C {
-			// time to update status health data
-			refreshStatusData()
-		}
-	}()
-
 }
 
 func LoadIndexConstants() {
@@ -139,8 +115,7 @@ func LoadIndexConstants() {
 }
 
 func NewIndexController() *IndexController {
-	ctl := new(IndexController)
-	return ctl
+	return new(IndexController)
 }
 
 func Index(c *echo.Context) error {

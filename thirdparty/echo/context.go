@@ -28,6 +28,16 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 )
 
+type RequestScheme uint8
+
+const (
+	Http RequestScheme = iota
+	Https
+	Unix
+	Websocket
+	Other
+)
+
 var (
 	errInvalidateCache = errors.New("failed to get item from internal cache, cache invalidation issues around")
 )
@@ -49,6 +59,14 @@ type Context struct {
 	// connection profile data for interaction
 	profileLock *sync.Mutex
 	profileData profile.ConnectionProfile
+
+	//boots data cache value
+	isJson     bool
+	isTls      bool
+	isWs       bool
+	SchemeType RequestScheme
+	SchemeName string
+	ip         string
 }
 
 var (
@@ -66,6 +84,14 @@ const (
 	defaultMemory = 32 << 20 // 32 MB
 	indexPage     = "index.html"
 )
+
+func (c *Context) Preload() {
+	c.isJson = strings.Contains(c.request.Header.Get("Accept"), "application/json")
+	c.isTls = c.request.TLS != nil
+	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
+	c.SchemeName = c.resolveScheme()
+	c.ip = c.resolveRealIP()
+}
 
 func (c *Context) writeContentType(value string) {
 	header := c.response.Header()
@@ -87,36 +113,45 @@ func (c *Context) Response() *Response {
 }
 
 func (c *Context) IsTLS() bool {
-	return c.request.TLS != nil
+	return c.isTls
 }
 
 func (c *Context) IsWebSocket() bool {
-	upgrade := c.request.Header.Get(HeaderUpgrade)
-	return strings.ToLower(upgrade) == "websocket"
+	return c.isWs
 }
 
-func (c *Context) Scheme() string {
+func (c *Context) resolveScheme() string {
 	// Can't use `r.Request.URL.Scheme`
 	// See: https://groups.google.com/forum/#!topic/golang-nuts/pMUkBlQBDF0
 	if c.IsTLS() {
+		c.SchemeType = Https
 		return "https"
 	}
 	if scheme := c.request.Header.Get(HeaderXForwardedProto); scheme != "" {
+		c.SchemeType = Other
 		return scheme
 	}
 	if scheme := c.request.Header.Get(HeaderXForwardedProtocol); scheme != "" {
+		c.SchemeType = Other
 		return scheme
 	}
 	if ssl := c.request.Header.Get(HeaderXForwardedSsl); ssl == "on" {
+		c.SchemeType = Https
 		return "https"
 	}
 	if scheme := c.request.Header.Get(HeaderXUrlScheme); scheme != "" {
+		c.SchemeType = Other
 		return scheme
 	}
+	c.SchemeType = Http
 	return "http"
 }
 
-func (c *Context) RealIP() string {
+func (c *Context) Scheme() RequestScheme {
+	return c.SchemeType
+}
+
+func (c *Context) resolveRealIP() string {
 	if ip := c.request.Header.Get(HeaderXForwardedFor); ip != "" {
 		return strings.Split(ip, ", ")[0]
 	}
@@ -125,6 +160,10 @@ func (c *Context) RealIP() string {
 	}
 	ra, _, _ := net.SplitHostPort(c.request.RemoteAddr)
 	return ra
+}
+
+func (c *Context) RealIP() string {
+	return c.ip
 }
 
 func (c *Context) Path() string {
@@ -462,6 +501,14 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.store = nil
 	c.path = ""
 	c.pnames = nil
+
+	//boots data cache value
+	c.isJson = false
+	c.isTls = false
+	c.isWs = false
+	c.SchemeType = Other
+	c.SchemeName = ""
+	c.ip = ""
 	// NOTE: Don't reset because it has to have length c.echo.maxParam at all times
 	// c.pvalues = nil
 }
@@ -531,5 +578,5 @@ func (c *Context) ReadConnectionProfileToken() string {
 }
 
 func (c *Context) IsJsonRequest() bool {
-	return strings.Contains(c.request.Header.Get("Accept"), "application/json")
+	return c.isJson
 }

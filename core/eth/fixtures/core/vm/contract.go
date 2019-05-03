@@ -17,8 +17,9 @@
 package vm
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
 
 // ContractRef is a reference to the contract's backing object
@@ -49,7 +50,7 @@ type Contract struct {
 	self          ContractRef
 
 	jumpdests map[fixtures.Hash]bitvec // Aggregated result of JUMPDEST analysis.
-	analysis  bitvec                 // Locally cached result of JUMPDEST analysis
+	analysis  bitvec                   // Locally cached result of JUMPDEST analysis
 
 	Code     []byte
 	CodeHash fixtures.Hash

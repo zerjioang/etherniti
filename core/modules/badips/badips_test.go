@@ -1,8 +1,12 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package badips
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBadIps(t *testing.T) {

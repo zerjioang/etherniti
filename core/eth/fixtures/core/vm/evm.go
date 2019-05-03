@@ -17,14 +17,15 @@
 package vm
 
 import (
+	"math/big"
+	"sync/atomic"
+	"time"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/core/memdb"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
-	"math/big"
-	"sync/atomic"
-	"time"
 )
 
 // emptyCodeHash is used by create to ensure deployment is disallowed to already
@@ -81,14 +82,14 @@ type Context struct {
 
 	// Message information
 	Origin   fixtures.Address // Provides information for ORIGIN
-	GasPrice *big.Int       // Provides information for GASPRICE
+	GasPrice *big.Int         // Provides information for GASPRICE
 
 	// Block information
 	Coinbase    fixtures.Address // Provides information for COINBASE
-	GasLimit    uint64         // Provides information for GASLIMIT
-	BlockNumber *big.Int       // Provides information for NUMBER
-	Time        *big.Int       // Provides information for TIME
-	Difficulty  *big.Int       // Provides information for DIFFICULTY
+	GasLimit    uint64           // Provides information for GASLIMIT
+	BlockNumber *big.Int         // Provides information for NUMBER
+	Time        *big.Int         // Provides information for TIME
+	Difficulty  *big.Int         // Provides information for DIFFICULTY
 }
 
 // EVM is the Ethereum Virtual Machine base object and provides

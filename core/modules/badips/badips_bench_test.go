@@ -20,7 +20,7 @@ func BenchmarkBadIPs(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			b.ResetTimer()
-			for pb.Next(){
+			for pb.Next() {
 				_ = GetBadIPList()
 			}
 		})
@@ -42,7 +42,7 @@ func BenchmarkBadIPs(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
-			for pb.Next(){
+			for pb.Next() {
 				_ = l.Contains("31.6.220.31")
 			}
 		})
@@ -64,7 +64,7 @@ func BenchmarkBadIPs(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
-			for pb.Next(){
+			for pb.Next() {
 				_ = l.Contains("121.31.56.58")
 			}
 		})
@@ -84,7 +84,7 @@ func BenchmarkBadIPs(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
-			for pb.Next(){
+			for pb.Next() {
 				_ = IsBackListedIp("123.169.201.52")
 			}
 		})

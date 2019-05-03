@@ -16,6 +16,13 @@ func BenchmarkHashSet(b *testing.B) {
 			NewHashSet()
 		}
 	})
+	b.Run("instantiate-ptr", func(b *testing.B) {
+		b.ReportAllocs()
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			NewHashSetPtr()
+		}
+	})
 	b.Run("add", func(b *testing.B) {
 		b.Run("simple", func(b *testing.B) {
 			b.ReportAllocs()
@@ -96,6 +103,35 @@ func BenchmarkHashSet(b *testing.B) {
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			set.Count()
+		}
+	})
+	b.Run("size", func(b *testing.B) {
+		b.ReportAllocs()
+		b.ResetTimer()
+		set := NewHashSet()
+		for i := 0; i < b.N; i++ {
+			_ = set.Size()
+		}
+	})
+	b.Run("size-10000", func(b *testing.B) {
+		//add 10000 items first
+		set := NewHashSet()
+		for i := 0; i < 10000; i++ {
+			set.Add(strconv.Itoa(i))
+		}
+
+		b.ReportAllocs()
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			set.Size()
+		}
+	})
+	b.Run("clear", func(b *testing.B) {
+		b.ReportAllocs()
+		b.ResetTimer()
+		set := NewHashSet()
+		for i := 0; i < b.N; i++ {
+			set.Clear()
 		}
 	})
 }

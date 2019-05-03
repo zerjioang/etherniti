@@ -17,9 +17,10 @@
 package vm
 
 import (
+	"math/big"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
-	"math/big"
 )
 
 // calcMemSize64 calculates the required memory size, and returns

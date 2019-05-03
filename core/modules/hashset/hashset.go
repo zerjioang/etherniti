@@ -15,18 +15,18 @@ import (
 )
 
 var (
-	none *struct{}
+	none struct{}
 )
 
 type HashSet struct {
-	data map[string]*struct{}
-	lock *sync.Mutex
+	data map[string]struct{}
+	lock *sync.RWMutex
 }
 
 func NewHashSet() HashSet {
 	hs := HashSet{}
-	hs.lock = new(sync.Mutex)
-	hs.data = make(map[string]*struct{})
+	hs.lock = new(sync.RWMutex)
+	hs.data = map[string]struct{}{}
 	return hs
 }
 
@@ -42,27 +42,27 @@ func (set *HashSet) Add(item string) {
 }
 
 func (set *HashSet) Size() int {
-	set.lock.Lock()
+	set.lock.RLock()
 	l := len(set.data)
-	set.lock.Unlock()
+	set.lock.RUnlock()
 	return l
 }
 
 func (set *HashSet) Clear() {
 	set.lock.Lock()
-	set.data = make(map[string]*struct{})
+	set.data = map[string]struct{}{}
 	set.lock.Unlock()
 }
 
 func (set HashSet) Contains(item string) bool {
-	set.lock.Lock()
+	set.lock.RLock()
 	_, contains := set.data[item]
-	set.lock.Unlock()
+	set.lock.RUnlock()
 	return contains
 }
 
 func (set HashSet) MatchAny(item string) bool {
-	set.lock.Lock()
+	set.lock.RLock()
 	found := false
 	for k := range set.data {
 		found = strings.Contains(item, k)
@@ -70,7 +70,7 @@ func (set HashSet) MatchAny(item string) bool {
 			break
 		}
 	}
-	set.lock.Unlock()
+	set.lock.RUnlock()
 	return found
 }
 
@@ -81,15 +81,15 @@ func (set *HashSet) Remove(item string) {
 }
 
 func (set HashSet) Count() int {
-	set.lock.Lock()
+	set.lock.RLock()
 	count := len(set.data)
-	set.lock.Unlock()
+	set.lock.RUnlock()
 	return count
 }
 
 func (set *HashSet) LoadFromJsonArray(path string) {
 	if path != "" {
-		logger.Debug("loading hashset with data")
+		logger.Debug("loading hashset with json data")
 		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			logger.Error("could not read source data")
@@ -108,7 +108,7 @@ func (set *HashSet) LoadFromJsonArray(path string) {
 
 func (set *HashSet) LoadFromRaw(path string, splitChar string) {
 	if path != "" {
-		logger.Debug("loading hashset with data")
+		logger.Debug("loading hashset with raw data")
 		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			logger.Error("could not read source data")
@@ -122,8 +122,10 @@ func (set *HashSet) LoadFromRaw(path string, splitChar string) {
 
 func (set *HashSet) LoadFromArray(data []string) {
 	if data != nil {
+		set.lock.Lock()
 		for _, v := range data {
-			set.Add(v)
+			set.data[v] = none
 		}
+		set.lock.Unlock()
 	}
 }

@@ -18,8 +18,9 @@ package vm
 
 import (
 	"fmt"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 )
 
 // Memory implements a simple memory model for the ethereum virtual machine.

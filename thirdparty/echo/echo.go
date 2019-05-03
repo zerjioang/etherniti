@@ -563,17 +563,18 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Acquire Context
 	c := e.AcquireContext()
 	c.Reset(r, w)
+	c.Preload()
 
 	h := NotFoundHandler
 
 	if e.premiddleware == nil {
 		e.router.Find(r.Method, getPath(r), c)
-		h = c.Handler()
+		h = c.handler
 		h = applyMiddleware(h, e.middleware...)
 	} else {
 		h = func(c *Context) error {
 			e.router.Find(r.Method, getPath(r), c)
-			h := c.Handler()
+			h := c.handler
 			h = applyMiddleware(h, e.middleware...)
 			return h(c)
 		}

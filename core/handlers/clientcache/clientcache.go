@@ -5,7 +5,6 @@ package clientcache
 
 import (
 	"strconv"
-	"sync"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -39,8 +38,6 @@ long to cache the resource (in seconds).
 */
 func Cached(c *echo.Context, cacheHit bool, seconds uint) (int, *echo.Context) {
 	// add cache headers
-	edit := sync.Mutex{}
-	edit.Lock()
 	r := c.Response()
 	h := r.Header()
 	if seconds > 0 {
@@ -57,7 +54,6 @@ func Cached(c *echo.Context, cacheHit bool, seconds uint) (int, *echo.Context) {
 			r.Status = protocol.StatusOK
 		}
 	}
-	edit.Unlock()
 	return r.Status, c
 }
 

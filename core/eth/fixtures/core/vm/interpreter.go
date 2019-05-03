@@ -18,18 +18,19 @@ package vm
 
 import (
 	"fmt"
+	"hash"
+	"sync/atomic"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
-	"hash"
-	"sync/atomic"
 )
 
 // Config are the configuration options for the Interpreter
 type Config struct {
-	Debug                   bool   // Enables debugging
-	NoRecursion             bool   // Disables call, callcode, delegate call and create
-	EnablePreimageRecording bool   // Enables recording of SHA3/keccak preimages
+	Debug                   bool // Enables debugging
+	NoRecursion             bool // Disables call, callcode, delegate call and create
+	EnablePreimageRecording bool // Enables recording of SHA3/keccak preimages
 
 	JumpTable [256]operation // EVM instruction table, automatically populated if unset
 
@@ -75,7 +76,7 @@ type EVMInterpreter struct {
 
 	intPool *intPool
 
-	hasher    keccakState // Keccak256 hasher instance shared across opcodes
+	hasher    keccakState   // Keccak256 hasher instance shared across opcodes
 	hasherBuf fixtures.Hash // Keccak256 hasher result array shared aross opcodes
 
 	readOnly   bool   // Whether to throw on stateful modifications
@@ -152,7 +153,7 @@ func (in *EVMInterpreter) Run(contract *Contract, input []byte, readOnly bool) (
 		pc   = uint64(0) // program counter
 		cost uint64
 		// copies used by tracer
-		res     []byte // result of the opcode execution function
+		res []byte // result of the opcode execution function
 	)
 	contract.Input = input
 

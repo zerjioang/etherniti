@@ -27,7 +27,7 @@ func TestHashSet(t *testing.T) {
 			set := NewHashSet()
 			assert.NotNil(t, set)
 
-			assert.Equal(t, set.Count(), uint32(0))
+			assert.Equal(t, set.Count(), 0)
 		})
 
 		t.Run("count-1", func(t *testing.T) {
@@ -36,7 +36,7 @@ func TestHashSet(t *testing.T) {
 
 			set.Add("India")
 
-			assert.Equal(t, set.Count(), uint32(1))
+			assert.Equal(t, set.Count(), 1)
 		})
 
 		t.Run("count-0", func(t *testing.T) {
@@ -48,7 +48,28 @@ func TestHashSet(t *testing.T) {
 			set.Add("South Africa")
 			set.Add("India") // adding duplicate elements
 
-			assert.Equal(t, set.Count(), uint32(3))
+			assert.Equal(t, set.Count(), 3)
 		})
+	})
+
+	t.Run("double-clear", func(t *testing.T) {
+		set := NewHashSet()
+		assert.NotNil(t, set)
+
+		set.Add("India")
+		set.Add("Australia")
+		set.Add("South Africa")
+		set.Add("India") // adding duplicate elements
+
+		assert.Equal(t, set.Count(), 3)
+
+		set.Clear()
+		assert.Equal(t, set.Count(), 0)
+
+		set.Add("India") // adding duplicate elements
+		assert.Equal(t, set.Count(), 1)
+
+		set.Clear()
+		assert.Equal(t, set.Count(), 0)
 	})
 }

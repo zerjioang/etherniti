@@ -1,8 +1,12 @@
+// Copyright etherniti
+// SPDX-License-Identifier: Apache License 2.0
+
 package common
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
 
 // HexToHash sets byte representation of s to hash.

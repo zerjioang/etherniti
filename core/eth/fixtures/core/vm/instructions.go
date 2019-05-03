@@ -18,12 +18,13 @@ package vm
 
 import (
 	"errors"
+	"math/big"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
 	"golang.org/x/crypto/sha3"
-	"math/big"
 )
 
 var (

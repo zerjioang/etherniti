@@ -49,6 +49,8 @@ var (
 	// allowed cors domains
 	AllowedCorsOriginList *hashset.HashSet
 	AllowedHostnames      *hashset.HashSet
+	// user configured values
+	BlockTorConnections bool
 )
 
 func init() {
@@ -56,8 +58,10 @@ func init() {
 	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
 	AllowedHostnames = hashset.NewHashSetPtr()
 	AllowedHostnames.LoadFromRaw(HostsFile, "\n")
+	BlockTorConnections = resolveBlockTorConnections()
 }
-func BlockTorConnections() bool {
+
+func resolveBlockTorConnections() bool {
 	v, found := ReadEnvironment("X_ETHERNITI_BLOCK_TOR_CONNECTIONS")
 	return found && v == true
 }

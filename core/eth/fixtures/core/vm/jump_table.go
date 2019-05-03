@@ -18,6 +18,7 @@ package vm
 
 import (
 	"errors"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
 )
 

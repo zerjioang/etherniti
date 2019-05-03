@@ -17,10 +17,11 @@
 package params
 
 import (
-"fmt"
+	"fmt"
+	"math/big"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
-	"math/big"
 )
 
 // Genesis hashes to enforce below configs on.
@@ -169,8 +170,8 @@ var (
 // used to start light syncing from this checkpoint and avoid downloading the
 // entire header chain while still being able to securely access old headers/logs.
 type TrustedCheckpoint struct {
-	Name         string      `json:"-"`
-	SectionIndex uint64      `json:"sectionIndex"`
+	Name         string        `json:"-"`
+	SectionIndex uint64        `json:"sectionIndex"`
 	SectionHead  fixtures.Hash `json:"sectionHead"`
 	CHTRoot      fixtures.Hash `json:"chtRoot"`
 	BloomRoot    fixtures.Hash `json:"bloomRoot"`
@@ -190,7 +191,7 @@ type ChainConfig struct {
 	DAOForkSupport bool     `json:"daoForkSupport,omitempty"` // Whether the nodes supports or opposes the DAO hard-fork
 
 	// EIP150 implements the Gas price changes (https://github.com/ethereum/EIPs/issues/150)
-	EIP150Block *big.Int    `json:"eip150Block,omitempty"` // EIP150 HF block (nil = no fork)
+	EIP150Block *big.Int      `json:"eip150Block,omitempty"` // EIP150 HF block (nil = no fork)
 	EIP150Hash  fixtures.Hash `json:"eip150Hash,omitempty"`  // EIP150 HF hash (needed for header only clients as only gas pricing changed)
 
 	EIP155Block *big.Int `json:"eip155Block,omitempty"` // EIP155 HF block
@@ -455,4 +456,3 @@ func (c *ChainConfig) Rules(num *big.Int) Rules {
 		IsPetersburg:     c.IsPetersburg(num),
 	}
 }
-
