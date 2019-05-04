@@ -12,7 +12,8 @@ import (
 
 var (
 	// build commit hash value
-	Build = config.GetEnvironmentName()
+	Build    = config.GetEnvironmentName()
+	notifier = make(chan error, 1)
 )
 
 func init() {
@@ -23,8 +24,10 @@ func init() {
 // compile passing -ldflags "-X main.Build <build sha1>"
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
-	err := cmd.RunServer()
+	cmd.RunServer(notifier)
+	err := <-notifier
 	if err != nil {
 		log.Fatal("failed to execute etherniti proxy:", err)
 	}
+	<-notifier
 }

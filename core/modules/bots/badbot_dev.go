@@ -9,7 +9,7 @@ package bots
 
 import "github.com/zerjioang/etherniti/core/modules/hashset"
 
-func GetBadBotsList() *hashset.HashSet {
+func GetBadBotsList() hashset.HashSet {
 	badBotsList.Remove("apachebench")
 	badBotsList.Remove("curl")
 	return badBotsList

@@ -69,7 +69,7 @@ func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 		req := c.Request()
 		scheme := c.Scheme()
 		// host := req.Host
-		if scheme == "http" {
+		if scheme == echo.Http {
 			return c.Redirect(301, config.GetRedirectUrl(req.Host, req.RequestURI))
 		}
 		return next(c)
@@ -123,7 +123,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			return securityErr
 		}
 
-		if config.BlockTorConnections() {
+		if config.BlockTorConnections {
 			// add rate limit control
 			logger.Info("[LAYER] tor connections blocker middleware added")
 			//get current request ip

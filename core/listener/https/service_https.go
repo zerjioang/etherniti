@@ -71,7 +71,7 @@ func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
 func (l HttpsListener) RunMode(address string, background bool) {
 }
 
-func (l HttpsListener) Listen() error {
+func (l HttpsListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	//build http server
 	httpServerInstance := common.NewServer(nil)
@@ -106,7 +106,6 @@ func (l HttpsListener) Listen() error {
 	}()
 	//graceful shutdown of http and https server
 	l.shutdown(httpServerInstance, secureServer)
-	return nil
 }
 
 func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {

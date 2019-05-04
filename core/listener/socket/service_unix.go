@@ -36,7 +36,7 @@ func (l UnixSocketListener) RunMode(socketPath string, background bool) {
 	l.mode = background
 }
 
-func (l UnixSocketListener) Listen() error {
+func (l UnixSocketListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI via unix sockets")
 	l.e = common.NewDefaultServer()
 	if l.mode {
@@ -44,7 +44,6 @@ func (l UnixSocketListener) Listen() error {
 	} else {
 		l.foreground()
 	}
-	return nil
 }
 
 // create new socket listener instance

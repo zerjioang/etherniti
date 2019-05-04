@@ -4,7 +4,7 @@
 package listener
 
 type ListenerInterface interface {
-	Listen() error
+	Listen(notifier chan error)
 	RunMode(string, bool)
 }
 

@@ -4,6 +4,9 @@
 package cmd
 
 import (
+	"errors"
+	"sync/atomic"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/handlers"
 	"github.com/zerjioang/etherniti/core/listener"
@@ -11,19 +14,35 @@ import (
 	"github.com/zerjioang/etherniti/shared/constants"
 )
 
+var (
+	// serverStarted atomic.Value
+	serverStarted     atomic.Value
+	errAlreadyStarted = errors.New("already started")
+)
+
 func init() {
 	handlers.LoadIndexConstants()
 	logger.Info("system running with pointers size of: ", constants.PointerSize, " bits")
+	serverStarted.Store(false)
 }
 
-func RunServer() error {
-	// setup current execution environment
-	config.Setup()
+func RunServer(notifier chan error) {
 
-	// 2 get listening mode
-	logger.Info("starting etherniti proxy listener with requested mode")
-	mode := config.ServiceListeningMode()
+	// 1 read value
+	if !serverStarted.Load().(bool) {
+		// setup current execution environment
+		config.Setup()
 
-	// 3 run listener
-	return listener.FactoryListener(mode).Listen()
+		// 2 get listening mode
+		logger.Info("starting etherniti proxy listener with requested mode")
+		mode := config.ServiceListeningMode()
+
+		// 4 update value
+		serverStarted.Store(true)
+
+		// 3 run listener
+		go listener.FactoryListener(mode).Listen(notifier)
+	} else {
+		notifier <- errAlreadyStarted
+	}
 }

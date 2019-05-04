@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	badBotsList *hashset.HashSet
+	badBotsList hashset.HashSet
 )
 
 func init() {

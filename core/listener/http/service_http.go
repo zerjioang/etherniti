@@ -10,11 +10,10 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/listener/middleware"
-
 	"github.com/zerjioang/etherniti/core/listener/swagger"
-
 	"github.com/zerjioang/etherniti/core/util/banner"
+
+	"github.com/zerjioang/etherniti/core/listener/middleware"
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -41,24 +40,25 @@ var (
 func (l HttpListener) RunMode(address string, background bool) {
 }
 
-func (l HttpListener) Listen() error {
+func (l HttpListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
 	//deploy http server only
 	e := common.NewServer(middleware.ConfigureServerRoutes)
+	logger.Info("starting http server...")
+	logger.Info("interface: ", config.GetHttpInterface())
+	swagger.ConfigureFromTemplate()
+	println(banner.WelcomeBanner())
 	// Start server
 	go func() {
-		logger.Info("starting http server...")
-		logger.Info("interface: ", config.GetHttpInterface())
-		swagger.ConfigureFromTemplate()
-		println(banner.WelcomeBanner())
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {
+			notifier <- err
 			logger.Info("shutting down http server", err)
 		}
 	}()
+	notifier <- nil
 	//enable graceful shutdown of http server
 	l.shutdown(e)
-	return nil
 }
 
 func (l HttpListener) shutdown(httpInstance *echo.Echo) {

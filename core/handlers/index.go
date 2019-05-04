@@ -7,24 +7,21 @@ import (
 	"bytes"
 	"io/ioutil"
 
+	"github.com/zerjioang/etherniti/core/modules/interval"
+
 	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"github.com/zerjioang/etherniti/core/util/str"
-
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 
 	"runtime"
-	"strconv"
 	"sync"
 	"time"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/eth/fastime"
-	"github.com/zerjioang/etherniti/core/modules/integrity"
 	"github.com/zerjioang/etherniti/core/server/mods/mem"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -43,9 +40,9 @@ var (
 	diskMonitor *disk.DiskStatus
 	memMonitor  mem.MemStatus
 	// integrity ticker (24h)
-	integrityTicker *time.Ticker
+	integrityTicker *interval.IntervalTask
 	// status ticker (5s)
-	statusTicker *time.Ticker
+	statusTicker *interval.IntervalTask
 	//bytes of welcome message
 	IndexWelcomeJson      string
 	indexWelcomeBytes     []byte
@@ -80,8 +77,6 @@ var (
 			return new(bytes.Buffer)
 		},
 	}
-	statusData    bytes.Buffer
-	integrityData bytes.Buffer
 )
 
 func init() {
@@ -90,9 +85,10 @@ func init() {
 	// monitor memory usage and get basic stats
 	memMonitor = mem.MemStatusMonitor()
 	// integrity ticker (24h)
-	integrityTicker = time.NewTicker(24 * time.Hour)
+	//integrityTicker = interval.NewTask(24 * time.Hour, interval.Loop).Do()
+	integrityTicker = interval.NewTask("integrity", 5*time.Second, interval.Loop, true, onNewIntegrityData).Do()
 	// status ticker update each 5s
-	statusTicker = time.NewTicker(5 * time.Second)
+	statusTicker = interval.NewTask("status", 5*time.Second, interval.Loop, true, onNewStatusData).Do()
 
 	/*IndexWelcomeJson = `{
 	  "name": "eth-wbapi",
@@ -133,33 +129,7 @@ func (ctl *IndexController) Status(c *echo.Context) error {
 }
 
 func (ctl *IndexController) status() []byte {
-	return statusData.Bytes()
-}
-
-func refreshStatusData() {
-
-	//get the wrapper from the pool, and cast it
-	wrapper := statusPool.Get().(protocol.ServerStatusResponse)
-	// force a new read memory
-	memMonitor.ReadMemory()
-	// read values
-	memMonitor.ReadPtr(&wrapper)
-
-	wrapper.Disk.All = diskMonitor.All()
-	wrapper.Disk.Used = diskMonitor.Used()
-	wrapper.Disk.Free = diskMonitor.Free()
-
-	//get the buffer from the pool, and cast it
-	buffer := bufferBool.Get().(*bytes.Buffer)
-	data := wrapper.Bytes(buffer)
-	buffer.Reset()
-
-	// Then put it back
-	statusPool.Put(wrapper)
-	bufferBool.Put(buffer)
-
-	statusData.Reset()
-	_, _ = statusData.Write(data)
+	return statusTicker.Bytes()
 }
 
 // return server side integrity message signed with private ecdsa key
@@ -171,29 +141,8 @@ func (ctl *IndexController) Integrity(c *echo.Context) error {
 	return c.JSONBlob(code, data)
 }
 
-func refreshIntegrityData() {
-	// get current date time
-	millis := fastime.Now().Unix()
-	timeStr := time.Unix(millis, 0).Format(time.RFC3339)
-	millisStr := strconv.FormatInt(millis, 10)
-
-	//sign message
-	signMessage := "Hello from Etherniti Proxy. Today message generated at " + timeStr
-	hash, signature := integrity.SignMsgWithIntegrity(signMessage)
-
-	var wrapper protocol.IntegrityResponse
-	wrapper.Message = signMessage
-	wrapper.Millis = millisStr
-	wrapper.Hash = hash
-	wrapper.Signature = signature
-
-	data := str.GetJsonBytes(wrapper)
-	integrityData.Reset()
-	_, _ = integrityData.Write(data)
-}
-
 func (ctl *IndexController) integrity() []byte {
-	return integrityData.Bytes()
+	return integrityTicker.Bytes()
 }
 
 // implemented method from interface RouterRegistrable

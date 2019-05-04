@@ -1,7 +1,6 @@
-*
+proxy.etherniti.org
+127.0.0.1
 localhost
 0.0.0.0
-127.0.0.1
 api.etherniti.org
-proxy.etherniti.org
 cloud.etherniti.org
