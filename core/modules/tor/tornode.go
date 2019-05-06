@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	TornodeSet hashset.HashSet
+	TornodeSet hashset.HashSetMutex
 )
 
 func init() {

@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package util
+package concurrent
 
 import (
 	"sync"
@@ -9,15 +9,20 @@ import (
 	"testing"
 )
 
-type Config struct {
+type ConfigWithMutex struct {
 	mut      *sync.RWMutex
 	endpoint string
 }
 
-func BenchmarkPMutexSet(b *testing.B) {
-	config := Config{}
+type Config struct {
+	endpoint string
+}
+
+func BenchmarkMutexSet(b *testing.B) {
+	config := ConfigWithMutex{}
 	config.mut = new(sync.RWMutex)
 	b.ReportAllocs()
+	b.SetBytes(1)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			config.mut.Lock()
@@ -27,10 +32,11 @@ func BenchmarkPMutexSet(b *testing.B) {
 	})
 }
 
-func BenchmarkPMutexGet(b *testing.B) {
-	config := Config{endpoint: "api.example.com"}
+func BenchmarkMutexGet(b *testing.B) {
+	config := ConfigWithMutex{endpoint: "api.example.com"}
 	config.mut = new(sync.RWMutex)
 	b.ReportAllocs()
+	b.SetBytes(1)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			config.mut.RLock()
@@ -40,10 +46,11 @@ func BenchmarkPMutexGet(b *testing.B) {
 	})
 }
 
-func BenchmarkPAtomicSet(b *testing.B) {
+func BenchmarkAtomicSet(b *testing.B) {
 	var config = new(atomic.Value)
 	c := Config{endpoint: "api.example.com"}
 	b.ReportAllocs()
+	b.SetBytes(1)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			config.Store(c)
@@ -51,10 +58,11 @@ func BenchmarkPAtomicSet(b *testing.B) {
 	})
 }
 
-func BenchmarkPAtomicGet(b *testing.B) {
+func BenchmarkAtomicGet(b *testing.B) {
 	var config = new(atomic.Value)
 	config.Store(Config{endpoint: "api.example.com"})
 	b.ReportAllocs()
+	b.SetBytes(1)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			_ = config.Load().(Config)

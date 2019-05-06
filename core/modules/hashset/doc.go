@@ -45,6 +45,4 @@ BenchmarkHashSet/size-10000-4                                   100000000       
 BenchmarkHashSet/clear                                          20000000                64.8 ns/op            48 B/op          1 allocs/op
 BenchmarkHashSet/clear-2                                        20000000                65.1 ns/op            48 B/op          1 allocs/op
 BenchmarkHashSet/clear-4                                        20000000                69.0 ns/op            48 B/op          1 allocs/op
-
-after replacing sync.lock with sync.rwlock
 */

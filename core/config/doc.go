@@ -4,6 +4,12 @@
 package config
 
 /*
+go test -bench=. -benchmem -cpu=1,2,4
+go test -bench=. -benchmem -benchtime=5s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
+go tool -web pprof profile.out
+go tool -web pprof memprofile.out
+go tool pprof -http=localhost:6060 memprofile.out
+
 for production deployments, an SSL certificate information is required.
 in order to have a modular an extensible design, this information is provided via env variables as following:
 

@@ -13,14 +13,14 @@ func BenchmarkHashSet(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			NewHashSet()
+			_ = NewHashSet()
 		}
 	})
 	b.Run("instantiate-ptr", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			NewHashSetPtr()
+			_ = NewHashSetPtr()
 		}
 	})
 	b.Run("add", func(b *testing.B) {
@@ -45,10 +45,12 @@ func BenchmarkHashSet(b *testing.B) {
 	})
 	b.Run("contains", func(b *testing.B) {
 		b.Run("simple", func(b *testing.B) {
-			b.ReportAllocs()
-			b.ResetTimer()
+
 			set := NewHashSet()
 			set.Add("test")
+
+			b.ReportAllocs()
+			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
 				set.Contains("test")
 			}
@@ -89,7 +91,7 @@ func BenchmarkHashSet(b *testing.B) {
 		b.ResetTimer()
 		set := NewHashSet()
 		for i := 0; i < b.N; i++ {
-			_ = set.Count()
+			_ = set.Size()
 		}
 	})
 	b.Run("count-10000", func(b *testing.B) {
@@ -102,7 +104,7 @@ func BenchmarkHashSet(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			set.Count()
+			set.Size()
 		}
 	})
 	b.Run("size", func(b *testing.B) {

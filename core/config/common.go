@@ -50,8 +50,8 @@ var (
 
 var (
 	// allowed cors domains
-	AllowedCorsOriginList hashset.HashSet
-	AllowedHostnames      hashset.HashSet
+	AllowedCorsOriginList hashset.HashSetMutex
+	AllowedHostnames      hashset.HashSetMutex
 	// user configured values
 	BlockTorConnections bool
 )
