@@ -32,6 +32,7 @@ var uid = os.Getuid()
 var gid = os.Getgid()
 
 func init() {
+	logger.Debug("loading db module data")
 	err := createData(baseData + "data")
 	if err != nil {
 		logger.Error("failed to create shared database dir:", err)
@@ -39,6 +40,7 @@ func init() {
 }
 
 func createData(path string) error {
+	logger.Debug("creating db path")
 	defaultConfig.Dir = path
 	defaultConfig.ValueDir = path
 	logger.Debug("creating dir: ", path)
@@ -57,6 +59,7 @@ func createData(path string) error {
 }
 
 func NewCollection(name string) (*Db, error) {
+	logger.Debug("creating new db collection")
 	collection := new(Db)
 	err := createData(baseData + name)
 	if err != nil {
@@ -71,6 +74,7 @@ func NewCollection(name string) (*Db, error) {
 }
 
 func (db *Db) Init() error {
+	logger.Debug("initializing db file")
 	// Open the Badger database located in the /data/badger directory.
 	// It will be created if it doesn't exist.
 	instance, err := badger.Open(defaultConfig)
@@ -98,6 +102,7 @@ func (db *Db) PutKeyValue(key []byte, value []byte) error {
 }
 
 func (db *Db) Close() error {
+	logger.Debug("closing database")
 	return db.instance.Close()
 }
 
@@ -129,6 +134,7 @@ func (db *Db) Add(key, data []byte) error {
 }
 
 func GetInstance() *Db {
+	logger.Debug("getting database instance")
 	once.Do(func() {
 		instance = &Db{}
 		instance.Init()

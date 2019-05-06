@@ -27,7 +27,7 @@ func init() {
 }
 
 func RunServer(notifier chan error) {
-
+	logger.Debug("running etherniti main server")
 	// 1 read value
 	if !serverStarted.Load().(bool) {
 		// setup current execution environment

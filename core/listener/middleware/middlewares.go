@@ -5,6 +5,7 @@ package middleware
 
 import (
 	"errors"
+	ip2 "github.com/zerjioang/etherniti/core/util/ip"
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics"
@@ -128,7 +129,8 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			logger.Info("[LAYER] tor connections blocker middleware added")
 			//get current request ip
 			requestIp := request.RemoteAddr
-			found := tor.TornodeSet.Contains(requestIp)
+			ipUint32 := ip2.Ip2intLow(requestIp)
+			found := tor.TornodeSet.Contains(ipUint32)
 			if !found {
 				//received request IP is not blacklisted
 				return next(c)

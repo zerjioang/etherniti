@@ -4,6 +4,7 @@
 package banner
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"runtime"
 	"strings"
 
@@ -38,17 +39,20 @@ var (
 
 // thread safe init function
 func init() {
+	logger.Debug("loading banner module data")
 	banner = getBannerFromTemplate()
 }
 
 // return welcome banner asci art message
 func WelcomeBanner() string {
+	logger.Debug("reading welcome banner")
 	banner = strings.Replace(banner, "$COMMIT", Commit, 1)
 	return banner
 }
 
 // inject runtime variables in welcome banner message
 func getBannerFromTemplate() string {
+	logger.Debug("generating welcome banner from template")
 	banner = strings.Replace(bannerTemplate, "$GOARCH", runtime.GOARCH, 1)
 	banner = strings.Replace(banner, "$GOARCH", runtime.GOOS, 1)
 	banner = strings.Replace(banner, "$GOROOT", runtime.GOROOT(), 1)

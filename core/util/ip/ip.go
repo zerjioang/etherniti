@@ -21,13 +21,13 @@ func Ip2int(ip string) uint32 {
 }
 
 func Ip2intLow(ip string) uint32 {
-	var octets [4][3]byte
+	var octets [4][4]byte
 	var currentOctect uint8 = 0
 	var currentOctectPos uint8 = 0
 	for i := 0; i < len(ip); i++ {
 		ipVal := ip[i]
-		isDot := ipVal == asciiDot
-		if isDot {
+		if ipVal == asciiDot {
+			octets[currentOctect][3]=currentOctectPos
 			//move to the next octect
 			currentOctect++
 			currentOctectPos = 0
@@ -37,16 +37,29 @@ func Ip2intLow(ip string) uint32 {
 			currentOctectPos++
 		}
 	}
+	// save last octet information
+	octets[currentOctect][3]=currentOctectPos
+
 	// convert octects string bytes to decimal
 	var octectsDecimal [4]byte
-	octectsDecimal[0] = (octets[0][2]-asciiZero)*100 + (octets[0][1]-asciiZero)*10 + (octets[0][0] - asciiZero)
-	octectsDecimal[1] = (octets[1][2]-asciiZero)*100 + (octets[1][1]-asciiZero)*10 + (octets[1][0] - asciiZero)
-	octectsDecimal[2] = (octets[2][2]-asciiZero)*100 + (octets[2][1]-asciiZero)*10 + (octets[2][0] - asciiZero)
-	octectsDecimal[3] = (octets[3][2]-asciiZero)*100 + (octets[3][1]-asciiZero)*10 + (octets[3][0] - asciiZero)
-	// convert octects to uint32
-	// octets[0]*256³ + octets[1]*256² + octets[2]*256¹ + octets[1]*256⁰
+	for i:=0; i<4;i++{
+		//process each octect data
+		// convert octects to uint32
+		// octets[0]*256³ + octets[1]*256² + octets[2]*256¹ + octets[1]*256⁰
+		switch octets[i][3] {
+		case 0:
+			octectsDecimal[i] = 0
+		case 1:
+			octectsDecimal[i] = octets[i][0]-asciiZero
+		case 2:
+			octectsDecimal[i] = (octets[i][0]-asciiZero)*10 + (octets[i][1]-asciiZero)
+		case 3:
+			octectsDecimal[i] = (octets[i][0]-asciiZero)*100 + (octets[i][1]-asciiZero)*10 + (octets[i][2] - asciiZero)
+		}
+	}
 	var intIp uint32
-	intIp = uint32(octectsDecimal[0])*16777216 + uint32(octectsDecimal[1])*65536*uint32(octectsDecimal[2])*256 + uint32(octectsDecimal[3])
+	// intIp = uint32(octectsDecimal[0])*16777216 + uint32(octectsDecimal[1])*65536 + uint32(octectsDecimal[2])*256 + uint32(octectsDecimal[3])
+	intIp = uint32(octectsDecimal[3]) | uint32(octectsDecimal[2])<<8 | uint32(octectsDecimal[1])<<16 | uint32(octectsDecimal[0])<<24
 	return intIp
 }
 

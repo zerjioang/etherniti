@@ -8,6 +8,8 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
 	"syscall"
 	"time"
 
@@ -41,6 +43,8 @@ func (l UnixSocketListener) Listen(notifier chan error) {
 	l.e = common.NewDefaultServer()
 	if l.mode {
 		l.background()
+		//graceful shutdown of http and https server
+		l.shutdown()
 	} else {
 		l.foreground()
 	}
@@ -177,4 +181,24 @@ func (l UnixSocketListener) foreground() error {
 		}
 		go l.unixServerListener(fd)
 	}*/
+}
+
+
+func (l UnixSocketListener) shutdown() {
+	// The make built-in returns a value of type T (not *T), and it's memory is
+	// initialized.
+	quit := make(chan os.Signal)
+
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	logger.Info("graceful shutdown of the unix socket listener requested")
+	if l.e.Listener != nil {
+		logger.Info("shutting down unix socket listener...")
+		if err := l.e.Listener.Close(); err != nil {
+			logger.Error(err)
+		}
+	}
+	logger.Info("graceful shutdown executed")
+	logger.Info("exiting...")
+	os.Exit(0)
 }

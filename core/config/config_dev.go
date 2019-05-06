@@ -62,6 +62,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 )
 
 func init() {
+	logger.Debug("loading development config module data")
 	//hardcoded cert content as bytes
 	certPemBytes = str.UnsafeBytes(certPem)
 	//hardcoded key content as bytes

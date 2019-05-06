@@ -89,35 +89,43 @@ func LogLevel() log.Lvl {
 }
 
 func EnableLogging() bool {
+	logger.Debug("reading logging level from env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_LOGGING")
 	return found && v == true
 }
 func EnableSecureMode() bool {
+	logger.Debug("reading secure mode from env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_SECURITY")
 	return found && v == true
 }
 func EnableCors() bool {
+	logger.Debug("reading cors mode from env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_CORS")
 	return found && v == true
 }
 func EnableRateLimit() bool {
+	logger.Debug("reading rate limit mode from env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_RATE_LIMIT")
 	return found && v == true
 }
 func EnableAnalytics() bool {
+	logger.Debug("reading analytics mode from env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_ANALYTICS")
 	return found && v == true
 }
 func EnableMetrics() bool {
+	logger.Debug("reading metrics mode env")
 	v, found := ReadEnvironment("X_ETHERNITI_ENABLE_METRICS")
 	return found && v == true
 }
 func UseUniqueRequestId() bool {
+	logger.Debug("reading unique request id from env")
 	v, found := ReadEnvironment("X_ETHERNITI_USE_UNIQUE_REQUEST_ID")
 	return found && v == true
 }
 
 func RateLimit() uint32 {
+	logger.Debug("reading ratelimit uint32 from env")
 	v, found := ReadEnvironment("X_ETHERNITI_RATE_LIMIT")
 	if found && v != nil {
 		return v.(uint32)
@@ -126,6 +134,7 @@ func RateLimit() uint32 {
 }
 
 func RateLimitUnitsFt() fastime.Duration {
+	logger.Debug("reading rate limit units from env")
 	v, found := ReadEnvironment("X_ETHERNITI_RATE_LIMIT_UNITS_FT")
 	if found && v != nil {
 		return v.(fastime.Duration)
@@ -134,19 +143,23 @@ func RateLimitUnitsFt() fastime.Duration {
 }
 
 func RateLimitUnitsStr() string {
+	logger.Debug("reading rate limit string from env")
 	return ReadEnvironmentString("X_ETHERNITI_RATE_LIMIT_UNITS")
 }
 
 func TokenSecret() string {
+	logger.Debug("reading token secret from env")
 	return ReadEnvironmentString("X_ETHERNITI_TOKEN_SECRET")
 }
 
 func DebugServer() bool {
+	logger.Debug("reading debug mode from env")
 	v, found := ReadEnvironment("X_ETHERNITI_DEBUG_SERVER")
 	return found && v == true
 }
 
 func TokenExpiration() fastime.Duration {
+	logger.Debug("reading token expiration from env")
 	v, found := ReadEnvironment("X_ETHERNITI_TOKEN_EXPIRATION")
 	if found && v != nil {
 		return v.(fastime.Duration)
@@ -155,18 +168,22 @@ func TokenExpiration() fastime.Duration {
 }
 
 func GetSwaggerAddress() string {
+	logger.Debug("reading swagger address from env")
 	return ReadEnvironmentString("X_ETHERNITI_SWAGGER_ADDRESS")
 }
 
 func GetEnvironmentName() string {
+	logger.Debug("reading etherniti environment name env")
 	return ReadEnvironmentString("X_ETHERNITI_ENVIRONMENT_NAME")
 }
 
 func GetListeningAddress() string {
+	logger.Debug("reading requested listening ip address from env")
 	return ReadEnvironmentString("X_ETHERNITI_LISTENING_ADDRESS")
 }
 
 func GetHttpInterface() string {
+	logger.Debug("reading requested listening interface address from env")
 	return ReadEnvironmentString("X_ETHERNITI_HTTP_LISTEN_INTERFACE")
 }
 
@@ -206,21 +223,26 @@ func IsProfilingEnabled() bool {
 }
 
 func GetEmailUsername() string {
+	logger.Debug("reading email username from env")
 	return ReadEnvironmentString("X_ETHERNITI_EMAIL_USERNAME")
 }
 
 func GetEmailPassword() string {
+	logger.Debug("reading email password from env")
 	return ReadEnvironmentString("X_ETHERNITI_GMAIL_ACCESS_TOKEN")
 }
 func GetEmailServer() string {
+	logger.Debug("reading email server name and port from env")
 	return ReadEnvironmentString("X_ETHERNITI_EMAIL_SERVER")
 }
 func GetEmailServerOnly() string {
+	logger.Debug("reading email server name from env")
 	return ReadEnvironmentString("X_ETHERNITI_EMAIL_SERVER_ONLY")
 }
 
 // sendgrid service configuration
 func SendGridApiKey() string {
+	logger.Debug("reading sendgrid api key from env")
 	return ReadEnvironmentString("SENDGRID_API_KEY")
 }
 
@@ -239,5 +261,6 @@ func ServiceListeningMode() listener.ServiceType {
 }
 
 func IsDevelopment() bool {
+	logger.Debug("checking if current server environment is development")
 	return GetEnvironmentName() == "development"
 }

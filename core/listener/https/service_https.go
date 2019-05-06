@@ -132,6 +132,7 @@ func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Ech
 	}
 	logger.Info("graceful shutdown executed")
 	logger.Info("exiting...")
+	os.Exit(0)
 }
 
 func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {

@@ -23,6 +23,7 @@ var (
 )
 
 func init() {
+	logger.Debug("loading api wrapper data")
 	errorPool = sync.Pool{
 		New: func() interface{} {
 			return protocol.NewApiError(protocol.StatusBadRequest, []byte{})
@@ -84,6 +85,7 @@ func Success(c *echo.Context, msg []byte, result []byte) error {
 }
 
 func ToSuccessPool(msg []byte, result interface{}) []byte {
+	logger.Debug("converting data to success message")
 	//get item from pool
 	item := successPool.Get().(*protocol.ApiResponse)
 	item.Message = msg
@@ -98,6 +100,7 @@ func ToSuccessPool(msg []byte, result interface{}) []byte {
 }
 
 func ToSuccess(msg []byte, result interface{}) []byte {
+	logger.Debug("converting data to success payload")
 	//get item from pool
 	var item protocol.ApiResponse
 	item.Code = 200
@@ -111,6 +114,7 @@ func ToSuccess(msg []byte, result interface{}) []byte {
 }
 
 func toErrorPool(msg []byte) []byte {
+	logger.Debug("converting api to error payload")
 	//get item from pool
 	item := errorPool.Get().(*protocol.ApiError)
 	item.Message = msg
@@ -123,6 +127,7 @@ func toErrorPool(msg []byte) []byte {
 }
 
 func toError(code int, msg []byte) []byte {
+	logger.Debug("converting data to error payload")
 	var item protocol.ApiError
 	item.Message = msg
 	item.Code = code
@@ -134,22 +139,26 @@ func toError(code int, msg []byte) []byte {
 }
 
 func ErrorStr(c *echo.Context, msg []byte) error {
+	logger.Debug("converting error string to payload")
 	logger.Error(str.UnsafeString(msg))
 	rawBytes := toErrorPool(msg)
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func Error(c *echo.Context, err error) error {
+	logger.Debug("converting error to payload")
 	return ErrorStr(c, str.UnsafeBytes(err.Error()))
 }
 
 func ErrorCode(c *echo.Context, code int, err error) error {
+	logger.Debug("converting error with code to error payload")
 	logger.Error(err)
 	rawBytes := toError(code, str.UnsafeBytes(err.Error()))
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func StackError(c *echo.Context, stackErr trycatch.Error) error {
+	logger.Debug("converting stack error to error payload")
 	logger.Error(stackErr)
 	rawBytes := toError(protocol.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)

@@ -17,6 +17,7 @@ var doOnce sync.Once
 var globalCfg *EnvConfig
 
 func GetEnvironment() EnvConfig {
+	logger.Debug("accessing to environment configuration")
 	doOnce.Do(func() {
 		logger.Debug("reading environment configuration")
 		globalCfg = newEnvironment()
@@ -24,11 +25,11 @@ func GetEnvironment() EnvConfig {
 		// override default values with user provided data
 		globalCfg.read()
 	})
-	logger.Debug("accessing to environment configuration")
 	return *globalCfg
 }
 
 func GetEnvironmentPtr() *EnvConfig {
+	logger.Debug("accessing to environment configuration")
 	doOnce.Do(func() {
 		logger.Debug("reading environment configuration")
 		globalCfg = newEnvironment()
@@ -36,16 +37,17 @@ func GetEnvironmentPtr() *EnvConfig {
 		// override default values with user provided data
 		globalCfg.read()
 	})
-	logger.Debug("accessing to environment configuration")
 	return globalCfg
 }
 
 func ReadEnvironment(key string) (interface{}, bool) {
+	logger.Debug("reading environment key")
 	v, ok := GetEnvironment().data[key]
 	return v, ok
 }
 
 func ReadEnvironmentString(key string) string {
+	logger.Debug("reading environment key as string")
 	v, found := ReadEnvironment(key)
 	if !found {
 		return ""
@@ -60,6 +62,7 @@ type EnvConfig struct {
 
 // Constructor like function for new Env config data wrappers
 func newEnvironment() *EnvConfig {
+	logger.Debug("creating new enviroment data")
 	cfg := new(EnvConfig)
 	cfg.data = make(map[string]interface{})
 	return cfg

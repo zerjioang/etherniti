@@ -62,16 +62,19 @@ let getBalanceFunction = function(){
 	var addr = ('0x3DEB1894DC2d3e1B4a073f520e516C2DF6f45B88');
 	//console.log('Address:', addr);
 	web3.eth.getBalance(addr, function (error, result) {
-		if (!error)
-			console.log('Ether:', web3.utils.fromWei(result,'ether')); 
-		else
-			console.log('Huston we have a promblem: ', error);
+	    const print = false;
+		if(print){
+            if (!error)
+                console.log('Ether:', web3.utils.fromWei(result,'ether'));
+            else
+                console.log('Huston we have a promblem: ', error);
+        }
 		
 	})
 }
 
-//const iterations = [1,5,10,50,100,500,1000,2000]
-const iterations = [1]
+const iterations = [1,5,10,50,100,500,1000,2000]
+//const iterations = [1]
 for (var i = 0; i < iterations.length ; i++) {
 	let TestResult = new StandardBenchmark(getBalanceFunction,iterations[i]);
 	console.log("Iterations ", iterations[i], TestResult);

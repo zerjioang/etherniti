@@ -23,6 +23,7 @@ var (
 )
 
 func init() {
+	logger.Debug("loading productin config module data")
 	logger.Info("loading production ssl crypto material for https")
 	certPath := os.Getenv("X_ETHERNITI_SSL_CERT_FILE")
 	certPemBytes = loadCertBytes(certPath)
@@ -32,6 +33,7 @@ func init() {
 }
 
 func loadCertBytes(path string) []byte {
+	logger.Debug("loading cert file data from fs")
 	certData, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal("failed to load production HTTPS SSL certificate data")
@@ -84,4 +86,5 @@ func (c *EnvConfig) SetDefaults() {
 
 // setup server config
 func Setup() {
+	logger.Debug("loading additional production setup config")
 }

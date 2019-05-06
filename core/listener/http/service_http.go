@@ -71,14 +71,13 @@ func (l HttpListener) shutdown(httpInstance *echo.Echo) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	logger.Info("graceful shutdown of the service requested")
-	if httpInstance != nil {
-		logger.Info("shutting down http server...")
-		if err := httpInstance.Shutdown(ctx); err != nil {
-			logger.Error(err)
-		}
+	logger.Info("shutting down http server...")
+	if err := httpInstance.Shutdown(ctx); err != nil {
+		logger.Error(err)
 	}
 	logger.Info("graceful shutdown executed")
 	logger.Info("exiting...")
+	os.Exit(0)
 }
 
 // create new deployer instance

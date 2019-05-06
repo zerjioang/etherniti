@@ -8,6 +8,7 @@
 package config
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -56,6 +57,7 @@ ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 )
 
 func init() {
+	logger.Debug("loading staging config module data")
 	//hardcoded cert content as bytes
 	certPemBytes = str.UnsafeBytes(certPem)
 	//hardcoded key content as bytes
