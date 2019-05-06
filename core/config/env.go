@@ -28,6 +28,18 @@ func GetEnvironment() EnvConfig {
 	return *globalCfg
 }
 
+func GetEnvironmentPtr() *EnvConfig {
+	doOnce.Do(func() {
+		logger.Debug("reading environment configuration")
+		globalCfg = newEnvironment()
+		globalCfg.SetDefaults()
+		// override default values with user provided data
+		globalCfg.read()
+	})
+	logger.Debug("accessing to environment configuration")
+	return globalCfg
+}
+
 func ReadEnvironment(key string) (interface{}, bool) {
 	v, ok := GetEnvironment().data[key]
 	return v, ok

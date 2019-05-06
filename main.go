@@ -6,8 +6,8 @@ package main
 import (
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/banner"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
 var (
@@ -27,7 +27,7 @@ func main() {
 	cmd.RunServer(notifier)
 	err := <-notifier
 	if err != nil {
-		log.Fatal("failed to execute etherniti proxy:", err)
+		logger.Fatal("failed to execute etherniti proxy:", err)
 	}
 	<-notifier
 }

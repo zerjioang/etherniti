@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity >=0.4.22 <0.6.0;
 
 contract ERC777 {
     function name() public constant returns (string);
@@ -28,4 +28,9 @@ contract ERC777 {
     event Burned(address indexed operator, address indexed from, uint256 amount, bytes userData, bytes operatorData);
     event AuthorizedOperator(address indexed operator, address indexed tokenHolder);
     event RevokedOperator(address indexed operator, address indexed tokenHolder);
+}
+
+contract MyERC777 is ERC777 {
+    constructor () public {
+    }
 }

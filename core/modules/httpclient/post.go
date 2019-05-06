@@ -19,6 +19,10 @@ var (
 )
 
 func MakePost(client *http.Client, url string, headers http.Header, data string) (json.RawMessage, error) {
+	return MakeCall(client, "POST", url, headers, data)
+}
+
+func MakeCall(client *http.Client, method string, url string, headers http.Header, data string) (json.RawMessage, error) {
 	log.Info("sending request: ", data)
 	if client == nil {
 		client = &http.Client{
@@ -28,7 +32,7 @@ func MakePost(client *http.Client, url string, headers http.Header, data string)
 			},
 		}
 	}
-	req, err := http.NewRequest("POST", url, strings.NewReader(data))
+	req, err := http.NewRequest(method, url, strings.NewReader(data))
 	if err != nil {
 		return nil, err
 	}

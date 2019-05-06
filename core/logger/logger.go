@@ -37,6 +37,11 @@ func Error(i ...interface{}) {
 	customLog.Error(i...)
 }
 
+// custom error format logger
+func Fatal(i ...interface{}) {
+	customLog.Fatal(i...)
+}
+
 // custom info format logger
 func Info(i ...interface{}) {
 	customLog.Info(i...)

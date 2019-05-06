@@ -7,11 +7,12 @@ import (
 	"math/big"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -47,7 +48,7 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 		if decodeErr != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, methodName, rawBytes)
+		err := erc20.LoadErc20Abi().Unpack(&unpacked, methodName, rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
@@ -120,7 +121,7 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 			if decodeErr != nil {
 				return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 			}
-			err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+			err := erc20.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
 			if err != nil {
 				return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 			} else {

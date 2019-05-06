@@ -74,6 +74,10 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// register ui rest
 	NewUIController().RegisterRouters(publicGroup)
 
+	//register external api calls
+	// coin market cap: get eth price data
+	NewExternalController().RegisterRouters(publicGroup)
+
 	//register public ethereum network related services
 	// /v1/ropsten
 	ropstenGroup := groupV1.Group("/ropsten", next)

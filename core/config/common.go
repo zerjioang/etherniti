@@ -17,9 +17,9 @@ import (
 )
 
 var (
-	//cert content as bytes readed from filesystem
+	//cert content as bytes
 	certPemBytes []byte
-	//key content as bytes readed from filesystem
+	//key content as bytes
 	keyPemBytes  []byte
 	gopath       = os.Getenv("GOPATH")
 	ResourcesDir = gopath + "/src/github.com/zerjioang/etherniti/testdata"
@@ -50,16 +50,16 @@ var (
 
 var (
 	// allowed cors domains
-	AllowedCorsOriginList *hashset.HashSet
-	AllowedHostnames      *hashset.HashSet
+	AllowedCorsOriginList hashset.HashSet
+	AllowedHostnames      hashset.HashSet
 	// user configured values
 	BlockTorConnections bool
 )
 
 func init() {
-	AllowedCorsOriginList = hashset.NewHashSetPtr()
+	AllowedCorsOriginList = hashset.NewHashSet()
 	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
-	AllowedHostnames = hashset.NewHashSetPtr()
+	AllowedHostnames = hashset.NewHashSet()
 	AllowedHostnames.LoadFromRaw(HostsFile, "\n")
 	BlockTorConnections = resolveBlockTorConnections()
 }

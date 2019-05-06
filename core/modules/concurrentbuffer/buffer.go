@@ -12,7 +12,7 @@ import (
 type ConcurrentBuffer struct {
 	b bytes.Buffer
 	// mutual-exclusion lock
-	m sync.RWMutex
+	m *sync.RWMutex
 	//b *bytes.Buffer
 	//m *sync.RWMutex
 }
@@ -144,7 +144,7 @@ func (b *ConcurrentBuffer) WriteTo(w io.Writer) (n int64, err error) {
 // constructor like function for concurrent buffer
 func NewConcurrentBuffer() ConcurrentBuffer {
 	cb := ConcurrentBuffer{}
-	//cb.m = new(sync.RWMutex)
+	cb.m = new(sync.RWMutex)
 	//cb.b = new(bytes.Buffer)
 	return cb
 }

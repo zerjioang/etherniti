@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
+
 	"github.com/zerjioang/etherniti/core/modules/httpclient"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
@@ -22,8 +24,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
-
-	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
@@ -843,19 +843,19 @@ func (rpc *EthRPC) Erc20Summary(contract string) (map[string]string, error) {
 }
 
 func (rpc *EthRPC) Erc20TotalSupply(contract string) (string, error) {
-	return rpc.contractCallAbiParams(contract, paramencoder.TotalSupplyParams, model.LatestBlockNumber)
+	return rpc.contractCallAbiParams(contract, erc20.TotalSupplyParams, model.LatestBlockNumber)
 }
 
 func (rpc *EthRPC) Erc20Symbol(contract string) (string, error) {
-	return rpc.contractCallAbiParams(contract, paramencoder.SymbolParams, model.LatestBlockNumber)
+	return rpc.contractCallAbiParams(contract, erc20.SymbolParams, model.LatestBlockNumber)
 }
 
 func (rpc *EthRPC) Erc20Name(contract string) (string, error) {
-	return rpc.contractCallAbiParams(contract, paramencoder.NameParams, model.LatestBlockNumber)
+	return rpc.contractCallAbiParams(contract, erc20.NameParams, model.LatestBlockNumber)
 }
 
 func (rpc *EthRPC) Erc20Decimals(contract string) (string, error) {
-	return rpc.contractCallAbiParams(contract, paramencoder.DecimalsParams, model.LatestBlockNumber)
+	return rpc.contractCallAbiParams(contract, erc20.DecimalsParams, model.LatestBlockNumber)
 }
 
 func (rpc *EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawMessage, error) {
@@ -864,7 +864,7 @@ func (rpc *EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawM
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
 		return nil, decodeErr
 	}
-	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("balanceOf", tokenOwnerAddress)
+	abiparams, encErr := erc20.LoadErc20Abi().Pack("balanceOf", tokenOwnerAddress)
 	if encErr != nil {
 		logger.Error("failed to encode ABI parameters for ERC20 balanceof method", encErr)
 		return nil, encErr
@@ -886,7 +886,7 @@ func (rpc *EthRPC) Erc20Allowance(contract string, tokenOwner string, spender st
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
 		return nil, decodeErr
 	}
-	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("allowance", tokenOwnerAddress, spenderAddress)
+	abiparams, encErr := erc20.LoadErc20Abi().Pack("allowance", tokenOwnerAddress, spenderAddress)
 	if encErr != nil {
 		logger.Error("failed to encode ABI parameters for ERC20 allowance method", encErr)
 		return nil, encErr
@@ -907,7 +907,7 @@ func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (j
 		logger.Error("failed to read and decode provided Ethereum address", decodeErr)
 		return nil, decodeErr
 	}
-	abiparams, encErr := paramencoder.LoadErc20Abi().Pack("transfer", senderAddress, amount)
+	abiparams, encErr := erc20.LoadErc20Abi().Pack("transfer", senderAddress, amount)
 	if encErr != nil {
 		logger.Error("failed to encode ABI parameters for ERC20 transfer method", encErr)
 		return nil, encErr

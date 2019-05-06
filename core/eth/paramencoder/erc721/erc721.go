@@ -1,7 +1,12 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package paramencoder
+package erc721
+
+import (
+	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
+	"github.com/zerjioang/etherniti/core/logger"
+)
 
 //What is ERC-721?
 //
@@ -138,3 +143,344 @@ package paramencoder
 //}
 
 // more info at http://erc721.org/
+
+/*
+{
+    "095ea7b3": "approve(address,uint256)",
+    "70a08231": "balanceOf(address)",
+    "081812fc": "getApproved(uint256)",
+    "e985e9c5": "isApprovedForAll(address,address)",
+    "150b7a02": "onERC721Received(address,address,uint256,bytes)",
+    "6352211e": "ownerOf(uint256)",
+    "42842e0e": "safeTransferFrom(address,address,uint256)",
+    "b88d4fde": "safeTransferFrom(address,address,uint256,bytes)",
+    "a22cb465": "setApprovalForAll(address,bool)",
+    "23b872dd": "transferFrom(address,address,uint256)"
+}
+
+*/
+
+const (
+	defaultErc721Abi = `[
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_approved",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_operator",
+				"type": "address"
+			},
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_data",
+				"type": "bytes"
+			}
+		],
+		"name": "onERC721Received",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes4"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_operator",
+				"type": "address"
+			},
+			{
+				"name": "_approved",
+				"type": "bool"
+			}
+		],
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"name": "_operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	}
+]`
+)
+
+const (
+	ApproveParams                   string = "095ea7b3" // approve(address,uint256)
+	BalanceOfParams                 string = "70a08231" // balanceOf(address)
+	GetApprovedParams               string = "081812fc" // getApproved(uint256)
+	IsApprovedForAllParams          string = "e985e9c5" // isApprovedForAll(address,address)
+	OnERC721ReceivedParams          string = "150b7a02" // onERC721Received(address,address,uint256,bytes)
+	OwnerOfParams                   string = "6352211e" // ownerOf(uint256)
+	SafeTransferFromParams          string = "42842e0e" // safeTransferFrom(address,address,uint256)
+	SafeTransferFromParamsWithBytes string = "b88d4fde" // safeTransferFrom(address,address,uint256,bytes)
+	SetApprovalForAllParams         string = "a22cb465" // setApprovalForAll(address,bool)
+	TransferFromParams              string = "23b872dd" // transferFrom(address,address,uint256)
+)
+
+var (
+	// read only variables for ERC721
+	erc721AbiModel *abi.ABI
+)
+
+func init() {
+	erc721AbiModel = new(abi.ABI)
+	unmErr := erc721AbiModel.UnmarshalJSON([]byte(defaultErc721Abi))
+	if unmErr != nil {
+		logger.Error("failed to load ERC721 interaction model internals")
+		return
+	}
+}
+
+func LoadErc721Abi() *abi.ABI {
+	return erc721AbiModel
+}

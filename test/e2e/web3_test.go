@@ -27,7 +27,8 @@ const (
 func TestWeb3ControllerEndToEnd(t *testing.T) {
 	t.Run("getBalance", func(t *testing.T) {
 		// run server
-		go cmd.RunServer()
+		notifier := make(chan error, 1)
+		go cmd.RunServer(notifier)
 
 		//wait 1 second
 		time.Sleep(time.Second * 1)

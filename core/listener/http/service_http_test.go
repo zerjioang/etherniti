@@ -5,8 +5,8 @@ package http_test
 
 import (
 	"testing"
-	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/listener/http"
 )
 
@@ -16,20 +16,17 @@ func TestHttpListener(t *testing.T) {
 	})
 	t.Run("run", func(t *testing.T) {
 		s := http.NewHttpListener()
-		err := s.Listen()
-		if err != nil {
-			t.Error(err)
-		}
-		time.Sleep(200000 * time.Second)
+		notifier := make(chan error, 1)
+		s.Listen(notifier)
+		err := <-notifier
+		assert.Nil(t, err)
 	})
 	t.Run("request-status", func(t *testing.T) {
 		s := http.NewHttpListener()
 		// run the socket server
-		err := s.Listen()
-		if err != nil {
-			t.Error(err)
-		}
-		// wait one second to bootup
-		time.Sleep(1 * time.Second)
+		notifier := make(chan error, 1)
+		s.Listen(notifier)
+		err := <-notifier
+		assert.Nil(t, err)
 	})
 }

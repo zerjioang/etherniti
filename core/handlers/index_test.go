@@ -139,16 +139,6 @@ func BenchmarkIndexMethods(b *testing.B) {
 		}
 	})
 
-	b.Run("status-reload", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(1)
-		ctl := NewIndexController()
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			ctl.refreshStatusData()
-		}
-	})
-
 	b.Run("integrity", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -156,16 +146,6 @@ func BenchmarkIndexMethods(b *testing.B) {
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			ctl.integrity()
-		}
-	})
-
-	b.Run("integrity-reload", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(1)
-		ctl := NewIndexController()
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			ctl.refreshIntegrityData()
 		}
 	})
 }

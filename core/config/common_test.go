@@ -4,6 +4,7 @@
 package config
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -38,14 +39,53 @@ func TestTLSCryptoData(t *testing.T) {
 	t.Run("check-cert-pem", func(t *testing.T) {
 		assert.NotNil(t, GetCertPem() != nil)
 	})
+	t.Run("check-cert-pem-", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				data := GetCertPem()
+				assert.NotNil(t, data)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
 	t.Run("check-key-pem", func(t *testing.T) {
 		assert.NotNil(t, GetKeyPem() != nil)
+	})
+	t.Run("check-key-pem-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				data := GetKeyPem()
+				assert.NotNil(t, data)
+				g.Done()
+			}()
+		}
+		g.Wait()
 	})
 }
 
 func TestConfig(t *testing.T) {
 	t.Run("is-http", func(t *testing.T) {
 		assert.NotNil(t, IsHttpMode())
+	})
+	t.Run("is-http-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				data := IsHttpMode()
+				assert.NotNil(t, data)
+				g.Done()
+			}()
+		}
+		g.Wait()
 	})
 	t.Run("is-socket", func(t *testing.T) {
 		assert.NotNil(t, IsSocketMode())

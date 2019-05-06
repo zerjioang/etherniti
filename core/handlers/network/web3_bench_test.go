@@ -27,7 +27,8 @@ func BenchmarkWeb3Controller(b *testing.B) {
 	b.Run("get-balance", func(b *testing.B) {
 
 		// run server
-		go cmd.RunServer()
+		notifier := make(chan error, 1)
+		go cmd.RunServer(notifier)
 
 		//wait 1 second
 		time.Sleep(time.Second * 1)

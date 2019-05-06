@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
+
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/eth"
@@ -17,7 +19,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/zerjioang/etherniti/core/eth/paramencoder"
 	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -360,7 +361,7 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 		if decodeErr != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "name", rawBytes)
+		err := erc20.LoadErc20Abi().Unpack(&unpacked, "name", rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
@@ -396,7 +397,7 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 		if decodeErr != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "symbol", rawBytes)
+		err := erc20.LoadErc20Abi().Unpack(&unpacked, "symbol", rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
@@ -432,7 +433,7 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 		if decodeErr != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "totalSupply", rawBytes)
+		err := erc20.LoadErc20Abi().Unpack(&unpacked, "totalSupply", rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
@@ -468,7 +469,7 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 		if decodeErr != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
-		err := paramencoder.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
+		err := erc20.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
 		if err != nil {
 			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
