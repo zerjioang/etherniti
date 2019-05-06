@@ -1,10 +1,12 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package hex
+package hex_test
 
 import (
 	"encoding/hex"
+	gohex "github.com/tmthrgd/go-hex"
+	hex2 "github.com/zerjioang/etherniti/core/util/hex"
 	"testing"
 )
 
@@ -24,7 +26,16 @@ func BenchmarkEncode(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = UnsafeEncodeToString(data)
+			_ = hex2.UnsafeEncodeToString(data)
+		}
+	})
+	b.Run("encode-gohex", func(b *testing.B) {
+		data := []byte("this-is-a-test")
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = gohex.EncodeToString(data)
 		}
 	})
 	b.Run("encode-fast-pooled", func(b *testing.B) {
@@ -33,7 +44,7 @@ func BenchmarkEncode(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = UnsafeEncodeToStringPooled(data)
+			_ = hex2.UnsafeEncodeToStringPooled(data)
 		}
 	})
 	b.Run("decode-stdlib", func(b *testing.B) {
@@ -42,10 +53,19 @@ func BenchmarkEncode(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_, _= hex.DecodeString(data)
+			_, _ = hex.DecodeString(data)
 		}
 	})
-	b.Run("decode-fast", func(b *testing.B) {
+	b.Run("decode-gohex", func(b *testing.B) {
+		data := "746869732d69732d612d74657374"
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_, _ = gohex.DecodeString(data)
+		}
+	})
+	/*b.Run("decode-fast", func(b *testing.B) {
 		data := "746869732d69732d612d74657374"
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -53,5 +73,5 @@ func BenchmarkEncode(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			_,_ = UnsafeDecodeString(data)
 		}
-	})
+	})*/
 }

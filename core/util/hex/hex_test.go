@@ -1,13 +1,14 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package hex
+package hex_test
 
 import (
 	"encoding/hex"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	gohex "github.com/tmthrgd/go-hex"
+	hex2 "github.com/zerjioang/etherniti/core/util/hex"
+	"testing"
 )
 
 func TestEncode(t *testing.T) {
@@ -16,11 +17,15 @@ func TestEncode(t *testing.T) {
 		assert.Equal(t, result, "746869732d69732d612d74657374")
 	})
 	t.Run("fast-encode", func(t *testing.T) {
-		result := UnsafeEncodeToString([]byte("this-is-a-test"))
+		result := hex2.UnsafeEncodeToString([]byte("this-is-a-test"))
 		assert.Equal(t, result, "746869732d69732d612d74657374")
 	})
 	t.Run("fast-encode-pooled", func(t *testing.T) {
-		result := UnsafeEncodeToStringPooled([]byte("this-is-a-test"))
+		result := hex2.UnsafeEncodeToStringPooled([]byte("this-is-a-test"))
+		assert.Equal(t, result, "746869732d69732d612d74657374")
+	})
+	t.Run("gohex-encode", func(t *testing.T) {
+		result := gohex.EncodeToString([]byte("this-is-a-test"))
 		assert.Equal(t, result, "746869732d69732d612d74657374")
 	})
 }
@@ -32,7 +37,7 @@ func TestDecode(t *testing.T) {
 		assert.Equal(t, result, []byte("this-is-a-test"))
 	})
 	t.Run("fast-decode", func(t *testing.T) {
-		result, err := UnsafeDecodeString("746869732d69732d612d74657374")
+		result, err := hex2.UnsafeDecodeString("746869732d69732d612d74657374")
 		assert.Nil(t, err)
 		assert.Equal(t, result, []byte("this-is-a-test"))
 	})

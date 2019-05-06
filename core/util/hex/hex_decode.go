@@ -83,6 +83,7 @@ func fromHexChar(c byte) (byte, bool) {
 
 	return 0, false
 }
+
 // fromHexChar converts a hex character into its value and a success flag.
 func fromHexCharDual(a byte, b byte) (a1 byte, b1 byte, ab bool, bb bool) {
 	switch {

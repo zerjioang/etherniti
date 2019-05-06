@@ -254,6 +254,22 @@
   revision = "1166b9ac2b65e46a43d8618d30d1554f4652d49b"
 
 [[projects]]
+  branch = "master"
+  digest = "1:8f326b9b29560f9e661f6f692a66b8b30db788bdb8550b3e5791ed3ee607e4d7"
+  name = "github.com/tmthrgd/asm"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "409546f4138f9ab0bd9b5fe426f362daeff840ec"
+
+[[projects]]
+  branch = "master"
+  digest = "1:e5a9550bd0d10e250a93e9d67ab830f6b2c2bb3dc7bda7616e49a89f89d84182"
+  name = "github.com/tmthrgd/go-hex"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "0bdcb15db6317286e8e8cbf89787c034d6707d7c"
+
+[[projects]]
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -334,6 +350,7 @@
     "github.com/stretchr/testify/require",
     "github.com/stretchr/testify/suite",
     "github.com/tidwall/gjson",
+    "github.com/tmthrgd/go-hex",
     "github.com/valyala/bytebufferpool",
     "golang.org/x/crypto/bcrypt",
     "golang.org/x/crypto/pbkdf2",
