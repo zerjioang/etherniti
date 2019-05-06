@@ -4,13 +4,14 @@
 package tor
 
 import (
+	"io/ioutil"
+	"strings"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/hashset"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/str"
-	"io/ioutil"
-	"strings"
 )
 
 type TorList struct {
@@ -36,6 +37,7 @@ func (l *TorList) LoadIps(path string) {
 		}
 	}
 }
+
 var (
 	TornodeSet TorList
 )

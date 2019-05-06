@@ -50,8 +50,8 @@ func (set *HashSetAtomic) Add(item string) {
 // this call is considered as unsafe because write locks are removed from it
 func (set *HashSetAtomic) UnsafeAddUint32(v uint32) {
 	d := set.Read()
-	d[v] = none 		// do the update that we need
-	set.m.Store(d)      // atomically replace the current object with the new one
+	d[v] = none    // do the update that we need
+	set.m.Store(d) // atomically replace the current object with the new one
 }
 
 func (set *HashSetAtomic) Read() HashUint32Set {

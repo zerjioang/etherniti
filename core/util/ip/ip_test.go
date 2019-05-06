@@ -4,9 +4,10 @@
 package ip
 
 import (
-	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIpToUint32(t *testing.T) {

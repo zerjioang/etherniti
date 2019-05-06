@@ -284,7 +284,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "7f726cade0ab7c929c16ce0b5b25bd201e25f39f"
+  revision = "f4e77d36d62c17c2336347bb2670ddbd02d092b7"
 
 [[projects]]
   branch = "master"
@@ -295,7 +295,7 @@
     "unix",
   ]
   pruneopts = "UT"
-  revision = "a43fa875dd822b81eb6d2ad538bc1f4caba169bd"
+  revision = "ca7f33d4116e3a1f9425755d6a44e7ed9b4c97df"
 
 [[projects]]
   branch = "master"
@@ -313,7 +313,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "5cec639030af3a6ada2732d9bfa1d3731ed55106"
+  revision = "2d16b83fe98cd1bed9e2ce9fdc86bd438d14aab7"
 
 [solve-meta]
   analyzer-name = "dep"

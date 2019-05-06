@@ -8,8 +8,9 @@
 package config
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 

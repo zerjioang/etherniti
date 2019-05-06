@@ -4,9 +4,10 @@
 package banner
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"runtime"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 )

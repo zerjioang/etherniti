@@ -27,7 +27,7 @@ func Ip2intLow(ip string) uint32 {
 	for i := 0; i < len(ip); i++ {
 		ipVal := ip[i]
 		if ipVal == asciiDot {
-			octets[currentOctect][3]=currentOctectPos
+			octets[currentOctect][3] = currentOctectPos
 			//move to the next octect
 			currentOctect++
 			currentOctectPos = 0
@@ -38,11 +38,13 @@ func Ip2intLow(ip string) uint32 {
 		}
 	}
 	// save last octet information
-	octets[currentOctect][3]=currentOctectPos
+	octets[currentOctect][3] = currentOctectPos
 
 	// convert octects string bytes to decimal
 	var octectsDecimal [4]byte
-	for i:=0; i<4;i++{
+	var l uint8 = 4
+	var i uint8 = 0
+	for i < l {
 		//process each octect data
 		// convert octects to uint32
 		// octets[0]*256³ + octets[1]*256² + octets[2]*256¹ + octets[1]*256⁰
@@ -50,12 +52,13 @@ func Ip2intLow(ip string) uint32 {
 		case 0:
 			octectsDecimal[i] = 0
 		case 1:
-			octectsDecimal[i] = octets[i][0]-asciiZero
+			octectsDecimal[i] = octets[i][0] - asciiZero
 		case 2:
-			octectsDecimal[i] = (octets[i][0]-asciiZero)*10 + (octets[i][1]-asciiZero)
+			octectsDecimal[i] = (octets[i][0]-asciiZero)*10 + (octets[i][1] - asciiZero)
 		case 3:
 			octectsDecimal[i] = (octets[i][0]-asciiZero)*100 + (octets[i][1]-asciiZero)*10 + (octets[i][2] - asciiZero)
 		}
+		i++
 	}
 	var intIp uint32
 	// intIp = uint32(octectsDecimal[0])*16777216 + uint32(octectsDecimal[1])*65536 + uint32(octectsDecimal[2])*256 + uint32(octectsDecimal[3])

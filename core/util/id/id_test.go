@@ -15,3 +15,10 @@ func TestGenerateUUID(t *testing.T) {
 		}
 	})
 }
+
+func TestGenerateID(t *testing.T) {
+	t.Run("id-entropy", func(t *testing.T) {
+		value := GenerateID()
+		t.Log("uuid value:", value.String())
+	})
+}

@@ -183,7 +183,6 @@ func (l UnixSocketListener) foreground() error {
 	}*/
 }
 
-
 func (l UnixSocketListener) shutdown() {
 	// The make built-in returns a value of type T (not *T), and it's memory is
 	// initialized.

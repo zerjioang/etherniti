@@ -14,4 +14,12 @@ func BenchmarkGenerateUUID(b *testing.B) {
 			_ = GenerateUUIDFromEntropy()
 		}
 	})
+	b.Run("uuid-from-entropy-2", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = GenerateID()
+		}
+	})
 }

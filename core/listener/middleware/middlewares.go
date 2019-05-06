@@ -5,8 +5,9 @@ package middleware
 
 import (
 	"errors"
-	ip2 "github.com/zerjioang/etherniti/core/util/ip"
 	"strings"
+
+	ip2 "github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics"
 
