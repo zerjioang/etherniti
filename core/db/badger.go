@@ -86,6 +86,7 @@ func (db *Db) Init() error {
 }
 
 func (db *Db) Query() error {
+	logger.Debug("querying db")
 	err := db.instance.View(func(txn *badger.Txn) error {
 		// Your code here…
 		return nil
@@ -94,6 +95,7 @@ func (db *Db) Query() error {
 }
 
 func (db *Db) PutKeyValue(key []byte, value []byte) error {
+	logger.Debug("inserting key-value in db")
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		err := txn.Set(key, value)
 		return err
@@ -107,6 +109,7 @@ func (db *Db) Close() error {
 }
 
 func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
+	logger.Debug("inserting unique key-value in db")
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
 		if err == nil && item != nil {
@@ -119,6 +122,7 @@ func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
 }
 
 func (db *Db) GetKeyValue(key []byte) ([]byte, error) {
+	logger.Debug("reading key from db")
 	var readedVal []byte
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
@@ -130,6 +134,7 @@ func (db *Db) GetKeyValue(key []byte) ([]byte, error) {
 	return readedVal, err
 }
 func (db *Db) Add(key, data []byte) error {
+	logger.Debug("adding new key-value to db")
 	return db.PutKeyValue(key, data)
 }
 

@@ -6,6 +6,8 @@ package data
 import "errors"
 
 var (
+	NotImplemented = []byte("not implemented")
+
 	Symbol             = []byte("symbol")
 	Name               = []byte("name")
 	Allowance          = []byte("allowance")

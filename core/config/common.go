@@ -28,6 +28,7 @@ var (
 	ResourcesDirInternalSecurity = ResourcesDirInternal + "/security"
 	ResourcesDirInternalBots     = ResourcesDirInternal + "/bots"
 	ResourcesDirInternalTor      = ResourcesDirInternal + "/tor"
+	ResourcesDirInternalTokens   = ResourcesDirInternal + "/tokens"
 	ResourcesDirInternalBadIps   = ResourcesDirInternal + "/badips"
 	ResourcesDirInternalCors     = ResourcesDirInternal + "/cors"
 	ResourcesDirInternalHosts    = ResourcesDirInternal + "/hosts"
@@ -39,6 +40,7 @@ var (
 	// define internal files
 	ResourcesDirPHP       = ResourcesDirRoot + "/phpinfo.php"
 	BlacklistedDomainFile = ResourcesDirInternalSecurity + "/domains.json"
+	TokenListFile         = ResourcesDirInternalTokens + "/list.json"
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
 	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
 	TorExitFile           = ResourcesDirInternalTor + "/tor_exit"

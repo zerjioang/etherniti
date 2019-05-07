@@ -115,10 +115,11 @@ func NewIndexController() *IndexController {
 }
 
 func Index(c *echo.Context) error {
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
 	if c.IsJsonRequest() {
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, indexWelcomeBytes)
+		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
 	}
-	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
+	return c.HTMLBlob(protocol.StatusOK, indexWelcomeHtmlBytes)
 }
 
 func (ctl *IndexController) Status(c *echo.Context) error {
