@@ -7,7 +7,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/abi"
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -29,7 +28,7 @@ func NewAbiController() AbiController {
 // profile abi data getter
 func (ctl *AbiController) getAbi(c *echo.Context) error {
 	var code int
-	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
+	c.OnSuccessCachePolicy = 10
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {
@@ -46,7 +45,7 @@ func (ctl *AbiController) getAbi(c *echo.Context) error {
 
 // profile abi data setter
 func (ctl *AbiController) setAbi(c *echo.Context) error {
-	_, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
+	c.OnSuccessCachePolicy = 10
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {

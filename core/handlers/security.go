@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/handlers/security"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -23,18 +24,16 @@ func NewSecurityController() SecurityController {
 // This list is maintained by GitHub user 409H at
 // https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json
 func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.DomainBlacklistBytesData())
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	return api.SendSuccessBlob(c,security.DomainBlacklistBytesData())
 }
 
 // return a whitelist of non phishing sites,
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.PhishingWhitelistRawBytes())
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	return api.SendSuccessBlob(c,security.PhishingWhitelistRawBytes())
 }
 
 // return a blacklist of phishing sites,
@@ -42,26 +41,23 @@ func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingBlacklist(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.PhishingBlacklistRawBytes())
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	return api.SendSuccessBlob(c,security.PhishingBlacklistRawBytes())
 }
 
 // return a list of fuzzy domains
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) fuzzylist(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
-	return c.JSONBlob(code, security.FuzzyDataRawBytes())
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	return api.SendSuccessBlob(c, security.FuzzyDataRawBytes())
 }
 
 // return whether given domain name is dangerous or not
 func (ctl SecurityController) isDangerousDomain(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, clientcache.CacheOneDay) // 24h cache directive
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
 	domainName := c.Param("domain")
-	return c.JSONBlob(code, security.IsDangerousDomain(domainName))
+	return api.SendSuccessBlob(c, security.IsDangerousDomain(domainName))
 }
 
 func (ctl SecurityController) RegisterRouters(router *echo.Group) {

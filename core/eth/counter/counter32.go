@@ -3,7 +3,10 @@
 
 package counter
 
-import "sync/atomic"
+import (
+	"encoding/json"
+	"sync/atomic"
+)
 
 type Count32 uint32
 
@@ -13,6 +16,15 @@ func (c *Count32) Increment() uint32 {
 
 func (c *Count32) Get() uint32 {
 	return atomic.LoadUint32((*uint32)(c))
+}
+
+func (c *Count32) Bytes() []byte {
+	v := atomic.LoadUint32((*uint32)(c))
+	raw, err := json.Marshal(v)
+	if err !=nil {
+		return []byte{}
+	}
+	return raw
 }
 
 // constructor like function

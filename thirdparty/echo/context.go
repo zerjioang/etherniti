@@ -542,6 +542,7 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.SchemeType = Other
 	c.SchemeName = ""
 	c.ip = ""
+	c.OnSuccessCachePolicy = 0
 	// NOTE: Don't reset because it has to have length c.echo.maxParam at all times
 	// c.pvalues = nil
 }

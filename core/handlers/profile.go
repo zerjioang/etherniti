@@ -9,7 +9,6 @@ import (
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/eth/counter"
@@ -68,9 +67,8 @@ func (ctl ProfileController) validate(c *echo.Context) error {
 
 // profile validation counter
 func (ctl ProfileController) count(c *echo.Context) error {
-	var code int
-	code, c = clientcache.Cached(c, true, 10) // cache policy: 10 seconds
-	return c.JSON(code, profilesCreated.Get())
+	c.OnSuccessCachePolicy = 10
+	return api.SendSuccessBlob(c, profilesCreated.Bytes())
 }
 
 // implemented method from interface RouterRegistrable

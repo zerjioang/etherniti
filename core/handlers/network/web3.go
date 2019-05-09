@@ -75,7 +75,8 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 		if found && result != nil {
 			//cache hit
 			logger.Info(key, ": cache hit")
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, result.([]byte))
+			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			return api.SendSuccessBlob(c, result.([]byte))
 		} else {
 			//cache miss
 			logger.Info(key, ": cache miss")
@@ -92,7 +93,8 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 			// save result in the cache
 			response := api.ToSuccess(data.Balance, result)
 			ctl.network.cache.Set(keyBytes, response)
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			return api.SendSuccessBlob(c, response)
 		}
 	} else {
 		// send invalid address message
@@ -148,7 +150,8 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 		//cache hit
 		logger.Info(key, ": cache hit")
 		response := api.ToSuccess(key, result.(string))
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
 		logger.Info(key, ": cache miss")
@@ -165,8 +168,9 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 		} else {
 			// save result in the cache
 			ctl.network.cache.Set(key, response)
+			c.OnSuccessCachePolicy = clientcache.CacheInfinite
 			response := api.ToSuccess(key, response)
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+			return api.SendSuccessBlob(c, response)
 		}
 	}
 }
@@ -181,7 +185,8 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 		//cache hit
 		logger.Info(key, ": cache hit")
 		response := api.ToSuccess(key, result)
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
 		logger.Info(key, ": cache miss")
@@ -197,7 +202,8 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 			return api.Error(c, err)
 		} else {
 			response := api.ToSuccess(data.IsGanache, d)
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			return api.SendSuccessBlob(c, response)
 		}
 	}
 }
@@ -227,7 +233,8 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 		//cache hit
 		logger.Info(method, ": cache hit")
 		response := api.ToSuccess(methodBytes, result)
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
 		logger.Info(method, ": cache miss")
@@ -248,7 +255,8 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 			// save result in the cache
 			ctl.network.cache.Set(cacheKeyBytes, rpcResponse)
 			response := api.ToSuccess(methodBytes, rpcResponse)
-			return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			return api.SendSuccessBlob(c, response)
 		}
 	}
 }
@@ -326,7 +334,8 @@ func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 			return api.Error(c, err)
 		}
 		response := api.ToSuccess(data.IsContract, result)
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		return api.SendSuccessBlob(c, response)
 	}
 	// send invalid address message
 	return api.ErrorStr(c, data.MissingAddress)
