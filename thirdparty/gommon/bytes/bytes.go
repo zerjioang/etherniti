@@ -10,7 +10,7 @@ import (
 )
 
 type (
-	// Bytes struct
+	// UnsafeBytes struct
 	Bytes struct{}
 )
 
@@ -29,7 +29,7 @@ var (
 	global  = New()
 )
 
-// New creates a Bytes instance.
+// New creates a UnsafeBytes instance.
 func New() *Bytes {
 	return &Bytes{}
 }
@@ -100,12 +100,12 @@ func (*Bytes) Parse(value string) (i int64, err error) {
 	}
 }
 
-// Format wraps global Bytes's Format function.
+// Format wraps global UnsafeBytes's Format function.
 func Format(b int64) string {
 	return global.Format(b)
 }
 
-// Parse wraps global Bytes's Parse function.
+// Parse wraps global UnsafeBytes's Parse function.
 func Parse(val string) (int64, error) {
 	return global.Parse(val)
 }

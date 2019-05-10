@@ -68,7 +68,7 @@ func (ctl ProfileController) validate(c *echo.Context) error {
 // profile validation counter
 func (ctl ProfileController) count(c *echo.Context) error {
 	c.OnSuccessCachePolicy = 10
-	return api.SendSuccessBlob(c, profilesCreated.Bytes())
+	return api.SendSuccessBlob(c, profilesCreated.UnsafeBytes())
 }
 
 // implemented method from interface RouterRegistrable

@@ -25,7 +25,7 @@ func NewSecurityController() SecurityController {
 // https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json
 func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
 	c.OnSuccessCachePolicy = clientcache.CacheInfinite
-	return api.SendSuccessBlob(c,security.DomainBlacklistBytesData())
+	return api.SendSuccessBlob(c, security.DomainBlacklistBytesData())
 }
 
 // return a whitelist of non phishing sites,
@@ -33,7 +33,7 @@ func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 	c.OnSuccessCachePolicy = clientcache.CacheInfinite
-	return api.SendSuccessBlob(c,security.PhishingWhitelistRawBytes())
+	return api.SendSuccessBlob(c, security.PhishingWhitelistRawBytes())
 }
 
 // return a blacklist of phishing sites,
@@ -42,7 +42,7 @@ func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingBlacklist(c *echo.Context) error {
 	c.OnSuccessCachePolicy = clientcache.CacheInfinite
-	return api.SendSuccessBlob(c,security.PhishingBlacklistRawBytes())
+	return api.SendSuccessBlob(c, security.PhishingBlacklistRawBytes())
 }
 
 // return a list of fuzzy domains

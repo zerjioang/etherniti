@@ -30,4 +30,31 @@ func TestCounter(t *testing.T) {
 
 		}
 	})
+	t.Run("atomic-uint32-bytes", func(t *testing.T) {
+		var c3 Count32
+		v1 := c3.Get()
+		if v1 == 0 {
+
+		}
+		c3.Increment()
+		_ = c3.UnsafeBytes()
+	})
+	t.Run("atomic-uint32-bytes-fixed", func(t *testing.T) {
+		var c3 Count32
+		v1 := c3.Get()
+		if v1 == 0 {
+
+		}
+		c3.Increment()
+		_ = c3.UnsafeBytesFixed()
+	})
+	t.Run("atomic-uint32-bytes-safe", func(t *testing.T) {
+		var c3 Count32
+		v1 := c3.Get()
+		if v1 == 0 {
+
+		}
+		c3.Increment()
+		_ = c3.SafeBytes()
+	})
 }

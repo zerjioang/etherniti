@@ -6,6 +6,7 @@ package fastime
 import (
 	"encoding/binary"
 	"time"
+	"unsafe"
 )
 
 type Duration int64
@@ -36,10 +37,14 @@ func (fastTime FastTime) Nanos() uint32 {
 	return fastTime.nsec
 }
 
-func (fastTime FastTime) NanosByte() []byte {
+func (fastTime FastTime) SafeBytes() []byte {
 	buf := make([]byte, binary.MaxVarintLen64)
 	n := binary.PutVarint(buf, fastTime.sec)
 	return buf[:n]
+}
+
+func (fastTime FastTime) UnsafeBytes() []byte {
+	return (*[8]byte)(unsafe.Pointer(&fastTime.sec))[:]
 }
 
 func (fastTime FastTime) Add(duration Duration) FastTime {

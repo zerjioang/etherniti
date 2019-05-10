@@ -106,7 +106,7 @@ func (a *Address) SetBytes(b []byte) {
 	copy(a[AddressLength-len(b):], b)
 }
 
-// Bytes gets the string representation of the underlying address.
+// UnsafeBytes gets the string representation of the underlying address.
 func (a Address) Bytes() []byte { return a[:] }
 
 // Big converts an address to a big integer.

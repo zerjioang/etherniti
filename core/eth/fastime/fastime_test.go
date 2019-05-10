@@ -40,6 +40,16 @@ func TestFastTime(t *testing.T) {
 
 		}
 	})
+	t.Run("safe-bytes", func(t *testing.T) {
+		tm2 := Now()
+		raw := tm2.SafeBytes()
+		t.Log(raw)
+	})
+	t.Run("unsafe-bytes", func(t *testing.T) {
+		tm2 := Now()
+		raw := tm2.UnsafeBytes()
+		t.Log(raw)
+	})
 }
 
 func TestStandardTime(t *testing.T) {

@@ -6,9 +6,9 @@ package model
 // Object - The transaction call object
 type EthRequestParams struct {
 
-	// DATA, 20 Bytes - (optional) The address the transaction is sent from.
+	// DATA, 20 UnsafeBytes - (optional) The address the transaction is sent from.
 	From string `json:"from,omitempty"`
-	// DATA, 20 Bytes - The address the transaction is directed to.
+	// DATA, 20 UnsafeBytes - The address the transaction is directed to.
 	To string `json:"to,omitempty"`
 	// QUANTITY - (optional) Integer of the gas provided for the transaction execution.
 	// eth_call consumes zero gas, but this parameter may be needed by some executions.
