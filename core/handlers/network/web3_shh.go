@@ -33,7 +33,7 @@ func (ctl *Web3ShhController) shhVersion(c *echo.Context) error {
 		return api.Error(c, cliErr)
 	}
 
-	response, err := client.EthMethodNoParams("shh_version")
+	response, err := client.ShhVersion()
 	if err != nil {
 		// send invalid response message
 		return api.Error(c, err)

@@ -123,7 +123,7 @@ func TestEthRPC_Call(t *testing.T) {
 	})
 	t.Run("eth_hashrate", func(t *testing.T) {
 		client := NewDefaultRPC(localGanache, true)
-		result, err := client.EthHashrate()
+		result, err := client.EthHashRate()
 		if err != nil {
 			t.Error("failed to post", err)
 		} else {

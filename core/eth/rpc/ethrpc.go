@@ -253,6 +253,7 @@ func (rpc *EthRPC) EthSyncing() (*Syncing, error) {
 	}
 	syncing := new(Syncing)
 	if bytes.Equal(result, []byte("false")) {
+		//no syncing, return false
 		return syncing, nil
 	}
 	err = json.Unmarshal(result, syncing)
@@ -283,29 +284,28 @@ func (rpc *EthRPC) EthMining() (bool, error) {
 	return mining, err
 }
 
-// EthHashrate returns the number of hashes per second that the node is mining with.
-func (rpc *EthRPC) EthHashrate() (int, error) {
+// EthHashRate returns the number of hashes per second that the node is mining with.
+func (rpc *EthRPC) EthHashRate() (int, error) {
 	var response string
-
-	if err := rpc.post("eth_hashrate", &response, nil); err != nil {
+	err := rpc.post("eth_hashrate", &response, nil);
+	if err != nil {
 		return 0, err
 	}
-
 	return ParseInt(response)
 }
 
 // EthGasPrice returns the current price per gas in wei.
 func (rpc *EthRPC) EthGasPrice() (int64, error) {
 	var response string
-	if err := rpc.post("eth_gasPrice", &response, nil); err != nil {
+	err := rpc.post("eth_gasPrice", &response, nil);
+	if err != nil {
 		return 0, err
 	}
 	// example 0x4a817c800
 	// fast check if string starts with 0x
-	if len(response) > 2 && response[0] == 48 && response[1] == 120 {
+	if len(response) > 2 && response[1] == 'x' && response[0] == '0' {
 		response = response[2:]
 	}
-	//return ParseBigInt(response)
 	return ParseHexToInt(response)
 }
 
@@ -413,11 +413,6 @@ func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
 		return 0, err
 	}
 	return ParseInt(response)
-}
-
-// double quotes given string
-func (rpc *EthRPC) doubleQuote(data string) string {
-	return `"` + data + `"`
 }
 
 // EthGetCode returns code at a given address.
@@ -604,8 +599,48 @@ func (rpc *EthRPC) EthGetPendingTransactions(hash string) (*TransactionReceipt, 
 	return transactionReceipt, nil
 }
 
+// eth_getUncleByBlockHashAndIndex
+// Returns information about a uncle of a block by hash and uncle index position.
+// params: [
+//   '0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b',
+//   '0x0' // 0
+// ]
+// Note: An uncle doesn't contain individual transactions.
+func (rpc *EthRPC) EthGetUncleByBlockHashAndIndex(hash string, uncleIndex int) (*TransactionReceipt, error) {
+	transactionReceipt := new(TransactionReceipt)
+	params := func() string {
+		return "["+rpc.doubleQuote(hash)+","+rpc.doubleQuote(IntToHex(uncleIndex))+"]"
+	}
+	err := rpc.post("eth_getUncleByBlockHashAndIndex", transactionReceipt, params)
+	if err != nil {
+		return nil, err
+	}
+	return transactionReceipt, nil
+}
+
+// eth_getUncleByBlockNumberAndIndex
+// Returns information about a uncle of a block by number and uncle index position.
+// params: [
+//   '0x29c', // 668
+//   '0x0' // 0
+// ]
+// Note: An uncle doesn't contain individual transactions.
+func (rpc *EthRPC) EthGetUncleByBlockNumberAndIndex(blockNumber string, uncleIndex int) (*TransactionReceipt, error) {
+	transactionReceipt := new(TransactionReceipt)
+	params := func() string {
+		return "["+rpc.doubleQuote(blockNumber)+","+rpc.doubleQuote(IntToHex(uncleIndex))+"]"
+	}
+	err := rpc.post("eth_getUncleByBlockNumberAndIndex", transactionReceipt, params)
+	if err != nil {
+		return nil, err
+	}
+	return transactionReceipt, nil
+}
+
+
 // EthGetCompilers returns a list of available compilers in the client.
 // @deprecated
+// returns Array - Array of available compilers.
 func (rpc *EthRPC) EthGetCompilers() ([]string, error) {
 	var compilers []string
 	params := func() string {
@@ -615,15 +650,42 @@ func (rpc *EthRPC) EthGetCompilers() ([]string, error) {
 	return compilers, err
 }
 
-// TODO implement
 // eth_compileSolidity
 // @deprecated
+// Returns compiled solidity code.
+//   DATA - The compiled source code.
 func (rpc *EthRPC) EthCompileSolidity() ([]string, error) {
 	var compilers []string
 	params := func() string {
-		return ""
+		return "contract test{function multiply(uint a)returns(uint d){return a * 7;}}"
 	}
 	err := rpc.post("eth_compileSolidity", &compilers, params)
+	return compilers, err
+}
+
+// eth_compileLLL
+// @deprecated
+// Returns compiled LLL code.
+//   DATA - The compiled source code.
+func (rpc *EthRPC) EthCompileLLL() ([]string, error) {
+	var compilers []string
+	params := func() string {
+		return "(returnlll (suicide (caller)))"
+	}
+	err := rpc.post("eth_compileLLL", &compilers, params)
+	return compilers, err
+}
+
+// eth_compileSerpent
+// @deprecated
+// Returns compiled Serpent code.
+//   DATA - The compiled source code.
+func (rpc *EthRPC) EthCompileSerpent() ([]string, error) {
+	var compilers []string
+	params := func() string {
+		return "/* some serpent */"
+	}
+	err := rpc.post("eth_compileSerpent", &compilers, params)
 	return compilers, err
 }
 
@@ -699,50 +761,395 @@ func (rpc *EthRPC) EthGetLogs(filter FilterParams) ([]Log, error) {
 	return logs, err
 }
 
-// TODO implement
+// eth_getWork
+// Returns the hash of the current block, the seedHash, and the boundary condition to be met ("target").
 // EthGetWork returns an array of all logs matching a given filter object.
-func (rpc *EthRPC) EthGetWork(filter FilterParams) ([]Log, error) {
-	var logs []Log
+// Returns
+// Array - Array with the following properties:
+// DATA, 32 Bytes - current block header pow-hash
+// DATA, 32 Bytes - the seed hash used for the DAG.
+// DATA, 32 Bytes - the boundary condition ("target"), 2^256 / difficulty.
+func (rpc *EthRPC) EthGetWork() ([]string, error) {
+	var logs []string
 	params := func() string {
-		return filter.String()
+		return ""
 	}
 	err := rpc.post("eth_getWork", &logs, params)
 	return logs, err
 }
 
-// TODO implement
+// eth_submitWork
 // EthSubmitWork
-func (rpc *EthRPC) EthSubmitWork(filter FilterParams) ([]Log, error) {
-	var logs []Log
+// Used for submitting a proof-of-work solution.
+// DATA, 8 Bytes - The nonce found (64 bits)
+// DATA, 32 Bytes - The header's pow-hash (256 bits)
+// DATA, 32 Bytes - The mix digest (256 bits)
+// params: [
+//  "0x0000000000000001",
+//  "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+//  "0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000"
+// ]
+// Boolean - returns true if the provided solution is valid, otherwise false.
+func (rpc *EthRPC) EthSubmitWork(nonce, header, digest string) (bool, error) {
+	var result bool
 	params := func() string {
-		return filter.String()
+		return "["+rpc.doubleQuote(nonce)+","+rpc.doubleQuote(header)+","+rpc.doubleQuote(digest)+"]"
 	}
-	err := rpc.post("eth_submitWork", &logs, params)
-	return logs, err
+	err := rpc.post("eth_submitWork", &result, params)
+	return result, err
 }
 
-// TODO implement
-// EthSubmitHashrate
-func (rpc *EthRPC) EthSubmitHashrate(filter FilterParams) ([]Log, error) {
-	var logs []Log
+// eth_submitHashrate
+// Used for submitting mining hashrate.
+// Parameters
+//    Hashrate, a hexadecimal string representation (32 bytes) of the hash rate
+//    ID, String - A random hexadecimal(32 bytes) ID identifying the client
+// params: [
+//  "0x0000000000000000000000000000000000000000000000000000000000500000",
+//  "0x59daa26581d0acd1fce254fb7e85952f4c09d0915afd33d3886cd914bc7d283c"
+// ]
+// returns
+// Boolean - returns true if submitting went through succesfully and false otherwise.
+func (rpc *EthRPC) EthSubmitHashrate(hashrate string, clientid string) (bool, error) {
+	var result bool
 	params := func() string {
-		return filter.String()
+		return "["+rpc.doubleQuote(hashrate)+","+rpc.doubleQuote(clientid)+"]"
 	}
-	err := rpc.post("eth_submitHashrate", &logs, params)
-	return logs, err
+	err := rpc.post("eth_submitHashrate", &result, params)
+	return result, err
 }
 
-// TODO implement
-// EthGetProof
-func (rpc *EthRPC) EthGetProof(filter FilterParams) ([]Log, error) {
-	var logs []Log
+// eth_getProof
+// Returns the account- and storage-values of the specified account including the Merkle-proof.
+// getProof-Parameters
+//
+//    DATA, 20 bytes - address of the account or contract
+//    ARRAY, 32 Bytes - array of storage-keys which should be proofed and included. See eth_getStorageAt
+//    QUANTITY|TAG - integer block number, or the string "latest" or "earliest", see the default block parameter
+//
+//Example Parameters
+//
+//params: ["0x1234567890123456789012345678901234567890",["0x0000000000000000000000000000000000000000000000000000000000000000","0x0000000000000000000000000000000000000000000000000000000000000001"],"latest"]
+//
+//getProof-Returns
+
+//Returns Object - A account object:
+	//balance: QUANTITY - the balance of the account. See eth_getBalance
+	//codeHash: DATA, 32 Bytes - hash of the code of the account. For a simple Account without code it will return "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+	//nonce: QUANTITY, - nonce of the account. See eth_getTransactionCount
+	//storageHash: DATA, 32 Bytes - SHA3 of the StorageRoot. All storage will deliver a MerkleProof starting with this rootHash.
+	//accountProof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the stateRoot-Node, following the path of the SHA3 (address) as key.
+	//storageProof: ARRAY - Array of storage-entries as requested. Each entry is a object with these properties:
+	//key: QUANTITY - the requested storage key value: QUANTITY - the storage value proof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the storageHash-Node, following the path of the SHA3 (key) as path.
+func (rpc *EthRPC) EthGetProof(address string, keys []string, blocktime string) (bool, error) {
+	var response bool
 	params := func() string {
-		return filter.String()
+		return "["+rpc.doubleQuote(address)+"]"
 	}
-	err := rpc.post("eth_getProof", &logs, params)
-	return logs, err
+	err := rpc.post("eth_getProof", &response, params)
+	return response, err
+}
+// db_putString
+// Stores a string in the local database.
+//Note this function is deprecated and will be removed in the future.
+// Parameters
+//
+//    String - Database name.
+//    String - Key name.
+//    String - String to store.
+//
+//Example Parameters
+//
+//params: [
+//  "testDB",
+//  "myKey",
+//  "myString"
+//]
+//
+//Returns
+//
+//Boolean - returns true if the value was stored, otherwise false.
+func (rpc *EthRPC) DbPutString(dbname string, key string, value string) (bool, error) {
+	var response bool
+	params := func() string {
+		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+","+rpc.doubleQuote(value)+"]"
+	}
+	err := rpc.post("db_putString", &response, params)
+	return response, err
 }
 
+// db_getString
+// Returns string from the local database.
+// Note this function is deprecated and will be removed in the future.
+// Parameters
+// String - Database name.
+// String - Key name.
+// Example Parameters
+//
+// params: [
+//  "testDB",
+//  "myKey",
+// ]
+// Returns
+//
+// String - The previously stored string.
+func (rpc *EthRPC) DbGetString(dbname string, key string) (string, error) {
+	var value string
+	params := func() string {
+		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+"]"
+	}
+	err := rpc.post("db_getString", &value, params)
+	return value, err
+}
+
+// db_putHex
+// Stores binary data in the local database.
+//Note this function is deprecated and will be removed in the future.
+// Parameters
+//
+//    String - Database name.
+//    String - Key name.
+//    DATA - The data to store.
+//
+//Example Parameters
+//
+//params: [
+//  "testDB",
+//  "myKey",
+//  "0x68656c6c6f20776f726c64"
+//]
+//
+//Returns
+//
+//Boolean - returns true if the value was stored, otherwise false.
+func (rpc *EthRPC) DbPutHex(dbname string, key string, value string) (bool, error) {
+	var response bool
+	params := func() string {
+		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+","+rpc.doubleQuote(value)+"]"
+	}
+	err := rpc.post("db_putHex", &response, params)
+	return response, err
+}
+
+// db_getHex
+// Returns binary data from the local database.
+// Note this function is deprecated and will be removed in the future.
+// Parameters
+//
+//    String - Database name.
+//    String - Key name.
+// Example Parameters
+//
+// params: [
+//  "testDB",
+//  "myKey",
+// ]
+//
+// Returns
+//
+// DATA - The previously stored data.
+func (rpc *EthRPC) DbGetHex(dbname string, key string) (string, error) {
+	var value string
+	params := func() string {
+		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+"]"
+	}
+	err := rpc.post("db_getHex", &value, params)
+	return value, err
+}
+
+// shh_version
+// Returns the current whisper protocol version.
+// Parameters
+// 		none
+// Returns
+// 		String - The current whisper protocol version
+func (rpc *EthRPC) ShhVersion() (string, error) {
+	var sshVersion string
+	err := rpc.post("shh_version", &sshVersion, nil)
+	return sshVersion, err
+}
+
+// shh_post
+// Sends a whisper message.
+// Parameters
+//
+//     Object - The whisper post object:
+//
+//     from: DATA, 60 Bytes - (optional) The identity of the sender.
+//     to: DATA, 60 Bytes - (optional) The identity of the receiver. When present whisper will encrypt the message so that only the receiver can decrypt it.
+//     topics: Array of DATA - Array of DATA topics, for the receiver to identify messages.
+//     payload: DATA - The payload of the message.
+//     priority: QUANTITY - The integer of the priority in a range from ... (?).
+//     ttl: QUANTITY - integer of the time to live in seconds.
+//
+// Example Parameters
+//
+// params: [{
+//   from: "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
+//   to: "0x3e245533f97284d442460f2998cd41858798ddf04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a0d4d661997d3940272b717b1",
+//   topics: ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
+//   payload: "0x7b2274797065223a226d6",
+//   priority: "0x64",
+//   ttl: "0x64",
+// }]
+//
+// Returns
+//
+// Boolean - returns true if the message was send, otherwise false.
+// TODO develop this option
+func (rpc *EthRPC) ShhPost(data model.WhisperParams) (string, error) {
+	var sshVersion string
+	err := rpc.post("shh_post", &sshVersion, nil)
+	return sshVersion, err
+}
+
+// shh_newIdentity
+// Creates new whisper identity in the client.
+// Parameters: none
+// Returns
+//		DATA, 60 Bytes - the address of the new identiy.
+func (rpc *EthRPC) ShhNewIdentity() (string, error) {
+	var newIdAddress string
+	err := rpc.post("shh_newIdentity", &newIdAddress, nil)
+	return newIdAddress, err
+}
+
+// shh_hasIdentity
+// Checks if the client hold the private keys for a given identity.
+// Parameters
+//    DATA, 60 Bytes - The identity address to check.
+//Example Parameters
+//params: [  "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1"
+//]
+// Returns
+// Boolean - returns true if the client holds the privatekey for that identity, otherwise false.
+func (rpc *EthRPC) SshHasIdentity(identityKey string) (bool, error) {
+	var response bool
+	params := func() string {
+		return "["+rpc.doubleQuote(identityKey)+"]"
+	}
+	err := rpc.post("shh_hasIdentity", &response, params)
+	return response, err
+}
+
+// shh_newGroup
+// Creates a new group.
+// Parameters: none
+//Returns
+//	DATA, 60 Bytes - the address of the new group.
+func (rpc *EthRPC) ShhNewGroup() (string, error) {
+	var groupId string
+	err := rpc.post("shh_newGroup", &groupId, nil)
+	return groupId, err
+}
+
+// shh_addToGroup
+// Adds a whisper identity to the group.
+//Parameters
+//    DATA, 60 Bytes - The identity address to add to a group.
+// Example Parameters
+// params: [ "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1"
+// ]
+// Returns
+// 		Boolean - returns true if the identity was successfully added to the group, otherwise false.
+func (rpc *EthRPC) ShhAddToGroup(identityKey string) (bool, error) {
+	var response bool
+	params := func() string {
+		return "["+rpc.doubleQuote(identityKey)+"]"
+	}
+	err := rpc.post("shh_addToGroup", &response, params)
+	return response, err
+}
+
+// shh_newFilter
+// Creates filter to notify, when client receives whisper message matching the filter options.
+// Parameters
+//
+//     Object - The filter options:
+//
+//     to: DATA, 60 Bytes - (optional) Identity of the receiver. When present it will try to decrypt any incoming message if the client holds the private key to this identity.
+//     topics: Array of DATA - Array of DATA topics which the incoming message's topics should match. You can use the following combinations:
+//         [A, B] = A && B
+//         [A, [B, C]] = A && (B || C)
+//         [null, A, B] = ANYTHING && A && B null works as a wildcard
+//
+// Example Parameters
+//
+// params: [{
+//    "topics": ['0x12341234bf4b564f'],
+//    "to": "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1"
+// }]
+//
+// Returns
+//
+// QUANTITY - The newly created filter.
+// TODO develop
+func (rpc *EthRPC) ShhNewFilter() (string, error) {
+	var groupId string
+	err := rpc.post("shh_newGroup", &groupId, nil)
+	return groupId, err
+}
+
+// shh_uninstallFilter
+// Uninstalls a filter with given id. Should always be called when
+// watch is no longer needed. Additonally Filters timeout when they
+// aren't requested with shh_getFilterChanges for a period of time.
+// Parameters
+//    QUANTITY - The filter id.
+// Example Parameters
+// params: [
+// "0x7" // 7
+// ]
+// Returns
+// Boolean - true if the filter was successfully uninstalled, otherwise false.
+func (rpc *EthRPC) ShhUninstallFilter() (bool, error) {
+	var response bool
+	err := rpc.post("shh_uninstallFilter", &response, nil)
+	return response, err
+}
+
+// shh_getFilterChanges
+// Polling method for whisper filters. Returns new messages since the last call of this method.
+// Note calling the shh_getMessages method, will reset the buffer for this method, so that you won't receive duplicate messages.
+// Parameters
+//    QUANTITY - The filter id.
+// Example Parameters
+// params: [
+// "0x7" // 7
+// ]
+// Returns
+// Array - Array of messages received since last poll:
+//    hash: DATA, 32 Bytes (?) - The hash of the message.
+//    from: DATA, 60 Bytes - The sender of the message, if a sender was specified.
+//    to: DATA, 60 Bytes - The receiver of the message, if a receiver was specified.
+//    expiry: QUANTITY - Integer of the time in seconds when this message should expire (?).
+//    ttl: QUANTITY - Integer of the time the message should float in the system in seconds (?).
+//    sent: QUANTITY - Integer of the unix timestamp when the message was sent.
+//    topics: Array of DATA - Array of DATA topics the message contained.
+//    payload: DATA - The payload of the message.
+//    workProved: QUANTITY - Integer of the work this message required before it was send (?).
+func (rpc *EthRPC) ShhGetFilterChanges() (string, error) {
+	var groupId string
+	err := rpc.post("shh_getFilterChanges", &groupId, nil)
+	return groupId, err
+}
+
+// shh_getMessages
+// Get all messages matching a filter. Unlike shh_getFilterChanges this returns all messages.
+// Parameters
+//    QUANTITY - The filter id.
+// params: [
+//  "0x7" // 7
+// ]
+// Returns: see shh_getFilterChanges
+func (rpc *EthRPC) SshGetMessages(filterId string) ([]model.FilterChanges, error) {
+	var response []model.FilterChanges
+	params := func() string {
+		return "["+rpc.doubleQuote(filterId)+"]"
+	}
+	err := rpc.post("shh_getMessages", &response, params)
+	return response, err
+}
 func (rpc *EthRPC) generateTransactionPayload(contract string, data string, block string, gas string, gasprice string, params *model.EthRequestParams) string {
 	requestParams := map[string]interface{}{
 		"to":   contract,
@@ -951,12 +1358,6 @@ func fromStringToAddress(addr string) (fixtures.Address, error) {
 	return a, nil
 }
 
-// @deprecated
-// Eth1 returns 1 ethereum value (10^18 wei)
-func (rpc *EthRPC) Eth1() *big.Int {
-	return Eth1()
-}
-
 // Eth1 returns 1 ethereum value (10^18 wei)
 func Eth1() *big.Int {
 	return oneEth
@@ -965,4 +1366,9 @@ func Eth1() *big.Int {
 // Eth1 returns 1 ethereum value (10^18 wei)
 func Eth1Int64() int64 {
 	return oneEthInt64
+}
+
+// double quotes given string
+func (rpc *EthRPC) doubleQuote(data string) string {
+	return `"` + data + `"`
 }

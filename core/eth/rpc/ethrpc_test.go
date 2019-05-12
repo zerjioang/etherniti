@@ -304,7 +304,7 @@ func (s *EthRPCTestSuite) TestEthMining() {
 
 func (s *EthRPCTestSuite) TestEthHashrate() {
 	s.registerResponseError(errors.New("Error"))
-	hashrate, err := s.rpc.EthHashrate()
+	hashrate, err := s.rpc.EthHashRate()
 	s.Require().NotNil(err)
 
 	s.registerResponse(`"0x38a"`, func(body []byte) {
@@ -312,7 +312,7 @@ func (s *EthRPCTestSuite) TestEthHashrate() {
 		s.paramsEqual(body, "null")
 	})
 
-	hashrate, err = s.rpc.EthHashrate()
+	hashrate, err = s.rpc.EthHashRate()
 	s.Require().Nil(err)
 	s.Require().Equal(906, hashrate)
 }

@@ -304,7 +304,7 @@ func (s *EthRPCBenchSuite) TestEthMining() {
 
 func (s *EthRPCBenchSuite) TestEthHashrate() {
 	s.registerResponseError(errors.New("Error"))
-	hashrate, err := s.rpc.EthHashrate()
+	hashrate, err := s.rpc.EthHashRate()
 	s.Require().NotNil(err)
 
 	s.registerResponse(`"0x38a"`, func(body []byte) {
@@ -312,7 +312,7 @@ func (s *EthRPCBenchSuite) TestEthHashrate() {
 		s.paramsEqual(body, "null")
 	})
 
-	hashrate, err = s.rpc.EthHashrate()
+	hashrate, err = s.rpc.EthHashRate()
 	s.Require().Nil(err)
 	s.Require().Equal(906, hashrate)
 }
@@ -1170,16 +1170,6 @@ func BenchmarkEth1(b *testing.B) {
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = Eth1().Int64()
-		}
-	})
-	b.Run("eth1-client", func(b *testing.B) {
-		client := NewDefaultRPC("", false)
-		b.ReportAllocs()
-		b.SetBytes(1)
-
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			_ = client.Eth1().Int64()
 		}
 	})
 	b.Run("eth1-global", func(b *testing.B) {
