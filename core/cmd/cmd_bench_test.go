@@ -4,9 +4,10 @@
 package cmd
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"sync"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 func BenchmarkCmd(b *testing.B) {

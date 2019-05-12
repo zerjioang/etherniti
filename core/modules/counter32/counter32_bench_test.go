@@ -6,7 +6,7 @@ package counter32_test
 import (
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/eth/counter"
+	"github.com/zerjioang/etherniti/core/modules/counter32"
 )
 
 func BenchmarkCounterPtr(b *testing.B) {

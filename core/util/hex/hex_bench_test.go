@@ -5,9 +5,10 @@ package hex_test
 
 import (
 	"encoding/hex"
+	"testing"
+
 	gohex "github.com/tmthrgd/go-hex"
 	hex2 "github.com/zerjioang/etherniti/core/util/hex"
-	"testing"
 )
 
 func BenchmarkEncode(b *testing.B) {

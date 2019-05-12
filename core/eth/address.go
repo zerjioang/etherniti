@@ -4,8 +4,9 @@
 package eth
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
 	"regexp"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
@@ -27,13 +28,13 @@ func ConvertAddress(addr string) fixtures.Address {
 // check if an address is syntactically valid or not
 // example address: 0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 func IsValidAddress(addr string) bool {
-	if len(addr)==42 {
+	if len(addr) == 42 {
 		raw := str.UnsafeBytes(addr)
 		// for bound checks speed up
 		_ = raw[41]
 		// check adress begin (0x)
-		zero := raw[0]
 		x := raw[1]
+		zero := raw[0]
 		if zero == '0' && x == 'x' {
 			//check address body
 			for i := 2; i < 40; i++ {
@@ -50,7 +51,7 @@ func IsValidAddress(addr string) bool {
 
 // IsZeroAddress validate if it's a 0 address
 func IsZeroAddress(addr string) bool {
-	if len(addr)==42 {
+	if len(addr) == 42 {
 		return addr == "0x0000000000000000000000000000000000000000"
 	}
 	return false

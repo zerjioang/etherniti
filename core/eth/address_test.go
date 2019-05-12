@@ -4,9 +4,10 @@
 package eth
 
 import (
-	"github.com/stretchr/testify/assert"
 	"math/big"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 )

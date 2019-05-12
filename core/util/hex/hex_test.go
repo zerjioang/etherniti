@@ -5,10 +5,11 @@ package hex_test
 
 import (
 	"encoding/hex"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	gohex "github.com/tmthrgd/go-hex"
 	hex2 "github.com/zerjioang/etherniti/core/util/hex"
-	"testing"
 )
 
 func TestEncode(t *testing.T) {

@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/modules/counter32"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -12,7 +13,6 @@ import (
 	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/eth/counter"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"

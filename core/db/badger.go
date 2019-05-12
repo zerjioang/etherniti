@@ -5,11 +5,12 @@ package db
 
 import (
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/data"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/dgraph-io/badger"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -20,12 +21,12 @@ type Db struct {
 	instance *badger.DB
 }
 
-var(
-	defaultConfig   = badger.DefaultOptions
-	instance *Db
-	once sync.Once
-	uid = os.Getuid()
-	gid = os.Getgid()
+var (
+	defaultConfig = badger.DefaultOptions
+	instance      *Db
+	once          sync.Once
+	uid           = os.Getuid()
+	gid           = os.Getgid()
 )
 
 func init() {

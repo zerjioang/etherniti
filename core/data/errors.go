@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	NotImplementedStr = "not implemented"
-	ErrUnknownModeStr = "unknown mode selected. Allowed modes are: single, git, zip, targz"
+	NotImplementedStr    = "not implemented"
+	ErrUnknownModeStr    = "unknown mode selected. Allowed modes are: single, git, zip, targz"
 	SolcVersionFailedStr = "failed to get solc version"
 )
 
@@ -41,7 +41,7 @@ var (
 	DataBindFailedStr = "failed to execute requested operation"
 	DataBindFailed    = []byte(DataBindFailedStr)
 
-	SolcVersionFailed    = []byte(SolcVersionFailedStr)
+	SolcVersionFailed = []byte(SolcVersionFailedStr)
 
 	AddressNoSetupStr = "invalid ethereum address setup when creating connection profile. Please provide a alid address as 'from'"
 
@@ -74,7 +74,6 @@ var (
 	QuiknodeJwtErrorMessage = []byte("please provide a QuikNode connection profile token including provided full peer endpoint URL")
 	JwtErrorMessage         = []byte("please provide a connection profile token for this kind of call")
 
-
 	ReadErr = []byte("there was an error during execution")
 	BindErr = []byte("there was an error while processing your request information")
 
@@ -106,10 +105,10 @@ var (
 var (
 	ErrUnknownMode           = errors.New(ErrUnknownModeStr)
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)
-	ErrNotImplemented = errors.New(NotImplementedStr)
+	ErrNotImplemented        = errors.New(NotImplementedStr)
 )
 
 // database related errors
-var(
+var (
 	DuplicateKeyErr = errors.New("duplicate key found on database. cannot store")
 )
