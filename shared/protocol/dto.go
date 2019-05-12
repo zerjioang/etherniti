@@ -110,9 +110,33 @@ type HdWalletResponse struct {
 // abi link request dto
 type AbiLinkRequest json.RawMessage
 
+// contract compilation options
+type ContractCompilationOpts struct {
+	// Select desired EVM version. Either homestead,
+	//  tangerineWhistle, spuriousDragon, byzantium (default) or
+	//  constantinople.
+	Optimize           bool
+	EstimateGas        bool
+	GenerateAsm        bool
+	GenerateOpcodes    bool
+	GenerateBin        bool
+	GenerateRuntimeBin bool
+	GenerateAbi        bool
+	GenerateHashes     bool
+	OptimizeRuns       int
+	EvmVersion         string
+}
+
 // contract compilation request dto
-type ContractCompileRequest struct {
-	Contract string `json:"contract" form:"contract" query:"contract"`
+type SingleFileContractCompileRequest struct {
+	ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
+	Contract                string `json:"contract" form:"contract" query:"contract"`
+}
+
+// contract compilation request dto
+type MultiFileContractCompileRequest struct {
+	ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
+	Contract                []string `json:"contract" form:"contract" query:"contract"`
 }
 
 // contract compilation response dto

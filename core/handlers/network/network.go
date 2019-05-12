@@ -24,12 +24,12 @@ var (
 
 // eth network controller
 type NetworkController struct {
-	//ethereum interaction cache
-	cache *cache.MemoryCache
 	//main connection peer address/ip
 	peer string
 	//connection name: mainet, ropsten, rinkeby, etc
 	networkName string
+	//ethereum interaction cache
+	cache *cache.MemoryCache
 }
 
 // constructor like function

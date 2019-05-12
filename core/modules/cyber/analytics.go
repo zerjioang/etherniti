@@ -64,6 +64,6 @@ func processAnalytics(ip string, r *http.Request) {
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk
-		collection.PutKeyValue(n.NanosByte(), raw)
+		collection.PutKeyValue(n.SafeBytes(), raw)
 	}
 }

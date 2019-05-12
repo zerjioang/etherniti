@@ -115,16 +115,17 @@ func NewIndexController() *IndexController {
 }
 
 func Index(c *echo.Context) error {
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
 	if c.IsJsonRequest() {
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, indexWelcomeBytes)
+		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
 	}
-	return clientcache.CachedHtml(c, true, clientcache.CacheInfinite, indexWelcomeHtmlBytes)
+	return c.HTMLBlob(protocol.StatusOK, indexWelcomeHtmlBytes)
 }
 
 func (ctl *IndexController) Status(c *echo.Context) error {
 	data := ctl.status()
 	var code int
-	code, c = clientcache.Cached(c, true, 5) // 5 seconds cache directive
+	c.OnSuccessCachePolicy = 5
 	return c.JSONBlob(code, data)
 }
 
@@ -137,7 +138,7 @@ func (ctl *IndexController) status() []byte {
 func (ctl *IndexController) Integrity(c *echo.Context) error {
 	data := ctl.integrity()
 	var code int
-	code, c = clientcache.Cached(c, true, 86400) // 24h cache directive
+	c.OnSuccessCachePolicy = clientcache.CacheOneDay
 	return c.JSONBlob(code, data)
 }
 

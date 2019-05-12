@@ -16,8 +16,11 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/json-iterator/go"
 	"github.com/zerjioang/etherniti/core/config"
@@ -67,6 +70,8 @@ type Context struct {
 	SchemeType RequestScheme
 	SchemeName string
 	ip         string
+	// http client cache policy
+	OnSuccessCachePolicy int
 }
 
 var (
@@ -303,11 +308,11 @@ func (c *Context) HTML(code int, html string) (err error) {
 }
 
 func (c *Context) HTMLBlob(code int, b []byte) (err error) {
-	return c.Blob(code, MIMETextHTMLCharsetUTF8, b)
+	return c.FastBlob(code, MIMETextHTMLCharsetUTF8, b)
 }
 
 func (c *Context) String(code int, s string) (err error) {
-	return c.Blob(code, MIMETextPlainCharsetUTF8, []byte(s))
+	return c.FastBlob(code, MIMETextPlainCharsetUTF8, []byte(s))
 }
 
 func (c *Context) jsonPBlob(code int, callback string, i interface{}) (err error) {
@@ -350,7 +355,7 @@ func (c *Context) JSON(code int, i interface{}) (err error) {
 }
 
 func (c *Context) JSONBlob(code int, b []byte) (err error) {
-	return c.Blob(code, MIMEApplicationJSONCharsetUTF8, b)
+	return c.FastBlob(code, MIMEApplicationJSONCharsetUTF8, b)
 }
 
 func (c *Context) JSONP(code int, callback string, i interface{}) (err error) {
@@ -378,6 +383,34 @@ func (c *Context) Blob(code int, contentType string, b []byte) (err error) {
 }
 
 func (c *Context) FastBlob(code int, contentType string, b []byte) (err error) {
+	if code == protocol.StatusOK {
+		// add http client cache headers
+		/*
+			The Cache-Control header is the most important header
+			to set as it effectively ‘switches on’ caching in
+			the browser. With this header in place, and set with
+			a value that enables caching, the browser will cache
+			the file for as long as specified. Without this header
+			the browser will re-request the file on each
+			subsequent request.
+
+			public resources can be cached not only by the
+			end-user’s browser but also by any intermediate
+			proxies that may be serving many other users as well.
+
+			private resources are bypassed by intermediate
+			proxies and can only be cached by the end-client.
+
+			The max-age value sets a timespan for how
+			long to cache the resource (in seconds).
+		*/
+		r := c.Response()
+		h := r.Header()
+		if c.OnSuccessCachePolicy > 0 {
+			timeStr := strconv.Itoa(c.OnSuccessCachePolicy)
+			h.Set("Cache-Control", "public, max-age="+timeStr) // 24h cache = 86400
+		}
+	}
 	c.writeContentType(contentType)
 	c.response.WriteHeader(code)
 	_, err = c.response.Write(b)
@@ -509,6 +542,7 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.SchemeType = Other
 	c.SchemeName = ""
 	c.ip = ""
+	c.OnSuccessCachePolicy = 0
 	// NOTE: Don't reset because it has to have length c.echo.maxParam at all times
 	// c.pvalues = nil
 }

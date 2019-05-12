@@ -46,8 +46,8 @@ type (
 		// - error
 		// - latency (In nanoseconds)
 		// - latency_human (Human readable)
-		// - bytes_in (Bytes received)
-		// - bytes_out (Bytes sent)
+		// - bytes_in (UnsafeBytes received)
+		// - bytes_out (UnsafeBytes sent)
 		// - header:<NAME>
 		// - query:<NAME>
 		// - form:<NAME>

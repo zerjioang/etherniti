@@ -199,7 +199,7 @@ func (ctl WalletController) generateAddress(c *echo.Context) error {
 // check if an ethereum address is valid
 func (ctl WalletController) isValidAddress(c *echo.Context) error {
 	//since this method checks address as string, cache always
-	_, c = clientcache.Cached(c, true, clientcache.CacheInfinite) // 24h cache directive
+	c.OnSuccessCachePolicy = clientcache.CacheInfinite
 
 	//read user entered address
 	targetAddr := c.Param("address")

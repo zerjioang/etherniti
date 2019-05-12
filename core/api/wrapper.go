@@ -138,6 +138,10 @@ func toError(code int, msg []byte) []byte {
 	return rawBytes
 }
 
+func ErrorBytes(msg string) []byte {
+	return toErrorPool(str.UnsafeBytes(msg))
+}
+
 func ErrorStr(c *echo.Context, msg []byte) error {
 	logger.Debug("converting error string to payload")
 	logger.Error(str.UnsafeString(msg))

@@ -14,6 +14,8 @@ const (
 )
 
 var (
+	NotImplemented = []byte("not implemented")
+
 	Symbol             = []byte("symbol")
 	Name               = []byte("name")
 	Allowance          = []byte("allowance")

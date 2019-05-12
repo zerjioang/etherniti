@@ -87,7 +87,7 @@ func init() {
 
 func SignMsgWithIntegrity(message string) (string, string) {
 	//create test message
-	//str := util.Bytes(message)
+	//str := util.UnsafeBytes(message)
 	// hash test message
 	h.Reset()
 	h.Write([]byte(message))

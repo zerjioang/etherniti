@@ -17,11 +17,12 @@ import (
 
 type HashSetAtomic struct {
 	m  atomic.Value
-	mu sync.Mutex // used only by writers
+	mu *sync.Mutex // used only by writers
 }
 
 func NewAtomicHashSet() HashSetAtomic {
 	m := HashSetAtomic{}
+	m.mu = new(sync.Mutex)
 	return m
 }
 

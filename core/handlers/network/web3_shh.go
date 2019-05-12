@@ -6,7 +6,6 @@ package network
 import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/handlers/clientcache"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -40,8 +39,7 @@ func (ctl *Web3ShhController) shhVersion(c *echo.Context) error {
 		return api.Error(c, err)
 	} else {
 		ctl.network.cache.Set(data.ShhVersion, response)
-		response := api.ToSuccess(data.ShhVersion, response)
-		return clientcache.CachedJsonBlob(c, true, clientcache.CacheInfinite, response)
+		return api.SendSuccess(c, data.ShhVersion, response)
 	}
 }
 
