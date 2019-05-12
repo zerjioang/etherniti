@@ -69,7 +69,7 @@ func newEnvironment() *EnvConfig {
 }
 
 //read environment variables
-func (c EnvConfig) read() {
+func (c *EnvConfig) read() {
 	logger.Debug("reading environment variables from current operating system")
 	for _, e := range os.Environ() {
 		pair := strings.Split(e, "=")

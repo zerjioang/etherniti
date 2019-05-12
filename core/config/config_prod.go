@@ -12,7 +12,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )

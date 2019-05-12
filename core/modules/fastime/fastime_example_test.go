@@ -3,7 +3,7 @@
 
 package fastime_test
 
-import "github.com/zerjioang/etherniti/core/eth/fastime"
+import "github.com/zerjioang/etherniti/core/modules/fastimetime"
 
 func ExampleFastTime() {
 	tm2 := fastime.Now()

@@ -23,5 +23,4 @@ BenchmarkConnectionProfile/valid-true-4                   	300000000	         5.
 BenchmarkConnectionProfile/get-secret-4                   	2000000000	         0.41 ns/op	2463.78 MB/s	       0 B/op	       0 allocs/op
 BenchmarkConnectionProfile/create-token-4                 	  200000	     10693 ns/op	   0.09 MB/s	    3713 B/op	      36 allocs/op
 BenchmarkConnectionProfile/parse-token-4                  	   50000	     23192 ns/op	   0.04 MB/s	    5929 B/op	     103 allocs/op
-
 */

@@ -83,8 +83,15 @@ func (ctl UIController) register(c *echo.Context) error {
 	return nil
 }
 
+// validates recatpcha requests
+// more info at: https://www.google.com/recaptcha/admin/site/346227166
+func (ctl UIController) recaptcha(c *echo.Context) error {
+	return data.ErrNotImplemented
+}
+
 func (ctl UIController) RegisterRouters(router *echo.Group) {
 	logger.Debug("exposing ui controller methods")
 	router.POST("/ui/login", ctl.login)
 	router.POST("/ui/register", ctl.register)
+	router.POST("/ui/recaptcha", ctl.recaptcha)
 }

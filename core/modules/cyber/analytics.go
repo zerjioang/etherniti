@@ -10,7 +10,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/db"
-	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/thirdparty/echo"

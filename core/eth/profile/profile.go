@@ -14,7 +14,7 @@ import (
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
 )
 
@@ -217,17 +217,18 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
+		Id:         id.GenerateUUIDFromEntropy(),
 		ProfileRequest: protocol.ProfileRequest{
 			RpcEndpoint: "http://127.0.0.1:8545",
 			Address:     "0x0",
 			Key:         "0x0",
 		},
 		//standard claims
-		Id:         id.GenerateUUIDFromEntropy(),
-		Issuer:     "etherniti",
-		ExpiresAt:  now.Add(10 * fastime.Minute).Unix(),
-		NotBefore:  now.Unix(),
-		IssuedAt:   now.Unix(),
-		Valididity: false,
+		Issuer:    "etherniti.org",
+		ExpiresAt: now.Add(config.TokenExpiration()).Unix(),
+		NotBefore: now.Unix(),
+		IssuedAt:  now.Unix(),
+		Version:   constants.Version,
+		Valididity:true,
 	}
 }

@@ -17,7 +17,7 @@ import (
 	_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 	"time"
 
-	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
@@ -111,6 +111,8 @@ func (c *EnvConfig) SetDefaults() {
 	env["X_GMAIL_ACCESS_TOKEN"] = "vhlpmtrvskzxdebh"
 	env["X_EMAIL_SERVER"] = "smtp.gmail.com:587"
 	env["X_EMAIL_SERVER_ONLY"] = "smtp.gmail.com"
+
+	env["X_ETHERNITI_RECATPCHAV3_APIKEY"] = "6LfeAaMUAAAAADzEfvOzsajWuLCCrUfxprh-wZcC"
 }
 
 // setup server config

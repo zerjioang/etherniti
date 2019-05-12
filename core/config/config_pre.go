@@ -14,7 +14,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/zerjioang/etherniti/core/eth/fastime"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 )
 
 // openssl genrsa -out server.key 2048

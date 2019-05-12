@@ -5,7 +5,8 @@ package db
 
 import (
 	"encoding/json"
-	"errors"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/data"
 	"os"
 	"path/filepath"
 	"sync"
@@ -15,25 +16,21 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var (
-	defaultConfig   = badger.DefaultOptions
-	home            = os.Getenv("HOME")
-	baseData        = home + "/.etherniti/"
-	duplicateKeyErr = errors.New("duplicate key found on database. cannot store")
-)
-
 type Db struct {
 	instance *badger.DB
 }
 
-var instance *Db
-var once sync.Once
-var uid = os.Getuid()
-var gid = os.Getgid()
+var(
+	defaultConfig   = badger.DefaultOptions
+	instance *Db
+	once sync.Once
+	uid = os.Getuid()
+	gid = os.Getgid()
+)
 
 func init() {
 	logger.Debug("loading db module data")
-	err := createData(baseData + "data")
+	err := createData(config.DatabaseRootPath + "db")
 	if err != nil {
 		logger.Error("failed to create shared database dir:", err)
 	}
@@ -61,7 +58,7 @@ func createData(path string) error {
 func NewCollection(name string) (*Db, error) {
 	logger.Debug("creating new db collection")
 	collection := new(Db)
-	err := createData(baseData + name)
+	err := createData(config.DatabaseRootPath + name)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +107,7 @@ func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
 		if err == nil && item != nil {
-			return duplicateKeyErr
+			return data.DuplicateKeyErr
 		} else {
 			return txn.Set(key, value)
 		}

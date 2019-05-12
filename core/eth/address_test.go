@@ -4,6 +4,7 @@
 package eth
 
 import (
+	"github.com/stretchr/testify/assert"
 	"math/big"
 	"testing"
 
@@ -26,6 +27,11 @@ func TestConvertAddress(t *testing.T) {
 	if addr.Hex() != address0 {
 		t.Error("failed to convert account")
 	}
+}
+
+func TestIsValidAddress(t *testing.T) {
+	result := IsValidAddress(address0)
+	assert.True(t, result)
 }
 
 func TestGetAccountBalance(t *testing.T) {

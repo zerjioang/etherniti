@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"github.com/zerjioang/etherniti/core/logger"
 	"sync"
 	"testing"
 )
@@ -12,6 +13,7 @@ func BenchmarkCmd(b *testing.B) {
 	b.Run("run-server", func(b *testing.B) {
 		// pre-required data
 		notifier := make(chan error, 1)
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -21,6 +23,7 @@ func BenchmarkCmd(b *testing.B) {
 		}
 	})
 	b.Run("run-server-goroutines", func(b *testing.B) {
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()

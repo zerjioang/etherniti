@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package counter_test
+package counter32_test
 
 import (
 	"testing"
@@ -16,13 +16,13 @@ func BenchmarkCounterPtr(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = counter.NewCounter32()
+			_ = counter32.NewCounter32()
 		}
 	})
 	b.Run("add", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		c := counter.NewCounter32()
+		c := counter32.NewCounter32()
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			c.Increment()
@@ -31,7 +31,7 @@ func BenchmarkCounterPtr(b *testing.B) {
 	b.Run("get", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
-		c := counter.NewCounter32()
+		c := counter32.NewCounter32()
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = c.Get()

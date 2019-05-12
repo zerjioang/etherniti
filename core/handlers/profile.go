@@ -23,7 +23,7 @@ type ProfileController struct {
 
 var (
 	//atomic counters stored on heap
-	profilesCreated counter.Count32
+	profilesCreated counter32.Count32
 )
 
 func NewProfileController() ProfileController {
