@@ -43,6 +43,15 @@ func UnsafeBytes(data string) []byte {
 	return *(*[]byte)(unsafe.Pointer(&bh))
 }
 
+func bytesToStr(b []byte) string {
+	header := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	strHeader := &reflect.StringHeader{
+		Data: header.Data,
+		Len:  header.Len,
+	}
+	return *(*string)(unsafe.Pointer(strHeader))
+}
+
 func UnsafeString(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
 }
@@ -76,14 +85,22 @@ func GetJsonBytes(data interface{}) []byte {
 // twice as fast as standard to lower function of go standard library
 func ToLowerAscii(src string) string {
 	rawBytes := []byte(src)
+	//rawBytes := UnsafeBytes(src)
+	start := uintptr(unsafe.Pointer(&rawBytes[0]))
+	step := unsafe.Sizeof(rawBytes[0])
 	s := len(rawBytes)
 	for i := 0; i < s; i++ {
-		c := &rawBytes[i]
-		if *c >= 'A' && *c <= 'Z' {
-			*c = *c + 32
+		// get char at current index
+		c := *(*byte)((unsafe.Pointer)(start + step*uintptr(i)))
+		if c >= 'A' && c <= 'Z' {
+			*(*byte)((unsafe.Pointer)(start + step*uintptr(i))) = c + 32
 		}
 	}
-	return string(rawBytes)
+	return *(*string)(unsafe.Pointer(&rawBytes))
+}
+
+func strLen(s string) int {
+	return (*reflect.StringHeader)(unsafe.Pointer(&s)).Len
 }
 
 func IntToByte(v int) []byte {

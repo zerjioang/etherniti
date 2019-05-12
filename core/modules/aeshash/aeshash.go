@@ -10,7 +10,7 @@ func aeshashstr(p unsafe.Pointer, h uintptr) uintptr
 // Hash hashes the given string using the algorithm used by Go's hash tables
 // God knows what it really is.
 func Hash(key string) uint32 {
-	return uint32(aeshashstr(noescape(unsafe.Pointer(&key)), 0))
+	return uint32(aeshashstr(unsafe.Pointer(&key), 0))
 }
 
 // noescape hides a pointer from escape analysis.  noescape is
@@ -20,6 +20,5 @@ func Hash(key string) uint32 {
 // USE CAREFULLY!
 //go:nosplit
 func noescape(p unsafe.Pointer) unsafe.Pointer {
-	x := uintptr(p)
-	return unsafe.Pointer(x ^ 0)
+	return unsafe.Pointer(uintptr(p) ^ 0)
 }

@@ -1167,9 +1167,8 @@ func TestEthError(t *testing.T) {
 }
 
 func TestEth1(t *testing.T) {
-	client := NewDefaultRPC("", true)
 	require.Equal(t, int64(1000000000000000000), Eth1().Int64())
-	require.Equal(t, int64(1000000000000000000), client.Eth1().Int64())
+	require.Equal(t, int64(1000000000000000000), Eth1Int64())
 }
 
 func ptrInt(i int) *int {

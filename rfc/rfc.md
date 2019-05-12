@@ -10,11 +10,11 @@ Get list of Blocks Mined by Address
 Get Contract ABI
 Get Contract Source Code
 
-transaction api
+## transaction api
 Check Contract Execution Status
 Check Transaction Receipt Status (Only applicable for Post Byzantium fork transactions)
 
-blocks api
+## blocks api
 [BETA] Get Block And Uncle Rewards by BlockNo
 
 Get ERC20-Token TotalSupply by ContractAddress

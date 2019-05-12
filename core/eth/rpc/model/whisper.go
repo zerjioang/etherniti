@@ -11,9 +11,8 @@ Parameters
     payload: DATA - The payload of the message.
     priority: QUANTITY - The integer of the priority in a range from ... (?).
     ttl: QUANTITY - integer of the time to live in seconds.
- */
+*/
 type WhisperParams struct {
-
 }
 
 type FilterChanges struct {

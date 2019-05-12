@@ -4,8 +4,9 @@
 package counter32_test
 
 import (
-	"github.com/zerjioang/etherniti/core/modules/counter32"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/modules/counter32"
 )
 
 func BenchmarkCounterPtr(b *testing.B) {

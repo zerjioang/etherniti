@@ -29,6 +29,25 @@ func BenchmarkStringUtils(b *testing.B) {
 			_ = ToLowerAscii(val)
 		}
 	})
+
+	b.Run("len-std", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = len(val)
+		}
+	})
+	b.Run("len-custom", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = strLen(val)
+		}
+	})
 }
 
 func BenchmarkGetJsonBytes(b *testing.B) {

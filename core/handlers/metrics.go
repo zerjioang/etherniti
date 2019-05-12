@@ -5,9 +5,9 @@ package handlers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/eth/counter"
-	"github.com/zerjioang/etherniti/core/eth/fastime"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/counter32"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -18,7 +18,7 @@ type MetricsController struct {
 
 var (
 	startTime      fastime.FastTime
-	requestCounter counter.Count32
+	requestCounter counter32.Count32
 )
 
 func init() {

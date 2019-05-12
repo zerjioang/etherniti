@@ -7,11 +7,20 @@ import (
 	"encoding/binary"
 	"net"
 	"strconv"
+	"sync"
 )
 
 const (
 	asciiDot  uint8 = 46
 	asciiZero uint8 = 48
+)
+
+var (
+	octets           [4][4]byte
+	octectsDecimal   [4]byte
+	currentOctect    uint8 = 0
+	currentOctectPos uint8 = 0
+	lock             sync.Mutex
 )
 
 // converts an IP address to uint32 value
@@ -24,7 +33,9 @@ func Ip2intLow(ip string) uint32 {
 	var octets [4][4]byte
 	var currentOctect uint8 = 0
 	var currentOctectPos uint8 = 0
-	for i := 0; i < len(ip); i++ {
+	s := len(ip)
+	_ = ip[s-1]
+	for i := 0; i < s; i++ {
 		ipVal := ip[i]
 		if ipVal == asciiDot {
 			octets[currentOctect][3] = currentOctectPos
@@ -48,6 +59,7 @@ func Ip2intLow(ip string) uint32 {
 		//process each octect data
 		// convert octects to uint32
 		// octets[0]*256³ + octets[1]*256² + octets[2]*256¹ + octets[1]*256⁰
+		_ = octets[i][2]
 		switch octets[i][3] {
 		case 0:
 			octectsDecimal[i] = 0

@@ -4,7 +4,6 @@
 package str
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -33,70 +32,4 @@ func TestToLowerAscii(t *testing.T) {
 			t.Error("failed to lowercase")
 		}
 	})
-}
-
-func TestBytes(t *testing.T) {
-	type args struct {
-		data string
-	}
-	tests := []struct {
-		name string
-		args args
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := UnsafeBytes(tt.args.data); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("UnsafeBytes() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestToString(t *testing.T) {
-	type args struct {
-		data []byte
-	}
-	tests := []struct {
-		name string
-		args args
-		want string
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := UnsafeString(tt.args.data); got != tt.want {
-				t.Errorf("UnsafeString() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestStdMarshal(t *testing.T) {
-	type args struct {
-		data interface{}
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    []byte
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := StdMarshal(tt.args.data)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("StdMarshal() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("StdMarshal() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }

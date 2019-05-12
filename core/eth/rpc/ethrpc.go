@@ -287,7 +287,7 @@ func (rpc *EthRPC) EthMining() (bool, error) {
 // EthHashRate returns the number of hashes per second that the node is mining with.
 func (rpc *EthRPC) EthHashRate() (int, error) {
 	var response string
-	err := rpc.post("eth_hashrate", &response, nil);
+	err := rpc.post("eth_hashrate", &response, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -297,7 +297,7 @@ func (rpc *EthRPC) EthHashRate() (int, error) {
 // EthGasPrice returns the current price per gas in wei.
 func (rpc *EthRPC) EthGasPrice() (int64, error) {
 	var response string
-	err := rpc.post("eth_gasPrice", &response, nil);
+	err := rpc.post("eth_gasPrice", &response, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -609,7 +609,7 @@ func (rpc *EthRPC) EthGetPendingTransactions(hash string) (*TransactionReceipt, 
 func (rpc *EthRPC) EthGetUncleByBlockHashAndIndex(hash string, uncleIndex int) (*TransactionReceipt, error) {
 	transactionReceipt := new(TransactionReceipt)
 	params := func() string {
-		return "["+rpc.doubleQuote(hash)+","+rpc.doubleQuote(IntToHex(uncleIndex))+"]"
+		return "[" + rpc.doubleQuote(hash) + "," + rpc.doubleQuote(IntToHex(uncleIndex)) + "]"
 	}
 	err := rpc.post("eth_getUncleByBlockHashAndIndex", transactionReceipt, params)
 	if err != nil {
@@ -628,7 +628,7 @@ func (rpc *EthRPC) EthGetUncleByBlockHashAndIndex(hash string, uncleIndex int) (
 func (rpc *EthRPC) EthGetUncleByBlockNumberAndIndex(blockNumber string, uncleIndex int) (*TransactionReceipt, error) {
 	transactionReceipt := new(TransactionReceipt)
 	params := func() string {
-		return "["+rpc.doubleQuote(blockNumber)+","+rpc.doubleQuote(IntToHex(uncleIndex))+"]"
+		return "[" + rpc.doubleQuote(blockNumber) + "," + rpc.doubleQuote(IntToHex(uncleIndex)) + "]"
 	}
 	err := rpc.post("eth_getUncleByBlockNumberAndIndex", transactionReceipt, params)
 	if err != nil {
@@ -636,7 +636,6 @@ func (rpc *EthRPC) EthGetUncleByBlockNumberAndIndex(blockNumber string, uncleInd
 	}
 	return transactionReceipt, nil
 }
-
 
 // EthGetCompilers returns a list of available compilers in the client.
 // @deprecated
@@ -793,7 +792,7 @@ func (rpc *EthRPC) EthGetWork() ([]string, error) {
 func (rpc *EthRPC) EthSubmitWork(nonce, header, digest string) (bool, error) {
 	var result bool
 	params := func() string {
-		return "["+rpc.doubleQuote(nonce)+","+rpc.doubleQuote(header)+","+rpc.doubleQuote(digest)+"]"
+		return "[" + rpc.doubleQuote(nonce) + "," + rpc.doubleQuote(header) + "," + rpc.doubleQuote(digest) + "]"
 	}
 	err := rpc.post("eth_submitWork", &result, params)
 	return result, err
@@ -813,7 +812,7 @@ func (rpc *EthRPC) EthSubmitWork(nonce, header, digest string) (bool, error) {
 func (rpc *EthRPC) EthSubmitHashrate(hashrate string, clientid string) (bool, error) {
 	var result bool
 	params := func() string {
-		return "["+rpc.doubleQuote(hashrate)+","+rpc.doubleQuote(clientid)+"]"
+		return "[" + rpc.doubleQuote(hashrate) + "," + rpc.doubleQuote(clientid) + "]"
 	}
 	err := rpc.post("eth_submitHashrate", &result, params)
 	return result, err
@@ -834,21 +833,22 @@ func (rpc *EthRPC) EthSubmitHashrate(hashrate string, clientid string) (bool, er
 //getProof-Returns
 
 //Returns Object - A account object:
-	//balance: QUANTITY - the balance of the account. See eth_getBalance
-	//codeHash: DATA, 32 Bytes - hash of the code of the account. For a simple Account without code it will return "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
-	//nonce: QUANTITY, - nonce of the account. See eth_getTransactionCount
-	//storageHash: DATA, 32 Bytes - SHA3 of the StorageRoot. All storage will deliver a MerkleProof starting with this rootHash.
-	//accountProof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the stateRoot-Node, following the path of the SHA3 (address) as key.
-	//storageProof: ARRAY - Array of storage-entries as requested. Each entry is a object with these properties:
-	//key: QUANTITY - the requested storage key value: QUANTITY - the storage value proof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the storageHash-Node, following the path of the SHA3 (key) as path.
+//balance: QUANTITY - the balance of the account. See eth_getBalance
+//codeHash: DATA, 32 Bytes - hash of the code of the account. For a simple Account without code it will return "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+//nonce: QUANTITY, - nonce of the account. See eth_getTransactionCount
+//storageHash: DATA, 32 Bytes - SHA3 of the StorageRoot. All storage will deliver a MerkleProof starting with this rootHash.
+//accountProof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the stateRoot-Node, following the path of the SHA3 (address) as key.
+//storageProof: ARRAY - Array of storage-entries as requested. Each entry is a object with these properties:
+//key: QUANTITY - the requested storage key value: QUANTITY - the storage value proof: ARRAY - Array of rlp-serialized MerkleTree-Nodes, starting with the storageHash-Node, following the path of the SHA3 (key) as path.
 func (rpc *EthRPC) EthGetProof(address string, keys []string, blocktime string) (bool, error) {
 	var response bool
 	params := func() string {
-		return "["+rpc.doubleQuote(address)+"]"
+		return "[" + rpc.doubleQuote(address) + "]"
 	}
 	err := rpc.post("eth_getProof", &response, params)
 	return response, err
 }
+
 // db_putString
 // Stores a string in the local database.
 //Note this function is deprecated and will be removed in the future.
@@ -872,7 +872,7 @@ func (rpc *EthRPC) EthGetProof(address string, keys []string, blocktime string) 
 func (rpc *EthRPC) DbPutString(dbname string, key string, value string) (bool, error) {
 	var response bool
 	params := func() string {
-		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+","+rpc.doubleQuote(value)+"]"
+		return "[" + rpc.doubleQuote(dbname) + "," + rpc.doubleQuote(key) + "," + rpc.doubleQuote(value) + "]"
 	}
 	err := rpc.post("db_putString", &response, params)
 	return response, err
@@ -896,7 +896,7 @@ func (rpc *EthRPC) DbPutString(dbname string, key string, value string) (bool, e
 func (rpc *EthRPC) DbGetString(dbname string, key string) (string, error) {
 	var value string
 	params := func() string {
-		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+"]"
+		return "[" + rpc.doubleQuote(dbname) + "," + rpc.doubleQuote(key) + "]"
 	}
 	err := rpc.post("db_getString", &value, params)
 	return value, err
@@ -925,7 +925,7 @@ func (rpc *EthRPC) DbGetString(dbname string, key string) (string, error) {
 func (rpc *EthRPC) DbPutHex(dbname string, key string, value string) (bool, error) {
 	var response bool
 	params := func() string {
-		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+","+rpc.doubleQuote(value)+"]"
+		return "[" + rpc.doubleQuote(dbname) + "," + rpc.doubleQuote(key) + "," + rpc.doubleQuote(value) + "]"
 	}
 	err := rpc.post("db_putHex", &response, params)
 	return response, err
@@ -951,7 +951,7 @@ func (rpc *EthRPC) DbPutHex(dbname string, key string, value string) (bool, erro
 func (rpc *EthRPC) DbGetHex(dbname string, key string) (string, error) {
 	var value string
 	params := func() string {
-		return "["+rpc.doubleQuote(dbname)+","+rpc.doubleQuote(key)+"]"
+		return "[" + rpc.doubleQuote(dbname) + "," + rpc.doubleQuote(key) + "]"
 	}
 	err := rpc.post("db_getHex", &value, params)
 	return value, err
@@ -1026,7 +1026,7 @@ func (rpc *EthRPC) ShhNewIdentity() (string, error) {
 func (rpc *EthRPC) SshHasIdentity(identityKey string) (bool, error) {
 	var response bool
 	params := func() string {
-		return "["+rpc.doubleQuote(identityKey)+"]"
+		return "[" + rpc.doubleQuote(identityKey) + "]"
 	}
 	err := rpc.post("shh_hasIdentity", &response, params)
 	return response, err
@@ -1055,7 +1055,7 @@ func (rpc *EthRPC) ShhNewGroup() (string, error) {
 func (rpc *EthRPC) ShhAddToGroup(identityKey string) (bool, error) {
 	var response bool
 	params := func() string {
-		return "["+rpc.doubleQuote(identityKey)+"]"
+		return "[" + rpc.doubleQuote(identityKey) + "]"
 	}
 	err := rpc.post("shh_addToGroup", &response, params)
 	return response, err
@@ -1145,7 +1145,7 @@ func (rpc *EthRPC) ShhGetFilterChanges() (string, error) {
 func (rpc *EthRPC) SshGetMessages(filterId string) ([]model.FilterChanges, error) {
 	var response []model.FilterChanges
 	params := func() string {
-		return "["+rpc.doubleQuote(filterId)+"]"
+		return "[" + rpc.doubleQuote(filterId) + "]"
 	}
 	err := rpc.post("shh_getMessages", &response, params)
 	return response, err
