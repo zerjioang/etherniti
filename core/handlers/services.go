@@ -70,9 +70,6 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// register ui rest
 	NewUIController().RegisterRouters(publicGroup)
 
-	// register project controller
-	project.NewProjectController().RegisterRouters(publicGroup)
-
 	//register external api calls
 	// coin market cap: get eth price data
 	NewExternalController().RegisterRouters(publicGroup)
@@ -102,6 +99,8 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	privateGroup := groupV1.Group(constants.PrivateApi, next)
 	privateGroup.Use(privateJwt)
 	NewPrivateNetController().RegisterRouters(privateGroup)
+	// register project controller
+	project.NewProjectController().RegisterRouters(privateGroup)
 	//NewTokenController(deployer.manager).RegisterRouters(privateGroup)
 	return groupV1
 }

@@ -4,8 +4,6 @@
 package project
 
 import (
-	"encoding/hex"
-
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/db"
@@ -54,8 +52,6 @@ func (ctl *ProjectController) Create(c *echo.Context) error {
 		return api.ErrorStr(c, str.UnsafeBytes(e.Error()))
 	} else {
 		// get required data to build a new project
-		//get user ip
-		c.RealIP()
 		intIP := ip.Ip2int(c.RealIP())
 		// get user uuid
 		projectOwner := c.UserUuid()
@@ -79,12 +75,9 @@ func (ctl *ProjectController) Create(c *echo.Context) error {
 func (ctl *ProjectController) Read(c *echo.Context) error {
 	projectId := c.Param("id")
 	if projectId != "" {
-		raw, err := hex.DecodeString(projectId)
-		if err != nil {
-			return api.Error(c, err)
-		}
 		// todo check if current project id belongs to current user
-		projectData, readErr := ctl.storage.GetKeyValue(raw)
+		key := str.UnsafeBytes(projectId)
+		projectData, readErr := ctl.storage.GetKeyValue(key)
 		if readErr != nil {
 			return api.Error(c, readErr)
 		}
@@ -97,12 +90,9 @@ func (ctl *ProjectController) Read(c *echo.Context) error {
 func (ctl *ProjectController) Update(c *echo.Context) error {
 	projectId := c.Param("id")
 	if projectId != "" {
-		raw, err := hex.DecodeString(projectId)
-		if err != nil {
-			return api.Error(c, err)
-		}
+		key := str.UnsafeBytes(projectId)
 		// todo check if current project id belongs to current user
-		projectData, readErr := ctl.storage.GetKeyValue(raw)
+		projectData, readErr := ctl.storage.GetKeyValue(key)
 		if readErr != nil {
 			return api.Error(c, readErr)
 		}
@@ -115,12 +105,9 @@ func (ctl *ProjectController) Update(c *echo.Context) error {
 func (ctl *ProjectController) Delete(c *echo.Context) error {
 	projectId := c.Param("id")
 	if projectId != "" {
-		raw, err := hex.DecodeString(projectId)
-		if err != nil {
-			return api.Error(c, err)
-		}
+		key := str.UnsafeBytes(projectId)
 		// todo check if current project id belongs to current user
-		deleteErr := ctl.storage.Delete(raw)
+		deleteErr := ctl.storage.Delete(key)
 		if deleteErr != nil {
 			return api.Error(c, deleteErr)
 		}
@@ -143,8 +130,8 @@ func (ctl *ProjectController) List(c *echo.Context) error {
 func (ctl ProjectController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing project controller methods")
 	router.GET("/projects", ctl.List)
-	router.POST("/project", ctl.Create)
-	router.GET("/project/:id", ctl.Read)
-	router.PUT("/project/:id", ctl.Update)
-	router.DELETE("/project/:id", ctl.Delete)
+	router.POST("/projects", ctl.Create)
+	router.GET("/projects/:id", ctl.Read)
+	router.PUT("/projects/:id", ctl.Update)
+	router.DELETE("/projects/:id", ctl.Delete)
 }

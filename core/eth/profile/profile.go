@@ -74,10 +74,11 @@ func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
 }
 func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfile {
+	profile.AccountId = profile.readString(claims["uuid"])
 	profile.RpcEndpoint = profile.readString(claims["endpoint"])
 	profile.Address = profile.readString(claims["address"])
 	profile.Key = profile.readString(claims["key"])
-	profile.Version = constants.Version
+	profile.Version = profile.readString(claims["version"])
 	profile.Valididity = profile.readBool(claims["validity"])
 	profile.Audience = profile.readString(claims["aud"])
 	profile.ExpiresAt = profile.readInt64(claims["exp"])
@@ -195,8 +196,9 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 	p := ConnectionProfile{
 		Id: id.GenerateUUIDFromEntropy(),
 		ProfileRequest: protocol.ProfileRequest{
-			RpcEndpoint: data.RpcEndpoint,
-			Address:     data.Address, //required
+			AccountId:   id.GenerateIDString().UnsafeString(),
+			RpcEndpoint: data.RpcEndpoint, //required
+			Address:     data.Address,     //required
 			Key:         data.Key,
 			Source:      ip.Ip2int(data.Ip),
 		},

@@ -2211,7 +2211,7 @@
         }
       }
     },
-    "/public/project": {
+    "/private/projects": {
       "post": {
         "tags": ["project"],
         "summary": "Create new project",
@@ -2240,7 +2240,46 @@
           "200": {
             "description": "response of new project creation request",
             "schema": {
-              "example": {}
+              "example": {
+                "code": 200,
+                "id": 0,
+                "msg": "project successfully created",
+                "details": "a1ebf4afd9e9462cb5dedc0e83efea17"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["project"],
+        "summary": "List user projects",
+        "description": "List projects in user workspace",
+        "operationId": "project-list",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "response of new project creation request",
+            "schema": {
+              "example": [
+                {
+                  "uuid": "24293a7cb63a4c82b205f24a5158dd03",
+                  "name": "test-project",
+                  "owner": "ac51633e37924e65b87bd0b9d59528d7",
+                  "id": "466e3553eff348e294ea81d22a0fd8c7",
+                  "secret": "25796d4cc11046ed9380b0ec0e22066c",
+                  "created": 1557756771,
+                  "ip": 2130706433
+                }
+              ]
             }
           },
           "400": {
@@ -2249,7 +2288,7 @@
         }
       }
     },
-    "/public/project/{id}": {
+    "/private/projects/{id}": {
       "get": {
         "tags": [
           "project"
