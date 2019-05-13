@@ -8,6 +8,7 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/handlers/project"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -28,11 +29,6 @@ func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
 // jwt middleware function.
 func jwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
 	return func(c *echo.Context) error {
-		// convert context in etherniti context
-		token := c.ReadConnectionProfileToken()
-		if token == "" {
-			return api.ErrorStr(c, errorMsg)
-		}
 		_, parseErr := c.ConnectionProfileSetup()
 		if parseErr != nil {
 			return api.Error(c, parseErr)
@@ -73,6 +69,9 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 
 	// register ui rest
 	NewUIController().RegisterRouters(publicGroup)
+
+	// register project controller
+	project.NewProjectController().RegisterRouters(publicGroup)
 
 	//register external api calls
 	// coin market cap: get eth price data

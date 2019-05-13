@@ -614,3 +614,9 @@ func (c *Context) ReadConnectionProfileToken() string {
 func (c *Context) IsJsonRequest() bool {
 	return c.isJson
 }
+
+// read user email
+// this value is in jwt token setn with each request
+func (c *Context) UserUuid() string {
+	return c.profileData.AccountId
+}

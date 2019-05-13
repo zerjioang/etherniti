@@ -44,7 +44,7 @@ func init() {
 // return success response to client context
 func SendSuccess(c *echo.Context, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
-	logger.Info(str.UnsafeString(logMsg), response)
+	logger.Info(str.UnsafeString(logMsg), " - ", response)
 	return c.FastBlob(
 		protocol.StatusOK,
 		echo.MIMEApplicationJSONCharsetUTF8,

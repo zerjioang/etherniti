@@ -7,6 +7,8 @@ import (
 	"bytes"
 	"encoding/json"
 
+	"github.com/zerjioang/etherniti/core/trycatch"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 )
 
@@ -19,6 +21,9 @@ type Profile struct {
 
 // new profile request dto
 type ProfileRequest struct {
+
+	// user account uuid
+	AccountId string `json:"uuid,omitempty" form:"uuid" query:"uuid"`
 
 	// address of the connection node: ip, domain, infura, etc
 	RpcEndpoint string `json:"endpoint" form:"endpoint" query:"endpoint"`
@@ -53,6 +58,17 @@ type RecoveryRequest struct {
 type EntropyRequest struct {
 	// size of initial entropy: 128 to 256 bits (for BIP39)
 	Size uint16 `json:"size" form:"size" query:"size"`
+}
+
+type ProjectRequest struct {
+	Name string `json:"name"`
+}
+
+func (pr ProjectRequest) Validate() trycatch.Error {
+	if pr.Name == "" {
+		return trycatch.New("project name not provided in request")
+	}
+	return trycatch.Nil()
 }
 
 // new deploy request dto
