@@ -15,7 +15,7 @@ import (
 )
 
 type ProjectController struct {
-	storage *db.Db
+	storage *db.BadgerStorage
 }
 
 // constructor like function
@@ -77,7 +77,7 @@ func (ctl *ProjectController) Read(c *echo.Context) error {
 	if projectId != "" {
 		// todo check if current project id belongs to current user
 		key := str.UnsafeBytes(projectId)
-		projectData, readErr := ctl.storage.GetKeyValue(key)
+		projectData, readErr := ctl.storage.Get(key)
 		if readErr != nil {
 			return api.Error(c, readErr)
 		}
@@ -92,7 +92,7 @@ func (ctl *ProjectController) Update(c *echo.Context) error {
 	if projectId != "" {
 		key := str.UnsafeBytes(projectId)
 		// todo check if current project id belongs to current user
-		projectData, readErr := ctl.storage.GetKeyValue(key)
+		projectData, readErr := ctl.storage.Get(key)
 		if readErr != nil {
 			return api.Error(c, readErr)
 		}

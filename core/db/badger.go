@@ -4,10 +4,8 @@
 package db
 
 import (
-	"encoding/json"
 	"os"
-	"path/filepath"
-	"sync"
+	"time"
 
 	"github.com/zerjioang/etherniti/core/util/fs"
 
@@ -16,17 +14,19 @@ import (
 
 	"github.com/dgraph-io/badger"
 	"github.com/zerjioang/etherniti/core/logger"
-	"golang.org/x/crypto/bcrypt"
 )
 
-type Db struct {
-	instance *badger.DB
+type BadgerStorage struct {
+	// our custom database configuration options
+	options *Options
+	// instance is the underlying handle to the db.
+	instance            *badger.DB
+	vlogTicker          *time.Ticker // runs every 1m, check size of vlog and run GC conditionally.
+	mandatoryVlogTicker *time.Ticker // runs every 10m, we always run vlog GC.
 }
 
 var (
 	defaultConfig = badger.DefaultOptions
-	instance      *Db
-	once          sync.Once
 	uid           = os.Getuid()
 	gid           = os.Getgid()
 )
@@ -61,9 +61,9 @@ func createData(path string) error {
 	return permErr
 }
 
-func NewCollection(name string) (*Db, error) {
+func NewCollection(name string) (*BadgerStorage, error) {
 	logger.Debug("creating new db collection")
-	collection := new(Db)
+	collection := new(BadgerStorage)
 	err := createData(config.DatabaseRootPath + name)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func NewCollection(name string) (*Db, error) {
 	return collection, nil
 }
 
-func (db *Db) Init() error {
+func (db *BadgerStorage) Init() error {
 	logger.Debug("initializing db file")
 	// Open the Badger database located in the /data/badger directory.
 	// It will be created if it doesn't exist.
@@ -88,30 +88,15 @@ func (db *Db) Init() error {
 	return nil
 }
 
-func (db *Db) Query() error {
-	logger.Debug("querying db")
-	err := db.instance.View(func(txn *badger.Txn) error {
-		// Your code here…
-		return nil
-	})
-	return err
-}
-
-func (db *Db) PutKeyValue(key []byte, value []byte) error {
+// Set is used to set a key/value set outside of the raft log.
+func (db *BadgerStorage) Set(key []byte, val []byte) error {
 	logger.Debug("inserting key-value in db")
-	err := db.instance.Update(func(txn *badger.Txn) error {
-		err := txn.Set(key, value)
-		return err
+	return db.instance.Update(func(txn *badger.Txn) error {
+		return txn.Set(key, val)
 	})
-	return err
 }
 
-func (db *Db) Close() error {
-	logger.Debug("closing database")
-	return db.instance.Close()
-}
-
-func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
+func (db *BadgerStorage) PutUniqueKeyValue(key []byte, value []byte) error {
 	logger.Debug("inserting unique key-value in db")
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
@@ -124,24 +109,39 @@ func (db *Db) PutUniqueKeyValue(key []byte, value []byte) error {
 	return err
 }
 
-func (db *Db) GetKeyValue(key []byte) ([]byte, error) {
+// Get is used to retrieve a value from the k/v store by key
+func (db *BadgerStorage) Get(key []byte) ([]byte, error) {
 	logger.Debug("reading key from db")
-	var readedVal []byte
-	err := db.instance.Update(func(txn *badger.Txn) error {
+	var value []byte
+	err := db.instance.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
-		if err == nil && item != nil {
-			readedVal, err = item.ValueCopy(readedVal)
+		if err != nil {
+			switch err {
+			case badger.ErrKeyNotFound:
+				return badger.ErrKeyNotFound
+			default:
+				return err
+			}
 		}
-		return err
+		value, err = item.ValueCopy(value)
+		if err != nil {
+			return err
+		}
+		return nil
 	})
-	return readedVal, err
-}
-func (db *Db) Add(key, data []byte) error {
-	logger.Debug("adding new key-value to db")
-	return db.PutKeyValue(key, data)
+	if err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
-func (db *Db) List(prefixStr string) ([][]byte, error) {
+func (db *BadgerStorage) Add(key, data []byte) error {
+	logger.Debug("adding new key-value to db")
+	return db.Set(key, data)
+}
+
+func (db *BadgerStorage) List(prefixStr string) ([][]byte, error) {
+	logger.Debug("listing values from db")
 	var results [][]byte
 	execErr := db.instance.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
@@ -163,7 +163,7 @@ func (db *Db) List(prefixStr string) ([][]byte, error) {
 	return results, execErr
 }
 
-func (db *Db) Delete(key []byte) error {
+func (db *BadgerStorage) Delete(key []byte) error {
 	logger.Debug("deleting key from db: ", string(key))
 	execErr := db.instance.View(func(txn *badger.Txn) error {
 		err := txn.Delete(key)
@@ -175,59 +175,93 @@ func (db *Db) Delete(key []byte) error {
 	return execErr
 }
 
-func GetInstance() *Db {
-	logger.Debug("getting database instance")
-	once.Do(func() {
-		instance = &Db{}
-		instance.Init()
+// DeleteRange deletes logs within a given range inclusively.
+func (db *BadgerStorage) DeleteRange(min, max uint64) error {
+	logger.Debug("deleting by range from db")
+	// we manage the transaction manually in order to avoid ErrTxnTooBig errors
+	txn := db.instance.NewTransaction(true)
+	it := txn.NewIterator(badger.IteratorOptions{
+		PrefetchValues: false,
+		Reverse:        false,
 	})
-	return instance
-}
 
-func Hash(data string) string {
-	// Use GenerateFromPassword to hash & salt pwd.
-	// MinCost is just an integer constant provided by the bcrypt
-	// package along with DefaultCost & MaxCost.
-	// The cost can be any value you want provided it isn't lower
-	// than the MinCost (4)
-	hash, err := bcrypt.GenerateFromPassword([]byte(data), bcrypt.DefaultCost)
+	for it.Seek(uint64ToBytes(min)); it.Valid(); it.Next() {
+		key := make([]byte, 8)
+		it.Item().KeyCopy(key)
+		// Handle out-of-range log index
+		if bytesToUint64(key) > max {
+			break
+		}
+		// Delete in-range log index
+		if err := txn.Delete(key); err != nil {
+			if err == badger.ErrTxnTooBig {
+				it.Close()
+				err = txn.Commit(nil)
+				if err != nil {
+					return err
+				}
+				return db.DeleteRange(bytesToUint64(key), max)
+			}
+			return err
+		}
+	}
+	it.Close()
+	err := txn.Commit(nil)
 	if err != nil {
-		logger.Error("failed to hash user password")
-		return ""
-	}
-	// GenerateFromPassword returns a byte slice so we need to
-	// convert the bytes to a string and return it
-	return string(hash)
-}
-
-func CompareHash(plainPwd, hash string) bool {
-	// Since we'll be getting the hashed password from the DB it
-	// will be a string so we'll need to convert it to a byte slice
-	byteHash := []byte(hash)
-	err := bcrypt.CompareHashAndPassword(byteHash, []byte(plainPwd))
-	return err == nil
-}
-
-func Serialize(item interface{}) []byte {
-	if item != nil {
-		raw, err := json.Marshal(item)
-		if err == nil {
-			return raw
-		}
-	}
-	return []byte{}
-}
-
-func Unserialize(data []byte, item interface{}) error {
-	return json.Unmarshal(data, item)
-}
-
-func chownR(path string, uid, gid int, mode os.FileMode) error {
-	return filepath.Walk(path, func(name string, info os.FileInfo, err error) error {
-		if err == nil {
-			err = os.Chown(name, uid, gid)
-			err = os.Chmod(name, mode)
-		}
 		return err
-	})
+	}
+	return nil
+}
+
+// SetUint64 is like Set, but handles uint64 values
+func (db *BadgerStorage) SetUint64(key []byte, val uint64) error {
+	return db.Set(key, uint64ToBytes(val))
+}
+
+// GetUint64 is like Get, but handles uint64 values
+func (db *BadgerStorage) GetUint64(key []byte) (uint64, error) {
+	val, err := db.Get(key)
+	if err != nil {
+		return 0, err
+	}
+	return bytesToUint64(val), nil
+}
+
+func (db *BadgerStorage) runVlogGC(instance *badger.DB, threshold int64) {
+	// Get initial size on start.
+	_, lastVlogSize := instance.Size()
+
+	runGC := func() {
+		var err error
+		for err == nil {
+			// If a GC is successful, immediately run it again.
+			err = instance.RunValueLogGC(0.7)
+		}
+		_, lastVlogSize = instance.Size()
+	}
+
+	for {
+		select {
+		case <-db.vlogTicker.C:
+			_, currentVlogSize := instance.Size()
+			if currentVlogSize < lastVlogSize+threshold {
+				continue
+			}
+			runGC()
+		case <-db.mandatoryVlogTicker.C:
+			runGC()
+		}
+	}
+}
+
+// Close is used to gracefully close the DB connection.
+func (db *BadgerStorage) Close() error {
+	logger.Debug("closing database")
+	if db.vlogTicker != nil {
+		db.vlogTicker.Stop()
+	}
+	if db.mandatoryVlogTicker != nil {
+		db.mandatoryVlogTicker.Stop()
+	}
+	return db.instance.Close()
 }

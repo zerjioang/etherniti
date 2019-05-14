@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	collection *db.Db
+	collection *db.BadgerStorage
 	pool       *sync.Pool
 )
 
@@ -64,6 +64,6 @@ func processAnalytics(ip string, r *http.Request) {
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk
-		collection.PutKeyValue(n.SafeBytes(), raw)
+		collection.Set(n.SafeBytes(), raw)
 	}
 }

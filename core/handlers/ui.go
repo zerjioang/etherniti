@@ -34,7 +34,7 @@ func (ctl UIController) login(c *echo.Context) error {
 	}
 	if req.Email != "" && req.Password != "" {
 		logger.Info("logging user with email: ", req.Email)
-		item, readErr := db.GetInstance().GetKeyValue([]byte(req.Email))
+		item, readErr := db.GetInstance().Get([]byte(req.Email))
 		if readErr == nil {
 			dto := new(protocol.RegisterRequest)
 			pErr := db.Unserialize(item, dto)

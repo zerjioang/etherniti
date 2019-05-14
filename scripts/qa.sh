@@ -21,6 +21,6 @@ echo "Checking code quality with linters..."
 # go vet
 ./scripts/govet.sh -tags dev
 # add license header to files
-./scripts/license_header.sh
+# ./scripts/license_header.sh
 
 echo "qa scripts finished"
