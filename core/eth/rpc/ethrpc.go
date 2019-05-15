@@ -6,10 +6,15 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"math/big"
+	"net"
 	"net/http"
 	"strings"
+	"syscall"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/worker"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
 
@@ -53,8 +58,17 @@ var (
 	oneEthInt64 = oneEth.Int64()
 )
 
+type ConnectionMode uint8
+
+const (
+	HttpMode ConnectionMode = iota
+	UnixMode
+)
+
 // EthRPC - Ethereum rpc client
 type EthRPC struct {
+	//connection mode: http or unix
+	mode ConnectionMode
 	//ethereum or quorum node endpoint
 	url string
 	//ethereum interaction cache
@@ -83,6 +97,10 @@ func NewDefaultRPC(url string, debug bool) EthRPC {
 			},
 		},
 		Debug: debug,
+	}
+	if strings.LastIndex(url, ".ipc") == 0 {
+		//unix mode detected
+		rpc.mode = UnixMode
 	}
 	return rpc
 }
@@ -160,6 +178,41 @@ func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
 	}
 
 	return resp.Result, nil
+}
+
+func unixSocketReader(r io.Reader, notifier chan worker.GoroutineResponse) {
+	buf := make([]byte, 1024)
+	for {
+		n, err := r.Read(buf[:])
+		if err != nil {
+			notifier <- worker.GoroutineResponse{Err: err, Data: nil}
+		}
+		notifier <- worker.GoroutineResponse{Err: nil, Data: buf[0:n]}
+	}
+}
+
+// out := make(chan GoroutineResponse, 1)
+func (rpc *EthRPC) makePostUnix(data string, notifier chan worker.GoroutineResponse) {
+	unixPath := "/tmp/echo.sock"
+	linKErr := syscall.Unlink(unixPath)
+	if linKErr != nil {
+		logger.Error(linKErr)
+	}
+	c, err := net.Dial("unix", unixPath)
+	if err != nil {
+		notifier <- worker.GoroutineResponse{Err: err, Data: nil}
+	} else {
+		go unixSocketReader(c, notifier)
+
+		//send the message
+		_, err = c.Write(str.UnsafeBytes(data))
+		if err != nil {
+			notifier <- worker.GoroutineResponse{Err: err, Data: nil}
+		}
+		//close connection
+		err = c.Close()
+		notifier <- worker.GoroutineResponse{Err: err, Data: nil}
+	}
 }
 
 // RawCall returns raw response of method post (Deprecated)

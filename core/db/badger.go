@@ -7,9 +7,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/util/fs"
 
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/dgraph-io/badger"
@@ -33,7 +34,7 @@ var (
 
 func init() {
 	logger.Debug("loading db module data")
-	err := createData(config.DatabaseRootPath + "db")
+	err := createData(constants.DatabaseRootPath + "db")
 	if err != nil {
 		logger.Error("failed to create shared database dir:", err)
 	}
@@ -64,7 +65,7 @@ func createData(path string) error {
 func NewCollection(name string) (*BadgerStorage, error) {
 	logger.Debug("creating new db collection")
 	collection := new(BadgerStorage)
-	err := createData(config.DatabaseRootPath + name)
+	err := createData(constants.DatabaseRootPath + name)
 	if err != nil {
 		return nil, err
 	}

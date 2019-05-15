@@ -20,8 +20,12 @@ var (
 	//cert content as bytes
 	certPemBytes []byte
 	//key content as bytes
-	keyPemBytes  []byte
-	gopath       = os.Getenv("GOPATH")
+	keyPemBytes []byte
+	//system gopath
+	gopath = os.Getenv("GOPATH")
+	// current executable process id
+	Pid = os.Getpid()
+	//resources base dir
 	ResourcesDir = gopath + "/src/github.com/zerjioang/etherniti/testdata"
 	// define internal folders
 	ResourcesDirInternal         = ResourcesDir + "/internal"
@@ -59,10 +63,13 @@ var (
 )
 
 func init() {
+	// load corst data
 	AllowedCorsOriginList = hashset.NewHashSet()
 	AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
+	// load hostnames data
 	AllowedHostnames = hashset.NewHashSet()
 	AllowedHostnames.LoadFromRaw(HostsFile, "\n")
+	// load tor data
 	BlockTorConnections = resolveBlockTorConnections()
 }
 

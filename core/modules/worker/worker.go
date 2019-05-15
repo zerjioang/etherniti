@@ -1,10 +1,8 @@
 package worker
 
 import (
-	"encoding/json"
-	"io"
-	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
@@ -14,31 +12,31 @@ var (
 	MaxQueue  = os.Getenv("MAX_QUEUE")
 )
 
-// Job represents the job to be run
-type Job struct {
-	Payload []byte
-}
-
 // A buffered channel that we can send work requests on.
-var JobQueue chan Job
+var JobQueue chan JobInterface
 
 // Worker represents the worker that executes the job
 type Worker struct {
-	WorkerPool chan chan Job
-	JobChannel chan Job
+	WorkerPool chan chan JobInterface
+	JobChannel chan JobInterface
 	quit       chan bool
 }
 
 func init() {
-	dispatcher := NewDispatcher(MaxWorker)
+	maxWorkersInt, err := strconv.Atoi(MaxWorker)
+	if err != nil {
+		maxWorkersInt = 5
+	}
+	dispatcher := NewDispatcher(maxWorkersInt)
 	dispatcher.Run()
 }
 
-func NewWorker(workerPool chan chan Job) Worker {
+func NewWorker(workerPool chan chan JobInterface) Worker {
 	return Worker{
 		WorkerPool: workerPool,
-		JobChannel: make(chan Job),
-		quit:       make(chan bool)}
+		JobChannel: make(chan JobInterface),
+		quit:       make(chan bool),
+	}
 }
 
 // Start method starts the run loop for the worker, listening for a quit channel in
@@ -52,8 +50,8 @@ func (w Worker) Start() {
 			select {
 			case job := <-w.JobChannel:
 				// we have received a work request.
-				if err := job.Payload.UploadToS3(); err != nil {
-					log.Errorf("Error uploading to S3: %s", err.Error())
+				if err := job.Run(); err != nil {
+					log.Errorf("Error executing the job", err.Error())
 				}
 
 			case <-w.quit:
@@ -71,31 +69,7 @@ func (w Worker) Stop() {
 	}()
 }
 
-func payloadHandler(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method != "POST" {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Read the body into a string for json decoding
-	var content = &PayloadCollection{}
-	err := json.NewDecoder(io.LimitReader(r.Body, MaxLength)).Decode(&content)
-	if err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	// Go through each payload and queue items individually to be posted to S3
-	for _, payload := range content.Payloads {
-
-		// let's create a job with the payload
-		work := Job{Payload: payload}
-
-		// Push the work onto the queue.
-		JobQueue <- work
-	}
-
-	w.WriteHeader(http.StatusOK)
+func SubmitJob(job JobInterface) {
+	// let's submit a job to the work onto the queue.
+	JobQueue <- job
 }
