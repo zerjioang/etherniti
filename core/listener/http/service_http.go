@@ -20,7 +20,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/ratelimit"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -56,12 +56,11 @@ func (l HttpListener) Listen(notifier chan error) {
 			logger.Info("shutting down http server", err)
 		}
 	}()
-	notifier <- nil
 	//enable graceful shutdown of http server
-	l.shutdown(e)
+	l.shutdown(e, notifier)
 }
 
-func (l HttpListener) shutdown(httpInstance *echo.Echo) {
+func (l HttpListener) shutdown(httpInstance *echo.Echo, notifier chan error) {
 	// The make built-in returns a value of type T (not *T), and it's memory is
 	// initialized.
 	quit := make(chan os.Signal)
@@ -69,15 +68,16 @@ func (l HttpListener) shutdown(httpInstance *echo.Echo) {
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
 	logger.Info("graceful shutdown of the service requested")
 	logger.Info("shutting down http server...")
 	if err := httpInstance.Shutdown(ctx); err != nil {
 		logger.Error(err)
+		notifier <- err
 	}
-	logger.Info("graceful shutdown executed")
+	cancel()
+	logger.Info("graceful shutdown executed for http listener")
 	logger.Info("exiting...")
-	os.Exit(0)
+	notifier <- nil
 }
 
 // create new deployer instance

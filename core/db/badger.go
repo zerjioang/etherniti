@@ -7,6 +7,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/bus"
+	"github.com/zerjioang/go-bus"
+
 	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/util/fs"
@@ -31,14 +34,6 @@ var (
 	uid           = os.Getuid()
 	gid           = os.Getgid()
 )
-
-func init() {
-	logger.Debug("loading db module data")
-	err := createData(constants.DatabaseRootPath + "db")
-	if err != nil {
-		logger.Error("failed to create shared database dir:", err)
-	}
-}
 
 func createData(path string) error {
 	logger.Debug("creating db path")
@@ -74,19 +69,15 @@ func NewCollection(name string) (*BadgerStorage, error) {
 	if err != nil {
 		return nil, openErr
 	}
+	// register for listening poweroff events
+	bus.SharedBus().Subscribe(bus.PowerOffEvent, func(message gobus.EventMessage) {
+		logger.Debug("executing database poweroff routine in database: ", name)
+		err := collection.Close()
+		if err != nil {
+			logger.Error("failed to close database due to: ", err)
+		}
+	})
 	return collection, nil
-}
-
-func (db *BadgerStorage) Init() error {
-	logger.Debug("initializing db file")
-	// Open the Badger database located in the /data/badger directory.
-	// It will be created if it doesn't exist.
-	instance, err := badger.Open(defaultConfig)
-	if err != nil {
-		return err
-	}
-	db.instance = instance
-	return nil
 }
 
 // Set is used to set a key/value set outside of the raft log.

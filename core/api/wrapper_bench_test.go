@@ -9,7 +9,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -138,7 +138,7 @@ func BenchmarkWrapper(b *testing.B) {
 	})
 	b.Run("stack-error", func(b *testing.B) {
 		ctx := common.NewContext(echo.New())
-		e := trycatch.New("no error")
+		e := stack.New("no error")
 		//disable logging
 		logger.Enabled(false)
 		b.ReportAllocs()

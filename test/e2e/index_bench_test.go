@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -22,7 +22,7 @@ func BenchmarkIndexController(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = handlers.NewIndexController()
+			_ = controllers.NewIndexController()
 		}
 	})
 
@@ -40,7 +40,7 @@ func BenchmarkIndexController(b *testing.B) {
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			_ = handlers.Index(c)
+			_ = controllers.Index(c)
 		}
 	})
 	b.Run("status", func(b *testing.B) {
@@ -56,7 +56,7 @@ func BenchmarkIndexController(b *testing.B) {
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			ctl := handlers.NewIndexController()
+			ctl := controllers.NewIndexController()
 			_ = ctl.Status(c)
 		}
 	})
@@ -74,7 +74,7 @@ func BenchmarkIndexController(b *testing.B) {
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			ctl := handlers.NewIndexController()
+			ctl := controllers.NewIndexController()
 			_ = ctl.Integrity(c)
 		}
 	})

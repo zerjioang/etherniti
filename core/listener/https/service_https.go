@@ -22,7 +22,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/ratelimit"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
@@ -86,6 +86,7 @@ func (l HttpsListener) Listen(notifier chan error) {
 		err := httpServerInstance.StartServer(&defaultHttpServerConfig)
 		if err != nil {
 			logger.Error("shutting down http the server", err)
+			notifier <- err
 		}
 	}()
 
@@ -95,20 +96,22 @@ func (l HttpsListener) Listen(notifier chan error) {
 		s, err := l.buildServerConfig(secureServer)
 		if err != nil {
 			logger.Error("failed to build https server configuration", err)
+			notifier <- err
 		} else {
 			logger.Info("starting https server...")
 			swagger.ConfigureFromTemplate()
 			err := secureServer.StartServer(s)
 			if err != nil {
 				logger.Error("shutting down https the server", err)
+				notifier <- err
 			}
 		}
 	}()
 	//graceful shutdown of http and https server
-	l.shutdown(httpServerInstance, secureServer)
+	l.shutdown(httpServerInstance, secureServer, notifier)
 }
 
-func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo) {
+func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo, notifier chan error) {
 	// The make built-in returns a value of type T (not *T), and it's memory is
 	// initialized.
 	quit := make(chan os.Signal)
@@ -122,23 +125,25 @@ func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Ech
 		logger.Info("shutting down http server...")
 		if err := httpInstance.Shutdown(ctx); err != nil {
 			logger.Error(err)
+			notifier <- err
 		}
 	}
 	if httpsInstance != nil {
 		logger.Info("shutting down https secure server...")
 		if err := httpsInstance.Shutdown(ctx); err != nil {
 			logger.Error(err)
+			notifier <- err
 		}
 	}
-	logger.Info("graceful shutdown executed")
+	logger.Info("graceful shutdown executed for https listener")
 	logger.Info("exiting...")
-	os.Exit(0)
+	notifier <- nil
 }
 
 func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 	cert, err := l.GetLocalHostTLS()
 	if err != nil {
-		log.Fatal("failed to setup TLS configuration due to trycatch", err)
+		log.Fatal("failed to setup TLS configuration due to stack", err)
 		return nil, err
 	}
 

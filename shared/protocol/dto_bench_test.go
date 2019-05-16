@@ -16,7 +16,7 @@ func BenchmarkNewApiError(b *testing.B) {
 
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = NewApiError(200, str.UnsafeBytes("test-trycatch"))
+			_ = NewApiError(200, str.UnsafeBytes("test-stack"))
 		}
 	})
 }

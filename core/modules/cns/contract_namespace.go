@@ -6,7 +6,7 @@ package cns
 import (
 	"sync"
 
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 )
 
 // solc compiler wrapper using executable from image: stable-alpine 5 MB
@@ -43,17 +43,17 @@ func (c ContractInfo) Id() string {
 	return c.Name + "-" + c.Version
 }
 
-func (c ContractInfo) Validate() trycatch.Error {
+func (c ContractInfo) Validate() stack.Error {
 	if c.Name == "" {
-		return trycatch.New("you must supply a valid contract name")
+		return stack.New("you must supply a valid contract name")
 	}
 	if c.Address == "" {
-		return trycatch.New("you must supply a valid contract address starting with 0x")
+		return stack.New("you must supply a valid contract address starting with 0x")
 	}
 	if c.Version == "" {
-		return trycatch.New("you must supply a valid contract version")
+		return stack.New("you must supply a valid contract version")
 	}
-	return trycatch.Nil()
+	return stack.Nil()
 }
 
 func NewContractNameSystem() ContractNameSystem {

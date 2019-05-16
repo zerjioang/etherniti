@@ -16,14 +16,14 @@ import (
 
 	"github.com/zerjioang/etherniti/core/modules/badips"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
-	"github.com/zerjioang/etherniti/core/server/mods/ratelimit"
+	"github.com/zerjioang/etherniti/core/server/ratelimit"
 
 	"github.com/zerjioang/etherniti/core/modules/bots"
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
-	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
 
@@ -46,7 +46,7 @@ var (
 	}
 	accessLogFormat = `{"time":"${time_unix}","id":"${id}","ip":"${remote_ip}",` +
 		`"host":"${host}","method":"${method}","referer":"${referer}","uri":"${uri}","ua":"${user_agent}",` +
-		`"status":${status},"err":"${trycatch}","latency":${latency},"latency_human":"${latency_human}"` +
+		`"status":${status},"err":"${stack}","latency":${latency},"latency_human":"${latency_human}"` +
 		`,"in":${bytes_in},"out":${bytes_out}}` + "\n"
 	gzipConfig = middleware.GzipConfig{
 		Level: 5,
@@ -71,7 +71,7 @@ func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 		req := c.Request()
 		scheme := c.Scheme()
 		// host := req.Host
-		if scheme == echo.Http {
+		if scheme == constants.Http {
 			return c.Redirect(301, config.GetRedirectUrl(req.Host, req.RequestURI))
 		}
 		return next(c)
@@ -198,7 +198,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 
 // configure deployer internal configuration
 func ConfigureServerRoutes(e *echo.Echo) {
-	// add a custom trycatch handler
+	// add a custom stack handler
 	logger.Info("[LAYER] custom error handler")
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
@@ -262,7 +262,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	e.Use(middleware.Recover())
 
 	// RegisterServices version 1 api calls
-	handlers.RegisterServices(e)
+	controllers.RegisterServices(e)
 
 	logger.Info("[LAYER] / static files")
 	//load root static folder
@@ -280,8 +280,8 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 // RegisterServices in echo server, allowed routes
 func RegisterRoot(e *echo.Echo) {
-	e.GET("/v1", handlers.Index)
-	e.GET("/v1/public", handlers.Index)
+	e.GET("/v1", controllers.Index)
+	e.GET("/v1/public", controllers.Index)
 }
 
 func GetTestSetup() *echo.Echo {

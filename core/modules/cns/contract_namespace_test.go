@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 )
 
 func TestContractNameSystem(t *testing.T) {
@@ -74,7 +74,7 @@ func TestContractInfo_Validate(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields fields
-		want   trycatch.Error
+		want   stack.Error
 	}{
 		// TODO: Add test cases.
 	}

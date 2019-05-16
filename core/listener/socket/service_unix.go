@@ -42,11 +42,11 @@ func (l UnixSocketListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI via unix sockets")
 	l.e = common.NewDefaultServer()
 	if l.mode {
-		l.background()
+		l.background(notifier)
 		//graceful shutdown of http and https server
-		l.shutdown()
+		l.shutdown(notifier)
 	} else {
-		l.foreground()
+		l.foreground(notifier)
 	}
 }
 
@@ -130,12 +130,12 @@ func (l UnixSocketListener) unixServerListener(c net.Conn) {
 }
 
 // run unix socket server instance in background
-func (l UnixSocketListener) background() {
-	go l.foreground()
+func (l UnixSocketListener) background(notifier chan error) {
+	go l.foreground(notifier)
 }
 
 // run unix socket server instance in foreground
-func (l UnixSocketListener) foreground() error {
+func (l UnixSocketListener) foreground(notifier chan error) {
 	log.Debug("starting unix socket server")
 	// Instead of identifying a server by an IP address and port,
 	// a UNIX domain socket is known by a pathname.
@@ -156,11 +156,11 @@ func (l UnixSocketListener) foreground() error {
 	ln, err := net.Listen("unix", l.path)
 	if err != nil {
 		log.Error("unix socket listen error: ", err)
-		return err
+		notifier <- err
 	}
 
 	l.e.Listener = ln
-	return l.e.Start("")
+	notifier <- l.e.Start("")
 
 	/*sigc := make(chan os.Signal, 1)
 	signal.Notify(sigc, os.Interrupt, syscall.SIGTERM)
@@ -183,7 +183,7 @@ func (l UnixSocketListener) foreground() error {
 	}*/
 }
 
-func (l UnixSocketListener) shutdown() {
+func (l UnixSocketListener) shutdown(notifier chan error) {
 	// The make built-in returns a value of type T (not *T), and it's memory is
 	// initialized.
 	quit := make(chan os.Signal)
@@ -195,9 +195,10 @@ func (l UnixSocketListener) shutdown() {
 		logger.Info("shutting down unix socket listener...")
 		if err := l.e.Listener.Close(); err != nil {
 			logger.Error(err)
+			notifier <- err
 		}
 	}
-	logger.Info("graceful shutdown executed")
+	logger.Info("graceful shutdown executed for unix socket listener")
 	logger.Info("exiting...")
-	os.Exit(0)
+	notifier <- nil
 }

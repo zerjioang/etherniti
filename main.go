@@ -6,6 +6,8 @@ package main
 import (
 	"runtime"
 
+	"github.com/zerjioang/etherniti/core/bus"
+
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -15,7 +17,7 @@ import (
 var (
 	// build commit hash value
 	Build    = config.GetEnvironmentName()
-	notifier = make(chan error, 1)
+	notifier = make(chan error)
 )
 
 func init() {
@@ -43,5 +45,9 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to execute etherniti proxy:", err)
 	}
-	<-notifier
+	logger.Info("shuting down remaining modules")
+	// finish graceful shutdown
+	bus.SharedBus().Emit(bus.PowerOffEvent)
+	bus.SharedBus().Shutdown()
+	logger.Info("all systems securely shutdown. Exiting now!")
 }

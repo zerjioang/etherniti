@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 )
@@ -36,24 +36,6 @@ type ProfileRequest struct {
 	Ip     string `json:"ip,omitempty"`
 }
 
-// new login request dto
-type LoginRequest struct {
-	Email    string `json:"email" form:"email" query:"email"`
-	Password string `json:"pwd" form:"pwd" query:"pwd"`
-}
-
-// new register request dto
-type RegisterRequest struct {
-	Username string `json:"user" form:"user" query:"user"`
-	Email    string `json:"email" form:"email" query:"email"`
-	Password string `json:"pwd" form:"pwd" query:"pwd"`
-}
-
-// new recovery request dto
-type RecoveryRequest struct {
-	Email string `json:"email" form:"email" query:"email"`
-}
-
 // new entropy request dto
 type EntropyRequest struct {
 	// size of initial entropy: 128 to 256 bits (for BIP39)
@@ -64,11 +46,11 @@ type ProjectRequest struct {
 	Name string `json:"name"`
 }
 
-func (pr ProjectRequest) Validate() trycatch.Error {
+func (pr ProjectRequest) Validate() stack.Error {
 	if pr.Name == "" {
-		return trycatch.New("project name not provided in request")
+		return stack.New("project name not provided in request")
 	}
-	return trycatch.Nil()
+	return stack.Nil()
 }
 
 // new deploy request dto
@@ -166,7 +148,7 @@ type ContractCompileResponse struct {
 	AbiDefinition   interface{} `json:"abiDefinition"`
 }
 
-// api trycatch model dto
+// api stack model dto
 type ApiError struct {
 	Code    int    `json:"code"`
 	Message []byte `json:"msg"`
@@ -199,7 +181,7 @@ func NewApiError(code int, details []byte) *ApiError {
 type ApiResponse struct {
 	Id   int `json:"id"`
 	Code int `json:"code"`
-	//Error trycatch
+	//Error stack
 	Message []byte      `json:"msg,omitempty"`
 	Result  interface{} `json:"result,omitempty"`
 }

@@ -99,7 +99,7 @@ func (s *EthRPCBenchSuite) TestWeb3ClientVersion() {
 }
 
 func (s *EthRPCBenchSuite) TestCall() {
-	// Test http trycatch
+	// Test http stack
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return nil, errors.New("Error")
 	})
@@ -116,9 +116,9 @@ func (s *EthRPCBenchSuite) TestCall() {
 	s.Require().NotNil(err)
 	httpmock.Reset()
 
-	// Test eth trycatch
+	// Test eth stack
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
-		return httpmock.NewStringResponse(200, `{"trycatch": {"code": 21, "message": "eee"}}`), nil
+		return httpmock.NewStringResponse(200, `{"stack": {"code": 21, "message": "eee"}}`), nil
 	})
 	_, err = s.rpc.makePostWithMethodParams("test", "")
 	s.Require().NotNil(err)
@@ -129,7 +129,7 @@ func (s *EthRPCBenchSuite) TestCall() {
 }
 
 func (s *EthRPCBenchSuite) Test_call() {
-	// Test http trycatch
+	// Test http stack
 	httpmock.RegisterResponder("POST", s.rpc.url, func(request *http.Request) (*http.Response, error) {
 		return nil, fmt.Errorf("Error")
 	})
@@ -209,7 +209,7 @@ func (s *EthRPCBenchSuite) TestNetListening() {
 }
 
 func (s *EthRPCBenchSuite) TestNetPeerCount() {
-	// Test trycatch
+	// Test stack
 	s.registerResponseError(errors.New("Error"))
 	peerCount, err := s.rpc.NetPeerCount()
 	s.Require().NotNil(err)
@@ -813,7 +813,7 @@ func (s *EthRPCBenchSuite) TestEthCall() {
 }
 
 func (s *EthRPCBenchSuite) TestEthEstimateGas() {
-	s.registerResponseError(errors.New("trycatch"))
+	s.registerResponseError(errors.New("stack"))
 	result, err := s.rpc.EthEstimateGas(TransactionData{
 		From: "0x111",
 		To:   "0x222",
@@ -834,7 +834,7 @@ func (s *EthRPCBenchSuite) TestEthEstimateGas() {
 
 func (s *EthRPCBenchSuite) TestEthGetTransactionReceipt() {
 	hash := "0x9c17afa5336d3cfd47e2e795520959b92e627e123e538fd4d5d7ece9025a8dce"
-	s.registerResponseError(errors.New("trycatch"))
+	s.registerResponseError(errors.New("stack"))
 	receipt, err := s.rpc.EthGetTransactionReceipt(hash)
 	s.Require().NotNil(err)
 

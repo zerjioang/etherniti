@@ -272,7 +272,7 @@ var (
 	ErrInvalidCertOrKeyType        = errors.New("invalid cert or key type, must be string or []byte")
 )
 
-// Error handlers
+// Error controllers
 var (
 	NotFoundHandler = func(c *Context) error {
 		return ErrNotFound

@@ -30,6 +30,9 @@ type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
 	protocol.ProfileRequest
 
+	// user type of role: admin, standard, premium, etc
+	UserRole constants.UserRole `json:"role"`
+
 	// service version when profile was generated
 	Version string `json:"version"`
 	//standard claims
@@ -140,6 +143,10 @@ func (profile ConnectionProfile) readBool(v interface{}) bool {
 	return false
 }
 
+func (profile ConnectionProfile) Role() constants.UserRole {
+	return profile.UserRole
+}
+
 func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
@@ -219,7 +226,8 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
-		Id: id.GenerateUUIDFromEntropy(),
+		Id:       id.GenerateUUIDFromEntropy(),
+		UserRole: constants.StandardUser,
 		ProfileRequest: protocol.ProfileRequest{
 			RpcEndpoint: "http://127.0.0.1:8545",
 			Address:     "0x0",

@@ -10,7 +10,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -23,7 +23,7 @@ func BenchmarkWalletController(b *testing.B) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
-		ctl := handlers.NewWalletController()
+		ctl := controllers.NewWalletController()
 
 		logger.Enabled(false)
 

@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	NotAuthorized        = "not authorized"
 	NotImplementedStr    = "not implemented"
 	ErrUnknownModeStr    = "unknown mode selected. Allowed modes are: single, git, zip, targz"
 	SolcVersionFailedStr = "failed to get solc version"
@@ -108,9 +109,21 @@ var (
 	ErrUnknownMode           = errors.New(ErrUnknownModeStr)
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)
 	ErrNotImplemented        = errors.New(NotImplementedStr)
+	ErrNotAuthorized         = errors.New(NotAuthorized)
+	ListingNotSupported      = errors.New("listing not supported")
 )
 
 // database related errors
 var (
 	DuplicateKeyErr = errors.New("duplicate key found on database. cannot store")
+)
+
+// project controller related errors
+var (
+	FailedToProcess     = []byte("failed to process current request")
+	ProvideProjectId    = []byte("you have to provide a valid project id")
+	ProvideId           = []byte("you have to provide a valid object id")
+	SuccessfullyCreated = []byte("successfully created")
+	SuccessfullyDeleted = []byte("successfully deleted")
+	NotAllowedToList    = []byte("you are not allowed to list items")
 )

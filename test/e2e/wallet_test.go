@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
@@ -23,7 +23,7 @@ func TestWalletController(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
-		ctl := handlers.NewWalletController()
+		ctl := controllers.NewWalletController()
 
 		// Assertions
 		if assert.NoError(t, ctl.Entropy(c)) {

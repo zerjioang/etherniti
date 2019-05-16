@@ -278,6 +278,15 @@
   version = "v0.2.1"
 
 [[projects]]
+  name = "github.com/zerjioang/go-bus"
+  packages = [
+    ".",
+    "mutex"
+  ]
+  revision = "198f0cd9d8d1d7fbd98f1bae40ae566da3009ada"
+  version = "v0.2.3"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = [
@@ -411,6 +420,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f39ef9cdb04a7077af1f842d071e8af9cae734c607aac01947fb0ff1050b0cc4"
+  inputs-digest = "72d3c698fb2a828fe1ea9449375418cc9a0ad80a540995cbfba9705a25918db7"
   solver-name = "gps-cdcl"
   solver-version = 1

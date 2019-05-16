@@ -13,10 +13,10 @@ import (
 
 func TestNewApiError(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		apiErr := NewApiError(200, str.UnsafeBytes("test-trycatch"))
+		apiErr := NewApiError(200, str.UnsafeBytes("test-stack"))
 		require.NotNil(t, apiErr)
 		require.Equal(t, apiErr.Code, 200)
-		require.Equal(t, apiErr.Details, "test-trycatch")
+		require.Equal(t, apiErr.Details, "test-stack")
 	})
 }
 

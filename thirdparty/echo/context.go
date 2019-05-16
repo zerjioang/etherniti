@@ -31,16 +31,6 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
 )
 
-type RequestScheme uint8
-
-const (
-	Http RequestScheme = iota
-	Https
-	Unix
-	Websocket
-	Other
-)
-
 var (
 	errInvalidateCache = errors.New("failed to get item from internal cache, cache invalidation issues around")
 )
@@ -67,7 +57,7 @@ type Context struct {
 	isJson     bool
 	isTls      bool
 	isWs       bool
-	SchemeType RequestScheme
+	SchemeType constants.RequestScheme
 	SchemeName string
 	ip         string
 	// http client cache policy
@@ -129,30 +119,30 @@ func (c *Context) resolveScheme() string {
 	// Can't use `r.Request.URL.Scheme`
 	// See: https://groups.google.com/forum/#!topic/golang-nuts/pMUkBlQBDF0
 	if c.IsTLS() {
-		c.SchemeType = Https
+		c.SchemeType = constants.Https
 		return "https"
 	}
 	if scheme := c.request.Header.Get(HeaderXForwardedProto); scheme != "" {
-		c.SchemeType = Other
+		c.SchemeType = constants.Other
 		return scheme
 	}
 	if scheme := c.request.Header.Get(HeaderXForwardedProtocol); scheme != "" {
-		c.SchemeType = Other
+		c.SchemeType = constants.Other
 		return scheme
 	}
 	if ssl := c.request.Header.Get(HeaderXForwardedSsl); ssl == "on" {
-		c.SchemeType = Https
+		c.SchemeType = constants.Https
 		return "https"
 	}
 	if scheme := c.request.Header.Get(HeaderXUrlScheme); scheme != "" {
-		c.SchemeType = Other
+		c.SchemeType = constants.Other
 		return scheme
 	}
-	c.SchemeType = Http
+	c.SchemeType = constants.Http
 	return "http"
 }
 
-func (c *Context) Scheme() RequestScheme {
+func (c *Context) Scheme() constants.RequestScheme {
 	return c.SchemeType
 }
 
@@ -539,7 +529,7 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.isJson = false
 	c.isTls = false
 	c.isWs = false
-	c.SchemeType = Other
+	c.SchemeType = constants.Other
 	c.SchemeName = ""
 	c.ip = ""
 	c.OnSuccessCachePolicy = 0
@@ -599,10 +589,10 @@ func (c *Context) ReadConnectionProfileToken() string {
 	tokenDataStr = req.Header.Get(constants.HttpProfileHeaderkey)
 	if tokenDataStr == "" {
 		//read if token provided via query param
-		tokenDataStr = c.QueryParam("token")
+		tokenDataStr = c.QueryParam("profile")
 		if tokenDataStr == "" {
 			//read from request cookie
-			cok, err := c.Cookie("token")
+			cok, err := c.Cookie("profile")
 			if err == nil && cok != nil {
 				tokenDataStr = cok.Value
 			}
@@ -619,4 +609,8 @@ func (c *Context) IsJsonRequest() bool {
 // this value is in jwt token setn with each request
 func (c *Context) UserUuid() string {
 	return c.profileData.AccountId
+}
+
+func (c *Context) User() profile.ConnectionProfile {
+	return c.profileData
 }

@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/handlers"
+	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/core/listener"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -21,9 +21,10 @@ var (
 )
 
 func init() {
-	handlers.LoadIndexConstants()
+	controllers.LoadIndexConstants()
 	logger.Info("system running with pointers size of: ", constants.PointerSize, " bits")
 	serverStarted.Store(false)
+
 }
 
 func RunServer(notifier chan error) {

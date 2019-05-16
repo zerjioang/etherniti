@@ -12,7 +12,7 @@ import (
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/trycatch"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -161,7 +161,7 @@ func ErrorCode(c *echo.Context, code int, err error) error {
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-func StackError(c *echo.Context, stackErr trycatch.Error) error {
+func StackError(c *echo.Context, stackErr stack.Error) error {
 	logger.Debug("converting stack error to error payload")
 	logger.Error(stackErr)
 	rawBytes := toError(protocol.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
