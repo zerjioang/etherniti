@@ -2211,7 +2211,7 @@
         }
       }
     },
-    "/private/projects": {
+    "/public/projects": {
       "post": {
         "tags": ["project"],
         "summary": "Create new project",
@@ -2288,7 +2288,7 @@
         }
       }
     },
-    "/private/projects/{id}": {
+    "/public/projects/{id}": {
       "get": {
         "tags": [
           "project"

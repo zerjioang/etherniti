@@ -84,19 +84,31 @@ func GetJsonBytes(data interface{}) []byte {
 // this function is at least
 // twice as fast as standard to lower function of go standard library
 func ToLowerAscii(src string) string {
+	// string are immutable
 	rawBytes := []byte(src)
-	//rawBytes := UnsafeBytes(src)
 	start := uintptr(unsafe.Pointer(&rawBytes[0]))
-	step := unsafe.Sizeof(rawBytes[0])
 	s := len(rawBytes)
 	for i := 0; i < s; i++ {
 		// get char at current index
-		c := *(*byte)((unsafe.Pointer)(start + step*uintptr(i)))
+		c := *(*byte)((unsafe.Pointer)(start + uintptr(i)))
 		if c >= 'A' && c <= 'Z' {
-			*(*byte)((unsafe.Pointer)(start + step*uintptr(i))) = c + 32
+			*(*byte)((unsafe.Pointer)(start + uintptr(i))) = c + 32
 		}
 	}
 	return *(*string)(unsafe.Pointer(&rawBytes))
+}
+
+// A slightly faster lowercase function.
+func toLower(s string) string {
+	b := make([]byte, len(s))
+	for i := range b {
+		c := s[i]
+		if c >= 'A' && c <= 'Z' {
+			c += 'a' - 'A'
+		}
+		b[i] = c
+	}
+	return string(b)
 }
 
 func strLen(s string) int {
