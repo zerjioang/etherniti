@@ -16,7 +16,7 @@ type ProjectController struct {
 func NewProjectController() ProjectController {
 	pc := ProjectController{}
 	var err error
-	pc.DatabaseController, err = common.NewDatabaseController("project", NewDBProject())
+	pc.DatabaseController, err = common.NewDatabaseController("projects", NewDBProject())
 	if err != nil {
 		logger.Error("failed to create database controller ", err)
 	}

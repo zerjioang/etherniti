@@ -124,9 +124,8 @@ func Index(c *echo.Context) error {
 
 func (ctl *IndexController) Status(c *echo.Context) error {
 	data := ctl.status()
-	var code int
 	c.OnSuccessCachePolicy = 5
-	return c.JSONBlob(code, data)
+	return c.JSONBlob(protocol.StatusOK, data)
 }
 
 func (ctl *IndexController) status() []byte {
@@ -137,9 +136,8 @@ func (ctl *IndexController) status() []byte {
 // concurrency safe
 func (ctl *IndexController) Integrity(c *echo.Context) error {
 	data := ctl.integrity()
-	var code int
 	c.OnSuccessCachePolicy = clientcache.CacheOneDay
-	return c.JSONBlob(code, data)
+	return c.JSONBlob(protocol.StatusOK, data)
 }
 
 func (ctl *IndexController) integrity() []byte {
