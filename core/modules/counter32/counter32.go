@@ -5,6 +5,7 @@ package counter32
 
 import (
 	"encoding/binary"
+	"strconv"
 	"sync/atomic"
 	"unsafe"
 )
@@ -28,6 +29,13 @@ func (c *Count32) Get() uint32 {
 func (c *Count32) UnsafeBytes() []byte {
 	v := atomic.LoadUint32((*uint32)(c))
 	return (*[4]byte)(unsafe.Pointer(&v))[:]
+}
+
+func (c *Count32) JsonBytes() []byte {
+	// todo optimize this concatenation and conversion
+	var s = strconv.FormatUint(uint64(c.Get()), 10)
+	raw := []byte(`{"count": ` + s + `}`)
+	return raw
 }
 
 // The code in the question interprets the uint32 as a slice header.

@@ -44,6 +44,7 @@ func init() {
 	//preload solc version information
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
+		solcResponseCode = protocol.StatusBadRequest
 		solcVersionResponse = api.ErrorBytes("failed to get solc version")
 	} else if err != nil {
 		solcResponseCode = protocol.StatusBadRequest

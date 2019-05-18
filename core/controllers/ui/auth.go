@@ -3,7 +3,8 @@ package ui
 import (
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/modules/stack"
+
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/db"
@@ -72,13 +73,13 @@ func (req *AuthRequest) CanList(context *echo.Context) error {
 	return data.ListingNotSupported
 }
 
-func (req *AuthRequest) Bind(context *echo.Context) common.DatabaseObjectInterface {
+func (req *AuthRequest) Bind(context *echo.Context) (common.DatabaseObjectInterface, stack.Error) {
 	if err := context.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		_ = api.ErrorStr(context, data.BindErr)
+		return nil, stack.Ret(err)
 	}
-	return nil
+	return nil, data.ErrBind
 }
 
 func NewEmptyAuthRequestPtr() *AuthRequest {

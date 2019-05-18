@@ -1,6 +1,9 @@
 package common
 
-import "github.com/zerjioang/etherniti/thirdparty/echo"
+import (
+	"github.com/zerjioang/etherniti/core/modules/stack"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
+)
 
 type DatabaseObjectInterface interface {
 	Key() []byte
@@ -14,5 +17,5 @@ type DatabaseObjectInterface interface {
 	CanWrite(context *echo.Context) error
 	CanList(context *echo.Context) error
 	// method used to decode http input byte data to go struct
-	Bind(context *echo.Context) DatabaseObjectInterface
+	Bind(context *echo.Context) (DatabaseObjectInterface, stack.Error)
 }

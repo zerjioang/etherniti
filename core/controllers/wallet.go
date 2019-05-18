@@ -124,12 +124,6 @@ func (ctl WalletController) HdWallet(c *echo.Context) error {
 
 func (ctl WalletController) Entropy(c *echo.Context) error {
 	req := protocol.EntropyRequest{}
-	if err := c.Bind(&req); err != nil {
-		// return a binding error
-		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, data.BindErr)
-	}
-
 	req.Size = ctl.getIntParam(c, "bits")
 
 	if req.Size <= 0 || req.Size > 4096*8 {
@@ -189,10 +183,9 @@ func (ctl WalletController) generateAddress(c *echo.Context) error {
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
-	var response = map[string]string{
-		"address": address.Hex(),
-		"private": privateKey,
-	}
+	var response protocol.AccountResponse
+	response.Address = address.Hex()
+	response.Key = privateKey
 	return api.SendSuccess(c, data.EthAccountSuccess, response)
 }
 

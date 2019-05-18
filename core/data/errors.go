@@ -5,6 +5,8 @@ package data
 
 import (
 	"errors"
+
+	"github.com/zerjioang/etherniti/core/modules/stack"
 )
 
 const (
@@ -12,6 +14,8 @@ const (
 	NotImplementedStr    = "not implemented"
 	ErrUnknownModeStr    = "unknown mode selected. Allowed modes are: single, git, zip, targz"
 	SolcVersionFailedStr = "failed to get solc version"
+	BindErrStr           = "there was an error while processing your request information"
+	ProvideProjectIdStr  = "you have to provide a valid project data"
 )
 
 var (
@@ -78,18 +82,18 @@ var (
 	JwtErrorMessage         = []byte("please provide a connection profile token for this kind of call")
 
 	ReadErr = []byte("there was an error during execution")
-	BindErr = []byte("there was an error while processing your request information")
+	BindErr = []byte(BindErrStr)
 
 	UserLogin          = []byte("login")
 	UserRegistered     = []byte("user registered")
 	UserRegisterFailed = []byte("failed to register new user account")
 
-	DatabaseError = []byte("Failed to process your login request at this moment. Please try it later")
+	DatabaseError = []byte("failed to process your login request at this moment. Please try it later")
 
-	InvalidLoginData        = []byte("Invalid username or password provided")
-	MissingLoginFields      = []byte("Invalid login data provided. please fill all required fields")
-	FailedLoginVerification = []byte("Failed to verify your login information at this time. Please try it few minutes later.")
-	RegistrationSuccess     = []byte("Registration successfully finished. Please verify your account with the message sent to your inbox.")
+	InvalidLoginData        = []byte("invalid username or password provided")
+	MissingLoginFields      = []byte("invalid login data provided. please fill all required fields")
+	FailedLoginVerification = []byte("failed to verify your login information at this time. Please try it few minutes later.")
+	RegistrationSuccess     = []byte("registration successfully finished. Please verify your account with the message sent to your inbox.")
 
 	MnemonicLanguageNotProvided = []byte("provided language is not supported")
 	MnemonicSizeNotSupported    = []byte("provided mnemonic size is not supported. allowed sizes are: 128,160,192,224,256")
@@ -97,7 +101,7 @@ var (
 	MnemonicSuccess             = []byte("mnemonic successfully created")
 	HDWalletSuccess             = []byte("hd wallet successfully created")
 	EntropySizeNotSupported     = []byte("provided entropy size is not supported")
-	EntropySuccess              = []byte("Entropy data generated")
+	EntropySuccess              = []byte("entropy data generated")
 	EthAccountSuccess           = []byte("ethereum account created")
 	EthAccountFailed            = []byte("failed to generate ecdsa private key")
 	EthAddressValidation        = []byte("address validation")
@@ -111,6 +115,8 @@ var (
 	ErrNotImplemented        = errors.New(NotImplementedStr)
 	ErrNotAuthorized         = errors.New(NotAuthorized)
 	ListingNotSupported      = errors.New("listing not supported")
+	ErrBind                  = stack.New(BindErrStr)
+	StackErrProject          = stack.New(ProvideProjectIdStr)
 )
 
 // database related errors
@@ -121,7 +127,7 @@ var (
 // project controller related errors
 var (
 	FailedToProcess     = []byte("failed to process current request")
-	ProvideProjectId    = []byte("you have to provide a valid project id")
+	ProvideProjectId    = []byte(ProvideProjectIdStr)
 	ProvideId           = []byte("you have to provide a valid object id")
 	SuccessfullyCreated = []byte("successfully created")
 	SuccessfullyDeleted = []byte("successfully deleted")

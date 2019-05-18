@@ -277,7 +277,9 @@
           "200": {
             "description": "profile count response",
             "schema": {
-              "example": 10
+              "example": {
+                "count": 0
+              }
             }
           }
         }
@@ -375,7 +377,7 @@
                 "msg": "ethereum account created",
                 "result": {
                   "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
-                  "private": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
+                  "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
                 }
               }
             }
@@ -2211,7 +2213,7 @@
         }
       }
     },
-    "/public/projects": {
+    "/private/projects": {
       "post": {
         "tags": ["project"],
         "summary": "Create new project",
@@ -2232,9 +2234,6 @@
           "example": {
             "name": "test-project"
           },
-          "default": {
-            "name": "test-project"
-          }
         }],
         "responses": {
           "200": {
@@ -2288,7 +2287,7 @@
         }
       }
     },
-    "/public/projects/{id}": {
+    "/private/projects/{id}": {
       "get": {
         "tags": [
           "project"
@@ -2360,9 +2359,6 @@
             "type": "string",
             "required": true,
             "example": {
-              "name": "test-project"
-            },
-            "default": {
               "name": "test-project"
             }
           }

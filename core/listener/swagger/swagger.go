@@ -28,7 +28,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	}
 	//replace hardcoded variables
 	str := string(raw)
-	str = strings.Replace(str, "$title", "Etherniti REST API Proxy", -1)
+	str = strings.Replace(str, "$title", "Etherniti: High Performance Web3 REST Proxy", -1)
 	str = strings.Replace(str, "$version", constants.Version, -1)
 	str = strings.Replace(str, "$host", config.GetSwaggerAddress(), -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)

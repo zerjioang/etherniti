@@ -64,6 +64,12 @@ type DeployRequest struct {
 	} `json:"registry"`
 }
 
+// account creation response
+type AccountResponse struct {
+	Address string `json:"address" form:"address" query:"address"`
+	Key     string `json:"key" form:"key" query:"key"`
+}
+
 // new hd wallet response dto
 type EntropyResponse struct {
 	Raw []byte `json:"entropy" form:"entropy" query:"entropy"`

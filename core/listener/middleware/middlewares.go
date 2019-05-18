@@ -143,31 +143,34 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		// add keep alive headers in the response if requested by the client
 		h := request.Header
-		connectionMode := h.Get("Connection")
-		connectionMode = str.ToLowerAscii(connectionMode)
-		/*
-			Lista de parámetros separados por coma,
-			cada uno consiste en un identificador y un valor separado por el signo igual ('=').
-			Es posible establecer los siguientes identificadores:
-			* timeout: indica la cantidad de  tiempo mínima  en la cual una conexión ociosa
-			se debe mantener abierta (en segundos).
-			Nótese que los timeouts mas largos que el timeout de TCP
-			pueden ser ignorados si no se establece un mensaje de TCP
-			keep-alive  en la capa de transporte.
-			* max: indica el número máximo de peticiones que pueden ser
-			enviadas en esta conexión antes de que sea cerrada. Si es  0,
-			este valor es ignorado para las conexiones no segmentadas,
-			ya que se enviara otra solicitud en la próxima respuesta.
-			Una canalización de HTTP puede ser usada para limitar la división.
-		*/
 		response := c.Response()
 		rh := response.Header()
-		if strings.Contains(connectionMode, "keep-alive") {
-			// keep alive connection mode requested
-			rh.Set("Connection", "Keep-Alive")
-			rh.Set("Keep-Alive", "timeout=5, max=1000")
+
+		// add keep alive headers in the response if requested by the client
+		connectionMode := h.Get("Connection")
+		if connectionMode != "" {
+			connectionMode = str.ToLowerAscii(connectionMode)
+			/*
+				Lista de parámetros separados por coma,
+				cada uno consiste en un identificador y un valor separado por el signo igual ('=').
+				Es posible establecer los siguientes identificadores:
+				* timeout: indica la cantidad de  tiempo mínima  en la cual una conexión ociosa
+				se debe mantener abierta (en segundos).
+				Nótese que los timeouts mas largos que el timeout de TCP
+				pueden ser ignorados si no se establece un mensaje de TCP
+				keep-alive  en la capa de transporte.
+				* max: indica el número máximo de peticiones que pueden ser
+				enviadas en esta conexión antes de que sea cerrada. Si es  0,
+				este valor es ignorado para las conexiones no segmentadas,
+				ya que se enviara otra solicitud en la próxima respuesta.
+				Una canalización de HTTP puede ser usada para limitar la división.
+			*/
+			if strings.Contains(connectionMode, "keep-alive") {
+				// keep alive connection mode requested
+				rh.Set("Connection", "Keep-Alive")
+				rh.Set("Keep-Alive", "timeout=5, max=1000")
+			}
 		}
 
 		// add security headers

@@ -1,11 +1,11 @@
 package project
 
 import (
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
+	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/core/util/id"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -78,18 +78,18 @@ func (project Project) CanList(context *echo.Context) error {
 	return nil
 }
 
-func (project Project) Bind(context *echo.Context) common.DatabaseObjectInterface {
+func (project Project) Bind(context *echo.Context) (common.DatabaseObjectInterface, stack.Error) {
 	//new project creation request
 	var req protocol.ProjectRequest
 	if err := context.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		_ = api.ErrorStr(context, data.BindErr)
+		return nil, data.ErrBind
 	}
 	e := req.Validate()
 	if e.Occur() {
 		logger.Error("failed to validate new project data: ", e.Error())
-		_ = api.ErrorStr(context, str.UnsafeBytes(e.Error()))
+		return nil, e
 	} else {
 		// get required data to build a new project
 		intIP := ip.Ip2int(context.RealIP())
@@ -98,13 +98,12 @@ func (project Project) Bind(context *echo.Context) common.DatabaseObjectInterfac
 
 		if intIP == 0 || projectOwner == "" {
 			logger.Error("failed to create new project: missing data")
-			_ = api.ErrorStr(context, data.ProvideProjectId)
+			return nil, data.StackErrProject
+		} else {
+			p := NewProject(req.Name, projectOwner, intIP)
+			return p, stack.Nil()
 		}
-
-		p := NewProject(req.Name, projectOwner, intIP)
-		return p
 	}
-	return nil
 }
 
 func NewEmptyProject() Project {

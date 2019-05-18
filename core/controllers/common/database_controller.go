@@ -36,7 +36,10 @@ func NewDatabaseController(collection string, model DatabaseObjectInterface) (Da
 }
 
 func (ctl *DatabaseController) Create(c *echo.Context) error {
-	requestedItem := ctl.model.New().Bind(c)
+	requestedItem, err := ctl.model.New().Bind(c)
+	if err.Occur() {
+		return api.StackError(c, err)
+	}
 	if requestedItem != nil {
 		canWriteErr := requestedItem.CanWrite(c)
 		if canWriteErr == nil {
