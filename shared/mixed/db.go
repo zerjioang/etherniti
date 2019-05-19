@@ -1,4 +1,4 @@
-package common
+package protocol
 
 import (
 	"github.com/zerjioang/etherniti/core/modules/stack"

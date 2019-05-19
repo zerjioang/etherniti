@@ -15,7 +15,7 @@ import (
 
 type Project struct {
 	// implement interface to be a rest-db-crud able struct
-	common.DatabaseObjectInterface
+	common.DatabaseObjectInterface `json:"_,omitempty"`
 
 	// unique project indetifier used for database storage
 	Uuid string `json:"uuid"`

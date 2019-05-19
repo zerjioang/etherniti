@@ -1,8 +1,7 @@
-package ui
+package auth
 
 import (
 	"errors"
-
 	"github.com/zerjioang/etherniti/core/modules/stack"
 
 	"github.com/zerjioang/etherniti/core/controllers/common"
@@ -16,9 +15,10 @@ import (
 
 // new login request dto
 type AuthRequest struct {
-	common.DatabaseObjectInterface
-	Username string             `json:"user,omitempty" form:"user" query:"user"`
-	Role     constants.UserRole `json:"user,omitempty" form:"user" query:"user"`
+	common.DatabaseObjectInterface `json:"_,omitempty"`
+	Uuid string `json:"uuid,omitempty"`
+	Username string             `json:"name,omitempty" form:"name" query:"name"`
+	Role     constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
 	Email    string             `json:"email" form:"email" query:"email"`
 	Password string             `json:"pwd" form:"pwd" query:"pwd"`
 }
