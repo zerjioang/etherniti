@@ -156,63 +156,59 @@ type ContractCompileResponse struct {
 
 // api stack model dto
 type ApiError struct {
-	Code    int    `json:"code"`
-	Message []byte `json:"msg"`
-	Details []byte `json:"details"`
+	Message []byte `json:"msg,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 func (e ApiError) Bytes(b *bytes.Buffer) []byte {
 	b.Reset()
 	// {"code":400,"msg":"test-error","details":""}
-	b.Write(str.UnsafeBytes(`{"code":`))
-	b.Write(str.IntToByte(e.Code))
-	b.Write(str.UnsafeBytes(`,"msg":"`))
-	b.Write(e.Message)
-	b.Write(str.UnsafeBytes(`","details":"`))
-	b.Write(e.Details)
-	b.Write(str.UnsafeBytes(`"}`))
+	b.Write(str.UnsafeBytes(`{`))
+	if len(e.Message) > 0 {
+		b.Write(str.UnsafeBytes(`"msg":"`))
+		b.Write(e.Message)
+		b.Write(str.UnsafeBytes(`"`))
+	}
+	if len(e.Data) > 0 {
+		b.Write(str.UnsafeBytes(`,"data":"`))
+		b.Write(e.Data)
+		b.Write(str.UnsafeBytes(`"`))
+	}
+	b.Write(str.UnsafeBytes(`}`))
 	return b.Bytes()
 }
 
 // api error constructor like function
 func NewApiError(code int, details []byte) *ApiError {
 	ae := ApiError{}
-	ae.Code = code
 	ae.Message = str.UnsafeBytes(StatusText(code))
-	ae.Details = details
+	ae.Data = details
 	return &ae
 }
 
 // api response model dto
 type ApiResponse struct {
-	Id   int `json:"id"`
-	Code int `json:"code"`
-	//Error stack
-	Message []byte      `json:"msg,omitempty"`
-	Result  interface{} `json:"result,omitempty"`
+	Message []byte `json:"msg,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 // api response constructor like function
-func NewApiResponse(message []byte, payload interface{}) *ApiResponse {
+func NewApiResponse(message []byte, payload []byte) *ApiResponse {
 	ae := ApiResponse{}
-	ae.Id = 0
-	ae.Code = 200
 	ae.Message = message
-	ae.Result = payload
+	ae.Data = payload
 	return &ae
 }
 
 func (e ApiResponse) Bytes(b *bytes.Buffer) []byte {
 	b.Reset()
-	// {"code":400,"msg":"test-error","details":""}
-	b.WriteString(`{"code":`)
-	b.Write(str.IntToByte(e.Code))
-	b.WriteString(`,"id":`)
-	b.Write(str.IntToByte(e.Id))
-	b.WriteString(`,"msg":"`)
+	b.WriteString(`{"msg":"`)
 	b.Write(e.Message)
-	b.WriteString(`","details":`)
-	b.Write(str.GetJsonBytes(e.Result))
+	b.WriteString(`"`)
+	if e.Data != nil && len(e.Data) > 0 {
+		b.WriteString(`,"data":`)
+		b.Write(e.Data)
+	}
 	b.WriteString(`}`)
 	return b.Bytes()
 }

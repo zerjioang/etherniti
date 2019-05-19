@@ -1,11 +1,14 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
+// +build arm arm64 arm64be
+
 package aeshash
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
 	"hash/fnv"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 // Hash hashes the given string using the algorithm used by Go's hash tables

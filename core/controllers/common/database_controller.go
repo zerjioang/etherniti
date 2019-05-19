@@ -8,6 +8,7 @@ import (
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/shared/mixed"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -15,11 +16,11 @@ type DatabaseController struct {
 	storage *db.BadgerStorage
 	name    string
 	// data model used in this collection
-	model DatabaseObjectInterface
+	model mixed.DatabaseObjectInterface
 }
 
 // constructor like function
-func NewDatabaseController(collection string, model DatabaseObjectInterface) (DatabaseController, error) {
+func NewDatabaseController(collection string, model mixed.DatabaseObjectInterface) (DatabaseController, error) {
 	dbctl := DatabaseController{}
 	dbctl.name = collection
 	dbctl.model = model
@@ -137,7 +138,7 @@ func (ctl *DatabaseController) List(c *echo.Context) error {
 }
 
 // todo delegate rather than recall
-func (ctl DatabaseController) Model() DatabaseObjectInterface {
+func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
 	return ctl.model
 }
 

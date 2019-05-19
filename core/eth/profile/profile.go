@@ -4,8 +4,7 @@
 package profile
 
 import (
-	"errors"
-
+	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -19,10 +18,7 @@ import (
 )
 
 var (
-	tokenSecretBytes        = []byte(config.TokenSecret())
-	errTokenNoValid         = errors.New("provided token contains invalid or missing fields")
-	errInvalidSigningMethod = errors.New("unexpected signing method")
-	errFailedToRead         = errors.New("failed to read token claims")
+	tokenSecretBytes = []byte(config.TokenSecret())
 )
 
 // default data for connection profile
@@ -68,7 +64,7 @@ type ConnectionProfile struct {
 // implementation from Claims
 func (profile ConnectionProfile) Valid() error {
 	if !profile.Valididity {
-		return errTokenNoValid
+		return data.ErrTokenNoValid
 	}
 	return nil
 }
@@ -166,7 +162,7 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 		// Don't forget to validate the alg is what you expect:
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
-			return nil, errInvalidSigningMethod
+			return nil, data.ErrInvalidSigningMethod
 		}
 		// return used token secret
 		return tokenSecretBytes, nil
@@ -177,7 +173,7 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 
 	mapc, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return profile, errFailedToRead
+		return profile, data.ErrFailedToRead
 	}
 	profile = profile.Populate(mapc)
 
@@ -187,7 +183,7 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	if profile.Valididity {
 		return profile, nil
 	} else {
-		return profile, errTokenNoValid
+		return profile, data.ErrTokenNoValid
 	}
 }
 

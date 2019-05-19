@@ -3,7 +3,8 @@ package constants
 type UserRole uint8
 
 const (
-	AdminUser UserRole = iota
+	UndefinedUser UserRole = iota
+	AdminUser
 	StandardUser
 	PremiumUserUser
 )

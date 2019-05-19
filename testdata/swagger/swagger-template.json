@@ -32,14 +32,23 @@
   "produces": [
     "application/json;charset=utf-8"
   ],
-  "tags": [{
-    "name": "public",
-    "description": "Public Etherniti Web3 Proxy operations",
-    "externalDocs": {
-      "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-      "url": "https://www.etherniti.org/docs/api/public-operations/"
-    }
-  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Etherniti Web3 Proxy authenticator",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
+        "url": "https://www.etherniti.org/docs/api/auth/"
+      }
+    },
+    {
+      "name": "public",
+      "description": "Public Etherniti Web3 Proxy operations",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
+        "url": "https://www.etherniti.org/docs/api/public-operations/"
+      }
+    },
     {
       "name": "profile",
       "description": "Etherniti Web3 Proxy connection profile management",
@@ -150,6 +159,123 @@
         }
       }
     },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User login",
+        "description": "User login and authentication",
+        "operationId": "auth-login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "email": "jhon.doe@domain.tld",
+              "pwd": "123456"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "login success message",
+            "schema": {
+              "example": {
+                "msg": "login",
+                "data": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiNDhjZWFmYzUzM2VlNDE4YzhhMjgwNWI5OTkxZjlkOTAiLCJleHAiOjE1NTgyOTAxMjF9.vAuZNSh9KHz5xJeJ2sJ8aTf0J9DUPFdAQAZKaBUVa0E"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid authentication message",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "failed to process your login request at this moment. Please try it later",
+                "details": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "New user registration",
+        "description": "New user registration and account creation",
+        "operationId": "auth-register",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "name": "jhon doe",
+              "email": "jhon.doe@domain.tld",
+              "pwd": "123456"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "user registration response message",
+            "schema": {
+              "example": {
+                "msg": "registration successfully finished. Please verify your account with the message sent to your inbox."
+              }
+            }
+          },
+          "400": {
+            "description": "user registration failed message",
+            "schema": {
+              "example": {
+                "msg": "failed to register new user account"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/recover": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User account recovery",
+        "description": "User account recovery",
+        "operationId": "auth-recover",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "email": "jhon.doe@domain.tld"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "user account recovery response message",
+            "schema": {
+              "example": {
+                "msg": "account recovery in progress"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public/status": {
       "get": {
         "tags": ["public"],
@@ -243,7 +369,7 @@
           "name": "profile",
           "schema": {
             "example": {
-              "endpoint": "http://172.168.0.2",
+              "endpoint": "http://172.168.0.2:8545",
               "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
             }
           }
@@ -2213,7 +2339,7 @@
         }
       }
     },
-    "/private/projects": {
+    "/my/projects": {
       "post": {
         "tags": ["project"],
         "summary": "Create new project",
@@ -2223,7 +2349,7 @@
         "produces": ["application/json"],
         "deprecated": false,
         "security": [{
-          "connectionProfileToken": []
+          "accountToken": []
         }],
         "parameters": [{
           "in": "body",
@@ -2233,7 +2359,7 @@
           "required": true,
           "example": {
             "name": "test-project"
-          },
+          }
         }],
         "responses": {
           "200": {
@@ -2261,7 +2387,7 @@
         "produces": ["application/json"],
         "deprecated": false,
         "security": [{
-          "connectionProfileToken": []
+          "accountToken": []
         }],
         "parameters": [],
         "responses": {
@@ -2287,7 +2413,7 @@
         }
       }
     },
-    "/private/projects/{id}": {
+    "/my/projects/{id}": {
       "get": {
         "tags": [
           "project"
@@ -2303,7 +2429,7 @@
         ],
         "deprecated": false,
         "security": [{
-          "connectionProfileToken": []
+          "accountToken": []
         }],
         "parameters": [{
           "in": "path",
@@ -2341,7 +2467,7 @@
         ],
         "deprecated": false,
         "security": [{
-          "connectionProfileToken": []
+          "accountToken": []
         }],
         "parameters": [{
           "in": "path",
@@ -2390,7 +2516,7 @@
         ],
         "deprecated": false,
         "security": [{
-          "connectionProfileToken": []
+          "accountToken": []
         }],
         "parameters": [{
           "in": "path",
@@ -2416,6 +2542,12 @@
     }
   },
   "securityDefinitions": {
+    "accountToken": {
+      "type": "apiKey",
+      "description": "Etherniti REST API Account token",
+      "name": "Authorization",
+      "in": "header"
+    },
     "connectionProfileToken": {
       "type": "apiKey",
       "description": "Etherniti REST API Proxy connection profile token",

@@ -13,7 +13,7 @@ type EthResponse struct {
 	ID      int             `json:"id"`
 	JSONRPC string          `json:"jsonrpc"`
 	Result  json.RawMessage `json:"result"`
-	//Result string    `json:"result"`
+	//Data string    `json:"result"`
 	Error *EthError `json:"error"`
 }
 

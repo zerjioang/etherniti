@@ -2,9 +2,11 @@ package auth
 
 import (
 	"errors"
+
+	"github.com/zerjioang/etherniti/shared/mixed"
+
 	"github.com/zerjioang/etherniti/core/modules/stack"
 
-	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -15,12 +17,12 @@ import (
 
 // new login request dto
 type AuthRequest struct {
-	common.DatabaseObjectInterface `json:"_,omitempty"`
-	Uuid string `json:"uuid,omitempty"`
-	Username string             `json:"name,omitempty" form:"name" query:"name"`
-	Role     constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
-	Email    string             `json:"email" form:"email" query:"email"`
-	Password string             `json:"pwd" form:"pwd" query:"pwd"`
+	mixed.DatabaseObjectInterface `json:"_,omitempty"`
+	Uuid                          string             `json:"uuid,omitempty"`
+	Username                      string             `json:"name,omitempty" form:"name" query:"name"`
+	Role                          constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
+	Email                         string             `json:"email" form:"email" query:"email"`
+	Password                      string             `json:"pwd" form:"pwd" query:"pwd"`
 }
 
 // implementation of interface DatabaseObjectInterface
@@ -30,7 +32,7 @@ func (req *AuthRequest) Key() []byte {
 func (req *AuthRequest) Value() []byte {
 	return str.GetJsonBytes(req)
 }
-func (req *AuthRequest) New() common.DatabaseObjectInterface {
+func (req *AuthRequest) New() mixed.DatabaseObjectInterface {
 	return NewEmptyAuthRequestPtr()
 }
 
@@ -73,7 +75,7 @@ func (req *AuthRequest) CanList(context *echo.Context) error {
 	return data.ListingNotSupported
 }
 
-func (req *AuthRequest) Bind(context *echo.Context) (common.DatabaseObjectInterface, stack.Error) {
+func (req *AuthRequest) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
 	if err := context.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
@@ -90,6 +92,6 @@ func NewEmptyAuthRequest() AuthRequest {
 	return AuthRequest{}
 }
 
-func NewDBAuthModel() common.DatabaseObjectInterface {
+func NewDBAuthModel() mixed.DatabaseObjectInterface {
 	return NewEmptyAuthRequestPtr()
 }

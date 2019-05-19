@@ -15,17 +15,15 @@ func TestNewApiError(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
 		apiErr := NewApiError(200, str.UnsafeBytes("test-stack"))
 		require.NotNil(t, apiErr)
-		require.Equal(t, apiErr.Code, 200)
-		require.Equal(t, apiErr.Details, "test-stack")
+		require.Equal(t, apiErr.Data, "test-stack")
 	})
 }
 
 func TestNewApiResponse(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		msg := NewApiResponse(str.UnsafeBytes("success"), 12345)
+		msg := NewApiResponse(str.UnsafeBytes("success"), nil)
 		require.NotNil(t, msg)
-		require.Equal(t, msg.Code, 200)
 		require.Equal(t, msg.Message, "success")
-		require.Equal(t, msg.Result, 12345)
+		require.Equal(t, msg.Data, 12345)
 	})
 }

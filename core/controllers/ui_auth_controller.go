@@ -1,9 +1,11 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package auth
+package controllers
 
 import (
+	"time"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
@@ -13,16 +15,15 @@ import (
 	"github.com/zerjioang/etherniti/core/util/id"
 	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
-	"time"
 )
 
 var (
 	// Create the JWT key used to create the signature
 	authTokenSecret = []byte(" cc03a2bc-4a01-43dd-bdfe-a65f4a6e1f2f ")
 )
+
 type UIAuthController struct {
 	common.DatabaseController
 }
@@ -67,7 +68,7 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 						logger.Error("failed to create authentication token: ", err)
 						return api.ErrorStr(c, data.InvalidLoginData)
 					} else {
-						return api.Success(c, data.UserLogin, protocol.NewLoginResponse(token).Json())
+						return api.Success(c, data.UserLogin, auth.NewLoginResponse(token).Json())
 					}
 				} else {
 					return api.ErrorStr(c, data.InvalidLoginData)

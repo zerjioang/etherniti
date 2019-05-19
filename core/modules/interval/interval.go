@@ -6,8 +6,6 @@ package interval
 import (
 	"sync/atomic"
 	"time"
-
-	"github.com/zerjioang/etherniti/core/logger"
 )
 
 type TaskMode uint8
@@ -68,7 +66,6 @@ func (task *IntervalTask) Do() *IntervalTask {
 
 func (task *IntervalTask) triggerExpirationRoutine() {
 	// atomic/thread-safe
-	logger.Debug("time expired for task :", task.name, " . reloading data")
 	result := task.onExpired()
 	task.atomicResult.Store(result)
 }

@@ -71,11 +71,11 @@ func SendSuccessBlob(c *echo.Context, raw []byte) error {
 
 func Success(c *echo.Context, msg []byte, result []byte) error {
 	logger.Debug("sending success message to client")
-	logger.Debug(str.UnsafeString(msg), str.UnsafeString(result))
+	logger.Debug(str.UnsafeString(msg), " , ", str.UnsafeString(result))
 	//get item from pool
 	item := successPool.Get().(*protocol.ApiResponse)
 	item.Message = msg
-	item.Result = result
+	item.Data = result
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool
@@ -89,7 +89,7 @@ func ToSuccessPool(msg []byte, result interface{}) []byte {
 	//get item from pool
 	item := successPool.Get().(*protocol.ApiResponse)
 	item.Message = msg
-	item.Result = result
+	item.Data = str.GetJsonBytes(result)
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool
@@ -103,9 +103,8 @@ func ToSuccess(msg []byte, result interface{}) []byte {
 	logger.Debug("converting data to success payload")
 	//get item from pool
 	var item protocol.ApiResponse
-	item.Code = 200
 	item.Message = msg
-	item.Result = result
+	item.Data = str.GetJsonBytes(result)
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool
@@ -130,7 +129,6 @@ func toError(code int, msg []byte) []byte {
 	logger.Debug("converting data to error payload")
 	var item protocol.ApiError
 	item.Message = msg
-	item.Code = code
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool

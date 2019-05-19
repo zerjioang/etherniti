@@ -41,6 +41,7 @@ var (
 			echo.HeaderContentType,
 			echo.HeaderAccept,
 			"X-Language",
+			"Authorization",
 			constants.HttpProfileHeaderkey,
 		},
 	}

@@ -309,12 +309,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 				item.Key = "secret"
 			}
 		}
-		return c.JSONBlob(
-			protocol.StatusOK,
-			str.GetJsonBytes(
-				protocol.NewApiResponse(data.AccountsBalanced, wrapperList),
-			),
-		)
+		return api.SendSuccess(c, data.AccountsBalanced, wrapperList)
 	}
 }
 

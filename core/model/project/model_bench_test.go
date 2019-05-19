@@ -31,13 +31,13 @@ func BenchmarkProjectModel(b *testing.B) {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
 			p := NewProject("", "", testIp)
-			_, _ = p.Storage()
+			_ = p.Value()
 		}
 	})
 	b.Run("deserialization-bench", func(b *testing.B) {
 		testIp := ip.Ip2intLow("127.0.0.1")
 		p := NewProject("", "", testIp)
-		_, v := p.Storage()
+		v := p.Value()
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)

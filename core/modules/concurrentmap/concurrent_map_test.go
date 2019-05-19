@@ -154,7 +154,7 @@ func TestRemoveCb(t *testing.T) {
 	// Monkey should be removed
 	result := m.RemoveCb("monkey", cb)
 	if !result {
-		t.Errorf("Result was not true")
+		t.Errorf("Data was not true")
 	}
 
 	if mapKey != "monkey" {
@@ -176,7 +176,7 @@ func TestRemoveCb(t *testing.T) {
 	// Elephant should not be removed
 	result = m.RemoveCb("elephant", cb)
 	if result {
-		t.Errorf("Result was true")
+		t.Errorf("Data was true")
 	}
 
 	if mapKey != "elephant" {
@@ -198,7 +198,7 @@ func TestRemoveCb(t *testing.T) {
 	// Unset key should remain unset
 	result = m.RemoveCb("horse", cb)
 	if result {
-		t.Errorf("Result was true")
+		t.Errorf("Data was true")
 	}
 
 	if mapKey != "horse" {

@@ -1,7 +1,6 @@
 package project
 
 import (
-	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
@@ -9,13 +8,14 @@ import (
 	"github.com/zerjioang/etherniti/core/util/id"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/shared/mixed"
 	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type Project struct {
 	// implement interface to be a rest-db-crud able struct
-	common.DatabaseObjectInterface `json:"_,omitempty"`
+	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 
 	// unique project indetifier used for database storage
 	Uuid string `json:"uuid"`
@@ -40,7 +40,7 @@ func (project Project) Key() []byte {
 func (project Project) Value() []byte {
 	return str.GetJsonBytes(project)
 }
-func (project Project) New() common.DatabaseObjectInterface {
+func (project Project) New() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()
 }
 
@@ -78,7 +78,7 @@ func (project Project) CanList(context *echo.Context) error {
 	return nil
 }
 
-func (project Project) Bind(context *echo.Context) (common.DatabaseObjectInterface, stack.Error) {
+func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
 	//new project creation request
 	var req protocol.ProjectRequest
 	if err := context.Bind(&req); err != nil {
@@ -94,7 +94,7 @@ func (project Project) Bind(context *echo.Context) (common.DatabaseObjectInterfa
 		// get required data to build a new project
 		intIP := ip.Ip2int(context.RealIP())
 		// get user uuid
-		projectOwner := context.UserUuid()
+		projectOwner := context.AuthenticatedUserUuid()
 
 		if intIP == 0 || projectOwner == "" {
 			logger.Error("failed to create new project: missing data")
@@ -110,7 +110,7 @@ func NewEmptyProject() Project {
 	return Project{}
 }
 
-func NewDBProject() common.DatabaseObjectInterface {
+func NewDBProject() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()
 }
 

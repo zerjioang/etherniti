@@ -7,8 +7,6 @@ import (
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/modules/counter32"
 
-	"github.com/zerjioang/etherniti/core/util/str"
-
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
@@ -49,14 +47,12 @@ func (ctl ProfileController) create(c *echo.Context) error {
 	// create the token
 	token, err := profile.CreateConnectionProfileToken(userProfile)
 	if err == nil {
-		rawBytes := str.GetJsonBytes(protocol.NewApiResponse(data.ProfileTokenSuccess, token))
 		// increment created counter
 		profilesCreated.Increment()
-		return c.JSONBlob(protocol.StatusOK, rawBytes)
+		return api.SendSuccess(c, data.ProfileTokenSuccess, token)
 	} else {
-		//token generation stack
-		rawBytes := str.GetJsonBytes(protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())))
-		return c.JSONBlob(protocol.StatusOK, rawBytes)
+		//token generation error
+		return api.Error(c, err)
 	}
 }
 

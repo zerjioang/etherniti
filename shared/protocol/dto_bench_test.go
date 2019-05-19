@@ -28,7 +28,7 @@ func BenchmarkNewApiResponse(b *testing.B) {
 
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = NewApiResponse(str.UnsafeBytes("success"), 12345)
+			_ = NewApiResponse(str.UnsafeBytes("success"), nil)
 		}
 	})
 }

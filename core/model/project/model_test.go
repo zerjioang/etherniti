@@ -23,7 +23,7 @@ func TestProjectModel(t *testing.T) {
 	t.Run("deserialize", func(t *testing.T) {
 		testIp := ip.Ip2intLow("127.0.0.1")
 		p := NewProject("random-name", "jhon.doe@domain.tld", testIp)
-		_, v := p.Storage()
+		v := p.Value()
 		p2 := NewEmptyProject()
 		err := json.Unmarshal(v, &p2)
 		assert.Nil(t, err)

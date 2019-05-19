@@ -15,19 +15,33 @@ import (
 )
 
 func infuraJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, data.InfuraJwtErrorMessage)
+	return defaultJwt(next, data.InfuraJwtErrorMessage)
 }
 
 func quiknodeJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, data.QuiknodeJwtErrorMessage)
+	return defaultJwt(next, data.QuiknodeJwtErrorMessage)
 }
 
 func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
-	return jwt(next, data.JwtErrorMessage)
+	return defaultJwt(next, data.JwtErrorMessage)
+}
+
+func userJwt(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		tokenData := c.ReadToken("Authorization")
+		decodedAuthData, err := ParseAuthenticationToken(tokenData)
+		if err != nil {
+			logger.Error("failed to process authentication token: ", err)
+			return api.ErrorStr(c, []byte("invalid authentication token"))
+		} else {
+			c.UserId = decodedAuthData.Uuid
+		}
+		return next(c)
+	}
 }
 
 // jwt middleware function.
-func jwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
+func defaultJwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		_, parseErr := c.ConnectionProfileSetup()
 		if parseErr != nil {
@@ -56,19 +70,21 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 		),
 		)
 	}
-	// /v1/
+	// add authentication controller to root
+	// /v1/auth/...
+	// register ui rest
+	NewUIAuthController().RegisterRouters(groupV1)
+
+	// /v1/public
 	publicGroup := groupV1.Group(constants.PublicApi, next)
 
-	// /v1/...
+	// /v1/public/...
 	NewIndexController().RegisterRouters(publicGroup)
 	NewProfileController().RegisterRouters(publicGroup)
 	NewSecurityController().RegisterRouters(publicGroup)
 	NewWalletController().RegisterRouters(publicGroup)
 	NewSolcController().RegisterRouters(publicGroup)
 	NewContractNameSpaceController().RegisterRouters(publicGroup)
-
-	// register ui rest
-	NewUIAuthController().RegisterRouters(publicGroup)
 
 	//register external api calls
 	// coin market cap: get eth price data
@@ -99,8 +115,9 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	privateGroup := groupV1.Group(constants.PrivateApi, next)
 	privateGroup.Use(privateJwt)
 	NewPrivateNetController().RegisterRouters(privateGroup)
-	// register project controller
-	project.NewProjectController().RegisterRouters(privateGroup)
-	//NewTokenController(deployer.manager).RegisterRouters(privateGroup)
+	// register controllers related to user context
+	userGroup := groupV1.Group("/my", next)
+	userGroup.Use(userJwt)
+	project.NewProjectController().RegisterRouters(userGroup)
 	return groupV1
 }

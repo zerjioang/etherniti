@@ -62,6 +62,7 @@ type Context struct {
 	ip         string
 	// http client cache policy
 	OnSuccessCachePolicy int
+	UserId               string
 }
 
 var (
@@ -273,13 +274,6 @@ func (c *Context) Set(key string, val interface{}) {
 func (c *Context) Bind(i interface{}) error {
 	err := json.NewDecoder(c.request.Body).Decode(i)
 	return err
-}
-
-func (c *Context) Validate(i interface{}) error {
-	if c.echo.Validator == nil {
-		return ErrValidatorNotRegistered
-	}
-	return c.echo.Validator.Validate(i)
 }
 
 func (c *Context) Render(code int, name string, data interface{}) (err error) {
@@ -601,6 +595,27 @@ func (c *Context) ReadConnectionProfileToken() string {
 	return tokenDataStr
 }
 
+// reads connection profile token from allowed sources
+func (c *Context) ReadToken(tokenName string) string {
+	req := c.request
+
+	var tokenDataStr string
+	// read if token provided via header key
+	tokenDataStr = req.Header.Get(tokenName)
+	if tokenDataStr == "" {
+		//read if token provided via query param
+		tokenDataStr = c.QueryParam(tokenName)
+		if tokenDataStr == "" {
+			//read from request cookie
+			cok, err := c.Cookie(tokenName)
+			if err == nil && cok != nil {
+				tokenDataStr = cok.Value
+			}
+		}
+	}
+	return tokenDataStr
+}
+
 func (c *Context) IsJsonRequest() bool {
 	return c.isJson
 }
@@ -609,6 +624,10 @@ func (c *Context) IsJsonRequest() bool {
 // this value is in jwt token setn with each request
 func (c *Context) UserUuid() string {
 	return c.profileData.AccountId
+}
+
+func (c *Context) AuthenticatedUserUuid() string {
+	return c.UserId
 }
 
 func (c *Context) User() profile.ConnectionProfile {
