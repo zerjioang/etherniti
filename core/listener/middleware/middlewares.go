@@ -203,13 +203,13 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 // configure deployer internal configuration
 func ConfigureServerRoutes(e *echo.Echo) {
 	// add a custom stack handler
-	logger.Info("[LAYER] custom error handler")
+	logger.Info("[LAYER] /=> custom error handler")
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
 	// log all single request
 	// configure logging level
 	if config.EnableLogging() {
-		logger.Info("[LAYER] logger level")
+		logger.Info("[LAYER] /=> logger level")
 		e.Logger.SetLevel(config.LogLevel())
 		e.Pre(middlewareLogger.LoggerWithConfig(middlewareLogger.LoggerConfig{
 			Format: accessLogFormat,
@@ -217,52 +217,52 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	}
 
 	if config.EnableMetrics() {
-		logger.Info("[LAYER] metrics")
+		logger.Info("[LAYER] /=> metrics")
 		e.Pre(prometheus_metrics.MetricsCollector)
 	}
 
 	if config.IsHttpMode() {
 		// remove trailing slash for better usage
-		logger.Info("[LAYER] trailing slash remover")
+		logger.Info("[LAYER] /=> trailing slash remover")
 		e.Pre(middleware.RemoveTrailingSlash())
 
 		if config.EnableSecureMode() {
 			// antibots, crawler middleware
 			// avoid bots and crawlers
-			logger.Info("[LAYER] security")
+			logger.Info("[LAYER] /=> security")
 			e.Pre(secure)
 		}
 
 		// add CORS support
 		if config.EnableCors() {
-			logger.Info("[LAYER] cors support")
+			logger.Info("[LAYER] /=> CORS support")
 			e.Use(middleware.CORSWithConfig(corsConfig))
 		}
 	}
 
 	if config.EnableRateLimit() {
 		// add rate limit control
-		logger.Info("[LAYER] rest api rate limit middleware added")
+		logger.Info("[LAYER] /=> rest api rate limit middleware added")
 		e.Use(ratelimit.RateLimit)
 	}
 
 	if config.EnableAnalytics() {
-		logger.Info("[LAYER] analytics")
+		logger.Info("[LAYER] /=> analytics")
 		e.Use(cyber.Analytics)
 	}
 
 	// Request ID middleware generates a unique id for a request.
 	if config.UseUniqueRequestId() {
-		logger.Info("[LAYER] unique request id")
+		logger.Info("[LAYER] /=> unique request id")
 		e.Use(middleware.RequestID())
 	}
 
 	// add gzip support if client requests it
-	logger.Info("[LAYER] gzip compression")
+	logger.Info("[LAYER] /=> gzip compression")
 	e.Use(middleware.GzipWithConfig(gzipConfig))
 
 	// avoid panics
-	logger.Info("[LAYER] panic recovery")
+	logger.Info("[LAYER] /=> panic recovery")
 	e.Use(middleware.Recover())
 
 	//http, https, unix socket
@@ -271,17 +271,18 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 	// start websocket handler if requested
 	if config.IsWebSocketMode() {
+		logger.Info("[LAYER] /=> websocket")
 		e.GET("/ws", controllers.WebsocketEntrypoint)
 	}
 
-	logger.Info("[LAYER] / static files")
+	logger.Info("[LAYER] /=> static files")
 	//load root static folder
 	e.Static("/", config.ResourcesDirRoot)
 
 	e.Static("/phpinfo.php", config.ResourcesDirPHP)
 
 	// load swagger ui files
-	logger.Info("[LAYER] /swagger files")
+	logger.Info("[LAYER] /=> swagger files")
 	e.Static("/swagger", config.ResourcesDirSwagger)
 
 	// RegisterServices root calls

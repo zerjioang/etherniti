@@ -4,6 +4,7 @@
 package str
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -14,16 +15,14 @@ func TestGetJsonBytes(t *testing.T) {
 }
 
 func TestToLowerAscii(t *testing.T) {
-	t.Run("ToLowerAscii", func(t *testing.T) {
-		val := "Hello World, This is AWESOME"
+	t.Run("ToLowerAscii-ua-1", func(t *testing.T) {
+		val := "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like Gecko) Version/9.1.2 Safari/601.7.7"
 		converted := ToLowerAscii(val)
 		t.Log(val)
 		t.Log(converted)
-		if converted != "hello world, this is awesome" {
-			t.Error("failed to lowercase")
-		}
+		assert.Equal(t, converted, "mozilla/5.0 (macintosh; intel mac os x 10_11_6) applewebkit/601.7.7 (khtml, like gecko) version/9.1.2 safari/601.7.7")
 	})
-	t.Run("ToLowerAscii-ua", func(t *testing.T) {
+	t.Run("ToLowerAscii-ua-2", func(t *testing.T) {
 		val := "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
 		converted := ToLowerAscii(val)
 		t.Log(val)
