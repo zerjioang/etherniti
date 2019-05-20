@@ -17,7 +17,7 @@ type Project struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 
-	// unique project indetifier used for database storage
+	// unique project identifier used for database storage
 	Uuid string `json:"uuid"`
 	// project name
 	Name string `json:"name"`

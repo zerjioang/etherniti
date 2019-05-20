@@ -24,7 +24,6 @@ func init() {
 	controllers.LoadIndexConstants()
 	logger.Info("system running with pointers size of: ", constants.PointerSize, " bits")
 	serverStarted.Store(false)
-
 }
 
 func RunServer(notifier chan error) {
