@@ -2,7 +2,9 @@ package snowflake
 
 /*
 // Original package: https://github.com/bwmarrin/snowflake
-initial snowflake package performance:
+Initial package performance:
+
+go test -bench=. -benchmem -benchtime=5s -cpu=1,2,4
 
 BenchmarkParseBase32-4           	50000000	        24.0 ns/op	  41.64 MB/s	       0 B/op	       0 allocs/op
 BenchmarkBase32-4                	20000000	        65.2 ns/op	  15.33 MB/s	      16 B/op	       1 allocs/op

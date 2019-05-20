@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -24,7 +26,6 @@ import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/controllers/clientcache"
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -75,7 +76,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 		if found && result != nil {
 			//cache hit
 			logger.Info(key, ": cache hit")
-			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			c.OnSuccessCachePolicy = constants.CacheInfinite
 			return api.SendSuccessBlob(c, result.([]byte))
 		} else {
 			//cache miss
@@ -93,7 +94,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 			// save result in the cache
 			response := api.ToSuccess(data.Balance, result)
 			ctl.network.cache.Set(keyBytes, response)
-			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			c.OnSuccessCachePolicy = constants.CacheInfinite
 			return api.SendSuccessBlob(c, response)
 		}
 	} else {
@@ -150,7 +151,7 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 		//cache hit
 		logger.Info(key, ": cache hit")
 		response := api.ToSuccess(key, result.(string))
-		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		c.OnSuccessCachePolicy = constants.CacheInfinite
 		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
@@ -168,7 +169,7 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 		} else {
 			// save result in the cache
 			ctl.network.cache.Set(key, response)
-			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			c.OnSuccessCachePolicy = constants.CacheInfinite
 			response := api.ToSuccess(key, response)
 			return api.SendSuccessBlob(c, response)
 		}
@@ -185,7 +186,7 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 		//cache hit
 		logger.Info(key, ": cache hit")
 		response := api.ToSuccess(key, result)
-		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		c.OnSuccessCachePolicy = constants.CacheInfinite
 		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
@@ -202,7 +203,7 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 			return api.Error(c, err)
 		} else {
 			response := api.ToSuccess(data.IsGanache, d)
-			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			c.OnSuccessCachePolicy = constants.CacheInfinite
 			return api.SendSuccessBlob(c, response)
 		}
 	}
@@ -233,7 +234,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 		//cache hit
 		logger.Info(method, ": cache hit")
 		response := api.ToSuccess(methodBytes, result)
-		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		c.OnSuccessCachePolicy = constants.CacheInfinite
 		return api.SendSuccessBlob(c, response)
 	} else {
 		//cache miss
@@ -255,7 +256,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 			// save result in the cache
 			ctl.network.cache.Set(cacheKeyBytes, rpcResponse)
 			response := api.ToSuccess(methodBytes, rpcResponse)
-			c.OnSuccessCachePolicy = clientcache.CacheInfinite
+			c.OnSuccessCachePolicy = constants.CacheInfinite
 			return api.SendSuccessBlob(c, response)
 		}
 	}
@@ -329,7 +330,7 @@ func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 			return api.Error(c, err)
 		}
 		response := api.ToSuccess(data.IsContract, result)
-		c.OnSuccessCachePolicy = clientcache.CacheInfinite
+		c.OnSuccessCachePolicy = constants.CacheInfinite
 		return api.SendSuccessBlob(c, response)
 	}
 	// send invalid address message

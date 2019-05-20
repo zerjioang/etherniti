@@ -6,9 +6,10 @@ package mailer
 import (
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/model/auth"
+
 	"github.com/pkg/errors"
 	"github.com/zerjioang/etherniti/core/modules/mailer/model"
-	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 var (
@@ -18,7 +19,7 @@ var (
 //todo add google markup
 //guide: https://developers.google.com/gmail/markup/registering-with-google
 //examples. https://developers.google.com/gmail/markup/reference/one-click-action
-func SendActivationEmail(registerRequest *protocol.RegisterRequest, sender model.EmailSenderMecanism) error {
+func SendActivationEmail(registerRequest *auth.AuthRequest, sender model.EmailSenderMecanism) error {
 
 	//generate target email address
 	targetUserEmailAddress := model.MailAddress{User: registerRequest.Username, Email: registerRequest.Email}
@@ -71,7 +72,7 @@ func applyDefaults(emailBody string) string {
 	return emailBody
 }
 
-func SendLoginEmail(loginRequest *protocol.LoginRequest, sender model.EmailSenderMecanism) error {
+func SendLoginEmail(loginRequest *auth.AuthRequest, sender model.EmailSenderMecanism) error {
 
 	//generate target email address
 	targetUserEmailAddress := model.MailAddress{User: "", Email: loginRequest.Email}
@@ -112,7 +113,7 @@ func SendLoginEmail(loginRequest *protocol.LoginRequest, sender model.EmailSende
 //todo add google markup
 //guide: https://developers.google.com/gmail/markup/registering-with-google
 //examples. https://developers.google.com/gmail/markup/reference/one-click-action
-func SendRecoveryEmail(recoveryRequest *protocol.RecoveryRequest, sender model.EmailSenderMecanism) error {
+func SendRecoveryEmail(recoveryRequest *auth.AuthRequest, sender model.EmailSenderMecanism) error {
 
 	//generate target email address
 	targetUserEmailAddress := model.MailAddress{Email: recoveryRequest.Email}

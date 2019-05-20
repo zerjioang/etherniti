@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package clientcache
+package constants
 
 const (
 	CacheOneDay   = 86400    // seconds in a day

@@ -8,9 +8,10 @@ import (
 	"encoding/hex"
 	"strconv"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/data"
 
-	"github.com/zerjioang/etherniti/core/controllers/clientcache"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -192,7 +193,7 @@ func (ctl WalletController) generateAddress(c *echo.Context) error {
 // check if an ethereum address is valid
 func (ctl WalletController) isValidAddress(c *echo.Context) error {
 	//since this method checks address as string, cache always
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 
 	//read user entered address
 	targetAddr := c.Param("address")

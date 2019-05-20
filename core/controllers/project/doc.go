@@ -1,9 +1,12 @@
 package project
 
 /*
-Initial performance benchmark
+Initial package performance:
 
-BenchmarkProjectModel/create-model-4         	 			 500000	      2586 ns/op	   0.39 MB/s	     240 B/op	       7 allocs/op
-BenchmarkProjectModel/serialization-bench-4  	  			 500000	      3750 ns/op	   0.27 MB/s	     552 B/op	      11 allocs/op
-BenchmarkProjectModel/deserialization-bench-4         	     300000	      3948 ns/op	   0.25 MB/s	     392 B/op	       8 allocs/op
+go test -bench=. -benchmem -benchtime=5s -cpu=1,2,4
+
+BenchmarkProjectController/create-controller              200000             45512 ns/op           0.02 MB/s       14124 B/op         59 allocs/op
+BenchmarkProjectController/create-controller-2            200000             47167 ns/op           0.02 MB/s       14125 B/op         59 allocs/op
+BenchmarkProjectController/create-controller-4            200000             45893 ns/op           0.02 MB/s       14132 B/op         59 allocs/op
+
 */

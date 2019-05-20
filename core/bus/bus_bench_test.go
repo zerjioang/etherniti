@@ -1,4 +1,4 @@
-package project
+package bus
 
 import (
 	"testing"
@@ -6,14 +6,14 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-func BenchmarkProjectController(b *testing.B) {
-	b.Run("create-controller", func(b *testing.B) {
+func BenchmarkBus(b *testing.B) {
+	b.Run("get-bus", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = NewProjectController()
+			_ = SharedBus()
 		}
 	})
 }

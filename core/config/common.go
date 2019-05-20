@@ -220,9 +220,14 @@ func IsHttpMode() bool {
 	return ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") == "http"
 }
 
-func IsSocketMode() bool {
+func IsUnixSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
 	return ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") == "socket"
+}
+
+func IsWebSocketMode() bool {
+	logger.Debug("checking if socket mode is enabled")
+	return ReadEnvironmentString("X_ETHERNITI_LISTENING_MODE") == "ws"
 }
 
 func IsProfilingEnabled() bool {

@@ -5,10 +5,10 @@ package controllers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/controllers/clientcache"
 	"github.com/zerjioang/etherniti/core/controllers/tokenlist"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -27,7 +27,7 @@ func (ctl TokenController) whoisAddress(c *echo.Context) error {
 
 func (ctl TokenController) resolveContractAddress(c *echo.Context) error {
 	//set cache policy
-	c.OnSuccessCachePolicy = clientcache.CacheOneDay
+	c.OnSuccessCachePolicy = constants.CacheOneDay
 
 	symbol := c.Param("symbol")
 	address := tokenlist.GetTokenAddressByName(symbol)
@@ -36,7 +36,7 @@ func (ctl TokenController) resolveContractAddress(c *echo.Context) error {
 
 func (ctl TokenController) resolveContractSymbol(c *echo.Context) error {
 	//set cache policy
-	c.OnSuccessCachePolicy = clientcache.CacheOneDay
+	c.OnSuccessCachePolicy = constants.CacheOneDay
 
 	address := c.Param("address")
 	symbol := tokenlist.GetTokenSymbol(address)

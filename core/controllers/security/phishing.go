@@ -72,15 +72,19 @@ func contains(arr []string, str string) bool {
 	return false
 }
 
+type response struct {
+	Domain string `json:"domain"`
+	Trust  bool   `json:"trust"`
+	//metadata
+	Title   string `json:"title"`
+	Message string `json:"message"`
+}
+
+func isDangerous(domain string) bool {
+	return contains(pm.Blacklist, domain) || contains(DomainBlacklist(), domain)
+}
 func IsDangerousDomain(domain string) []byte {
-	type response struct {
-		Domain string `json:"domain"`
-		Trust  bool   `json:"trust"`
-		//metadata
-		Title   string `json:"title"`
-		Message string `json:"message"`
-	}
-	warn := contains(pm.Blacklist, domain) || contains(DomainBlacklist(), domain)
+	warn := isDangerous(domain)
 	if warn {
 		responseData := response{
 			Title:   "deceptive domain detected",

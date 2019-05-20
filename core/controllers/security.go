@@ -5,9 +5,9 @@ package controllers
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/core/controllers/clientcache"
 	"github.com/zerjioang/etherniti/core/controllers/security"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/shared/constants"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -24,7 +24,7 @@ func NewSecurityController() SecurityController {
 // This list is maintained by GitHub user 409H at
 // https://github.com/409H/EtherAddressLookup/blob/master/blacklists/domains.json
 func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.DomainBlacklistBytesData())
 }
 
@@ -32,7 +32,7 @@ func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.PhishingWhitelistRawBytes())
 }
 
@@ -41,7 +41,7 @@ func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) phisingBlacklist(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.PhishingBlacklistRawBytes())
 }
 
@@ -49,13 +49,13 @@ func (ctl SecurityController) phisingBlacklist(c *echo.Context) error {
 // This list is maintained by the MetaMask project at
 // https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
 func (ctl SecurityController) fuzzylist(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.FuzzyDataRawBytes())
 }
 
 // return whether given domain name is dangerous or not
 func (ctl SecurityController) isDangerousDomain(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	domainName := c.Param("domain")
 	return api.SendSuccessBlob(c, security.IsDangerousDomain(domainName))
 }

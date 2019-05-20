@@ -14,8 +14,6 @@ import (
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"github.com/zerjioang/etherniti/core/controllers/clientcache"
-
 	"runtime"
 	"sync"
 	"time"
@@ -115,7 +113,7 @@ func NewIndexController() *IndexController {
 }
 
 func Index(c *echo.Context) error {
-	c.OnSuccessCachePolicy = clientcache.CacheInfinite
+	c.OnSuccessCachePolicy = constants.CacheInfinite
 	if c.IsJsonRequest() {
 		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
 	}
@@ -136,7 +134,7 @@ func (ctl *IndexController) status() []byte {
 // concurrency safe
 func (ctl *IndexController) Integrity(c *echo.Context) error {
 	data := ctl.integrity()
-	c.OnSuccessCachePolicy = clientcache.CacheOneDay
+	c.OnSuccessCachePolicy = constants.CacheOneDay
 	return c.JSONBlob(protocol.StatusOK, data)
 }
 

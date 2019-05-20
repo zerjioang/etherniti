@@ -13,7 +13,7 @@ func BenchmarkParseBase32(b *testing.B) {
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		ParseBase32([]byte(b32i))
+		_, _ = ParseBase32([]byte(b32i))
 	}
 }
 func BenchmarkBase32(b *testing.B) {
@@ -40,7 +40,7 @@ func BenchmarkParseBase58(b *testing.B) {
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		ParseBase58([]byte(b58))
+		_, _ = ParseBase58([]byte(b58))
 	}
 }
 func BenchmarkBase58(b *testing.B) {

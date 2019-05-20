@@ -41,7 +41,7 @@ func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 			c.RealIP(),
 			c.Request(),
 		)
-		// fordward request to next middleware
+		// forward request to next middleware
 		return next(c)
 	}
 }
@@ -64,6 +64,6 @@ func processAnalytics(ip string, r *http.Request) {
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk
-		collection.Set(n.SafeBytes(), raw)
+		_ = collection.Set(n.SafeBytes(), raw)
 	}
 }

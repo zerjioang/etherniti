@@ -6,17 +6,10 @@ package cmd
 import (
 	"sync"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"time"
 )
 
 func TestCmd(t *testing.T) {
-	t.Run("test-server", func(t *testing.T) {
-		notifier := make(chan error, 1)
-		RunServer(notifier)
-		err := <-notifier
-		assert.Nil(t, err)
-	})
 	t.Run("test-server-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
 		total := 50
@@ -25,7 +18,7 @@ func TestCmd(t *testing.T) {
 		for i := 0; i < total; i++ {
 			go func() {
 				RunServer(notifier)
-				<-notifier
+				time.Sleep(time.Millisecond * 200)
 				g.Done()
 			}()
 		}

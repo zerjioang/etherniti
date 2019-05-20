@@ -265,8 +265,14 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	logger.Info("[LAYER] panic recovery")
 	e.Use(middleware.Recover())
 
-	// RegisterServices version 1 api calls
+	//http, https, unix socket
+	// register services version 1 api calls
 	controllers.RegisterServices(e)
+
+	// start websocket handler if requested
+	if config.IsWebSocketMode() {
+		e.GET("/ws", controllers.WebsocketEntrypoint)
+	}
 
 	logger.Info("[LAYER] / static files")
 	//load root static folder

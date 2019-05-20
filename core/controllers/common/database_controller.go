@@ -15,15 +15,18 @@ import (
 type DatabaseController struct {
 	storage *db.BadgerStorage
 	name    string
+	// data model generator fnction. it will create a new struct
+	modelGenerator func() mixed.DatabaseObjectInterface
 	// data model used in this collection
 	model mixed.DatabaseObjectInterface
 }
 
 // constructor like function
-func NewDatabaseController(collection string, model mixed.DatabaseObjectInterface) (DatabaseController, error) {
+func NewDatabaseController(collection string, modelGenerator func() mixed.DatabaseObjectInterface) (DatabaseController, error) {
 	dbctl := DatabaseController{}
 	dbctl.name = collection
-	dbctl.model = model
+	dbctl.modelGenerator = modelGenerator
+	dbctl.model = modelGenerator()
 	if collection == "" {
 		return dbctl, errors.New("invalid collection name provided")
 	}
@@ -37,7 +40,7 @@ func NewDatabaseController(collection string, model mixed.DatabaseObjectInterfac
 }
 
 func (ctl *DatabaseController) Create(c *echo.Context) error {
-	requestedItem, err := ctl.model.New().Bind(c)
+	requestedItem, err := ctl.modelGenerator().Bind(c)
 	if err.Occur() {
 		return api.StackError(c, err)
 	}

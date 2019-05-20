@@ -88,7 +88,7 @@ func TestConfig(t *testing.T) {
 		g.Wait()
 	})
 	t.Run("is-socket", func(t *testing.T) {
-		assert.NotNil(t, IsSocketMode())
+		assert.NotNil(t, IsUnixSocketMode())
 	})
 	t.Run("is-profiling-enabled", func(t *testing.T) {
 		assert.NotNil(t, IsProfilingEnabled())

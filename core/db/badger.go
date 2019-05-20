@@ -59,12 +59,12 @@ func createData(path string) error {
 
 func NewCollection(name string) (*BadgerStorage, error) {
 	logger.Debug("creating new db collection")
-	collection := new(BadgerStorage)
 	err := createData(constants.DatabaseRootPath + name)
 	if err != nil {
 		return nil, err
 	}
 	var openErr error
+	collection := new(BadgerStorage)
 	collection.instance, openErr = badger.Open(defaultConfig)
 	if err != nil {
 		return nil, openErr
