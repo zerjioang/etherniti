@@ -14,8 +14,6 @@ import (
 
 	"gopkg.in/src-d/go-billy.v4/memfs"
 
-	"sync/atomic"
-
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -28,9 +26,8 @@ import (
 
 // token controller
 type SolcController struct {
-	//cached value. concurrent safe that stores []byte
-	solidityVersionResponse atomic.Value
 }
+
 type CodeReader func(c *echo.Context) ([]string, error)
 
 var (
@@ -57,57 +54,44 @@ func init() {
 
 // constructor like function
 func NewSolcController() SolcController {
-	ctl := SolcController{}
-	return ctl
+	return SolcController{}
 }
 
-func (ctl *SolcController) version(c *echo.Context) error {
+func (ctl SolcController) version(c *echo.Context) error {
 	return c.FastBlob(solcResponseCode, echo.MIMEApplicationJSONCharsetUTF8, solcVersionResponse)
 }
 
 // solc --optimize --optimize-runs 200 --opcodes --bin --abi --hashes --asm erc20.sol
 func (ctl SolcController) compileFromSources(c *echo.Context, codeReader CodeReader) error {
-	//read request parameters encoded in the body
-	req := protocol.MultiFileContractCompileRequest{}
-	if err := c.Bind(&req); err != nil {
-		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
-	}
-
-	if len(req.Contract) == 0 {
-		return errNoContractData
+	dataFiles, codeErr := codeReader(c)
+	if codeErr != nil {
+		//error reading source code
+		return api.Error(c, codeErr)
 	} else {
-		dataFiles, codeErr := codeReader(c)
-		if codeErr != nil {
-			//error reading source code
-			return api.Error(c, codeErr)
+		//decoding success. compile the contract files
+		compilerResponse, err := solc.CompileSolidity(dataFiles...)
+		if err != nil {
+			// compilation error
+			return api.Error(c, err)
 		} else {
-			//decoding success. compile the contract files
-			compilerResponse, err := solc.CompileSolidity(dataFiles...)
-			if err != nil {
-				// compilation error
-				return api.Error(c, err)
-			} else {
-				//generate the response for the client
-				var contractResp []protocol.ContractCompileResponse
-				contractResp = make([]protocol.ContractCompileResponse, len(compilerResponse))
-				idx := 0
-				for _, v := range compilerResponse {
-					//populate current response
-					current := contractResp[idx]
-					current.Code = v.Code
-					current.RuntimeCode = v.RuntimeCode
-					current.Language = v.Info.Language
-					current.LanguageVersion = v.Info.LanguageVersion
-					current.CompilerVersion = v.Info.CompilerVersion
-					current.CompilerOptions = v.Info.CompilerOptions
-					current.AbiDefinition = v.Info.AbiDefinition
-					contractResp[idx] = current
-					idx++
-				}
-				return api.SendSuccess(c, data.SolcCompiled, contractResp)
+			//generate the response for the client
+			var contractResp []protocol.ContractCompileResponse
+			contractResp = make([]protocol.ContractCompileResponse, len(compilerResponse))
+			idx := 0
+			for _, v := range compilerResponse {
+				//populate current response
+				current := contractResp[idx]
+				current.Code = v.Code
+				current.RuntimeCode = v.RuntimeCode
+				current.Language = v.Info.Language
+				current.LanguageVersion = v.Info.LanguageVersion
+				current.CompilerVersion = v.Info.CompilerVersion
+				current.CompilerOptions = v.Info.CompilerOptions
+				current.AbiDefinition = v.Info.AbiDefinition
+				contractResp[idx] = current
+				idx++
 			}
+			return api.SendSuccess(c, data.SolcCompiled, contractResp)
 		}
 	}
 }
