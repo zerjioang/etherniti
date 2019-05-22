@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/util/ip"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -20,6 +19,8 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
@@ -61,7 +62,7 @@ type Context struct {
 	SchemeType constants.RequestScheme
 	SchemeName string
 	ip         string
-	intIp uint32
+	intIp      uint32
 	// http client cache policy
 	OnSuccessCachePolicy int
 	UserId               string

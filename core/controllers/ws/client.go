@@ -2,11 +2,12 @@ package ws
 
 import (
 	"bytes"
-	"github.com/gorilla/websocket"
-	"github.com/zerjioang/etherniti/core/logger"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 const (
@@ -30,10 +31,10 @@ var (
 
 var (
 	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		HandshakeTimeout: time.Second * 2,
-		EnableCompression:true,
+		ReadBufferSize:    1024,
+		WriteBufferSize:   1024,
+		HandshakeTimeout:  time.Second * 2,
+		EnableCompression: true,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},

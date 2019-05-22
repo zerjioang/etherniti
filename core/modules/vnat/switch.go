@@ -70,4 +70,3 @@ func (g *GreedyDropSwitcher) SwitchedRates(mat *ConnMat) {
 		}
 	}
 }
-

@@ -119,7 +119,7 @@ var (
 	ListingNotSupported      = errors.New("listing not supported")
 	ErrBind                  = stack.New(BindErrStr)
 	StackErrProject          = stack.New(ProvideProjectIdStr)
-	StackErrInvalidData = stack.New(ProvideValidDataStr)
+	StackErrInvalidData      = stack.New(ProvideValidDataStr)
 )
 
 // database related errors

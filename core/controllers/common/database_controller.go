@@ -119,7 +119,7 @@ func (ctl *DatabaseController) Delete(c *echo.Context) error {
 			if deleteErr != nil {
 				return api.Error(c, deleteErr)
 			}
-			return api.SendSuccessBlob(c, data.SuccessfullyDeleted)
+			return api.SendSuccess(c, data.SuccessfullyDeleted, nil)
 		}
 		return api.Error(c, canDeleteErr)
 	} else {

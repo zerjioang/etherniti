@@ -4,9 +4,10 @@
 package config
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"os"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 func GetEnvironment() *EnvConfig {

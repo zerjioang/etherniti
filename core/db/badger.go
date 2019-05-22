@@ -156,7 +156,7 @@ func (db *BadgerStorage) List(prefixStr string) ([][]byte, error) {
 
 func (db *BadgerStorage) Delete(key []byte) error {
 	logger.Debug("deleting key from db: ", string(key))
-	execErr := db.instance.View(func(txn *badger.Txn) error {
+	execErr := db.instance.Update(func(txn *badger.Txn) error {
 		err := txn.Delete(key)
 		if err != nil {
 			logger.Error("failed to delete key from db: ", string(key), "error: ", err)

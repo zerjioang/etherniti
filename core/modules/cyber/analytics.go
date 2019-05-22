@@ -4,10 +4,11 @@
 package cyber
 
 import (
-	"github.com/zerjioang/etherniti/core/config"
 	"net/http"
 	"strconv"
 	"sync"
+
+	"github.com/zerjioang/etherniti/core/config"
 
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"

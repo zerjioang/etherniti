@@ -3,11 +3,11 @@ package vnat
 import (
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/modules/slice"
 	"math"
 	"math/rand"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/modules/slice"
 )
 
 // An EventStream is a uni-directional channel of events
@@ -190,7 +190,7 @@ func (e *EventLoop) Run() error {
 		e.lock.Unlock()
 	}()
 
-	for _ = range e.notifyCh {
+	for range e.notifyCh {
 		if shouldContinue, err := e.step(); !shouldContinue {
 			return err
 		}
@@ -301,4 +301,3 @@ func (e *EventLoop) deliver(event *Event) bool {
 	event.Stream.pending = append(event.Stream.pending, event.Message)
 	return false
 }
-

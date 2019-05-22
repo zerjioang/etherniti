@@ -56,4 +56,3 @@ func TestGreedyDropSwitcher(t *testing.T) {
 		}
 	}
 }
-

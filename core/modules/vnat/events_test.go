@@ -252,4 +252,3 @@ func BenchmarkTimerManipulation(b *testing.B) {
 		loop.Run()
 	}
 }
-

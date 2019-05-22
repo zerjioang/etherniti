@@ -84,7 +84,7 @@ func GetJsonBytes(data interface{}) []byte {
 // this function is at least
 // twice as fast as standard to lower function of go standard library
 func ToLowerAscii(src string) string {
-	if src == ""{
+	if src == "" {
 		return src
 	}
 	// string are immutable

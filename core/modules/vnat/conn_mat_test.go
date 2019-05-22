@@ -1,6 +1,5 @@
 package vnat
 
-
 import (
 	"testing"
 )

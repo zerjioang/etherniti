@@ -9,7 +9,7 @@ var (
 	hub = NewHub()
 )
 
-func init(){
+func init() {
 	go hub.run()
 }
 

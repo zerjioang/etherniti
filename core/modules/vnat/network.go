@@ -276,4 +276,3 @@ func messagesWithLowestETA(msgs []*switchedMsg) (lowest, rest []*switchedMsg, lo
 
 	return lowest, rest, lowestETA
 }
-

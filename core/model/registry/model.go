@@ -21,10 +21,10 @@ type Registry struct {
 	Name string `json:"name"`
 	// registry description
 	Description string `json:"description"`
-	
-	Address     string `json:"address"`
-	Version     string `json:"version"`
-	
+
+	Address string `json:"address"`
+	Version string `json:"version"`
+
 	Metadata *metadata.Metadata `json:"metadata"`
 }
 

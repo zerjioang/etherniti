@@ -5,8 +5,9 @@ package middleware
 
 import (
 	"errors"
-	"github.com/zerjioang/etherniti/core/controllers/ws"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/controllers/ws"
 
 	ip2 "github.com/zerjioang/etherniti/core/util/ip"
 

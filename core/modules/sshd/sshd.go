@@ -2,16 +2,17 @@ package sshd
 
 import (
 	"bufio"
-	"golang.org/x/crypto/ssh"
 	"io"
 	"strings"
+
+	"golang.org/x/crypto/ssh"
 )
 
 type Client struct {
-	client *ssh.Client
-	config *ssh.ClientConfig
-	host string
-	port string
+	client       *ssh.Client
+	config       *ssh.ClientConfig
+	host         string
+	port         string
 	rootPassword string
 }
 
@@ -20,7 +21,7 @@ func (c *Client) EnrollWithKey(username string, keyData string) error {
 	if err != nil {
 		return err
 	}
-	c.config = &ssh.ClientConfig {
+	c.config = &ssh.ClientConfig{
 		User: username,
 		Auth: []ssh.AuthMethod{
 			k,
@@ -39,7 +40,7 @@ func (c *Client) publicKey(keyData string) (ssh.AuthMethod, error) {
 }
 
 func (c *Client) EnrollWithPassword(username string, password string) {
-	c.config = &ssh.ClientConfig {
+	c.config = &ssh.ClientConfig{
 		User: username,
 		Auth: []ssh.AuthMethod{
 			ssh.Password(password),

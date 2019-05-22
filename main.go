@@ -4,8 +4,9 @@
 package main
 
 import (
-	"github.com/zerjioang/etherniti/core/util/banner"
 	"runtime"
+
+	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/bus"
 
@@ -15,7 +16,7 @@ import (
 
 var (
 	//build-time variables
-	Commit = ""
+	Commit  = ""
 	Edition = ""
 
 	// build commit hash value
