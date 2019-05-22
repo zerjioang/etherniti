@@ -107,10 +107,10 @@ func (c *EnvConfig) SetDefaults() {
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
 
 	// email sender configuration
-	env["X_EMAIL_USERNAME"] = "faktorialabs@gmail.com"
-	env["X_GMAIL_ACCESS_TOKEN"] = "vhlpmtrvskzxdebh"
-	env["X_EMAIL_SERVER"] = "smtp.gmail.com:587"
-	env["X_EMAIL_SERVER_ONLY"] = "smtp.gmail.com"
+	env["X_ETHERNITI_EMAIL_USERNAME"] = "faktorialabs@gmail.com"
+	env["X_ETHERNITI_GMAIL_ACCESS_TOKEN"] = "vhlpmtrvskzxdebh"
+	env["X_ETHERNITI_EMAIL_SERVER"] = "smtp.gmail.com:587"
+	env["X_ETHERNITI_EMAIL_SERVER_ONLY"] = "smtp.gmail.com"
 
 	env["X_ETHERNITI_RECATPCHAV3_APIKEY"] = "6LfeAaMUAAAAADzEfvOzsajWuLCCrUfxprh-wZcC"
 }

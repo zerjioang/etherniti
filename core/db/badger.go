@@ -80,7 +80,6 @@ func NewCollection(name string) (*BadgerStorage, error) {
 	return collection, nil
 }
 
-// Set is used to set a key/value set outside of the raft log.
 func (db *BadgerStorage) Set(key []byte, val []byte) error {
 	logger.Debug("inserting key-value in db")
 	return db.instance.Update(func(txn *badger.Txn) error {

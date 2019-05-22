@@ -4,11 +4,11 @@
 package cyber
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"net/http"
 	"strconv"
 	"sync"
 
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
@@ -19,6 +19,7 @@ import (
 var (
 	collection *db.BadgerStorage
 	pool       *sync.Pool
+	analyze    bool
 )
 
 func init() {
@@ -32,6 +33,7 @@ func init() {
 			return map[string]string{}
 		},
 	}
+	analyze = !config.IsDevelopment() && collection != nil
 }
 
 // check if http request host value is allowed or not
@@ -46,12 +48,14 @@ func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// this method is called form a goroutine
 func processAnalytics(ip string, r *http.Request) {
-	if !config.IsDevelopment() && collection != nil {
-		// save request analytics data:
+	if analyze {
+		// save request analytics data
 		n := fastime.Now()
 		// Get item from instance
 		record := pool.Get().(map[string]string)
+		// populate the access analytics item
 		record["time"] = strconv.Itoa(int(n.Unix()))
 		record["ip"] = ip
 		record["host"] = r.Host
@@ -60,10 +64,14 @@ func processAnalytics(ip string, r *http.Request) {
 		record["remote"] = r.RemoteAddr
 		record["ua"] = r.UserAgent()
 		record["uri"] = r.URL.RequestURI()
+		// serialize the item
 		raw := str.GetJsonBytes(record)
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk
-		_ = collection.Set(n.SafeBytes(), raw)
+		storeErr := collection.Set(n.SafeBytes(), raw)
+		if storeErr != nil {
+			logger.Error("failed to store analytics information due to error: ", storeErr)
+		}
 	}
 }
