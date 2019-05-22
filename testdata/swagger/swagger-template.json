@@ -4,13 +4,13 @@
     "description": "$title definition",
     "version": "$version",
     "title": "$title",
-    "termsOfService": "https://www.etherniti.org/docs/terms-of-service/",
+    "termsOfService": "https://www.etherniti.org/terms-of-service/",
     "contact": {
       "email": "core@etherniti.org"
     },
     "license": {
       "name": "Etherniti License",
-      "url": "https://www.etherniti.org/docs/license/"
+      "url": "https://www.etherniti.org/license/"
     },
     "x-apisguru-categories": [
       "iot",
@@ -38,7 +38,7 @@
       "description": "Etherniti Web3 Proxy authenticator",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
-        "url": "https://www.etherniti.org/docs/api/auth/"
+        "url": "https://docs.etherniti.org/api/auth/"
       }
     },
     {
@@ -46,7 +46,7 @@
       "description": "Public Etherniti Web3 Proxy operations",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/api/public-operations/"
+        "url": "https://docs.etherniti.org/api/public-operations/"
       }
     },
     {
@@ -54,7 +54,7 @@
       "description": "Etherniti Web3 Proxy connection profile management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/api/profile-management/"
+        "url": "https://docs.etherniti.org/api/profile-management/"
       }
     },
     {
@@ -62,7 +62,7 @@
       "description": "Etherniti Web3 Proxy wallet service",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/api/wallet/"
+        "url": "https://docs.etherniti.org/api/wallet/"
       }
     },
     {
@@ -70,7 +70,7 @@
       "description": "Etherniti Web3 Proxy context dependant services",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
-        "url": "https://www.etherniti.org/docs/api/private"
+        "url": "https://docs.etherniti.org/api/private"
       }
     },
     {
@@ -78,7 +78,7 @@
       "description": "Etherniti Web3 Proxy security services",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API security services at",
-        "url": "https://www.etherniti.org/docs/api/security"
+        "url": "https://docs.etherniti.org/api/security"
       }
     },
     {
@@ -86,7 +86,7 @@
       "description": "Etherniti Web3 Proxy web3 implementation",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API web3 implementation at",
-        "url": "https://www.etherniti.org/docs/api/web3"
+        "url": "https://docs.etherniti.org/api/web3"
       }
     },
     {
@@ -94,23 +94,23 @@
       "description": "Etherniti Web3 Proxy solc compiler implementation",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API solc compiler implementation at",
-        "url": "https://www.etherniti.org/docs/api/solc"
+        "url": "https://docs.etherniti.org/api/solc"
       }
     },
     {
       "name": "registry",
-      "description": "Ethereum REST API Contract Name Service implementation",
+      "description": "Etherniti Web3 Registry",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API Contract Name Service implementation at",
-        "url": "https://www.etherniti.org/docs/api/contract-name-service"
+        "url": "https://docs.etherniti.org/api/registry"
       }
     },
     {
       "name": "devops",
       "description": "Etherniti Web3 Proxy devops helpers",
       "externalDocs": {
-        "description": "Find out more about Etherniti, an Ethereum REST APIdevops helpers implementation at",
-        "url": "https://www.etherniti.org/docs/api/devops"
+        "description": "Find out more about Etherniti, an Ethereum REST API devops helpers implementation at",
+        "url": "https://docs.etherniti.org/api/devops"
       }
     },
     {
@@ -118,7 +118,7 @@
       "description": "Etherniti Web3 Proxy ERC20 management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API ERC20 management at",
-        "url": "https://www.etherniti.org/docs/api/erc20"
+        "url": "https://docs.etherniti.org/api/erc20"
       }
     },
     {
@@ -126,7 +126,7 @@
       "description": "Etherniti Web3 Proxy Projects management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API Projects management at ",
-        "url": "https://www.etherniti.org/docs/api/projects"
+        "url": "https://docs.etherniti.org/api/projects"
       }
     }
   ],
@@ -2537,6 +2537,207 @@
           "400": {
             "$ref": "#responses/ProfileInvalidError"
           }
+        }
+      }
+    }
+  },
+  "/my/registry": {
+    "post": {
+      "tags": ["registry"],
+      "summary": "Create new registry",
+      "description": "Create new registry in user workspace",
+      "operationId": "registry-new",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "accountToken": []
+      }],
+      "parameters": [{
+        "in": "body",
+        "name": "data",
+        "description": "registry details",
+        "type": "string",
+        "required": true,
+        "example": {
+          "name": "test-registry"
+        }
+      }],
+      "responses": {
+        "200": {
+          "description": "response of new registry creation request",
+          "schema": {
+            "example": {
+              "code": 200,
+              "id": 0,
+              "msg": "registry successfully created",
+              "details": "a1ebf4afd9e9462cb5dedc0e83efea17"
+            }
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    },
+    "get": {
+      "tags": ["registry"],
+      "summary": "List user registry",
+      "description": "List registry in user workspace",
+      "operationId": "registry-list",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "accountToken": []
+      }],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "response of new registry creation request",
+          "schema": {
+            "example": [
+              {
+                "uuid": "24293a7cb63a4c82b205f24a5158dd03",
+                "name": "test-registry",
+                "owner": "ac51633e37924e65b87bd0b9d59528d7",
+                "id": "466e3553eff348e294ea81d22a0fd8c7",
+                "secret": "25796d4cc11046ed9380b0ec0e22066c",
+                "created": 1557756771,
+                "ip": 2130706433
+              }
+            ]
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    }
+  },
+  "/my/registry/{id}": {
+    "get": {
+      "tags": [
+        "registry"
+      ],
+      "summary": "Get specific registry details",
+      "description": "Get specific registry details",
+      "operationId": "registry-details",
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "deprecated": false,
+      "security": [{
+        "accountToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "id",
+        "description": "registry id",
+        "type": "string",
+        "required": true,
+        "example": "cfb79f10bd524a57bc330cf1a48d213b",
+        "default": "cfb79f10bd524a57bc330cf1a48d213b"
+      }],
+      "responses": {
+        "200": {
+          "description": "details of etherniti proxy created registry",
+          "schema": {
+            "example": {}
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    },
+    "put": {
+      "tags": [
+        "registry"
+      ],
+      "summary": "Update existing registry details",
+      "description": "Update existing registry details",
+      "operationId": "registry-update",
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "deprecated": false,
+      "security": [{
+        "accountToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "id",
+        "description": "registry id",
+        "type": "string",
+        "required": true,
+        "example": "cfb79f10bd524a57bc330cf1a48d213b",
+        "default": "cfb79f10bd524a57bc330cf1a48d213b"
+      },
+        {
+          "in": "body",
+          "name": "data",
+          "description": "registry details",
+          "type": "string",
+          "required": true,
+          "example": {
+            "name": "test-registry"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "details of etherniti proxy created registry",
+          "schema": {
+            "example": {}
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    },
+    "delete": {
+      "tags": [
+        "registry"
+      ],
+      "summary": "Delete existing registry",
+      "description": "Delete existing registry from user workspace",
+      "operationId": "registry-delete",
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "deprecated": false,
+      "security": [{
+        "accountToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "id",
+        "description": "registry id",
+        "type": "string",
+        "required": true,
+        "example": "cfb79f10bd524a57bc330cf1a48d213b",
+        "default": "cfb79f10bd524a57bc330cf1a48d213b"
+      }],
+      "responses": {
+        "200": {
+          "description": "response of registry delete operation",
+          "schema": {
+            "example": {}
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
         }
       }
     }

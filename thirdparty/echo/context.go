@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/zerjioang/etherniti/core/util/ip"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -60,6 +61,7 @@ type Context struct {
 	SchemeType constants.RequestScheme
 	SchemeName string
 	ip         string
+	intIp uint32
 	// http client cache policy
 	OnSuccessCachePolicy int
 	UserId               string
@@ -87,6 +89,7 @@ func (c *Context) Preload() {
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()
 	c.ip = c.resolveRealIP()
+	c.intIp = ip.Ip2int(c.ip)
 }
 
 func (c *Context) writeContentType(value string) {
@@ -632,4 +635,8 @@ func (c *Context) AuthenticatedUserUuid() string {
 
 func (c *Context) User() profile.ConnectionProfile {
 	return c.profileData
+}
+
+func (c *Context) IntIp() uint32 {
+	return c.intIp
 }

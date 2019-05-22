@@ -19,7 +19,7 @@ func NewProjectController() ProjectController {
 	var err error
 	pc.DatabaseController, err = common.NewDatabaseController("projects", project.NewDBProject)
 	if err != nil {
-		logger.Error("failed to create database controller ", err)
+		logger.Error("failed to create project controller ", err)
 	}
 	return pc
 }

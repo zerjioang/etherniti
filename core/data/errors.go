@@ -16,6 +16,7 @@ const (
 	SolcVersionFailedStr = "failed to get solc version"
 	BindErrStr           = "there was an error while processing your request information"
 	ProvideProjectIdStr  = "you have to provide a valid project data"
+	ProvideValidDataStr  = "you have to provide valid data"
 )
 
 var (
@@ -118,6 +119,7 @@ var (
 	ListingNotSupported      = errors.New("listing not supported")
 	ErrBind                  = stack.New(BindErrStr)
 	StackErrProject          = stack.New(ProvideProjectIdStr)
+	StackErrInvalidData = stack.New(ProvideValidDataStr)
 )
 
 // database related errors
