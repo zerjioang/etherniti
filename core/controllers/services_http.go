@@ -7,8 +7,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/controllers/cns"
 	"github.com/zerjioang/etherniti/core/controllers/project"
+	"github.com/zerjioang/etherniti/core/controllers/registry"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -85,7 +85,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewSecurityController().RegisterRouters(publicGroup)
 	NewWalletController().RegisterRouters(publicGroup)
 	NewSolcController().RegisterRouters(publicGroup)
-	cns.NewContractNameServiceController().RegisterRouters(publicGroup)
+	registry.NewRegistryController().RegisterRouters(publicGroup)
 
 	//register external api calls
 	// coin market cap: get eth price data

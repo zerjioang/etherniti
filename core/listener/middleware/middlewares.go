@@ -5,6 +5,7 @@ package middleware
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/controllers/ws"
 	"strings"
 
 	ip2 "github.com/zerjioang/etherniti/core/util/ip"
@@ -272,7 +273,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// start websocket handler if requested
 	if config.IsWebSocketMode() {
 		logger.Info("[LAYER] /=> websocket")
-		e.GET("/ws", controllers.WebsocketEntrypoint)
+		e.GET("/ws", ws.WebsocketEntrypoint)
 	}
 
 	logger.Info("[LAYER] /=> static files")

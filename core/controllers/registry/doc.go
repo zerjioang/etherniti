@@ -1,4 +1,4 @@
-package cns
+package registry
 
 /*
 Initial package performance:
