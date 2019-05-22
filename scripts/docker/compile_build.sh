@@ -16,7 +16,12 @@ bash ./link.sh
 cd ../..
 
 # default configuration
-hash=$(git rev-parse --short HEAD)
+# short version of the hash
+# hash=$(git rev-parse --short HEAD)
+
+# large version of the hash
+hash=$(git rev-list -1 HEAD)
+
 if [[ -z "$hash" ]]; then
     echo "no hash found. setting default"
     hash="development-build"
@@ -113,7 +118,7 @@ function compile(){
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
             -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
-            -ldflags "-s -w -libgcc=none  -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash} main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
@@ -129,7 +134,7 @@ function compile(){
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
                 -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
-                -ldflags "-s -w -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}'" \
+                -ldflags "-s -w -X 'main.Commit=${hash} main.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
@@ -141,7 +146,7 @@ function compile(){
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
                 -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
-                -ldflags "-s -w -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}'" \
+                -ldflags "-s -w -X 'main.Commit=${hash} main.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         else
             echo "compiling production version..."
@@ -154,7 +159,7 @@ function compile(){
             go build \
             -a \
             -tags "'netgo prod ${BUILD_CONTEXT}'" \
-            -ldflags "-s -w -libgcc=none  -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash} main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname && \
             ls -alh
         fi

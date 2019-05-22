@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/zerjioang/etherniti/core/util/banner"
 	"runtime"
 
 	"github.com/zerjioang/etherniti/core/bus"
@@ -13,11 +14,19 @@ import (
 )
 
 var (
+	//build-time variables
+	Commit = ""
+	Edition = ""
+
 	// build commit hash value
 	notifier = make(chan error)
 )
 
 func init() {
+	//pass build-time variables to banner package
+	// in order to print in the welcome banner
+	banner.Commit = Commit
+	banner.Edition = Edition
 }
 
 // generate build sha1: git rev-parse --short HEAD

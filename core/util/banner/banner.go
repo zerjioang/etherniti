@@ -21,14 +21,20 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
  \___  >__| |___|  /\___  >__|  |___|  /__||__| |__|
      \/          \/     \/           \/
 
-arch              : $GOARCH
-goroot            : $GOROOT
-goversion         : $GO_VERSION
-gocompiler        : $GO_COMPILER
-etherniti version : $VER
-etherniti commit  : $COMMIT
+  Official Page  :        https://www.etherniti.org
+  Github Page    :     https://github.com/etherniti
+  Issues         : https://github.com/etherniti/rfc
 
-Etherniti Proxy is listening!
+  Build information:
+
+  arch             : $GOARCH
+  go/root          : $GOROOT
+  go/version       : $GO_VERSION
+  go/compiler      : $GO_COMPILER
+  proxy/version    : $VER
+  proxy/commit     : $COMMIT
+  proxy/edition    : $EDITION
+
 `
 )
 
@@ -51,6 +57,7 @@ func init() {
 func WelcomeBanner() string {
 	logger.Debug("reading welcome banner")
 	banner = strings.Replace(banner, "$COMMIT", Commit, 1)
+	banner = strings.Replace(banner, "EDITION", Edition, 1)
 	return banner
 }
 
