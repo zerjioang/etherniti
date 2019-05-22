@@ -70,8 +70,8 @@ func (c *EnvConfig) SetDefaults() {
 	env := c.data
 	env["X_ETHERNITI_LOG_LEVEL"] = "debug"
 	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "beta-stage"
-	env["X_ETHERNITI_HTTP_PORT"] = "80"
-	env["X_ETHERNITI_HTTPS_PORT"] = "443"
+	env["X_ETHERNITI_HTTP_PORT"] = "8080"
+	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
 	env["X_ETHERNITI_DEBUG_SERVER"] = false
 	env["X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"] = true
 	env["X_ETHERNITI_TOKEN_SECRET"] = "t0k3n-s3cr3t-h3r3"

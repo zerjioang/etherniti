@@ -64,10 +64,14 @@ if [[ -z "$ETHERNITI_CGO_ENABLED" ]]; then
     ETHERNITI_CGO_ENABLED=1
 fi
 
+# defined compilation custom compilation go tags
+TAGS="'${BUILD_MODE} ${BUILD_CONTEXT}'"
+
 echo "
 HASH:                       $hash
 BUILD_MODE:                 $BUILD_MODE
 BUILD_CONTEXT:              $BUILD_CONTEXT
+BUILD_TAGS:                 $TAGS
 ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
 ETHERNITI_GOOS:             $ETHERNITI_GOOS
 ETHERNITI_COMPILER:         $ETHERNITI_COMPILER
@@ -84,7 +88,7 @@ ETHERNITI_CGO_ENABLED:      $ETHERNITI_CGO_ENABLED
 # -trimpath is used to tell go compile to trim $GOPATH from source file path in stack trace.
 # -fmessage-length=0 You can use the options described below to control
 # the formatting algorithm for diagnostic messages, e.g. how many characters
-# per line, how often source location information should be reported. 
+# per line, how often source location information should be reported.
 # -C is used to disable printing of columns in error messages
 # -ldflags '-linkmode external'
 # -ldflags '-extldflags -static'
@@ -92,6 +96,10 @@ ETHERNITI_CGO_ENABLED:      $ETHERNITI_CGO_ENABLED
 # libgcc: compiler support lib for internal linking; use "none" to disable
 # -w just disables debug letting the file be smaller
 # -s
+#
+# static compilation issues:
+#    https://github.com/golang/go/issues/23265
+#
 function compile(){
 
     CGO_ENABLED=${ETHERNITI_CGO_ENABLED}
@@ -107,6 +115,8 @@ function compile(){
     fi
     if [[ "$ETHERNITI_GOARCH" = "arm" || "$ETHERNITI_GOARCH" = "arm64" ]]; then
         echo "compiling for arm..."
+        echo "Using commit hash '$hash' for current build"
+
         #ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-7
         ETHERNITI_COMPILER=/usr/bin/arm-linux-gnueabi-gcc-6
         # compile for arm-v7
@@ -117,13 +127,13 @@ function compile(){
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
-            -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+            -tags "${TAGS}'"\
             -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
     else
-        echo "compiling for $ETHERNITI_GOARCH..."
+        echo "compiling for ${ETHERNITI_GOARCH}..."
         if [[ "$BUILD_MODE" = "dev" ]]; then
             echo "compiling dev-stage version..."
             echo "Using commit hash '$hash' for current build"
@@ -133,7 +143,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+                -tags "${TAGS}'"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
@@ -145,7 +155,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+                -tags "${TAGS}'"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         else
@@ -158,7 +168,7 @@ function compile(){
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
             -a \
-            -tags "'netgo prod ${BUILD_CONTEXT}'" \
+            -tags "'netgo ${BUILD_MODE} ${BUILD_CONTEXT}'" \
             -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname && \
             ls -alh
