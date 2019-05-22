@@ -34,8 +34,11 @@ Etherniti Proxy is listening!
 
 var (
 	banner = ""
-	// compilation commit
+	// compilation data: commit
 	Commit = ""
+	// compliation data: edition
+	// proxy edition: oss or pro
+	Edition = ""
 )
 
 // thread safe init function

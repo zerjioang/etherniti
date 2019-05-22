@@ -9,19 +9,15 @@ import (
 	"github.com/zerjioang/etherniti/core/bus"
 
 	"github.com/zerjioang/etherniti/core/cmd"
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util/banner"
 )
 
 var (
 	// build commit hash value
-	Build    = config.GetEnvironmentName()
 	notifier = make(chan error)
 )
 
 func init() {
-	banner.Commit = Build
 }
 
 // generate build sha1: git rev-parse --short HEAD

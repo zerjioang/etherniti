@@ -62,7 +62,7 @@ fi
 echo "
 HASH:                       $hash
 BUILD_MODE:                 $BUILD_MODE
-BUILD_CONTEXT:                 $BUILD_CONTEXT
+BUILD_CONTEXT:              $BUILD_CONTEXT
 ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
 ETHERNITI_GOOS:             $ETHERNITI_GOOS
 ETHERNITI_COMPILER:         $ETHERNITI_COMPILER
@@ -112,8 +112,8 @@ function compile(){
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
-            -tags ${BUILD_MODE} ${BUILD_CONTEXT}\
-            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags -static" \
+            -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+            -ldflags "-s -w -libgcc=none  -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
@@ -128,8 +128,8 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags ${BUILD_MODE} ${BUILD_CONTEXT} \
-                -ldflags "-s -w -X 'main.Build=$hash'" \
+                -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+                -ldflags "-s -w -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
@@ -140,8 +140,8 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags ${BUILD_MODE} ${BUILD_CONTEXT} \
-                -ldflags "-s -w -X 'main.Build=$hash'" \
+                -tags "'${BUILD_MODE} ${BUILD_CONTEXT}'"\
+                -ldflags "-s -w -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}'" \
                 -o $outputname
         else
             echo "compiling production version..."
@@ -153,8 +153,8 @@ function compile(){
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
             -a \
-            -tags 'netgo prod' \
-            -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags -static" \
+            -tags "'netgo prod ${BUILD_CONTEXT}'" \
+            -ldflags "-s -w -libgcc=none  -X 'banner.Commit=${hash} banner.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
             -o $outputname && \
             ls -alh
         fi
