@@ -167,6 +167,12 @@ func DebugServer() bool {
 	return found && v == true
 }
 
+func HideServerData() bool {
+	logger.Debug("reading debug mode from env")
+	v, found := ReadEnvironment("X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE")
+	return found && v == true
+}
+
 func TokenExpiration() fastime.Duration {
 	logger.Debug("reading token expiration from env")
 	v, found := ReadEnvironment("X_ETHERNITI_TOKEN_EXPIRATION")
@@ -193,7 +199,7 @@ func GetListeningAddress() string {
 
 func GetHttpInterface() string {
 	logger.Debug("reading requested listening interface address from env")
-	return ReadEnvironmentString("X_ETHERNITI_HTTP_LISTEN_INTERFACE")
+	return ReadEnvironmentString("X_ETHERNITI_LISTENING_INTERFACE")
 }
 
 //simply converts http requests into https

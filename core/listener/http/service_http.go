@@ -5,15 +5,14 @@ package http
 
 import (
 	"context"
+	"github.com/zerjioang/etherniti/core/util/banner"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/listener/swagger"
-	"github.com/zerjioang/etherniti/core/util/banner"
-
 	"github.com/zerjioang/etherniti/core/listener/middleware"
+	"github.com/zerjioang/etherniti/core/listener/swagger"
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -50,9 +49,10 @@ func (l HttpListener) Listen(notifier chan error) {
 	logger.Info("interface: ", config.GetHttpInterface())
 	logger.Info("endpoint: ", listenAddr)
 	swagger.ConfigureFromTemplate()
-	println(banner.WelcomeBanner())
 	// Start server
 	go func() {
+		println(banner.WelcomeBanner())
+		logger.Info("server listening")
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {
 			notifier <- err

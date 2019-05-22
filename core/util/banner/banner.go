@@ -21,11 +21,11 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
  \___  >__| |___|  /\___  >__|  |___|  /__||__| |__|
      \/          \/     \/           \/
 
-  Official Page  :        https://www.etherniti.org
-  Github Page    :     https://github.com/etherniti
-  Issues         : https://github.com/etherniti/rfc
+  Official Page  |        https://www.etherniti.org
+  Github Page    |     https://github.com/etherniti
+  Issues         | https://github.com/etherniti/rfc
 
-  Build information:
+  build information:
 
   arch             : $GOARCH
   go/root          : $GOROOT

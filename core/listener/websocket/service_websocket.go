@@ -47,9 +47,10 @@ func (l WebsocketListener) Listen(notifier chan error) {
 	logger.Info("starting websocket server...")
 	logger.Info("interface: ", config.GetHttpInterface())
 	swagger.ConfigureFromTemplate()
-	println(banner.WelcomeBanner())
 	// Start server
 	go func() {
+		println(banner.WelcomeBanner())
+		logger.Info("starting websocket server...")
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {
 			notifier <- err

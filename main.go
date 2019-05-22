@@ -54,5 +54,5 @@ func main() {
 	// finish graceful shutdown
 	bus.SharedBus().Emit(bus.PowerOffEvent)
 	bus.SharedBus().Shutdown()
-	logger.Info("all systems securely shutdown. Exiting now!")
+	logger.Info("all systems securely shutdown. exiting")
 }

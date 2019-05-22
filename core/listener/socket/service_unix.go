@@ -153,6 +153,7 @@ func (l UnixSocketListener) foreground(notifier chan error) {
 		log.Warn("failed to unlink unix socket: ", unErr)
 	}
 	println(banner.WelcomeBanner())
+	logger.Info("starting unix socket server...")
 	ln, err := net.Listen("unix", l.path)
 	if err != nil {
 		log.Error("unix socket listen error: ", err)

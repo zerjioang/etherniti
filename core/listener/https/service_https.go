@@ -81,8 +81,8 @@ func (l HttpsListener) Listen(notifier chan error) {
 
 	// Start http server
 	go func() {
-		logger.Info("starting http server...")
 		println(banner.WelcomeBanner())
+		logger.Info("starting http server...")
 		err := httpServerInstance.StartServer(&defaultHttpServerConfig)
 		if err != nil {
 			logger.Error("shutting down http the server", err)
