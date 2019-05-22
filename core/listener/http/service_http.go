@@ -29,9 +29,11 @@ type HttpListener struct {
 }
 
 var (
+	//listening ip:port
+	listenAddr = config.GetListeningAddress()
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.GetListeningAddress(),
+		Addr:         listenAddr,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -46,6 +48,7 @@ func (l HttpListener) Listen(notifier chan error) {
 	e := common.NewServer(middleware.ConfigureServerRoutes)
 	logger.Info("starting http server...")
 	logger.Info("interface: ", config.GetHttpInterface())
+	logger.Info("endpoint: ", listenAddr)
 	swagger.ConfigureFromTemplate()
 	println(banner.WelcomeBanner())
 	// Start server

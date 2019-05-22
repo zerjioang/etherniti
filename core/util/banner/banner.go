@@ -57,7 +57,7 @@ func init() {
 func WelcomeBanner() string {
 	logger.Debug("reading welcome banner")
 	banner = strings.Replace(banner, "$COMMIT", Commit, 1)
-	banner = strings.Replace(banner, "EDITION", Edition, 1)
+	banner = strings.Replace(banner, "$EDITION", Edition, 1)
 	return banner
 }
 
