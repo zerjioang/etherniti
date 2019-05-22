@@ -1,3 +1,6 @@
+# exit script on error
+set -e
+
 echo "Creating Diffie-Hellman params..."
 openssl dhparam -out dhparam.pem 4096
 echo "creating self signed certificate"

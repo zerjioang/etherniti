@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: Apache 2
 #
 
+# exit script on error
+set -e
+
 # Check whether a given container (filtered by name) exists or not
 function existsImage(){
     imageName=${1}

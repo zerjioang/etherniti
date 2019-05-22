@@ -5,8 +5,10 @@
 # SPDX-License-Identifier: Apache 2
 #
 
+# exit script on error
+set -e
 set -x #trace on
-set -e #break on error
+
 echo "hardening container..."
 
 # docker image hardening

@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: Apache 2
 #
 
+# exit script on error
+set -e
+
 cd "$(dirname "$0")"
 
 bash ./link.sh
@@ -22,6 +25,11 @@ fi
 if [[ -z "$BUILD_MODE" ]]; then
     echo "no BUILD_MODE found.           setting default to: dev"
     BUILD_MODE="pre" # dev, pre, prod
+fi
+
+if [[ -z "$BUILD_CONTEXT" ]]; then
+    echo "no BUILD_CONTEXT found.           setting default to: oss"
+    BUILD_MODE="oss" # oss, pro
 fi
 
 if [[ -z "$ETHERNITI_GOARCH" ]]; then
@@ -54,6 +62,7 @@ fi
 echo "
 HASH:                       $hash
 BUILD_MODE:                 $BUILD_MODE
+BUILD_CONTEXT:                 $BUILD_CONTEXT
 ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
 ETHERNITI_GOOS:             $ETHERNITI_GOOS
 ETHERNITI_COMPILER:         $ETHERNITI_COMPILER
@@ -103,7 +112,7 @@ function compile(){
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
-            -tags ${BUILD_MODE} \
+            -tags ${BUILD_MODE} ${BUILD_CONTEXT}\
             -ldflags "-s -w -libgcc=none  -X 'main.Build=$hash' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
@@ -119,7 +128,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags ${BUILD_MODE} \
+                -tags ${BUILD_MODE} ${BUILD_CONTEXT} \
                 -ldflags "-s -w -X 'main.Build=$hash'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
@@ -131,7 +140,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags ${BUILD_MODE} \
+                -tags ${BUILD_MODE} ${BUILD_CONTEXT} \
                 -ldflags "-s -w -X 'main.Build=$hash'" \
                 -o $outputname
         else

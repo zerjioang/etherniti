@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: Apache 2
 #
 
+# exit script on error
+set -e
+
 cd "$(dirname "$0")"
 
 # source helper files

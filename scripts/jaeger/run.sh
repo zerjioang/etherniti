@@ -1,3 +1,6 @@
+# exit script on error
+set -e
+
 docker run -d --name jaeger \
   -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
   -p 5775:5775/udp \

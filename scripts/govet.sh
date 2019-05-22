@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: Apache License 2.0
 #
 
+# exit script on error
+set -e
+
 cd "$(dirname "$0")"
 
 # move to project root dir from ./scripts to ./
