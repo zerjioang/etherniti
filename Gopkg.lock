@@ -128,12 +128,12 @@
   version = "v0.1.1"
 
 [[projects]]
-  digest = "1:e150b5fafbd7607e2d638e4e5cf43aa4100124e5593385147b0a74e2733d8b0d"
+  digest = "1:9b90c7639a41697f3d4ad12d7d67dfacc9a7a4a6e0bbfae4fc72d0da57c28871"
   name = "github.com/mattn/go-isatty"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c2a7a6ca930a4cd0bc33a3f298eb71960732a3a7"
-  version = "v0.0.7"
+  revision = "1311e847b0cb909da63b5fecfb5370aa66236465"
+  version = "v0.0.8"
 
 [[projects]]
   digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
@@ -242,7 +242,7 @@
   revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
 
 [[projects]]
-  digest = "1:35cf6bdf68db765988baa9c4f10cc5d7dda1126a54bd62e252dbcd0b1fc8da90"
+  digest = "1:8dcedf2e8f06c7f94e48267dea0bc0be261fa97b377f3ae3e87843a92a549481"
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
@@ -250,19 +250,19 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "1ba88736f028e37bc17328369e94a537ae9e0234"
-  version = "v0.4.0"
+  revision = "17f5ca1748182ddf24fc33a5a7caaaf790a52fcc"
+  version = "v0.4.1"
 
 [[projects]]
   branch = "master"
-  digest = "1:b4e48c7af197047d85fad1874951a927084c5be9ef686911258f78f52101d93a"
+  digest = "1:33aa10382f02c1a1d61fa1c2d3ba5c78fb6f628c1c21983e5e1c773d03e6ad66"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
   ]
   pruneopts = "UT"
-  revision = "9935e8e0588d26307d1d4a07bed7bd47271b6bbd"
+  revision = "bc1a522cf7b161885c0c3ae8080f59bf38a6e9e7"
 
 [[projects]]
   digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
@@ -412,11 +412,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "3ec19112720433827bbce8be9342797f5a6aaaf9"
+  revision = "f3200d17e092c607f615320ecaad13d87ad9a2b3"
 
 [[projects]]
   branch = "master"
-  digest = "1:2209166f26714596481963efb0322ccc112f6ba8d08db975ecfd18f0c8c609d9"
+  digest = "1:832105dfef7fb8befe37f774c2ab4db8eec28b0e05501dee908d5daac0afbd20"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -424,7 +424,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "ad400b1274690a55531a013560dc08706088f82b"
+  revision = "8097e1b27ff5e40620836729a9584e91b094b062"
 
 [[projects]]
   branch = "master"
@@ -442,7 +442,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "faf83c64e9269d0b25a74424705e3606824fcbe6"
+  revision = "521d6ed310dd2348b2d3c64b91c55df233c52860"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -545,6 +545,7 @@
     "golang.org/x/crypto/pbkdf2",
     "golang.org/x/crypto/ripemd160",
     "golang.org/x/crypto/sha3",
+    "golang.org/x/crypto/ssh",
     "golang.org/x/sys/cpu",
     "gopkg.in/src-d/go-billy.v4/memfs",
     "gopkg.in/src-d/go-git.v4",
