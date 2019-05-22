@@ -13,6 +13,7 @@ LABEL PROJECT           etherniti
 # production build parameters
 ARG BASE=/go/src/github.com/zerjioang/etherniti
 ARG BUILD_MODE=prod
+ARG BUILD_CONTEXT=oss
 ARG FILE=proxy
 ARG ETHERNITI_GOOS=linux
 ARG ETHERNITI_GOARCH=amd64
