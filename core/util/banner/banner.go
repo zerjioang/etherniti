@@ -40,9 +40,9 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
 
 var (
 	banner = ""
-	// compilation data: commit
+	// compilation built-in: commit
 	Commit = ""
-	// compliation data: edition
+	// compilation built-in: edition
 	// proxy edition: oss or pro
 	Edition = ""
 )
