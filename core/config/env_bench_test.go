@@ -66,27 +66,22 @@ func BenchmarkGetEnvironment(b *testing.B) {
 			}
 		})
 	})
-	b.Run("get-env-ptr", func(b *testing.B) {
+	b.Run("read-key-env", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = GetEnvironmentPtr()
+			_ = GetEnvironment().String("X_ETHERNITI_TOKEN_SECRET")
 		}
 	})
-	b.Run("get-env-ptr-parallel", func(b *testing.B) {
+	b.Run("read-key-ptr", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
-		// RunParallel will create GOMAXPROCS goroutines
-		// and distribute work among them.
-		b.RunParallel(func(pb *testing.PB) {
-			// The loop body is executed b.N times total across all goroutines.
-			for pb.Next() {
-				_ = GetEnvironmentPtr()
-			}
-		})
+		for n := 0; n < b.N; n++ {
+			_ = GetEnvironment().String("X_ETHERNITI_TOKEN_SECRET")
+		}
 	})
 }
