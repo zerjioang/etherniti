@@ -16,7 +16,7 @@ addons:
       - upx
 
 env:
-  - HOME=/home/travis GOPATH=/home/travis/gopath VERSION=0.1
+  - HOME=/home/travis GOPATH=$HOME/gopath GOBIN=$GOPATH/bin VERSION=0.1
 
 cache:
   directories:
