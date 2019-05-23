@@ -16,10 +16,9 @@ cd ..
 if ! [ -x "$(command -v dep)" ]; then
   echo 'error: dep is not installed.'
   echo 'installing dep...'
-  export GOPATH=$HOME/go
   curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 fi
 
 echo "Downloading dependencies using go dep"
-$GOPATH/bin/dep ensure -v
+$GOBIN/dep ensure -v
 echo "all dependencies downloaded"
