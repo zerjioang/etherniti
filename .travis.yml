@@ -4,11 +4,11 @@ go_import_path: github.com/zerjioang/etherniti
 sudo: false
 
 # required to be able to generate docker images
+# needed for the docker pipe
 services:
   - 'docker'
 
 language: go
-
 addons:
   apt:
     packages:
@@ -16,8 +16,7 @@ addons:
       - upx
 
 env:
-  - HOME=/home/travis GOPATH=/home/travis/gopath
-  - VERSION=0.1
+  - HOME=/home/travis GOPATH=/home/travis/gopath VERSION=0.1
 
 cache:
   directories:
@@ -39,10 +38,6 @@ depth: 1
 notifications:
   email: false
 
-# needed for the docker pipe
-services:
-  - docker
-
 before_install:
   - ./ci/before_install.sh
 install:
@@ -63,5 +58,5 @@ deploy:
   script: ./ci/deploy.sh
   on:
     branch: master
-addons:
-  ssh_known_hosts: github.com
+
+ssh_known_hosts: github.com
