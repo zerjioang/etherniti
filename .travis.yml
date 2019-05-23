@@ -1,15 +1,56 @@
+# This is a weird way of telling Travis to use the fast container-based test
+# runner instead of the slow VM-based runner.
+go_import_path: github.com/zerjioang/etherniti
+sudo: false
+
 language: go
+
+addons:
+  apt:
+    packages:
+    # for binary packing
+      - upx
+
 env:
-  - GO111MODULE=on
-go:
-  - 1.2
-  - 1.3
-  - 1.4
-  - tip
+  - HOME=/home/travis GOPATH=/home/travis/gopath
+
+cache:
+  directories:
+    - ~/.cache/go-build
+    - ~/gopath/pkg/mod
+
+# Only the last two Go releases are supported by the Go team with security
+# updates. Any older versions be considered deprecated. Don't bother testing
+# with them.
+go: 1.11.x
+
+# Only clone the most recent commit.
+git:
+depth: 1
+
+# Don't email me the results of the test runs.
+notifications:
+  email: false
+
+# needed for the docker pipe
+services:
+  - docker
+
+before_install:
+  - .ci/before_install.sh
 install:
-  - go build .
+  - ./ci/install.sh
+before_script:
+  - .ci/before_script.sh
+# script always runs to completion (set +e). If we have linter issues AND a
+# failing test, we want to see both. Configure golangci-lint with a
+# .golangci.yml file at the top level of your repo.
 script:
-  - golint -set_exit_status ./...
-  - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - ./ci/script.sh
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - ./ci/after_success.sh
+before_deploy:
+  - ./ci/before_deploy.sh
+
+addons:
+  ssh_known_hosts: github.com

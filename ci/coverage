@@ -1,0 +1,4 @@
+# Use this token when uploading reports to this repository.
+# You can set it in your CI environment variables. CODECOV_TOKEN="ab353ca3-4769-4ec7-9940-c0e015e561ec"
+
+# ab353ca3-4769-4ec7-9940-c0e015e561ec
