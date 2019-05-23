@@ -75,7 +75,6 @@ func socketClient() {
 	if err != nil {
 		log.Fatal("Dial error", err)
 	}
-	defer c.Close()
 
 	go reader(c)
 	for {
@@ -88,6 +87,7 @@ func socketClient() {
 		log.Debug("Client sent:", msg)
 		time.Sleep(1e9)
 	}
+	_ = c.Close()
 }
 
 // new http format socket client

@@ -53,7 +53,7 @@ type Context struct {
 
 	// connection profile data for interaction
 	profileLock *sync.Mutex
-	profileData profile.ConnectionProfile
+	profileData *profile.ConnectionProfile
 
 	//boots data cache value
 	isJson     bool
@@ -537,7 +537,7 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 
 //added new functions
 // returns connection profile from token information
-func (c *Context) ConnectionProfileSetup() (profile.ConnectionProfile, error) {
+func (c *Context) ConnectionProfileSetup() (*profile.ConnectionProfile, error) {
 	requestProfileKeyContent := c.ReadConnectionProfileToken()
 	readedProfile, err := profile.ParseConnectionProfileToken(requestProfileKeyContent)
 	if err == nil {
@@ -634,7 +634,7 @@ func (c *Context) AuthenticatedUserUuid() string {
 	return c.UserId
 }
 
-func (c *Context) User() profile.ConnectionProfile {
+func (c *Context) User() *profile.ConnectionProfile {
 	return c.profileData
 }
 

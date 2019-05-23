@@ -119,7 +119,6 @@ func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Ech
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
 	logger.Info("graceful shutdown of the service requested")
 	if httpInstance != nil {
 		logger.Info("shutting down http server...")
@@ -138,6 +137,7 @@ func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Ech
 	logger.Info("graceful shutdown executed for https listener")
 	logger.Info("exiting...")
 	notifier <- nil
+	cancel()
 }
 
 func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {

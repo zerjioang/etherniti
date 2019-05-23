@@ -72,7 +72,7 @@ func (profile ConnectionProfile) Valid() error {
 func (profile ConnectionProfile) Secret() []byte {
 	return tokenSecretBytes
 }
-func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfile {
+func (profile *ConnectionProfile) Populate(claims jwt.MapClaims) {
 	profile.AccountId = profile.readString(claims["uuid"])
 	profile.RpcEndpoint = profile.readString(claims["endpoint"])
 	profile.Address = profile.readString(claims["address"])
@@ -86,7 +86,6 @@ func (profile ConnectionProfile) Populate(claims jwt.MapClaims) ConnectionProfil
 	profile.Issuer = profile.readString(claims["iss"])
 	profile.NotBefore = profile.readInt64(claims["nbf"])
 	profile.Subject = profile.readString(claims["sub"])
-	return profile
 }
 
 func (profile ConnectionProfile) readString(v interface{}) string {
@@ -152,8 +151,8 @@ func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	return token.SignedString(tokenSecretBytes)
 }
 
-func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
-	var profile ConnectionProfile
+func ParseConnectionProfileToken(tokenStr string) (*ConnectionProfile, error) {
+	var profile = NewConnectionProfilePtr()
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -168,14 +167,14 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 		return tokenSecretBytes, nil
 	})
 	if err != nil {
-		return profile, err
+		return nil, err
 	}
 
 	mapc, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return profile, data.ErrFailedToRead
+		return nil, data.ErrFailedToRead
 	}
-	profile = profile.Populate(mapc)
+	profile.Populate(mapc)
 
 	//check profile validity
 	profile.Valididity = profile.RpcEndpoint != ""
@@ -183,13 +182,18 @@ func ParseConnectionProfileToken(tokenStr string) (ConnectionProfile, error) {
 	if profile.Valididity {
 		return profile, nil
 	} else {
-		return profile, data.ErrTokenNoValid
+		return nil, data.ErrTokenNoValid
 	}
 }
 
 //constructor like function
 func NewConnectionProfile() ConnectionProfile {
 	p := ConnectionProfile{}
+	return p
+}
+
+func NewConnectionProfilePtr() *ConnectionProfile {
+	p := new(ConnectionProfile)
 	return p
 }
 

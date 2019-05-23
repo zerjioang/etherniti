@@ -63,7 +63,6 @@ func (c Client) SyncCommand(cmds []string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer session.Close()
 
 	modes := ssh.TerminalModes{
 		ssh.ECHO:          0,     // disable echoing
@@ -73,16 +72,19 @@ func (c Client) SyncCommand(cmds []string) ([]byte, error) {
 
 	err = session.RequestPty("xterm", 80, 40, modes)
 	if err != nil {
+		session.Close()
 		return []byte{}, err
 	}
 
 	in, err := session.StdinPipe()
 	if err != nil {
+		session.Close()
 		return nil, err
 	}
 
 	out, err := session.StdoutPipe()
 	if err != nil {
+		session.Close()
 		return nil, err
 	}
 
@@ -120,8 +122,9 @@ func (c Client) SyncCommand(cmds []string) ([]byte, error) {
 	cmd := strings.Join(cmds, "; ")
 	_, err = session.Output(cmd)
 	if err != nil {
+		session.Close()
 		return []byte{}, err
 	}
-
+	session.Close()
 	return output, nil
 }

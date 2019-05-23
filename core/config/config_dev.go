@@ -136,6 +136,8 @@ func Setup() {
 //
 //http://localhost:6060/debug/pprof/profile?seconds=5
 //http://localhost:6060/debug/pprof/trace?seconds=5
+// run in the web
+// go tool pprof -http=localhost:6060 profile.out
 func runProfiler() {
 	go func() {
 		logger.Info("starting go profiler on 127.0.0.1:6060...")

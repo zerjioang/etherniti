@@ -127,7 +127,6 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 			stop := time.Now()
 			buf := config.pool.Get().(*bytes.Buffer)
 			buf.Reset()
-			defer config.pool.Put(buf)
 
 			if _, err = config.template.ExecuteFunc(buf, func(w io.Writer, tag string) (int, error) {
 				switch tag {
@@ -211,12 +210,15 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 						}
 					}
 				}
+				config.pool.Put(buf)
 				return 0, nil
 			}); err != nil {
+				config.pool.Put(buf)
 				return
 			}
 
 			_, err = config.Output.Write(buf.Bytes())
+			config.pool.Put(buf)
 			return
 		}
 	}

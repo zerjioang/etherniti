@@ -40,6 +40,6 @@ func TestDecode(t *testing.T) {
 	t.Run("fast-decode", func(t *testing.T) {
 		result, err := hex2.UnsafeDecodeString("746869732d69732d612d74657374")
 		assert.Nil(t, err)
-		assert.Equal(t, result, []byte("this-is-a-test"))
+		assert.Equal(t, string(result), "this-is-a-test")
 	})
 }

@@ -88,7 +88,7 @@ func GzipWithConfig(config GzipConfig) echo.MiddlewareFunc {
 						res.Writer = rw
 						w.Reset(ioutil.Discard)
 					}
-					w.Close()
+					_ = w.Close()
 				}()
 				grw := &gzipResponseWriter{Writer: w, ResponseWriter: rw}
 				res.Writer = grw

@@ -24,6 +24,7 @@ import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
+	"github.com/zerjioang/helix/eth-temp/core/types"
 	"golang.org/x/crypto/sha3"
 )
 

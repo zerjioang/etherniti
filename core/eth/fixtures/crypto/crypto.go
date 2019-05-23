@@ -154,16 +154,19 @@ func LoadECDSA(file string) (*ecdsa.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer fd.Close()
 	if _, err := io.ReadFull(fd, buf); err != nil {
+		_ = fd.Close()
 		return nil, err
 	}
 
 	key, err := hex.DecodeString(string(buf))
 	if err != nil {
+		_ = fd.Close()
 		return nil, err
 	}
-	return ToECDSA(key)
+	k, err := ToECDSA(key)
+	_ = fd.Close()
+	return k, err
 }
 
 // SaveECDSA saves a secp256k1 private key to the given file with

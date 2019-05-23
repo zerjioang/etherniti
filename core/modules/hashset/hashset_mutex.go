@@ -113,6 +113,7 @@ func (s *HashSetMutex) LoadFromRaw(path string, splitChar string) {
 	}
 }
 
+// content loaded via this method will make to allocate data on the heap
 func (s *HashSetMutex) LoadFromArray(data []string) {
 	if data != nil {
 		s.lock.Lock()

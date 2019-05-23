@@ -21,6 +21,7 @@ import (
 	"math/big"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures/core/vm"
+	"github.com/zerjioang/helix/eth-temp/core/types"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"

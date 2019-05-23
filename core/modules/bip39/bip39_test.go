@@ -8,6 +8,8 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/zerjioang/etherniti/core/modules/bip39/wordlists"
 )
 
@@ -21,8 +23,8 @@ func TestSplitData(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		result, b := splitMnemonicWords("letter advice cage absurd amount doctor acoustic avoid letter advice cage above")
 		assertNotNil(t, result)
-		assertEqual(t, len(result), 12)
-		assertEqual(t, b, true)
+		assert.Equal(t, len(result), 12)
+		assert.Equal(t, b, true)
 		t.Log(result)
 	})
 }
@@ -34,13 +36,13 @@ func TestGetWordIndex(t *testing.T) {
 	for expectedIdx, word := range wordList {
 		actualIdx, ok := GetWordIndexFromTree(word)
 		assertTrue(t, ok)
-		assertEqual(t, actualIdx, expectedIdx)
+		assert.Equal(t, actualIdx, expectedIdx)
 	}
 
 	for _, word := range []string{"a", "set", "of", "invalid", "words"} {
 		actualIdx, ok := GetWordIndexFromTree(word)
 		assertFalse(t, ok)
-		assertEqual(t, actualIdx, 0)
+		assert.Equal(t, actualIdx, 0)
 	}
 }
 
@@ -91,7 +93,7 @@ func TestMnemonicToByteArrayInvalidMnemonic(t *testing.T) {
 
 	_, err := MnemonicToByteArray("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon yellow")
 	assertNotNil(t, err)
-	assertEqual(t, err.Error(), ErrChecksumIncorrect.Error())
+	assert.Equal(t, err.Error(), ErrChecksumIncorrect.Error())
 }
 
 func TestNewEntropy(t *testing.T) {
@@ -263,7 +265,7 @@ func TestEntropyFromMnemonic256(t *testing.T) {
 
 func TestEntropyFromMnemonicInvalidChecksum(t *testing.T) {
 	_, err := EntropyFromMnemonic("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon yellow")
-	assertEqual(t, ErrChecksumIncorrect.Error(), err.Error())
+	assert.Equal(t, ErrChecksumIncorrect.Error(), err.Error())
 }
 
 func TestEntropyFromMnemonicInvalidMnemonicSize(t *testing.T) {
@@ -273,7 +275,7 @@ func TestEntropyFromMnemonicInvalidMnemonicSize(t *testing.T) {
 		"a a a a a a a a a a a a a a", // Not multiple of 3
 	} {
 		_, err := EntropyFromMnemonic(mnemonic)
-		assertEqual(t, ErrInvalidMnemonic.Error(), err.Error())
+		assert.Equal(t, ErrInvalidMnemonic.Error(), err.Error())
 	}
 }
 
@@ -459,12 +461,6 @@ func assertTrue(t *testing.T, a bool) {
 func assertFalse(t *testing.T, a bool) {
 	if a {
 		t.Error("Expected false, got true")
-	}
-}
-
-func assertEqual(t *testing.T, a, b interface{}) {
-	if a != b {
-		t.Errorf("Objects not equal, expected `%s` and got `%s`", a, b)
 	}
 }
 

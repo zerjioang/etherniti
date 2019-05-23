@@ -353,10 +353,8 @@ func Panicj(j JSON) {
 
 func (l *Logger) log(v Lvl, format string, args ...interface{}) {
 	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	buf := l.bufferPool.Get().(*bytes.Buffer)
 	buf.Reset()
-	defer l.bufferPool.Put(buf)
 	_, file, line, _ := runtime.Caller(l.skip)
 
 	if v >= l.level || v == 0 {
@@ -416,4 +414,6 @@ func (l *Logger) log(v Lvl, format string, args ...interface{}) {
 			l.output.Write(buf.Bytes())
 		}
 	}
+	l.bufferPool.Put(buf)
+	l.mutex.Unlock()
 }
