@@ -3,6 +3,10 @@
 go_import_path: github.com/zerjioang/etherniti
 sudo: false
 
+# required to be able to generate docker images
+services:
+  - 'docker'
+
 language: go
 
 addons:
@@ -13,6 +17,7 @@ addons:
 
 env:
   - HOME=/home/travis GOPATH=/home/travis/gopath
+  - VERSION=0.1
 
 cache:
   directories:
@@ -22,7 +27,9 @@ cache:
 # Only the last two Go releases are supported by the Go team with security
 # updates. Any older versions be considered deprecated. Don't bother testing
 # with them.
-go: 1.11.x
+go:
+  - 1.11.x
+  - tip
 
 # Only clone the most recent commit.
 git:
@@ -37,11 +44,11 @@ services:
   - docker
 
 before_install:
-  - .ci/before_install.sh
+  - ./ci/before_install.sh
 install:
   - ./ci/install.sh
 before_script:
-  - .ci/before_script.sh
+  - ./ci/before_script.sh
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a
 # .golangci.yml file at the top level of your repo.
@@ -51,6 +58,10 @@ after_success:
   - ./ci/after_success.sh
 before_deploy:
   - ./ci/before_deploy.sh
-
+deploy:
+  provider: script
+  script: ./ci/deploy.sh
+  on:
+    branch: master
 addons:
   ssh_known_hosts: github.com
