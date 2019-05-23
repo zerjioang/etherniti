@@ -50,7 +50,7 @@ if ! [ -x "$(command -v gosec)" ]; then
   echo 'error: gosec is not installed.'
   echo 'installing gosec...'
 	# binary will be $GOPATH/bin/gosec
-	curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GOPATH/bin vX.Y.Z
+	curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GOPATH/bin latest
 fi
 # run gosec and audit full source code
 # to scan test files and vendored data use
