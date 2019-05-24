@@ -33,6 +33,7 @@ func onNewStatusData() []byte {
 
 	// Then put it back
 	buffer.Reset()
+	wrapper.Reset()
 	statusPool.Put(wrapper)
 	bufferBool.Put(buffer)
 

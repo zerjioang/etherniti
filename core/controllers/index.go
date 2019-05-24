@@ -103,7 +103,7 @@ func init() {
 
 func LoadIndexConstants() {
 	// load constants
-	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Web3 REST Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","env":"` + config.GetEnvironmentName() + `","tagline":"dapps everywhere"}`
+	IndexWelcomeJson = `{"name":"eth-wbapi","description":"High Performance Web3 REST Proxy","cluster_name":"eth-wbapi","version":"` + constants.Version + `","commit":"` + banner.Commit + `","edition":"` + banner.Edition + `","env":"` + config.GetEnvironmentName() + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
 }

@@ -71,7 +71,7 @@ func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, err
 
 func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) {
 	from := c.CallerEthAddress()
-	if !eth.IsValidAddress(from) {
+	if !eth.IsValidAddressLow(from) {
 		return "", errInvalidAddress
 	}
 	return from, nil

@@ -48,3 +48,11 @@ func slurpFiles(files []string) (string, error) {
 	}
 	return concat.String(), nil
 }
+
+func slurpFileBytes(files []string) (string, error) {
+	var concat bytes.Buffer
+	for _,file := range files {
+		concat.WriteString(file)
+	}
+	return concat.String(), nil
+}

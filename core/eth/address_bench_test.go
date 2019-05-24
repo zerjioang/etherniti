@@ -14,6 +14,14 @@ func BenchmarkAddress(b *testing.B) {
 			_ = ConvertAddress(address0)
 		}
 	})
+	b.Run("convert-address-and-hex", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = ConvertAddress(address0).Hex()
+		}
+	})
 	b.Run("is-zero-address", func(b *testing.B) {
 		b.Run("invalid-length-address", func(b *testing.B) {
 			b.ReportAllocs()
@@ -47,6 +55,14 @@ func BenchmarkAddress(b *testing.B) {
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = IsValidAddress(address0)
+			}
+		})
+		b.Run("valid-length-address-ow", func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_ = IsValidAddressLow(address0)
 			}
 		})
 	})

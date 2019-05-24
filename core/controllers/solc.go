@@ -69,7 +69,7 @@ func (ctl SolcController) compileFromSources(c *echo.Context, codeReader CodeRea
 		return api.Error(c, codeErr)
 	} else {
 		//decoding success. compile the contract files
-		compilerResponse, err := solc.CompileSolidity(dataFiles...)
+		compilerResponse, err := solc.CompileSolidityFileBytes(dataFiles)
 		if err != nil {
 			// compilation error
 			return api.Error(c, err)

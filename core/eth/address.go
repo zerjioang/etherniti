@@ -28,6 +28,11 @@ func ConvertAddress(addr string) fixtures.Address {
 // check if an address is syntactically valid or not
 // example address: 0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 func IsValidAddress(addr string) bool {
+	return addressRegex.MatchString(addr)
+}
+// check if an address is syntactically valid or not
+// example address: 0x71c7656ec7ab88b098defb751b7401b5f6d8976f
+func IsValidAddressLow(addr string) bool {
 	if len(addr) == 42 {
 		raw := str.UnsafeBytes(addr)
 		// for bound checks speed up

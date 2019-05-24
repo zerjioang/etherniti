@@ -18,6 +18,13 @@ type ServerStatusResponse struct {
 	Memory       Memory  `json:"memory"`
 	Gc           Gc      `json:"gc"`
 }
+
+func (r *ServerStatusResponse) Reset() {
+	r.Disk.Reset()
+	r.Memory.Reset()
+	r.Gc.Reset()
+}
+
 type Cpus struct {
 	Cores int `json:"cores"`
 }
@@ -34,6 +41,12 @@ type Disk struct {
 	Used uint64 `json:"used"`
 	Free uint64 `json:"free"`
 }
+
+func (disk *Disk) Reset() {
+	disk.All = 0
+	disk.Used = 0
+	disk.Free = 0
+}
 type Memory struct {
 	Frees     uint64 `json:"frees"`
 	Heapalloc uint64 `json:"heapalloc"`
@@ -42,9 +55,24 @@ type Memory struct {
 	Sys       uint64 `json:"sys"`
 	Mallocs   uint64 `json:"mallocs"`
 }
+
+func (memory *Memory) Reset() {
+	memory.Frees = 0
+	memory.Heapalloc = 0
+	memory.Alloc = 0
+	memory.Total = 0
+	memory.Sys = 0
+	memory.Mallocs = 0
+}
+
 type Gc struct {
 	Numgc       uint32 `json:"numgc"`
 	NumForcedGC uint32 `json:"numForcedGC"`
+}
+
+func (gc *Gc) Reset() {
+	gc.Numgc = 0
+	gc.NumForcedGC = 0
 }
 
 func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {

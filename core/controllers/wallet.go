@@ -199,7 +199,7 @@ func (ctl WalletController) isValidAddress(c *echo.Context) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
-		result := eth.IsValidAddress(targetAddr)
+		result := eth.IsValidAddressLow(targetAddr)
 		return api.SendSuccess(c, data.EthAddressValidation, result)
 	}
 	// send invalid address message
