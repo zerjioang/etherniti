@@ -294,7 +294,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 // RegisterServices in echo server, allowed routes
 func RegisterRoot(e *echo.Echo) {
 	e.GET("/v1", controllers.Index)
-	e.GET("/v1/public", controllers.Index)
+	e.GET("/v1/hi", controllers.Index)
 }
 
 func GetTestSetup() *echo.Echo {

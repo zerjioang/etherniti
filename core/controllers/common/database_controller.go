@@ -34,7 +34,7 @@ func NewDatabaseController(collection string, modelGenerator func() mixed.Databa
 	var err error
 	dbctl.storage, err = db.NewCollection(collection)
 	if err != nil {
-		logger.Error("failed to initialize projects db collection: ", err)
+		logger.Error("failed to initialize database db collection: ", err)
 	}
 	return dbctl, err
 }
@@ -148,17 +148,22 @@ func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
 // automatically register database related basic CRUD operations
 func (ctl *DatabaseController) RegisterDatabaseMethods(router *echo.Group) {
 	listPostPath := "/" + ctl.name
+	logger.Info("exposing GET ", listPostPath)
 	router.GET(listPostPath, ctl.List)
+	logger.Info("exposing POST ", listPostPath)
 	router.POST(listPostPath, ctl.Create)
 
 	customItemPath := "/" + ctl.name + "/:id"
+	logger.Info("exposing GET ", customItemPath)
 	router.GET(customItemPath, ctl.Read)
+	logger.Info("exposing PUT ", customItemPath)
 	router.PUT(customItemPath, ctl.Update)
+	logger.Info("exposing DELETE ", customItemPath)
 	router.DELETE(customItemPath, ctl.Delete)
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl DatabaseController) RegisterRouters(router *echo.Group) {
-	logger.Info("exposing project controller methods")
+	logger.Info("exposing ", ctl.name, " controller methods")
 	ctl.RegisterDatabaseMethods(router)
 }

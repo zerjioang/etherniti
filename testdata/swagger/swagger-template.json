@@ -132,7 +132,7 @@
   ],
   "schemes": ["http", "https", "unix"],
   "paths": {
-    "/public": {
+    "/hi": {
       "get": {
         "tags": ["public"],
         "summary": "Proxy welcome message",
@@ -276,11 +276,11 @@
         }
       }
     },
-    "/public/status": {
+    "/metrics": {
       "get": {
         "tags": ["public"],
-        "summary": "Proxy health status",
-        "description": "Read proxy instance interal metrics and health status",
+        "summary": "Proxy health metrics",
+        "description": "Read proxy instance internal metrics and health status",
         "operationId": "status",
         "consumes": ["application/json"],
         "produces": ["application/json"],
@@ -329,7 +329,7 @@
         }
       }
     },
-    "/public/integrity": {
+    "/integrity": {
       "get": {
         "tags": ["public"],
         "summary": "Check remote proxy integrity status",
@@ -354,7 +354,7 @@
         }
       }
     },
-    "/public/profile": {
+    "/profile": {
       "post": {
         "tags": ["profile"],
         "summary": "Create a connection profile using prefered provider",
@@ -389,7 +389,7 @@
         }
       }
     },
-    "/public/profile/count": {
+    "/profile/count": {
       "get": {
         "tags": ["profile"],
         "summary": "Count created profiles",
@@ -411,7 +411,7 @@
         }
       }
     },
-    "/public/wallet/mnemonic/bip39": {
+    "/wallet/mnemonic/bip39": {
       "post": {
         "tags": ["wallet"],
         "summary": "Generate a bip39 mnemonic",
@@ -447,7 +447,7 @@
         }
       }
     },
-    "/public/wallet/entropy/{bits}": {
+    "/wallet/entropy/{bits}": {
       "get": {
         "tags": ["wallet"],
         "summary": "Get a entropy of N bits",
@@ -483,7 +483,7 @@
         }
       }
     },
-    "/public/wallet": {
+    "/wallet": {
       "post": {
         "tags": ["wallet"],
         "summary": "Generate a new Ethereum compatible account",
@@ -511,7 +511,7 @@
         }
       }
     },
-    "/public/wallet/verify/{address}": {
+    "/wallet/verify/{address}": {
       "get": {
         "tags": ["wallet"],
         "summary": "Verify Ethereum address",
@@ -543,7 +543,7 @@
         }
       }
     },
-    "/{network}/is/contract/{address}": {
+    "/web3/{network}/is/contract/{address}": {
       "get": {
         "tags": ["web3"],
         "summary": "Verify if an Ethereum address belongs to an existing contract",
@@ -589,7 +589,7 @@
         }
       }
     },
-    "/public/security/{source}": {
+    "/security/{source}": {
       "get": {
         "tags": ["security"],
         "summary": "Blacklisted domain list",
@@ -621,7 +621,7 @@
         }
       }
     },
-    "/public/security/check/{domain}": {
+    "/security/check/{domain}": {
       "get": {
         "tags": ["security"],
         "summary": "Check domain name status",
@@ -659,7 +659,7 @@
         }
       }
     },
-    "/public/solc/version": {
+    "/solc/version": {
       "get": {
         "tags": ["solc"],
         "summary": "Solidity compiler version",
@@ -701,7 +701,7 @@
         }
       }
     },
-    "/public/solc/compile/{mode}": {
+    "/solc/compile/{mode}": {
       "post": {
         "tags": ["solc"],
         "summary": "Compile a contract using solc",
@@ -797,108 +797,7 @@
         }
       }
     },
-    "/public/registry": {
-      "post": {
-        "tags": ["registry"],
-        "summary": "Register new contract details",
-        "description": "Register new contract details",
-        "operationId": "registry-register",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "deprecated": false,
-        "parameters": [{
-          "in": "body",
-          "name": "data",
-          "description": "contract information to be registered",
-          "required": true,
-          "example": {
-            "name": "test-contract",
-            "description": "test contract description",
-            "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
-            "version": "1.0"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Contract Name Service registration response",
-            "schema": {
-              "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "contract successfully registered in naming service",
-                "result": "test-contract-1.0"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/public/registry/{id}": {
-      "get": {
-        "tags": ["registry"],
-        "summary": "Get existing contract details given its ID",
-        "description": "Get existing contract details",
-        "operationId": "registry-resolve",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "deprecated": false,
-        "parameters": [{
-          "in": "path",
-          "type": "string",
-          "required": true,
-          "description": "id of the contract to be fetch",
-          "name": "id"
-        }],
-        "responses": {
-          "200": {
-            "description": "Contract Name Service response",
-            "schema": {
-              "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "contract information successfully resolved",
-                "result": {
-                  "name": "test-contract",
-                  "description": "test contract description",
-                  "address": "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
-                  "version": "1.0"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["registry"],
-        "summary": "Delete existing contract information given its ID",
-        "description": "Delete existing contract details",
-        "operationId": "registry-delete",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "deprecated": false,
-        "parameters": [{
-          "in": "path",
-          "type": "string",
-          "required": true,
-          "description": "id of the contract to be deleted",
-          "name": "id"
-        }],
-        "responses": {
-          "200": {
-            "description": "Contract Name Service record delete response",
-            "schema": {
-              "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "contract successfully unregistered from naming service",
-                "result": "test-contract-1.0"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/{network}/is/ganache": {
+    "/web3/{network}/is/ganache": {
       "get": {
         "tags": ["web3"],
         "summary": "Detect wether target network is Ganache or not",
@@ -937,7 +836,7 @@
         }
       }
     },
-    "/{network}/net/version": {
+    "/web3/{network}/net/version": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -976,7 +875,7 @@
         }
       }
     },
-    "/{network}/client/version": {
+    "/web3/{network}/client/version": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network client version information",
@@ -1015,7 +914,7 @@
         }
       }
     },
-    "/{network}/net/peers": {
+    "/web3/{network}/net/peers": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network peers",
@@ -1054,7 +953,7 @@
         }
       }
     },
-    "/{network}/protocol/version": {
+    "/web3/{network}/protocol/version": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network protocol version information",
@@ -1093,7 +992,7 @@
         }
       }
     },
-    "/{network}/syncing": {
+    "/web3/{network}/syncing": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1132,7 +1031,7 @@
         }
       }
     },
-    "/{network}/coinbase": {
+    "/web3/{network}/coinbase": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1171,7 +1070,7 @@
         }
       }
     },
-    "/{network}/mining": {
+    "/web3/{network}/mining": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1210,7 +1109,7 @@
         }
       }
     },
-    "/{network}/hashrate": {
+    "/web3/{network}/hashrate": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1249,7 +1148,7 @@
         }
       }
     },
-    "/{network}/gasprice": {
+    "/web3/{network}/gasprice": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1288,7 +1187,7 @@
         }
       }
     },
-    "/{network}/accounts": {
+    "/web3/{network}/accounts": {
       "get": {
         "tags": ["web3"],
         "summary": "Get stored accounts in peer ",
@@ -1327,7 +1226,7 @@
         }
       }
     },
-    "/{network}/accountsBalanced": {
+    "/web3/{network}/accountsBalanced": {
       "get": {
         "tags": ["web3"],
         "summary": "Get stored accounts in peer with balance information",
@@ -1366,7 +1265,7 @@
         }
       }
     },
-    "/{network}/block/latest": {
+    "/web3/{network}/block/latest": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1405,7 +1304,7 @@
         }
       }
     },
-    "/{network}/compilers": {
+    "/web3/{network}/compilers": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1444,7 +1343,7 @@
         }
       }
     },
-    "/{network}/block/current": {
+    "/web3/{network}/block/current": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1483,7 +1382,7 @@
         }
       }
     },
-    "/{network}/shh/version": {
+    "/web3/{network}/shh/version": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1522,7 +1421,7 @@
         }
       }
     },
-    "/{network}/shh/new": {
+    "/web3/{network}/shh/new": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1561,7 +1460,7 @@
         }
       }
     },
-    "/{network}/shh/group": {
+    "/web3/{network}/shh/group": {
       "get": {
         "tags": ["web3"],
         "summary": "Get network version information",
@@ -1600,7 +1499,7 @@
         }
       }
     },
-    "/{network}/balance/{address}": {
+    "/web3/{network}/balance/{address}": {
       "get": {
         "tags": ["web3"],
         "summary": "Get the balance of an account",
@@ -1650,7 +1549,7 @@
         }
       }
     },
-    "/{network}/balance/{address}/block/{block}": {
+    "/web3/{network}/balance/{address}/block/{block}": {
       "get": {
         "tags": ["web3"],
         "summary": "Get the balance of an account at given block number",
@@ -1708,7 +1607,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/summary": {
+    "/web3/{network}/erc20/{contract}/summary": {
       "get": {
         "tags": ["erc20"],
         "summary": "Get summary of ERC 20 smart contract",
@@ -1765,7 +1664,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/name": {
+    "/web3/{network}/erc20/{contract}/name": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read the name of ERC 20 smart contract",
@@ -1822,7 +1721,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/symbol": {
+    "/web3/{network}/erc20/{contract}/symbol": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read the symbol of ERC 20 smart contract",
@@ -1879,7 +1778,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/totalsupply": {
+    "/web3/{network}/erc20/{contract}/totalsupply": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read total supply of ERC 20 smart contract",
@@ -1936,7 +1835,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/decimals": {
+    "/web3/{network}/erc20/{contract}/decimals": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read decimal value of ERC 20 smart contract",
@@ -1988,7 +1887,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/balanceof/{address}": {
+    "/web3/{network}/erc20/{contract}/balanceof/{address}": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read the balance of given address for selected ERC 20 smart contract",
@@ -2054,7 +1953,7 @@
         }
       }
     },
-    "/{network}/erc20/{contract}/allowance/{owner}/to/{spender}": {
+    "/web3/{network}/erc20/{contract}/allowance/{owner}/to/{spender}": {
       "get": {
         "tags": ["erc20"],
         "summary": "Read the allowance of given address for selected ERC 20 smart contract",
@@ -2129,7 +2028,7 @@
         }
       }
     },
-    "/{network}/tx/hash/{hash}": {
+    "/web3/{network}/tx/hash/{hash}": {
       "get": {
         "tags": ["tx"],
         "summary": "get transaction receipt",
@@ -2194,106 +2093,6 @@
               "msg": "Unprocessable entity",
               "details": "The method totalSupply does not exist/is not available. Error code: -32601"
             }
-          }
-        }
-      }
-    },
-    "/{network}/abi/{contract}": {
-      "get": {
-        "tags": ["abi"],
-        "summary": "read specific abi model information",
-        "description": "read specific abi model information for specific Ethereum network",
-        "operationId": "abi-read",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
-          "example": "ropsten",
-          "required": true
-        },
-          {
-            "in": "path",
-            "name": "contract",
-            "description": "Contract to be linked to",
-            "type": "string",
-            "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
-            "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "linked abi model response",
-            "schema": {
-              "example": {}
-            }
-          },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
-          }
-        }
-      },
-      "post": {
-        "tags": ["abi"],
-        "summary": "link specific abi model to contract address",
-        "description": "link specific abi model to contract address for specific Ethereum network",
-        "operationId": "abi-link",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
-          "example": "ropsten",
-          "required": true
-        },
-          {
-            "in": "path",
-            "name": "contract",
-            "description": "Contract to be linked to",
-            "type": "string",
-            "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
-            "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
-            "required": true
-          },
-          {
-            "in": "body",
-            "name": "abi",
-            "description": "user specified abi model to link",
-            "type": "string",
-            "example": "[\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"to\",\n\t\t\t\t\"type\": \"address\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"delegate\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": true,\n\t\t\"inputs\": [],\n\t\t\"name\": \"winningProposal\",\n\t\t\"outputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"_winningProposal\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"view\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"toVoter\",\n\t\t\t\t\"type\": \"address\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"giveRightToVote\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"toProposal\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"vote\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"_numProposals\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"constructor\"\n\t}\n]",
-            "default": "user provided abi json",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "abi linking execution response",
-            "schema": {
-              "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "abi successfully linked to contract",
-                "result": ""
-              }
-            }
-          },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
           }
         }
       }
@@ -2396,7 +2195,7 @@
             "schema": {
               "example": [
                 {
-                  "uuid": "24293a7cb63a4c82b205f24a5158dd03",
+                  "sid": "24293a7cb63a4c82b205f24a5158dd03",
                   "name": "test-project",
                   "owner": "ac51633e37924e65b87bd0b9d59528d7",
                   "id": "466e3553eff348e294ea81d22a0fd8c7",
@@ -2598,7 +2397,7 @@
           "schema": {
             "example": [
               {
-                "uuid": "24293a7cb63a4c82b205f24a5158dd03",
+                "sid": "24293a7cb63a4c82b205f24a5158dd03",
                 "name": "test-registry",
                 "owner": "ac51633e37924e65b87bd0b9d59528d7",
                 "id": "466e3553eff348e294ea81d22a0fd8c7",
@@ -2734,6 +2533,106 @@
           "description": "response of registry delete operation",
           "schema": {
             "example": {}
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    }
+  },
+  "/web3/{network}/abi/{contract}": {
+    "get": {
+      "tags": ["abi"],
+      "summary": "read specific abi model information",
+      "description": "read specific abi model information for specific Ethereum network",
+      "operationId": "abi-read",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "connectionProfileToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "network",
+        "description": "target web3 protocol compatible network",
+        "type": "string",
+        "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+        "example": "ropsten",
+        "required": true
+      },
+        {
+          "in": "path",
+          "name": "contract",
+          "description": "Contract to be linked to",
+          "type": "string",
+          "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+          "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "linked abi model response",
+          "schema": {
+            "example": {}
+          }
+        },
+        "400": {
+          "$ref": "#responses/ProfileInvalidError"
+        }
+      }
+    },
+    "post": {
+      "tags": ["abi"],
+      "summary": "link specific abi model to contract address",
+      "description": "link specific abi model to contract address for specific Ethereum network",
+      "operationId": "abi-link",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "deprecated": false,
+      "security": [{
+        "connectionProfileToken": []
+      }],
+      "parameters": [{
+        "in": "path",
+        "name": "network",
+        "description": "target web3 protocol compatible network",
+        "type": "string",
+        "enum": ["ropsten", "rinkeby", "kovan", "mainnet", "infura", "quiknode", "private"],
+        "example": "ropsten",
+        "required": true
+      },
+        {
+          "in": "path",
+          "name": "contract",
+          "description": "Contract to be linked to",
+          "type": "string",
+          "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+          "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+          "required": true
+        },
+        {
+          "in": "body",
+          "name": "abi",
+          "description": "user specified abi model to link",
+          "type": "string",
+          "example": "[\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"to\",\n\t\t\t\t\"type\": \"address\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"delegate\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": true,\n\t\t\"inputs\": [],\n\t\t\"name\": \"winningProposal\",\n\t\t\"outputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"_winningProposal\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"view\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"toVoter\",\n\t\t\t\t\"type\": \"address\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"giveRightToVote\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"constant\": false,\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"toProposal\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"name\": \"vote\",\n\t\t\"outputs\": [],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"function\"\n\t},\n\t{\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"name\": \"_numProposals\",\n\t\t\t\t\"type\": \"uint8\"\n\t\t\t}\n\t\t],\n\t\t\"payable\": false,\n\t\t\"stateMutability\": \"nonpayable\",\n\t\t\"type\": \"constructor\"\n\t}\n]",
+          "default": "user provided abi json",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "abi linking execution response",
+          "schema": {
+            "example": {
+              "id": 0,
+              "code": 200,
+              "msg": "abi successfully linked to contract",
+              "result": ""
+            }
           }
         },
         "400": {

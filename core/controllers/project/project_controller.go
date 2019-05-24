@@ -7,6 +7,7 @@ import (
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/project"
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type ProjectController struct {
@@ -22,4 +23,10 @@ func NewProjectController() ProjectController {
 		logger.Error("failed to create project controller ", err)
 	}
 	return pc
+}
+
+// implemented method from interface RouterRegistrable
+func (ctl ProjectController) RegisterRouters(router *echo.Group) {
+	logger.Info("exposing custom projects controller methods")
+	ctl.DatabaseController.RegisterRouters(router)
 }

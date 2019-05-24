@@ -19,6 +19,13 @@ if ! [ -x "$(command -v dep)" ]; then
   curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 fi
 
+if [ -z "$GOBIN" ]; then
+	echo "\$GOBIN is empty"
+	export GOBIN=${GOPATH}/bin
+else
+	echo "\$GOBIN is NOT empty"
+fi
+
 echo "Downloading dependencies using go dep"
 $GOBIN/dep ensure -v
 echo "all dependencies downloaded"

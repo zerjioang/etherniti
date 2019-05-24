@@ -18,7 +18,7 @@ import (
 // new login request dto
 type AuthRequest struct {
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
-	Uuid                          string             `json:"uuid,omitempty"`
+	Uuid                          string             `json:"sid,omitempty"`
 	Username                      string             `json:"name,omitempty" form:"name" query:"name"`
 	Role                          constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
 	Email                         string             `json:"email" form:"email" query:"email"`

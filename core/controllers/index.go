@@ -146,6 +146,6 @@ func (ctl *IndexController) integrity() []byte {
 func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", Index)
-	router.GET("/status", ctl.Status)
+	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
 }

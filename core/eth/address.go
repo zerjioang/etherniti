@@ -30,6 +30,7 @@ func ConvertAddress(addr string) fixtures.Address {
 func IsValidAddress(addr string) bool {
 	return addressRegex.MatchString(addr)
 }
+
 // check if an address is syntactically valid or not
 // example address: 0x71c7656ec7ab88b098defb751b7401b5f6d8976f
 func IsValidAddressLow(addr string) bool {
@@ -40,7 +41,7 @@ func IsValidAddressLow(addr string) bool {
 		// check adress begin (0x)
 		x := raw[1]
 		zero := raw[0]
-		if zero == '0' && x == 'x' {
+		if zero == '0' && (x == 'x' || x == 'X') {
 			//check address body
 			for i := 2; i < 40; i++ {
 				c := raw[i]

@@ -19,7 +19,7 @@ func BenchmarkWalletController(b *testing.B) {
 		// Setup
 		e := echo.New()
 
-		req := httptest.NewRequest(http.MethodGet, "/v1/public/wallet/entropy/20", nil)
+		req := httptest.NewRequest(http.MethodGet, "/v1/wallet/entropy/20", nil)
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)

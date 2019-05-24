@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	ganacheUITestEndpoint  = "HTTP://127.0.0.1:9545"
-	ganacheUIAddress0      = "0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102"
-	ganacheCliTestEndpoint = "HTTP://127.0.0.1:9545"
-	ganacheCLIAddress0     = "0xa156Cf364ff355c5727AC79e5363377b6F726129"
+	ganacheUITestEndpoint   = "HTTP://127.0.0.1:9545"
+	ganacheUIAddress0       = "0xcD1C300209FeE0dd6C68c69115C9148f9FDF3102"
+	ganacheCliTestEndpoint  = "HTTP://127.0.0.1:9545"
+	ganacheCLIAddress0      = "0xa156Cf364ff355c5727AC79e5363377b6F726129"
 	ganacheCLIAddressoEIP55 = "0xa156Cf364Ff355c5727aC79E5363377b6f726129"
 	// run tests using ganache cli
 	address0            = ganacheCLIAddress0

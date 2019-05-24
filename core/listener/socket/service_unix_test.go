@@ -29,9 +29,9 @@ func TestUnixSocketListener(t *testing.T) {
 		s.Listen(notifier)
 		err := <-notifier
 		assert.Nil(t, err)
-		// send GET style request for v1/public for welcome message
+		// send GET style request for v1/hi for welcome message
 		cli := socketHttpClient("/tmp/go.sock")
-		resp, err := cli.Get("http://unix/v1/public")
+		resp, err := cli.Get("http://unix/v1/hi")
 		t.Log("response", resp)
 		t.Log("error", err)
 	})

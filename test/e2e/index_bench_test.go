@@ -36,7 +36,7 @@ func BenchmarkIndexController(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			req := httptest.NewRequest(http.MethodGet, "/v1/public/", nil)
+			req := httptest.NewRequest(http.MethodGet, "/v1/", nil)
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
@@ -52,7 +52,7 @@ func BenchmarkIndexController(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			req := httptest.NewRequest(http.MethodGet, "/v1/public/status", nil)
+			req := httptest.NewRequest(http.MethodGet, "/v1/metrics", nil)
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
@@ -70,7 +70,7 @@ func BenchmarkIndexController(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			req := httptest.NewRequest(http.MethodGet, "/v1/public/integrity", nil)
+			req := httptest.NewRequest(http.MethodGet, "/v1/integrity", nil)
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)

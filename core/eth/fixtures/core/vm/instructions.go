@@ -20,11 +20,9 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common/math"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
-	"github.com/zerjioang/helix/eth-temp/core/types"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -126,7 +124,7 @@ func opSmod(pc *uint64, interpreter *EVMInterpreter, contract *Contract, memory 
 func opExp(pc *uint64, interpreter *EVMInterpreter, contract *Contract, memory *Memory, stack *Stack) ([]byte, error) {
 	base, exponent := stack.pop(), stack.pop()
 	// some shortcuts
-	cmpToOne := exponent.Cmp(fixtures.Big1)
+	cmpToOne := exponent.Cmp(common.Big1)
 	if cmpToOne < 0 { // Exponent is zero
 		// x ^ 0 == 1
 		stack.push(base.SetUint64(1))

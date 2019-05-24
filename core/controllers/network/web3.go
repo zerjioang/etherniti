@@ -213,7 +213,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	//resolve method name from url
 	methodName := c.Request().URL.Path
 	//try to get this information from the cache
-	// methodName example: /v1/public/ropsten/net/version
+	// methodName example: /v1/ropsten/net/version
 	chunks := strings.Split(methodName, "/")
 	if len(chunks) < 4 {
 		return api.ErrorStr(c, data.InvalidUrlWeb3)

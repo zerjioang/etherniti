@@ -22,8 +22,8 @@ type Profile struct {
 // new profile request dto
 type ProfileRequest struct {
 
-	// user account uuid
-	AccountId string `json:"uuid,omitempty" form:"uuid" query:"uuid"`
+	// user account sid
+	AccountId string `json:"sid,omitempty" form:"sid" query:"sid"`
 
 	// address of the connection node: ip, domain, infura, etc
 	RpcEndpoint string `json:"endpoint" form:"endpoint" query:"endpoint"`

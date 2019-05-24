@@ -7,7 +7,7 @@ const (
 	// api version
 	ApiVersion = "/v1"
 	// context free api path
-	PublicApi = "/public"
+	PublicApi = "/"
 	// context dependant api path
 	PrivateApi = "/private"
 )

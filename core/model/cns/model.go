@@ -36,7 +36,7 @@ type ContractInfo struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 	// unique project identifier used for database storage
-	Uuid string `json:"uuid"`
+	Uuid string `json:"sid"`
 
 	Name        string `json:"name"`
 	Description string `json:"description"`

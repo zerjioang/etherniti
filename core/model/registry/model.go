@@ -2,8 +2,10 @@ package registry
 
 import (
 	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/metadata"
+	"github.com/zerjioang/etherniti/core/model/registry/version"
 	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/core/util/id"
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -15,31 +17,33 @@ type Registry struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 
-	// unique registry indetifier used for database storage
-	Uuid string `json:"uuid"`
+	// unique registry identifier used for database storage
+	Uuid [8]byte `json:"sid"`
 	// registry name
 	Name string `json:"name"`
 	// registry description
 	Description string `json:"description"`
 
+	// contract address for this version
 	Address string `json:"address"`
-	Version string `json:"version"`
-
-	Metadata *metadata.Metadata `json:"metadata"`
+	// contract version
+	Version version.ContractVersion `json:"version"`
+	// contract metadata
+	Metadata *metadata.Metadata `json:"metadata,omitempty"`
 }
 
 func (r Registry) Id() string {
-	return r.Name + "-" + r.Version
+	return r.Name + "-" + r.Version.String()
 }
 
 func (r Registry) Validate() stack.Error {
 	if r.Name == "" {
 		return stack.New("you must supply a valid contract name")
 	}
-	if r.Address == "" {
+	if !eth.IsValidAddressLow(r.Address) {
 		return stack.New("you must supply a valid contract address starting with 0x")
 	}
-	if r.Version == "" {
+	if !r.Version.Valid() {
 		return stack.New("you must supply a valid contract version")
 	}
 	return stack.Nil()
@@ -111,6 +115,7 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 			logger.Error("failed to create new registry: missing data")
 			return nil, data.StackErrInvalidData
 		} else {
+			r.Metadata = metadata.NewMetadata(context)
 			return r, stack.Nil()
 		}
 	}
@@ -124,11 +129,13 @@ func NewDBRegistry() mixed.DatabaseObjectInterface {
 	return NewEmptyRegistry()
 }
 
-func NewRegistry(ctx *echo.Context, name string, description string) *Registry {
+func NewRegistry(name string, description string, major int, minor int, mtdt *metadata.Metadata) *Registry {
 	p := new(Registry)
-	p.Uuid = id.GenerateIDString().String()
+	p.Uuid = id.GenerateSnowFlakeId()
 	p.Name = name
 	p.Description = description
-	p.Metadata = metadata.NewMetadata(ctx)
+	p.Version.Major = major
+	p.Version.Minor = minor
+	p.Metadata = mtdt
 	return p
 }

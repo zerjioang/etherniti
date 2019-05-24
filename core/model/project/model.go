@@ -3,7 +3,8 @@ package project
 import (
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
+	"github.com/zerjioang/etherniti/core/model/metadata"
+	"github.com/zerjioang/etherniti/core/model/registry/version"
 	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/core/util/id"
 	"github.com/zerjioang/etherniti/core/util/ip"
@@ -18,19 +19,27 @@ type Project struct {
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 
 	// unique project identifier used for database storage
-	Uuid string `json:"uuid"`
+	Uuid string `json:"sid"`
+
 	// project name
 	Name string `json:"name"`
-	// owner id (sha256 of owner user email)
-	Owner string `json:"owner"`
+	// project description
+	Description string `json:"description"`
+	// project logo url
+	ImageUrl string `json:"image,omitempty"`
+
 	// internal project id assigned
 	ProjectId string `json:"id"`
 	// internal project secret id assigned
 	ProjectSecret string `json:"secret"`
-	// project creation date
-	CreationDate int64 `json:"created"`
-	// ip address who created the project
-	Ip uint32 `json:"ip"`
+
+	//list of linked contracts to this project
+	// usually each entry in the array means a
+	// deployed version of project's contract
+	Contracts []version.ContractVersion `json:"contracts"`
+
+	// project metadata
+	Metadata *metadata.Metadata `json:"metadata,omitempty"`
 }
 
 // implementation of interface DatabaseObjectInterface
@@ -86,6 +95,13 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 		logger.Error("failed to bind request data to model: ", err)
 		return nil, data.ErrBind
 	}
+	// todo optimize this process
+	// external clients will neber be able to bind some fields, so delete them
+	project.Uuid = ""
+	project.ProjectId = ""
+	project.ProjectSecret = ""
+	project.Metadata = nil
+
 	e := req.Validate()
 	if e.Occur() {
 		logger.Error("failed to validate new project data: ", e.Error())
@@ -100,8 +116,8 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 			logger.Error("failed to create new project: missing data")
 			return nil, data.StackErrProject
 		} else {
-			p := NewProject(req.Name, projectOwner, intIP)
-			return p, stack.Nil()
+			project.Metadata = metadata.NewMetadata(context)
+			return project, stack.Nil()
 		}
 	}
 }
@@ -114,14 +130,12 @@ func NewDBProject() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()
 }
 
-func NewProject(name string, owner string, ip uint32) *Project {
+func NewProject(name string, mtdt *metadata.Metadata) *Project {
 	p := new(Project)
 	p.Uuid = id.GenerateIDString().String()
 	p.Name = name
-	p.Owner = owner
-	p.CreationDate = fastime.Now().Unix()
+	p.Metadata = mtdt
 	p.ProjectId = id.GenerateIDString().String()
 	p.ProjectSecret = id.GenerateIDString().String()
-	p.Ip = ip
 	return p
 }

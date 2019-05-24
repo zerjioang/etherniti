@@ -76,50 +76,56 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// register ui rest
 	NewUIAuthController().RegisterRouters(groupV1)
 
-	// /v1/public
-	publicGroup := groupV1.Group(constants.PublicApi, next)
-
-	// /v1/public/...
-	NewIndexController().RegisterRouters(publicGroup)
-	NewProfileController().RegisterRouters(publicGroup)
-	NewSecurityController().RegisterRouters(publicGroup)
-	NewWalletController().RegisterRouters(publicGroup)
-	NewSolcController().RegisterRouters(publicGroup)
+	// /v1/...
+	NewIndexController().RegisterRouters(groupV1)
+	NewProfileController().RegisterRouters(groupV1)
+	NewSecurityController().RegisterRouters(groupV1)
+	NewWalletController().RegisterRouters(groupV1)
+	NewSolcController().RegisterRouters(groupV1)
 
 	//register external api calls
 	// coin market cap: get eth price data
-	NewExternalController().RegisterRouters(publicGroup)
+	NewExternalController().RegisterRouters(groupV1)
 
-	//register public ethereum network related services
-	// /v1/ropsten
-	ropstenGroup := groupV1.Group("/ropsten", next)
+	//register web3 networks related services
+	web3Group := groupV1.Group("/web3", next)
+
+	// /v1/web3/ropsten
+	ropstenGroup := web3Group.Group("/ropsten", next)
 	NewRopstenController().RegisterRouters(ropstenGroup)
 
-	rinkebyGroup := groupV1.Group("/rinkeby", next)
+	// /v1/web3/rinkeby
+	rinkebyGroup := web3Group.Group("/rinkeby", next)
 	NewRinkebyController().RegisterRouters(rinkebyGroup)
 
-	kovanGroup := groupV1.Group("/kovan", next)
+	// /v1/web3/kovan
+	kovanGroup := web3Group.Group("/kovan", next)
 	NewKovanController().RegisterRouters(kovanGroup)
 
-	mainnetGroup := groupV1.Group("/mainnet", next)
+	// /v1/web3/mainnet
+	mainnetGroup := web3Group.Group("/mainnet", next)
 	NewMainNetController().RegisterRouters(mainnetGroup)
 
-	infuraGroup := groupV1.Group("/infura", next)
+	// /v1/web3/infura
+	infuraGroup := web3Group.Group("/infura", next)
 	infuraGroup.Use(infuraJwt)
 	NewInfuraController().RegisterRouters(infuraGroup)
 
-	quiknodeGroup := groupV1.Group("/quiknode", next)
+	// /v1/web3/quiknode
+	quiknodeGroup := web3Group.Group("/quiknode", next)
 	quiknodeGroup.Use(quiknodeJwt)
 	NewQuikNodeController().RegisterRouters(quiknodeGroup)
 
-	privateGroup := groupV1.Group(constants.PrivateApi, next)
+	// /v1/web3/private
+	privateGroup := web3Group.Group(constants.PrivateApi, next)
 	privateGroup.Use(privateJwt)
 	NewPrivateNetController().RegisterRouters(privateGroup)
 
 	// register controllers related to user context
+	// /v1/my
 	userGroup := groupV1.Group("/my", next)
 	userGroup.Use(userJwt)
 	project.NewProjectController().RegisterRouters(userGroup)
-	registry.NewRegistryController().RegisterRouters(publicGroup)
+	registry.NewRegistryController().RegisterRouters(userGroup)
 	return groupV1
 }

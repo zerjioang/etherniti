@@ -29,14 +29,14 @@ type Solidity struct {
 	Patch       int    `json:"patch"`
 }
 
-var(
+var (
 	compiler        *Solidity
 	versionErr      error
 	compilationArgs []string
 	compilerPath    string
 )
 
-func init(){
+func init() {
 	//load solidity version data once, the first time
 	compiler, versionErr = solidityVersion()
 	//preload compilation args
@@ -71,6 +71,7 @@ func (s Solidity) makeArgs() []string {
 func SolidityVersion() (*Solidity, error) {
 	return compiler, versionErr
 }
+
 // solidityVersion runs solc and parses its version output.
 func solidityVersion() (*Solidity, error) {
 	var solc = "solc"
@@ -133,7 +134,8 @@ func CompileSolidityFileBytes(sourcefiles []string) (map[string]*Contract, error
 	if len(sourcefiles) == 0 {
 		return nil, ErrNoSourceFiles
 	} else if len(sourcefiles) == 1 {
-		source = sourcefiles[0]; err = nil
+		source = sourcefiles[0]
+		err = nil
 	} else {
 		source, err = slurpFileBytes(sourcefiles)
 	}

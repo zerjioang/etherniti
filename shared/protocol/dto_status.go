@@ -47,6 +47,7 @@ func (disk *Disk) Reset() {
 	disk.Used = 0
 	disk.Free = 0
 }
+
 type Memory struct {
 	Frees     uint64 `json:"frees"`
 	Heapalloc uint64 `json:"heapalloc"`
