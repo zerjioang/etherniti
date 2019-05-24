@@ -140,7 +140,8 @@ func CompileSolidityFileBytes(sourcefiles []string) (map[string]*Contract, error
 	if err != nil {
 		return nil, err
 	}
-	cmd := exec.Command(compilerPath, append(compilationArgs, sourcefiles...)...)
+	cmd := exec.Command(compilerPath, append(compilationArgs, "-")...)
+	cmd.Stdin = strings.NewReader(source)
 	return compiler.run(cmd, source)
 }
 
