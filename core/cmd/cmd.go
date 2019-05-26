@@ -31,17 +31,21 @@ func RunServer(notifier chan error) {
 	// 1 read value
 	if !serverStarted.Load().(bool) {
 		// setup current execution environment
-		config.Setup()
+		err := config.Setup()
+		if err != nil {
+			// env error configuration found
+			notifier <- err
+		} else {
+			// 2 get listening mode
+			logger.Info("starting etherniti proxy listener with requested mode")
+			mode := config.ServiceListeningMode()
 
-		// 2 get listening mode
-		logger.Info("starting etherniti proxy listener with requested mode")
-		mode := config.ServiceListeningMode()
+			// 4 update value
+			serverStarted.Store(true)
 
-		// 4 update value
-		serverStarted.Store(true)
-
-		// 3 run listener
-		go listener.FactoryListener(mode).Listen(notifier)
+			// 3 run listener
+			go listener.FactoryListener(mode).Listen(notifier)
+		}
 	} else {
 		notifier <- errAlreadyStarted
 	}

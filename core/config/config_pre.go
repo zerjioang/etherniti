@@ -112,5 +112,13 @@ func IsProfilingEnabled() bool {
 }
 
 // setup server config
-func Setup() {
+func Setup() error {
+	// make security checks on environment config variables
+	err := hasValidConfiguration()
+	if err != nil {
+		logger.Error("proxy configuration error")
+		return err
+	}
+	logger.Debug("loading additional staging setup config")
+	return nil
 }

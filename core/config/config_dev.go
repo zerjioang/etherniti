@@ -123,27 +123,37 @@ func IsProfilingEnabled() bool {
 }
 
 // setup server config
-func Setup() {
+func Setup() error {
+	// make security checks on environment config variables
+	err := hasValidConfiguration()
+	if err != nil {
+		logger.Error("proxy configuration error")
+		return err
+	}
+	logger.Debug("loading additional development setup config")
 	// enable profile mode if requested
 	if IsProfilingEnabled() {
 		go runProfiler()
 	}
+	return nil
 }
 
-//There are 7 places you can get profiles in the default webserver: the ones mentioned above
+// There are 7 places you can get profiles in the default webserver: the ones mentioned above
 //
-//http://localhost:6060/debug/pprof/
-//http://localhost:6060/debug/pprof/goroutine
-//http://localhost:6060/debug/pprof/heap
-//http://localhost:6060/debug/pprof/threadcreate
-//http://localhost:6060/debug/pprof/block
-//http://localhost:6060/debug/pprof/mutex
+// http://localhost:6060/debug/pprof/
+// http://localhost:6060/debug/pprof/goroutine
+// http://localhost:6060/debug/pprof/heap
+// http://localhost:6060/debug/pprof/threadcreate
+// http://localhost:6060/debug/pprof/block
+// http://localhost:6060/debug/pprof/mutex
 //
-//and also 2 more: the CPU profile and the CPU trace.
+// and also 2 more: the CPU profile and the CPU trace.
 //
-//http://localhost:6060/debug/pprof/profile?seconds=5
-//http://localhost:6060/debug/pprof/trace?seconds=5
+// http://localhost:6060/debug/pprof/profile?seconds=5
+// http://localhost:6060/debug/pprof/trace?seconds=5
+//
 // run in the web
+//
 // go tool pprof -http=localhost:6060 profile.out
 func runProfiler() {
 	go func() {

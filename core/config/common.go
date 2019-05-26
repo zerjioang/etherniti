@@ -287,3 +287,8 @@ func IsDevelopment() bool {
 	logger.Debug("checking if current server environment is development")
 	return GetEnvironmentName() == "development"
 }
+
+// check if environment configuration is valid or not
+func hasValidConfiguration() error {
+	return nil
+}
