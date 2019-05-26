@@ -107,25 +107,26 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewMainNetController().RegisterRouters(mainnetGroup)
 
 	// /v1/web3/infura
-	infuraGroup := web3Group.Group("/infura", next)
-	infuraGroup.Use(infuraJwt)
+	infuraGroup := web3Group.Group("/infura", infuraJwt)
 	NewInfuraController().RegisterRouters(infuraGroup)
 
 	// /v1/web3/quiknode
-	quiknodeGroup := web3Group.Group("/quiknode", next)
-	quiknodeGroup.Use(quiknodeJwt)
+	quiknodeGroup := web3Group.Group("/quiknode", quiknodeJwt)
 	NewQuikNodeController().RegisterRouters(quiknodeGroup)
 
 	// /v1/web3/private
-	privateGroup := web3Group.Group(constants.PrivateApi, next)
-	privateGroup.Use(privateJwt)
+	privateGroup := web3Group.Group(constants.PrivateApi, privateJwt)
 	NewPrivateNetController().RegisterRouters(privateGroup)
 
 	// register controllers related to user context
 	// /v1/my
-	userGroup := groupV1.Group("/my", next)
-	userGroup.Use(userJwt)
+	userGroup := groupV1.Group("/my", userJwt)
 	project.NewProjectController().RegisterRouters(userGroup)
 	registry.NewRegistryController().RegisterRouters(userGroup)
+
+	// register project interaction controller
+	// /v1/dapp
+	dappGroup := groupV1.Group("/dapp", userJwt)
+	project.NewProjectInteractionController().RegisterRouters(dappGroup)
 	return groupV1
 }
