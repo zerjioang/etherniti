@@ -104,6 +104,13 @@ func (c *EnvConfig) SetDefaults() {
 	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
 }
 
+//check if profiling is enabled or not
+// preproduction and production profiling
+// is always disabled
+func IsProfilingEnabled() bool {
+	return false
+}
+
 // setup server config
 func Setup() {
 }

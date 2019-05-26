@@ -115,6 +115,13 @@ func (c *EnvConfig) SetDefaults() {
 	env["X_ETHERNITI_RECATPCHAV3_APIKEY"] = "6LfeAaMUAAAAADzEfvOzsajWuLCCrUfxprh-wZcC"
 }
 
+//check if profiling is enabled or not
+func IsProfilingEnabled() bool {
+	logger.Debug("checking if profiling mode is enabled")
+	v, found := GetEnvironment().Read("X_ETHERNITI_ENABLE_PROFILER")
+	return found && v == true
+}
+
 // setup server config
 func Setup() {
 	// enable profile mode if requested

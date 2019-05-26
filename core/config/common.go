@@ -245,12 +245,6 @@ func IsWebSocketMode() bool {
 	return GetEnvironment().String("X_ETHERNITI_LISTENING_MODE") == "ws"
 }
 
-func IsProfilingEnabled() bool {
-	logger.Debug("checking if profiling mode is enabled")
-	v, found := GetEnvironment().Read("X_ETHERNITI_ENABLE_PROFILER")
-	return found && v == true
-}
-
 func GetEmailUsername() string {
 	logger.Debug("reading email username from env")
 	return GetEnvironment().String("X_ETHERNITI_EMAIL_USERNAME")

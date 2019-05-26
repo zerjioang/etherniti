@@ -15,7 +15,7 @@ import (
 type DatabaseController struct {
 	storage *db.BadgerStorage
 	name    string
-	// data model generator fnction. it will create a new struct
+	// data model generator function. it will create a new struct
 	modelGenerator func() mixed.DatabaseObjectInterface
 	// data model used in this collection
 	model mixed.DatabaseObjectInterface
