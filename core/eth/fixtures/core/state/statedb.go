@@ -5,14 +5,17 @@
 package state
 
 import (
+	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 	"math/big"
 	"sort"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
+	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
+	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
+
 type revision struct {
 	id           int
 	journalIndex int

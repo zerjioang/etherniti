@@ -10,13 +10,14 @@ import (
 )
 
 const (
-	NotAuthorized        = "not authorized"
-	NotImplementedStr    = "not implemented"
-	ErrUnknownModeStr    = "unknown mode selected. Allowed modes are: single, git, zip, targz"
-	SolcVersionFailedStr = "failed to get solc version"
-	BindErrStr           = "there was an error while processing your request information"
-	ProvideProjectIdStr  = "you have to provide a valid project data"
-	ProvideValidDataStr  = "you have to provide valid data"
+	NotAuthorized            = "not authorized"
+	NotImplementedStr        = "not implemented"
+	ErrUnknownModeStr        = "unknown mode selected. Allowed modes are: single, git, zip, targz"
+	SolcVersionFailedStr     = "failed to get solc version"
+	BindErrStr               = "there was an error while processing your request information"
+	ProvideProjectIdStr      = "you have to provide a valid project data"
+	ProvideValidDataStr      = "you have to provide valid data"
+	OperationNotSupportedStr = "operation not supported"
 )
 
 var (
@@ -120,6 +121,7 @@ var (
 	ErrBind                  = stack.New(BindErrStr)
 	StackErrProject          = stack.New(ProvideProjectIdStr)
 	StackErrInvalidData      = stack.New(ProvideValidDataStr)
+	ErrOperationNotSupported = stack.New(OperationNotSupportedStr)
 )
 
 // database related errors
@@ -129,12 +131,13 @@ var (
 
 // project controller related errors
 var (
-	FailedToProcess     = []byte("failed to process current request")
-	ProvideProjectId    = []byte(ProvideProjectIdStr)
-	ProvideId           = []byte("you have to provide a valid object id")
-	SuccessfullyCreated = []byte("successfully created")
-	SuccessfullyDeleted = []byte("successfully deleted")
-	NotAllowedToList    = []byte("you are not allowed to list items")
+	OperationNotSupported = []byte(OperationNotSupportedStr)
+	FailedToProcess       = []byte("failed to process current request")
+	ProvideProjectId      = []byte(ProvideProjectIdStr)
+	ProvideId             = []byte("you have to provide a valid object id")
+	SuccessfullyCreated   = []byte("successfully created")
+	SuccessfullyDeleted   = []byte("successfully deleted")
+	NotAllowedToList      = []byte("you are not allowed to list items")
 )
 
 // profile token related errors

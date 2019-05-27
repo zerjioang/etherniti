@@ -32,6 +32,10 @@ func (stack Error) Error() string {
 	return str.UnsafeString(stack.cause)
 }
 
+func (stack Error) Bytes() []byte {
+	return stack.cause
+}
+
 func (stack Error) Occur() bool {
 	return len(stack.cause) > 0
 }

@@ -10,8 +10,12 @@ import (
 )
 
 func TestProjectController(t *testing.T) {
-	t.Run("create-project-controller", func(t *testing.T) {
+	t.Run("create-project-controller-struct", func(t *testing.T) {
 		pc := NewProjectController()
+		assert.NotNil(t, pc)
+	})
+	t.Run("create-project-controller-ptr", func(t *testing.T) {
+		pc := NewProjectControllerPtr()
 		assert.NotNil(t, pc)
 	})
 	t.Run("create-project-write", func(t *testing.T) {

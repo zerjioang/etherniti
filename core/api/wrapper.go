@@ -162,6 +162,6 @@ func ErrorCode(c *echo.Context, code int, err error) error {
 func StackError(c *echo.Context, stackErr stack.Error) error {
 	logger.Debug("converting stack error to error payload")
 	logger.Error(stackErr)
-	rawBytes := toError(protocol.StatusBadRequest, str.UnsafeBytes(stackErr.Error()))
+	rawBytes := toError(protocol.StatusBadRequest, stackErr.Bytes())
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }

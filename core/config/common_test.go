@@ -39,7 +39,7 @@ func TestTLSCryptoData(t *testing.T) {
 	t.Run("check-cert-pem", func(t *testing.T) {
 		assert.NotNil(t, GetCertPem() != nil)
 	})
-	t.Run("check-cert-pem-", func(t *testing.T) {
+	t.Run("check-cert-pem-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
 		total := 200
 		g.Add(total)
@@ -70,7 +70,7 @@ func TestTLSCryptoData(t *testing.T) {
 	})
 }
 
-func TestConfig(t *testing.T) {
+func TestCommonConfig(t *testing.T) {
 	t.Run("is-http", func(t *testing.T) {
 		assert.NotNil(t, IsHttpMode())
 	})

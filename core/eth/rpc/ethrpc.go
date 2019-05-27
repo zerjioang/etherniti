@@ -495,6 +495,12 @@ func (rpc *EthRPC) EthSign(address, data string) (string, error) {
 // EthSendTransaction creates new message post transaction
 // or a contract creation, if the data field contains code.
 func (rpc *EthRPC) EthSendTransaction(transaction TransactionData) (string, error) {
+	return rpc.EthSendTransactionPtr(&transaction)
+}
+
+// EthSendTransaction creates new message post transaction
+// or a contract creation, if the data field contains code.
+func (rpc *EthRPC) EthSendTransactionPtr(transaction *TransactionData) (string, error) {
 	var hash string
 	//prepare the params of the function
 	params := func() string {

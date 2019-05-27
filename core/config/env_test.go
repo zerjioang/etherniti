@@ -28,4 +28,20 @@ func TestGetEnvironment(t *testing.T) {
 		}
 		g.Wait()
 	})
+	t.Run("redirect", func(t *testing.T) {
+		r := GetRedirectUrl("subdomain.localhost.com", "/v1/do/the/test")
+		assert.NotNil(t, r)
+	})
+	t.Run("redirect-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				_ = GetRedirectUrl("subdomain.localhost.com", "/v1/do/the/test")
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
 }

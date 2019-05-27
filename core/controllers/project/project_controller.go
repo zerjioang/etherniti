@@ -25,8 +25,39 @@ func NewProjectController() ProjectController {
 	return pc
 }
 
+// constructor like function
+func NewProjectControllerPtr() *ProjectController {
+	pc := NewProjectController()
+	return &pc
+}
+
+func (ctl ProjectController) listProjectVersions(ctx *echo.Context) error {
+	return nil
+}
+
+func (ctl ProjectController) addProjectVersion(ctx *echo.Context) error {
+	return nil
+}
+
+func (ctl ProjectController) getProjectVersion(ctx *echo.Context) error {
+	return nil
+}
+
+func (ctl ProjectController) deleteProjectVersion(ctx *echo.Context) error {
+	return nil
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl ProjectController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing custom projects controller methods")
 	ctl.DatabaseController.RegisterRouters(router)
+	logger.Info("exposing custom projects controller methods")
+	router.GET("projects/:name/releases", ctl.listProjectVersions)
+	router.POST("projects/:name/releases", ctl.addProjectVersion)
+	router.GET("projects/:name/release/:tag", ctl.getProjectVersion)
+	router.DELETE("projects/:name/release/:tag", ctl.deleteProjectVersion)
+}
+
+func (ctl ProjectController) ReadProject(uid string, name string) (*project.Project, error) {
+	return nil, nil
 }

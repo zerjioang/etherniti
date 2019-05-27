@@ -1,6 +1,8 @@
 package project
 
 import (
+	"errors"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/metadata"
@@ -33,10 +35,21 @@ type Project struct {
 	// internal project secret id assigned
 	ProjectSecret string `json:"secret"`
 
+	//connection required data
+
+	// peer endpoint url
+	Endpoint string
+	// default gas value
+	Gas string
+	// default gasprice value
+	GasPrice string
+	// default target block: latest by default
+	Block string
+
 	//list of linked contracts to this project
 	// usually each entry in the array means a
 	// deployed version of project's contract
-	Contracts []version.ContractVersion `json:"contracts"`
+	Contracts map[string]*version.ContractVersion `json:"contracts"`
 
 	// project metadata
 	Metadata *metadata.Metadata `json:"metadata,omitempty"`
@@ -120,6 +133,15 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 			return project, stack.Nil()
 		}
 	}
+}
+
+func (project Project) ResolveContract(version string) (*version.ContractVersion, error) {
+	version = str.ToLowerAscii(version)
+	details, found := project.Contracts[version]
+	if found {
+		return details, nil
+	}
+	return nil, errors.New("contract details not found")
 }
 
 func NewEmptyProject() Project {
