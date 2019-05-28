@@ -9,7 +9,6 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-
 // additional configuration setup for open source (oss) edition
 func ExtraSetup() error {
 	logger.Debug("adding addition configuration for Open Source Community edition")
