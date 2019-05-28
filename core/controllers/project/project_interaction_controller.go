@@ -10,7 +10,6 @@ import (
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/model/project"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -19,37 +18,14 @@ var (
 )
 
 type ProjectInteractionController struct {
-	projects ProjectController
-}
-
-// constructor like function
-func NewProjectInteractionController(p ProjectController) ProjectInteractionController {
-	pc := ProjectInteractionController{}
-	pc.projects = p
-	return pc
+	projects *ProjectController
 }
 
 // constructor like function
 func NewProjectInteractionControllerPtr(p *ProjectController) *ProjectInteractionController {
 	pc := new(ProjectInteractionController)
-	pc.projects = *p
+	pc.projects = p
 	return pc
-}
-
-func (ctl ProjectInteractionController) getProjectData(uid string, name string, version string) (*project.Project, error) {
-	// todo optimize validation: trim string and deep version check
-	if name == "" || version == "" {
-		return nil, errInvalidParams
-	}
-	return ctl.projects.ReadProject(name, version)
-}
-
-func (ctl *ProjectInteractionController) getProjectDataPtr(uid string, name string, version string) (*project.Project, error) {
-	// todo optimize validation: trim string and deep version check
-	if name == "" || version == "" {
-		return nil, errInvalidParams
-	}
-	return ctl.projects.ReadProject(name, version)
 }
 
 func (ctl *ProjectInteractionController) contractCall(context *echo.Context) error {

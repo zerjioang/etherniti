@@ -17,7 +17,7 @@ type RegistryController struct {
 func NewRegistryController() RegistryController {
 	pc := RegistryController{}
 	var err error
-	pc.DatabaseController, err = common.NewDatabaseController("registry", registry.NewDBRegistry)
+	pc.DatabaseController, err = common.NewDatabaseController("", "registry", registry.NewDBRegistry)
 	if err != nil {
 		logger.Error("failed to create registry controller ", err)
 	}

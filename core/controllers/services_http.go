@@ -121,12 +121,13 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// register controllers related to user context
 	// /v1/my
 	userGroup := groupV1.Group("/my", userJwt)
-	project.NewProjectController().RegisterRouters(userGroup)
+	p := project.NewProjectControllerPtr()
+	p.RegisterRouters(userGroup)
 	registry.NewRegistryController().RegisterRouters(userGroup)
 
 	// register project interaction controller
 	// /v1/dapp
 	dappGroup := groupV1.Group("/dapp", userJwt)
-	project.NewProjectInteractionController().RegisterRouters(dappGroup)
+	project.NewProjectInteractionControllerPtr(p).RegisterRouters(dappGroup)
 	return groupV1
 }

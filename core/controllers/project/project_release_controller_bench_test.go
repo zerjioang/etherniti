@@ -6,8 +6,8 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-func BenchmarkProjectInteractionController(b *testing.B) {
-	b.Run("create-interaction-controller-struct", func(b *testing.B) {
+func BenchmarkProjectReleaseController(b *testing.B) {
+	b.Run("create-release-controller-struct", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -16,7 +16,7 @@ func BenchmarkProjectInteractionController(b *testing.B) {
 			_ = NewProjectReleaseController()
 		}
 	})
-	b.Run("create-interaction-controller-ptr", func(b *testing.B) {
+	b.Run("create-release-controller-ptr", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)

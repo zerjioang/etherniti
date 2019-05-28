@@ -32,7 +32,7 @@ type UIAuthController struct {
 func NewUIAuthController() UIAuthController {
 	uiCtl := UIAuthController{}
 	var err error
-	uiCtl.DatabaseController, err = common.NewDatabaseController("auth", auth.NewDBAuthModel)
+	uiCtl.DatabaseController, err = common.NewDatabaseController("", "auth", auth.NewDBAuthModel)
 	if err != nil {
 		logger.Error("failed to create authentication controller ", err)
 	}

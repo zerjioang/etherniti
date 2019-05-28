@@ -19,17 +19,36 @@ type DatabaseController struct {
 	modelGenerator func() mixed.DatabaseObjectInterface
 	// data model used in this collection
 	model mixed.DatabaseObjectInterface
+	// path prepend string
+	pathPrepend string
 }
 
 // constructor like function
-func NewDatabaseController(collection string, modelGenerator func() mixed.DatabaseObjectInterface) (DatabaseController, error) {
+func NewDatabaseController(pathPrepend string, collection string, modelGenerator func() mixed.DatabaseObjectInterface) (DatabaseController, error) {
 	dbctl := DatabaseController{}
-	dbctl.name = collection
-	dbctl.modelGenerator = modelGenerator
-	dbctl.model = modelGenerator()
 	if collection == "" {
 		return dbctl, errors.New("invalid collection name provided")
 	}
+	if collection[len(collection)-1:] != "s" {
+		// collection name does not end with plural. add the 's'
+		dbctl.name = collection + "s"
+	} else {
+		dbctl.name = collection
+	}
+	dbctl.modelGenerator = modelGenerator
+	dbctl.model = modelGenerator()
+
+	// create path prepend data
+	if pathPrepend != "" {
+		if pathPrepend[0] == '/' {
+			// developer entered path prepend starts with slash
+			dbctl.pathPrepend = pathPrepend
+		} else {
+			// developer entered path prepend does not starts with slash
+			dbctl.pathPrepend = "/" + pathPrepend
+		}
+	}
+
 	// database initialization method
 	var err error
 	dbctl.storage, err = db.NewCollection(collection)
@@ -147,13 +166,13 @@ func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
 
 // automatically register database related basic CRUD operations
 func (ctl *DatabaseController) RegisterDatabaseMethods(router *echo.Group) {
-	listPostPath := "/" + ctl.name
+	listPostPath := ctl.pathPrepend + "/" + ctl.name
 	logger.Info("exposing GET ", listPostPath)
 	router.GET(listPostPath, ctl.List)
 	logger.Info("exposing POST ", listPostPath)
 	router.POST(listPostPath, ctl.Create)
 
-	customItemPath := "/" + ctl.name + "/:id"
+	customItemPath := ctl.pathPrepend + "/" + ctl.name + "/:id"
 	logger.Info("exposing GET ", customItemPath)
 	router.GET(customItemPath, ctl.Read)
 	logger.Info("exposing PUT ", customItemPath)

@@ -7,12 +7,13 @@
 package config
 
 import (
-	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestConfig(t *testing.T){
+func TestConfig(t *testing.T) {
 	t.Run("IsProfilingEnabled", func(t *testing.T) {
 		data := IsProfilingEnabled()
 		assert.NotNil(t, data)

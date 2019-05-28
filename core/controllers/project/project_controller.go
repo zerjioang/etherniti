@@ -18,7 +18,7 @@ type ProjectController struct {
 func NewProjectController() ProjectController {
 	pc := ProjectController{}
 	var err error
-	pc.DatabaseController, err = common.NewDatabaseController("projects", project.NewDBProject)
+	pc.DatabaseController, err = common.NewDatabaseController("", "projects", project.NewDBProject)
 	if err != nil {
 		logger.Error("failed to create project controller ", err)
 	}
@@ -31,20 +31,21 @@ func NewProjectControllerPtr() *ProjectController {
 	return &pc
 }
 
-func (ctl ProjectController) listProjectVersions(ctx *echo.Context) error {
-	return nil
+// helper methods
+func (ctl ProjectController) getProjectData(uid string, name string, version string) (*project.Project, error) {
+	// todo optimize validation: trim string and deep version check
+	if name == "" || version == "" {
+		return nil, errInvalidParams
+	}
+	return ctl.ReadProject(name, version)
 }
 
-func (ctl ProjectController) addProjectVersion(ctx *echo.Context) error {
-	return nil
-}
-
-func (ctl ProjectController) getProjectVersion(ctx *echo.Context) error {
-	return nil
-}
-
-func (ctl ProjectController) deleteProjectVersion(ctx *echo.Context) error {
-	return nil
+func (ctl ProjectController) getProjectDataPtr(uid string, name string, version string) (*project.Project, error) {
+	// todo optimize validation: trim string and deep version check
+	if name == "" || version == "" {
+		return nil, errInvalidParams
+	}
+	return ctl.ReadProject(name, version)
 }
 
 // implemented method from interface RouterRegistrable
@@ -52,10 +53,6 @@ func (ctl ProjectController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing custom projects controller methods")
 	ctl.DatabaseController.RegisterRouters(router)
 	logger.Info("exposing custom projects controller methods")
-	router.GET("projects/:name/releases", ctl.listProjectVersions)
-	router.POST("projects/:name/releases", ctl.addProjectVersion)
-	router.GET("projects/:name/release/:tag", ctl.getProjectVersion)
-	router.DELETE("projects/:name/release/:tag", ctl.deleteProjectVersion)
 }
 
 func (ctl ProjectController) ReadProject(uid string, name string) (*project.Project, error) {
