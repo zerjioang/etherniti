@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build enterprise
+// +build pro
 
 package edition
 
@@ -9,9 +9,8 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-
-// additional configuration setup for Enterprise/Subscription (enterprise) edition
+// additional configuration setup for Pro/Subscription (pro) edition
 func ExtraSetup() error {
-	logger.Debug("adding addition configuration for Enterprise edition")
+	logger.Debug("adding addition configuration for Pro edition")
 	return nil
 }
