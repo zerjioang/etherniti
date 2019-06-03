@@ -28,6 +28,5 @@ sysdirs="
 /usr
 "
 find $sysdirs -xdev -type d \
--exec chown root:root {} \; \
--exec chmod 0755 {} \;
-
+	-exec chown root:root {} \; \
+	-exec chmod 0755 {} \;

@@ -17,10 +17,10 @@ cd ../..
 
 # default configuration
 # short version of the hash
-# hash=$(git rev-parse --short HEAD)
+hash=$(git rev-parse --short HEAD)
 
 # large version of the hash
-hash=$(git rev-list -1 HEAD)
+# hash=$(git rev-list -1 HEAD)
 
 if [[ -z "$hash" ]]; then
     echo "no hash found. setting default"
@@ -32,8 +32,8 @@ if [[ -z "$BUILD_MODE" ]]; then
     BUILD_MODE="pre" # dev, pre, prod
 fi
 
-if [[ -z "$BUILD_CONTEXT" ]]; then
-    echo "no BUILD_CONTEXT found.           setting default to: oss"
+if [[ -z "$BUILD_EDITION" ]]; then
+    echo "no BUILD_EDITION found.           setting default to: oss"
     BUILD_MODE="oss" # oss, pro
 fi
 
@@ -65,12 +65,12 @@ if [[ -z "$ETHERNITI_CGO_ENABLED" ]]; then
 fi
 
 # defined compilation custom compilation go tags
-TAGS="'${BUILD_MODE} ${BUILD_CONTEXT}'"
+TAGS="${BUILD_MODE} ${BUILD_EDITION}"
 
 echo "
 HASH:                       $hash
 BUILD_MODE:                 $BUILD_MODE
-BUILD_CONTEXT:              $BUILD_CONTEXT
+BUILD_EDITION:              $BUILD_EDITION
 BUILD_TAGS:                 $TAGS
 ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
 ETHERNITI_GOOS:             $ETHERNITI_GOOS
@@ -127,8 +127,8 @@ function compile(){
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
-            -tags "${TAGS}"\
-            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
+            -tags "'${TAGS}'"\
+            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
@@ -143,8 +143,8 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "${TAGS}"\
-                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}'" \
+                -tags "'${TAGS}'"\
+                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
@@ -155,8 +155,8 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "${TAGS}"\
-                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}'" \
+                -tags "'${TAGS}'"\
+                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
                 -o $outputname
         else
             echo "compiling production version..."
@@ -167,10 +167,10 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-            -a \
-            -tags "'netgo ${BUILD_MODE} ${BUILD_CONTEXT}'" \
-            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_CONTEXT}' -linkmode=external -extldflags -static" \
-            -o $outputname && \
+                -a \
+                -tags "'netgo ${TAGS}'" \
+                -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
+                -o $outputname && \
             ls -alh
         fi
     fi

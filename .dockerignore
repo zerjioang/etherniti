@@ -23,7 +23,12 @@ site
 
 # ignore dashboard files
 **/dashboard
+**/ci
+**/benchmark
+**\.idea
+**/test
 **/volumes
 **/secrets
 **/rfc
+**/ofus
 etherniti
