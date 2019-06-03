@@ -10,10 +10,12 @@ var (
 )
 
 func init() {
+	logger.Info("loading websocket hub")
 	go hub.run()
 }
 
 func WebsocketEntrypoint(c *echo.Context) error {
+	logger.Info("loading websocket entry point")
 	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
 		logger.Error("failed to upgrade to websocket: ", err)

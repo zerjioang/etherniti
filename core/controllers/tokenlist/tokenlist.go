@@ -12,32 +12,30 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-func init() {
-	// token data is loaded from json file downloaded from
-	// https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json
-}
-
-// https://raw.githubusercontent.com/409H/EtherAddressLookup/master/blacklists/domains.json
+// token data is loaded from json file downloaded from
+// https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json
 // last update: mar-23-2019
-type TokenData struct {
+type TokenInfo struct {
 	Address string `json:"address"`
 	Symbol  string `json:"symbol"`
 	Type    string `json:"type"`
 	Decimal int    `json:"decimal"`
 }
-type TokenListModel []TokenData
+// list containing TokenInfo
+// this element is stored in heap
+type TokenInfoList []TokenInfo
 
 var (
-	tokenlistData  TokenListModel
+	tokenlistData  TokenInfoList
 	tokenlistBytes []byte
 )
 
-// load blacklist information
+// load token data information
 func init() {
-	logger.Debug("loading loken list information")
+	logger.Debug("loading token list information")
 	data, err := ioutil.ReadFile(config.TokenListFile)
 	if err != nil {
-		logger.Error("could not read tokenlist data")
+		logger.Error("could not read token list data")
 		return
 	}
 	tokenlistBytes = data
@@ -48,11 +46,14 @@ func init() {
 	}
 }
 
+// fetch token data (address only) by token name
+// todo implement some caching mecanism
 func GetTokenAddressByName(name string) string {
 	value := gjson.GetBytes(tokenlistBytes, `#[symbol=="`+name+`"].address`)
 	return value.Str
 }
-
+// fetch token data (symbol only) by token address
+// todo implement some caching mecanism
 func GetTokenSymbol(address string) string {
 	value := gjson.GetBytes(tokenlistBytes, `#[address=="`+address+`"].symbol`)
 	return value.Str

@@ -29,10 +29,10 @@
   "host": "$host",
   "basePath": "$basepath",
   "consumes": [
-    "application/json;charset=utf-8"
+    "application/json", "application/x-msgpack", "application/protobuf"
   ],
   "produces": [
-    "application/json;charset=utf-8"
+    "application/json", "application/x-msgpack", "application/protobuf"
   ],
   "tags": [{
     "name": "auth",
@@ -150,10 +150,10 @@
         "description": "proxy welcome message or index message",
         "operationId": "index",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -183,10 +183,10 @@
         "description": "User login and authentication",
         "operationId": "auth-login",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -234,10 +234,10 @@
         "description": "New user registration and account creation",
         "operationId": "auth-register",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -281,10 +281,10 @@
         "description": "User account recovery",
         "operationId": "auth-recover",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -318,10 +318,10 @@
         "description": "Read proxy instance internal metrics and health status",
         "operationId": "status",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -377,10 +377,10 @@
         "description": "Get digitally signed integrity message from proxy instance can compare signature validity with provided public key",
         "operationId": "integrity",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -408,10 +408,10 @@
         "description": "Create a connection profile using prefered provider. Choose between, public node, private node, infura, etc",
         "operationId": "profile",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -449,10 +449,10 @@
         "description": "Get the number of profiles created in last cycle",
         "operationId": "profile-count",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -477,10 +477,10 @@
         "description": "Generate a bip39 mnemonic with given customization details such as language, length, etc",
         "operationId": "mnemonic-bip39",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -519,10 +519,10 @@
         "description": "Get a entropy data from secured source such as /dev/random",
         "operationId": "mnemonic-entropy",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -561,10 +561,10 @@
         "description": "Generate a new Ethereum compatible account and get its address and key",
         "operationId": "new-account",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -595,10 +595,10 @@
         "description": "Verify if given Ethereum address is valid or not",
         "operationId": "verify-address",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -633,10 +633,10 @@
         "description": "Verify if given Ethereum contract address is a contract holder address or not",
         "operationId": "has-contract",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -695,10 +695,10 @@
         "description": "Get a list of Blacklisted domain based on OSINT (Open Source Intelligence)",
         "operationId": "security-domains",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -737,10 +737,10 @@
         "description": "Check the trust level of given domain and stop scamming and malware attempts",
         "operationId": "phishing-check",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -781,10 +781,10 @@
         "description": "Get the version of Solidity compiler",
         "operationId": "solc-version",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [],
@@ -829,10 +829,10 @@
         "description": "Compile a contract using solc",
         "operationId": "solc-compile",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "parameters": [{
@@ -937,10 +937,10 @@
         "description": "Detect wether target network is running Truffle Ganache or is a real, disttributed and decentralized Ethereum/Quorum network",
         "operationId": "is-ganache",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -990,10 +990,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-net-version",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1043,10 +1043,10 @@
         "description": "Get target Ethereum or Quorum network client version details",
         "operationId": "web3-client-version",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1096,10 +1096,10 @@
         "description": "Get target Ethereum or Quorum network peers details",
         "operationId": "web3-net-peers",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1149,10 +1149,10 @@
         "description": "Get target Ethereum or Quorum network protocol version details",
         "operationId": "web3-protocol-version",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1202,10 +1202,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-syncing",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1255,10 +1255,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-coinbase",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1308,10 +1308,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-mining",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1361,10 +1361,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-hashrate",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1414,10 +1414,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-gas-price",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1467,10 +1467,10 @@
         "description": "Get stored accounts in peer information",
         "operationId": "web3-accounts",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1520,10 +1520,10 @@
         "description": "Get the details of stored accounts in peer filesystem including the balance data of each account",
         "operationId": "web3-accounts-balanced",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1573,10 +1573,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-block-latest",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1626,10 +1626,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-compilers",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1679,10 +1679,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-current",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1732,10 +1732,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-shh-version",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1785,10 +1785,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-shh-new",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1838,10 +1838,10 @@
         "description": "Get target Ethereum or Quorum network version details",
         "operationId": "web3-shh-group",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1891,10 +1891,10 @@
         "description": "Get target Ethereum account balance",
         "operationId": "web3-account-balance",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -1955,10 +1955,10 @@
         "description": "Get target Ethereum account balance at given block number",
         "operationId": "web3-account-balance-block",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2027,10 +2027,10 @@
         "description": "Read the overall information of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-summary",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2098,10 +2098,10 @@
         "description": "Read the name of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-name",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2169,10 +2169,10 @@
         "description": "Read the symbol of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-symbol",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2240,10 +2240,10 @@
         "description": "Read total supply of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-totalsupply",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2311,10 +2311,10 @@
         "description": "Read decimal value of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-decimals",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2377,10 +2377,10 @@
         "description": "Read the balance of given address of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-balance",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2457,10 +2457,10 @@
         "description": "Read the allowance of given address of ERC 20 smart contract providing contract address and target network specification",
         "operationId": "erc20-allowance",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2546,10 +2546,10 @@
         "description": "Read transaction receipt",
         "operationId": "tx-receipt",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2630,10 +2630,10 @@
         "description": "Compile, deploy and register your smart contract in just one single call",
         "operationId": "devops-deploy",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2677,10 +2677,10 @@
         "description": "Create new project in user workspace",
         "operationId": "project-new",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2721,10 +2721,10 @@
         "description": "List projects in user workspace",
         "operationId": "project-list",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2761,10 +2761,10 @@
         "description": "Get specific project details",
         "operationId": "project-details",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2799,10 +2799,10 @@
         "description": "Update existing project details",
         "operationId": "project-update",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2848,10 +2848,10 @@
         "description": "Delete existing project from user workspace",
         "operationId": "project-delete",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2888,10 +2888,10 @@
         "description": "Create new registry in user workspace",
         "operationId": "registry-new",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2932,10 +2932,10 @@
         "description": "List registry in user workspace",
         "operationId": "registry-list",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -2972,10 +2972,10 @@
         "description": "Get specific registry details",
         "operationId": "registry-details",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -3010,10 +3010,10 @@
         "description": "Update existing registry details",
         "operationId": "registry-update",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -3059,10 +3059,10 @@
         "description": "Delete existing registry from user workspace",
         "operationId": "registry-delete",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -3099,10 +3099,10 @@
         "description": "Make read operation against a Web3 smart contract",
         "operationId": "dapps-read",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{
@@ -3153,10 +3153,10 @@
         "description": "Make write operation against a Web3 smart contract",
         "operationId": "dapps-write",
         "consumes": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
-          "application/json"
+          "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
         "security": [{

@@ -1,5 +1,7 @@
 package ws
 
+import "github.com/zerjioang/etherniti/core/logger"
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -17,6 +19,7 @@ type Hub struct {
 }
 
 func NewHub() *Hub {
+	logger.Debug("creating new websocket hub")
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
@@ -26,6 +29,7 @@ func NewHub() *Hub {
 }
 
 func (h *Hub) run() {
+	logger.Info("running websocket hub")
 	for {
 		select {
 		case client := <-h.register:
