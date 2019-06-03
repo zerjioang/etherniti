@@ -143,7 +143,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "'${TAGS}'"\
+                -tags "${TAGS}"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
@@ -155,7 +155,7 @@ function compile(){
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
-                -tags "'${TAGS}'"\
+                -tags "${TAGS}"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
                 -o $outputname
         else
@@ -168,7 +168,7 @@ function compile(){
             GOARCH=${ETHERNITI_GOARCH} \
             go build \
                 -a \
-                -tags "'netgo ${TAGS}'" \
+                -tags "netgo ${TAGS}" \
                 -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
                 -o $outputname && \
             ls -alh
