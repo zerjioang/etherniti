@@ -51,7 +51,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to execute etherniti proxy:", err)
 	}
-	logger.Info("shuting down remaining modules")
+	logger.Info("shutting down remaining modules")
 	// finish graceful shutdown
 	bus.SharedBus().Emit(bus.PowerOffEvent)
 	bus.SharedBus().Shutdown()

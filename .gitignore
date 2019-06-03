@@ -1,7 +1,7 @@
 **/dist
 **/vendor
 **/node_modules
-\.idea/**
+**\.idea
 etherniti
 eth-temp
 secrets
