@@ -10,10 +10,8 @@ package config
 import (
 	"io/ioutil"
 	"os"
-	"time"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
@@ -44,46 +42,6 @@ func loadCertBytes(path string) []byte {
 	return certData
 }
 
-//set default environment variables value for current context
-func (c *EnvConfig) SetDefaults() {
-	env := c.data
-	env["X_ETHERNITI_LOG_LEVEL"] = "warn"
-	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "production"
-	env["X_ETHERNITI_HTTP_PORT"] = "80"
-	env["X_ETHERNITI_HTTPS_PORT"] = "443"
-	env["X_ETHERNITI_DEBUG_SERVER"] = false
-	env["X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"] = true
-	env["X_ETHERNITI_TOKEN_SECRET"] = `IoHrlEV4vl9GViynFBHsgJ6qDxkWULgz98UQrO4m`
-	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = true
-	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
-	env["X_ETHERNITI_ENABLE_CORS"] = true
-	env["X_ETHERNITI_ENABLE_SECURITY"] = true
-	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
-	env["X_ETHERNITI_ENABLE_METRICS"] = true
-	env["X_ETHERNITI_ENABLE_CACHE"] = true
-	env["X_ETHERNITI_ENABLE_RATELIMIT"] = true
-	env["X_ETHERNITI_ENABLE_PROFILER"] = false
-	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
-	env["X_ETHERNITI_ENABLE_LOGGING"] = true
-
-	//for 'local development' deployment
-	env["X_ETHERNITI_LISTENING_MODE"] = "https"
-	env["X_ETHERNITI_LISTENING_INTERFACE"] = "0.0.0.0"
-	env["X_ETHERNITI_LISTENING_ADDRESS"] = env["X_ETHERNITI_LISTENING_INTERFACE"].(string) + ":" + env["X_ETHERNITI_HTTP_PORT"].(string)
-	env["X_ETHERNITI_SWAGGER_ADDRESS"] = "proxy.etherniti.org"
-
-	//connection profile params
-	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 10 * fastime.Minute
-
-	//rate limit units must be the same in both variables
-	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 10 * time.Second
-	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 10 * time.Second
-
-	// ratelimit configuration
-	env["X_ETHERNITI_RATE_LIMIT"] = 10
-	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
-}
-
 //check if profiling is enabled or not
 // preproduction and production profiling
 // is always disabled
@@ -93,12 +51,6 @@ func IsProfilingEnabled() bool {
 
 // setup server config
 func Setup() error {
-	// make security checks on environment config variables
-	err := hasValidConfiguration()
-	if err != nil {
-		logger.Error("proxy configuration error")
-		return err
-	}
 	logger.Debug("loading additional production setup config")
 	return nil
 }

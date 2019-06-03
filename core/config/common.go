@@ -68,7 +68,6 @@ func init() {
 	// load environment variables once
 	logger.Debug("reading environment configuration")
 	proxyEnv = newEnvironment()
-	proxyEnv.SetDefaults()
 	// override default values with user provided data
 	proxyEnv.readEnvironmentData()
 
@@ -87,6 +86,9 @@ func resolveBlockTorConnections() bool {
 	return found && v == true
 }
 
+func LogLevelStr() string {
+	return GetEnvironment().String("X_ETHERNITI_LOG_LEVEL")
+}
 func LogLevel() log.Lvl {
 	value := GetEnvironment().String("X_ETHERNITI_LOG_LEVEL")
 	value = strings.ToLower(value)
@@ -106,6 +108,9 @@ func LogLevel() log.Lvl {
 	}
 }
 
+func EnableLoggingStr() string {
+	return GetEnvironment().String("X_ETHERNITI_ENABLE_LOGGING")
+}
 func EnableLogging() bool {
 	logger.Debug("reading logging level from env")
 	v, found := GetEnvironment().Read("X_ETHERNITI_ENABLE_LOGGING")
@@ -230,9 +235,19 @@ func GetKeyPem() []byte {
 	return keyPemBytes
 }
 
+func InfuraToken() string {
+	logger.Debug("reading infura token")
+	return GetEnvironment().String("X_ETHERNITI_INFURA_TOKEN")
+}
+
 func IsHttpMode() bool {
 	logger.Debug("checking if http mode is enabled")
 	return GetEnvironment().String("X_ETHERNITI_LISTENING_MODE") == "http"
+}
+
+func IsHttpsMode() bool {
+	logger.Debug("checking if https mode is enabled")
+	return GetEnvironment().String("X_ETHERNITI_LISTENING_MODE") == "https"
 }
 
 func IsUnixSocketMode() bool {
@@ -269,9 +284,13 @@ func SendGridApiKey() string {
 	return GetEnvironment().String("SENDGRID_API_KEY")
 }
 
-func ServiceListeningMode() listener.ServiceType {
+func ServiceListeningModeStr() string {
 	logger.Debug("reading service listening mode")
-	switch GetEnvironment().String("X_ETHERNITI_LISTENING_MODE") {
+	return GetEnvironment().String("X_ETHERNITI_LISTENING_MODE")
+}
+func ServiceListeningMode() listener.ServiceType {
+	v := ServiceListeningModeStr()
+	switch v {
 	case "http":
 		return listener.HttpMode
 	case "https":
@@ -286,9 +305,4 @@ func ServiceListeningMode() listener.ServiceType {
 func IsDevelopment() bool {
 	logger.Debug("checking if current server environment is development")
 	return GetEnvironmentName() == "development"
-}
-
-// check if environment configuration is valid or not
-func hasValidConfiguration() error {
-	return nil
 }

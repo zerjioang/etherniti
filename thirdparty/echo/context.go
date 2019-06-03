@@ -641,3 +641,13 @@ func (c *Context) User() *profile.ConnectionProfile {
 func (c *Context) IntIp() uint32 {
 	return c.intIp
 }
+
+// check if request is http
+func (c *Context) IsHttp() bool {
+	return c.SchemeType == constants.Http
+}
+
+// check if request is https
+func (c *Context) IsHttps() bool {
+	return c.SchemeType == constants.Https
+}

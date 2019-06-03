@@ -5,9 +5,10 @@ package cmd
 
 import (
 	"errors"
+	"sync/atomic"
+
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/listener"
-	"sync/atomic"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/controllers"
@@ -46,14 +47,21 @@ func RunServer(notifier chan error) {
 			notifier <- extraErr
 			return
 		}
-		// 3 get listening mode
+		// 3 check proxy server configuration
+		configErr := config.CheckConfiguration()
+		if configErr != nil {
+			// proxy configuration error configuration found
+			notifier <- configErr
+			return
+		}
+		// 4 get listening mode
 		logger.Info("starting etherniti proxy listener with requested mode")
 		mode := config.ServiceListeningMode()
 
-		// 4 update value
+		// 5 update value
 		serverStarted.Store(true)
 
-		// 5 run listener
+		// 6 run listener
 		go listener.FactoryListener(mode).Listen(notifier)
 	} else {
 		notifier <- errAlreadyStarted

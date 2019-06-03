@@ -33,7 +33,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	str = strings.Replace(str, "$host", config.GetSwaggerAddress(), -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)
-	//write swagger.json file
+	//write swagger.json files
 	writeErr := ioutil.WriteFile(resources+"/swagger/swagger.json", []byte(str), os.ModePerm)
 	if writeErr != nil {
 		logger.Error("failed writing swagger.json file", writeErr)

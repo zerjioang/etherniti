@@ -20,7 +20,7 @@ var (
 	Edition = ""
 
 	// build commit hash value
-	notifier = make(chan error)
+	notifier = make(chan error, 1)
 )
 
 func init() {
@@ -49,7 +49,7 @@ func main() {
 	cmd.RunServer(notifier)
 	err := <-notifier
 	if err != nil {
-		logger.Fatal("failed to execute etherniti proxy:", err)
+		logger.Error("failed to execute etherniti proxy: ", err)
 	}
 	logger.Info("shutting down remaining modules")
 	// finish graceful shutdown

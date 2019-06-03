@@ -21,6 +21,7 @@ type TokenInfo struct {
 	Type    string `json:"type"`
 	Decimal int    `json:"decimal"`
 }
+
 // list containing TokenInfo
 // this element is stored in heap
 type TokenInfoList []TokenInfo
@@ -52,6 +53,7 @@ func GetTokenAddressByName(name string) string {
 	value := gjson.GetBytes(tokenlistBytes, `#[symbol=="`+name+`"].address`)
 	return value.Str
 }
+
 // fetch token data (symbol only) by token address
 // todo implement some caching mecanism
 func GetTokenSymbol(address string) string {

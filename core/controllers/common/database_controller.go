@@ -29,9 +29,16 @@ func NewDatabaseController(pathPrepend string, collection string, modelGenerator
 	if collection == "" {
 		return dbctl, errors.New("invalid collection name provided")
 	}
-	if collection[len(collection)-1:] != "s" {
-		// collection name does not end with plural. add the 's'
-		dbctl.name = collection + "s"
+
+	lastChar := collection[len(collection)-1:]
+	if lastChar != "s" {
+		// check if ends with y. example: proxy, registry
+		if lastChar == "y" {
+			dbctl.name = collection
+		} else {
+			// collection name does not end with plural. add the 's'
+			dbctl.name = collection + "s"
+		}
 	} else {
 		dbctl.name = collection
 	}

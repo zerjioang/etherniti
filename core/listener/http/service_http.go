@@ -85,8 +85,13 @@ func (l HttpListener) shutdown(httpInstance *echo.Echo, notifier chan error) {
 }
 
 // create new deployer instance
-func NewHttpListener() listener.ListenerInterface {
+func NewHttpListenerCustom() HttpListener {
 	d := HttpListener{}
 	d.limiter = ratelimit.NewRateLimitEngine()
 	return d
+}
+
+// create new http listener instance
+func NewHttpListener() listener.ListenerInterface {
+	return NewHttpListenerCustom()
 }

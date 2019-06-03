@@ -11,13 +11,13 @@ import (
 	"net/http"
 	"runtime"
 
+	"github.com/zerjioang/etherniti/core/config/edition"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	_ "net/http/pprof" //adds 2,5Mb to final executable when imported
-	"time"
 
-	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
@@ -69,52 +69,6 @@ func init() {
 	keyPemBytes = str.UnsafeBytes(keyPem)
 }
 
-//set default environment variables value for current context
-func (c *EnvConfig) SetDefaults() {
-	env := c.data
-	env["X_ETHERNITI_LOG_LEVEL"] = "debug"
-	env["X_ETHERNITI_ENVIRONMENT_NAME"] = "development"
-	env["X_ETHERNITI_HTTP_PORT"] = "8080"
-	env["X_ETHERNITI_HTTPS_PORT"] = "4430"
-	env["X_ETHERNITI_DEBUG_SERVER"] = true
-	env["X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"] = true
-	env["X_ETHERNITI_TOKEN_SECRET"] = "t0k3n-s3cr3t-h3r3"
-	env["X_ETHERNITI_ENABLE_HTTPS_REDIRECT"] = false
-	env["X_ETHERNITI_USE_UNIQUE_REQUEST_ID"] = false
-	env["X_ETHERNITI_ENABLE_CORS"] = true
-	env["X_ETHERNITI_ENABLE_SECURITY"] = true
-	env["X_ETHERNITI_ENABLE_ANALYTICS"] = true
-	env["X_ETHERNITI_ENABLE_METRICS"] = true
-	env["X_ETHERNITI_ENABLE_CACHE"] = true
-	env["X_ETHERNITI_ENABLE_RATELIMIT"] = false
-	env["X_ETHERNITI_ENABLE_PROFILER"] = true
-	env["X_ETHERNITI_BLOCK_TOR_CONNECTIONS"] = false
-	env["X_ETHERNITI_ENABLE_LOGGING"] = true
-
-	//for 'local development' deployment
-	env["X_ETHERNITI_LISTENING_MODE"] = "http" // http or socket
-	env["X_ETHERNITI_LISTENING_INTERFACE"] = "127.0.0.1"
-	env["X_ETHERNITI_LISTENING_ADDRESS"] = env["X_ETHERNITI_LISTENING_INTERFACE"].(string) + ":" + env["X_ETHERNITI_HTTP_PORT"].(string)
-	env["X_ETHERNITI_SWAGGER_ADDRESS"] = env["X_ETHERNITI_LISTENING_ADDRESS"]
-
-	//connection profile params
-	env["X_ETHERNITI_TOKEN_EXPIRATION"] = 100 * fastime.Hour
-
-	//rate limit units must be the same in both variables
-	env["X_ETHERNITI_RATE_LIMIT_UNITS"] = 5 * time.Second
-	env["X_ETHERNITI_RATE_LIMIT_UNITS_FT"] = 5 * fastime.Second
-	env["X_ETHERNITI_RATE_LIMIT"] = 10
-	env["X_ETHERNITI_RATE_LIMIT_STR"] = "10"
-
-	// email sender configuration
-	env["X_ETHERNITI_EMAIL_USERNAME"] = "faktorialabs@gmail.com"
-	env["X_ETHERNITI_GMAIL_ACCESS_TOKEN"] = "vhlpmtrvskzxdebh"
-	env["X_ETHERNITI_EMAIL_SERVER"] = "smtp.gmail.com:587"
-	env["X_ETHERNITI_EMAIL_SERVER_ONLY"] = "smtp.gmail.com"
-
-	env["X_ETHERNITI_RECATPCHAV3_APIKEY"] = "6LfeAaMUAAAAADzEfvOzsajWuLCCrUfxprh-wZcC"
-}
-
 //check if profiling is enabled or not
 func IsProfilingEnabled() bool {
 	logger.Debug("checking if profiling mode is enabled")
@@ -124,15 +78,9 @@ func IsProfilingEnabled() bool {
 
 // setup server config
 func Setup() error {
-	// make security checks on environment config variables
-	err := hasValidConfiguration()
-	if err != nil {
-		logger.Error("proxy configuration error")
-		return err
-	}
 	logger.Debug("loading additional development setup config")
 	// enable profile mode if requested
-	if IsProfilingEnabled() {
+	if edition.IsEnterprise() && IsProfilingEnabled() {
 		go runProfiler()
 	}
 	return nil

@@ -11,6 +11,8 @@ import (
 	"os/signal"
 	"time"
 
+	http2 "github.com/zerjioang/etherniti/core/listener/http"
+
 	"github.com/zerjioang/etherniti/core/listener/middleware"
 
 	"github.com/zerjioang/etherniti/core/listener/swagger"
@@ -22,7 +24,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server/ratelimit"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
@@ -40,7 +41,7 @@ var (
 )
 
 type HttpsListener struct {
-	limiter ratelimit.RateLimitEngine
+	http2.HttpListener
 }
 
 func recoverFromPem() {
@@ -68,11 +69,8 @@ func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
 	return localhostCert, certEtr
 }
 
-func (l HttpsListener) RunMode(address string, background bool) {
-}
-
 func (l HttpsListener) Listen(notifier chan error) {
-	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
+	logger.Info("loading Etherniti Proxy, a High Performance Web3 Multitenant REST API")
 	//build http server
 	httpServerInstance := common.NewServer(nil)
 	// add redirects from http to https
@@ -166,6 +164,6 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 // create new deployer instance
 func NewHttpsListener() listener.ListenerInterface {
 	d := HttpsListener{}
-	d.limiter = ratelimit.NewRateLimitEngine()
+	d.HttpListener = http2.NewHttpListenerCustom()
 	return d
 }

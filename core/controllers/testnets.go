@@ -4,27 +4,28 @@
 package controllers
 
 import (
+	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/controllers/network"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 const (
-	ropsten       = "ropsten"
-	ropstenInfura = "https://ropsten.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
-
-	rinkeby       = "rinkeby"
-	rinkebyInfura = "https://rinkeby.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
-
-	kovan       = "kovan"
-	kovanInfura = "https://kovan.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
-
-	mainnet       = "mainnet"
-	mainnetInfura = "https://mainnet.infura.io/v3/4f61378203ca4da4a6b6601bc16a22ad"
-
+	ropsten  = "ropsten"
+	rinkeby  = "rinkeby"
+	kovan    = "kovan"
+	mainnet  = "mainnet"
 	infura   = "infura"
 	quiknode = "quiknode"
 	private  = "private"
+)
+
+var (
+	ropstenInfura = "https://ropsten.infura.io/v3/"
+	rinkebyInfura = "https://rinkeby.infura.io/v3/"
+	kovanInfura   = "https://kovan.infura.io/v3/"
+	mainnetInfura = "https://mainnet.infura.io/v3/"
+	infuraToken   = "" //4f61378203ca4da4a6b6601bc16a22ad
 )
 
 type RestController struct {
@@ -37,8 +38,21 @@ type RestController struct {
 	devops  network.DevOpsController
 }
 
+func init() {
+	logger.Debug("loading infura token secret")
+	// rad infura token
+	infuraToken = config.InfuraToken()
+	//update all infura related urls
+	logger.Debug("updating infura v3 endpoints with provided token")
+	ropstenInfura = ropstenInfura + infuraToken
+	rinkebyInfura = rinkebyInfura + infuraToken
+	kovanInfura = kovanInfura + infuraToken
+	infuraToken = infuraToken + infuraToken
+}
+
 // constructor like function
 func newController(peer string, name string) RestController {
+	logger.Debug("creating new web3 controller")
 	ctl := RestController{}
 	ctl.network = network.NewNetworkController()
 	ctl.erc20 = network.NewErc20Controller(&ctl.network)
@@ -66,35 +80,42 @@ func (ctl RestController) RegisterRouters(router *echo.Group) {
 
 // constructor like function
 func NewRopstenController() RestController {
+	logger.Debug("creating new web3 controller for ropsten network")
 	return newController(ropstenInfura, ropsten)
 }
 
 // constructor like function
 func NewRinkebyController() RestController {
+	logger.Debug("creating new web3 controller for rinkeby network")
 	return newController(rinkebyInfura, rinkeby)
 }
 
 // constructor like function
 func NewKovanController() RestController {
+	logger.Debug("creating new web3 controller for kovan network")
 	return newController(kovanInfura, kovan)
 }
 
 // constructor like function
 func NewMainNetController() RestController {
+	logger.Debug("creating new web3 controller for mainnet network")
 	return newController(mainnetInfura, mainnet)
 }
 
 // constructor like function for user provided infura based connection
 func NewInfuraController() RestController {
+	logger.Debug("creating new web3 controller for infura network")
 	return newController("", infura)
 }
 
 // constructor like function for user provided infura based connection
 func NewQuikNodeController() RestController {
+	logger.Debug("creating new web3 controller for quiknode network")
 	return newController("", quiknode)
 }
 
 // constructor like function
 func NewPrivateNetController() RestController {
+	logger.Debug("creating new web3 controller for private network")
 	return newController("", private)
 }
