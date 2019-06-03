@@ -28,9 +28,9 @@ echo "architecture : $osarch"
 echo "edition      : $edition"
 echo "version      : $version"
 echo ""
-echo "generating docker image etherniti/proxy:$osarch-$edition-$version"
+echo "generating docker image etherniti/proxy-oss:$osarch-$version"
 echo ""
 
-build --build-arg BUILD_MODE=pre --build-arg BUILD_EDITION=oss -t etherniti/proxy:$osarch-$edition-$version && \
+build --build-arg BUILD_MODE=pre --build-arg BUILD_EDITION=oss -t etherniti/proxy-oss:$osarch-$version && \
 	echo "uploading to public docker hub" && \
-	docker push etherniti/proxy:$osarch-$edition-$version
+	docker push etherniti/proxy-oss:$osarch-$version
