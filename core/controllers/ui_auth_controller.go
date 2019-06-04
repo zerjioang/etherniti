@@ -135,7 +135,7 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 	}
 	if req.Email != "" {
 		logger.Info("recovering user with email: ", req.Email)
-		return api.Success(c, []byte("recovery"), []byte("account recovery in progress"))
+		return api.Success(c,[]byte("account recovery in progress"), nil)
 	}
 	return nil
 }

@@ -15,7 +15,7 @@ func TestNewApiError(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
 		apiErr := NewApiError(200, str.UnsafeBytes("test-stack"))
 		require.NotNil(t, apiErr)
-		require.Equal(t, string(apiErr.Data), "test-stack")
+		require.Equal(t, string(apiErr.Err), "test-stack")
 	})
 }
 

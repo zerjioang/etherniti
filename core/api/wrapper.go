@@ -116,7 +116,7 @@ func toErrorPool(msg []byte) []byte {
 	logger.Debug("converting api to error payload")
 	//get item from pool
 	item := errorPool.Get().(*protocol.ApiError)
-	item.Message = msg
+	item.Desc = msg
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool
@@ -125,10 +125,11 @@ func toErrorPool(msg []byte) []byte {
 	return rawBytes
 }
 
-func toError(code int, msg []byte) []byte {
+func toError(code int, msg []byte, data []byte) []byte {
 	logger.Debug("converting data to error payload")
 	var item protocol.ApiError
-	item.Message = msg
+	item.Desc = msg
+	item.Err = data
 	b := bufferPool.Get().(*bytes.Buffer)
 	rawBytes := item.Bytes(b)
 	// put item back to the pool
@@ -147,6 +148,14 @@ func ErrorStr(c *echo.Context, msg []byte) error {
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
+func ErrorWithMessage(c *echo.Context, msg []byte, err error) error {
+	logger.Debug("converting error with message to payload")
+	logger.Error(err)
+	rawBytes := toError(protocol.StatusBadRequest, msg, str.UnsafeBytes(err.Error()))
+	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+}
+
+
 func Error(c *echo.Context, err error) error {
 	logger.Debug("converting error to payload")
 	return ErrorStr(c, str.UnsafeBytes(err.Error()))
@@ -155,13 +164,13 @@ func Error(c *echo.Context, err error) error {
 func ErrorCode(c *echo.Context, code int, err error) error {
 	logger.Debug("converting error with code to error payload")
 	logger.Error(err)
-	rawBytes := toError(code, str.UnsafeBytes(err.Error()))
+	rawBytes := toError(code, str.UnsafeBytes(err.Error()), nil)
 	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func StackError(c *echo.Context, stackErr stack.Error) error {
 	logger.Debug("converting stack error to error payload")
 	logger.Error(stackErr)
-	rawBytes := toError(protocol.StatusBadRequest, stackErr.Bytes())
+	rawBytes := toError(protocol.StatusBadRequest, stackErr.Bytes(), nil)
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }

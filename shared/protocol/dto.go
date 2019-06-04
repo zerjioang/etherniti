@@ -156,33 +156,41 @@ type ContractCompileResponse struct {
 
 // api stack model dto
 type ApiError struct {
-	Message []byte `json:"msg,omitempty"`
-	Data    []byte `json:"data,omitempty"`
+	Desc []byte `json:"desc,omitempty"`
+	Err  []byte `json:"error,omitempty"`
 }
+
+var (
+	jsonBegin = str.UnsafeBytes(`{`)
+	jsonEnd = str.UnsafeBytes(`}`)
+	doubleQuote = str.UnsafeBytes(`"`)
+	descId = str.UnsafeBytes(`"desc":"`)
+	errId = str.UnsafeBytes(`,"error":"`)
+)
 
 func (e ApiError) Bytes(b *bytes.Buffer) []byte {
 	b.Reset()
 	// {"code":400,"msg":"test-error","details":""}
-	b.Write(str.UnsafeBytes(`{`))
-	if len(e.Message) > 0 {
-		b.Write(str.UnsafeBytes(`"msg":"`))
-		b.Write(e.Message)
-		b.Write(str.UnsafeBytes(`"`))
+	b.Write(jsonBegin)
+	if len(e.Desc) > 0 {
+		b.Write(descId)
+		b.Write(e.Desc)
+		b.Write(doubleQuote)
 	}
-	if len(e.Data) > 0 {
-		b.Write(str.UnsafeBytes(`,"data":"`))
-		b.Write(e.Data)
-		b.Write(str.UnsafeBytes(`"`))
+	if len(e.Err) > 0 {
+		b.Write(errId)
+		b.Write(e.Err)
+		b.Write(doubleQuote)
 	}
-	b.Write(str.UnsafeBytes(`}`))
+	b.Write(jsonEnd)
 	return b.Bytes()
 }
 
 // api error constructor like function
 func NewApiError(code int, details []byte) *ApiError {
 	ae := ApiError{}
-	ae.Message = str.UnsafeBytes(StatusText(code))
-	ae.Data = details
+	ae.Desc = str.UnsafeBytes(StatusText(code))
+	ae.Err = details
 	return &ae
 }
 
@@ -204,11 +212,11 @@ func (e ApiResponse) Bytes(b *bytes.Buffer) []byte {
 	b.Reset()
 	b.WriteString(`{"msg":"`)
 	b.Write(e.Message)
-	b.WriteString(`"`)
+	b.Write(doubleQuote)
 	if e.Data != nil && len(e.Data) > 0 {
 		b.WriteString(`,"data":`)
 		b.Write(e.Data)
 	}
-	b.WriteString(`}`)
+	b.Write(jsonEnd)
 	return b.Bytes()
 }

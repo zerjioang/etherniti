@@ -17,7 +17,7 @@ func HttpServerCache(next echo.HandlerFunc) echo.HandlerFunc {
 		ifModData := c.Request().Header.Get(ifModifiedSince)
 		if ifModData != "" {
 			//request contains If-Modified-Since information
-			// todo parse and handle request sucessfully
+			// todo parse and handle request successfully
 			invalidateCache := false
 			if invalidateCache {
 				// resend new data to client

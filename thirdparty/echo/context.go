@@ -87,7 +87,7 @@ const (
 )
 
 func (c *Context) Preload() {
-	c.isJson = strings.Contains(c.request.Header.Get(HeaderContentType), MIMEApplicationJSON)
+	c.isJson = c.request.Header.Get(HeaderContentType) == MIMEApplicationJSON ||  c.request.Header.Get(HeaderAccept) == MIMEApplicationJSON
 	c.isTls = c.request.TLS != nil
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()

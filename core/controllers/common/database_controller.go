@@ -159,6 +159,9 @@ func (ctl *DatabaseController) List(c *echo.Context) error {
 		results, err := ctl.storage.List("")
 		if err != nil {
 			return api.Error(c, err)
+		} else if results == nil || len(results) == 0 {
+			//no data found
+			return api.Success(c, str.UnsafeBytes(ctl.name), nil)
 		} else {
 			return api.SendSuccess(c, str.UnsafeBytes(ctl.name), results)
 		}

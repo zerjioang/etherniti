@@ -33,7 +33,7 @@ func userJwt(next echo.HandlerFunc) echo.HandlerFunc {
 		decodedAuthData, err := ParseAuthenticationToken(tokenData)
 		if err != nil {
 			logger.Error("failed to process authentication token: ", err)
-			return api.ErrorStr(c, []byte("invalid authentication token"))
+			return api.ErrorWithMessage(c, []byte("invalid authentication token"), err)
 		} else {
 			c.UserId = decodedAuthData.Uuid
 		}
