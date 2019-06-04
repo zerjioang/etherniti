@@ -19,7 +19,7 @@ cd ../..
 
 #our proxy configuration
 edition="oss"
-version="1.0.0"
+version="1.0.1"
 
 # get current os system architecture
 osarch=$(arch)
@@ -32,5 +32,9 @@ echo "generating docker image etherniti/proxy-oss:$osarch-$version"
 echo ""
 
 build --build-arg BUILD_MODE=pre --build-arg BUILD_EDITION=oss -t etherniti/proxy-oss:$osarch-$version && \
-	echo "uploading to public docker hub" && \
-	docker push etherniti/proxy-oss:$osarch-$version
+echo "uploading to public docker hub"
+docker push etherniti/proxy-oss:$osarch-$version
+# retag
+docker tag etherniti/proxy-oss:$osarch-$version etherniti/proxy-oss:$osarch-latest
+docker push etherniti/proxy-oss:$osarch-$version
+docker push etherniti/proxy-oss:$osarch-latest

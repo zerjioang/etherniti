@@ -17,8 +17,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/listener/swagger"
 
-	"github.com/zerjioang/etherniti/core/util/banner"
-
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
@@ -79,7 +77,6 @@ func (l HttpsListener) Listen(notifier chan error) {
 
 	// Start http server
 	go func() {
-		println(banner.WelcomeBanner())
 		logger.Info("starting http server...")
 		err := httpServerInstance.StartServer(&defaultHttpServerConfig)
 		if err != nil {

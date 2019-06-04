@@ -30,6 +30,8 @@ func init() {
 	// in order to print in the welcome banner
 	banner.Commit = Commit
 	banner.Edition = Edition
+	// show welcome banner
+	println(banner.WelcomeBanner())
 }
 
 // generate build sha1: git rev-parse --short HEAD

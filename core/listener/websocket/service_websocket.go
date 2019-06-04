@@ -10,10 +10,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/listener/swagger"
-	"github.com/zerjioang/etherniti/core/util/banner"
-
 	"github.com/zerjioang/etherniti/core/listener/middleware"
+	"github.com/zerjioang/etherniti/core/listener/swagger"
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -47,7 +45,6 @@ func (l WebsocketListener) Listen(notifier chan error) {
 	swagger.ConfigureFromTemplate()
 	// Start server
 	go func() {
-		println(banner.WelcomeBanner())
 		logger.Info("starting websocket server...")
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {

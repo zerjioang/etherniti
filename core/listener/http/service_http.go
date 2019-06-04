@@ -10,8 +10,6 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/util/banner"
-
 	"github.com/zerjioang/etherniti/core/listener/middleware"
 	"github.com/zerjioang/etherniti/core/listener/swagger"
 
@@ -50,7 +48,6 @@ func (l HttpListener) Listen(notifier chan error) {
 	swagger.ConfigureFromTemplate()
 	// Start server
 	go func() {
-		println(banner.WelcomeBanner())
 		logger.Info("server listening")
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {
