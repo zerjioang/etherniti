@@ -21,8 +21,17 @@ echo "Checking code quality with linters..."
 ./scripts/fmt_and_simplify.sh
 # go imports
 ./scripts/goimports.sh
+
 # go vet
-./scripts/govet.sh -tags dev
+./scripts/govet.sh -tags "dev oss"
+./scripts/govet.sh -tags "pre oss"
+./scripts/govet.sh -tags "prod oss"
+
+./scripts/govet.sh -tags "dev pro"
+./scripts/govet.sh -tags "pre pro"
+./scripts/govet.sh -tags "prod pro"
+
+
 # add license header to files
 # ./scripts/license_header.sh
 

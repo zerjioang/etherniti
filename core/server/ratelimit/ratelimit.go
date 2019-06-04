@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zerjioang/etherniti/shared/protocol"
-
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/modules/cache"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
@@ -36,8 +34,9 @@ const (
 )
 
 var (
-	rateExcedeed                  = protocol.NewApiError(protocol.StatusTooManyRequests, []byte("rate limit reached"))
 	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt()
+	maxRatelimitStr               = config.RateLimitStr()
+	maxRatelimitValue             = config.RateLimit()
 )
 
 type limit struct {
@@ -66,14 +65,14 @@ func (rte RateLimitEngine) Eval(clientIdentifier []byte, h http.Header) RateLimi
 	resetTime := timeNow.Add(defaultCacheMeasurementUnitFt)
 
 	//inject rate limit header: X-Rate-Limit-Limit
-	h.Set(XRateLimit, config.RateLimitUnitsStr())
+	h.Set(XRateLimit, maxRatelimitStr)
 
 	// read current limit
 	var currentRequestsLimit limit
 	rateRemaining, found := rte.rateCache.Get(clientIdentifier)
 	if !found {
 		// initialize client max allowed rate limit
-		currentRequestsLimit = limit{value: config.RateLimit(), reset: resetTime.Unix()}
+		currentRequestsLimit = limit{value: maxRatelimitValue, reset: resetTime.Unix()}
 	} else {
 		currentRequestsLimit = rateRemaining.(limit)
 	}

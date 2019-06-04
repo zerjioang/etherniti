@@ -20,18 +20,16 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server/ratelimit"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type WebsocketListener struct {
-	limiter ratelimit.RateLimitEngine
 }
 
 var (
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.GetListeningAddress(),
+		Addr:         config.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -41,7 +39,7 @@ func (l WebsocketListener) RunMode(address string, background bool) {
 }
 
 func (l WebsocketListener) Listen(notifier chan error) {
-	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
+	logger.Info("loading Etherniti Proxy, a High Performance Web3 REST Proxy")
 	//deploy http server only
 	e := common.NewServer(middleware.ConfigureServerRoutes)
 	logger.Info("starting websocket server...")
@@ -84,6 +82,5 @@ func (l WebsocketListener) shutdown(httpInstance *echo.Echo, notifier chan error
 // create new deployer instance
 func NewWebsocketListener() listener.ListenerInterface {
 	d := WebsocketListener{}
-	d.limiter = ratelimit.NewRateLimitEngine()
 	return d
 }

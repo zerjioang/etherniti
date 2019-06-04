@@ -6,7 +6,7 @@ package ws_test
 import (
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/listener/websocket"
+	ws "github.com/zerjioang/etherniti/core/listener/websocket"
 )
 
 func TestWebsocketListener(t *testing.T) {

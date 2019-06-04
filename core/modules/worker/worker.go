@@ -1,15 +1,8 @@
 package worker
 
 import (
-	"os"
-	"strconv"
-
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
-)
-
-var (
-	MaxWorker = os.Getenv("MAX_WORKERS")
-	MaxQueue  = os.Getenv("MAX_QUEUE")
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 // A buffered channel that we can send work requests on.
@@ -23,11 +16,7 @@ type Worker struct {
 }
 
 func init() {
-	maxWorkersInt, err := strconv.Atoi(MaxWorker)
-	if err != nil {
-		maxWorkersInt = 5
-	}
-	dispatcher := NewDispatcher(maxWorkersInt)
+	dispatcher := NewDispatcher(config.MaxWorker)
 	dispatcher.Run()
 }
 
@@ -51,7 +40,7 @@ func (w Worker) Start() {
 			case job := <-w.JobChannel:
 				// we have received a work request.
 				if err := job.Run(); err != nil {
-					log.Errorf("Error executing the job", err.Error())
+					logger.Error("error executing the job: ", err.Error())
 				}
 
 			case <-w.quit:

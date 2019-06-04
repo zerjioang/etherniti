@@ -15,7 +15,7 @@ func TestIndexConcurrency(t *testing.T) {
 	t.Run("index-single-echo", func(t *testing.T) {
 		testServer := common.NewServer(nil)
 		ctx := common.NewContext(testServer)
-		err := Index(ctx)
+		err := NewIndexController().Index(ctx)
 		if err != nil {
 			t.Log(err)
 		}
@@ -23,10 +23,11 @@ func TestIndexConcurrency(t *testing.T) {
 	t.Run("index-concurrency-echo", func(t *testing.T) {
 		times := 100
 		testServer := common.NewServer(nil)
+		ctl := NewIndexController()
 		for i := 0; i < times; i++ {
 			go func() {
 				ctx := common.NewContext(testServer)
-				err := Index(ctx)
+				err := ctl.Index(ctx)
 				if err != nil {
 					t.Log(err)
 				}

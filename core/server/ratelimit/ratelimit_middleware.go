@@ -4,7 +4,8 @@
 package ratelimit
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/pkg/errors"
+	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -12,7 +13,8 @@ import (
 
 var (
 	//this variable might be concurrent accessed
-	rateLimitEngine RateLimitEngine
+	rateLimitEngine     RateLimitEngine
+	rateLimitExcededErr = errors.New("rate limit reached")
 )
 
 func init() {
@@ -27,12 +29,11 @@ func init() {
 func RateLimit(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		header := c.Response().Header()
-		clientIdentifier := c.RealIP()
-		clientIdentifierBytes := str.UnsafeBytes(clientIdentifier)
-		result := rateLimitEngine.Eval(clientIdentifierBytes, header)
+		clientIdentifier := c.RateLimitIdentifier()
+		result := rateLimitEngine.Eval(clientIdentifier, header)
 		if result == Allow {
 			return next(c)
 		}
-		return c.JSON(protocol.StatusTooManyRequests, rateExcedeed)
+		return api.ErrorCode(c, protocol.StatusTooManyRequests, rateLimitExcededErr)
 	}
 }

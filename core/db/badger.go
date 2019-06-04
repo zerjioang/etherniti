@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/zerjioang/etherniti/core/bus"
-	"github.com/zerjioang/go-bus"
+	gobus "github.com/zerjioang/go-bus"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"unsafe"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 )
 
 var (

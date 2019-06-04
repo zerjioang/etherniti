@@ -11,6 +11,8 @@ import (
 	"sort"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/eth/fixtures"
+
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
@@ -50,8 +52,8 @@ type StateDB struct {
 	trie Trie
 
 	// This map holds 'live' objects, which will get modified while processing a state transition.
-	stateObjects      map[common.Address]*stateObject
-	stateObjectsDirty map[common.Address]struct{}
+	stateObjects      map[fixtures.Address]*stateObject
+	stateObjectsDirty map[fixtures.Address]struct{}
 
 	// DB error.
 	// State objects are used by the consensus core and VM which are
@@ -63,12 +65,12 @@ type StateDB struct {
 	// The refund counter, also used by state transitioning.
 	refund uint64
 
-	thash, bhash common.Hash
+	thash, bhash fixtures.Hash
 	txIndex      int
-	logs         map[common.Hash][]*types.Log
+	logs         map[fixtures.Hash][]*types.Log
 	logSize      uint
 
-	preimages map[common.Hash][]byte
+	preimages map[fixtures.Hash][]byte
 
 	// Journal of state modifications. This is the backbone of
 	// Snapshot and RevertToSnapshot.
@@ -88,7 +90,7 @@ type StateDB struct {
 }
 
 // Create a new state from a given trie.
-func New(root common.Hash, db Database) (*StateDB, error) {
+func New(root fixtures.Hash, db Database) (*StateDB, error) {
 	tr, err := db.OpenTrie(root)
 	if err != nil {
 		return nil, err
@@ -96,10 +98,10 @@ func New(root common.Hash, db Database) (*StateDB, error) {
 	return &StateDB{
 		db:                db,
 		trie:              tr,
-		stateObjects:      make(map[common.Address]*stateObject),
-		stateObjectsDirty: make(map[common.Address]struct{}),
-		logs:              make(map[common.Hash][]*types.Log),
-		preimages:         make(map[common.Hash][]byte),
+		stateObjects:      make(map[fixtures.Address]*stateObject),
+		stateObjectsDirty: make(map[fixtures.Address]struct{}),
+		logs:              make(map[fixtures.Hash][]*types.Log),
+		preimages:         make(map[fixtures.Hash][]byte),
 		journal:           newJournal(),
 	}, nil
 }
@@ -117,20 +119,20 @@ func (self *StateDB) Error() error {
 
 // Reset clears out all ephemeral state objects from the state db, but keeps
 // the underlying state trie to avoid reloading data for the next operations.
-func (self *StateDB) Reset(root common.Hash) error {
+func (self *StateDB) Reset(root fixtures.Hash) error {
 	tr, err := self.db.OpenTrie(root)
 	if err != nil {
 		return err
 	}
 	self.trie = tr
-	self.stateObjects = make(map[common.Address]*stateObject)
-	self.stateObjectsDirty = make(map[common.Address]struct{})
-	self.thash = common.Hash{}
-	self.bhash = common.Hash{}
+	self.stateObjects = make(map[fixtures.Address]*stateObject)
+	self.stateObjectsDirty = make(map[fixtures.Address]struct{})
+	self.thash = fixtures.Hash{}
+	self.bhash = fixtures.Hash{}
 	self.txIndex = 0
-	self.logs = make(map[common.Hash][]*types.Log)
+	self.logs = make(map[fixtures.Hash][]*types.Log)
 	self.logSize = 0
-	self.preimages = make(map[common.Hash][]byte)
+	self.preimages = make(map[fixtures.Hash][]byte)
 	self.clearJournalAndRefund()
 	return nil
 }
@@ -146,7 +148,7 @@ func (self *StateDB) AddLog(log *types.Log) {
 	self.logSize++
 }
 
-func (self *StateDB) GetLogs(hash common.Hash) []*types.Log {
+func (self *StateDB) GetLogs(hash fixtures.Hash) []*types.Log {
 	return self.logs[hash]
 }
 
@@ -159,7 +161,7 @@ func (self *StateDB) Logs() []*types.Log {
 }
 
 // AddPreimage records a SHA3 preimage seen by the VM.
-func (self *StateDB) AddPreimage(hash common.Hash, preimage []byte) {
+func (self *StateDB) AddPreimage(hash fixtures.Hash, preimage []byte) {
 	if _, ok := self.preimages[hash]; !ok {
 		self.journal.append(addPreimageChange{hash: hash})
 		pi := make([]byte, len(preimage))
@@ -169,7 +171,7 @@ func (self *StateDB) AddPreimage(hash common.Hash, preimage []byte) {
 }
 
 // Preimages returns a list of SHA3 preimages that have been submitted.
-func (self *StateDB) Preimages() map[common.Hash][]byte {
+func (self *StateDB) Preimages() map[fixtures.Hash][]byte {
 	return self.preimages
 }
 
@@ -191,19 +193,19 @@ func (self *StateDB) SubRefund(gas uint64) {
 
 // Exist reports whether the given account address exists in the state.
 // Notably this also returns true for suicided accounts.
-func (self *StateDB) Exist(addr common.Address) bool {
+func (self *StateDB) Exist(addr fixtures.Address) bool {
 	return self.getStateObject(addr) != nil
 }
 
 // Empty returns whether the state object is either non-existent
 // or empty according to the EIP161 specification (balance = nonce = code = 0)
-func (self *StateDB) Empty(addr common.Address) bool {
+func (self *StateDB) Empty(addr fixtures.Address) bool {
 	so := self.getStateObject(addr)
 	return so == nil || so.empty()
 }
 
 // Retrieve the balance from the given address or 0 if object not found
-func (self *StateDB) GetBalance(addr common.Address) *big.Int {
+func (self *StateDB) GetBalance(addr fixtures.Address) *big.Int {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.Balance()
@@ -211,7 +213,7 @@ func (self *StateDB) GetBalance(addr common.Address) *big.Int {
 	return common.Big0
 }
 
-func (self *StateDB) GetNonce(addr common.Address) uint64 {
+func (self *StateDB) GetNonce(addr fixtures.Address) uint64 {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.Nonce()
@@ -226,11 +228,11 @@ func (self *StateDB) TxIndex() int {
 }
 
 // BlockHash returns the current block hash set by Prepare.
-func (self *StateDB) BlockHash() common.Hash {
+func (self *StateDB) BlockHash() fixtures.Hash {
 	return self.bhash
 }
 
-func (self *StateDB) GetCode(addr common.Address) []byte {
+func (self *StateDB) GetCode(addr fixtures.Address) []byte {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.Code(self.db)
@@ -238,7 +240,7 @@ func (self *StateDB) GetCode(addr common.Address) []byte {
 	return nil
 }
 
-func (self *StateDB) GetCodeSize(addr common.Address) int {
+func (self *StateDB) GetCodeSize(addr fixtures.Address) int {
 	stateObject := self.getStateObject(addr)
 	if stateObject == nil {
 		return 0
@@ -253,32 +255,32 @@ func (self *StateDB) GetCodeSize(addr common.Address) int {
 	return size
 }
 
-func (self *StateDB) GetCodeHash(addr common.Address) common.Hash {
+func (self *StateDB) GetCodeHash(addr fixtures.Address) fixtures.Hash {
 	stateObject := self.getStateObject(addr)
 	if stateObject == nil {
-		return common.Hash{}
+		return fixtures.Hash{}
 	}
 	return common.BytesToHash(stateObject.CodeHash())
 }
 
 // GetState retrieves a value from the given account's storage trie.
-func (self *StateDB) GetState(addr common.Address, hash common.Hash) common.Hash {
+func (self *StateDB) GetState(addr fixtures.Address, hash fixtures.Hash) fixtures.Hash {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.GetState(self.db, hash)
 	}
-	return common.Hash{}
+	return fixtures.Hash{}
 }
 
 // GetProof returns the MerkleProof for a given Account
-func (self *StateDB) GetProof(a common.Address) ([][]byte, error) {
+func (self *StateDB) GetProof(a fixtures.Address) ([][]byte, error) {
 	var proof proofList
 	err := self.trie.Prove(crypto.Keccak256(a.Bytes()), 0, &proof)
 	return [][]byte(proof), err
 }
 
 // GetProof returns the StorageProof for given key
-func (self *StateDB) GetStorageProof(a common.Address, key common.Hash) ([][]byte, error) {
+func (self *StateDB) GetStorageProof(a fixtures.Address, key fixtures.Hash) ([][]byte, error) {
 	var proof proofList
 	trie := self.StorageTrie(a)
 	if trie == nil {
@@ -289,12 +291,12 @@ func (self *StateDB) GetStorageProof(a common.Address, key common.Hash) ([][]byt
 }
 
 // GetCommittedState retrieves a value from the given account's committed storage trie.
-func (self *StateDB) GetCommittedState(addr common.Address, hash common.Hash) common.Hash {
+func (self *StateDB) GetCommittedState(addr fixtures.Address, hash fixtures.Hash) fixtures.Hash {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.GetCommittedState(self.db, hash)
 	}
-	return common.Hash{}
+	return fixtures.Hash{}
 }
 
 // Database retrieves the low level database supporting the lower level trie ops.
@@ -304,7 +306,7 @@ func (self *StateDB) Database() Database {
 
 // StorageTrie returns the storage trie of an account.
 // The return value is a copy and is nil for non-existent accounts.
-func (self *StateDB) StorageTrie(addr common.Address) Trie {
+func (self *StateDB) StorageTrie(addr fixtures.Address) Trie {
 	stateObject := self.getStateObject(addr)
 	if stateObject == nil {
 		return nil
@@ -313,7 +315,7 @@ func (self *StateDB) StorageTrie(addr common.Address) Trie {
 	return cpy.updateTrie(self.db)
 }
 
-func (self *StateDB) HasSuicided(addr common.Address) bool {
+func (self *StateDB) HasSuicided(addr fixtures.Address) bool {
 	stateObject := self.getStateObject(addr)
 	if stateObject != nil {
 		return stateObject.suicided
@@ -326,7 +328,7 @@ func (self *StateDB) HasSuicided(addr common.Address) bool {
  */
 
 // AddBalance adds amount to the account associated with addr.
-func (self *StateDB) AddBalance(addr common.Address, amount *big.Int) {
+func (self *StateDB) AddBalance(addr fixtures.Address, amount *big.Int) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.AddBalance(amount)
@@ -334,35 +336,35 @@ func (self *StateDB) AddBalance(addr common.Address, amount *big.Int) {
 }
 
 // SubBalance subtracts amount from the account associated with addr.
-func (self *StateDB) SubBalance(addr common.Address, amount *big.Int) {
+func (self *StateDB) SubBalance(addr fixtures.Address, amount *big.Int) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.SubBalance(amount)
 	}
 }
 
-func (self *StateDB) SetBalance(addr common.Address, amount *big.Int) {
+func (self *StateDB) SetBalance(addr fixtures.Address, amount *big.Int) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.SetBalance(amount)
 	}
 }
 
-func (self *StateDB) SetNonce(addr common.Address, nonce uint64) {
+func (self *StateDB) SetNonce(addr fixtures.Address, nonce uint64) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.SetNonce(nonce)
 	}
 }
 
-func (self *StateDB) SetCode(addr common.Address, code []byte) {
+func (self *StateDB) SetCode(addr fixtures.Address, code []byte) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.SetCode(crypto.Keccak256Hash(code), code)
 	}
 }
 
-func (self *StateDB) SetState(addr common.Address, key, value common.Hash) {
+func (self *StateDB) SetState(addr fixtures.Address, key, value fixtures.Hash) {
 	stateObject := self.GetOrNewStateObject(addr)
 	if stateObject != nil {
 		stateObject.SetState(self.db, key, value)
@@ -374,7 +376,7 @@ func (self *StateDB) SetState(addr common.Address, key, value common.Hash) {
 //
 // The account's state object is still available until the state is committed,
 // getStateObject will return a non-nil account after Suicide.
-func (self *StateDB) Suicide(addr common.Address) bool {
+func (self *StateDB) Suicide(addr fixtures.Address) bool {
 	stateObject := self.getStateObject(addr)
 	if stateObject == nil {
 		return false
@@ -424,7 +426,7 @@ func (s *StateDB) deleteStateObject(stateObject *stateObject) {
 }
 
 // Retrieve a state object given by the address. Returns nil if not found.
-func (s *StateDB) getStateObject(addr common.Address) (stateObject *stateObject) {
+func (s *StateDB) getStateObject(addr fixtures.Address) (stateObject *stateObject) {
 	// Prefer live objects
 	if obj := s.stateObjects[addr]; obj != nil {
 		if obj.deleted {
@@ -458,7 +460,7 @@ func (self *StateDB) setStateObject(object *stateObject) {
 }
 
 // Retrieve a state object or create a new state object if nil.
-func (self *StateDB) GetOrNewStateObject(addr common.Address) *stateObject {
+func (self *StateDB) GetOrNewStateObject(addr fixtures.Address) *stateObject {
 	stateObject := self.getStateObject(addr)
 	if stateObject == nil || stateObject.deleted {
 		stateObject, _ = self.createObject(addr)
@@ -468,7 +470,7 @@ func (self *StateDB) GetOrNewStateObject(addr common.Address) *stateObject {
 
 // createObject creates a new state object. If there is an existing account with
 // the given address, it is overwritten and returned as the second return value.
-func (self *StateDB) createObject(addr common.Address) (newobj, prev *stateObject) {
+func (self *StateDB) createObject(addr fixtures.Address) (newobj, prev *stateObject) {
 	prev = self.getStateObject(addr)
 	newobj = newObject(self, addr, Account{})
 	newobj.setNonce(0) // sets the object to dirty
@@ -491,14 +493,14 @@ func (self *StateDB) createObject(addr common.Address) (newobj, prev *stateObjec
 //   2. tx_create(sha(account ++ nonce)) (note that this gets the address of 1)
 //
 // Carrying over the balance ensures that Ether doesn't disappear.
-func (self *StateDB) CreateAccount(addr common.Address) {
+func (self *StateDB) CreateAccount(addr fixtures.Address) {
 	newObj, prev := self.createObject(addr)
 	if prev != nil {
 		newObj.setBalance(prev.data.Balance)
 	}
 }
 
-func (db *StateDB) ForEachStorage(addr common.Address, cb func(key, value common.Hash) bool) error {
+func (db *StateDB) ForEachStorage(addr fixtures.Address, cb func(key, value fixtures.Hash) bool) error {
 	so := db.getStateObject(addr)
 	if so == nil {
 		return nil
@@ -534,12 +536,12 @@ func (self *StateDB) Copy() *StateDB {
 	state := &StateDB{
 		db:                self.db,
 		trie:              self.db.CopyTrie(self.trie),
-		stateObjects:      make(map[common.Address]*stateObject, len(self.journal.dirties)),
-		stateObjectsDirty: make(map[common.Address]struct{}, len(self.journal.dirties)),
+		stateObjects:      make(map[fixtures.Address]*stateObject, len(self.journal.dirties)),
+		stateObjectsDirty: make(map[fixtures.Address]struct{}, len(self.journal.dirties)),
 		refund:            self.refund,
-		logs:              make(map[common.Hash][]*types.Log, len(self.logs)),
+		logs:              make(map[fixtures.Hash][]*types.Log, len(self.logs)),
 		logSize:           self.logSize,
-		preimages:         make(map[common.Hash][]byte, len(self.preimages)),
+		preimages:         make(map[fixtures.Hash][]byte, len(self.preimages)),
 		journal:           newJournal(),
 	}
 	// Copy the dirty states, logs, and preimages
@@ -635,7 +637,7 @@ func (s *StateDB) Finalise(deleteEmptyObjects bool) {
 // IntermediateRoot computes the current root hash of the state trie.
 // It is called in between transactions to get the root hash that
 // goes into transaction receipts.
-func (s *StateDB) IntermediateRoot(deleteEmptyObjects bool) common.Hash {
+func (s *StateDB) IntermediateRoot(deleteEmptyObjects bool) fixtures.Hash {
 	s.Finalise(deleteEmptyObjects)
 
 	// Track the amount of time wasted on hashing the account trie
@@ -647,7 +649,7 @@ func (s *StateDB) IntermediateRoot(deleteEmptyObjects bool) common.Hash {
 
 // Prepare sets the current transaction hash and index and block hash which is
 // used when the EVM emits new state logs.
-func (self *StateDB) Prepare(thash, bhash common.Hash, ti int) {
+func (self *StateDB) Prepare(thash, bhash fixtures.Hash, ti int) {
 	self.thash = thash
 	self.bhash = bhash
 	self.txIndex = ti
@@ -660,7 +662,7 @@ func (s *StateDB) clearJournalAndRefund() {
 }
 
 // Commit writes the state to the underlying in-memory trie database.
-func (s *StateDB) Commit(deleteEmptyObjects bool) (root common.Hash, err error) {
+func (s *StateDB) Commit(deleteEmptyObjects bool) (root fixtures.Hash, err error) {
 	defer s.clearJournalAndRefund()
 
 	for addr := range s.journal.dirties {
@@ -682,7 +684,7 @@ func (s *StateDB) Commit(deleteEmptyObjects bool) (root common.Hash, err error) 
 			}
 			// Write any storage changes in the state object to its storage trie.
 			if err := stateObject.CommitTrie(s.db); err != nil {
-				return common.Hash{}, err
+				return fixtures.Hash{}, err
 			}
 			// Update the object in the main account trie.
 			s.updateStateObject(stateObject)
@@ -693,7 +695,7 @@ func (s *StateDB) Commit(deleteEmptyObjects bool) (root common.Hash, err error) 
 	if metrics.EnabledExpensive {
 		defer func(start time.Time) { s.AccountCommits += time.Since(start) }(time.Now())
 	}
-	root, err = s.trie.Commit(func(leaf []byte, parent common.Hash) error {
+	root, err = s.trie.Commit(func(leaf []byte, parent fixtures.Hash) error {
 		var account Account
 		if err := rlp.DecodeBytes(leaf, &account); err != nil {
 			return nil

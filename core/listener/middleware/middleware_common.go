@@ -8,11 +8,11 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/controllers/ws"
+	"github.com/zerjioang/etherniti/core/modules/cyber"
+	"github.com/zerjioang/etherniti/core/modules/httpcache"
+	"github.com/zerjioang/etherniti/core/server/ratelimit"
 
 	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics"
-
-	"github.com/zerjioang/etherniti/core/modules/cyber"
-	"github.com/zerjioang/etherniti/core/server/ratelimit"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
@@ -101,50 +101,52 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		if config.EnableSecureMode() {
 			// antibots, crawler middleware
 			// avoid bots and crawlers
-			logger.Info("[LAYER] /=> security")
+			logger.Info("[LAYER] /=> adding security")
 			e.Pre(secure)
 		}
 
 		// add CORS support
 		if config.EnableCors() {
-			logger.Info("[LAYER] /=> CORS support")
+			logger.Info("[LAYER] /=> adding CORS support")
 			e.Use(middleware.CORSWithConfig(corsConfig))
+		}
+	}
+
+	// Request ID middleware generates a unique id for a request.
+	if config.UseUniqueRequestId() {
+		logger.Info("[LAYER] /=> adding unique request id")
+		e.Use(middleware.RequestID())
+	}
+
+	if edition.IsEnterprise() || true {
+		// enable analytics for pro version and for those who requested
+		if config.EnableCompression() {
+			// add gzip support if client requests it
+			logger.Info("[LAYER] /=> adding gzip compression")
+			e.Use(middleware.GzipWithConfig(gzipConfig))
+		}
+		// enable analytics for pro version and for those who requested
+		if config.EnableAnalytics() {
+			logger.Info("[LAYER] /=> adding analytics")
+			e.Use(cyber.Analytics)
+		}
+		// enable analytics for pro version and for those who requested
+		if config.EnableServerCache() {
+			logger.Info("[LAYER] /=> adding server cache")
+			e.Use(httpcache.HttpServerCache)
 		}
 	}
 
 	// always enable rate limit for opensource version and for those who requested
 	if edition.IsOpenSource() || config.EnableRateLimit() {
 		// add rate limit control
-		logger.Info("[LAYER] /=> rest api rate limit middleware added")
+		logger.Info("[LAYER] /=> adding rate limit middleware")
 		e.Use(ratelimit.RateLimit)
-	}
-
-	// enable analytics for pro version and for those who requested
-	if edition.IsEnterprise() && config.EnableAnalytics() {
-		logger.Info("[LAYER] /=> analytics")
-		e.Use(cyber.Analytics)
-	}
-
-	// Request ID middleware generates a unique id for a request.
-	if config.UseUniqueRequestId() {
-		logger.Info("[LAYER] /=> unique request id")
-		e.Use(middleware.RequestID())
-	}
-
-	// enable analytics for pro version and for those who requested
-	if edition.IsEnterprise() {
-		// add gzip support if client requests it
-		logger.Info("[LAYER] /=> gzip compression")
-		e.Use(middleware.GzipWithConfig(gzipConfig))
 	}
 
 	// avoid panics
 	logger.Info("[LAYER] /=> panic recovery")
 	e.Use(middleware.Recover())
-
-	//http, https, unix socket
-	// register services version 1 api calls
-	controllers.RegisterServices(e)
 
 	// start websocket handler if requested
 	if edition.IsEnterprise() && config.IsWebSocketMode() {
@@ -162,14 +164,9 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	logger.Info("[LAYER] /=> swagger files")
 	e.Static("/swagger", config.ResourcesDirSwagger)
 
-	// RegisterServices root calls
-	RegisterRoot(e)
-}
-
-// RegisterServices in echo server, allowed routes
-func RegisterRoot(e *echo.Echo) {
-	e.GET("/v1", controllers.Index)
-	e.GET("/v1/hi", controllers.Index)
+	//http, https, unix socket
+	// register services version 1 api calls
+	controllers.RegisterServices(e)
 }
 
 func GetTestSetup() *echo.Echo {

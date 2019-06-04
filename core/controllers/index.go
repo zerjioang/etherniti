@@ -112,7 +112,7 @@ func NewIndexController() *IndexController {
 	return new(IndexController)
 }
 
-func Index(c *echo.Context) error {
+func (ctl *IndexController) Index(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
 	if c.IsJsonRequest() {
 		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
@@ -145,7 +145,7 @@ func (ctl *IndexController) integrity() []byte {
 // implemented method from interface RouterRegistrable
 func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
-	router.GET("/", Index)
+	router.GET("/", ctl.Index)
 	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
 }

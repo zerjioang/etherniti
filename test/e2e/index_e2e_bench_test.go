@@ -8,6 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/zerjioang/etherniti/shared/constants"
+
 	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -29,23 +31,24 @@ func BenchmarkIndexController(b *testing.B) {
 	b.Run("index", func(b *testing.B) {
 		// Setup
 		e := echo.New()
-
+		ctl := controllers.NewIndexController()
 		logger.Enabled(false)
 
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			req := httptest.NewRequest(http.MethodGet, "/v1/", nil)
+			req := httptest.NewRequest(http.MethodGet, constants.ApiVersion+"/", nil)
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			_ = controllers.Index(c)
+			_ = ctl.Index(c)
 		}
 	})
 	b.Run("status", func(b *testing.B) {
 		// Setup
 		e := echo.New()
+		ctl := controllers.NewIndexController()
 		logger.Enabled(false)
 
 		b.ReportAllocs()
@@ -56,14 +59,13 @@ func BenchmarkIndexController(b *testing.B) {
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			ctl := controllers.NewIndexController()
 			_ = ctl.Status(c)
 		}
 	})
 	b.Run("integrity", func(b *testing.B) {
 		// Setup
 		e := echo.New()
-
+		ctl := controllers.NewIndexController()
 		logger.Enabled(false)
 
 		b.ReportAllocs()
@@ -74,7 +76,6 @@ func BenchmarkIndexController(b *testing.B) {
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
-			ctl := controllers.NewIndexController()
 			_ = ctl.Integrity(c)
 		}
 	})

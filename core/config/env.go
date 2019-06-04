@@ -51,6 +51,21 @@ func (c EnvConfig) String(key string) string {
 	return ""
 }
 
+func (c EnvConfig) Lower(key string) string {
+	return strings.ToLower(c.String(key))
+}
+
+func (c EnvConfig) Int(key string, fallback int) int {
+	v, ok := c.Read(key)
+	if ok {
+		num, ok := v.(int)
+		if ok {
+			return num
+		}
+	}
+	return fallback
+}
+
 func (c EnvConfig) Read(key string) (interface{}, bool) {
 	v, ok := c.data[key]
 	return v, ok

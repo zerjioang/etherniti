@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 const (

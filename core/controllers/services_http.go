@@ -71,13 +71,17 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 		),
 		)
 	}
+	// /v1/hi
+	indexCtl := NewIndexController()
+	groupV1.GET("/hi", indexCtl.Index)
+
 	// add authentication controller to root
 	// /v1/auth/...
 	// register ui rest
 	NewUIAuthController().RegisterRouters(groupV1)
 
 	// /v1/...
-	NewIndexController().RegisterRouters(groupV1)
+	indexCtl.RegisterRouters(groupV1)
 	NewProfileController().RegisterRouters(groupV1)
 	NewSecurityController().RegisterRouters(groupV1)
 	NewWalletController().RegisterRouters(groupV1)

@@ -39,7 +39,7 @@ func (l UnixSocketListener) RunMode(socketPath string, background bool) {
 }
 
 func (l UnixSocketListener) Listen(notifier chan error) {
-	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI via unix sockets")
+	logger.Info("loading Etherniti Proxy, a High Performance Web3 REST Proxy via unix sockets")
 	l.e = common.NewDefaultServer()
 	if l.mode {
 		l.background(notifier)

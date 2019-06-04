@@ -20,14 +20,16 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
@@ -85,7 +87,7 @@ const (
 )
 
 func (c *Context) Preload() {
-	c.isJson = strings.Contains(c.request.Header.Get("Accept"), "application/json")
+	c.isJson = strings.Contains(c.request.Header.Get(HeaderContentType), MIMEApplicationJSON)
 	c.isTls = c.request.TLS != nil
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()
@@ -152,11 +154,11 @@ func (c *Context) Scheme() constants.RequestScheme {
 }
 
 func (c *Context) resolveRealIP() string {
-	if ip := c.request.Header.Get(HeaderXForwardedFor); ip != "" {
-		return strings.Split(ip, ", ")[0]
+	if ipstr := c.request.Header.Get(HeaderXForwardedFor); ipstr != "" {
+		return strings.Split(ipstr, ", ")[0]
 	}
-	if ip := c.request.Header.Get(HeaderXRealIP); ip != "" {
-		return ip
+	if ipstr := c.request.Header.Get(HeaderXRealIP); ipstr != "" {
+		return ipstr
 	}
 	ra, _, _ := net.SplitHostPort(c.request.RemoteAddr)
 	return ra
@@ -650,4 +652,15 @@ func (c *Context) IsHttp() bool {
 // check if request is https
 func (c *Context) IsHttps() bool {
 	return c.SchemeType == constants.Https
+}
+
+// read rate limit identifier value
+// this value can be:
+// * the ip address
+// * the token value
+// * the ip address + token value
+func (c *Context) RateLimitIdentifier() []byte {
+	clientIdentifier := c.RealIP()
+	clientIdentifierBytes := str.UnsafeBytes(clientIdentifier)
+	return clientIdentifierBytes
 }

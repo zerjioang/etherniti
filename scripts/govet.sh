@@ -20,7 +20,7 @@ filelist=$(go list ./... | grep -vendor)
 for file in ${filelist}
 do
 	echo "static analysis of package $file"
-	go vet $@ ${file}
+	go vet "$@" ${file}
 done
 
 echo "Code checking done!"

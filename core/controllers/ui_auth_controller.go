@@ -110,6 +110,20 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 	return nil
 }
 
+// generate a token for given user.
+// this functions allows to firebase registered users to work with the proxy
+func (ctl UIAuthController) token(c *echo.Context) error {
+	//new login request
+	req := auth.NewEmptyAuthRequest()
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, data.BindErr)
+	}
+	logger.Error("failed to generate user token")
+	return api.ErrorStr(c, data.UserTokenFailed)
+}
+
 // triggers user account recovery mecanisms
 func (ctl UIAuthController) recover(c *echo.Context) error {
 	//new recovery request
@@ -121,7 +135,7 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 	}
 	if req.Email != "" {
 		logger.Info("recovering user with email: ", req.Email)
-		return api.Success(c, []byte("account recovery in progress"), nil)
+		return api.Success(c, []byte("recovery"), []byte("account recovery in progress"))
 	}
 	return nil
 }
@@ -137,6 +151,7 @@ func (ctl UIAuthController) RegisterRouters(router *echo.Group) {
 	router.POST("/auth/login", ctl.login)
 	router.POST("/auth/register", ctl.register)
 	router.POST("/auth/recover", ctl.recover)
+	router.POST("/auth/token", ctl.token)
 	router.POST("/auth/recaptcha", ctl.recaptcha)
 }
 func (ctl UIAuthController) createToken(userUuid string) (string, error) {

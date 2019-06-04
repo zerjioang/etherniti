@@ -8,7 +8,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 )
 
 // content stored in the wallet

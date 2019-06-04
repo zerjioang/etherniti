@@ -110,6 +110,7 @@ var (
 	EthAddressValidation        = []byte("address validation")
 
 	ErrBlockTorConnection = []byte("invalid connection address")
+	UserTokenFailed       = []byte("failed to generate user token")
 )
 
 var (

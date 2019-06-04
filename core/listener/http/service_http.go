@@ -20,17 +20,15 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/server/ratelimit"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type HttpListener struct {
-	limiter ratelimit.RateLimitEngine
 }
 
 var (
 	//listening ip:port
-	listenAddr = config.GetListeningAddress()
+	listenAddr = config.GetListeningAddressWithPort()
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
 		Addr:         listenAddr,
@@ -43,7 +41,7 @@ func (l HttpListener) RunMode(address string, background bool) {
 }
 
 func (l HttpListener) Listen(notifier chan error) {
-	logger.Info("loading Etherniti Proxy, an Ethereum Multitenant WebAPI")
+	logger.Info("loading Etherniti Proxy, a High Performance Web3 REST Proxy")
 	//deploy http server only
 	e := common.NewServer(middleware.ConfigureServerRoutes)
 	logger.Info("starting http server...")
@@ -57,7 +55,7 @@ func (l HttpListener) Listen(notifier chan error) {
 		err := e.StartServer(&defaultHttpServerConfig)
 		if err != nil {
 			notifier <- err
-			logger.Info("shutting down http server", err)
+			logger.Info("shutting down http server: ", err)
 		}
 	}()
 	//enable graceful shutdown of http server
@@ -87,7 +85,6 @@ func (l HttpListener) shutdown(httpInstance *echo.Echo, notifier chan error) {
 // create new deployer instance
 func NewHttpListenerCustom() HttpListener {
 	d := HttpListener{}
-	d.limiter = ratelimit.NewRateLimitEngine()
 	return d
 }
 

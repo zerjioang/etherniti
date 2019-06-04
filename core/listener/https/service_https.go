@@ -34,7 +34,7 @@ var (
 	certEtr       error
 	// define http server config for http to https redirection
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.GetListeningAddress(),
+		Addr:         config.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -70,7 +70,7 @@ func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
 }
 
 func (l HttpsListener) Listen(notifier chan error) {
-	logger.Info("loading Etherniti Proxy, a High Performance Web3 Multitenant REST API")
+	logger.Info("loading Etherniti Proxy, a High Performance Web3 Multitenant REST Proxy")
 	//build http server
 	httpServerInstance := common.NewServer(nil)
 	// add redirects from http to https
@@ -154,7 +154,7 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 
 	//configure custom secure server
 	return &http.Server{
-		Addr:         config.GetListeningAddress(),
+		Addr:         config.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    &tlsConf,
