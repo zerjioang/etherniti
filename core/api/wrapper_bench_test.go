@@ -39,7 +39,7 @@ func BenchmarkWrapper(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = toError(0, msg)
+			_ = toError(0, msg, nil)
 		}
 	})
 	b.Run("to-error-pool", func(b *testing.B) {

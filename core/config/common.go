@@ -219,11 +219,6 @@ func TokenExpiration() fastime.Duration {
 	return 100 * fastime.Hour
 }
 
-func GetEnvironmentName() string {
-	logger.Debug("reading etherniti environment name env")
-	return GetEnvironment().String(XEthernitiEnvironmentName)
-}
-
 func GetSwaggerAddress() string {
 	logger.Debug("reading swagger address from env")
 	return GetEnvironment().String(XEthernitiSwaggerAddress)
@@ -342,9 +337,4 @@ func ServiceListeningMode() listener.ServiceType {
 	default:
 		return listener.UnknownMode
 	}
-}
-
-func IsDevelopment() bool {
-	logger.Debug("checking if current server environment is development")
-	return GetEnvironmentName() == "development"
 }

@@ -18,4 +18,5 @@ type DatabaseObjectInterface interface {
 	CanList(context *echo.Context) error
 	// method used to decode http input byte data to go struct
 	Bind(context *echo.Context) (DatabaseObjectInterface, stack.Error)
+	Decode(data []byte) (DatabaseObjectInterface, stack.Error)
 }

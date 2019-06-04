@@ -76,6 +76,16 @@ func IsProfilingEnabled() bool {
 	return found && v == true
 }
 
+func IsDevelopment() bool {
+	logger.Debug("checking if current server environment is development")
+	return true
+}
+
+func Env() string {
+	logger.Debug("reading server environment name")
+	return "development"
+}
+
 // setup server config
 func Setup() error {
 	logger.Debug("loading additional development setup config")

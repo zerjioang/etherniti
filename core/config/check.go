@@ -3,11 +3,14 @@ package config
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/shared/def/listener"
+
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
 const (
 	infuraKeyErr     = "invalid infura token provided. Make sure your environment has correctly setup key X_ETHERNITI_INFURA_TOKEN"
+	infuraKeyLenErr  = "invalid infura token provided. Make sure your provided infura key contains 32 chars on it. Check X_ETHERNITI_INFURA_TOKEN"
 	logLevelErr      = "invalid log level provided. Make sure your environment has correctly setup key X_ETHERNITI_LOG_LEVEL. Allowed values are: debug, info, warn, error, off"
 	listeningModeErr = "invalid listening mode provided. Make sure your environment has correctly setup key X_ETHERNITI_LISTENING_MODE. Allowed values are: http, https, socket"
 )
@@ -33,7 +36,7 @@ func CheckConfiguration() error {
 	}
 
 	if !EnableCors() {
-		logger.Warn("[WARNING] cors is disabled")
+		logger.Warn("[WARNING] CORS is disabled")
 	}
 
 	if !EnableRateLimit() {
@@ -46,6 +49,10 @@ func CheckConfiguration() error {
 	if InfuraToken() == "" {
 		logger.Error(infuraKeyErr)
 		return errors.New(infuraKeyErr)
+	}
+	if len(InfuraToken()) != 32 {
+		logger.Error(infuraKeyLenErr)
+		return errors.New(infuraKeyLenErr)
 	}
 	if BlockTorConnections == false {
 		logger.Warn("[WARNING] block of tor based connections is disabled")
@@ -75,29 +82,39 @@ func CheckConfiguration() error {
 	// check swagger address
 	if GetSwaggerAddress() == "" {
 		logger.Warn("[WARNING] missing swagger address. Make sure your environment has correctly setup key ", XEthernitiSwaggerAddress)
+		return errors.New("missing swagger address. Make sure your environment has correctly setup key " + XEthernitiSwaggerAddress)
 	}
 	// check listening address
 	if GetListeningAddress() == "" {
 		logger.Warn("[WARNING] missing http listening address. Make sure your environment has correctly setup key ", XEthernitiListeningAddress)
+		return errors.New("missing http listening address. Make sure your environment has correctly setup key " + XEthernitiListeningAddress)
 	}
 	// check listening port
 	if GetListeningPort() < 1024 {
 		logger.Warn("[WARNING] selected listening port may require privileged access. Make sure your environment has correctly setup key ", XEthernitiListeningPort)
+		return errors.New("selected listening port may require privileged access. Make sure your environment has correctly setup key " + XEthernitiListeningPort)
 	}
 	// check listening port string
 	if GetListeningPortStr() == "" {
-		msg := "[ERROR] selected listening port is not set. Make sure your environment has correctly setup key " + XEthernitiListeningPort
+		msg := "selected listening port is not set. Make sure your environment has correctly setup key " + XEthernitiListeningPort
 		logger.Warn(msg)
 		return errors.New(msg)
-	}
-	// check http listening interface
-	if GetHttpInterface() == "" {
-		logger.Warn("[WARNING] missing http listening interface. Make sure your environment has correctly setup key ", XEthernitiListeningInterface)
 	}
 	// check listening mode
 	if ServiceListeningModeStr() == "" {
 		logger.Error(listeningModeErr)
 		return errors.New(listeningModeErr)
+	}
+
+	if ServiceListeningMode() == listener.UnknownMode {
+		logger.Error(listeningModeErr)
+		return errors.New(listeningModeErr)
+	}
+
+	// check http listening interface
+	if GetHttpInterface() == "" {
+		logger.Warn("[WARNING] missing http listening interface. Make sure your environment has correctly setup key ", XEthernitiListeningInterface)
+		return errors.New("missing http listening interface. Make sure your environment has correctly setup key " + XEthernitiListeningInterface)
 	}
 
 	// check worker module config

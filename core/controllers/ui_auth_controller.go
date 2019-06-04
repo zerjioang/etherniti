@@ -6,6 +6,8 @@ package controllers
 import (
 	"time"
 
+	"github.com/zerjioang/etherniti/core/modules/fastime"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/data"
@@ -135,7 +137,7 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 	}
 	if req.Email != "" {
 		logger.Info("recovering user with email: ", req.Email)
-		return api.Success(c,[]byte("account recovery in progress"), nil)
+		return api.Success(c, []byte("account recovery in progress"), nil)
 	}
 	return nil
 }
@@ -156,10 +158,12 @@ func (ctl UIAuthController) RegisterRouters(router *echo.Group) {
 }
 func (ctl UIAuthController) createToken(userUuid string) (string, error) {
 	type Claims struct {
-		User string `json:"u"`
+		User    string `json:"sid"`
+		Version string `json:"version"`
 		jwt.StandardClaims
 	}
 	// Declare the expiration time of the token
+	now := fastime.Now()
 	// here, we have kept it as 20 minutes
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Claims{
@@ -167,7 +171,11 @@ func (ctl UIAuthController) createToken(userUuid string) (string, error) {
 		StandardClaims: jwt.StandardClaims{
 			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expirationTime.Unix(),
+			Issuer:    "etherniti.org",
+			NotBefore: now.Unix(),
+			IssuedAt:  now.Unix(),
 		},
+		Version: constants.Version,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -199,6 +207,6 @@ func ParseAuthenticationToken(tokenStr string) (auth.AuthRequest, error) {
 	if !ok || mapc == nil {
 		return decoded, data.ErrFailedToRead
 	}
-	decoded.Uuid = mapc["u"].(string)
+	decoded.Uuid = mapc["sid"].(string)
 	return decoded, nil
 }

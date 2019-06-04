@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/zerjioang/etherniti/shared/mixed"
+
 	"github.com/zerjioang/etherniti/core/bus"
 	gobus "github.com/zerjioang/go-bus"
 
@@ -131,22 +133,26 @@ func (db *BadgerStorage) Add(key, data []byte) error {
 	return db.Set(key, data)
 }
 
-func (db *BadgerStorage) List(prefixStr string) ([][]byte, error) {
+func (db *BadgerStorage) List(prefixStr string, decoderModel mixed.DatabaseObjectInterface) ([]mixed.DatabaseObjectInterface, error) {
 	logger.Debug("listing values from db")
-	var results [][]byte
+	var results []mixed.DatabaseObjectInterface
 	execErr := db.instance.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		prefix := []byte(prefixStr)
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
 			item := it.Item()
-			k := item.Key()
 			var readedVal []byte
 			readedVal, err := item.ValueCopy(readedVal)
 			if err != nil {
 				it.Close()
 				return err
+			} else {
+				//decode readed bytes to go struct
+				readedModel, err := decoderModel.Decode(readedVal)
+				if err.None() {
+					results = append(results, readedModel)
+				}
 			}
-			logger.Debug("key: ", k, " value: ", string(readedVal))
 		}
 		it.Close()
 		return nil

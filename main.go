@@ -4,12 +4,14 @@
 package main
 
 import (
+	"os"
 	"runtime"
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/bus"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/core/logger"
 )
@@ -50,10 +52,22 @@ func main() {
 	err := <-notifier
 	if err != nil {
 		logger.Error("failed to execute etherniti proxy: ", err)
+		//print error details in a table
+		defer showErrorInformation(err)
 	}
 	logger.Info("shutting down remaining modules")
 	// finish graceful shutdown
 	bus.SharedBus().Emit(bus.PowerOffEvent)
 	bus.SharedBus().Shutdown()
 	logger.Info("all systems securely shutdown. exiting")
+}
+func showErrorInformation(e error) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Error", "Description"})
+	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold, tablewriter.BgRedColor, tablewriter.FgHiWhiteColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.BgRedColor, tablewriter.FgHiWhiteColor},
+	)
+	table.Append([]string{"failed to execute etherniti proxy", e.Error()})
+	table.Render()
 }

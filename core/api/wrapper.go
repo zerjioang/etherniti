@@ -155,7 +155,6 @@ func ErrorWithMessage(c *echo.Context, msg []byte, err error) error {
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-
 func Error(c *echo.Context, err error) error {
 	logger.Debug("converting error to payload")
 	return ErrorStr(c, str.UnsafeBytes(err.Error()))

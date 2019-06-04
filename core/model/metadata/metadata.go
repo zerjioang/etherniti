@@ -11,7 +11,7 @@ type Metadata struct {
 	// owner id of the creator
 	Owner string `json:"owner"`
 	// ip address who created the item
-	Ip uint32 `json:"ip"`
+	Ip uint32 `json:"issued"`
 }
 
 func NewMetadata(ctx *echo.Context) *Metadata {

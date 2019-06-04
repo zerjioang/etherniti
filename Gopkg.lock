@@ -136,6 +136,14 @@
   version = "v0.0.8"
 
 [[projects]]
+  digest = "1:0356f3312c9bd1cbeda81505b7fd437501d8e778ab66998ef69f00d7f9b3a0d7"
+  name = "github.com/mattn/go-runewidth"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3ee7d812e62a0804a7d0a324e0249ca2db3476d3"
+  version = "v0.0.4"
+
+[[projects]]
   digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
   name = "github.com/matttproud/golang_protobuf_extensions"
   packages = ["pbutil"]
@@ -188,6 +196,14 @@
   pruneopts = "UT"
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
+
+[[projects]]
+  digest = "1:abcdbf03ca6ca13d3697e2186edc1f33863bbdac2b3a44dfa39015e8903f7409"
+  name = "github.com/olekukonko/tablewriter"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e6d60cf7ba1f42d86d54cdf5508611c4aafb3970"
+  version = "v0.0.1"
 
 [[projects]]
   digest = "1:b2ee62e09bec113cf086d2ce0769efcc7bf79481aba8373fd8f7884e94df3462"
@@ -254,15 +270,15 @@
   version = "v0.4.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:77b841555ca2ce5a45d7ba8b3eea5bd6e2e50c139d979b9b10f57a30fbd1132c"
+  digest = "1:403b810b43500b5b0a9a24a47347e31dc2783ccae8cf97c891b46f5b0496fa1a"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
   ]
   pruneopts = "UT"
-  revision = "a7aeb8df3389edaf53efcc319ad0063cb27c3960"
+  revision = "833678b5bb319f2d20a475cb165c6cc59c2cc77c"
+  version = "v0.0.2"
 
 [[projects]]
   digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
@@ -374,7 +390,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9cd3e89906c7385a118fe505d8452d1e7297c8afbf994bcc3967cf6394768a51"
+  digest = "1:961331a65c5b38a8ff95ab43c562c7f7ee50da5d7cfb9c9947ce3778a4e129fc"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -400,7 +416,7 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "22d7a77e9e5f409e934ed268692e56707cd169e5"
+  revision = "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7"
 
 [[projects]]
   branch = "master"
@@ -412,11 +428,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "f3200d17e092c607f615320ecaad13d87ad9a2b3"
+  revision = "60506f45cf65977eb3a9c6e30f995f54a721c271"
 
 [[projects]]
   branch = "master"
-  digest = "1:d995d1aa584abc5269f456a961a714d77f1a44f5191d11b51441c904fd2efd38"
+  digest = "1:94f3c016b859b321c6279d2c9becd7835b4b50efad7f70a2cf53347ec876af2c"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -424,11 +440,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "791d8a0f4d093bd8fe272dea2cd28991154796fb"
+  revision = "4c4f7f33c9ed00de01c4c741d2177abfcfe19307"
 
 [[projects]]
   branch = "master"
-  digest = "1:f5ce0b59aeb99ebb725de7b7a35483600e5f119b4daf081e88329322a2de95bc"
+  digest = "1:6f19963162d6a59826537146ceb9e3400ab33bffeb0686efb0883c97cd2fe52d"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -442,7 +458,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "7be61e1b0e514e106d83fc439d56a79143738603"
+  revision = "8aaa1484dc108aa23dcf2d4a09371c0c9e280f6b"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -528,6 +544,7 @@
     "github.com/json-iterator/go",
     "github.com/mattn/go-colorable",
     "github.com/mattn/go-isatty",
+    "github.com/olekukonko/tablewriter",
     "github.com/pkg/errors",
     "github.com/pkg/profile",
     "github.com/prometheus/client_golang/prometheus",

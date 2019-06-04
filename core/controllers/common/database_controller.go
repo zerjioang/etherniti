@@ -2,6 +2,7 @@ package common
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
@@ -73,12 +74,20 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 	if requestedItem != nil {
 		canWriteErr := requestedItem.CanWrite(c)
 		if canWriteErr == nil {
-			requestedItem.Key()
-			writeErr := ctl.storage.PutUniqueKeyValue(requestedItem.Key(), requestedItem.Value())
+			// check if current user Id is valid, exists.
+			// source: auth-jwt-token
+			authId := c.AuthenticatedUserUuid()
+			if authId == "" {
+				return errors.New("unauthorized operation detected")
+			}
+			key := ctl.buildCompositeId(authId, string(requestedItem.Key()))
+			value := requestedItem.Value()
+			fmt.Println(requestedItem)
+			writeErr := ctl.storage.PutUniqueKeyValue(key, value)
 			if writeErr != nil {
 				return api.Error(c, writeErr)
 			} else {
-				return api.SendSuccess(c, data.SuccessfullyCreated, requestedItem)
+				return api.Success(c, data.SuccessfullyCreated, value)
 			}
 		} else {
 			return api.Error(c, canWriteErr)
@@ -88,11 +97,17 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 }
 
 func (ctl *DatabaseController) Read(c *echo.Context) error {
-	projectId := c.Param("id")
-	if projectId != "" {
-		canReadErr := ctl.model.CanRead(c, projectId)
+	modelId := c.Param("id")
+	if modelId != "" {
+		canReadErr := ctl.model.CanRead(c, modelId)
 		if canReadErr == nil {
-			key := str.UnsafeBytes(projectId)
+			// check if current user Id is valid, exists.
+			// source: auth-jwt-token
+			authId := c.AuthenticatedUserUuid()
+			if authId == "" {
+				return errors.New("unauthorized operation detected")
+			}
+			key := ctl.buildCompositeId(authId, modelId)
 			projectData, readErr := ctl.storage.Get(key)
 			if readErr != nil {
 				return api.Error(c, readErr)
@@ -118,11 +133,17 @@ func (ctl *DatabaseController) SetUniqueKey(key []byte, value []byte) error {
 }
 
 func (ctl *DatabaseController) Update(c *echo.Context) error {
-	projectId := c.Param("id")
-	if projectId != "" {
-		canUpdateErr := ctl.model.CanUpdate(c, projectId)
+	modelId := c.Param("id")
+	if modelId != "" {
+		canUpdateErr := ctl.model.CanUpdate(c, modelId)
 		if canUpdateErr == nil {
-			key := str.UnsafeBytes(projectId)
+			// check if current user Id is valid, exists.
+			// source: auth-jwt-token
+			authId := c.AuthenticatedUserUuid()
+			if authId == "" {
+				return errors.New("unauthorized operation detected")
+			}
+			key := ctl.buildCompositeId(authId, modelId)
 			projectData, readErr := ctl.storage.Get(key)
 			if readErr != nil {
 				return api.Error(c, readErr)
@@ -136,11 +157,18 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 }
 
 func (ctl *DatabaseController) Delete(c *echo.Context) error {
-	projectId := c.Param("id")
-	if projectId != "" {
-		canDeleteErr := ctl.model.CanDelete(c, projectId)
+	modelId := c.Param("id")
+	if modelId != "" {
+		canDeleteErr := ctl.model.CanDelete(c, modelId)
 		if canDeleteErr == nil {
-			key := str.UnsafeBytes(projectId)
+			// check if current user Id is valid, exists.
+			// source: auth-jwt-token
+			authId := c.AuthenticatedUserUuid()
+			if authId == "" {
+				return errors.New("unauthorized operation detected")
+			}
+			// build the composite id: authId + modelId
+			key := ctl.buildCompositeId(authId, modelId)
 			deleteErr := ctl.storage.Delete(key)
 			if deleteErr != nil {
 				return api.Error(c, deleteErr)
@@ -156,7 +184,30 @@ func (ctl *DatabaseController) Delete(c *echo.Context) error {
 func (ctl *DatabaseController) List(c *echo.Context) error {
 	canList := ctl.model.CanList(c)
 	if canList == nil {
-		results, err := ctl.storage.List("")
+		results, err := ctl.storage.List("", ctl.model)
+		if err != nil {
+			return api.Error(c, err)
+		} else if results == nil || len(results) == 0 {
+			//no data found
+			return api.Success(c, str.UnsafeBytes(ctl.name), nil)
+		} else {
+			return api.SendSuccess(c, str.UnsafeBytes(ctl.name), results)
+		}
+	}
+	return api.ErrorStr(c, data.NotAllowedToList)
+}
+
+func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
+	canList := ctl.model.CanList(c)
+	if canList == nil {
+		// check if current user Id is valid, exists.
+		// source: auth-jwt-token
+		authId := c.AuthenticatedUserUuid()
+		if authId == "" {
+			return errors.New("unauthorized operation detected")
+		}
+		// search for results that start with current user id
+		results, err := ctl.storage.List(authId, ctl.model)
 		if err != nil {
 			return api.Error(c, err)
 		} else if results == nil || len(results) == 0 {
@@ -178,7 +229,7 @@ func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
 func (ctl *DatabaseController) RegisterDatabaseMethods(router *echo.Group) {
 	listPostPath := ctl.pathPrepend + "/" + ctl.name
 	logger.Info("exposing GET ", listPostPath)
-	router.GET(listPostPath, ctl.List)
+	router.GET(listPostPath, ctl.ListOwnerOnly)
 	logger.Info("exposing POST ", listPostPath)
 	router.POST(listPostPath, ctl.Create)
 
@@ -195,4 +246,11 @@ func (ctl *DatabaseController) RegisterDatabaseMethods(router *echo.Group) {
 func (ctl DatabaseController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing ", ctl.name, " controller methods")
 	ctl.RegisterDatabaseMethods(router)
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId(authId string, modelId string) []byte {
+	c := authId + "." + modelId
+	key := str.UnsafeBytes(c)
+	return key
 }

@@ -23,7 +23,6 @@ const (
 	XEthernitiHideServerDataInConsole = "X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE"
 	XEthernitiTokenExpiration         = "X_ETHERNITI_TOKEN_EXPIRATION"
 	XEthernitiSwaggerAddress          = "X_ETHERNITI_SWAGGER_ADDRESS"
-	XEthernitiEnvironmentName         = "X_ETHERNITI_ENVIRONMENT_NAME"
 
 	// proxy listener configuration
 	XEthernitiListeningAddress   = "X_ETHERNITI_LISTENING_ADDRESS"

@@ -1,6 +1,7 @@
 package project
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -9,10 +10,8 @@ import (
 	"github.com/zerjioang/etherniti/core/model/registry/version"
 	"github.com/zerjioang/etherniti/core/modules/stack"
 	"github.com/zerjioang/etherniti/core/util/id"
-	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/mixed"
-	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -20,36 +19,34 @@ type Project struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
 
-	// unique project identifier used for database storage
-	Uuid string `json:"sid"`
+	// internal project id assigned
+	ProjectId string `json:"id,omitempty"`
 
 	// project name
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 	// project description
-	Description string `json:"description"`
+	Description string `json:"description,omitempty"`
 	// project logo url
 	ImageUrl string `json:"image,omitempty"`
 
-	// internal project id assigned
-	ProjectId string `json:"id"`
 	// internal project secret id assigned
-	ProjectSecret string `json:"secret"`
+	ProjectSecret string `json:"secret,omitempty"`
 
 	//connection required data
 
 	// peer endpoint url
-	Endpoint string
+	Endpoint string `json:"endpoint,omitempty"`
 	// default gas value
-	Gas string
+	Gas string `json:"gas,omitempty"`
 	// default gasprice value
-	GasPrice string
+	GasPrice string `json:"gasPrice,omitempty"`
 	// default target block: latest by default
-	Block string
+	Block string `json:"block,omitempty"`
 
 	//list of linked contracts to this project
 	// usually each entry in the array means a
 	// deployed version of project's contract
-	Contracts map[string]*version.ContractVersion `json:"contracts"`
+	Contracts map[string]*version.ContractVersion `json:"contracts,omitempty"`
 
 	// project metadata
 	Metadata *metadata.Metadata `json:"metadata,omitempty"`
@@ -57,7 +54,7 @@ type Project struct {
 
 // implementation of interface DatabaseObjectInterface
 func (project Project) Key() []byte {
-	return str.UnsafeBytes(project.Uuid)
+	return str.UnsafeBytes(project.ProjectId)
 }
 func (project Project) Value() []byte {
 	return str.GetJsonBytes(project)
@@ -102,37 +99,44 @@ func (project Project) CanList(context *echo.Context) error {
 
 func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
 	//new project creation request
-	var req protocol.ProjectRequest
-	if err := context.Bind(&req); err != nil {
+	if err := context.Bind(&project); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
 		return nil, data.ErrBind
 	}
 	// todo optimize this process
-	// external clients will neber be able to bind some fields, so delete them
-	project.Uuid = ""
-	project.ProjectId = ""
+	// external clients will never be able to bind some fields, so delete them
 	project.ProjectSecret = ""
 	project.Metadata = nil
+	project.ProjectId = id.GenerateIDString().String()
 
-	e := req.Validate()
+	e := project.Validate()
 	if e.Occur() {
-		logger.Error("failed to validate new project data: ", e.Error())
+		logger.Error("failed to validate request project data: ", e.Error())
 		return nil, e
 	} else {
-		// get required data to build a new project
-		intIP := ip.Ip2int(context.RealIP())
-		// get user uuid
-		projectOwner := context.AuthenticatedUserUuid()
-
-		if intIP == 0 || projectOwner == "" {
-			logger.Error("failed to create new project: missing data")
+		if context.IntIp() == 0 || context.AuthenticatedUserUuid() == "" {
+			logger.Error("failed to create new project: authentication data is incomplete")
 			return nil, data.StackErrProject
 		} else {
 			project.Metadata = metadata.NewMetadata(context)
 			return project, stack.Nil()
 		}
 	}
+}
+
+// converts byte sequence to go project struct
+func (project Project) Decode(data []byte) (mixed.DatabaseObjectInterface, stack.Error) {
+	o := NewEmptyProject()
+	err := json.Unmarshal(data, &o)
+	return o, stack.Ret(err)
+}
+
+func (project Project) Validate() stack.Error {
+	if project.Name == "" {
+		return stack.New("project name not provided in request")
+	}
+	return stack.Nil()
 }
 
 func (project Project) ResolveContract(version string) (*version.ContractVersion, error) {
@@ -154,7 +158,6 @@ func NewDBProject() mixed.DatabaseObjectInterface {
 
 func NewProject(name string, mtdt *metadata.Metadata) *Project {
 	p := new(Project)
-	p.Uuid = id.GenerateIDString().String()
 	p.Name = name
 	p.Metadata = mtdt
 	p.ProjectId = id.GenerateIDString().String()

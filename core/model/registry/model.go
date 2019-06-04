@@ -1,6 +1,8 @@
 package registry
 
 import (
+	"encoding/json"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -127,6 +129,13 @@ func NewEmptyRegistry() Registry {
 
 func NewDBRegistry() mixed.DatabaseObjectInterface {
 	return NewEmptyRegistry()
+}
+
+// converts byte sequence to go registry struct
+func (r Registry) Decode(data []byte) (mixed.DatabaseObjectInterface, stack.Error) {
+	o := NewEmptyRegistry()
+	err := json.Unmarshal(data, &o)
+	return o, stack.Ret(err)
 }
 
 func NewRegistry(name string, description string, major int, minor int, mtdt *metadata.Metadata) *Registry {
