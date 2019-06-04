@@ -127,7 +127,7 @@ function compile(){
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
         go build \
-            -tags "'${TAGS}'"\
+            -tags "${TAGS}"\
             -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
