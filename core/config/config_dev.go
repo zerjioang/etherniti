@@ -81,6 +81,13 @@ func IsDevelopment() bool {
 	return true
 }
 
+// allow swagger ui access via ip and port or domain and port.
+// development only
+func GetSwaggerAddressWithPort() string {
+	logger.Debug("reading swagger address with port from env")
+	return GetSwaggerAddress() + ":" + GetListeningPortStr()
+}
+
 func Env() string {
 	logger.Debug("reading server environment name")
 	return "development"

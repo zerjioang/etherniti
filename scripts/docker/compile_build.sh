@@ -113,7 +113,7 @@ function compile(){
         echo "no compilation filename found. setting default to: etherniti"
         outputname="etherniti"
     fi
-    if [[ "$ETHERNITI_GOARCH" = "arm" || "$ETHERNITI_GOARCH" = "arm64" ]]; then
+    if [[ "$ETHERNITI_GOARCH" = "arm" || "$ETHERNITI_GOARCH" = "arm64" || "$ETHERNITI_GOARCH" = "armv7l" ]]; then
         echo "compiling for arm..."
         echo "Using commit hash '$hash' for current build"
 

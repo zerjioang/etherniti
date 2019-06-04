@@ -224,11 +224,6 @@ func GetSwaggerAddress() string {
 	return GetEnvironment().String(XEthernitiSwaggerAddress)
 }
 
-func GetSwaggerAddressWithPort() string {
-	logger.Debug("reading swagger address with port from env")
-	return GetSwaggerAddress() + ":" + GetListeningPortStr()
-}
-
 func GetListeningAddress() string {
 	logger.Debug("reading requested listening ip address from env")
 	return GetEnvironment().String(XEthernitiListeningAddress)

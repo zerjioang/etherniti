@@ -73,6 +73,14 @@ func IsDevelopment() bool {
 	return false
 }
 
+// read swagger url domain: ip or FQDN
+// no port allowed in pre and prod. default port is used
+// 80 and 443
+func GetSwaggerAddressWithPort() string {
+	logger.Debug("reading swagger address port from env")
+	return GetSwaggerAddress()
+}
+
 func Env() string {
 	logger.Debug("reading server environment name")
 	return "staging"
