@@ -13,19 +13,21 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
-echo "Generating test functions base with gotests"
+# load colored logs
+source ./scripts/colors.sh
 
-echo "checking if gotests is installed in $GOPATH"
+log "generating test functions base with gotests"
+log "checking if gotests is installed in $GOPATH"
 if [[ ! -f ${GOPATH}/bin/gotests ]]; then
 	#statements
-	echo "gotests not found. Downloading via go get"
+	log "gotests not found. Downloading via go get"
 	go get -v github.com/cweill/gotests
 	cd ${GOPATH}/src/github.com/cweill/gotests/gotests
 	go build && go install
 fi
 
 if [[ ! -f ${GOPATH}/bin/gotests ]]; then
-	echo "failed to install gotests in ${GOPATH}"
+	fail "failed to install gotests in ${GOPATH}"
 	return -1
 fi
 
@@ -33,8 +35,8 @@ fi
 filelist=$(find . -type f -name "*.go" | grep -vendor)
 for file in ${filelist}
 do
-	echo "generating gotests for file $file"
+	log "generating gotests for file $file"
 	${GOPATH}/bin/gotests -excl Benchmark.* -w ${file}
 done
 
-echo "Code formatting done!"
+ok "Code formatting done!"

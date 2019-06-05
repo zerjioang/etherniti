@@ -11,7 +11,6 @@ import (
 	"io"
 	"io/ioutil"
 	"mime/multipart"
-	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -160,8 +159,25 @@ func (c *Context) resolveRealIP() string {
 	if ipstr := c.request.Header.Get(HeaderXRealIP); ipstr != "" {
 		return ipstr
 	}
-	ra, _, _ := net.SplitHostPort(c.request.RemoteAddr)
+	ra, _ := c.SplitHostPort(c.request.RemoteAddr)
 	return ra
+}
+
+// simplistic method that split host and port from string
+// the reason for custom method is to avoid
+// the overhead of net package and its CGO methods
+func (c *Context) SplitHostPort(address string) (string, string) {
+	var ipStr, port string
+	if address != "" {
+		loc := strings.LastIndex(address, ":")
+		if loc != -1 {
+			ipStr = address[0:loc]
+			port = address[loc+1:]
+		} else {
+			ipStr = address
+		}
+	}
+	return ipStr, port
 }
 
 func (c *Context) RealIP() string {

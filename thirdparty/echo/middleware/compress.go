@@ -4,11 +4,9 @@
 package middleware
 
 import (
-	"bufio"
 	"compress/gzip"
 	"io"
 	"io/ioutil"
-	"net"
 	"net/http"
 	"strings"
 
@@ -115,8 +113,4 @@ func (w *gzipResponseWriter) Write(b []byte) (int, error) {
 
 func (w *gzipResponseWriter) Flush() {
 	w.Writer.(*gzip.Writer).Flush()
-}
-
-func (w *gzipResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
-	return w.ResponseWriter.(http.Hijacker).Hijack()
 }

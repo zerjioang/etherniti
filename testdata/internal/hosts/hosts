@@ -1,6 +1,7 @@
 proxy.etherniti.org
+dev.proxy.etherniti.org
+api.etherniti.org
+cloud.etherniti.org
 127.0.0.1
 localhost
 0.0.0.0
-api.etherniti.org
-cloud.etherniti.org

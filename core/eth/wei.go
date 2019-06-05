@@ -4,6 +4,7 @@
 package eth
 
 import (
+	"github.com/zerjioang/etherniti/core/util/str"
 	"math/big"
 
 	"github.com/zerjioang/etherniti/thirdparty/decimal"
@@ -61,8 +62,6 @@ func CalcGasCost(gasLimit uint64, gasPrice *big.Int) *big.Int {
 }
 
 // LogTopicHash generates the log topic hash given the event function declaration signature
-func LogTopicHash(fnsig string) fixtures.Hash {
-	eventSignature := []byte(fnsig)
-	hash := crypto.Keccak256Hash(eventSignature)
-	return hash
+func LogTopicHash(functionSignature string) fixtures.Hash {
+	return crypto.Keccak256Hash(str.UnsafeBytes(functionSignature))
 }

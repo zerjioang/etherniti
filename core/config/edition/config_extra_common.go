@@ -16,3 +16,9 @@ func IsOpenSource() bool {
 func IsEnterprise() bool {
 	return Edition() == constants.Enterprise
 }
+
+// check if active edition is valid or not
+// atomic/thread-safe
+func IsValidEdition() bool {
+	return Edition() != constants.Unknown
+}

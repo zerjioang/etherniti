@@ -26,6 +26,8 @@ func init() {
 	fmt.Println("aligned struct size: ", int64(unsafe.Sizeof(myStructOptimized{})))
 }
 
+// conclusion:
+// aligned struct uses much less amount of RAM while its been used
 func BenchmarkStructs(b *testing.B) {
 	b.Run("unaligned", func(b *testing.B) {
 		b.ReportAllocs()

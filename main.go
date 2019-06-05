@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/zerjioang/etherniti/core/controllers"
 	"os"
 	"runtime"
 
@@ -18,8 +19,9 @@ import (
 
 var (
 	//build-time variables
-	Commit  = ""
-	Edition = ""
+	// default values when no data is found
+	Commit  = "latest"
+	Edition = "oss"
 
 	// build commit hash value
 	notifier = make(chan error, 1)
@@ -32,6 +34,7 @@ func init() {
 	banner.Edition = Edition
 	// show welcome banner
 	println(banner.WelcomeBanner())
+	controllers.LoadIndexConstants()
 }
 
 // generate build sha1: git rev-parse --short HEAD

@@ -13,18 +13,21 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts to ./
 cd ..
 
+# load colored logs
+source ./scripts/colors.sh
+
 function install(){
 	name=$1
 	package=$2
-	echo "checking if $name is installed in $GOPATH"
+	log "checking if $name is installed in $GOPATH"
 	if [[ ! -f ${GOPATH}/bin/$name ]]; then
 		#statements
-		echo "$name not found. Downloading via go get"
+		log "$name not found. Downloading via go get"
 		go get -u $package
 	fi
 }
 
-echo "Checking aligment in source code"
+log "Checking aligment in source code"
 
 # A set of utilities for checking Go sources.
 install "aligncheck" "gitlab.com/opennota/check/cmd/aligncheck"
@@ -36,16 +39,16 @@ install "maligned" "github.com/mdempsky/maligned"
 install "prealloc" "github.com/alexkohler/prealloc"
 
 project="github.com/zerjioang/etherniti"
-echo "aligncheck of ${project}"
+log "aligncheck of ${project}"
 ${GOPATH}/bin/aligncheck ${project}
 
 #get all files excluding vendors
 filelist=$(find . -type f -name "*.go" | grep -vendor)
 for file in ${filelist}
 do
-	echo "checking file $file"
+	log "checking file $file"
 	#${GOPATH}/bin/goimports -v -w ${file}
 done
 
-echo "Code checks done!"
+ok "Code checks done!"
 

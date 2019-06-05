@@ -4,8 +4,6 @@
 package echo
 
 import (
-	"bufio"
-	"net"
 	"net/http"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -92,13 +90,6 @@ func (r *Response) Write(b []byte) (n int, err error) {
 // See [http.Flusher](https://golang.org/pkg/net/http/#Flusher)
 func (r *Response) Flush() {
 	r.Writer.(http.Flusher).Flush()
-}
-
-// Hijack implements the http.Hijacker interface to allow an HTTP handler to
-// take over the connection.
-// See [http.Hijacker](https://golang.org/pkg/net/http/#Hijacker)
-func (r *Response) Hijack() (net.Conn, *bufio.ReadWriter, error) {
-	return r.Writer.(http.Hijacker).Hijack()
 }
 
 func (r *Response) reset(w http.ResponseWriter) {

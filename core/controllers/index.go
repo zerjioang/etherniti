@@ -87,16 +87,6 @@ func init() {
 	integrityTicker = interval.NewTask("integrity", 5*time.Second, interval.Loop, true, onNewIntegrityData).Do()
 	// status ticker update each 5s
 	statusTicker = interval.NewTask("status", 5*time.Second, interval.Loop, true, onNewStatusData).Do()
-
-	/*IndexWelcomeJson = `{
-	  "name": "eth-wbapi",
-	  "description": "Web3 REST Proxy",
-	  "cluster_name": "eth-wbapi",
-	  "version": "` + constants.Version + `",
-	  "env": "` + config.EnvironmentName + `",
-	  "tagline": "dapps everywhere"
-	}`*/
-	LoadIndexConstants()
 	// start monitoring root path
 	diskMonitor.Start("/")
 }

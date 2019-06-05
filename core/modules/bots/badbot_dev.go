@@ -11,6 +11,5 @@ import "github.com/zerjioang/etherniti/core/modules/hashset"
 
 func GetBadBotsList() hashset.HashSetMutex {
 	badBotsList.Remove("apachebench")
-	badBotsList.Remove("curl")
 	return badBotsList
 }

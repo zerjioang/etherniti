@@ -77,6 +77,7 @@ ETHERNITI_GOOS:             $ETHERNITI_GOOS
 ETHERNITI_COMPILER:         $ETHERNITI_COMPILER
 ETHERNITI_GOGCCFLAGS:       $ETHERNITI_GOGCCFLAGS
 ETHERNITI_CGO_ENABLED:      $ETHERNITI_CGO_ENABLED
+DNS RESOLVER:               Pure GO
 "
 
 # core=$(uname -m)
@@ -107,6 +108,7 @@ function compile(){
     GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS}
     GOOS=${ETHERNITI_GOOS}
     GOARCH=${ETHERNITI_GOARCH}
+    GODEBUG=netdns=go
 
     outputname=$1
     if [[ -z "$outputname" ]]; then
@@ -126,6 +128,7 @@ function compile(){
         GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
         GOOS=${ETHERNITI_GOOS} \
         GOARCH=${ETHERNITI_GOARCH} \
+        GODEBUG=${GODEBUG} \
         go build \
             -tags "${TAGS}"\
             -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
@@ -142,6 +145,7 @@ function compile(){
             GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
+            GODEBUG=${GODEBUG} \
             go build \
                 -tags "${TAGS}"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
@@ -154,6 +158,7 @@ function compile(){
             GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
+            GODEBUG=${GODEBUG} \
             go build \
                 -tags "${TAGS}"\
                 -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
@@ -166,6 +171,7 @@ function compile(){
             GOGCCFLAGS=${X_ETHERNITI_GOGCCFLAGS} \
             GOOS=${ETHERNITI_GOOS} \
             GOARCH=${ETHERNITI_GOARCH} \
+            GODEBUG=${GODEBUG} \
             go build \
                 -a \
                 -tags "netgo ${TAGS}" \

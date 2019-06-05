@@ -57,4 +57,14 @@ func BenchmarkConfigExtra(b *testing.B) {
 			_ = edition.IsEnterprise()
 		}
 	})
+	b.Run("is-valid-edition", func(b *testing.B) {
+		logger.Enabled(false)
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+
+		for n := 0; n < b.N; n++ {
+			_ = edition.IsValidEdition()
+		}
+	})
 }

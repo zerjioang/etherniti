@@ -162,10 +162,12 @@
             "description": "proxy welcome message",
             "schema": {
               "example": {
-                "name": "eth-wbapi",
-                "description": "Etherniti: High Performance Ethereum REST API",
-                "cluster_name": "eth-wbapi",
-                "version": "0.0.1",
+                "name": "etherniti-public-api",
+                "description": "High Performance Web3 REST Proxy",
+                "cluster_name": "apollo-api",
+                "version": "1.0.0",
+                "commit": "latest",
+                "edition": "oss",
                 "env": "development",
                 "tagline": "dapps everywhere"
               }

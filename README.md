@@ -10,7 +10,47 @@ A multitenant High Performance Ethereum WebAPI for smart contract inter-communic
 
 ## Usage
 
-## Dependencies by size
+```$bash
+docker run \
+    -it \
+    -d etherniti/proxy-oss:latest
+```
+## Development
+
+### Using Intellij GoLand
+
+In order to execute builds and run them from IDE, you will need to pass all required env variables.
+You can copy and paste them to workspace.xml file or add them manually one by one
+
+```xml
+<env name="X_ETHERNITI_LOG_LEVEL" value="debug" />
+<env name="X_ETHERNITI_SSL_CERT_FILE" value="/etc/letsencrypt/live/etherniti.org/fullchain.pem" />
+<env name="X_ETHERNITI_SSL_KEY_FILE" value="/etc/letsencrypt/live/etherniti.org/privkey.pem" />
+<env name="X_ETHERNITI_HTTPS_PORT" value="4430" />
+<env name="X_ETHERNITI_DEBUG_SERVER" value="true" />
+<env name="X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE" value="true" />
+<env name="X_ETHERNITI_TOKEN_SECRET" value="your-favourite-jwt-token-secret" />
+<env name="X_ETHERNITI_ENABLE_HTTPS_REDIRECT" value="false" />
+<env name="X_ETHERNITI_ENABLE_LOGGING" value="true" />
+<env name="X_ETHERNITI_USE_UNIQUE_REQUEST_ID" value="false" />
+<env name="X_ETHERNITI_ENABLE_SECURITY" value="true" />
+<env name="X_ETHERNITI_ENABLE_ANALYTICS" value="true" />
+<env name="X_ETHERNITI_ENABLE_CORS" value="true" />
+<env name="X_ETHERNITI_ENABLE_CACHE" value="true" />
+<env name="X_ETHERNITI_ENABLE_RATE_LIMIT" value="false" />
+<env name="X_ETHERNITI_BLOCK_TOR_CONNECTIONS" value="false" />
+<env name="X_ETHERNITI_LISTENING_PORT" value="8080" />
+<env name="X_ETHERNITI_LISTENING_INTERFACE" value="127.0.0.1" />
+<env name="X_ETHERNITI_LISTENING_ADDRESS" value="127.0.0.1" />
+<env name="X_ETHERNITI_SWAGGER_ADDRESS" value="127.0.0.1" />
+<env name="X_ETHERNITI_TOKEN_EXPIRATION" value="600" />
+<env name="X_ETHERNITI_RATELIMIT" value="10" />
+<env name="X_ETHERNITI_RATE_LIMIT_UNITS" value="10" />
+<env name="X_ETHERNITI_INFURA_TOKEN" value="4f61378203ca4da4a6b6601bc16a22ad" />
+<env name="X_ETHERNITI_LISTENING_MODE" value="http" />
+```
+
+### Dependencies by size
 
 Following, **etherniti** dependencies are listed, orderer by impact on final executable size:
 
