@@ -4,6 +4,7 @@
 package swagger
 
 import (
+	"github.com/zerjioang/etherniti/core/util/banner"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -29,7 +30,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	//replace hardcoded variables
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti: High Performance Web3 REST Proxy", -1)
-	str = strings.Replace(str, "$version", constants.Version, -1)
+	str = strings.Replace(str, "$version", banner.Version, -1)
 	str = strings.Replace(str, "$host", config.GetSwaggerAddressWithPort(), -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)

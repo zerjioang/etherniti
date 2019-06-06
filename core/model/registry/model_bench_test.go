@@ -31,7 +31,6 @@ func BenchmarkRegistryModel(b *testing.B) {
 			contract.Name = "test"
 			contract.Description = "this is a demo contract"
 			contract.Address = "0xf17f52151EbEF6C7334FAD080c5704D77216b732"
-			contract.Version = "1.2"
 		}
 	})
 }

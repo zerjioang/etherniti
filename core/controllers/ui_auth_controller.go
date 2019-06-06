@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"github.com/zerjioang/etherniti/core/util/banner"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/fastime"
@@ -175,7 +176,7 @@ func (ctl UIAuthController) createToken(userUuid string) (string, error) {
 			NotBefore: now.Unix(),
 			IssuedAt:  now.Unix(),
 		},
-		Version: constants.Version,
+		Version: banner.Version,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

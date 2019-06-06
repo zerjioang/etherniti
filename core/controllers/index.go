@@ -58,7 +58,7 @@ var (
 			wrapper.Os = runtime.GOOS
 			wrapper.Runtime.Compiler = runtime.Compiler
 
-			wrapper.Version.Etherniti = constants.Version
+			wrapper.Version.Etherniti = banner.Version
 			wrapper.Version.Go = runtime.Version()
 			wrapper.Version.HTTP = echo.Version
 
@@ -93,7 +93,7 @@ func init() {
 
 func LoadIndexConstants() {
 	// load constants
-	IndexWelcomeJson = `{"name":"etherniti-public-api","description":"High Performance Web3 REST Proxy","cluster_name":"apollo-api","version":"` + constants.Version + `","commit":"` + banner.Commit + `","edition":"` + banner.Edition + `","env":"` + config.Env() + `","tagline":"dapps everywhere"}`
+	IndexWelcomeJson = `{"name":"etherniti-public-api","description":"High Performance Web3 REST Proxy","cluster_name":"apollo-api","version":"` + banner.Version + `","commit":"` + banner.Commit + `","edition":"` + banner.Edition + `","env":"` + config.Env() + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
 }

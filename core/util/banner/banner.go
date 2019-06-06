@@ -8,8 +8,6 @@ import (
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/logger"
-
-	"github.com/zerjioang/etherniti/shared/constants"
 )
 
 const (
@@ -25,7 +23,9 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
   Github Page    |     https://github.com/etherniti
   Issues         | https://github.com/etherniti/rfc
 
-  build information:
+  Contact at     |               help@etherniti.org
+  
+  Build information:
 
   arch             : $GOARCH
   go/root          : $GOROOT
@@ -40,6 +40,8 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
 
 var (
 	banner = ""
+	// compilation built-in: version
+	Version = ""
 	// compilation built-in: commit
 	Commit = ""
 	// compilation built-in: edition
@@ -58,6 +60,7 @@ func WelcomeBanner() string {
 	logger.Debug("reading welcome banner")
 	banner = strings.Replace(banner, "$COMMIT", Commit, 1)
 	banner = strings.Replace(banner, "$EDITION", Edition, 1)
+	banner = strings.Replace(banner, "$VER", Version, 1)
 	return banner
 }
 
@@ -69,6 +72,5 @@ func getBannerFromTemplate() string {
 	banner = strings.Replace(banner, "$GOROOT", runtime.GOROOT(), 1)
 	banner = strings.Replace(banner, "$GO_VERSION", runtime.Version(), 1)
 	banner = strings.Replace(banner, "$GO_COMPILER", runtime.Compiler, 1)
-	banner = strings.Replace(banner, "$VER", constants.Version, 1)
 	return banner
 }

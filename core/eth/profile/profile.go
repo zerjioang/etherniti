@@ -5,6 +5,7 @@ package profile
 
 import (
 	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/util/banner"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -213,7 +214,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 		ExpiresAt: now.Add(config.TokenExpiration()).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
-		Version:   constants.Version,
+		Version:   banner.Version,
 	}
 	//check profile validity
 	p.Valididity = p.Id != "" &&
@@ -238,7 +239,7 @@ func NewDefaultConnectionProfile() ConnectionProfile {
 		ExpiresAt:  now.Add(config.TokenExpiration()).Unix(),
 		NotBefore:  now.Unix(),
 		IssuedAt:   now.Unix(),
-		Version:    constants.Version,
+		Version:    banner.Version,
 		Valididity: true,
 	}
 }

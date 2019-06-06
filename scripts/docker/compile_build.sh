@@ -71,6 +71,7 @@ echo "
 HASH:                       $hash
 BUILD_MODE:                 $BUILD_MODE
 BUILD_EDITION:              $BUILD_EDITION
+BUILD_VERSION:              $BUILD_VERSION
 BUILD_TAGS:                 $TAGS
 ETHERNITI_GOARCH:           $ETHERNITI_GOARCH
 ETHERNITI_GOOS:             $ETHERNITI_GOOS
@@ -131,7 +132,7 @@ function compile(){
         GODEBUG=${GODEBUG} \
         go build \
             -tags "${TAGS}"\
-            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
+            -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}' -linkmode=external -extldflags -static" \
             -o $outputname
         ls -alh && file $outputname
         # docker run -it --entrypoint=/bin/sh etherniti/proxy-arm:develop
@@ -148,7 +149,7 @@ function compile(){
             GODEBUG=${GODEBUG} \
             go build \
                 -tags "${TAGS}"\
-                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
+                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}'" \
                 -o $outputname
         elif [[ "$BUILD_MODE" = "pre" ]]; then
             echo "compiling pre-stage version..."
@@ -161,7 +162,7 @@ function compile(){
             GODEBUG=${GODEBUG} \
             go build \
                 -tags "${TAGS}"\
-                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}'" \
+                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}'" \
                 -o $outputname
         else
             echo "compiling production version..."
@@ -175,7 +176,7 @@ function compile(){
             go build \
                 -a \
                 -tags "netgo ${TAGS}" \
-                -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -linkmode=external -extldflags -static" \
+                -ldflags "-s -w -libgcc=none  -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}' -linkmode=external -extldflags -static" \
                 -o $outputname && \
             ls -alh
         fi

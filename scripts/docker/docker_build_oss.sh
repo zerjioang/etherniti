@@ -38,7 +38,10 @@ log "generating docker image etherniti/proxy-oss:$osarch-$BUILD_VERSION"
 echo ""
 
 log "starting docker image compilation"
-build --build-arg BUILD_MODE=$mode --build-arg BUILD_EDITION=$edition -t etherniti/proxy-oss:$osarch-$BUILD_VERSION && \
+build --build-arg BUILD_MODE=$mode \
+    --build-arg BUILD_EDITION=$edition \
+    --build-arg BUILD_VERSION=$BUILD_VERSION \
+    -t etherniti/proxy-oss:$osarch-$BUILD_VERSION && \
 log "docker image compilation finished"
 
 # show message: Press any key to continue

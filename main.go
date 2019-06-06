@@ -21,6 +21,7 @@ import (
 var (
 	//build-time variables
 	// default values when no data is found
+	Version  = "latest"
 	Commit  = "latest"
 	Edition = "oss"
 
@@ -31,6 +32,7 @@ var (
 func init() {
 	//pass build-time variables to banner package
 	// in order to print in the welcome banner
+	banner.Version = Version
 	banner.Commit = Commit
 	banner.Edition = Edition
 	// show welcome banner
