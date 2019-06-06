@@ -47,8 +47,8 @@ func CheckConfiguration() error {
 
 	// check infura token
 	if InfuraToken() == "" {
-		logger.Error(infuraKeyErr)
-		return errors.New(infuraKeyErr)
+		logger.Warn(infuraKeyErr)
+		logger.Warn("infura provider is disabled until valid token is provided")
 	}
 	if len(InfuraToken()) != 32 {
 		logger.Error(infuraKeyLenErr)

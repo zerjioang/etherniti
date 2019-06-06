@@ -26,6 +26,12 @@ var (
 	kovanInfura   = "https://kovan.infura.io/v3/"
 	mainnetInfura = "https://mainnet.infura.io/v3/"
 	infuraToken   = "" //4f61378203ca4da4a6b6601bc16a22ad
+
+	//custom endpoints
+	ropstenCustom = ""
+	rinkebyCustom = ""
+	kovanCustom   = ""
+	mainnetCustom = ""
 )
 
 type RestController struct {
@@ -48,6 +54,9 @@ func init() {
 	rinkebyInfura = rinkebyInfura + infuraToken
 	kovanInfura = kovanInfura + infuraToken
 	infuraToken = infuraToken + infuraToken
+	// load custom endpoints if exists
+	//ropstenCustom := config.EndpointRopsten()
+
 }
 
 // constructor like function
@@ -79,27 +88,43 @@ func (ctl RestController) RegisterRouters(router *echo.Group) {
 }
 
 // constructor like function
+func newInfuraController(networkName, infuraEndpoint, fallbackEndpoint string) RestController {
+	logger.Debug("creating new web3 controller for ", networkName, " network")
+
+	if infuraToken != "" && len(infuraToken) == 32 {
+		// infura token found and valid
+		return newController(infuraEndpoint, networkName)
+	} else if fallbackEndpoint != "" {
+		// load ropsten controller with user provided URL
+		return newController(fallbackEndpoint, networkName)
+	} else {
+		// ropsten not supported
+		return newController("", "unknown")
+	}
+}
+
+// constructor like function
 func NewRopstenController() RestController {
 	logger.Debug("creating new web3 controller for ropsten network")
-	return newController(ropstenInfura, ropsten)
+	return newInfuraController(ropsten, ropstenInfura, ropstenCustom)
 }
 
 // constructor like function
 func NewRinkebyController() RestController {
 	logger.Debug("creating new web3 controller for rinkeby network")
-	return newController(rinkebyInfura, rinkeby)
+	return newInfuraController(rinkeby, rinkebyInfura, rinkebyCustom)
 }
 
 // constructor like function
 func NewKovanController() RestController {
 	logger.Debug("creating new web3 controller for kovan network")
-	return newController(kovanInfura, kovan)
+	return newInfuraController(kovan, kovanInfura, kovanCustom)
 }
 
 // constructor like function
 func NewMainNetController() RestController {
 	logger.Debug("creating new web3 controller for mainnet network")
-	return newController(mainnetInfura, mainnet)
+	newInfuraController(mainnet, mainnetInfura, mainnetCustom)
 }
 
 // constructor like function for user provided infura based connection

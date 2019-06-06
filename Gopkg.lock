@@ -19,11 +19,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:093bf93a65962e8191e3e8cd8fc6c363f83d43caca9739c906531ba7210a9904"
+  digest = "1:9e7c5138114ff9c51a60731b3a425c319305013c6ea8b3f60fd2435baba1a0db"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "16327141da8ce4b46b5bac57ba01352943465d9e"
+  revision = "a0d1e3e36d50f61ee6eaab26d7bd246aae1f9ece"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -338,12 +338,12 @@
   version = "v1.0.1"
 
 [[projects]]
-  branch = "master"
   digest = "1:ddfe0a54e5f9b29536a6d7b2defa376f2cb2b6e4234d676d7ff214d5b097cb50"
   name = "github.com/tidwall/pretty"
   packages = ["."]
   pruneopts = "UT"
   revision = "1166b9ac2b65e46a43d8618d30d1554f4652d49b"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -390,7 +390,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:961331a65c5b38a8ff95ab43c562c7f7ee50da5d7cfb9c9947ce3778a4e129fc"
+  digest = "1:90286d51abf1f30fcb4f1d7ec32fc869d0eeca1e656daac0adccf52474a3bc33"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -416,7 +416,7 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7"
+  revision = "f99c8df09eb5bff426315721bfa5f16a99cad32c"
 
 [[projects]]
   branch = "master"
@@ -432,7 +432,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:94f3c016b859b321c6279d2c9becd7835b4b50efad7f70a2cf53347ec876af2c"
+  digest = "1:bd12c9d2ec64f136e0e2018314e7f83c781d363b1dc80634ef2fb2a37ab47906"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -440,7 +440,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "4c4f7f33c9ed00de01c4c741d2177abfcfe19307"
+  revision = "5da285871e9c6a1c3acade75bea3282d33f55ebd"
 
 [[projects]]
   branch = "master"
@@ -458,7 +458,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "8aaa1484dc108aa23dcf2d4a09371c0c9e280f6b"
+  revision = "d0a3d012864b53e579e8ec5cbf6a5405dbc12423"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
