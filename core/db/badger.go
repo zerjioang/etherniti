@@ -4,6 +4,7 @@
 package db
 
 import (
+	"github.com/dgraph-io/badger/options"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/util/codec"
 	"os"
@@ -34,7 +35,32 @@ type BadgerStorage struct {
 }
 
 var (
-	defaultConfig = badger.DefaultOptions
+	defaultConfig = badger.Options{
+		DoNotCompact:        false,
+		LevelOneSize:        256 << 20,
+		LevelSizeMultiplier: 10,
+		TableLoadingMode:    options.LoadToRAM, // Mode in which LSM tree is loaded
+		ValueLogLoadingMode: options.FileIO, // options.MemoryMap,
+		// table.MemoryMap to mmap() the tables.
+		// table.Nothing to not preload the tables.
+		MaxLevels:               7, // Size of table
+		MaxTableSize:            64 << 20,
+		NumCompactors:           1, // 3 // Number of concurrent compactions,
+		NumLevelZeroTables:      5,
+		NumLevelZeroTablesStall: 10,
+		NumMemtables:            5,
+		SyncWrites:              true,
+		NumVersionsToKeep:       1,
+		// Nothing to read/write value log using standard File I/O
+		// MemoryMap to mmap() the value log files
+		// (2^30 - 1)*2 when mmapping < 2^31 - 1, max int32.
+		// -1 so 2*ValueLogFileSize won't overflow on 32-bit systems.
+		ValueLogFileSize: 1<<30 - 1, // Size of value log file
+
+		ValueLogMaxEntries: 1000000,
+		ValueThreshold:     32,
+		Truncate:           false,
+	}
 	uid           = os.Getuid()
 	gid           = os.Getgid()
 )
@@ -65,12 +91,14 @@ func NewCollection(name string) (*BadgerStorage, error) {
 	logger.Debug("creating new db collection")
 	err := createData(constants.DatabaseRootPath + name)
 	if err != nil {
+		logger.Error("failed to create database dir", err)
 		return nil, err
 	}
 	var openErr error
 	collection := new(BadgerStorage)
 	collection.instance, openErr = badger.Open(defaultConfig)
 	if openErr != nil {
+		logger.Error("failed to open db with default config", openErr)
 		return nil, openErr
 	}
 	// register for listening poweroff events
