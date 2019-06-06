@@ -14,6 +14,10 @@ type Duration int64
 // Nanoseconds returns the duration as an integer nanosecond count.
 func (d Duration) Nanoseconds() int64 { return int64(d) }
 
+func (d Duration) Duration() time.Duration {
+	return time.Duration(d)
+}
+
 const (
 	Nanosecond  Duration = 1
 	Microsecond          = 1000 * Nanosecond

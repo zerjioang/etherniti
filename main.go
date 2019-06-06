@@ -4,9 +4,10 @@
 package main
 
 import (
-	"github.com/zerjioang/etherniti/core/controllers"
 	"os"
 	"runtime"
+
+	"github.com/zerjioang/etherniti/core/controllers"
 
 	"github.com/zerjioang/etherniti/core/util/banner"
 

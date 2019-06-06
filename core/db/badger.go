@@ -4,6 +4,8 @@
 package db
 
 import (
+	"github.com/zerjioang/etherniti/core/modules/fastime"
+	"github.com/zerjioang/etherniti/core/util/codec"
 	"os"
 	"time"
 
@@ -68,7 +70,7 @@ func NewCollection(name string) (*BadgerStorage, error) {
 	var openErr error
 	collection := new(BadgerStorage)
 	collection.instance, openErr = badger.Open(defaultConfig)
-	if err != nil {
+	if openErr != nil {
 		return nil, openErr
 	}
 	// register for listening poweroff events
@@ -182,11 +184,14 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 		Reverse:        false,
 	})
 
-	for it.Seek(uint64ToBytes(min)); it.Valid(); it.Next() {
+	seekKey := codec.Uint64ToBytes(min)
+	for it.Seek(seekKey); it.Valid(); it.Next() {
 		key := make([]byte, 8)
 		it.Item().KeyCopy(key)
+		//encode
+		k := codec.BytesToUint64(key)
 		// Handle out-of-range log index
-		if bytesToUint64(key) > max {
+		if k > max {
 			break
 		}
 		// Delete in-range log index
@@ -197,7 +202,7 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 				if err != nil {
 					return err
 				}
-				return db.DeleteRange(bytesToUint64(key), max)
+				return db.DeleteRange(k, max)
 			}
 			return err
 		}
@@ -212,7 +217,7 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 
 // SetUint64 is like Set, but handles uint64 values
 func (db *BadgerStorage) SetUint64(key []byte, val uint64) error {
-	return db.Set(key, uint64ToBytes(val))
+	return db.Set(key, codec.Uint64ToBytes(val))
 }
 
 // GetUint64 is like Get, but handles uint64 values
@@ -221,7 +226,7 @@ func (db *BadgerStorage) GetUint64(key []byte) (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
-	return bytesToUint64(val), nil
+	return codec.BytesToUint64(val), nil
 }
 
 func (db *BadgerStorage) runVlogGC(instance *badger.DB, threshold int64) {
@@ -261,4 +266,49 @@ func (db *BadgerStorage) Close() error {
 		db.mandatoryVlogTicker.Stop()
 	}
 	return db.instance.Close()
+}
+
+// New uses the supplied options to open the Badger db and prepare it for
+// use as a raft backend.
+func NewBadgerStorageGC(options *Options) (*BadgerStorage, error) {
+
+	// build badger options
+	if options.BadgerOptions == nil {
+		defaultOpts := badger.DefaultOptions
+		options.BadgerOptions = &defaultOpts
+	}
+	options.BadgerOptions.Dir = options.Path
+	options.BadgerOptions.ValueDir = options.Path
+	options.BadgerOptions.SyncWrites = !options.NoSync
+
+	// try to create new database handler
+	storage, err := NewCollection("")
+	if err != nil {
+		return nil, err
+	}
+	storage.options = options
+
+	// Start GC routine
+	if options.ValueLogGC {
+
+		var gcInterval fastime.Duration
+		var mandatoryGCInterval fastime.Duration
+		var threshold int64
+
+		if gcInterval = 1 * fastime.Minute; options.GCInterval != 0 {
+			gcInterval = options.GCInterval
+		}
+		if mandatoryGCInterval = 10 * fastime.Minute; options.MandatoryGCInterval != 0 {
+			mandatoryGCInterval = options.MandatoryGCInterval
+		}
+		if threshold = int64(1 << 30); options.GCThreshold != 0 {
+			threshold = options.GCThreshold
+		}
+
+		storage.vlogTicker = time.NewTicker(gcInterval.Duration())
+		storage.mandatoryVlogTicker = time.NewTicker(mandatoryGCInterval.Duration())
+		go storage.runVlogGC(storage.instance, threshold)
+	}
+
+	return storage, nil
 }

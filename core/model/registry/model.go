@@ -2,6 +2,7 @@ package registry
 
 import (
 	"encoding/json"
+	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/eth"
@@ -121,6 +122,16 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 			return r, stack.Nil()
 		}
 	}
+}
+
+func (r Registry) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
+	newRg, ok := o.(*Registry)
+	if newRg == nil || !ok {
+		return nil, model.UnsupportedDataErr
+	}
+	//if new name is provided, update it
+	r.Name = model.ConditionalStringUpdate(newRg.Name, r.Name, "")
+	return r, stack.Nil()
 }
 
 func NewEmptyRegistry() Registry {

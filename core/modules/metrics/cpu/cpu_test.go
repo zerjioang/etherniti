@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-func TestCpu(t *testing.T){
+func TestCpu(t *testing.T) {
 	t.Run("instant-sample", func(t *testing.T) {
 		idle0, total0 := getCPUSample()
-		fmt.Printf("CPU usage [busy: %d, total: %d]\n",idle0, total0)
+		fmt.Printf("CPU usage [busy: %d, total: %d]\n", idle0, total0)
 	})
 	t.Run("1-second-sample", func(t *testing.T) {
 		idle0, total0 := getCPUSample()

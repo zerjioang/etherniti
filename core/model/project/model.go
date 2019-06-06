@@ -3,6 +3,7 @@ package project
 import (
 	"encoding/json"
 	"errors"
+	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -146,6 +147,16 @@ func (project Project) ResolveContract(version string) (*version.ContractVersion
 		return details, nil
 	}
 	return nil, errors.New("contract details not found")
+}
+
+func (project Project) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
+	v, ok := o.(*Project)
+	if v == nil || !ok {
+		return nil, model.UnsupportedDataErr
+	}
+	//if new name is provided, update it
+	project.Name = model.ConditionalStringUpdate(v.Name, r.Name, "")
+	return project, stack.Nil()
 }
 
 func NewEmptyProject() Project {

@@ -2,6 +2,7 @@ package db
 
 import (
 	"encoding/json"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"os"
 	"path/filepath"
 
@@ -9,13 +10,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var (
+	empty []byte
+)
 func Hash(data string) string {
 	// Use GenerateFromPassword to hash & salt pwd.
 	// MinCost is just an integer constant provided by the bcrypt
 	// package along with DefaultCost & MaxCost.
 	// The cost can be any value you want provided it isn't lower
 	// than the MinCost (4)
-	hash, err := bcrypt.GenerateFromPassword([]byte(data), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword(str.UnsafeBytes(data), bcrypt.DefaultCost)
 	if err != nil {
 		logger.Error("failed to hash user password")
 		return ""
@@ -40,7 +44,7 @@ func Serialize(item interface{}) []byte {
 			return raw
 		}
 	}
-	return []byte{}
+	return empty
 }
 
 func Unserialize(data []byte, item interface{}) error {

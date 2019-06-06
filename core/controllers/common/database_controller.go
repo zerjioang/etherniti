@@ -96,30 +96,6 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 	return api.ErrorStr(c, data.FailedToProcess)
 }
 
-func (ctl *DatabaseController) Read(c *echo.Context) error {
-	modelId := c.Param("id")
-	if modelId != "" {
-		canReadErr := ctl.model.CanRead(c, modelId)
-		if canReadErr == nil {
-			// check if current user Id is valid, exists.
-			// source: auth-jwt-token
-			authId := c.AuthenticatedUserUuid()
-			if authId == "" {
-				return errors.New("unauthorized operation detected")
-			}
-			key := ctl.buildCompositeId(authId, modelId)
-			projectData, readErr := ctl.storage.Get(key)
-			if readErr != nil {
-				return api.Error(c, readErr)
-			}
-			return api.SendSuccessBlob(c, projectData)
-		}
-		return api.Error(c, canReadErr)
-	} else {
-		return api.ErrorStr(c, data.ProvideId)
-	}
-}
-
 func (ctl *DatabaseController) GetKey(key []byte) ([]byte, error) {
 	return ctl.storage.Get(key)
 }
@@ -144,13 +120,58 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 				return errors.New("unauthorized operation detected")
 			}
 			key := ctl.buildCompositeId(authId, modelId)
+			// read current content stored in given key
+			projectData, readErr := ctl.storage.Get(key)
+			if readErr != nil {
+				return api.Error(c, readErr)
+			}
+			// decode byte content into model
+			readedObject, objErr := ctl.model.Decode(projectData)
+			if objErr.Occur() {
+				return api.StackError(c, objErr)
+			}
+			// now update readed object content with user provided content in request body
+			requestedItem, bindErr := ctl.modelGenerator().Bind(c)
+			if bindErr.Occur() {
+				return api.StackError(c, bindErr)
+			}
+			// update item
+			updatedItem, updateErr := readedObject.Update(requestedItem)
+			if updateErr.Occur() {
+				return api.StackError(c, updateErr)
+			}
+			// save result
+			storeErr := ctl.storage.Set(key, updatedItem.Value())
+			if storeErr != nil {
+				return api.Error(c, storeErr)
+			}
+			return api.SendSuccessBlob(c, projectData)
+		}
+		return api.Error(c, canUpdateErr)
+	} else {
+		return api.ErrorStr(c, data.ProvideId)
+	}
+}
+
+func (ctl *DatabaseController) Read(c *echo.Context) error {
+	modelId := c.Param("id")
+	if modelId != "" {
+		canReadErr := ctl.model.CanRead(c, modelId)
+		if canReadErr == nil {
+			// check if current user Id is valid, exists.
+			// source: auth-jwt-token
+			authId := c.AuthenticatedUserUuid()
+			if authId == "" {
+				return errors.New("unauthorized operation detected")
+			}
+			key := ctl.buildCompositeId(authId, modelId)
 			projectData, readErr := ctl.storage.Get(key)
 			if readErr != nil {
 				return api.Error(c, readErr)
 			}
 			return api.SendSuccessBlob(c, projectData)
 		}
-		return api.Error(c, canUpdateErr)
+		return api.Error(c, canReadErr)
 	} else {
 		return api.ErrorStr(c, data.ProvideId)
 	}

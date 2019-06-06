@@ -9,4 +9,4 @@ BenchmarkConfigExtra/is-oss-4                   	2000000000	         0.25 ns/op	
 BenchmarkConfigExtra/is-pro-4                   	2000000000	         0.25 ns/op	4039.60 MB/s	       0 B/op	       0 allocs/op
 BenchmarkConfigExtra/is-valid-edition-4         	2000000000	         0.25 ns/op	3990.23 MB/s	       0 B/op	       0 allocs/op
 
- */
+*/

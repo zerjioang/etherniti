@@ -5,6 +5,8 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+type Policy func(context *echo.Context, key string) error
+
 type DatabaseObjectInterface interface {
 	Key() []byte
 	Value() []byte
@@ -19,4 +21,5 @@ type DatabaseObjectInterface interface {
 	// method used to decode http input byte data to go struct
 	Bind(context *echo.Context) (DatabaseObjectInterface, stack.Error)
 	Decode(data []byte) (DatabaseObjectInterface, stack.Error)
+	Update(o DatabaseObjectInterface) (DatabaseObjectInterface, stack.Error)
 }

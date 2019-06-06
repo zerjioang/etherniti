@@ -4,8 +4,9 @@
 package eth
 
 import (
-	"github.com/zerjioang/etherniti/core/util/str"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/thirdparty/decimal"
 
