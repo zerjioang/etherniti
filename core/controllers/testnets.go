@@ -124,7 +124,7 @@ func NewKovanController() RestController {
 // constructor like function
 func NewMainNetController() RestController {
 	logger.Debug("creating new web3 controller for mainnet network")
-	newInfuraController(mainnet, mainnetInfura, mainnetCustom)
+	return newInfuraController(mainnet, mainnetInfura, mainnetCustom)
 }
 
 // constructor like function for user provided infura based connection

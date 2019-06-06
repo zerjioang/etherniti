@@ -150,12 +150,18 @@ func (project Project) ResolveContract(version string) (*version.ContractVersion
 }
 
 func (project Project) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
-	v, ok := o.(*Project)
-	if v == nil || !ok {
+	newPrj, ok := o.(*Project)
+	if newPrj == nil || !ok {
 		return nil, model.UnsupportedDataErr
 	}
 	//if new name is provided, update it
-	project.Name = model.ConditionalStringUpdate(v.Name, r.Name, "")
+	project.Name = model.ConditionalStringUpdate(newPrj.Name, project.Name, "")
+	project.Name = model.ConditionalStringUpdate(newPrj.Description, project.Description, "")
+	project.ImageUrl = model.ConditionalStringUpdate(newPrj.ImageUrl, project.ImageUrl, "")
+	project.Endpoint = model.ConditionalStringUpdate(newPrj.Endpoint, project.Endpoint, "")
+	project.Gas = model.ConditionalStringUpdate(newPrj.Gas, project.Gas, "")
+	project.GasPrice = model.ConditionalStringUpdate(newPrj.GasPrice, project.GasPrice, "")
+	project.Block = model.ConditionalStringUpdate(newPrj.Block, project.Block, "")
 	return project, stack.Nil()
 }
 
