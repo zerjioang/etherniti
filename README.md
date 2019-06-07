@@ -1,5 +1,5 @@
 <p align="center">
-  <img style="text-align:center;" width="200px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ethereum_logo_2014.svg/2000px-Ethereum_logo_2014.svg.png" alt="etherniti" />
+  <img style="text-align:center;" width="200px" src="https://avatars3.githubusercontent.com/u/47393730?s=200&v=4" alt="etherniti" />
   <h3 align="center"><b>Etherniti</b></h3>
   <p align="center">Multitenant High Performance Ethereum Webapi</p>
 </p>
