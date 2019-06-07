@@ -3,6 +3,7 @@ package common
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
@@ -13,6 +14,11 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	errInvalidCollectionName = errors.New("invalid collection name provided")
+	errUnauthorizedOp = errors.New("unauthorized operation detected")
+	s = []byte(".")
+)
 type DatabaseController struct {
 	storage *db.BadgerStorage
 	name    string
@@ -28,7 +34,7 @@ type DatabaseController struct {
 func NewDatabaseController(pathPrepend string, collection string, modelGenerator func() mixed.DatabaseObjectInterface) (DatabaseController, error) {
 	dbctl := DatabaseController{}
 	if collection == "" {
-		return dbctl, errors.New("invalid collection name provided")
+		return dbctl, errInvalidCollectionName
 	}
 
 	lastChar := collection[len(collection)-1:]
@@ -78,7 +84,7 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 			// source: auth-jwt-token
 			authId := c.AuthenticatedUserUuid()
 			if authId == "" {
-				return errors.New("unauthorized operation detected")
+				return errUnauthorizedOp
 			}
 			key := ctl.buildCompositeId(authId, string(requestedItem.Key()))
 			value := requestedItem.Value()
@@ -117,7 +123,7 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 			// source: auth-jwt-token
 			authId := c.AuthenticatedUserUuid()
 			if authId == "" {
-				return errors.New("unauthorized operation detected")
+				return errUnauthorizedOp
 			}
 			key := ctl.buildCompositeId(authId, modelId)
 			// read current content stored in given key
@@ -162,7 +168,7 @@ func (ctl *DatabaseController) Read(c *echo.Context) error {
 			// source: auth-jwt-token
 			authId := c.AuthenticatedUserUuid()
 			if authId == "" {
-				return errors.New("unauthorized operation detected")
+				return errUnauthorizedOp
 			}
 			key := ctl.buildCompositeId(authId, modelId)
 			projectData, readErr := ctl.storage.Get(key)
@@ -186,7 +192,7 @@ func (ctl *DatabaseController) Delete(c *echo.Context) error {
 			// source: auth-jwt-token
 			authId := c.AuthenticatedUserUuid()
 			if authId == "" {
-				return errors.New("unauthorized operation detected")
+				return errUnauthorizedOp
 			}
 			// build the composite id: authId + modelId
 			key := ctl.buildCompositeId(authId, modelId)
@@ -225,7 +231,7 @@ func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
 		// source: auth-jwt-token
 		authId := c.AuthenticatedUserUuid()
 		if authId == "" {
-			return errors.New("unauthorized operation detected")
+			return errUnauthorizedOp
 		}
 		// search for results that start with current user id
 		results, err := ctl.storage.List(authId, ctl.model)
@@ -274,4 +280,69 @@ func (ctl *DatabaseController) buildCompositeId(authId string, modelId string) [
 	c := authId + "." + modelId
 	key := str.UnsafeBytes(c)
 	return key
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId2(authId string, modelId string) []byte {
+	return []byte(strings.Join([]string{authId, modelId}, "."))
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId3(authId string, modelId string) []byte {
+	var b strings.Builder
+	b.WriteString(authId)
+	b.WriteString(".")
+	b.WriteString(modelId)
+	return []byte(b.String())
+}
+
+type ItemKey struct {
+	left []byte
+	separator []byte
+	right []byte
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) ItemKey {
+	 return ItemKey{
+		 left:[]byte(authId),
+		 separator:[]byte("."),
+		 right:[]byte(modelId),
+	 }
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) ItemKey {
+	return ItemKey{
+		left:str.UnsafeBytes(authId),
+		separator:s,
+		right:str.UnsafeBytes(modelId),
+	}
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) *ItemKey {
+	return &ItemKey{
+		left:str.UnsafeBytes(authId),
+		separator:str.UnsafeBytes("."),
+		right:str.UnsafeBytes(modelId),
+	}
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) *ItemKey {
+	return &ItemKey{
+		left:authId,
+		separator:s,
+		right:modelId,
+	}
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId8(authId []byte, modelId []byte) ItemKey {
+	return ItemKey{
+		left:authId,
+		separator:s,
+		right:modelId,
+	}
 }

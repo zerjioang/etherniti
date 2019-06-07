@@ -16,6 +16,11 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	nilErr = stack.Nil()
+	errContractNotFound = errors.New("contract details not found")
+	errNoContractNameProvided = stack.New("project name not provided in request")
+)
 type Project struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
@@ -121,7 +126,7 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 			return nil, data.StackErrProject
 		} else {
 			project.Metadata = metadata.NewMetadata(context)
-			return project, stack.Nil()
+			return project, nilErr
 		}
 	}
 }
@@ -135,9 +140,9 @@ func (project Project) Decode(data []byte) (mixed.DatabaseObjectInterface, stack
 
 func (project Project) Validate() stack.Error {
 	if project.Name == "" {
-		return stack.New("project name not provided in request")
+		return errNoContractNameProvided
 	}
-	return stack.Nil()
+	return nilErr
 }
 
 func (project Project) ResolveContract(version string) (*version.ContractVersion, error) {
@@ -146,7 +151,7 @@ func (project Project) ResolveContract(version string) (*version.ContractVersion
 	if found {
 		return details, nil
 	}
-	return nil, errors.New("contract details not found")
+	return nil, errContractNotFound
 }
 
 func (project Project) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
@@ -162,7 +167,7 @@ func (project Project) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseOb
 	project.Gas = model.ConditionalStringUpdate(newPrj.Gas, project.Gas, "")
 	project.GasPrice = model.ConditionalStringUpdate(newPrj.GasPrice, project.GasPrice, "")
 	project.Block = model.ConditionalStringUpdate(newPrj.Block, project.Block, "")
-	return project, stack.Nil()
+	return project, nilErr
 }
 
 func NewEmptyProject() Project {
