@@ -12,6 +12,7 @@ import (
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
+	"github.com/zerjioang/etherniti/shared/protocol"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -30,10 +31,14 @@ func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
 func userJwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		tokenData := c.ReadToken("Authorization")
+		if tokenData == "" {
+			logger.Error("missing authentication token")
+			return api.ErrorWithMessage(c, protocol.StatusUnauthorized, data.ErrMissingAuthenticationToken, data.ErrMissingAuthentication)
+		}
 		decodedAuthData, err := ParseAuthenticationToken(tokenData)
 		if err != nil {
 			logger.Error("failed to process authentication token: ", err)
-			return api.ErrorWithMessage(c, []byte("invalid authentication token"), err)
+			return api.ErrorWithMessage(c, protocol.StatusUnauthorized, data.ErrInvalidAuthenticationToken, err)
 		} else {
 			c.UserId = decodedAuthData.Uuid
 		}

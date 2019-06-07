@@ -2,6 +2,7 @@ package registry
 
 import (
 	"encoding/json"
+
 	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"

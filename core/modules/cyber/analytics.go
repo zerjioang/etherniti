@@ -70,7 +70,7 @@ func processAnalytics(ip string, r *http.Request) {
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk
-		storeErr := collection.Set(n.SafeBytes(), raw)
+		storeErr := collection.SetRawKey(n.SafeBytes(), raw)
 		if storeErr != nil {
 			logger.Error("failed to store analytics information due to error: ", storeErr)
 		}

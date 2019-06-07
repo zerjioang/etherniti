@@ -2,9 +2,10 @@ package db
 
 import (
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"os"
 	"path/filepath"
+
+	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -13,6 +14,7 @@ import (
 var (
 	empty []byte
 )
+
 func Hash(data string) string {
 	// Use GenerateFromPassword to hash & salt pwd.
 	// MinCost is just an integer constant provided by the bcrypt

@@ -1,4 +1,14 @@
 [
+  "wget",
+  "libwww-perl",
+  "apachebench",
+  "googlebot",
+  "FeedFetcher",
+  "FeedFetcher-Google",
+  "APIs-Google",
+  "AdsBot-Google-Mobile",
+  "AdsBot-Google",
+  "zgrab",
   "netsystemsresearch.com",
   "netsystemsresearch",
   "archive-it",
@@ -182,9 +192,5 @@
   "xpymep",
   "turnitinbot",
   "sindice",
-  "purebot",
-  "wget",
-  "libwww-perl",
-  "apachebench",
-  "googlebot"
+  "purebot"
 ]

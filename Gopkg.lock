@@ -238,7 +238,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:0de31727c88e9f4a4ae70c28b6caa27f39b25788daf2dc4f7406013421228144"
+  digest = "1:e89f2cdede55684adbe44b5566f55838ad2aee1dff348d14b73ccf733607b671"
   name = "github.com/prometheus/client_golang"
   packages = [
     "prometheus",
@@ -246,8 +246,8 @@
     "prometheus/promhttp",
   ]
   pruneopts = "UT"
-  revision = "50c4339db732beb2165735d2cde0bff78eb3c5a5"
-  version = "v0.9.3"
+  revision = "2641b987480bca71fb39738eb8c8b0d577cb1d76"
+  version = "v0.9.4"
 
 [[projects]]
   branch = "master"
@@ -428,11 +428,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "60506f45cf65977eb3a9c6e30f995f54a721c271"
+  revision = "d5cec388452433938efda7023f16bf94a6784bdf"
 
 [[projects]]
   branch = "master"
-  digest = "1:bd12c9d2ec64f136e0e2018314e7f83c781d363b1dc80634ef2fb2a37ab47906"
+  digest = "1:7f6ce4b9f0a89047122e149c077ceb0a0e41c607f4e8c0f4ba82dadf5bcf9f1e"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -440,7 +440,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "5da285871e9c6a1c3acade75bea3282d33f55ebd"
+  revision = "7fc4e5ec1444df20dd195ae7c3bbfcd7114d3faa"
 
 [[projects]]
   branch = "master"
@@ -458,7 +458,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "d0a3d012864b53e579e8ec5cbf6a5405dbc12423"
+  revision = "5aed7825b13ee2b55737e99244fd658841b12a99"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -539,6 +539,7 @@
   input-imports = [
     "github.com/btcsuite/btcd/btcec",
     "github.com/dgraph-io/badger",
+    "github.com/dgraph-io/badger/options",
     "github.com/gorilla/websocket",
     "github.com/jarcoal/httpmock",
     "github.com/json-iterator/go",

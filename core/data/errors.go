@@ -143,7 +143,10 @@ var (
 
 // profile token related errors
 var (
-	ErrTokenNoValid         = errors.New("provided token contains invalid or missing fields")
-	ErrInvalidSigningMethod = errors.New("unexpected signing method")
-	ErrFailedToRead         = errors.New("failed to read token claims")
+	ErrTokenNoValid               = errors.New("provided token contains invalid or missing fields")
+	ErrInvalidSigningMethod       = errors.New("unexpected signing method")
+	ErrFailedToRead               = errors.New("failed to read token claims")
+	ErrMissingAuthentication      = errors.New("authentication token was not found in request")
+	ErrInvalidAuthenticationToken = []byte("invalid authentication token")
+	ErrMissingAuthenticationToken = []byte("missing authentication token")
 )

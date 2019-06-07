@@ -8,13 +8,15 @@ import "github.com/zerjioang/etherniti/shared/constants"
 var (
 	isOpen, isPro, isValid bool
 )
+
 // check if active edition is opensource
-func init(){
+func init() {
 	e := Edition()
 	isOpen = e == constants.OpenSource
 	isPro = e == constants.Enterprise
 	isValid = e != constants.Unknown
 }
+
 // atomic/thread-safe
 func IsOpenSource() bool {
 	return isOpen

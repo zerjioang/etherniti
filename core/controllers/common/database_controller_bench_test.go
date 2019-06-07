@@ -1,11 +1,13 @@
 package common
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
+
 func BenchmarkDatabaseControllerAppend(b *testing.B) {
-	b.Run("append", func(b *testing.B) {
+	b.Run("append-1", func(b *testing.B) {
 		logger.Enabled(false)
 		ctl := new(DatabaseController)
 		b.ReportAllocs()

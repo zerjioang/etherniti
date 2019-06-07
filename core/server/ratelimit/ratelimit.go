@@ -6,9 +6,11 @@ package ratelimit
 import (
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/gocache"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/modules/cache"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 )
 
@@ -40,22 +42,25 @@ var (
 )
 
 type limit struct {
-	value uint32
-	reset int64
+	value    uint32
+	reset    int64
+	resetStr string
 }
 type RateLimitEngine struct {
-	rateCache *cache.MemoryCache
+	rateCache *gocache.Cache
 }
 
 // constructor like function
 func NewRateLimitEngine() RateLimitEngine {
 	rle := RateLimitEngine{}
-	rle.rateCache = cache.Instance()
+	// Create a cache with a default expiration time of 1 minute, and which
+	// purges expired items every 10 minutes
+	rle.rateCache = gocache.New(1*time.Minute, 10*time.Minute)
 	return rle
 }
 
 // ratelimit evaluation function
-func (rte RateLimitEngine) Eval(clientIdentifier []byte, h http.Header) RateLimitResult {
+func (rte RateLimitEngine) Eval(clientIdentifier string, h http.Header) RateLimitResult {
 	if h == nil {
 		return Deny
 	}
@@ -72,22 +77,23 @@ func (rte RateLimitEngine) Eval(clientIdentifier []byte, h http.Header) RateLimi
 	rateRemaining, found := rte.rateCache.Get(clientIdentifier)
 	if !found {
 		// initialize client max allowed rate limit
-		currentRequestsLimit = limit{value: maxRatelimitValue, reset: resetTime.Unix()}
+		r := resetTime.Unix()
+		currentRequestsLimit = limit{value: maxRatelimitValue, reset: r, resetStr: strconv.FormatInt(r, 10)}
 	} else {
 		currentRequestsLimit = rateRemaining.(limit)
 	}
 
+	//set rate limit reset time
+	h.Set(XRateReset, currentRequestsLimit.resetStr)
+
 	if currentRequestsLimit.value > 0 {
 		//decrease counter limit and save it again
 		currentRequestsLimit.value--
-		rte.rateCache.Set(clientIdentifier, currentRequestsLimit)
+		// Want performance? Store pointers!
+		rte.rateCache.Set(clientIdentifier, currentRequestsLimit, gocache.DefaultExpiration)
 
 		// add current user remaining limit
 		h.Set(XRateRemaining, strconv.FormatInt(int64(currentRequestsLimit.value), 10))
-
-		//set rate limit reset time
-		rateResetStr := strconv.FormatInt(currentRequestsLimit.reset, 10)
-		h.Set(XRateReset, rateResetStr)
 
 		//allow request
 		return Allow

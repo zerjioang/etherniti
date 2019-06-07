@@ -19,16 +19,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/zerjioang/etherniti/core/util/str"
-
 	"github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	jsoniter "github.com/json-iterator/go"
+	"github.com/json-iterator/go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
@@ -675,8 +673,7 @@ func (c *Context) IsHttps() bool {
 // * the ip address
 // * the token value
 // * the ip address + token value
-func (c *Context) RateLimitIdentifier() []byte {
+func (c *Context) RateLimitIdentifier() string {
 	clientIdentifier := c.RealIP()
-	clientIdentifierBytes := str.UnsafeBytes(clientIdentifier)
-	return clientIdentifierBytes
+	return clientIdentifier
 }

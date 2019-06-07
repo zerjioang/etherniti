@@ -21,7 +21,7 @@ import (
 var (
 	//build-time variables
 	// default values when no data is found
-	Version  = "latest"
+	Version = "latest"
 	Commit  = "latest"
 	Edition = "oss"
 

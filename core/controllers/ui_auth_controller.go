@@ -4,8 +4,9 @@
 package controllers
 
 import (
-	"github.com/zerjioang/etherniti/core/util/banner"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 

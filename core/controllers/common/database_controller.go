@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/zerjioang/etherniti/shared/protocol"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/db"
@@ -16,9 +18,10 @@ import (
 
 var (
 	errInvalidCollectionName = errors.New("invalid collection name provided")
-	errUnauthorizedOp = errors.New("unauthorized operation detected")
-	s = []byte(".")
+	errUnauthorizedOp        = errors.New("unauthorized operation detected")
+	s                        = []byte(".")
 )
+
 type DatabaseController struct {
 	storage *db.BadgerStorage
 	name    string
@@ -107,7 +110,7 @@ func (ctl *DatabaseController) GetKey(key []byte) ([]byte, error) {
 }
 
 func (ctl *DatabaseController) SetKey(key []byte, value []byte) error {
-	return ctl.storage.Set(key, value)
+	return ctl.storage.SetRawKey(key, value)
 }
 
 func (ctl *DatabaseController) SetUniqueKey(key []byte, value []byte) error {
@@ -147,7 +150,7 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 				return api.StackError(c, updateErr)
 			}
 			// save result
-			storeErr := ctl.storage.Set(key, updatedItem.Value())
+			storeErr := ctl.storage.SetRawKey(key, updatedItem.Value())
 			if storeErr != nil {
 				return api.Error(c, storeErr)
 			}
@@ -296,53 +299,47 @@ func (ctl *DatabaseController) buildCompositeId3(authId string, modelId string) 
 	return []byte(b.String())
 }
 
-type ItemKey struct {
-	left []byte
-	separator []byte
-	right []byte
-}
-
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) ItemKey {
-	 return ItemKey{
-		 left:[]byte(authId),
-		 separator:[]byte("."),
-		 right:[]byte(modelId),
-	 }
-}
-
-// build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) ItemKey {
-	return ItemKey{
-		left:str.UnsafeBytes(authId),
-		separator:s,
-		right:str.UnsafeBytes(modelId),
+func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) protocol.ItemKey {
+	return protocol.ItemKey{
+		Left:  []byte(authId),
+		Sep:   []byte("."),
+		Right: []byte(modelId),
 	}
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) *ItemKey {
-	return &ItemKey{
-		left:str.UnsafeBytes(authId),
-		separator:str.UnsafeBytes("."),
-		right:str.UnsafeBytes(modelId),
+func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) protocol.ItemKey {
+	return protocol.ItemKey{
+		Left:  str.UnsafeBytes(authId),
+		Sep:   s,
+		Right: str.UnsafeBytes(modelId),
 	}
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) *ItemKey {
-	return &ItemKey{
-		left:authId,
-		separator:s,
-		right:modelId,
+func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) *protocol.ItemKey {
+	return &protocol.ItemKey{
+		Left:  str.UnsafeBytes(authId),
+		Sep:   str.UnsafeBytes("."),
+		Right: str.UnsafeBytes(modelId),
 	}
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId8(authId []byte, modelId []byte) ItemKey {
-	return ItemKey{
-		left:authId,
-		separator:s,
-		right:modelId,
+func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) *protocol.ItemKey {
+	return &protocol.ItemKey{
+		Left:  authId,
+		Sep:   s,
+		Right: modelId,
+	}
+}
+
+// build the composite id: authId + modelId
+func (ctl *DatabaseController) buildCompositeId8(authId []byte, modelId []byte) protocol.ItemKey {
+	return protocol.ItemKey{
+		Left:  authId,
+		Sep:   s,
+		Right: modelId,
 	}
 }

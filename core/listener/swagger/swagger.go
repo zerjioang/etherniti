@@ -4,10 +4,11 @@
 package swagger
 
 import (
-	"github.com/zerjioang/etherniti/core/util/banner"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"

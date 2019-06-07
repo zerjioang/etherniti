@@ -3,6 +3,7 @@ package project
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -17,10 +18,11 @@ import (
 )
 
 var (
-	nilErr = stack.Nil()
-	errContractNotFound = errors.New("contract details not found")
+	nilErr                    = stack.Nil()
+	errContractNotFound       = errors.New("contract details not found")
 	errNoContractNameProvided = stack.New("project name not provided in request")
 )
+
 type Project struct {
 	// implement interface to be a rest-db-crud able struct
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`

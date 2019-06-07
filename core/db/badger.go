@@ -4,11 +4,12 @@
 package db
 
 import (
+	"os"
+	"time"
+
 	"github.com/dgraph-io/badger/options"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/util/codec"
-	"os"
-	"time"
 
 	"github.com/zerjioang/etherniti/shared/mixed"
 
@@ -40,7 +41,7 @@ var (
 		LevelOneSize:        256 << 20,
 		LevelSizeMultiplier: 10,
 		TableLoadingMode:    options.LoadToRAM, // Mode in which LSM tree is loaded
-		ValueLogLoadingMode: options.FileIO, // options.MemoryMap,
+		ValueLogLoadingMode: options.FileIO,    // options.MemoryMap,
 		// table.MemoryMap to mmap() the tables.
 		// table.Nothing to not preload the tables.
 		MaxLevels:               7, // Size of table
@@ -61,8 +62,8 @@ var (
 		ValueThreshold:     32,
 		Truncate:           false,
 	}
-	uid           = os.Getuid()
-	gid           = os.Getgid()
+	uid = os.Getuid()
+	gid = os.Getgid()
 )
 
 func createData(path string) error {
@@ -112,7 +113,14 @@ func NewCollection(name string) (*BadgerStorage, error) {
 	return collection, nil
 }
 
-func (db *BadgerStorage) Set(key []byte, val []byte) error {
+func (db *BadgerStorage) SetRawKey(key []byte, val []byte) error {
+	logger.Debug("inserting key-value in db")
+	return db.instance.Update(func(txn *badger.Txn) error {
+		return txn.Set(key, val)
+	})
+}
+
+func (db *BadgerStorage) SetCompositeKey(key []byte, val []byte) error {
 	logger.Debug("inserting key-value in db")
 	return db.instance.Update(func(txn *badger.Txn) error {
 		return txn.Set(key, val)
@@ -160,7 +168,7 @@ func (db *BadgerStorage) Get(key []byte) ([]byte, error) {
 
 func (db *BadgerStorage) Add(key, data []byte) error {
 	logger.Debug("adding new key-value to db")
-	return db.Set(key, data)
+	return db.SetRawKey(key, data)
 }
 
 func (db *BadgerStorage) List(prefixStr string, decoderModel mixed.DatabaseObjectInterface) ([]mixed.DatabaseObjectInterface, error) {
@@ -245,7 +253,7 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 
 // SetUint64 is like Set, but handles uint64 values
 func (db *BadgerStorage) SetUint64(key []byte, val uint64) error {
-	return db.Set(key, codec.Uint64ToBytes(val))
+	return db.SetRawKey(key, codec.Uint64ToBytes(val))
 }
 
 // GetUint64 is like Get, but handles uint64 values

@@ -148,11 +148,11 @@ func ErrorStr(c *echo.Context, msg []byte) error {
 	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
-func ErrorWithMessage(c *echo.Context, msg []byte, err error) error {
+func ErrorWithMessage(c *echo.Context, code int, msg []byte, err error) error {
 	logger.Debug("converting error with message to payload")
 	logger.Error(err)
-	rawBytes := toError(protocol.StatusBadRequest, msg, str.UnsafeBytes(err.Error()))
-	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	rawBytes := toError(code, msg, str.UnsafeBytes(err.Error()))
+	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
 }
 
 func Error(c *echo.Context, err error) error {
