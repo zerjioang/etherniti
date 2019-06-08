@@ -5,11 +5,9 @@ package controllers
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/modules/httpclient"
 	"net/http"
 	"sync/atomic"
-	"time"
-
-	"github.com/zerjioang/etherniti/core/modules/httpclient"
 
 	"github.com/zerjioang/etherniti/core/data"
 
@@ -20,9 +18,17 @@ import (
 
 const (
 	ethPriceApi = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+	get = "GET"
+	none = ""
 )
 
 var (
+	/*
+	coinMarketheaders = http.Header{
+		"Host":clientHeaders["Host"],
+		"Cookie":clientHeaders["Cookie"],
+	}
+	*/
 	errNoResponse = errors.New("could not get eth price right now")
 )
 
@@ -47,20 +53,15 @@ type coinMarketCapEthPriceResponse []struct {
 // token controller
 type ExternalController struct {
 	// http client
-	client http.Client
+	client *http.Client
 	//cached value. concurrent safe that stores []byte
 	priceCache atomic.Value
 }
 
 // constructor like function
-func NewExternalController() ExternalController {
+func NewExternalController(client *http.Client) ExternalController {
 	ctl := ExternalController{}
-	ctl.client = http.Client{
-		Timeout: time.Second * 3,
-		Transport: &http.Transport{
-			TLSHandshakeTimeout: 3 * time.Second,
-		},
-	}
+	ctl.client = client
 	return ctl
 }
 
@@ -70,11 +71,9 @@ func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
 		// value not set. generate and store in cache
 		// generate value
 		clientHeaders := c.Request().Header
-		/*coinMarketheaders := http.Header{
-			"Host":clientHeaders["Host"],
-			"Cookie":clientHeaders["Cookie"],
-		}*/
-		raw, err := httpclient.MakeCall(&ctl.client, "GET", ethPriceApi, clientHeaders, "")
+		//overwrite http client configuration to send request without compression
+		clientHeaders.Set("Accept-Encoding", "deflate")
+		raw, err := httpclient.MakeCall(ctl.client, get, ethPriceApi, clientHeaders, none)
 		if err != nil {
 			return err
 		} else if raw == nil {
@@ -89,9 +88,8 @@ func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
 		}
 	} else {
 		//value already set and stored in memory cache
-		versionResponse := v.([]byte)
 		// return response to client
-		return api.SendSuccessBlob(c, versionResponse)
+		return api.SendSuccessBlob(c, v.([]byte))
 	}
 }
 

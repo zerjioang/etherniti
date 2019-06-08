@@ -154,7 +154,7 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 			if storeErr != nil {
 				return api.Error(c, storeErr)
 			}
-			return api.SendSuccessBlob(c, projectData)
+			return api.SendSuccessBlob(c, updatedItem.Value())
 		}
 		return api.Error(c, canUpdateErr)
 	} else {

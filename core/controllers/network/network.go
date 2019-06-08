@@ -5,6 +5,7 @@ package network
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/zerjioang/etherniti/core/data"
 
@@ -24,6 +25,8 @@ var (
 
 // eth network controller
 type NetworkController struct {
+	// http client
+	client *http.Client
 	//main connection peer address/ip
 	peer string
 	//connection name: mainet, ropsten, rinkeby, etc
@@ -37,6 +40,10 @@ func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
 	ctl.cache = cache.NewMemoryCache()
 	return ctl
+}
+
+func (ctl *NetworkController) SetClient(c *http.Client) {
+	ctl.client = c
 }
 
 func (ctl *NetworkController) SetPeer(peerLocation string) {

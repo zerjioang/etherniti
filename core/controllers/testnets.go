@@ -8,6 +8,7 @@ import (
 	"github.com/zerjioang/etherniti/core/controllers/network"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"net/http"
 )
 
 const (
@@ -60,7 +61,7 @@ func init() {
 }
 
 // constructor like function
-func newController(peer string, name string) RestController {
+func newController(client *http.Client, peer string, name string) RestController {
 	logger.Debug("creating new web3 controller")
 	ctl := RestController{}
 	ctl.network = network.NewNetworkController()
@@ -72,6 +73,7 @@ func newController(peer string, name string) RestController {
 	ctl.abi = network.NewAbiController()
 	ctl.network.SetPeer(peer)
 	ctl.network.SetTargetName(name)
+	ctl.network.SetClient(client)
 	return ctl
 }
 
@@ -88,59 +90,59 @@ func (ctl RestController) RegisterRouters(router *echo.Group) {
 }
 
 // constructor like function
-func newInfuraController(networkName, infuraEndpoint, fallbackEndpoint string) RestController {
+func newInfuraController(client *http.Client, networkName, infuraEndpoint, fallbackEndpoint string) RestController {
 	logger.Debug("creating new web3 controller for ", networkName, " network")
 
 	if infuraToken != "" && len(infuraToken) == 32 {
 		// infura token found and valid
-		return newController(infuraEndpoint, networkName)
+		return newController(client, infuraEndpoint, networkName)
 	} else if fallbackEndpoint != "" {
 		// load ropsten controller with user provided URL
-		return newController(fallbackEndpoint, networkName)
+		return newController(client, fallbackEndpoint, networkName)
 	} else {
 		// ropsten not supported
-		return newController("", "unknown")
+		return newController(client, "", "unknown")
 	}
 }
 
 // constructor like function
-func NewRopstenController() RestController {
+func NewRopstenController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for ropsten network")
-	return newInfuraController(ropsten, ropstenInfura, ropstenCustom)
+	return newInfuraController(client, ropsten, ropstenInfura, ropstenCustom)
 }
 
 // constructor like function
-func NewRinkebyController() RestController {
+func NewRinkebyController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for rinkeby network")
-	return newInfuraController(rinkeby, rinkebyInfura, rinkebyCustom)
+	return newInfuraController(client, rinkeby, rinkebyInfura, rinkebyCustom)
 }
 
 // constructor like function
-func NewKovanController() RestController {
+func NewKovanController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for kovan network")
-	return newInfuraController(kovan, kovanInfura, kovanCustom)
+	return newInfuraController(client, kovan, kovanInfura, kovanCustom)
 }
 
 // constructor like function
-func NewMainNetController() RestController {
+func NewMainNetController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for mainnet network")
-	return newInfuraController(mainnet, mainnetInfura, mainnetCustom)
+	return newInfuraController(client, mainnet, mainnetInfura, mainnetCustom)
 }
 
 // constructor like function for user provided infura based connection
-func NewInfuraController() RestController {
+func NewInfuraController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for infura network")
-	return newController("", infura)
+	return newController(client, "", infura)
 }
 
 // constructor like function for user provided infura based connection
-func NewQuikNodeController() RestController {
+func NewQuikNodeController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for quiknode network")
-	return newController("", quiknode)
+	return newController(client, "", quiknode)
 }
 
 // constructor like function
-func NewPrivateNetController() RestController {
+func NewPrivateNetController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for private network")
-	return newController("", private)
+	return newController(client, "", private)
 }

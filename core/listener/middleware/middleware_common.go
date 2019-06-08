@@ -118,7 +118,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.Use(middleware.RequestID())
 	}
 
-	if edition.IsEnterprise() || true {
+	if edition.IsEnterprise() {
 		// enable analytics for pro version and for those who requested
 		if config.EnableCompression() {
 			// add gzip support if client requests it

@@ -10,7 +10,7 @@
     },
     "license": {
       "name": "Etherniti License",
-      "url": "https://www.etherniti.org/blog/info/license/"
+      "url": "https://docs.etherniti.org/about/license/"
     },
     "x-apisguru-categories": [
       "iot",
@@ -137,10 +137,65 @@
         "description": "Find out more about Etherniti, an Ethereum REST API Dapps interaction at ",
         "url": "https://docs.etherniti.org/api/dapps"
       }
+    },
+    {
+      "name": "external",
+      "description": "Etherniti Web3 Proxy external resources",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API External resources at ",
+        "url": "https://docs.etherniti.org/api/external"
+      }
     }
   ],
   "schemes": ["http", "https", "unix"],
   "paths": {
+    "/external/eth/price": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Ethereum pricing information",
+        "description": "Get updated information about ethereum pricing and its market value",
+        "operationId": "eth-price",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "ethereum pricing response",
+            "schema": {
+              "example": {
+                "msg": "ethereum-price",
+                "data": [
+                  {
+                    "id": "ethereum",
+                    "name": "Ethereum",
+                    "symbol": "ETH",
+                    "rank": "2",
+                    "price_usd": "247.985082119",
+                    "price_btc": "0.03133506",
+                    "24h_volume_usd": "7426852583.39",
+                    "market_cap_usd": "26387116224.0",
+                    "available_supply": "106406063.0",
+                    "total_supply": "106406063.0",
+                    "max_supply": null,
+                    "percent_change_1h": "-0.33",
+                    "percent_change_24h": "-1.02",
+                    "percent_change_7d": "-7.13",
+                    "last_updated": "1560008121"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/hi": {
       "get": {
         "tags": [
@@ -2542,7 +2597,7 @@
     "/web3/{network}/tx/hash/{hash}": {
       "get": {
         "tags": [
-          "tx"
+          "web3"
         ],
         "summary": "get transaction receipt",
         "description": "Read transaction receipt",
@@ -2695,7 +2750,14 @@
           "type": "string",
           "required": true,
           "example": {
-            "name": "test-project"
+            "name": "test-project",
+            "description": "project description",
+            "image": "https://domain.tld/path/to/icon-png",
+            "secret": "abc123",
+            "endpoint": "http://127.0.0.1:8545",
+            "gas": "100000",
+            "gasPrice": "100000",
+            "block": "latest"
           }
         }],
         "responses": {
@@ -2703,10 +2765,22 @@
             "description": "response of new project creation request",
             "schema": {
               "example": {
-                "code": 200,
-                "id": 0,
-                "msg": "project successfully created",
-                "details": "a1ebf4afd9e9462cb5dedc0e83efea17"
+                "msg": "successfully created",
+                "data": {
+                  "id": "2b716244c69248a9a809fb473fc7bfa6",
+                  "name": "test-project",
+                  "description": "project description",
+                  "image": "https://domain.tld/path/to/icon-png",
+                  "endpoint": "http://127.0.0.1:8545",
+                  "gas": "100000",
+                  "gasPrice": "100000",
+                  "block": "latest",
+                  "metadata": {
+                    "created": 1560007438,
+                    "owner": "4dbd3ea7902045e283cc6a832241a9e8",
+                    "issued": 2130706433
+                  }
+                }
               }
             }
           },
@@ -3239,7 +3313,7 @@
   },
   "definitions": {},
   "externalDocs": {
-    "description": "Find out more about Etherniti, an Etherniti Web3 Proxy at https://www.etherniti.org",
-    "url": "https://www.etherniti.org"
+    "description": "Find out more about Etherniti, an High Performance Web3 REST Proxy at https://www.etherniti.org and https://docs.etherniti.org",
+    "url": "https://docs.etherniti.org"
   }
 }

@@ -130,7 +130,7 @@ var (
 	DuplicateKeyErr = errors.New("duplicate key found on database. cannot store")
 )
 
-// project controller related errors
+// project controller related data
 var (
 	OperationNotSupported = []byte(OperationNotSupportedStr)
 	FailedToProcess       = []byte("failed to process current request")
@@ -139,6 +139,11 @@ var (
 	SuccessfullyCreated   = []byte("successfully created")
 	SuccessfullyDeleted   = []byte("successfully deleted")
 	NotAllowedToList      = []byte("you are not allowed to list items")
+)
+
+// external controller related data {
+var (
+	EthPrice = []byte("ethereum-price")
 )
 
 // profile token related errors
