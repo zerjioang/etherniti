@@ -12,6 +12,13 @@ const(
 	// sonrie, sonreir, sonreido
 )
 
+type testWriter struct {
+	StreamInterface
+}
+
+func (w *testWriter) Write(b byte){
+}
+
 func TestBase64(t *testing.T){
 	t.Run("native-go", func(t *testing.T) {
 		raw := []byte(plainText)
@@ -22,9 +29,15 @@ func TestBase64(t *testing.T){
 		t.Log(string(encoded))
 	})
 	t.Run("custom", func(t *testing.T) {
-		raw := []byte(plainText)
-		encoded := EncodeToString(raw)
-		assert.Equal(t, exampleEncoded, encoded)
-		t.Log(string(encoded))
+		t.Run("encode-string", func(t *testing.T) {
+			raw := []byte(plainText)
+			encoded := EncodeToString(raw)
+			assert.Equal(t, exampleEncoded, encoded)
+			t.Log(string(encoded))
+		})
+		t.Run("encode-stream", func(t *testing.T) {
+			raw := []byte(plainText)
+			EncodeToStream(raw, new(testWriter).Write)
+		})
 	})
 }

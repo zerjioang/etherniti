@@ -32,13 +32,23 @@ func BenchmarkBase64(b *testing.B) {
 		})
 	})
 	b.Run("custom", func(b *testing.B) {
-		b.Run("encode", func(b *testing.B) {
+		b.Run("encode-string", func(b *testing.B) {
 			raw := []byte(plainText)
 			b.ReportAllocs()
 			b.SetBytes(1)
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				_ = EncodeToString(raw)
+			}
+		})
+		b.Run("encode-stream", func(b *testing.B) {
+			raw := []byte(plainText)
+			w := new(testWriter).Write
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				EncodeToStream(raw, w)
 			}
 		})
 	})
