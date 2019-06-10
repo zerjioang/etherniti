@@ -68,7 +68,7 @@ func (ctl *NetworkController) Name() string {
 
 func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, error) {
 	// get our client context
-	client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer)
+	client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer, ctl.client)
 	logger.Info("controller request using context id: ", cId)
 	if cliErr != nil {
 		return nil, api.Error(c, cliErr)

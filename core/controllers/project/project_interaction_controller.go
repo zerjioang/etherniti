@@ -5,6 +5,7 @@ package project
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
@@ -19,12 +20,14 @@ var (
 
 type ProjectInteractionController struct {
 	projects *ProjectController
+	client   *http.Client
 }
 
 // constructor like function
-func NewProjectInteractionControllerPtr(p *ProjectController) *ProjectInteractionController {
+func NewProjectInteractionControllerPtr(p *ProjectController, client *http.Client) *ProjectInteractionController {
 	pc := new(ProjectInteractionController)
 	pc.projects = p
+	pc.client = client
 	return pc
 }
 
@@ -61,7 +64,7 @@ func (ctl *ProjectInteractionController) contractCall(context *echo.Context) err
 	isDebug := true
 
 	// build an rpc client
-	web3Client := ethrpc.NewDefaultRPCPtr(endpoint, isDebug)
+	web3Client := ethrpc.NewDefaultRPCPtr(endpoint, isDebug, ctl.client)
 	// proxy pass user request
 	result, err := web3Client.ContractCall(
 		contractVersion.Address,
@@ -109,7 +112,7 @@ func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) 
 
 	isDebug := true
 	// build an rpc client
-	web3Client := ethrpc.NewDefaultRPCPtr(endpoint, isDebug)
+	web3Client := ethrpc.NewDefaultRPCPtr(endpoint, isDebug, ctl.client)
 	// proxy pass user request
 	result, err := web3Client.EthSendTransactionPtr(&ethrpc.TransactionData{
 		From:     "",

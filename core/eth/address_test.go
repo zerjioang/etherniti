@@ -5,7 +5,9 @@ package eth
 
 import (
 	"math/big"
+	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -23,6 +25,15 @@ const (
 	ganacheTestEndpoint = ganacheCliTestEndpoint
 )
 
+var (
+	testClient = &http.Client{
+		Timeout: time.Second * 3,
+		Transport: &http.Transport{
+			TLSHandshakeTimeout: 3 * time.Second,
+		},
+	}
+)
+
 func TestConvertAddress(t *testing.T) {
 	addr := ConvertAddress(address0)
 	t.Log("address converted", addr.Hex())
@@ -36,7 +47,7 @@ func TestIsValidAddress(t *testing.T) {
 
 func TestGetAccountBalance(t *testing.T) {
 	// define the client
-	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, false)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, false, testClient)
 	expected := big.NewInt(0)
 	expected, _ = expected.SetString("100000000000000000000", 10)
 	balance, err := cli.EthGetBalance(address0, "latest")
@@ -52,7 +63,7 @@ func TestGetAccountBalance(t *testing.T) {
 
 func TestGetAccountBalanceAtBlock(t *testing.T) {
 	// define the client
-	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, true)
+	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, true, testClient)
 	expected := big.NewInt(0)
 	expected, _ = expected.SetString("100000000000000000000", 10)
 	balance, err := cli.EthGetBalance(address0, "0")

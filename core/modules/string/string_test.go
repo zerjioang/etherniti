@@ -41,6 +41,12 @@ func TestString(t *testing.T) {
 		exampleString.LowerCase()
 		assert.Equal(t, exampleString.String(), "foo-bar-hello-world")
 	})
+	t.Run("to-capitalize-case", func(t *testing.T) {
+		example := []byte("foo-bar")
+		exampleString := NewWith(example)
+		exampleString.Capitalize()
+		assert.Equal(t, exampleString.String(), "Foo-bar")
+	})
 	t.Run("to-upper-case", func(t *testing.T) {
 		example := []byte("Foo-bar-HELLO-world")
 		exampleString := NewWith(example)
@@ -76,5 +82,61 @@ func TestString(t *testing.T) {
 		exampleString := NewWith(example)
 		result := exampleString.Compare(exampleString)
 		assert.Equal(t, result, 0)
+	})
+	t.Run("has-suffix", func(t *testing.T) {
+		t.Run("success", func(t *testing.T) {
+			example := []byte("Foo-bar-HELLO-world")
+			exampleString := NewWith(example)
+			result := exampleString.HasSuffix("world")
+			assert.True(t, result)
+		})
+		t.Run("fail", func(t *testing.T) {
+			example := []byte("Foo-bar-HELLO-world")
+			exampleString := NewWith(example)
+			result := exampleString.HasSuffix("blablabla")
+			assert.False(t, result)
+		})
+	})
+	t.Run("has-prefix", func(t *testing.T) {
+		t.Run("success", func(t *testing.T) {
+			example := []byte("Foo-bar-HELLO-world")
+			exampleString := NewWith(example)
+			result := exampleString.HasPrefix("Foo")
+			assert.True(t, result)
+		})
+		t.Run("fail", func(t *testing.T) {
+			example := []byte("Foo-bar-HELLO-world")
+			exampleString := NewWith(example)
+			result := exampleString.HasPrefix("blablabla")
+			assert.False(t, result)
+		})
+	})
+	t.Run("is-numeric", func(t *testing.T) {
+		t.Run("success", func(t *testing.T) {
+			example := []byte("123456")
+			exampleString := NewWith(example)
+			result := exampleString.IsNumeric()
+			assert.True(t, result)
+		})
+		t.Run("fail", func(t *testing.T) {
+			example := []byte("123456a")
+			exampleString := NewWith(example)
+			result := exampleString.IsNumeric()
+			assert.False(t, result)
+		})
+	})
+	t.Run("is-hexadecimal", func(t *testing.T) {
+		t.Run("success", func(t *testing.T) {
+			example := []byte("d46d1326aed64ac499cc02a128339b99")
+			exampleString := NewWith(example)
+			result := exampleString.IsHexadecimal()
+			assert.True(t, result)
+		})
+		t.Run("fail", func(t *testing.T) {
+			example := []byte("foo-bar")
+			exampleString := NewWith(example)
+			result := exampleString.IsHexadecimal()
+			assert.False(t, result)
+		})
 	})
 }

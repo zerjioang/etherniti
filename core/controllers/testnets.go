@@ -4,11 +4,12 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/controllers/network"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-	"net/http"
 )
 
 const (

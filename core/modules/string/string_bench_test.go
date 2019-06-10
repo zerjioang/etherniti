@@ -1,6 +1,7 @@
 package string
 
 import (
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -154,6 +155,50 @@ func BenchmarkString(b *testing.B) {
 		})
 	})
 
+	b.Run("to-uppercase", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "foo-bar-hello-world"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				strings.ToUpper(example)
+			}
+		})
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("foo-bar-hello-world")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				exampleString.UpperCase()
+			}
+		})
+	})
+
+	b.Run("to-capitalize", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "foo-bar-hello-world"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				strings.ToTitle(example)
+			}
+		})
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("foo-bar-hello-world")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				exampleString.Capitalize()
+			}
+		})
+	})
+
 	b.Run("reverse", func(b *testing.B) {
 		b.Run("custom", func(b *testing.B) {
 			example := []byte("foo-bar-hello-world")
@@ -168,6 +213,15 @@ func BenchmarkString(b *testing.B) {
 	})
 
 	b.Run("title-case", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "foo-bar-hello-world"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				strings.ToTitle(example)
+			}
+		})
 		b.Run("custom", func(b *testing.B) {
 			example := []byte("foo-bar-hello-world")
 			b.ReportAllocs()
@@ -202,6 +256,84 @@ func BenchmarkString(b *testing.B) {
 			exampleString := NewWith(example)
 			for n := 0; n < b.N; n++ {
 				_ = exampleString.Contains(item)
+			}
+		})
+	})
+	b.Run("has-suffix", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "foo-bar-hello-world"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				strings.HasSuffix(example, "world")
+			}
+		})
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("foo-bar-hello-world")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				_ = exampleString.HasSuffix("world")
+			}
+		})
+	})
+	b.Run("has-prefix", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "foo-bar-hello-world"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				strings.HasPrefix(example, "foo")
+			}
+		})
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("foo-bar-hello-world")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				_ = exampleString.HasPrefix("foo")
+			}
+		})
+	})
+	b.Run("is-numeric", func(b *testing.B) {
+		b.Run("standard", func(b *testing.B) {
+			example := "123456789"
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_, _ = strconv.Atoi(example)
+			}
+		})
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("123456789")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				_ = exampleString.IsNumeric()
+			}
+		})
+	})
+	// BenchmarkString/is-hexadecimal/custom-12  	 5000000	       337 ns/op	   2.96 MB/s	       0 B/op	       0 allocs/op
+	// BenchmarkString/is-hexadecimal/custom-12  	50000000	        35.0 ns/op	  28.54 MB/s	       0 B/op	       0 allocs/op
+
+	b.Run("is-hexadecimal", func(b *testing.B) {
+		b.Run("custom", func(b *testing.B) {
+			example := []byte("d46d1326aed64ac499cc02a128339b99")
+			b.ReportAllocs()
+			b.SetBytes(1)
+			b.ResetTimer()
+			exampleString := NewWith(example)
+			for n := 0; n < b.N; n++ {
+				_ = exampleString.IsHexadecimal()
 			}
 		})
 	})
