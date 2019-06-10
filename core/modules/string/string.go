@@ -8,6 +8,7 @@ import (
 
 const (
 	level = 32
+	empty = 0x0
 )
 
 type String struct {
@@ -30,7 +31,10 @@ func NewWith(data []byte) String {
 }
 
 func (c String) CharAt(index int) byte {
-	return *(*byte)((unsafe.Pointer)(c.start + uintptr(index)))
+	if index >= 0 && index < c.Len {
+		return *(*byte)((unsafe.Pointer)(c.start + uintptr(index)))
+	}
+	return empty
 }
 
 func (c *String) Bytes() []byte {
@@ -95,6 +99,14 @@ func (c String) UpperCase() {
 		if char >= 'a' && char <= 'z' {
 			*(*byte)((unsafe.Pointer)(c.start + ptri)) = char &^ level
 		}
+	}
+}
+
+// Capitalize returns a capitalized version of the string
+func (c String) Capitalize() {
+	char := *(*byte)((unsafe.Pointer)(c.start))
+	if char >= 'a' && char <= 'z' {
+		*(*byte)((unsafe.Pointer)(c.start)) = char &^ level
 	}
 }
 
@@ -177,4 +189,58 @@ func (c String) Contains(subStr []byte) bool {
 		}
 	}
 	return lastSubStrIdx == s
+}
+
+// HasPrefix tests whether the string s begins with prefix.
+func (c String) HasPrefix(prefix string) bool {
+	if c.Len >= len(prefix) {
+		var eq = true
+		for i := 0; i < len(prefix) && eq; i++ {
+			eq = *(*byte)((unsafe.Pointer)(c.start + uintptr(i))) == prefix[i]
+		}
+		return eq
+	}
+	return false
+}
+
+// HasSuffix tests whether the string s ends with suffix.
+func (c String) HasSuffix(suffix string) bool {
+	if c.Len >= len(suffix) {
+		var eq = true
+		for i := len(suffix) - 1; i >= 0 && eq; i-- {
+			v := *(*byte)((unsafe.Pointer)(c.start + uintptr(i)))
+			eq = v == suffix[i]
+		}
+		return eq
+	}
+	return false
+}
+
+// is numeric checks whether given string is numeric or not
+func (c String) IsNumeric() bool {
+	valid := true
+	for i := 0; i < c.Len && valid; i++ {
+		b := *(*byte)((unsafe.Pointer)(c.start + uintptr(i)))
+		valid = valid && b >= '0' && b <= '9'
+	}
+	return valid
+}
+
+// is numeric checks whether given string is numeric or not
+func (c String) IsHexadecimal() bool {
+	valid := true
+	for i := 0; i < c.Len && valid; i++ {
+		b := *(*byte)((unsafe.Pointer)(c.start + uintptr(i)))
+		valid = valid && ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'F') || (b >= 'a' && b <= 'f'))
+	}
+	return valid
+}
+
+func (c String) IsOctal() bool {
+	valid := true
+	for i := 0; i < c.Len && valid; i++ {
+		b := *(*byte)((unsafe.Pointer)(c.start + uintptr(i)))
+		valid = valid && (b >= '0' && b <= '7')
+	}
+	return valid
 }

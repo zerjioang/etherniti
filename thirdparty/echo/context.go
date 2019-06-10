@@ -23,10 +23,10 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/modules/concurrentmap"
@@ -576,7 +576,7 @@ func (c *Context) CallerEthAddress() string {
 // it recovers the eth client linked to it
 // if peer url is provided, this peer address is used to dial
 // otherwise, token information is readed in order to custom peer dial
-func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string) (*ethrpc.EthRPC, string, error) {
+func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string, httpClient *http.Client) (*ethrpc.EthRPC, string, error) {
 	client := new(ethrpc.EthRPC)
 	var contextId string
 	// by default, peer url is used to dial
@@ -590,7 +590,7 @@ func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string) (*ethrpc.Et
 		// use peer url
 		contextId = peerUrl
 	}
-	client = ethrpc.NewDefaultRPCPtr(contextId, isDebug)
+	client = ethrpc.NewDefaultRPCPtr(contextId, isDebug, httpClient)
 	return client, contextId, nil
 }
 

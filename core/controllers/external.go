@@ -5,9 +5,10 @@ package controllers
 
 import (
 	"errors"
-	"github.com/zerjioang/etherniti/core/modules/httpclient"
 	"net/http"
 	"sync/atomic"
+
+	"github.com/zerjioang/etherniti/core/modules/httpclient"
 
 	"github.com/zerjioang/etherniti/core/data"
 
@@ -18,16 +19,16 @@ import (
 
 const (
 	ethPriceApi = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
-	get = "GET"
-	none = ""
+	get         = "GET"
+	none        = ""
 )
 
 var (
 	/*
-	coinMarketheaders = http.Header{
-		"Host":clientHeaders["Host"],
-		"Cookie":clientHeaders["Cookie"],
-	}
+		coinMarketheaders = http.Header{
+			"Host":clientHeaders["Host"],
+			"Cookie":clientHeaders["Cookie"],
+		}
 	*/
 	errNoResponse = errors.New("could not get eth price right now")
 )

@@ -16,6 +16,12 @@ import (
 
 var (
 	ApplicationJson = "application/json"
+	fallbackClient  = &http.Client{
+		Timeout: time.Second * 3,
+		Transport: &http.Transport{
+			TLSHandshakeTimeout: 3 * time.Second,
+		},
+	}
 )
 
 func MakePost(client *http.Client, url string, headers http.Header, data string) (json.RawMessage, error) {
@@ -25,12 +31,7 @@ func MakePost(client *http.Client, url string, headers http.Header, data string)
 func MakeCall(client *http.Client, method string, url string, headers http.Header, data string) (json.RawMessage, error) {
 	log.Info("sending request: ", data)
 	if client == nil {
-		client = &http.Client{
-			Timeout: time.Second * 3,
-			Transport: &http.Transport{
-				TLSHandshakeTimeout: 3 * time.Second,
-			},
-		}
+		client = fallbackClient
 	}
 	req, err := http.NewRequest(method, url, strings.NewReader(data))
 	if err != nil {

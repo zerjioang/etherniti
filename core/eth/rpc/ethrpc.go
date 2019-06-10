@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/worker"
 
@@ -74,29 +73,24 @@ type EthRPC struct {
 	//ethereum interaction cache
 	cache *cache.MemoryCache
 	// http client
-	client http.Client
+	client *http.Client
 	// debug flag
 	Debug bool
 }
 
 // New create new rpc client with given url
-func NewDefaultRPCPtr(url string, debug bool) *EthRPC {
-	c := NewDefaultRPC(url, debug)
+func NewDefaultRPCPtr(url string, debug bool, client *http.Client) *EthRPC {
+	c := NewDefaultRPC(url, debug, client)
 	return &c
 }
 
 // New create new rpc client with given url
-func NewDefaultRPC(url string, debug bool) EthRPC {
+func NewDefaultRPC(url string, debug bool, client *http.Client) EthRPC {
 	rpc := EthRPC{
-		url:   url,
-		cache: cache.Instance(),
-		client: http.Client{
-			Timeout: time.Second * 3,
-			Transport: &http.Transport{
-				TLSHandshakeTimeout: 3 * time.Second,
-			},
-		},
-		Debug: debug,
+		url:    url,
+		cache:  cache.Instance(),
+		client: client,
+		Debug:  debug,
 	}
 	if strings.LastIndex(url, ".ipc") == 0 {
 		//unix mode detected
@@ -162,7 +156,7 @@ func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.
 
 func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
 
-	responseData, postErr := httpclient.MakePost(&rpc.client, rpc.url, defaultRpcHeader, data)
+	responseData, postErr := httpclient.MakePost(rpc.client, rpc.url, defaultRpcHeader, data)
 	if postErr != nil {
 		return nil, postErr
 	}
