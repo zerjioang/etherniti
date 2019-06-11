@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
@@ -15,119 +16,158 @@ const (
 	listeningModeErr = "invalid listening mode provided. Make sure your environment has correctly setup key X_ETHERNITI_LISTENING_MODE. Allowed values are: http, https, socket"
 )
 
-func CheckConfiguration() error {
+func CheckConfiguration(opts *EthernitiOptions) error {
 	logger.Info("checking etherniti proxy server configuration before full startup")
 
 	// check log level
-	if LogLevelStr() == "" {
+	if opts.LogLevelStr() == "" {
 		logger.Error(logLevelErr)
 		return errors.New(logLevelErr)
 	}
 
 	// check log enabled
-	if EnableLoggingStr() == "" {
+	if opts.EnableLoggingStr() == "" {
 		logger.Warn("proxy logging status is not defined. Make sure your environment has correctly setup key ", XEthernitiEnableLogging, ". Allowed values are: true, false")
 	}
 
-	if EnableSecureMode() {
+	if opts.EnableSecureMode() {
 		logger.Info("[INFO] enabling secure mode")
 	} else {
 		logger.Warn("[WARNING] secure mode is disabled")
 	}
 
-	if !EnableCors() {
+	if !opts.EnableCors() {
 		logger.Warn("[WARNING] CORS is disabled")
 	}
 
-	if !EnableRateLimit() {
+	if !opts.EnableRateLimit() {
 		logger.Warn("[WARNING] rate limit is disabled")
 	} else {
 		logger.Warn("[WARNING] rate limit is enabled")
 	}
 
 	// check infura token
-	if InfuraToken() == "" {
+	if opts.InfuraToken() == "" {
 		logger.Warn(infuraKeyErr)
 		logger.Warn("infura provider is disabled until valid token is provided")
 	}
-	if len(InfuraToken()) != 32 {
+	if len(opts.InfuraToken()) != 32 {
 		logger.Error(infuraKeyLenErr)
 		return errors.New(infuraKeyLenErr)
 	}
-	if BlockTorConnections == false {
+	if opts.BlockTorConnections == false {
 		logger.Warn("[WARNING] block of tor based connections is disabled")
 	}
 
 	// check gmail smtp
-	if GetEmailUsername() == "" {
+	if opts.GetEmailUsername() == "" {
 		logger.Warn("[WARNING] Missing GMAIL username. Some or all emailing features wont work as expected")
 	}
-	if GetEmailPassword() == "" {
+	if opts.GetEmailPassword() == "" {
 		logger.Warn("[WARNING] Missing GMAIL password or access token. Some or all emailing features wont work as expected")
 	}
-	if GetEmailServer() == "" {
+	if opts.GetEmailServer() == "" {
 		logger.Warn("[WARNING] Missing GMAIL server configuration. Some or all emailing features wont work as expected")
 	}
-	if GetEmailServerOnly() == "" {
+	if opts.GetEmailServerOnly() == "" {
 		logger.Warn("[WARNING] Missing GMAIL configuration. Some or all emailing features wont work as expected")
 	}
 
 	// check sendgrid api key
-	if SendGridApiKey() == "" {
+	if opts.SendGridApiKey() == "" {
 		logger.Warn("[WARNING] SendGrid API KEY not found. Make sure your environment has correctly setup key ", XEthernitiSendgridApiKey)
 	}
 
 	// proxy listener configuration checks
 
 	// check swagger address
-	if GetSwaggerAddress() == "" {
+	if opts.GetSwaggerAddress() == "" {
 		logger.Warn("[WARNING] missing swagger address. Make sure your environment has correctly setup key ", XEthernitiSwaggerAddress)
 		return errors.New("missing swagger address. Make sure your environment has correctly setup key " + XEthernitiSwaggerAddress)
 	}
 	// check listening address
-	if GetListeningAddress() == "" {
+	if opts.GetListeningAddress() == "" {
 		logger.Warn("[WARNING] missing http listening address. Make sure your environment has correctly setup key ", XEthernitiListeningAddress)
 		return errors.New("missing http listening address. Make sure your environment has correctly setup key " + XEthernitiListeningAddress)
 	}
 	// check listening port
-	if GetListeningPort() < 1024 {
+	if opts.GetListeningPort() < 1024 {
 		logger.Warn("[WARNING] selected listening port may require privileged access. Make sure your environment has correctly setup key ", XEthernitiListeningPort)
 		return errors.New("selected listening port may require privileged access. Make sure your environment has correctly setup key " + XEthernitiListeningPort)
 	}
 	// check listening port string
-	if GetListeningPortStr() == "" {
+	if opts.GetListeningPortStr() == "" {
 		msg := "selected listening port is not set. Make sure your environment has correctly setup key " + XEthernitiListeningPort
 		logger.Warn(msg)
 		return errors.New(msg)
 	}
 	// check listening mode
-	if ServiceListeningModeStr() == "" {
+	if opts.ServiceListeningModeStr() == "" {
 		logger.Error(listeningModeErr)
 		return errors.New(listeningModeErr)
 	}
 
-	if ServiceListeningMode() == listener.UnknownMode {
+	if opts.ServiceListeningMode() == listener.UnknownMode {
 		logger.Error(listeningModeErr)
 		return errors.New(listeningModeErr)
 	}
 
 	// check http listening interface
-	if GetHttpInterface() == "" {
+	if opts.GetHttpInterface() == "" {
 		logger.Warn("[WARNING] missing http listening interface. Make sure your environment has correctly setup key ", XEthernitiListeningInterface)
 		return errors.New("missing http listening interface. Make sure your environment has correctly setup key " + XEthernitiListeningInterface)
 	}
+	//check eth mainnets and testnets endpoints
+	if opts.RopstenCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Ropsten network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.RopstenCustomEndpoint) {
+		msg := "ropsten network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.RinkebyCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Rinkeby network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.RinkebyCustomEndpoint) {
+		msg := "rinkeby network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.KovanCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Kovan network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.KovanCustomEndpoint) {
+		msg := "kovan network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.MainnetCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Mainnet network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.MainnetCustomEndpoint) {
+		msg := "mainnet network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
 
 	// check worker module config
-	return checkWorkerModule()
+	return checkWorkerModule(opts)
 }
 
-func checkWorkerModule() error {
+func checkWorkerModule(opts *EthernitiOptions) error {
 	// worker module configuration
-	if MaxWorker <= 0 {
+	if opts.MaxWorker <= 0 {
 		logger.Warn("[WARNING] Invalid ", XEthernitiMaxWorkers, " value found. It must be bigger than 0")
 	}
-	if MaxQueue <= 0 {
+	if opts.MaxQueue <= 0 {
 		logger.Warn("[WARNING] Invalid ", XEthernitiMaxQueue, " value found. It must be bigger than 0")
 	}
 	return nil
+}
+
+func isValidUrl(url string) bool {
+	if url == "" {
+		return false
+	}
+	if !(strings.HasPrefix(url, "https://") || strings.HasPrefix(url, "http://")) {
+		return false
+	}
+	return true
 }

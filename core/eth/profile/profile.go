@@ -19,7 +19,8 @@ import (
 )
 
 var (
-	tokenSecretBytes = []byte(config.TokenSecret())
+	cfg              = config.GetDefaultOpts()
+	tokenSecretBytes = []byte(cfg.TokenSecret())
 )
 
 // default data for connection profile
@@ -211,7 +212,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 			Source:      ip.Ip2int(data.Ip),
 		},
 		Issuer:    "etherniti.org",
-		ExpiresAt: now.Add(config.TokenExpiration()).Unix(),
+		ExpiresAt: now.Add(cfg.TokenExpiration()).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
 		Version:   banner.Version,
@@ -236,7 +237,7 @@ func NewDefaultConnectionProfile() ConnectionProfile {
 		},
 		//standard claims
 		Issuer:     "etherniti.org",
-		ExpiresAt:  now.Add(config.TokenExpiration()).Unix(),
+		ExpiresAt:  now.Add(cfg.TokenExpiration()).Unix(),
 		NotBefore:  now.Unix(),
 		IssuedAt:   now.Unix(),
 		Version:    banner.Version,

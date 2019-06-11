@@ -90,6 +90,7 @@ const (
 )
 
 var (
+	cfg                      = config.GetDefaultOpts()
 	apiKey                   = ""
 	defaultRequestHeader     http.Header
 	defaultSendGridApiClient *http.Client
@@ -99,8 +100,7 @@ var (
 
 func init() {
 	logger.Debug("reading SENDGRID_API_KEY")
-	apiKey = config.SendGridApiKey()
-	apiKey = `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`
+	apiKey = cfg.SendGridApiKey()
 	//generate header used in all sendgrid request
 	defaultRequestHeader = http.Header{
 		"Content-Type":  []string{httpclient.ApplicationJson},
@@ -131,10 +131,11 @@ func SendGridMailDelivery(data *model.Maildata) (json.RawMessage, error) {
 	if apiKey == "" {
 		logger.Error("aborting email delivery because no api key was defined in current environment variables")
 		return nil, noApiKeyErr
+	} else {
+		emailStr := buildSendGridPayload(data)
+		logger.Debug("sending email via sendgrid api")
+		return httpclient.MakePost(defaultSendGridApiClient, sendgridUrl, defaultRequestHeader, emailStr)
 	}
-	emailStr := buildSendGridPayload(data)
-	logger.Debug("sending email via sendgrid api")
-	return httpclient.MakePost(defaultSendGridApiClient, sendgridUrl, defaultRequestHeader, emailStr)
 }
 
 func cleanHtml(html string) string {

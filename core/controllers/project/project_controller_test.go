@@ -31,4 +31,17 @@ func TestProjectController(t *testing.T) {
 			assert.NotNil(t, pc)
 		})
 	})
+	t.Run("register-routes", func(t *testing.T) {
+		ctl := NewProjectController()
+		e := echo.New()
+		// create example group
+		// create example group
+		testGroup := e.Group("", func(next echo.HandlerFunc) echo.HandlerFunc {
+			return func(c *echo.Context) error {
+				return next(c)
+			}
+		})
+		ctl.RegisterRouters(testGroup)
+		assert.NotNil(t, ctl)
+	})
 }

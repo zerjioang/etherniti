@@ -32,8 +32,11 @@ func RunServer(notifier chan error) {
 	logger.Debug("running etherniti main server")
 	// 1 read value
 	if !serverStarted.Load().(bool) {
+		// load etherniti proxy configuration
+		opts := config.GetDefaultOpts()
+
 		// setup current execution environment
-		err := config.Setup()
+		err := config.Setup(opts)
 		if err != nil {
 			// env error configuration found
 			notifier <- err
@@ -48,7 +51,7 @@ func RunServer(notifier chan error) {
 			return
 		}
 		// 3 check proxy server configuration
-		configErr := config.CheckConfiguration()
+		configErr := config.CheckConfiguration(opts)
 		if configErr != nil {
 			// proxy configuration error configuration found
 			notifier <- configErr
@@ -56,7 +59,7 @@ func RunServer(notifier chan error) {
 		}
 		// 4 get listening mode
 		logger.Info("starting etherniti proxy listener with requested mode")
-		mode := config.ServiceListeningMode()
+		mode := opts.ServiceListeningMode()
 
 		// 5 update value
 		serverStarted.Store(true)

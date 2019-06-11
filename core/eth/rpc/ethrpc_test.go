@@ -64,7 +64,7 @@ func (s *EthRPCTestSuite) paramsEqual(body []byte, expected string) {
 }
 
 func (s *EthRPCTestSuite) SetupSuite() {
-	client := NewDefaultRPC("http://127.0.0.1:8545", true)
+	client := NewDefaultRPC("http://127.0.0.1:8545", true, new(http.Client))
 	s.rpc = &client
 
 	httpmock.Activate()

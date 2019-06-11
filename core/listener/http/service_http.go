@@ -25,8 +25,10 @@ type HttpListener struct {
 }
 
 var (
+	//default etherniti proxy configuration
+	cfg = config.GetDefaultOpts()
 	//listening ip:port
-	listenAddr = config.GetListeningAddressWithPort()
+	listenAddr = cfg.GetListeningAddressWithPort()
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
 		Addr:         listenAddr,
@@ -43,7 +45,7 @@ func (l HttpListener) Listen(notifier chan error) {
 	//deploy http server only
 	e := common.NewServer(middleware.ConfigureServerRoutes)
 	logger.Info("starting http server...")
-	logger.Info("interface: ", config.GetHttpInterface())
+	logger.Info("interface: ", cfg.GetHttpInterface())
 	logger.Info("endpoint: ", listenAddr)
 	swagger.ConfigureFromTemplate()
 	// Start server

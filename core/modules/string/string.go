@@ -11,6 +11,9 @@ const (
 	empty = 0x0
 )
 
+// https://medium.com/@c_bata_/optimizing-go-by-avx2-using-auto-vectorization-in-llvm-118f7b366969
+// https://blog.minio.io/c2goasm-c-to-go-assembly-bb723d2f777f
+
 type String struct {
 	// Data here is analogous to the C string
 	Data  unsafe.Pointer
@@ -205,11 +208,13 @@ func (c String) HasPrefix(prefix string) bool {
 
 // HasSuffix tests whether the string s ends with suffix.
 func (c String) HasSuffix(suffix string) bool {
-	if c.Len >= len(suffix) {
+	sl := len(suffix)
+	if c.Len >= sl {
 		var eq = true
-		for i := len(suffix) - 1; i >= 0 && eq; i-- {
-			v := *(*byte)((unsafe.Pointer)(c.start + uintptr(i)))
-			eq = v == suffix[i]
+		for i := 0; i < sl && eq; i++ {
+			//read byte per byte starting from ending
+			v := *(*byte)((unsafe.Pointer)(c.start + uintptr(c.Len-i-1)))
+			eq = v == suffix[sl-i-1]
 		}
 		return eq
 	}

@@ -16,7 +16,7 @@ addons:
       - upx
 
 env:
-  - HOME=/home/travis GOPATH=$HOME/gopath GOBIN=$GOPATH/bin VERSION=0.1
+  - HOME=/home/travis GOPATH=$HOME/gopath GOBIN=$GOPATH/bin
 
 cache:
   directories:
@@ -49,6 +49,8 @@ before_script:
 # .golangci.yml file at the top level of your repo.
 script:
   - ./ci/script.sh
+after_script:
+  - ./ci/after_script.sh
 after_success:
   - ./ci/after_success.sh
 before_deploy:

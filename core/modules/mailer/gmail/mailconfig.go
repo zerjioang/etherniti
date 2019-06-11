@@ -24,32 +24,35 @@ type MailServerConfig struct {
 	auth        smtp.Auth
 }
 
-var packageInstance *MailServerConfig
-var packageInstanceThreadSafe *MailServerConfig
-var packageInitInstance *MailServerConfig
-var once sync.Once
+var (
+	packageInstance           *MailServerConfig
+	packageInstanceThreadSafe *MailServerConfig
+	packageInitInstance       *MailServerConfig
+	once                      sync.Once
+	opts                      = config.GetDefaultOpts()
+)
 
 /*
 thread safe initialization. it only writes content to variable packageInitInstance once and
 since this variable cannot be accesses by other code outside this file, it is completely thread safe
 */
 func init() {
-	packageInitInstance = newInternalServerConfig()
+	packageInitInstance = newInternalServerConfig(opts)
 }
 
 func GetMailServerConfigInstanceInit() *MailServerConfig {
 	return packageInitInstance
 }
 
-func newInternalServerConfig() *MailServerConfig {
+func newInternalServerConfig(opts *config.EthernitiOptions) *MailServerConfig {
 	conf := new(MailServerConfig)
-	conf.username = config.GetEmailUsername()
-	conf.password = config.GetEmailPassword()
-	conf.emailServer = config.GetEmailServer()
+	conf.username = opts.GetEmailUsername()
+	conf.password = opts.GetEmailPassword()
+	conf.emailServer = opts.GetEmailServer()
 	conf.auth = smtp.PlainAuth("",
 		conf.username,
 		conf.password,
-		config.GetEmailServerOnly(),
+		opts.GetEmailServerOnly(),
 	)
 	return conf
 }
@@ -63,7 +66,7 @@ use at your own risk knowning variable io access
 func GetMailServerConfigInstance() *MailServerConfig {
 	//not thread safe code
 	if packageInstance == nil {
-		packageInstance = newInternalServerConfig()
+		packageInstance = newInternalServerConfig(opts)
 	}
 	return packageInstance
 }
@@ -74,7 +77,7 @@ func GetMailServerConfigInstance() *MailServerConfig {
 func GetMailServerConfigInstanceThreadSafe() *MailServerConfig {
 	//thread safe code
 	once.Do(func() {
-		packageInstanceThreadSafe = newInternalServerConfig()
+		packageInstanceThreadSafe = newInternalServerConfig(opts)
 	})
 
 	return packageInstanceThreadSafe

@@ -21,13 +21,24 @@ func BenchmarkStringUtils(b *testing.B) {
 		}
 	})
 	b.Run("ToLowerAscii", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(1)
-		val := "Hello World, This is AWESOME"
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			_ = ToLowerAscii(val)
-		}
+		b.Run("empty", func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(1)
+			val := ""
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_ = ToLowerAscii(val)
+			}
+		})
+		b.Run("with-content", func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(1)
+			val := "Hello World, This is AWESOME"
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				_ = ToLowerAscii(val)
+			}
+		})
 	})
 	b.Run("ToLowerAscii-bytes", func(b *testing.B) {
 		b.ReportAllocs()

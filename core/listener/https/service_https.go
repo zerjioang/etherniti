@@ -27,12 +27,14 @@ import (
 )
 
 var (
+	//default etherniti proxy configuration
+	cfg = config.GetDefaultOpts()
 	//variables used when HTTPS is requested
 	localhostCert tls.Certificate
 	certEtr       error
 	// define http server config for http to https redirection
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.GetListeningAddressWithPort(),
+		Addr:         cfg.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -50,8 +52,8 @@ func recoverFromPem() {
 
 func init() {
 	defer recoverFromPem()
-	certBytes := config.GetCertPem()
-	keyBytes := config.GetKeyPem()
+	certBytes := cfg.GetCertPem()
+	keyBytes := cfg.GetKeyPem()
 	if certBytes != nil && len(certBytes) > 0 &&
 		keyBytes != nil && len(keyBytes) > 0 {
 		localhostCert, certEtr = tls.X509KeyPair(
@@ -151,7 +153,7 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 
 	//configure custom secure server
 	return &http.Server{
-		Addr:         config.GetListeningAddressWithPort(),
+		Addr:         cfg.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		TLSConfig:    &tlsConf,

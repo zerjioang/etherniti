@@ -87,21 +87,17 @@ func ToLowerAscii(src string) string {
 	if src == "" {
 		return src
 	}
-	// string are immutable
-	if src != "" {
-		rawBytes := []byte(src)
-		start := uintptr(unsafe.Pointer(&rawBytes[0]))
-		s := len(rawBytes)
-		for i := 0; i < s; i++ {
-			// get char at current index
-			c := *(*byte)((unsafe.Pointer)(start + uintptr(i)))
-			if c >= 'A' && c <= 'Z' {
-				*(*byte)((unsafe.Pointer)(start + uintptr(i))) = c + 32
-			}
+	rawBytes := []byte(src)
+	start := uintptr(unsafe.Pointer(&rawBytes[0]))
+	s := len(rawBytes)
+	for i := 0; i < s; i++ {
+		// get char at current index
+		c := *(*byte)((unsafe.Pointer)(start + uintptr(i)))
+		if c >= 'A' && c <= 'Z' {
+			*(*byte)((unsafe.Pointer)(start + uintptr(i))) = c + 32
 		}
-		return *(*string)(unsafe.Pointer(&rawBytes))
 	}
-	return ""
+	return *(*string)(unsafe.Pointer(&rawBytes))
 }
 
 // A slightly faster lowercase function.

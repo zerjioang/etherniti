@@ -6,7 +6,6 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/controllers/network"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
@@ -49,7 +48,7 @@ type RestController struct {
 func init() {
 	logger.Debug("loading infura token secret")
 	// rad infura token
-	infuraToken = config.InfuraToken()
+	infuraToken = cfg.InfuraToken()
 	//update all infura related urls
 	logger.Debug("updating infura v3 endpoints with provided token")
 	ropstenInfura = ropstenInfura + infuraToken
@@ -57,7 +56,7 @@ func init() {
 	kovanInfura = kovanInfura + infuraToken
 	infuraToken = infuraToken + infuraToken
 	// load custom endpoints if exists
-	//ropstenCustom := config.EndpointRopsten()
+	ropstenCustom = cfg.RopstenCustomEndpoint
 
 }
 
@@ -95,13 +94,13 @@ func newInfuraController(client *http.Client, networkName, infuraEndpoint, fallb
 	logger.Debug("creating new web3 controller for ", networkName, " network")
 
 	if infuraToken != "" && len(infuraToken) == 32 {
-		// infura token found and valid
+		// infura based controller is supported with default url
 		return newController(client, infuraEndpoint, networkName)
 	} else if fallbackEndpoint != "" {
-		// load ropsten controller with user provided URL
+		// infura based controller is supported with user provided URL
 		return newController(client, fallbackEndpoint, networkName)
 	} else {
-		// ropsten not supported
+		// infura based controller not supported
 		return newController(client, "", "unknown")
 	}
 }
