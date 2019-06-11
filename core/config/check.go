@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
@@ -116,6 +117,35 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 		logger.Warn("[WARNING] missing http listening interface. Make sure your environment has correctly setup key ", XEthernitiListeningInterface)
 		return errors.New("missing http listening interface. Make sure your environment has correctly setup key " + XEthernitiListeningInterface)
 	}
+	//check eth mainnets and testnets endpoints
+	if opts.RopstenCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Ropsten network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.RopstenCustomEndpoint) {
+		msg := "ropsten network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.RinkebyCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Rinkeby network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.RinkebyCustomEndpoint) {
+		msg := "rinkeby network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.KovanCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Kovan network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.KovanCustomEndpoint) {
+		msg := "kovan network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
+	if opts.MainnetCustomEndpoint == "" {
+		logger.Warn("[WARNING] missing Mainnet network custom endpoint. Default infura endpoint will be used if token provided")
+	} else if !isValidUrl(opts.MainnetCustomEndpoint) {
+		msg := "mainnet network custom endpoint is not a valid URL"
+		logger.Error(msg)
+		return errors.New(msg)
+	}
 
 	// check worker module config
 	return checkWorkerModule(opts)
@@ -130,4 +160,14 @@ func checkWorkerModule(opts *EthernitiOptions) error {
 		logger.Warn("[WARNING] Invalid ", XEthernitiMaxQueue, " value found. It must be bigger than 0")
 	}
 	return nil
+}
+
+func isValidUrl(url string) bool {
+	if url == "" {
+		return false
+	}
+	if !(strings.HasPrefix(url, "https://") || strings.HasPrefix(url, "http://")) {
+		return false
+	}
+	return true
 }

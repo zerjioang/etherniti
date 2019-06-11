@@ -5,6 +5,7 @@ package ethrpc
 
 import (
 	"encoding/hex"
+	"net/http"
 	"testing"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
@@ -20,7 +21,7 @@ const (
 
 func TestEthRPC_Call(t *testing.T) {
 	t.Run("web3_clientVersion", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		// Returns the current client version.
 		result, err := client.Web3ClientVersion()
 		if err != nil {
@@ -33,7 +34,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("web3_sha3", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		// Returns Keccak-256 (not the standardized SHA3-256) of the given data.
 		result, err := client.Web3Sha3([]byte("hello-world"))
 		if err != nil {
@@ -47,7 +48,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("net_version", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.NetVersion()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -59,7 +60,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("net_version", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.NetListening()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -72,7 +73,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("net_peerCount", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.NetPeerCount()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -84,7 +85,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("eth_protocolVersion", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthProtocolVersion()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -96,7 +97,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("eth_syncing", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthSyncing()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -108,7 +109,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("eth_coinbase", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthCoinbase()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -122,7 +123,7 @@ func TestEthRPC_Call(t *testing.T) {
 	t.Run("eth_mining", func(t *testing.T) {
 	})
 	t.Run("eth_hashrate", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthHashRate()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -134,7 +135,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("eth_gasprice", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthGasPrice()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -146,7 +147,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("eth_accounts", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		result, err := client.EthAccounts()
 		if err != nil {
 			t.Error("failed to post", err)
@@ -158,7 +159,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("ethereum-node-sign", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		// send sign nrequest of plain text
 		result, err := client.EthSign(address0, "foo-bar")
 		if err != nil {
@@ -182,7 +183,7 @@ func TestEthRPC_Call(t *testing.T) {
 		}
 	})
 	t.Run("ethereum-node-sign-2", func(t *testing.T) {
-		client := NewDefaultRPC(localGanache, true)
+		client := NewDefaultRPC(localGanache, true, new(http.Client))
 		// send sign request of hashed message
 		hashed, message := TextAndHash([]byte("foo-bar"))
 		t.Log(string(hashed))

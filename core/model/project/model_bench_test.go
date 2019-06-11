@@ -16,7 +16,7 @@ func BenchmarkProjectModel(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			_ = NewProject("", "", nil)
+			_ = NewProject("", nil)
 		}
 	})
 	b.Run("serialization-bench", func(b *testing.B) {
@@ -27,12 +27,12 @@ func BenchmarkProjectModel(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
-			p := NewProject("", "", nil)
+			p := NewProject("", nil)
 			_ = p.Value()
 		}
 	})
 	b.Run("deserialization-bench", func(b *testing.B) {
-		p := NewProject("", "", nil)
+		p := NewProject("", nil)
 		v := p.Value()
 		logger.Enabled(false)
 		b.ReportAllocs()

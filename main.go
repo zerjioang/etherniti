@@ -45,11 +45,16 @@ func init() {
 // example: go build -ldflags "-X main.Build a1064bc" example.go
 func main() {
 	/*
-		The GOMAXPROCS variable limits the number of operating system threads
-		that can execute user-level Go code simultaneously. There is no limit
-		to the number of threads that can be blocked in system calls on behalf
-		of Go code; those do not count against the GOMAXPROCS limit. This package's
-		GOMAXPROCS function queries and changes the limit.
+	The GOMAXPROCS variable limits the number of operating system threads
+	that can execute user-level Go code simultaneously. There is no limit
+	to the number of threads that can be blocked in system calls on behalf
+	of Go code; those do not count against the GOMAXPROCS limit. This package's
+	GOMAXPROCS function queries and changes the limit.
+
+	It is advised in most of the cases, to run all your goroutines on one core
+	but if you need to divide goroutines among available CPU cores of your system,
+	you can use GOMAXPROCS environment variable or call to runtime using function
+	runtime.GOMAXPROCS(n) where n is the number of cores to use.
 	*/
 	//set as default value
 	max := runtime.NumCPU()

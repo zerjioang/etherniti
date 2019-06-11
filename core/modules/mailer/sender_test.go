@@ -6,11 +6,12 @@ package mailer
 import (
 	"testing"
 
+	"github.com/zerjioang/etherniti/core/model/auth"
+
 	"github.com/zerjioang/etherniti/core/modules/mailer/gmail"
 	"github.com/zerjioang/etherniti/core/modules/mailer/sendgrid"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/shared/protocol"
 )
 
 const (
@@ -20,27 +21,27 @@ const (
 
 func TestEmails(t *testing.T) {
 	t.Run("registration-via-sendgrid", func(t *testing.T) {
-		err := SendActivationEmail(&protocol.RegisterRequest{
+		err := SendActivationEmail(&auth.AuthRequest{
 			Username: testUserName,
 			Email:    testEmail,
 		}, sendgrid.SendGridMailDelivery)
 		assert.Nil(t, err)
 	})
 	t.Run("registration-via-gmail", func(t *testing.T) {
-		err := SendActivationEmail(&protocol.RegisterRequest{
+		err := SendActivationEmail(&auth.AuthRequest{
 			Username: testUserName,
 			Email:    testEmail,
 		}, gmail.SendWithGmail)
 		assert.Nil(t, err)
 	})
 	t.Run("recovery-request", func(t *testing.T) {
-		err := SendRecoveryEmail(&protocol.RecoveryRequest{
+		err := SendRecoveryEmail(&auth.AuthRequest{
 			Email: testEmail,
 		}, sendgrid.SendGridMailDelivery)
 		assert.Nil(t, err)
 	})
 	t.Run("login-detect", func(t *testing.T) {
-		err := SendLoginEmail(&protocol.LoginRequest{
+		err := SendLoginEmail(&auth.AuthRequest{
 			Email: testEmail,
 		}, sendgrid.SendGridMailDelivery)
 		assert.Nil(t, err)

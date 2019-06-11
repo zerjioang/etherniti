@@ -25,9 +25,10 @@ type WebsocketListener struct {
 }
 
 var (
+	cfg = config.GetDefaultOpts()
 	// define http server config for listener service
 	defaultHttpServerConfig = http.Server{
-		Addr:         config.GetListeningAddressWithPort(),
+		Addr:         cfg.GetListeningAddressWithPort(),
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}
@@ -41,7 +42,7 @@ func (l WebsocketListener) Listen(notifier chan error) {
 	//deploy http server only
 	e := common.NewServer(middleware.ConfigureServerRoutes)
 	logger.Info("starting websocket server...")
-	logger.Info("interface: ", config.GetHttpInterface())
+	logger.Info("interface: ", cfg.GetHttpInterface())
 	swagger.ConfigureFromTemplate()
 	// Start server
 	go func() {
