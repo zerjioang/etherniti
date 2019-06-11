@@ -6,7 +6,7 @@ import (
 )
 
 //check if DF param is safe or not
-func isSafePrime(modulusInt *big.Int) (bool) {
+func isSafePrime(modulusInt *big.Int) bool {
 	// q2 = p - 1
 	b1 := new(big.Int)
 	fmt.Sscan("1", b1)

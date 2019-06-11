@@ -22,4 +22,9 @@ func TestIpToUint32(t *testing.T) {
 		t.Log("str ip:", strconv.Itoa(int(intVal)))
 		assert.Equal(t, int(intVal), 170492934, "failed to convert ip to numeric")
 	})
+	t.Run("assembly_amd64", func(t *testing.T) {
+		v := IpToInt2([]byte("10.41.132.6"))
+		t.Log("str ip:", strconv.Itoa(int(v)))
+		assert.Equal(t, int(v), 170492934, "failed to convert ip to numeric")
+	})
 }

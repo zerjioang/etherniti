@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-const(
-	plainText = "Hello, world from b64 benchmark"
+const (
+	plainText      = "Hello, world from b64 benchmark"
 	exampleEncoded = "SGVsbG8sIHdvcmxkIGZyb20gYjY0IGJlbmNobWFyaw=="
 	// sonrie, sonreir, sonreido
 )
@@ -16,10 +16,10 @@ type testWriter struct {
 	StreamInterface
 }
 
-func (w *testWriter) Write(b byte){
+func (w *testWriter) Write(b byte) {
 }
 
-func TestBase64(t *testing.T){
+func TestBase64(t *testing.T) {
 	t.Run("native-go", func(t *testing.T) {
 		raw := []byte(plainText)
 		encoded := base64.StdEncoding.EncodeToString(raw)

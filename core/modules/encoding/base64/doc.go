@@ -6,7 +6,7 @@ package base64
 /*
 http://0x80.pl/notesen/2015-12-27-base64-encoding.html
 http://0x80.pl/articles/index.html#base64-algorithm-update
- */
+*/
 
 /*
 

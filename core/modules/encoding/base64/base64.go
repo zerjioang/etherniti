@@ -9,16 +9,17 @@ type writer func(byte)
 type StreamInterface interface {
 	Write(byte)
 }
+
 const (
 	StdPadding rune = '=' // Standard padding character
 	NoPadding  rune = -1  // No padding
-	encodeStd = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-	encodeURL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
-	empty = ""
+	encodeStd       = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	encodeURL       = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+	empty           = ""
 )
 
-var(
-	charMap = []byte(encodeStd)
+var (
+	charMap        = []byte(encodeStd)
 	stdPaddingByte = byte(StdPadding)
 )
 
@@ -140,10 +141,10 @@ func EncodeToStream(src []byte, writer writer) {
 		mapIdx := uint(b1)<<16 | uint(b2)<<8 | uint(b3)
 		// this 24-bit number gets separated into four 6-bit numbers
 		// those four 6-bit numbers are used as indices into the base64 character list
-		writer(charMap[mapIdx >> 18 & 0x3F])
-		writer(charMap[mapIdx >> 12 & 0x3F])
-		writer(charMap[mapIdx >> 6 & 0x3F])
-		writer(charMap[mapIdx & 0x3F])
+		writer(charMap[mapIdx>>18&0x3F])
+		writer(charMap[mapIdx>>12&0x3F])
+		writer(charMap[mapIdx>>6&0x3F])
+		writer(charMap[mapIdx&0x3F])
 
 		//increase source data counter
 		si += 3
@@ -158,8 +159,8 @@ func EncodeToStream(src []byte, writer writer) {
 		val |= uint(src[si+1]) << 8
 	}
 
-	writer(charMap[val >> 18 & 0x3F])
-	writer(charMap[val >> 12 & 0x3F])
+	writer(charMap[val>>18&0x3F])
+	writer(charMap[val>>12&0x3F])
 
 	switch remain {
 	case 2:
