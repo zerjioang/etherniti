@@ -19,6 +19,10 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	cfg = config.GetDefaultOpts()
+)
+
 func infuraJwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return defaultJwt(next, data.InfuraJwtErrorMessage)
 }
@@ -79,7 +83,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	}
 	// /v1
 	groupV1 := e.Group(constants.ApiVersion, next)
-	if config.EnableMetrics() {
+	if cfg.EnableMetrics() {
 		logger.Info("registering prometheus_metrics metrics collector endpoint")
 		e.GET("/metrics", echo.WrapHandler(
 			promhttp.Handler(),

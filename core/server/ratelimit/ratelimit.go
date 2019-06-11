@@ -36,9 +36,13 @@ const (
 )
 
 var (
-	defaultCacheMeasurementUnitFt = config.RateLimitUnitsFt()
-	maxRatelimitStr               = config.RateLimitStr()
-	maxRatelimitValue             = config.RateLimit()
+	cfg = config.GetDefaultOpts()
+)
+
+var (
+	defaultCacheMeasurementUnitFt = cfg.RateLimitUnitsFt()
+	maxRatelimitStr               = cfg.RateLimitStr()
+	maxRatelimitValue             = cfg.RateLimit()
 )
 
 type limit struct {

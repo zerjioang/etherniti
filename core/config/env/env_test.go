@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package config
+package env
 
 import (
 	"sync"
@@ -12,7 +12,7 @@ import (
 
 func TestGetEnvironment(t *testing.T) {
 	t.Run("get-env", func(t *testing.T) {
-		cfg := GetEnvironment()
+		cfg := New()
 		assert.NotNil(t, cfg)
 	})
 	t.Run("get-env-goroutines", func(t *testing.T) {
@@ -21,24 +21,35 @@ func TestGetEnvironment(t *testing.T) {
 		g.Add(total)
 		for i := 0; i < total; i++ {
 			go func() {
-				cfg := GetEnvironment()
+				cfg := New()
 				assert.NotNil(t, cfg)
 				g.Done()
 			}()
 		}
 		g.Wait()
 	})
-	t.Run("redirect", func(t *testing.T) {
-		r := GetRedirectUrl("subdomain.localhost.com", "/v1/do/the/test")
-		assert.NotNil(t, r)
+	t.Run("read-env-all", func(t *testing.T) {
+		cfg := New()
+		cfg.Load()
 	})
-	t.Run("redirect-goroutines", func(t *testing.T) {
+	t.Run("read-env-key", func(t *testing.T) {
+		cfg := New()
+		cfg.Load()
+		v, found := cfg.Read("HOME")
+		assert.NotNil(t, v)
+		assert.True(t, found)
+	})
+	t.Run("read-env-key-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
 		total := 200
 		g.Add(total)
+		cfg := New()
+		cfg.Load()
 		for i := 0; i < total; i++ {
 			go func() {
-				_ = GetRedirectUrl("subdomain.localhost.com", "/v1/do/the/test")
+				v, found := cfg.Read("HOME")
+				assert.NotNil(t, v)
+				assert.True(t, found)
 				g.Done()
 			}()
 		}

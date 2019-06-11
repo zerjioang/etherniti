@@ -1,44 +1,47 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package config
+package env
 
 import (
 	"os"
 	"strings"
+	"sync/atomic"
 
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-func GetEnvironment() *EnvConfig {
-	return proxyEnv
-}
-
 // configuration data type
 type EnvConfig struct {
+	l    atomic.Value
 	data map[string]interface{}
 }
 
 // Constructor like function for new Env config data wrappers
-func newEnvironment() *EnvConfig {
+func New() *EnvConfig {
 	logger.Debug("creating new enviroment data")
 	cfg := new(EnvConfig)
 	cfg.data = make(map[string]interface{})
+	cfg.l.Store(false)
 	return cfg
 }
 
-//readEnvironmentData environment variables
-func (c *EnvConfig) readEnvironmentData() {
-	logger.Debug("reading environment variables from current operating system")
-	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
-		if len(pair) == 2 {
-			k := pair[0]
-			v := pair[1]
-			logger.Debug(k, " = ", v)
-			c.data[k] = v
+//read environment ariables
+func (c *EnvConfig) Load() {
+	if c.l.Load() == false {
+		logger.Debug("reading environment variables from current operating system")
+		for _, e := range os.Environ() {
+			pair := strings.Split(e, "=")
+			if len(pair) == 2 {
+				k := pair[0]
+				v := pair[1]
+				logger.Debug(k, " = ", v)
+				c.data[k] = v
+			}
 		}
 	}
+	//mark the env config as readed from env
+	c.l.Store(true)
 }
 func (c EnvConfig) String(key string) string {
 	v, ok := c.Read(key)

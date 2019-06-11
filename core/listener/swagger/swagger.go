@@ -16,6 +16,10 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
+var (
+	cfg = config.GetDefaultOpts()
+)
+
 func ConfigureFromTemplate() {
 	configureSwaggerJsonWithDir(config.ResourcesDir)
 }
@@ -32,7 +36,7 @@ func configureSwaggerJsonWithDir(resources string) {
 	str := string(raw)
 	str = strings.Replace(str, "$title", "Etherniti: High Performance Web3 REST Proxy", -1)
 	str = strings.Replace(str, "$version", banner.Version, -1)
-	str = strings.Replace(str, "$host", config.GetSwaggerAddressWithPort(), -1)
+	str = strings.Replace(str, "$host", config.GetSwaggerAddressWithPort(cfg), -1)
 	str = strings.Replace(str, "$basepath", "/v1", -1)
 	str = strings.Replace(str, "$header-auth-key", constants.HttpProfileHeaderkey, -1)
 	//write swagger.json files

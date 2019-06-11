@@ -45,4 +45,10 @@ const (
 	// worker module configuration
 	XEthernitiMaxWorkers = "X_ETHERNITI_MAX_WORKERS"
 	XEthernitiMaxQueue   = "X_ETHERNITI_MAX_QUEUE"
+
+	//add support for custom endpoints of mainnets and testnets
+	XEthernitiRopstenEndpoint = "X_ETHERNITI_ROPSTEN_ENDPOINT"
+	XEthernitiRinkebyEndpoint = "X_ETHERNITI_RINKEBY_ENDPOINT"
+	XEthernitiKovanEndpoint   = "X_ETHERNITI_KOVAN_ENDPOINT"
+	XEthernitiMainnetEndpoint = "X_ETHERNITI_MAINNET_ENDPOINT"
 )

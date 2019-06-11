@@ -15,8 +15,12 @@ type Worker struct {
 	quit       chan bool
 }
 
+var (
+	cfg = config.GetDefaultOpts()
+)
+
 func init() {
-	dispatcher := NewDispatcher(config.MaxWorker)
+	dispatcher := NewDispatcher(cfg.MaxWorker)
 	dispatcher.Run()
 }
 

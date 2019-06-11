@@ -11,15 +11,19 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	cfg = config.GetDefaultOpts()
+)
+
 // create a mock  server for testing
 func NewDefaultServer() *echo.Echo {
 	// build a the server
 	e := echo.New()
 	// enable debug mode
-	e.Debug = config.DebugServer()
-	e.HidePort = config.HideServerData()
+	e.Debug = cfg.DebugServer()
+	e.HidePort = cfg.HideServerData()
 	//hide the banner
-	e.HideBanner = config.HideServerData()
+	e.HideBanner = cfg.HideServerData()
 	return e
 }
 func NewServer(configurator func(e *echo.Echo)) *echo.Echo {

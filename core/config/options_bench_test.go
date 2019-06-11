@@ -10,13 +10,22 @@ import (
 )
 
 func BenchmarkCommon(b *testing.B) {
+	b.Run("get-defaults", func(b *testing.B) {
+		logger.Enabled(false)
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = GetDefaultOpts()
+		}
+	})
 	b.Run("BlockTorConnections", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = BlockTorConnections
+			_ = GetDefaultOpts().BlockTorConnections
 		}
 	})
 }

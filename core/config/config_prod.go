@@ -57,9 +57,9 @@ func IsDevelopment() bool {
 // read swagger url domain: ip or FQDN
 // no port allowed in pre and prod. default port is used
 // 80 and 443
-func GetSwaggerAddressWithPort() string {
+func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
 	logger.Debug("reading swagger address port from env")
-	return GetSwaggerAddress()
+	return opts.GetSwaggerAddress()
 }
 
 func Env() string {
@@ -68,7 +68,7 @@ func Env() string {
 }
 
 // setup server config
-func Setup() error {
+func Setup(opts *EthernitiOptions) error {
 	logger.Debug("loading additional production setup config")
 	return nil
 }
