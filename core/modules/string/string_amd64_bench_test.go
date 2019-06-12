@@ -55,6 +55,17 @@ func BenchmarkAssembly(b *testing.B) {
 			strings.ToLower(example)
 		}
 	})
+	b.Run("lowercase-go-custom", func(b *testing.B) {
+		logger.Enabled(false)
+		example := []byte("CONVERT TO LOWER CASE")
+		s := NewWith(example)
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			s.LowerCase()
+		}
+	})
 	b.Run("lowercase-asm", func(b *testing.B) {
 		logger.Enabled(false)
 		example := []byte("CONVERT TO LOWER CASE")
@@ -72,7 +83,7 @@ func isDigitGo(b byte) bool {
 }
 
 func isDigitArrayGo(data []byte) bool {
-	for idx := 0; idx < len(data); idx++{
+	for idx := 0; idx < len(data); idx++ {
 		b := data[idx]
 		if !(b >= '0' && b <= '9') {
 			return false

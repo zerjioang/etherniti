@@ -2,10 +2,16 @@
 
 ## Installation of required files
 
+Install: YASM, GAS, CLANG and helper tools
+
+Typically as or gas (GNU Assembler) will already be installed as it is part of binutils, but if need be, you can eg. do as follows
+
 ```bash
+sudo apt-get install build-essential yasm
+sudo apt install clang-7
 go get -u github.com/minio/asm2plan9s
-$ go get -u github.com/minio/c2goasm
-$ go get -u github.com/klauspost/asmfmt/cmd/asmfmt
+go get -u github.com/minio/c2goasm
+go get -u github.com/klauspost/asmfmt/cmd/asmfmt
 $ c2goasm -a -f _lib/sum_float64.s sum_float64.s
 ```
 
@@ -72,6 +78,7 @@ func ToUpper(src []byte) []byte {
 }
 ```
 
+### Using `clang`
 ```bash
 clang -S -O3 -masm=intel -mno-red-zone -mstackrealign -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti $file.c
 ```
@@ -84,4 +91,14 @@ clang -S -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -masm=intel -
 c2goasm -a -c -s -f strings.s strings_amd64.s
 ```
 
-https://codeday.me/news/20170719/42167.html
+### Using GCC
+
+```bash
+gcc -S -O3 -masm=intel -mno-red-zone -mstackrealign -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti strings.c
+```
+
+If you specify target CPU architecture:
+
+```bash
+gcc -S -O3 -masm=intel -march=skylake -mno-red-zone -mstackrealign -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti strings.c
+```

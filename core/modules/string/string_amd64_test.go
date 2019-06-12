@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestStringsAssembly(t *testing.T){
+func TestStringsAssembly(t *testing.T) {
 	t.Run("is-digit", func(t *testing.T) {
 		t.Run("true", func(t *testing.T) {
 			r := IsDigit('0')

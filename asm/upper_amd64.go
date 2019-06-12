@@ -3,7 +3,6 @@
 
 package hex
 
-
 import (
 	"unsafe"
 )

@@ -1,3 +1,7 @@
+package asm
+
+import "unsafe"
+
 //go:noescape
 func _Z7bin2hexPhi(vec1, vec2, result unsafe.Pointer)
 
