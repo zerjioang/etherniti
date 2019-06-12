@@ -144,6 +144,7 @@ var (
 // external controller related data {
 var (
 	EthPrice = []byte("ethereum-price")
+	EthTicker = []byte("ethereum-ticker")
 )
 
 // profile token related errors

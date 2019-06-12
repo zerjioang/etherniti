@@ -19,6 +19,7 @@ import (
 
 const (
 	ethPriceApi = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+	ethTickersApi = "https://api.coinmarketcap.com/v1/ticker/"
 	get         = "GET"
 	none        = ""
 )
@@ -57,6 +58,8 @@ type ExternalController struct {
 	client *http.Client
 	//cached value. concurrent safe that stores []byte
 	priceCache atomic.Value
+	//cached value. concurrent safe that stores []byte
+	tickerCache atomic.Value
 }
 
 // constructor like function
@@ -66,6 +69,33 @@ func NewExternalController(client *http.Client) ExternalController {
 	return ctl
 }
 
+func (ctl *ExternalController) coinMarketCapTickers(c *echo.Context) error {
+	v := ctl.tickerCache.Load()
+	if v == nil {
+		// value not set. generate and store in cache
+		// generate value
+		clientHeaders := c.Request().Header
+		//overwrite http client configuration to send request without compression
+		clientHeaders.Set("Accept-Encoding", "deflate")
+		raw, err := httpclient.MakeCall(ctl.client, get, ethTickersApi, clientHeaders, none)
+		if err != nil {
+			return err
+		} else if raw == nil {
+			return errNoResponse
+		} else {
+			// store in cache
+			ethPriceResponse := api.ToSuccess(data.EthTicker, raw)
+			// cache response for next request
+			ctl.tickerCache.Store(ethPriceResponse)
+			// return response to client
+			return api.SendSuccessBlob(c, ethPriceResponse)
+		}
+	} else {
+		//value already set and stored in memory cache
+		// return response to client
+		return api.SendSuccessBlob(c, v.([]byte))
+	}
+}
 func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
 	v := ctl.priceCache.Load()
 	if v == nil {
@@ -98,4 +128,5 @@ func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
 func (ctl ExternalController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing external controller methods")
 	router.GET("/eth/price", ctl.coinMarketCapEthPrice)
+	router.GET("/eth/ticker", ctl.coinMarketCapTickers)
 }
