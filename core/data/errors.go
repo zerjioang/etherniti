@@ -82,7 +82,7 @@ var (
 	InfuraJwtErrorMessage   = []byte("please provide an Infura connection profile token including provided Infura endpoint URL (https://$NETWORK.infura.io/v3/$PROJECT_ID) for this kind of call.")
 	QuiknodeJwtErrorMessage = []byte("please provide a QuikNode connection profile token including provided full peer endpoint URL")
 	UserJwtErrorMessage     = []byte("please provide a valid account token")
-	JwtErrorMessage         = []byte("please provide a connection profile token for this kind of call")
+	JwtErrorMessage         = []byte("please provide a private connection profile token for this kind of call")
 
 	ReadErr = []byte("there was an error during execution")
 	BindErr = []byte(BindErrStr)
@@ -143,7 +143,7 @@ var (
 
 // external controller related data {
 var (
-	EthPrice = []byte("ethereum-price")
+	EthPrice  = []byte("ethereum-price")
 	EthTicker = []byte("ethereum-ticker")
 )
 

@@ -47,5 +47,5 @@ func IsHexAddress(s string) bool {
 	if hasHexPrefix(s) {
 		s = s[2:]
 	}
-	return len(s) == 2*AddressLength && isHex(s)
+	return len(s) == 2*AddressLength && IsHex(s)
 }

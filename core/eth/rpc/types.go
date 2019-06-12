@@ -241,9 +241,8 @@ func (i *hexInt) UnmarshalJSON(data []byte) error {
 type hexBig big.Int
 
 func (i *hexBig) UnmarshalJSON(data []byte) error {
-	result, err := ParseBigInt(string(bytes.Trim(data, `"`)))
+	result, _, err := ParseBigInt(string(bytes.Trim(data, `"`)))
 	*i = hexBig(*result)
-
 	return err
 }
 

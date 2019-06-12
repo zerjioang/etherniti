@@ -53,8 +53,9 @@ var (
 )
 
 var (
-	oneEth      = big.NewInt(1000000000000000000)
-	oneEthInt64 = oneEth.Int64()
+	oneEth        = big.NewInt(1000000000000000000)
+	oneEthInt64   = oneEth.Int64()
+	defaultBigInt = new(big.Int)
 )
 
 type ConnectionMode uint8
@@ -149,7 +150,7 @@ func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.
 		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `"}`
 		return rpc.makePostRaw(request)
 	} else {
-		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params": [` + params + `]}`
+		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params":` + params + `}`
 		return rpc.makePostRaw(request)
 	}
 }
@@ -375,14 +376,14 @@ func (rpc *EthRPC) EthBlockNumber() (int, error) {
 }
 
 // EthGetBalance returns the balance of the account of given address in wei.
-func (rpc *EthRPC) EthGetBalance(address string, block string) (*big.Int, error) {
+func (rpc *EthRPC) EthGetBalance(address string, block string) (*big.Int, string, error) {
 	var response string
 	//prepare the params of the get balance function
 	params := func() string {
 		return "[" + rpc.doubleQuote(address) + "," + rpc.doubleQuote(block) + "]"
 	}
 	if err := rpc.post("eth_getBalance", &response, params); err != nil {
-		return new(big.Int), err
+		return defaultBigInt, response, err
 	}
 	return ParseBigInt(response)
 }

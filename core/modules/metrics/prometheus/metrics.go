@@ -1,7 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package prometheus_metrics
+package prometheus
 
 import (
 	"github.com/prometheus/client_golang/prometheus"

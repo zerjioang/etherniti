@@ -18,10 +18,10 @@ import (
 )
 
 const (
-	ethPriceApi = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+	ethPriceApi   = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
 	ethTickersApi = "https://api.coinmarketcap.com/v1/ticker/"
-	get         = "GET"
-	none        = ""
+	get           = "GET"
+	none          = ""
 )
 
 var (

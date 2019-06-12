@@ -36,6 +36,7 @@ var (
 	methodMap = map[string]string{
 		"client_version":   "web3_clientVersion",
 		"net_version":      "net_version",
+		"net_listening":      "net_listening",
 		"net_peers":        "net_peerCount",
 		"protocol_version": "eth_protocolVersion",
 		"syncing":          "eth_syncing",
@@ -46,7 +47,7 @@ var (
 		"accounts":         "eth_accounts",
 		"block_latest":     "eth_blockNumber",
 		"compilers":        "eth_getCompilers",
-		"block_current":    "eth_getWork",
+		"block_current":    "eth_blockNumber",
 		"shh_version":      "shh_version",
 		"shh_new":          "shh_newIdentity",
 		"shh_group":        "shh_newGroup",
@@ -88,12 +89,11 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 			if cliErr != nil {
 				return api.Error(c, cliErr)
 			}
-			result, err := client.EthGetBalance(targetAddr, "latest")
+			result, raw, err := client.EthGetBalance(targetAddr, "latest")
 			if err != nil {
 				return api.Error(c, err)
 			}
-			// save result in the cache
-			response := api.ToSuccess(data.Balance, result)
+			response := api.ToSuccess(data.Balance, BalanceResponse{Value: result, Raw: raw})
 			ctl.network.cache.Set(keyBytes, response)
 			c.OnSuccessCachePolicy = constants.CacheInfinite
 			return api.SendSuccessBlob(c, response)
@@ -113,16 +113,21 @@ func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 	}
 	targetAddr := c.Param("address")
 	block := c.Param("block")
-	// check if not empty
-	if targetAddr != "" {
-		result, err := client.EthGetBalance(targetAddr, block)
-		if err != nil {
-			return api.Error(c, err)
-		}
-		return api.SendSuccess(c, data.BalanceAtBlock, result)
+	//todo validate input parameters
+	if !eth.IsValidAddressLow(targetAddr) {
+		// send invalid address message
+		return api.ErrorStr(c, data.MissingAddress)
 	}
-	// send invalid address message
-	return api.ErrorStr(c, data.MissingAddress)
+	if !eth.IsValidBlockNumber(block) {
+		//return error that block is invalid
+		return api.Error(c, errors.New("provided block number is not valid. remember allowed values are: an hex number, 'earliest', 'latest' or 'pending'"))
+	}
+	result, raw, err := client.EthGetBalance(targetAddr, block)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	response := api.ToSuccess(data.Balance, BalanceResponse{Value: result, Raw: raw})
+	return api.SendSuccess(c, data.BalanceAtBlock, response)
 }
 
 // get node information
@@ -223,7 +228,7 @@ func (ctl *Web3Controller) sha3(c *echo.Context) error {
 		//some data found in body content
 		// try to convert data to string
 		strData, ok := content.(string)
-		if ok && len(strData)>0{
+		if ok && len(strData) > 0 {
 			//succesfully converted data to string
 			// 1 create a cache key
 			//ckey := "sha3:"+strData
@@ -331,6 +336,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 		Account string `json:"account"`
 		Balance string `json:"balance"`
 		Eth     string `json:"eth"`
+		Raw     string `json:"raw"`
 		Key     string `json:"key"`
 	}
 	wrapperList := make([]wrapper, len(list))
@@ -346,7 +352,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 		//iterate over account
 		for i := 0; i < len(list); i++ {
 			currentAccount := list[i]
-			bigInt, err := client.EthGetBalance(currentAccount, "latest")
+			bigInt, raw, err := client.EthGetBalance(currentAccount, "latest")
 			if err != nil {
 				logger.Error("failed to get account balance", currentAccount, err)
 			} else {
@@ -354,6 +360,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 				item.Account = currentAccount
 				item.Balance = bigInt.String()
 				item.Eth = fixtures.ToEth(bigInt).String()
+				item.Raw = raw
 				item.Key = "secret"
 			}
 		}
@@ -727,6 +734,10 @@ func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 	return api.ErrorStr(c, data.MissingAddress)
 }
 
+func (ctl *Web3Controller) noop(c *echo.Context) error {
+	return api.Error(c, errors.New("not implemented"))
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
@@ -735,6 +746,7 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/client/version", ctl.makeRpcCallNoParams)
 	router.POST("/sha3", ctl.sha3)
 	router.GET("/net/version", ctl.makeRpcCallNoParams)
+	router.GET("/net/listening", ctl.makeRpcCallNoParams)
 	router.GET("/net/peers", ctl.makeRpcCallNoParams)
 	router.GET("/protocol/version", ctl.makeRpcCallNoParams)
 	router.GET("/syncing", ctl.makeRpcCallNoParams)
@@ -743,18 +755,73 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/hashrate", ctl.makeRpcCallNoParams)
 	router.GET("/gasprice", ctl.makeRpcCallNoParams)
 	router.GET("/accounts", ctl.makeRpcCallNoParams)
+	router.GET("/accounts/balanced", ctl.getAccountsWithBalance)
 	router.GET("/block/latest", ctl.makeRpcCallNoParams)
-	router.GET("/block/current", ctl.makeRpcCallNoParams)
+	router.GET("/balance/:address", ctl.getBalance)
+	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
+
+	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getstorageat
+	router.GET("/storage", ctl.noop) //eth_getStorageAt
+
+	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount
+	router.GET("/tx/count", ctl.sendTransaction) //eth_getTransactionCount
+
+	// eth_getBlockTransactionCountByHash
+	//Returns the number of transactions in a block from a block matching the given block hash.
+
+	//eth_getBlockTransactionCountByNumber
+	//Returns the number of transactions in a block matching the given block number.
+
+	// eth_getUncleCountByBlockHash
+	// Returns the number of uncles in a block from a block matching the given block hash.
+
+	// eth_getUncleCountByBlockNumber
+	// Returns the number of uncles in a block from a block matching the given block number.
+
+	// eth_getCode
+	// Returns code at a given address.
+
+	// eth_sign
+
+	// eth_sendTransaction
+
+	// eth_sendRawTransaction
+
+	// eth_call
+
+	// eth_estimateGas
+
+	// eth_getBlockByHash
+
+	//eth_getBlockByNumber
+
+	//eth_getTransactionByHash
+
+	//eth_getTransactionByBlockHashAndIndex
+
+	//eth_getTransactionByBlockNumberAndIndex
+
+	//eth_getTransactionReceipt
+
+	//eth_pendingTransactions
+
+	//eth_getUncleByBlockHashAndIndex
+
+	//eth_getUncleByBlockNumberAndIndex
+
+	//eth_getCompilers (DEPRECATED)
+	//deprecated calls
 	router.GET("/compilers", ctl.makeRpcCallNoParams)
+	// eth_compileSolidity (DEPRECATED)
+	router.GET("/compile/solidity", ctl.noop)
+	// eth_compileLLL (DEPRECATED)
+	router.GET("/compile/lll", ctl.noop)
+	// eth_compileSerpent (DEPRECATED)
+	router.GET("/compile/serpent", ctl.noop)
 
 	router.GET("/tx/send", ctl.sendTransaction)
 	router.GET("/tx/hash/:hash", ctl.getTransactionByHash)
 	router.GET("/is/contract/:address", ctl.isContractAddress)
-
-	router.GET("/accountsBalanced", ctl.getAccountsWithBalance)
-
-	router.GET("/balance/:address", ctl.getBalance)
-	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
 
 	router.GET("/erc20/:contract/name", ctl.erc20Name)
 	router.GET("/erc20/:contract/symbol", ctl.erc20Symbol)

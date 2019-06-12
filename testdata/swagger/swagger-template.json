@@ -171,25 +171,23 @@
             "schema": {
               "example": {
                 "msg": "ethereum-price",
-                "data": [
-                  {
-                    "id": "ethereum",
-                    "name": "Ethereum",
-                    "symbol": "ETH",
-                    "rank": "2",
-                    "price_usd": "247.985082119",
-                    "price_btc": "0.03133506",
-                    "24h_volume_usd": "7426852583.39",
-                    "market_cap_usd": "26387116224.0",
-                    "available_supply": "106406063.0",
-                    "total_supply": "106406063.0",
-                    "max_supply": null,
-                    "percent_change_1h": "-0.33",
-                    "percent_change_24h": "-1.02",
-                    "percent_change_7d": "-7.13",
-                    "last_updated": "1560008121"
-                  }
-                ]
+                "data": [{
+                  "id": "ethereum",
+                  "name": "Ethereum",
+                  "symbol": "ETH",
+                  "rank": "2",
+                  "price_usd": "247.985082119",
+                  "price_btc": "0.03133506",
+                  "24h_volume_usd": "7426852583.39",
+                  "market_cap_usd": "26387116224.0",
+                  "available_supply": "106406063.0",
+                  "total_supply": "106406063.0",
+                  "max_supply": null,
+                  "percent_change_1h": "-0.33",
+                  "percent_change_24h": "-1.02",
+                  "percent_change_7d": "-7.13",
+                  "last_updated": "1560008121"
+                }]
               }
             }
           }
@@ -218,8 +216,7 @@
             "schema": {
               "example": {
                 "msg": "tickers",
-                "data": [
-                  {
+                "data": [{
                   "id": "bitcoin",
                   "name": "Bitcoin",
                   "symbol": "BTC",
@@ -235,7 +232,7 @@
                   "percent_change_24h": "0.71",
                   "percent_change_7d": "1.95",
                   "last_updated": "1560333393"
-                  },
+                },
                   {
                     "id": "ethereum",
                     "name": "Ethereum",
@@ -451,36 +448,58 @@
             "description": "proxy internal metrics collection",
             "schema": {
               "example": {
-                "system": {
-                  "os": "linux",
-                  "arch": "amd64"
-                },
+                "arch": "amd64",
+                "os": "linux",
                 "cpus": {
-                  "cores": 4
+                  "cores": 12,
+                  "features": {
+                    "bmi_2": true,
+                    "osxsave": true,
+                    "aes": true,
+                    "vaes": false,
+                    "avx": true,
+                    "avx_512_f": false,
+                    "avx_512_vl": false,
+                    "avx_512_dq": false,
+                    "sse_2": true,
+                    "sse_3": true,
+                    "pclmulqdq": true,
+                    "ssse_3": true,
+                    "fma": true,
+                    "sse_41": true,
+                    "sse_42": true,
+                    "popcnt": true,
+                    "bmi_1": true,
+                    "avx_2": true,
+                    "erms": true,
+                    "adx": true,
+                    "enabled_avx": true,
+                    "enabled_avx_512": false
+                  }
                 },
                 "runtime": {
                   "compiler": "gc"
                 },
                 "version": {
-                  "etherniti": "0.0.1",
+                  "etherniti": "latest",
                   "http": "4.0.0",
-                  "go": "go1.11.4"
+                  "go": "go1.12.5"
                 },
                 "disk": {
-                  "all": 147,
-                  "used": 133,
-                  "free": 14
+                  "all": 248,
+                  "used": 22,
+                  "free": 225
                 },
                 "memory": {
-                  "frees": 45976,
-                  "heapalloc": 94896448,
-                  "alloc": 94896448,
-                  "total": 98310760,
-                  "sys": 210827512,
-                  "mallocs": 143339
+                  "frees": 70161,
+                  "heapalloc": 362123544,
+                  "alloc": 362123544,
+                  "total": 368401176,
+                  "sys": 627261688,
+                  "mallocs": 173916
                 },
                 "gc": {
-                  "numgc": 4,
+                  "numgc": 7,
                   "numForcedGC": 0
                 }
               }
@@ -801,7 +820,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1094,58 +1113,7 @@
               }
             }
           },
-          "400": {
-            "$ref": "#responses/ProfileInvalidError"
-          }
-        }
-      }
-    },
-    "/web3/{network}/net/version": {
-      "get": {
-        "tags": [
-          "web3"
-        ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
-        "operationId": "web3-net-version",
-        "consumes": [
-          "application/json", "application/x-msgpack", "application/protobuf"
-        ],
-        "produces": [
-          "application/json", "application/x-msgpack", "application/protobuf"
-        ],
-        "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": [
-            "ropsten",
-            "rinkeby",
-            "kovan",
-            "mainnet",
-            "infura",
-            "quiknode",
-            "private"
-          ],
-          "example": "ropsten",
-          "required": true
-        }],
-        "responses": {
-          "200": {
-            "description": "ethereum net version information response",
-            "schema": {
-              "example": {
-                "msg": "net_version",
-                "data": "3"
-              }
-            }
-          },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1156,7 +1124,7 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network client version information",
+        "summary": "Get the current client version.",
         "description": "Get target Ethereum or Quorum network client version details",
         "operationId": "web3-client-version",
         "consumes": [
@@ -1188,7 +1156,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net client version information response",
+            "description": "The current client version.",
             "schema": {
               "example": {
                 "msg": "web3_clientVersion",
@@ -1196,7 +1164,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1220,31 +1188,30 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "required": true
+        },
           {
             "in": "body",
             "name": "data",
             "description": " the data to convert into a SHA3 hash.",
             "type": "string",
             "example": {
-              "data":"hello-ethereum"
+              "data": "hello-ethereum"
             },
             "required": true
           }
@@ -1259,7 +1226,109 @@
               }
             }
           },
-          "400": {
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/net/version": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network version information",
+        "description": "Get target's network",
+        "operationId": "web3-net-version",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network X response",
+            "schema": {
+              "example": {
+                "msg": "net_version",
+                "data": "3"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/net/listening": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Check node status and evaluate if it is listening or not",
+        "description": "Returns true if client is actively listening for network connections.",
+        "operationId": "web3-listening",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns true if client is actively listening for network connections.",
+            "schema": {
+              "example": {
+                "msg": "eth_listening",
+                "data": true
+              }
+            }
+          },
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1270,8 +1339,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network peers",
-        "description": "Get target Ethereum or Quorum network peers details",
+        "summary": "Get network peers connected to the client",
+        "description": "Get target Ethereum or Quorum network peers details. Returns number of peers currently connected to the client.",
         "operationId": "web3-net-peers",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1302,15 +1371,15 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum network peer information response",
+            "description": "ethereum network peer information response as integer indicating the number of connected peers.",
             "schema": {
               "example": {
                 "msg": "net_peerCount",
-                "data": 0
+                "data": "0x2"
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1353,15 +1422,15 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum protocol version information response",
             "schema": {
               "example": {
                 "msg": "eth_protocolVersion",
-                "data": "63"
+                "data": "0x54"
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1372,8 +1441,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get network syncing status",
+        "description": "Get target Ethereum or Quorum network syncing status and its details",
         "operationId": "web3-syncing",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1404,7 +1473,20 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum syncing information response when peer is syncing",
+            "schema": {
+              "example": {
+                "msg": "eth_syncing",
+                "data": {
+                  "startingBlock": "0x384",
+                  "currentBlock": "0x386",
+                  "highestBlock": "0x454"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ethereum syncing information response when peer client is not sycned/syncing",
             "schema": {
               "example": {
                 "msg": "eth_syncing",
@@ -1412,7 +1494,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1423,8 +1505,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get the client coinbase address.",
+        "description": "Get target Ethereum or Quorum network's client coinbase address.",
         "operationId": "web3-coinbase",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1455,7 +1537,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum coinbase response",
             "schema": {
               "example": {
                 "msg": "eth_coinbase",
@@ -1463,7 +1545,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1474,8 +1556,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get target network mining status",
+        "description": "Returns true if client is actively mining new blocks.",
         "operationId": "web3-mining",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1506,7 +1588,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum mining response",
             "schema": {
               "example": {
                 "msg": "eth_mining",
@@ -1514,7 +1596,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1525,8 +1607,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Returns the number of hashes per second that the node is mining with.",
+        "description": "Get target's network number of hashes per second that is mining with.",
         "operationId": "web3-hashrate",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1557,15 +1639,15 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum hashrate response",
             "schema": {
               "example": {
                 "msg": "eth_hashrate",
-                "data": "0x0"
+                "data": "0x38a"
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1576,8 +1658,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get the current price per gas in wei.",
+        "description": "Get target's network current price per gas in wei",
         "operationId": "web3-gas-price",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1612,11 +1694,11 @@
             "schema": {
               "example": {
                 "msg": "eth_gasPrice",
-                "data": "0x4a817c800"
+                "data": "0x09184e72a000"
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1628,7 +1710,7 @@
           "web3"
         ],
         "summary": "Get stored accounts in peer ",
-        "description": "Get stored accounts in peer information",
+        "description": "Get stored accounts in peer information and owned by target peer node/client.",
         "operationId": "web3-accounts",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1659,7 +1741,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum peer node owned accounts response",
             "schema": {
               "example": {
                 "msg": "eth_accounts",
@@ -1678,13 +1760,13 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
       }
     },
-    "/web3/{network}/accountsBalanced": {
+    "/web3/{network}/accounts/balanced": {
       "get": {
         "tags": [
           "web3"
@@ -1721,17 +1803,16 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "ethereum peer node owned accounts response including its balance status",
             "schema": {
               "example": {
                 "msg": "accounts_balanced",
-                "data": [
-                  {
-                    "account": "0x99579b05b90782013beddec2cbd7919b0d224b84",
-                    "balance": "100000000000000000000",
-                    "eth": "100",
-                    "key": "secret"
-                  },
+                "data": [{
+                  "account": "0x99579b05b90782013beddec2cbd7919b0d224b84",
+                  "balance": "100000000000000000000",
+                  "eth": "100",
+                  "key": "secret"
+                },
                   {
                     "account": "0xccfd6c216b0240557d0d1b2db09cc7bf5211ae36",
                     "balance": "100000000000000000000",
@@ -1790,7 +1871,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1801,8 +1882,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "summary": "Get the number of most recent block.",
+        "description": "Get target's network most recent block.",
         "operationId": "web3-block-latest",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1833,15 +1914,15 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network integer indicating the current block number the client is on.",
             "schema": {
               "example": {
                 "msg": "eth_blockNumber",
-                "data": "0x0"
+                "data": "0xc94"
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1853,7 +1934,7 @@
           "web3"
         ],
         "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "description": "Get target's network",
         "operationId": "web3-compilers",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1884,7 +1965,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "msg": "eth_getCompilers",
@@ -1892,7 +1973,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1904,7 +1985,7 @@
           "web3"
         ],
         "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "description": "Get target's network",
         "operationId": "web3-current",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1935,7 +2016,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -1945,7 +2026,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -1957,7 +2038,7 @@
           "web3"
         ],
         "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "description": "Get target's network",
         "operationId": "web3-shh-version",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -1988,7 +2069,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -1998,7 +2079,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2010,7 +2091,7 @@
           "web3"
         ],
         "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "description": "Get target's network",
         "operationId": "web3-shh-new",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -2041,7 +2122,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -2051,7 +2132,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2063,7 +2144,7 @@
           "web3"
         ],
         "summary": "Get network version information",
-        "description": "Get target Ethereum or Quorum network version details",
+        "description": "Get target's network",
         "operationId": "web3-shh-group",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -2094,7 +2175,7 @@
         }],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -2104,7 +2185,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2158,7 +2239,7 @@
         ],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -2168,7 +2249,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2230,7 +2311,7 @@
         ],
         "responses": {
           "200": {
-            "description": "ethereum net version information response",
+            "description": "target network X response",
             "schema": {
               "example": {
                 "id": 0,
@@ -2240,7 +2321,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2304,7 +2385,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2375,7 +2456,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2446,7 +2527,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2517,7 +2598,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2583,7 +2664,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2663,7 +2744,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2752,7 +2833,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2835,7 +2916,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           },
           "422": {
@@ -2890,7 +2971,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2955,7 +3036,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -2993,7 +3074,7 @@
               }]
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3033,7 +3114,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3082,7 +3163,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3120,7 +3201,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3166,7 +3247,7 @@
               }
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3204,7 +3285,7 @@
               }]
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3244,7 +3325,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3293,7 +3374,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3331,7 +3412,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3387,7 +3468,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }
@@ -3449,7 +3530,7 @@
               "example": {}
             }
           },
-          "400": {
+          "401": {
             "$ref": "#responses/ProfileInvalidError"
           }
         }

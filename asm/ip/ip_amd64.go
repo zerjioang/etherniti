@@ -5,6 +5,7 @@ package string
 
 //go:noescape
 func _ip_to_int(buf unsafe.Pointer) (result uint32)
+
 //go:noescape
 func _ip_to_int2(buf, size unsafe.Pointer) (result uint32)
 

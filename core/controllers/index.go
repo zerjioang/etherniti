@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"bytes"
+	"github.com/zerjioang/etherniti/core/modules/cpuid"
 	"io/ioutil"
 
 	"github.com/zerjioang/etherniti/core/modules/interval"
@@ -63,6 +64,8 @@ var (
 			wrapper.Version.HTTP = echo.Version
 
 			wrapper.Cpus.Cores = runtime.NumCPU()
+			// load cpu features
+			wrapper.Cpus.Features = cpuid.GetCpuFeatures()
 
 			return wrapper
 		},

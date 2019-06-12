@@ -3,6 +3,8 @@
 
 package string
 
+import "unsafe"
+
 //go:noescape
 func _isNumericArray(buf, len, res unsafe.Pointer)
 
@@ -13,9 +15,9 @@ func _isDigit(b byte) (result byte)
 
 func IsNumericArray(src []byte) bool {
 	var result byte
-	r := _isNumericArray(
+	_isNumericArray(
 		unsafe.Pointer(&src[0]),
-		unsafe.Pointer(len(src)),
+		unsafe.Pointer(uintptr(len(src))),
 		unsafe.Pointer(&result),
 	)
 	return result == 0x1
@@ -24,8 +26,8 @@ func IsNumericArray(src []byte) bool {
 func LowerCase(src []byte) {
 	_lowerCase(
 		unsafe.Pointer(&src[0]),
-		unsafe.Pointer(len(src)),
-		unsafe.Pointer(&src)
+		unsafe.Pointer(uintptr(len(src))),
+		unsafe.Pointer(&src),
 	)
 }
 

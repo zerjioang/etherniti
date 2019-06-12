@@ -5,6 +5,8 @@ package protocol
 
 import (
 	"bytes"
+	"github.com/zerjioang/etherniti/core/modules/cpuid"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"strconv"
 )
 
@@ -26,7 +28,8 @@ func (r *ServerStatusResponse) Reset() {
 }
 
 type Cpus struct {
-	Cores int `json:"cores"`
+	Cores    int               `json:"cores"`
+	Features cpuid.CpuFeatures `json:"features"`
 }
 type Runtime struct {
 	Compiler string `json:"compiler"`
@@ -77,45 +80,8 @@ func (gc *Gc) Reset() {
 }
 
 func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {
-	buffer.WriteString(`{"system":{"os":"`)
-	buffer.WriteString(r.Os)
-	buffer.WriteString(`","arch":"`)
-	buffer.WriteString(r.Architecture)
-	buffer.WriteString(`"},`)
-	buffer.WriteString(`"cpus":{"cores":`)
-	buffer.WriteString(itoa(r.Cpus.Cores))
-	buffer.WriteString(`},"runtime":{"compiler":"`)
-	buffer.WriteString(r.Runtime.Compiler)
-	buffer.WriteString(`"},"version":{"etherniti":"`)
-	buffer.WriteString(r.Version.Etherniti)
-	buffer.WriteString(`","http":"`)
-	buffer.WriteString(r.Version.HTTP)
-	buffer.WriteString(`","go":"`)
-	buffer.WriteString(r.Version.Go)
-	buffer.WriteString(`"},"disk":{"all":`)
-	buffer.WriteString(itoau64(r.Disk.All))
-	buffer.WriteString(`,"used":`)
-	buffer.WriteString(itoau64(r.Disk.Used))
-	buffer.WriteString(`,"free":`)
-	buffer.WriteString(itoau64(r.Disk.Free))
-	buffer.WriteString(`},"memory":{"frees":`)
-	buffer.WriteString(itoau64(r.Memory.Frees))
-	buffer.WriteString(`,"heapalloc":`)
-	buffer.WriteString(itoau64(r.Memory.Heapalloc))
-	buffer.WriteString(`,"alloc":`)
-	buffer.WriteString(itoau64(r.Memory.Alloc))
-	buffer.WriteString(`,"total":`)
-	buffer.WriteString(itoau64(r.Memory.Total))
-	buffer.WriteString(`,"sys":`)
-	buffer.WriteString(itoau64(r.Memory.Sys))
-	buffer.WriteString(`,"mallocs":`)
-	buffer.WriteString(itoau64(r.Memory.Mallocs))
-	buffer.WriteString(`},"gc":{"numgc":`)
-	buffer.WriteString(itoau32(r.Gc.Numgc))
-	buffer.WriteString(`,"numForcedGC":`)
-	buffer.WriteString(itoau32(r.Gc.NumForcedGC))
-	buffer.WriteString(`}}`)
-	return buffer.Bytes()
+	raw, _ := str.FastMarshal(r)
+	return raw
 }
 
 func itoa(v int) string {

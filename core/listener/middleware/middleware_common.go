@@ -12,7 +12,7 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/httpcache"
 	"github.com/zerjioang/etherniti/core/server/ratelimit"
 
-	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics"
+	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
@@ -91,7 +91,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// only for enterprise version, add suport for metrics
 	if edition.IsEnterprise() && cfg.EnableMetrics() {
 		logger.Info("[LAYER] /=> metrics")
-		e.Pre(prometheus_metrics.MetricsCollector)
+		e.Pre(prometheus.MetricsCollector)
 	}
 
 	if cfg.IsHttpMode() || cfg.IsHttpsMode() {
