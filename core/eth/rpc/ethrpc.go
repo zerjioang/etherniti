@@ -149,7 +149,7 @@ func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.
 		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `"}`
 		return rpc.makePostRaw(request)
 	} else {
-		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params": ` + params + `}`
+		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params": [` + params + `]}`
 		return rpc.makePostRaw(request)
 	}
 }
@@ -242,6 +242,7 @@ func (rpc *EthRPC) IsGanache() (bool, error) {
 		return false, err
 	} else {
 		// check if response data is similar to ganache response
+		// by default ganache node simulator starts with: EthereumJS TestRPC
 		isGanache := strings.Contains(data, "ethereum-js") || strings.Contains(data, "TestRPC")
 		return isGanache, nil
 	}
@@ -252,7 +253,7 @@ func (rpc *EthRPC) Web3Sha3(data []byte) (string, error) {
 	var hash string
 	//prepare the params of the sha3 function
 	params := func() string {
-		return fixtures.Encode(data)
+		return rpc.doubleQuote(fixtures.Encode(data))
 	}
 	err := rpc.post("web3_sha3", &hash, params)
 	return hash, err

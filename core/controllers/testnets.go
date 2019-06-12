@@ -50,13 +50,16 @@ func init() {
 	// rad infura token
 	infuraToken = cfg.InfuraToken()
 	//update all infura related urls
-	logger.Debug("updating infura v3 endpoints with provided token")
+	logger.Info("updating infura v3 endpoints with provided token")
 	ropstenInfura = ropstenInfura + infuraToken
 	rinkebyInfura = rinkebyInfura + infuraToken
 	kovanInfura = kovanInfura + infuraToken
-	infuraToken = infuraToken + infuraToken
 	// load custom endpoints if exists
+	logger.Info("loading user provided custom endpoints")
 	ropstenCustom = cfg.RopstenCustomEndpoint
+	rinkebyCustom = cfg.RinkebyCustomEndpoint
+	kovanCustom = cfg.KovanCustomEndpoint
+	mainnetCustom = cfg.MainnetCustomEndpoint
 
 }
 

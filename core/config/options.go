@@ -34,6 +34,9 @@ type EthernitiOptions struct {
 var (
 	// default etherniti proxy options
 	defaultOptions = &EthernitiOptions{}
+	//default token expiration time when users does not provide one
+	// 10 minute
+	defaultTokenExpirationTime = 10 * fastime.Minute
 )
 
 func init() {
@@ -187,11 +190,13 @@ func (eo *EthernitiOptions) HideServerData() bool {
 
 func (eo *EthernitiOptions) TokenExpiration() fastime.Duration {
 	logger.Debug("reading token expiration from env")
-	v, found := eo.envData.Read(XEthernitiTokenExpiration)
-	if found && v != nil {
-		return v.(fastime.Duration)
+	v := eo.envData.Int(XEthernitiTokenExpiration, -1)
+	if v == -1 {
+		// error while reading value
+		// return default
+		return defaultTokenExpirationTime
 	}
-	return 100 * fastime.Hour
+	return fastime.Duration(v) * fastime.Second
 }
 
 func (eo *EthernitiOptions) GetSwaggerAddress() string {

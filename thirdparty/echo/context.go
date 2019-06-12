@@ -582,7 +582,7 @@ func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string, httpClient 
 	// by default, peer url is used to dial
 	if peerUrl == "" {
 		//no peer url found, try to read from user token
-		if c.profileData.RpcEndpoint == "" {
+		if c.profileData == nil || c.profileData.RpcEndpoint == "" {
 			return client, "", noPeerAddressError
 		}
 		contextId = c.profileData.RpcEndpoint

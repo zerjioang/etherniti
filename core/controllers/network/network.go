@@ -11,7 +11,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/eth"
 	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -71,7 +70,8 @@ func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, err
 	client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer, ctl.client)
 	logger.Info("controller request using context id: ", cId)
 	if cliErr != nil {
-		return nil, api.Error(c, cliErr)
+		logger.Error("failed to build an eth client from current context. missing connection url: ", cliErr)
+		return nil, cliErr
 	}
 	return client, nil
 }

@@ -541,7 +541,7 @@
           "name": "profile",
           "schema": {
             "example": {
-              "endpoint": "http://172.168.0.2:8545",
+              "endpoint": "http://127.0.0.1:7545",
               "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
             }
           }
@@ -1089,10 +1089,8 @@
             "description": "ethereum ganache evaluation response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "is_ganache",
-                "result": false
+                "data": true
               }
             }
           },
@@ -1142,10 +1140,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_version",
-                "result": "3"
+                "data": "3"
               }
             }
           },
@@ -1195,10 +1191,71 @@
             "description": "ethereum net client version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "web3_clientVersion",
-                "result": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+                "data": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/sha3": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns Keccak-256 (not the standardized SHA3-256) of the given data.",
+        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data.",
+        "operationId": "web3-sha3",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "data",
+            "description": " the data to convert into a SHA3 hash.",
+            "type": "string",
+            "example": {
+              "data":"hello-ethereum"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The SHA3 result of the given string.",
+            "schema": {
+              "example": {
+                "msg": "sha3",
+                "data": "0x0f6373f10eaf984d15d4e241eb91354401065bef332875a4ebe30a18e90509be"
               }
             }
           },
@@ -1248,10 +1305,8 @@
             "description": "ethereum network peer information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_peerCount",
-                "result": "0x64"
+                "data": 0
               }
             }
           },
@@ -1301,10 +1356,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_protocolVersion",
+                "data": "63"
               }
             }
           },
@@ -1354,10 +1407,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_syncing",
+                "data": false
               }
             }
           },
@@ -1407,10 +1458,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_coinbase",
+                "data": "0x99579b05b90782013beddec2cbd7919b0d224b84"
               }
             }
           },
@@ -1460,10 +1509,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_mining",
+                "data": true
               }
             }
           },
@@ -1513,10 +1560,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_hashrate",
+                "data": "0x0"
               }
             }
           },
@@ -1566,10 +1611,8 @@
             "description": "a hex code of an integer representing the current gas price in wei.",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_gasPrice",
+                "data": "0x4a817c800"
               }
             }
           },
@@ -1619,10 +1662,19 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_accounts",
+                "data": [
+                  "0x99579b05b90782013beddec2cbd7919b0d224b84",
+                  "0xccfd6c216b0240557d0d1b2db09cc7bf5211ae36",
+                  "0x15d4a31a6d9290107788a9266d1fd03cf04e9bb7",
+                  "0x9621fd269dc62d3af7d33cf92f18518f190ce28d",
+                  "0x043f8bf5e470507592cde0ed2babc304ce386bbc",
+                  "0x0e492caf43987685854e74806b81ab200288eb64",
+                  "0xc5f76b5dee2a58ecd5b9134aa256515625dcc06a",
+                  "0x6696a3a4af596af393e33934556eb7d399a26d3d",
+                  "0x4f44eeda34652c731407a55edfd4e41411cd9dbe",
+                  "0x449fa20449a86301b4f4b4dc4f7d1141da9aa413"
+                ]
               }
             }
           },
@@ -1672,10 +1724,69 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "accounts_balanced",
+                "data": [
+                  {
+                    "account": "0x99579b05b90782013beddec2cbd7919b0d224b84",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0xccfd6c216b0240557d0d1b2db09cc7bf5211ae36",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x15d4a31a6d9290107788a9266d1fd03cf04e9bb7",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x9621fd269dc62d3af7d33cf92f18518f190ce28d",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x043f8bf5e470507592cde0ed2babc304ce386bbc",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x0e492caf43987685854e74806b81ab200288eb64",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0xc5f76b5dee2a58ecd5b9134aa256515625dcc06a",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x6696a3a4af596af393e33934556eb7d399a26d3d",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x4f44eeda34652c731407a55edfd4e41411cd9dbe",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x449fa20449a86301b4f4b4dc4f7d1141da9aa413",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "key": "secret"
+                  }
+                ]
               }
             }
           },
@@ -1725,10 +1836,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_blockNumber",
+                "data": "0x0"
               }
             }
           },
@@ -1752,7 +1861,7 @@
         "produces": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
-        "deprecated": false,
+        "deprecated": true,
         "security": [{
           "connectionProfileToken": []
         }],
@@ -1778,10 +1887,8 @@
             "description": "ethereum net version information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "eth_getCompilers",
+                "data": []
               }
             }
           },

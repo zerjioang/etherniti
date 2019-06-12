@@ -4,6 +4,7 @@
 package network
 
 import (
+	"github.com/pkg/errors"
 	"math/big"
 	"net/http"
 	"strconv"
@@ -209,24 +210,70 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 	}
 }
 
+func (ctl *Web3Controller) sha3(c *echo.Context) error {
+	// 0 parse this http rquest body
+	var model map[string]interface{}
+	if err := c.Bind(&model); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, data.BindErr)
+	}
+	content, found := model["data"]
+	if found && content != nil {
+		//some data found in body content
+		// try to convert data to string
+		strData, ok := content.(string)
+		if ok && len(strData)>0{
+			//succesfully converted data to string
+			// 1 create a cache key
+			//ckey := "sha3:"+strData
+			// 2 fetch our ethereum client instance
+			// get our client context
+			client, cliErr := ctl.network.getRpcClient(c)
+			if cliErr != nil {
+				return api.Error(c, cliErr)
+			}
+			// 3 make the call
+			response, err := client.Web3Sha3(str.UnsafeBytes(strData))
+			// 4 process ethereum response
+			if err != nil {
+				// send invalid response message
+				return api.Error(c, err)
+			} else {
+				response := api.ToSuccess([]byte("sha3"), response)
+				c.OnSuccessCachePolicy = constants.CacheInfinite
+				return api.SendSuccessBlob(c, response)
+			}
+		} else {
+			return api.Error(c, errors.New("no input data provided for sha3"))
+		}
+	} else {
+		// no content send for key 'data'
+		return api.Error(c, errors.New("no input data provided for sha3 at request body"))
+	}
+}
+
 func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	//resolve method name from url
 	methodName := c.Request().URL.Path
 	//try to get this information from the cache
-	// methodName example: /v1/ropsten/net/version
+	// methodName example: /v1/web3/private/net/version
 	chunks := strings.Split(methodName, "/")
-	if len(chunks) < 4 {
+	if len(chunks) < 5 {
 		return api.ErrorStr(c, data.InvalidUrlWeb3)
 	}
 	var key string
-	if len(chunks) == 4 {
-		key = chunks[3]
+	if len(chunks) == 6 {
+		// example url: /v1/web3/private/net/version
+		key = chunks[4] + "_" + chunks[5]
 	} else if len(chunks) == 5 {
-		key = chunks[3] + "_" + chunks[4]
+		// example url: /v1/web3/private/syncing
+		key = chunks[4]
 	}
 	//resolve method name from key value
 	method := methodMap[key]
 	methodBytes := str.UnsafeBytes(method)
+	//TODO : in private contenxt peer name is empty
 	cacheKey := ctl.network.peer + ":" + method
 	cacheKeyBytes := str.UnsafeBytes(cacheKey)
 	result, found := ctl.network.cache.Get(cacheKeyBytes)
@@ -686,6 +733,7 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/is/ganache", ctl.isRunningGanache)
 
 	router.GET("/client/version", ctl.makeRpcCallNoParams)
+	router.POST("/sha3", ctl.sha3)
 	router.GET("/net/version", ctl.makeRpcCallNoParams)
 	router.GET("/net/peers", ctl.makeRpcCallNoParams)
 	router.GET("/protocol/version", ctl.makeRpcCallNoParams)

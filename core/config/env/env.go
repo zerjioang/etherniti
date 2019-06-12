@@ -5,6 +5,7 @@ package env
 
 import (
 	"os"
+	"strconv"
 	"strings"
 	"sync/atomic"
 
@@ -61,9 +62,14 @@ func (c EnvConfig) Lower(key string) string {
 func (c EnvConfig) Int(key string, fallback int) int {
 	v, ok := c.Read(key)
 	if ok {
-		num, ok := v.(int)
+		str, ok := v.(string)
 		if ok {
-			return num
+			//successfully converted from interface to string
+			//now convert from string to int
+			num, err := strconv.Atoi(str)
+			if err == nil {
+				return num
+			}
 		}
 	}
 	return fallback

@@ -43,7 +43,7 @@ You can copy and paste them to workspace.xml file or add them manually one by on
 <env name="X_ETHERNITI_LISTENING_INTERFACE" value="127.0.0.1" />
 <env name="X_ETHERNITI_LISTENING_ADDRESS" value="127.0.0.1" />
 <env name="X_ETHERNITI_SWAGGER_ADDRESS" value="127.0.0.1" />
-<env name="X_ETHERNITI_TOKEN_EXPIRATION" value="600" />
+<env name="X_ETHERNITI_TOKEN_EXPIRATION" value="6000" />
 <env name="X_ETHERNITI_RATELIMIT" value="10" />
 <env name="X_ETHERNITI_RATE_LIMIT_UNITS" value="10" />
 <env name="X_ETHERNITI_INFURA_TOKEN" value="4f61378203ca4da4a6b6601bc16a22ad" />
