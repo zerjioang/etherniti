@@ -196,6 +196,70 @@
         }
       }
     },
+    "/external/eth/ticker": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Ethereum ticking information",
+        "description": "Get updated information about ethereum ticking and its market value",
+        "operationId": "eth-price",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "ethereum ticking response",
+            "schema": {
+              "example": {
+                "msg": "tickers",
+                "data": [
+                  {
+                  "id": "bitcoin",
+                  "name": "Bitcoin",
+                  "symbol": "BTC",
+                  "rank": "1",
+                  "price_usd": "7963.71200392",
+                  "price_btc": "1.0",
+                  "24h_volume_usd": "18394012988.6",
+                  "market_cap_usd": "141392218524",
+                  "available_supply": "17754562.0",
+                  "total_supply": "17754562.0",
+                  "max_supply": "21000000.0",
+                  "percent_change_1h": "-0.25",
+                  "percent_change_24h": "0.71",
+                  "percent_change_7d": "1.95",
+                  "last_updated": "1560333393"
+                  },
+                  {
+                    "id": "ethereum",
+                    "name": "Ethereum",
+                    "symbol": "ETH",
+                    "rank": "2",
+                    "price_usd": "247.855638453",
+                    "price_btc": "0.03118757",
+                    "24h_volume_usd": "7944674908.65",
+                    "market_cap_usd": "26386060354.0",
+                    "available_supply": "106457374.0",
+                    "total_supply": "106457374.0",
+                    "max_supply": null,
+                    "percent_change_1h": "-0.29",
+                    "percent_change_24h": "1.06",
+                    "percent_change_7d": "1.32",
+                    "last_updated": "1560333383"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/hi": {
       "get": {
         "tags": [
