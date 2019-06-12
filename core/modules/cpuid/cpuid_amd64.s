@@ -11,7 +11,7 @@ TEXT ·cpuid(SB), NOSPLIT, $0-24
 	MOVL BX, ebx+12(FP)
 	MOVL CX, ecx+16(FP)
 	MOVL DX, edx+20(FP)
-RET
+    RET
 
 // func xgetbv() (eax, edx uint32)
 TEXT ·xgetbv(SB),NOSPLIT,$0-8
@@ -19,4 +19,4 @@ TEXT ·xgetbv(SB),NOSPLIT,$0-8
 	XGETBV
 	MOVL AX, eax+0(FP)
 	MOVL DX, edx+4(FP)
-RET
+    RET

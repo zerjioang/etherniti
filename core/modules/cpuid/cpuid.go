@@ -1,15 +1,5 @@
 package cpuid
 
-// assembler functions
-
-// cpuid executes the CPUID instruction to obtain processor identification and
-// feature information.
-// cpuid executes the CPUID instruction with the given EAX, ECX inputs.
-func cpuid(eaxArg, ecxArg uint32) (eax, ebx, ecx, edx uint32)
-
-// xgetbv executes the XGETBV instruction.
-func xgetbv() (eax, edx uint32)
-
 type CpuFeatures struct {
 	HasBMI2     bool `json:"bmi_2"`
 	HasOSXSAVE  bool `json:"osxsave"`
@@ -38,9 +28,6 @@ type CpuFeatures struct {
 }
 
 var (
-	// useAsm flag determines whether the assembly version of EncodeInt will be
-	// used. By Default we fall back to encodeInt.
-	useAsm bool
 	// cpu contains feature flags relevant to selecting a Meow implementation.
 	cpuFeatures CpuFeatures
 )
