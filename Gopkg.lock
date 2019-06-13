@@ -390,7 +390,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:90286d51abf1f30fcb4f1d7ec32fc869d0eeca1e656daac0adccf52474a3bc33"
+  digest = "1:a0a22f160c7301868940da12eb2e1c18551737ec9c98d6d26a497ecf285cfced"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -416,7 +416,7 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "f99c8df09eb5bff426315721bfa5f16a99cad32c"
+  revision = "5c40567a22f818bd14a1ea7245dad9f8ef0691aa"
 
 [[projects]]
   branch = "master"
@@ -428,11 +428,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "d5cec388452433938efda7023f16bf94a6784bdf"
+  revision = "3f473d35a33aa6fdd203e306dc439b797820e3f1"
 
 [[projects]]
   branch = "master"
-  digest = "1:7f6ce4b9f0a89047122e149c077ceb0a0e41c607f4e8c0f4ba82dadf5bcf9f1e"
+  digest = "1:8ea0513faaf49c2491a6aa1c4962261295ed140478e3e84b5c699f42af0a3936"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -440,7 +440,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "7fc4e5ec1444df20dd195ae7c3bbfcd7114d3faa"
+  revision = "93c9922d18aeb82498a065f07aec7ad7fa60dfb7"
 
 [[projects]]
   branch = "master"
@@ -458,7 +458,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "5aed7825b13ee2b55737e99244fd658841b12a99"
+  revision = "59534d075a876675ef41a20fd596536cfa103662"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"

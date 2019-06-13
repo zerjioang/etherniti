@@ -20,7 +20,8 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
      \/          \/     \/           \/
 
   Official Page  |        https://www.etherniti.org
-  Github Page    |     https://github.com/etherniti
+  Documentation  |       https://docs.etherniti.org
+  Github         |     https://github.com/etherniti
   Issues         | https://github.com/etherniti/rfc
 
   Contact at     |               help@etherniti.org
