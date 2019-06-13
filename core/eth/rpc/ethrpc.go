@@ -33,6 +33,7 @@ import (
 )
 
 // https://documenter.getpostman.com/view/4117254/ethereum-json-rpc/RVu7CT5J
+// https://github.com/ethereum/go-ethereum/blob/master/ethclient/ethclient.go
 type contractFunction func(string) (string, error)
 type ParamsCallback func() string
 
@@ -1382,6 +1383,16 @@ func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (j
 		Tag:  model.LatestBlockNumber,
 	}
 	return rpc.makePostWithMethodParams("eth_sendTransaction", params.String())
+}
+
+// Chain id returns taret network chain id
+func (rpc *EthRPC) ChainId() (*big.Int, error) {
+	var result big.Int
+	err := rpc.post("eth_chainId", &result, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 // curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}

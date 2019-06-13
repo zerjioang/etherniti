@@ -734,6 +734,23 @@ func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 	return api.ErrorStr(c, data.MissingAddress)
 }
 
+// Blockchain Access
+
+// ChainId retrieves the current chain ID for transaction replay protection.
+func (ctl *Web3Controller) chainId(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+
+	result, err := client.ChainId()
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.ChainId, result)
+}
+
 func (ctl *Web3Controller) noop(c *echo.Context) error {
 	return api.Error(c, errors.New("not implemented"))
 }
@@ -818,6 +835,8 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/compile/lll", ctl.noop)
 	// eth_compileSerpent (DEPRECATED)
 	router.GET("/compile/serpent", ctl.noop)
+
+	router.GET("/chain/id", ctl.chainId)
 
 	router.GET("/tx/send", ctl.sendTransaction)
 	router.GET("/tx/hash/:hash", ctl.getTransactionByHash)

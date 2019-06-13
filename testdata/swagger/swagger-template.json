@@ -1068,6 +1068,65 @@
         }
       }
     },
+    "/web3/{network}/chain/id": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network chain id",
+        "description": "Read target network client provided chain id. Returns the currently configured chain id, a value used in replay-protected transaction signing as introduced by EIP-155.",
+        "operationId": "chain-id",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "web3 chain id response",
+            "schema": {
+              "example": {
+                "msg": "is_ganache",
+                "data": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "406": {
+            "description": "Method eth_chainId is not supported",
+            "schema": {
+              "example": {
+                "desc": "Method eth_chainId not supported.. Error code: -32000"
+              }
+            }
+          }
+        }
+      }
+    },
     "/web3/{network}/is/ganache": {
       "get": {
         "tags": [

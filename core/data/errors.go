@@ -37,6 +37,7 @@ var (
 	EthInfo            = []byte("eth_info")
 	NetVersion         = []byte("net_version")
 	TransactionReceipt = []byte("transaction_receipt")
+	ChainId = []byte("chain_id")
 	ShhVersion         = []byte("shh_version")
 
 	InvalidUrlWeb3    = []byte("invalid url or web3 method provided")

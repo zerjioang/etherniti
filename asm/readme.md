@@ -102,3 +102,29 @@ If you specify target CPU architecture:
 ```bash
 gcc -S -O3 -masm=intel -march=skylake -mno-red-zone -mstackrealign -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti strings.c
 ```
+
+### Type Mappings
+
+Go types will be mapped to C-types according to the following table:
+
+Go type                                       | C Type
+--------------------------------------------- | ------
+`int8`, `byte`                                | `char`
+`uint8`, `bool`                               | `unsigned char`
+`int16`                                       | `short`
+`uint16`                                      | `unsigned short`
+`int32`                                       | `int`
+`uint32`                                      | `unsigned int`
+`int64`                                       | `long`
+`uint64`                                      | `unsigned long`
+`float32`                                     | `float`
+`float64`                                     | `double`
+`[]`, `uintptr`, `reflect.UnsafePointer`, `*` | `*`
+
+The last line means that slices and pointers are mapped to pointers in C. Pointers to structs are possible.
+
+Passing `struct`, `complex`, and callback functions is not (yet) supported.
+
+> **WARNING** `struct`s that are referenced **must** follow C alignment rules! There is **no** type checking, since this is actually not possible due to libraries not knowing their types...
+
+Go `int` was deliberately left out to avoid confusion, since it has different sizes on different architectures.
