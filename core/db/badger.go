@@ -132,7 +132,7 @@ func (db *BadgerStorage) PutUniqueKeyValue(key []byte, value []byte) error {
 	err := db.instance.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
 		if err == nil && item != nil {
-			return data.DuplicateKeyErr
+			return data.ErrDuplicateKey
 		} else {
 			return txn.Set(key, value)
 		}

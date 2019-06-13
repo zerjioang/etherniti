@@ -36,7 +36,7 @@ var (
 	methodMap = map[string]string{
 		"client_version":   "web3_clientVersion",
 		"net_version":      "net_version",
-		"net_listening":      "net_listening",
+		"net_listening":    "net_listening",
 		"net_peers":        "net_peerCount",
 		"protocol_version": "eth_protocolVersion",
 		"syncing":          "eth_syncing",

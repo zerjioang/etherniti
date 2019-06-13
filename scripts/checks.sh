@@ -16,6 +16,8 @@ cd ..
 # load colored logs
 source ./scripts/colors.sh
 
+project="github.com/zerjioang/etherniti"
+
 function install(){
 	name=$1
 	package=$2
@@ -27,28 +29,54 @@ function install(){
 	fi
 }
 
-log "Checking aligment in source code"
+function gotools(){
+	log "Transforms an unkeyed struct literal into a keyed one."
+	# keyify github.com/zerjioang/etherniti
 
-# A set of utilities for checking Go sources.
-install "aligncheck" "gitlab.com/opennota/check/cmd/aligncheck"
-install "structcheck" "gitlab.com/opennota/check/cmd/structcheck"
-install "varcheck" "gitlab.com/opennota/check/cmd/varcheck"
-# tool to detect Go structs that would take less memory if their fields were sorted.
-install "maligned" "github.com/mdempsky/maligned"
-# prealloc is a Go static analysis tool to find slice declarations that could potentially be preallocated.
-install "prealloc" "github.com/alexkohler/prealloc"
+	log "Go static analysis, detecting bugs, performance issues, and much more."
+	# staticcheck -tags dev oss $(go list ./...)
 
-project="github.com/zerjioang/etherniti"
-log "aligncheck of ${project}"
-${GOPATH}/bin/aligncheck ${project}
+	log "Reorders struct fields to minimize the amount of padding."
+	# structlayout-optimize github.com/zerjioang/etherniti
+}
 
-#get all files excluding vendors
-filelist=$(find . -type f -name "*.go" | grep -vendor)
-for file in ${filelist}
-do
-	log "checking file $file"
-	#${GOPATH}/bin/goimports -v -w ${file}
-done
+function run(){
+	log "golinting code.."
 
-ok "Code checks done!"
+	# A set of utilities for checking Go sources.
+	install "aligncheck" "gitlab.com/opennota/check/cmd/aligncheck"
+	install "structcheck" "gitlab.com/opennota/check/cmd/structcheck"
+	install "varcheck" "gitlab.com/opennota/check/cmd/varcheck"
+	# tool to detect Go structs that would take less memory if their fields were sorted.
+	install "maligned" "github.com/mdempsky/maligned"
+	# prealloc is a Go static analysis tool to find slice declarations that could potentially be preallocated.
+	install "prealloc" "github.com/alexkohler/prealloc"
 
+	# keyify 	Transforms an unkeyed struct literal into a keyed one.
+	# rdeps 	Find all reverse dependencies of a set of packages
+	# staticcheck 	Go static analysis, detecting bugs, performance issues, and much more.
+	# structlayout 	Displays the layout (field sizes and padding) of structs.
+	# structlayout-optimize 	Reorders struct fields to minimize the amount of padding.
+	# structlayout-pretty 	Formats the output of structlayout with ASCII art.
+	install "go-tools" "honnef.co/go/tools/cmd/..."
+
+	# install golant ci
+	# binary will be $(go env GOPATH)/bin/golangci-lint
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin latest
+
+	log "aligncheck of ${project}"
+	${GOPATH}/bin/aligncheck ${project}
+
+	#get all files excluding vendors
+	filelist=$(find . -type f -name "*.go" | grep -vendor)
+	for file in ${filelist}
+	do
+		log "checking file $file"
+		#${GOPATH}/bin/goimports -v -w ${file}
+	done
+
+	ok "Code checks done!"
+}
+
+gotools
+run

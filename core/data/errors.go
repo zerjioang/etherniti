@@ -37,7 +37,7 @@ var (
 	EthInfo            = []byte("eth_info")
 	NetVersion         = []byte("net_version")
 	TransactionReceipt = []byte("transaction_receipt")
-	ChainId = []byte("chain_id")
+	ChainId            = []byte("chain_id")
 	ShhVersion         = []byte("shh_version")
 
 	InvalidUrlWeb3    = []byte("invalid url or web3 method provided")
@@ -119,16 +119,16 @@ var (
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)
 	ErrNotImplemented        = errors.New(NotImplementedStr)
 	ErrNotAuthorized         = errors.New(NotAuthorized)
-	ListingNotSupported      = errors.New("listing not supported")
+	ErrListingNotSupported   = errors.New("listing not supported")
 	ErrBind                  = stack.New(BindErrStr)
-	StackErrProject          = stack.New(ProvideProjectIdStr)
-	StackErrInvalidData      = stack.New(ProvideValidDataStr)
+	ErrStackProject          = stack.New(ProvideProjectIdStr)
+	ErrInvalidData           = stack.New(ProvideValidDataStr)
 	ErrOperationNotSupported = stack.New(OperationNotSupportedStr)
 )
 
 // database related errors
 var (
-	DuplicateKeyErr = errors.New("duplicate key found on database. cannot store")
+	ErrDuplicateKey = errors.New("duplicate key found on database. cannot store")
 )
 
 // project controller related data

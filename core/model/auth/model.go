@@ -72,7 +72,7 @@ func (req *AuthRequest) CanWrite(context *echo.Context) error {
 // custom validation logic for list operation
 // return nil if everyone can list
 func (req *AuthRequest) CanList(context *echo.Context) error {
-	return data.ListingNotSupported
+	return data.ErrListingNotSupported
 }
 
 func (req *AuthRequest) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {

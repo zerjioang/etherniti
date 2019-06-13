@@ -10,6 +10,7 @@ func _isNumericArray(buf, len, res unsafe.Pointer)
 
 //go:noescape
 func _lowerCase(buf, len, res unsafe.Pointer)
+
 //go:noescape
 func _isDigit(b byte) (result byte)
 

@@ -125,7 +125,7 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 	} else {
 		if context.IntIp() == 0 || context.AuthenticatedUserUuid() == "" {
 			logger.Error("failed to create new project: authentication data is incomplete")
-			return nil, data.StackErrProject
+			return nil, data.ErrStackProject
 		} else {
 			project.Metadata = metadata.NewMetadata(context)
 			return project, nilErr

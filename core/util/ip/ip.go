@@ -7,20 +7,11 @@ import (
 	"encoding/binary"
 	"net"
 	"strconv"
-	"sync"
 )
 
 const (
 	asciiDot  uint8 = 46
 	asciiZero uint8 = 48
-)
-
-var (
-	octets           [4][4]byte
-	octectsDecimal   [4]byte
-	currentOctect    uint8 = 0
-	currentOctectPos uint8 = 0
-	lock             sync.Mutex
 )
 
 // converts an IP address to uint32 value

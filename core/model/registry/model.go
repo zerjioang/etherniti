@@ -117,7 +117,7 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 
 		if intIP == 0 || projectOwner == "" {
 			logger.Error("failed to create new registry: missing data")
-			return nil, data.StackErrInvalidData
+			return nil, data.ErrInvalidData
 		} else {
 			r.Metadata = metadata.NewMetadata(context)
 			return r, stack.Nil()
