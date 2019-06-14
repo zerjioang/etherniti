@@ -2373,8 +2373,6 @@
             "description": "target network X response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_version",
                 "result": "3"
               }
@@ -2437,8 +2435,6 @@
             "description": "Ethereum name information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "name",
                 "result": "Glocoin"
               }
@@ -2508,8 +2504,6 @@
             "description": "Ethereum name information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "name",
                 "result": "Glocoin"
               }
@@ -2579,8 +2573,6 @@
             "description": "Ethereum symbol information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "symbol",
                 "result": "GLC"
               }
@@ -2650,8 +2642,6 @@
             "description": "Ethereum network peer information response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "totalSupply",
                 "result": 1000000
               }
@@ -2796,8 +2786,6 @@
             "description": "Ethereum network ERC20 contract balanceof response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "balanceof",
                 "result": "0x00000000000000000000000000000000000000000000000000000000000186a0"
               }
@@ -2885,8 +2873,6 @@
             "description": "Ethereum network peer ERC20 contract allowance response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "allowance",
                 "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
               }
@@ -2923,25 +2909,24 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "default": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
           {
             "in": "path",
             "name": "address",
@@ -2975,8 +2960,6 @@
             "description": "Ethereum network storage response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "get_storage",
                 "result": "0x000000000000000000000000000000000000000000000000000000000000162e"
               }
@@ -3006,25 +2989,24 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "default": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
           {
             "in": "path",
             "name": "address",
@@ -3049,8 +3031,6 @@
             "description": "Ethereum network transaction receipt response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "transaction_count",
                 "result": "0x1"
               }
@@ -3080,25 +3060,24 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "default": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
           {
             "in": "path",
             "name": "hash",
@@ -3114,8 +3093,6 @@
             "description": "integer of the number of transactions in this block.",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "transaction_count_hash",
                 "result": "0x1"
               }
@@ -3145,25 +3122,24 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "default": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "default": "ropsten",
+          "required": true
+        },
           {
             "in": "path",
             "name": "number",
@@ -3179,8 +3155,6 @@
             "description": "integer of the number of transactions in this block.",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "transaction_count_block_number",
                 "result": "0x1"
               }
@@ -3243,8 +3217,6 @@
             "description": "Ethereum network transaction receipt response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "transaction_receipt",
                 "result": {
                   "TransactionHash": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",

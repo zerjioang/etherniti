@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/modules/entropy"
 	"strings"
 
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -147,6 +148,10 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 		return errors.New(msg)
 	}
 
+	//check current system entropy
+	if entropy.HasCriticalValue() {
+		logger.Warn("[WARNING] current system entropy available bytes are in critical value. we recommend you to increase ssytem entropy for security purposes")
+	}
 	// check worker module config
 	return checkWorkerModule(opts)
 }
