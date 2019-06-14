@@ -37,6 +37,10 @@ var (
 	EthInfo            = []byte("eth_info")
 	NetVersion         = []byte("net_version")
 	TransactionReceipt = []byte("transaction_receipt")
+	TransactionCount   = []byte("transaction_count")
+	TransactionCountHash   = []byte("transaction_count_hash")
+	TransactionCountBlockNumber   = []byte("transaction_count_block_number")
+	GetStorage   = []byte("get_storage")
 	ChainId            = []byte("chain_id")
 	ShhVersion         = []byte("shh_version")
 
@@ -115,6 +119,7 @@ var (
 )
 
 var (
+	ErrInvalidBlockHash = errors.New("Invalid block hash provided")
 	ErrUnknownMode           = errors.New(ErrUnknownModeStr)
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)
 	ErrNotImplemented        = errors.New(NotImplementedStr)
@@ -124,6 +129,7 @@ var (
 	ErrStackProject          = stack.New(ProvideProjectIdStr)
 	ErrInvalidData           = stack.New(ProvideValidDataStr)
 	ErrOperationNotSupported = stack.New(OperationNotSupportedStr)
+	ErrInvalidBlockNumber = errors.New("provided block number is not valid. remember allowed values are: an hex number, 'earliest', 'latest' or 'pending'")
 )
 
 // database related errors

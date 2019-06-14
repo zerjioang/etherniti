@@ -18,7 +18,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/eth"
 
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
@@ -120,7 +120,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 	}
 	if !eth.IsValidBlockNumber(block) {
 		//return error that block is invalid
-		return api.Error(c, errors.New("provided block number is not valid. remember allowed values are: an hex number, 'earliest', 'latest' or 'pending'"))
+		return api.Error(c, data.ErrInvalidBlockNumber)
 	}
 	result, raw, err := client.EthGetBalance(targetAddr, block)
 	if err != nil {
@@ -546,7 +546,7 @@ func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
 	}
 	address := c.Param("address")
 	//input data validation
-	if address == "" {
+	if !eth.IsValidAddressLow(address) {
 		return api.ErrorStr(c, data.InvalidAccountAddress)
 	}
 	// get our client context
@@ -577,12 +577,12 @@ func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 	}
 	ownerAddress := c.Param("owner")
 	//input data validation
-	if ownerAddress == "" {
+	if !eth.IsValidAddressLow(ownerAddress) {
 		return api.ErrorStr(c, data.InvalidAccountOwner)
 	}
 	spenderAddress := c.Param("spender")
 	//input data validation
-	if spenderAddress == "" {
+	if !eth.IsValidAddressLow(spenderAddress) {
 		return api.ErrorStr(c, data.InvalidAccountSpender)
 	}
 	// get our client context
@@ -755,6 +755,100 @@ func (ctl *Web3Controller) noop(c *echo.Context) error {
 	return api.Error(c, errors.New("not implemented"))
 }
 
+// TODO implement the method
+// Returns the value from a storage position at a given address.
+func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
+	addr := c.Param("address")
+	//input data validation
+	if !eth.IsValidAddressLow(addr) {
+		return api.ErrorStr(c, data.InvalidAccountAddress)
+	}
+	//read block position
+	block := c.Param("block")
+	//validate block input position data
+	if !eth.IsValidBlockNumber(block) {
+		//return error that block is invalid
+		return api.Error(c, data.ErrInvalidBlockNumber)
+	}
+	pos := c.Param("position")
+	if pos == "" {
+		//return invalid position index provided
+		return api.Error(c, errors.New("invalid storage position provided"))
+	}
+	return ctl.noop(c)
+}
+
+// Returns the number of transactions sent from an address.
+func (ctl *Web3Controller) getTransactionCount(c *echo.Context) error {
+	// read input parameters
+	addr := c.Param("address")
+	//input data validation
+	if !eth.IsValidAddressLow(addr) {
+		return api.ErrorStr(c, data.InvalidAccountAddress)
+	}
+	//read block position
+	block := c.Param("block")
+	//validate block input position data
+	if !eth.IsValidBlockNumber(block) {
+		//return error that block is invalid
+		return api.Error(c, data.ErrInvalidBlockNumber)
+	}
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+
+	result, err := client.EthGetTransactionCount(addr, block)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.TransactionCount, result)
+}
+
+// Returns the number of transactions in a block from a block matching the given block hash.
+func (ctl *Web3Controller) getBlockTransactionCountByHash(c *echo.Context) error {
+	// read input parameters
+	hash := c.Param("hash")
+	//input data validation
+	// TODO add strong block hash validation here
+	if hash == "" {
+		return api.Error(c, data.ErrInvalidBlockHash)
+	}
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// Returns: integer of the number of transactions in this block.
+	result, err := client.EthGetBlockTransactionCountByHash(hash)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.TransactionCountHash, result)
+}
+
+// Returns the number of transactions in a block matching the given block number.
+func (ctl *Web3Controller) getBlockTransactionCountByNumber(c *echo.Context) error {
+	// read input parameters
+	number := c.Param("number")
+	//input data validation
+	if !eth.IsValidBlockNumber(number) {
+		return api.Error(c, data.ErrInvalidBlockNumber)
+	}
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// Returns: integer of the number of transactions in this block.
+	result, err := client.EthGetBlockTransactionCountByNumber(number)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.TransactionCountBlockNumber, result)
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
@@ -778,15 +872,17 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
 
 	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getstorageat
-	router.GET("/storage", ctl.noop) //eth_getStorageAt
+	router.GET("/storage/:address/:block/:position", ctl.ethGetStorageAt)
 
 	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount
-	router.GET("/tx/count", ctl.sendTransaction) //eth_getTransactionCount
+	router.GET("/tx/count/address/{address}/{block}", ctl.getTransactionCount)
 
 	// eth_getBlockTransactionCountByHash
+	router.GET("/tx/count/hash/{hash}", ctl.getBlockTransactionCountByHash)
 	//Returns the number of transactions in a block from a block matching the given block hash.
 
 	//eth_getBlockTransactionCountByNumber
+	router.GET("/tx/count/number/{number}", ctl.getBlockTransactionCountByNumber)
 	//Returns the number of transactions in a block matching the given block number.
 
 	// eth_getUncleCountByBlockHash

@@ -427,11 +427,11 @@ func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
 }
 
 // EthGetBlockTransactionCountByNumber returns the number of transactions in a block from a block matching the given block
-func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(number int) (int, error) {
+func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(blockNumber string) (int, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
-		return "[" + rpc.doubleQuote(IntToHex(number)) + "]"
+		return "[" + rpc.doubleQuote(blockNumber) + "]"
 	}
 	if err := rpc.post("eth_getBlockTransactionCountByNumber", &response, params); err != nil {
 		return 0, err
