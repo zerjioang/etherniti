@@ -23,7 +23,7 @@
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "a0d1e3e36d50f61ee6eaab26d7bd246aae1f9ece"
+  revision = "962a206e94e9151fe41bbd6d6464af4ba7168f50"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -161,7 +161,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ae08d850ba158ea3ba4a7bb90f8372608172d8920644e5a6693b940a1f4e5d01"
+  digest = "1:98106f39567779e63f6343e803b2d08424e098dd9b063384e5385510eebab3fd"
   name = "github.com/mmcloughlin/avo"
   packages = [
     "attr",
@@ -179,7 +179,7 @@
     "x86",
   ]
   pruneopts = "UT"
-  revision = "83fbad1a6b3cba8ac7711170e57953fd12cdc40a"
+  revision = "cad456ebdea789b868f5ef4e2da867fe0af0521e"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -390,10 +390,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a0a22f160c7301868940da12eb2e1c18551737ec9c98d6d26a497ecf285cfced"
+  digest = "1:38e28edd30381e8016d955cc5142a91c9dccaa733b5e0769a592118b0fc0eac9"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
+    "blake2b",
     "blowfish",
     "cast5",
     "curve25519",
@@ -428,11 +429,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "3f473d35a33aa6fdd203e306dc439b797820e3f1"
+  revision = "d28f0bde5980168871434b95cfc858db9f2a7a99"
 
 [[projects]]
   branch = "master"
-  digest = "1:8ea0513faaf49c2491a6aa1c4962261295ed140478e3e84b5c699f42af0a3936"
+  digest = "1:4ec4e6a762ff101d7350fd0011db0366c5a94baed48b9b25b177ef6458a6643e"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -440,25 +441,29 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "93c9922d18aeb82498a065f07aec7ad7fa60dfb7"
+  revision = "b47fdc937951267e2d980171881317deea47f29b"
 
 [[projects]]
   branch = "master"
-  digest = "1:6f19963162d6a59826537146ceb9e3400ab33bffeb0686efb0883c97cd2fe52d"
+  digest = "1:b656ed43b2171c520778ed2dc4cd220ddd0f69a003f6a9cda7692fb8016ed98f"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
+    "go/buildutil",
     "go/gcexportdata",
+    "go/internal/cgo",
     "go/internal/gcimporter",
     "go/internal/packagesdriver",
+    "go/loader",
     "go/packages",
     "go/types/typeutil",
     "internal/fastwalk",
     "internal/gopathwalk",
     "internal/semver",
+    "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "59534d075a876675ef41a20fd596536cfa103662"
+  revision = "5aca471b1d59ca42d39ca6419e64061391b9a6ad"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -560,11 +565,15 @@
     "github.com/zerjioang/go-bus",
     "github.com/zerjioang/go-bus/mutex",
     "golang.org/x/crypto/bcrypt",
+    "golang.org/x/crypto/blake2b",
     "golang.org/x/crypto/pbkdf2",
     "golang.org/x/crypto/ripemd160",
     "golang.org/x/crypto/sha3",
     "golang.org/x/crypto/ssh",
     "golang.org/x/sys/cpu",
+    "golang.org/x/tools/go/buildutil",
+    "golang.org/x/tools/go/loader",
+    "golang.org/x/tools/refactor/importgraph",
     "gopkg.in/src-d/go-billy.v4/memfs",
     "gopkg.in/src-d/go-git.v4",
     "gopkg.in/src-d/go-git.v4/storage/memory",
