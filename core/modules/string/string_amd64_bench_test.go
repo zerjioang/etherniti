@@ -1,9 +1,10 @@
 package string
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"strings"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 func BenchmarkAssembly(b *testing.B) {

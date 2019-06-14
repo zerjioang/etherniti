@@ -14,4 +14,4 @@ BenchmarkMathRandRNGInt31n-4           	100000000	        10.9 ns/op	  92.16 MB/
 BenchmarkMathRandRNGInt31nWithLock-4   	20000000	       114 ns/op	   8.70 MB/s	       0 B/op	       0 allocs/op
 BenchmarkMathRandRNGInt31nArray-4      	20000000	        71.4 ns/op	  14.00 MB/s	       0 B/op	       0 allocs/op
 
- */
+*/

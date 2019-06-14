@@ -1,10 +1,11 @@
 package entropy
 
 import (
+	"strconv"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/fs"
 	"github.com/zerjioang/etherniti/core/util/str"
-	"strconv"
 )
 
 //this package will check about entropy bits available in the system

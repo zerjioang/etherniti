@@ -1,9 +1,10 @@
 package entropy
 
 import (
-	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAvailableEntropy(t *testing.T) {

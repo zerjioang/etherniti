@@ -4,11 +4,12 @@
 package network
 
 import (
-	"github.com/pkg/errors"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -875,14 +876,14 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/storage/:address/:block/:position", ctl.ethGetStorageAt)
 
 	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount
-	router.GET("/tx/count/address/{address}/{block}", ctl.getTransactionCount)
+	router.GET("/tx/count/address/:address/:block", ctl.getTransactionCount)
 
 	// eth_getBlockTransactionCountByHash
-	router.GET("/tx/count/hash/{hash}", ctl.getBlockTransactionCountByHash)
+	router.GET("/tx/count/hash/:hash", ctl.getBlockTransactionCountByHash)
 	//Returns the number of transactions in a block from a block matching the given block hash.
 
 	//eth_getBlockTransactionCountByNumber
-	router.GET("/tx/count/number/{number}", ctl.getBlockTransactionCountByNumber)
+	router.GET("/tx/count/number/:number", ctl.getBlockTransactionCountByNumber)
 	//Returns the number of transactions in a block matching the given block number.
 
 	// eth_getUncleCountByBlockHash

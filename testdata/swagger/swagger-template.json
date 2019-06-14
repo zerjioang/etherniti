@@ -570,8 +570,6 @@
             "description": "profile creation response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "profile token successfully created",
                 "result": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmRwb2ludCI6Imh0dHA6Ly8xNzIuMTY4LjAuMiIsImFkZHJlc3MiOiIweEU3MjBjMzQxYmQ2NjRBOEY3ZWJDM2Y3NUNDRTkzQkQ2YmE2ZDc2NTQiLCJrZXkiOiIiLCJ2ZXJzaW9uIjoxLCJ2YWxpZGl0eSI6ZmFsc2UsImV4cCI6MTU1NDQ5MzM0MywianRpIjoiZTMzZjhkNTUtM2YzNS00OWQwLTg5ZTgtOWNiMjMzYThiYmQzIiwiaWF0IjoxNTU0MTMzMzQzLCJpc3MiOiJldGhlcm5pdGkub3JnIiwibmJmIjoxNTU0MTMzMzQzfQ.__b0kA8JnwLv0ceI03LRDzt8m3pemoIf_8_0GX76MJg"
               }
@@ -640,8 +638,6 @@
             "description": "mnemonic response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "mnemonic successfully created",
                 "result": "acid coin captain hen eyebrow donor surround jar mirror copper leisure shield"
               }
@@ -680,10 +676,8 @@
             "description": "entropy data response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "entropy data generated",
-                "result": {
+                "data": {
                   "entropy": "abWCKX7EmwiIWxKTnQMIZjisv5Y="
                 }
               }
@@ -713,10 +707,8 @@
             "description": "account creation response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "ethereum account created",
-                "result": {
+                "data": {
                   "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
                   "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
                 }
@@ -754,8 +746,6 @@
             "description": "verification response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "address validation checked",
                 "result": true
               }
@@ -813,8 +803,6 @@
             "description": "verification response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "address validation checked",
                 "result": true
               }
@@ -896,10 +884,8 @@
             "description": "suspicious domain analysis results",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "domain analyzed",
-                "result": {
+                "data": {
                   "domain": "my.suspicious.wallet.domain.tld",
                   "trust": false,
                   "score": 7,
@@ -933,10 +919,8 @@
             "description": "Solidity Solc compiler version response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "solc version",
-                "result": {
+                "data": {
                   "path": "/usr/bin/solc",
                   "version": "0.4.24",
                   "full_version": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
@@ -1005,12 +989,8 @@
             "description": "Solidity Solc Compiler compilation response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "solc version",
-                "result": {
-                  "id": 0,
-                  "code": 200,
+                "data": {
                   "msg": "solc contract compiler",
                   "result": [{
                     "code": "0x608060405234801561001057600080fd5b506040516102d43803806102d483398101604052805160008054600160a060020a0319163317905501805161004c906001906020840190610053565b50506100ee565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009457805160ff19168380011785556100c1565b828001600101855582156100c1579182015b828111156100c15782518255916020019190600101906100a6565b506100cd9291506100d1565b5090565b6100eb91905b808211156100cd57600081556001016100d7565b90565b6101d7806100fd6000396000f30060806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
@@ -1108,8 +1088,8 @@
             "description": "web3 chain id response",
             "schema": {
               "example": {
-                "msg": "is_ganache",
-                "data": true
+                "msg": "eth_chainid",
+                "data": "4"
               }
             }
           },
@@ -1867,63 +1847,73 @@
               "example": {
                 "msg": "accounts_balanced",
                 "data": [{
-                  "account": "0x99579b05b90782013beddec2cbd7919b0d224b84",
-                  "balance": "100000000000000000000",
-                  "eth": "100",
+                  "account": "0x3deb1894dc2d3e1b4a073f520e516c2df6f45b88",
+                  "balance": "99986951860000000000",
+                  "eth": "99.98695186",
+                  "raw": "56b9902f68d620800",
                   "key": "secret"
                 },
                   {
-                    "account": "0xccfd6c216b0240557d0d1b2db09cc7bf5211ae36",
+                    "account": "0xd1f8cf87d0718e5796e64728189f30b3e7ecdd0c",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x15d4a31a6d9290107788a9266d1fd03cf04e9bb7",
+                    "account": "0x6d9ee6a876dd47a480e33f62a5bca27df2687979",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x9621fd269dc62d3af7d33cf92f18518f190ce28d",
+                    "account": "0x0911f623a0b7a7b2c710981c9d07683d02585a20",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x043f8bf5e470507592cde0ed2babc304ce386bbc",
+                    "account": "0xa11905b71fedb7fa4fffa9587151613117cf1d88",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x0e492caf43987685854e74806b81ab200288eb64",
+                    "account": "0x991c4e53687640f2dedc944b52b0636fd079c207",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0xc5f76b5dee2a58ecd5b9134aa256515625dcc06a",
+                    "account": "0x918fffe19d351afa5b6eb407438d1733a09a23d5",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x6696a3a4af596af393e33934556eb7d399a26d3d",
+                    "account": "0xb473031f113ef6d07beb4515242eeb9c7fe1a4a2",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x4f44eeda34652c731407a55edfd4e41411cd9dbe",
+                    "account": "0x20f99fa2229213bf68f814a2618f664e1422834e",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   },
                   {
-                    "account": "0x449fa20449a86301b4f4b4dc4f7d1141da9aa413",
+                    "account": "0xbff6bb9962728eaed93bee00bb42ecebe7f6f0fe",
                     "balance": "100000000000000000000",
                     "eth": "100",
+                    "raw": "56bc75e2d63100000",
                     "key": "secret"
                   }
                 ]
@@ -1992,8 +1982,8 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target's network",
+        "summary": "Get compilers information",
+        "description": "Get target's network compilers information",
         "operationId": "web3-compilers",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -2038,66 +2028,13 @@
         }
       }
     },
-    "/web3/{network}/block/current": {
-      "get": {
-        "tags": [
-          "web3"
-        ],
-        "summary": "Get network version information",
-        "description": "Get target's network",
-        "operationId": "web3-current",
-        "consumes": [
-          "application/json", "application/x-msgpack", "application/protobuf"
-        ],
-        "produces": [
-          "application/json", "application/x-msgpack", "application/protobuf"
-        ],
-        "deprecated": false,
-        "security": [{
-          "connectionProfileToken": []
-        }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": [
-            "ropsten",
-            "rinkeby",
-            "kovan",
-            "mainnet",
-            "infura",
-            "quiknode",
-            "private"
-          ],
-          "example": "ropsten",
-          "required": true
-        }],
-        "responses": {
-          "200": {
-            "description": "target network X response",
-            "schema": {
-              "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#responses/ProfileInvalidError"
-          }
-        }
-      }
-    },
     "/web3/{network}/shh/version": {
       "get": {
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target's network",
+        "summary": "Get SHH protocol version",
+        "description": "Get target's network SHH protocol version",
         "operationId": "web3-shh-version",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
@@ -2128,13 +2065,11 @@
         }],
         "responses": {
           "200": {
-            "description": "target network X response",
+            "description": "target network SHH protocol version response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
-                "msg": "net_version",
-                "result": "3"
+                "msg": "shh_version",
+                "result": "2"
               }
             }
           },
@@ -2144,21 +2079,21 @@
         }
       }
     },
-    "/web3/{network}/shh/new": {
-      "get": {
+    "/web3/{network}/shh/message": {
+      "post": {
         "tags": [
           "web3"
         ],
-        "summary": "Get network version information",
-        "description": "Get target's network",
-        "operationId": "web3-shh-new",
+        "summary": "Sends a whisper message.",
+        "description": "Get target's network and sends a whisper message.",
+        "operationId": "web3-shh-send",
         "consumes": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "produces": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
-        "deprecated": false,
+        "deprecated": true,
         "security": [{
           "connectionProfileToken": []
         }],
@@ -2184,10 +2119,121 @@
             "description": "target network X response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_version",
                 "result": "3"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/shh/identity": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Create new SHH Identity",
+        "description": "Creates new whisper identity in the client.",
+        "operationId": "web3-shh-id",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private"
+          ],
+          "example": "ropsten",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "60 Bytes as the address of the new identity.",
+            "schema": {
+              "example": {
+                "msg": "shh_newIdentity",
+                "result": "0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/ssh/identity/{address}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Check existance of an SHH Identity",
+        "description": "Checks if the client hold the private keys for a given identity.",
+        "operationId": "web3-shh-has-id",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "The identity address to check.",
+            "type": "string",
+            "example": "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
+            "default": "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns true if the client holds the privatekey for that identity, otherwise false.",
+            "schema": {
+              "example": {
+                "msg": "shh_has_identity",
+                "result": true
               }
             }
           },
@@ -2237,8 +2283,6 @@
             "description": "target network X response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_version",
                 "result": "3"
               }
@@ -2301,8 +2345,6 @@
             "description": "target network X response",
             "schema": {
               "example": {
-                "id": 0,
-                "code": 200,
                 "msg": "net_version",
                 "result": "3"
               }
@@ -2896,7 +2938,7 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get Transaction count",
+        "summary": "Get storage at given position",
         "description": "Returns the value from a storage position at a given address.",
         "operationId": "tx-storage",
         "consumes": [
@@ -2976,7 +3018,7 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get Transaction count",
+        "summary": "Get Transaction count by Address",
         "description": "Returns the number of transactions sent from an address.",
         "operationId": "tx-count",
         "consumes": [
@@ -3032,7 +3074,7 @@
             "schema": {
               "example": {
                 "msg": "transaction_count",
-                "result": "0x1"
+                "data": 0
               }
             }
           },
@@ -3218,7 +3260,7 @@
             "schema": {
               "example": {
                 "msg": "transaction_receipt",
-                "result": {
+                "data": {
                   "TransactionHash": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",
                   "TransactionIndex": 0,
                   "BlockHash": "0x43d32d536accca748357c894334be54bd9a69e31e4b654b3a5b54ed9b9afbdf3",
@@ -3558,8 +3600,6 @@
             "description": "response of new registry creation request",
             "schema": {
               "example": {
-                "code": 200,
-                "id": 0,
                 "msg": "registry successfully created",
                 "details": "a1ebf4afd9e9462cb5dedc0e83efea17"
               }

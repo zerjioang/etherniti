@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	rngPool = &sync.Pool {
-		New: func()interface{} {
+	rngPool = &sync.Pool{
+		New: func() interface{} {
 			return new(RNG)
 		},
 	}

@@ -4,8 +4,9 @@
 package eth
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 	"regexp"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 

@@ -5,9 +5,10 @@ package protocol
 
 import (
 	"bytes"
+	"strconv"
+
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
 	"github.com/zerjioang/etherniti/core/util/str"
-	"strconv"
 )
 
 type ServerStatusResponse struct {

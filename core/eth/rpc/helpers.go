@@ -20,6 +20,9 @@ import (
 
 // ParseInt parse hex string value to int
 func ParseInt(value string) (int, error) {
+	if value == "0x0" {
+		return 0, nil
+	}
 	i, err := strconv.ParseInt(strings.TrimPrefix(value, "0x"), 16, 64)
 	if err != nil {
 		return 0, err

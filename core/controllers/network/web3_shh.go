@@ -95,9 +95,10 @@ func (ctl Web3ShhController) RegisterRouters(router *echo.Group) {
 
 	router.GET("/shh/version", ctl.shhVersion)
 
-	router.POST("/shh", ctl.shhPost)
+	router.POST("/shh/message", ctl.shhPost)
+
 	router.POST("/shh/identity", ctl.shhNewIdentity)
-	router.GET("/shh/identity", ctl.shhHasIdentity)
+	router.GET("/shh/identity/:address", ctl.shhHasIdentity)
 
 	router.POST("/shh/group", ctl.shhNewGroup)
 	router.POST("/shh/group/add", ctl.shhAddToGroup)

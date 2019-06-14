@@ -2,8 +2,9 @@ package config
 
 import (
 	"errors"
-	"github.com/zerjioang/etherniti/core/modules/entropy"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/modules/entropy"
 
 	"github.com/zerjioang/etherniti/shared/def/listener"
 

@@ -3,6 +3,8 @@
 
 package string
 
+import "unsafe"
+
 //go:noescape
 func _ip_to_int(buf unsafe.Pointer) (result uint32)
 

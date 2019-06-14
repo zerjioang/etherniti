@@ -2,8 +2,9 @@ package base64
 
 import (
 	"encoding/base64"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (

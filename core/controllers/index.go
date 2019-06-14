@@ -5,8 +5,9 @@ package controllers
 
 import (
 	"bytes"
-	"github.com/zerjioang/etherniti/core/modules/cpuid"
 	"io/ioutil"
+
+	"github.com/zerjioang/etherniti/core/modules/cpuid"
 
 	"github.com/zerjioang/etherniti/core/modules/interval"
 
