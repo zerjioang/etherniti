@@ -378,7 +378,6 @@ func (s *EthRPCTestSuite) TestEthGetBalance() {
 
 func (s *EthRPCTestSuite) TestEthGetStorageAt() {
 	data := "0x295a70b2de5e3953354a6a8344e616ed314d7251"
-	position := 33
 	tag := "pending"
 
 	s.registerResponse(`"0x00000000000000000000000000000000000000000000000000000000000004d2"`, func(body []byte) {
@@ -386,7 +385,7 @@ func (s *EthRPCTestSuite) TestEthGetStorageAt() {
 		s.paramsEqual(body, fmt.Sprintf(`["%s", "0x21", "pending"]`, data))
 	})
 
-	result, err := s.rpc.EthGetStorageAt(data, position, tag)
+	result, err := s.rpc.EthGetStorageAt(data, "0x0", tag)
 	s.Require().Nil(err)
 	s.Require().Equal("0x00000000000000000000000000000000000000000000000000000000000004d2", result)
 }

@@ -3152,7 +3152,7 @@
         }
       }
     },
-    "/web3/{network}/storage/{address}/{block}/{position}": {
+    "/web3/{network}/storage/{address}/{block}/{key}": {
       "get": {
         "tags": [
           "web3"
@@ -3208,8 +3208,8 @@
           },
           {
             "in": "path",
-            "name": "position",
-            "description": "index of the storage to be retrieved",
+            "name": "key",
+            "description": "hexadecimal encoded key of the storage to be retrieved",
             "type": "string",
             "example": "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
             "default": "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",

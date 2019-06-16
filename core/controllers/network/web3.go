@@ -883,16 +883,10 @@ func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
 		//return error that block is invalid
 		return api.Error(c, data.ErrInvalidBlockNumber)
 	}
-	pos := c.Param("position")
-	if pos == "" {
+	key := c.Param("key")
+	if key == "" {
 		//return invalid position index provided
-		return api.Error(c, errors.New("invalid storage position provided"))
-	}
-	//convert position to int
-	posIdx, err := strconv.Atoi(pos)
-	if err != nil {
-		//return invalid position value provided
-		return api.Error(c, err)
+		return api.Error(c, errors.New("invalid hexadecimal key provided"))
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -900,7 +894,7 @@ func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
 		return api.Error(c, cliErr)
 	}
 	// make the call
-	response, err := client.EthGetStorageAt(addr, posIdx, block)
+	response, err := client.EthGetStorageAt(addr, key, block)
 	if err != nil {
 		return api.Error(c, err)
 	}
