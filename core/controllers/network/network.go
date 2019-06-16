@@ -7,6 +7,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/api"
+
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/modules/cache"
@@ -82,4 +84,8 @@ func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) 
 		return "", errInvalidAddress
 	}
 	return from, nil
+}
+
+func (ctl *NetworkController) Noop(c *echo.Context) error {
+	return api.Error(c, errors.New("not implemented"))
 }

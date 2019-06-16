@@ -4,8 +4,9 @@
 package network_test
 
 import (
-	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/controllers/network"

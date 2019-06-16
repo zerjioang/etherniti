@@ -54,6 +54,7 @@ func init() {
 	ropstenInfura = ropstenInfura + infuraToken
 	rinkebyInfura = rinkebyInfura + infuraToken
 	kovanInfura = kovanInfura + infuraToken
+	mainnetInfura = mainnetInfura + infuraToken
 	// load custom endpoints if exists
 	logger.Info("loading user provided custom endpoints")
 	ropstenCustom = cfg.RopstenCustomEndpoint

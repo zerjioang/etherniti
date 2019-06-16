@@ -127,7 +127,7 @@
       "description": "Etherniti Web3 Proxy Projects management",
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API Projects management at ",
-        "url": "https://docs.etherniti.org/api/projects"
+        "url": "https://docs.etherniti.org/api/public/projects/"
       }
     },
     {
@@ -2058,6 +2058,195 @@
         }
       }
     },
+    "/web3/{network}/compile/solidity": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Compile solidity contract",
+        "description": "Compile solidity raw contract data using target node",
+        "operationId": "web3-compiler-solidity",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "solidity compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_solidity",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compile/serpent": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Compile serpent contract",
+        "description": "Compile serpent raw contract data using target node",
+        "operationId": "web3-compiler-serpent",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "/* some serpent */"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "serpent compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_serpent",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compile/lll": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Compile LLL contract",
+        "description": "Compile LLL raw contract data using target node",
+        "operationId": "web3-compiler-lll",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "(returnlll (suicide (caller)))"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lll compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_lll",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
     "/web3/{network}/shh/version": {
       "get": {
         "tags": [
@@ -2123,7 +2312,7 @@
         "produces": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
-        "deprecated": true,
+        "deprecated": false,
         "security": [{
           "connectionProfileToken": []
         }],
@@ -2174,7 +2363,7 @@
         "produces": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
-        "deprecated": true,
+        "deprecated": false,
         "security": [{
           "connectionProfileToken": []
         }],
@@ -2225,7 +2414,7 @@
         "produces": [
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
-        "deprecated": true,
+        "deprecated": false,
         "security": [{
           "connectionProfileToken": []
         }],
@@ -3238,7 +3427,7 @@
         }
       }
     },
-    "/web3/{network}/tx/hash/{hash}": {
+    "/web3/{network}/tx/receipt/{hash}": {
       "get": {
         "tags": [
           "web3"

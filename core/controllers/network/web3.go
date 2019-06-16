@@ -36,7 +36,6 @@ import (
 var (
 	methodMap = map[string]string{
 		"client_version":   "web3_clientVersion",
-		"net_version":      "net_version",
 		"net_listening":    "net_listening",
 		"net_peers":        "net_peerCount",
 		"protocol_version": "eth_protocolVersion",
@@ -272,7 +271,7 @@ func (ctl *Web3Controller) netVersion(c *echo.Context) error {
 	} else {
 		type netVersion struct {
 			Version string `json:"version"`
-			Name string `json:"name"`
+			Name    string `json:"name"`
 		}
 		var wrapper netVersion
 		wrapper.Version = response
@@ -776,8 +775,97 @@ func (ctl *Web3Controller) chainId(c *echo.Context) error {
 	return api.SendSuccess(c, data.ChainId, result)
 }
 
-func (ctl *Web3Controller) noop(c *echo.Context) error {
-	return api.Error(c, errors.New("not implemented"))
+func (ctl *Web3Controller) getUncleCountByBlockHash(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) getUncleCountByBlockNumber(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) getCode(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) sign(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) call(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) sendRawTransaction(c *echo.Context) error {
+	return ctl.network.Noop(c)
+}
+
+func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	var tx ethrpc.TransactionData
+	if err := c.Bind(&tx); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, data.BindErr)
+	}
+	//make the call with json body
+	amount, err := client.EthEstimateGas(tx)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.EstimateGas, amount)
+}
+
+func (ctl *Web3Controller) compileCode(c *echo.Context, id []byte, compilerCall func(code string) ([]string, error)) error {
+	var model map[string]string
+	if err := c.Bind(&model); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorStr(c, data.BindErr)
+	}
+	contractStr, found := model["contract"]
+	if found && len(contractStr) > 0 {
+		// make the call
+		response, err := compilerCall(contractStr)
+		if err != nil {
+			return api.Error(c, err)
+		}
+		return api.SendSuccess(c, id, response)
+	}
+	return api.Error(c, errors.New("invalid source contract content provided in the request"))
+}
+
+func (ctl *Web3Controller) compileLLL(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// make the call
+	return ctl.compileCode(c, data.CompileLLL, client.EthCompileLLL)
+}
+
+func (ctl *Web3Controller) compileSolidity(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// make the call
+	return ctl.compileCode(c, data.CompileSolidity, client.EthCompileSolidity)
+}
+
+func (ctl *Web3Controller) compileSerpent(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// make the call
+	return ctl.compileCode(c, data.CompileSerpent, client.EthCompileSerpent)
 }
 
 // TODO implement the method
@@ -800,7 +888,23 @@ func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
 		//return invalid position index provided
 		return api.Error(c, errors.New("invalid storage position provided"))
 	}
-	return ctl.noop(c)
+	//convert position to int
+	posIdx, err := strconv.Atoi(pos)
+	if err != nil {
+		//return invalid position value provided
+		return api.Error(c, err)
+	}
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// make the call
+	response, err := client.EthGetStorageAt(addr, posIdx, block)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.TransactionCount, response)
 }
 
 // Returns the number of transactions sent from an address.
@@ -912,22 +1016,36 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
 	// eth_getUncleCountByBlockHash
 	// Returns the number of uncles in a block from a block matching the given block hash.
+	router.GET("/uncle/count/address/:address/:block", ctl.getUncleCountByBlockHash)
 
 	// eth_getUncleCountByBlockNumber
 	// Returns the number of uncles in a block from a block matching the given block number.
+	router.GET("/uncle/count/number/:number", ctl.getUncleCountByBlockNumber)
 
 	// eth_getCode
 	// Returns code at a given address.
+	router.GET("/code", ctl.getCode)
 
 	// eth_sign
+	// The sign method calculates an Ethereum specific signature with:
+	// sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message))).
+	// By adding a prefix to the message makes the calculated signature recognisable
+	// as an Ethereum specific signature. This prevents misuse where a malicious DApp
+	// can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim.
+	// Note the address to sign with must be unlocked.
+	router.GET("/sign", ctl.sign)
 
 	// eth_sendTransaction
+	router.GET("/send/tx", ctl.sendTransaction)
 
 	// eth_sendRawTransaction
+	router.GET("/send/raw", ctl.sendRawTransaction)
 
 	// eth_call
+	router.GET("/call", ctl.call)
 
 	// eth_estimateGas
+	router.GET("/estimategas", ctl.estimateGas)
 
 	// eth_getBlockByHash
 
@@ -950,17 +1068,18 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	//eth_getCompilers (DEPRECATED)
 	//deprecated calls
 	router.GET("/compilers", ctl.makeRpcCallNoParams)
+
 	// eth_compileSolidity (DEPRECATED)
-	router.GET("/compile/solidity", ctl.noop)
+	router.GET("/compile/solidity", ctl.compileSolidity)
 	// eth_compileLLL (DEPRECATED)
-	router.GET("/compile/lll", ctl.noop)
+	router.GET("/compile/lll", ctl.compileLLL)
 	// eth_compileSerpent (DEPRECATED)
-	router.GET("/compile/serpent", ctl.noop)
+	router.GET("/compile/serpent", ctl.compileSerpent)
 
 	router.GET("/chain/id", ctl.chainId)
 
 	router.GET("/tx/send", ctl.sendTransaction)
-	router.GET("/tx/hash/:hash", ctl.getTransactionByHash)
+	router.GET("/tx/receipt/:hash", ctl.getTransactionByHash)
 	router.GET("/is/contract/:address", ctl.isContractAddress)
 
 	router.GET("/erc20/:contract/name", ctl.erc20Name)
