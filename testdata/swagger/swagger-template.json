@@ -1339,7 +1339,10 @@
             "schema": {
               "example": {
                 "msg": "net_version",
-                "data": "3"
+                "data": {
+                  "version": "3",
+                  "name": "Ropsten Testnet"
+                }
               }
             }
           },

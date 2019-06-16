@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"syscall"
 
@@ -1437,4 +1438,83 @@ func Eth1Int64() int64 {
 // double quotes given string
 func (rpc *EthRPC) doubleQuote(data string) string {
 	return `"` + data + `"`
+}
+
+func ResolveNetworkId(id string) (string){
+	if id == "0" {
+		return "Olympic, Ethereum public pre-release PoW testnet"
+	} else if id == "1"{
+		return "Ethereum Mainnet"
+	} else if id == "2"{
+		return "Morden Testnet"
+	} else if id == "3"{
+		return "Ropsten Testnet"
+	} else if id == "4"{
+		return "Rinkeby Testnet"
+	} else if id == "5"{
+		return "Goerli, the public cross-client PoA testnet"
+	} else if id == "6"{
+		return "Kotti Classic, the public cross-client PoA testnet for Classic"
+	} else if id == "8"{
+		return "Ubiq, the public Gubiq main network with flux difficulty"
+	} else if id == "42"{
+		return "Kovan, the public Parity-only PoA testnet"
+	} else if id == "60"{
+		return "GoChain, the GoChain networks mainnet"
+	} else if id == "61"{
+		return "Ethereum Classic PoW main network"
+	} else if id == "77"{
+		return "Sokol, the public POA Network testnet"
+	} else if id == "99"{
+		return "Core, the public POA Network main network"
+	} else if id == "100" {
+		return "xDai, the public MakerDAO/POA Network main network"
+	} else if id == "5777" {
+		return "Ganache Local Testnet"
+	} else if id == "31337"{
+		return "GoChain testnet, the GoChain networks public testnet"
+	} else if id == "401697"{
+		return "Tobalaba, the public Energy Web Foundation testnet"
+	} else if id == "7762959"{
+		return "Musicoin, the music blockchain"
+	} else if id == "61717561"{
+		return "Aquachain, ASIC resistant chain"
+	}
+	return "unknown"
+}
+
+var (
+	networkLookupMap = map[int]string {
+		0: "Olympic, Ethereum public pre-release PoW testnet",
+		1: "Ethereum Mainnet",
+		2: "Morden Testnet",
+		3: "Ropsten Testnet",
+		4: "Rinkeby Testnet",
+		5: "Goerli, the public cross-client PoA testnet",
+		6: "Kotti Classic, the public cross-client PoA testnet for Classic",
+		8: "Ubiq, the public Gubiq main network with flux difficulty chain ID 8",
+		42: "Kovan, the public Parity-only PoA testnet",
+		60: "GoChain, the GoChain networks mainnet",
+		61: "Ethereum Classic PoW main network",
+		77: "Sokol, the public POA Network testnet",
+		99: "Core, the public POA Network main network",
+		100: "xDai, the public MakerDAO/POA Network main network",
+		5777: "Ganache Local Testnet",
+		31337: "GoChain testnet, the GoChain networks public testnet",
+		401697: "Tobalaba, the public Energy Web Foundation testnet",
+		7762959: "Musicoin, the music blockchain",
+		61717561: "Aquachain, ASIC resistant chain",
+	}
+)
+
+// @deprecated
+func ResolveNetworkId2(id string) (string){
+	idx, err := strconv.Atoi(id)
+	if err == nil {
+		name, ok := networkLookupMap[idx]
+		if ok {
+			return name
+		}
+	}
+	return ""
 }

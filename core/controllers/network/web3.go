@@ -259,6 +259,30 @@ func (ctl *Web3Controller) sha3(c *echo.Context) error {
 	}
 }
 
+func (ctl *Web3Controller) netVersion(c *echo.Context) error {
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// make the call
+	response, err := client.NetVersion()
+	if err != nil {
+		// send invalid response message
+		return api.Error(c, err)
+	} else {
+		type netVersion struct {
+			Version string `json:"version"`
+			Name string `json:"name"`
+		}
+		var wrapper netVersion
+		wrapper.Version = response
+		wrapper.Name = ethrpc.ResolveNetworkId(response)
+		response := api.ToSuccess([]byte("net_version"), wrapper)
+		c.OnSuccessCachePolicy = constants.CacheInfinite
+		return api.SendSuccessBlob(c, response)
+	}
+}
+
 func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	//resolve method name from url
 	methodName := c.Request().URL.Path
@@ -857,7 +881,7 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
 	router.GET("/client/version", ctl.makeRpcCallNoParams)
 	router.POST("/sha3", ctl.sha3)
-	router.GET("/net/version", ctl.makeRpcCallNoParams)
+	router.GET("/net/version", ctl.netVersion)
 	router.GET("/net/listening", ctl.makeRpcCallNoParams)
 	router.GET("/net/peers", ctl.makeRpcCallNoParams)
 	router.GET("/protocol/version", ctl.makeRpcCallNoParams)

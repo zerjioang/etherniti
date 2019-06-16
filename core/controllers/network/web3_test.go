@@ -4,6 +4,7 @@
 package network_test
 
 import (
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,5 +29,11 @@ func TestWeb3Controller(t *testing.T) {
 		})
 		ctl.RegisterRouters(testGroup)
 		assert.NotNil(t, ctl)
+	})
+	t.Run("resolve-network-id", func(t *testing.T) {
+		t.Run("id-1", func(t *testing.T) {
+			name := ethrpc.ResolveNetworkId("1")
+			assert.Equal(t, name, "Ethereum Mainnet")
+		})
 	})
 }
