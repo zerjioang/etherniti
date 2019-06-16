@@ -6,6 +6,7 @@ package controllers
 import (
 	"bytes"
 	"io/ioutil"
+	"runtime"
 
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
 
@@ -16,7 +17,6 @@ import (
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/util/banner"
 
-	"runtime"
 	"sync"
 	"time"
 
@@ -47,6 +47,8 @@ var (
 	IndexWelcomeJson      string
 	indexWelcomeBytes     []byte
 	indexWelcomeHtmlBytes []byte
+	// info message bytes
+	infoBytes []byte
 	// internally used struct pools to reduce GC
 	statusPool = sync.Pool{
 		// New creates an object when the pool has nothing available to return.
@@ -56,18 +58,6 @@ var (
 			// Pools often contain things like *bytes.Buffer, which are
 			// temporary and re-usable.
 			wrapper := protocol.ServerStatusResponse{}
-			wrapper.Architecture = runtime.GOARCH
-			wrapper.Os = runtime.GOOS
-			wrapper.Runtime.Compiler = runtime.Compiler
-
-			wrapper.Version.Etherniti = banner.Version
-			wrapper.Version.Go = runtime.Version()
-			wrapper.Version.HTTP = echo.Version
-
-			wrapper.Cpus.Cores = runtime.NumCPU()
-			// load cpu features
-			wrapper.Cpus.Features = cpuid.GetCpuFeatures()
-
 			return wrapper
 		},
 	}
@@ -93,6 +83,8 @@ func init() {
 	statusTicker = interval.NewTask("status", 5*time.Second, interval.Loop, true, onNewStatusData).Do()
 	// start monitoring root path
 	diskMonitor.Start("/")
+	// load info bytes
+	loadInfoBytes()
 }
 
 func LoadIndexConstants() {
@@ -100,6 +92,22 @@ func LoadIndexConstants() {
 	IndexWelcomeJson = `{"name":"etherniti-public-api","description":"High Performance Web3 REST Proxy","cluster_name":"apollo-api","version":"` + banner.Version + `","commit":"` + banner.Commit + `","edition":"` + banner.Edition + `","env":"` + config.Env() + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
+}
+
+func loadInfoBytes() {
+	wrapper := protocol.ServerInfoResponse{}
+	wrapper.Architecture = runtime.GOARCH
+	wrapper.Os = runtime.GOOS
+	wrapper.Runtime.Compiler = runtime.Compiler
+
+	wrapper.Version.Etherniti = banner.Version
+	wrapper.Version.Go = runtime.Version()
+	wrapper.Version.HTTP = echo.Version
+
+	wrapper.Cpus.Cores = runtime.NumCPU()
+	// load cpu features
+	wrapper.Cpus.Features = cpuid.GetCpuFeatures()
+	infoBytes = wrapper.Bytes()
 }
 
 func NewIndexController() *IndexController {
@@ -112,6 +120,11 @@ func (ctl *IndexController) Index(c *echo.Context) error {
 		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
 	}
 	return c.HTMLBlob(protocol.StatusOK, indexWelcomeHtmlBytes)
+}
+
+func (ctl *IndexController) Info(c *echo.Context) error {
+	c.OnSuccessCachePolicy = constants.CacheInfinite
+	return c.JSONBlob(protocol.StatusOK, infoBytes)
 }
 
 func (ctl *IndexController) Status(c *echo.Context) error {
@@ -140,6 +153,7 @@ func (ctl *IndexController) integrity() []byte {
 func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", ctl.Index)
+	router.GET("/info", ctl.Info)
 	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
 }

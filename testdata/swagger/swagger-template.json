@@ -292,6 +292,70 @@
         }
       }
     },
+    "/info": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "proxy status information",
+        "description": "proxy information and versioning",
+        "operationId": "index",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy information message",
+            "schema": {
+              "example": {
+                "arch": "amd64",
+                "os": "linux",
+                "cpus": {
+                  "cores": 4,
+                  "features": {
+                    "bmi_2": true,
+                    "osxsave": true,
+                    "aes": true,
+                    "vaes": false,
+                    "avx": true,
+                    "avx_512_f": false,
+                    "avx_512_vl": false,
+                    "avx_512_dq": false,
+                    "sse_2": true,
+                    "sse_3": true,
+                    "pclmulqdq": true,
+                    "ssse_3": true,
+                    "fma": true,
+                    "sse_41": true,
+                    "sse_42": true,
+                    "popcnt": true,
+                    "bmi_1": true,
+                    "avx_2": true,
+                    "erms": true,
+                    "adx": true,
+                    "enabled_avx": true,
+                    "enabled_avx_512": false
+                  }
+                },
+                "runtime": {
+                  "compiler": "gc"
+                },
+                "version": {
+                  "etherniti": "",
+                  "http": "4.0.0",
+                  "go": "go1.11.4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login": {
       "post": {
         "tags": [
@@ -448,55 +512,18 @@
             "description": "proxy internal metrics collection",
             "schema": {
               "example": {
-                "arch": "amd64",
-                "os": "linux",
-                "cpus": {
-                  "cores": 12,
-                  "features": {
-                    "bmi_2": true,
-                    "osxsave": true,
-                    "aes": true,
-                    "vaes": false,
-                    "avx": true,
-                    "avx_512_f": false,
-                    "avx_512_vl": false,
-                    "avx_512_dq": false,
-                    "sse_2": true,
-                    "sse_3": true,
-                    "pclmulqdq": true,
-                    "ssse_3": true,
-                    "fma": true,
-                    "sse_41": true,
-                    "sse_42": true,
-                    "popcnt": true,
-                    "bmi_1": true,
-                    "avx_2": true,
-                    "erms": true,
-                    "adx": true,
-                    "enabled_avx": true,
-                    "enabled_avx_512": false
-                  }
-                },
-                "runtime": {
-                  "compiler": "gc"
-                },
-                "version": {
-                  "etherniti": "latest",
-                  "http": "4.0.0",
-                  "go": "go1.12.5"
-                },
                 "disk": {
-                  "all": 248,
-                  "used": 22,
-                  "free": 225
+                  "all": 147,
+                  "used": 131,
+                  "free": 16
                 },
                 "memory": {
-                  "frees": 70161,
-                  "heapalloc": 362123544,
-                  "alloc": 362123544,
-                  "total": 368401176,
-                  "sys": 627261688,
-                  "mallocs": 173916
+                  "frees": 73293,
+                  "heapalloc": 362286368,
+                  "alloc": 362286368,
+                  "total": 369013624,
+                  "sys": 487913720,
+                  "mallocs": 177358
                 },
                 "gc": {
                   "numgc": 7,

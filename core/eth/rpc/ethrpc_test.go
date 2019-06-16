@@ -362,7 +362,7 @@ func (s *EthRPCTestSuite) TestEthBlockNumber() {
 func (s *EthRPCTestSuite) TestEthGetBalance() {
 	address := "0x407d73d8a49eeb85d32cf465507dd71d507100c1"
 	s.registerResponseError(errors.New("Error"))
-	balance, err := s.rpc.EthGetBalance(address, "latest")
+	balance, _, err := s.rpc.EthGetBalance(address, "latest")
 	s.Require().NotNil(err)
 
 	s.registerResponse(`"0x486d06b0d08d05909c4"`, func(body []byte) {
@@ -371,7 +371,7 @@ func (s *EthRPCTestSuite) TestEthGetBalance() {
 	})
 
 	expected, _ := big.NewInt(0).SetString("21376347749069564217796", 10)
-	balance, err = s.rpc.EthGetBalance(address, "latest")
+	balance, _, err = s.rpc.EthGetBalance(address, "latest")
 	s.Require().Nil(err)
 	s.Require().Equal(*expected, balance)
 }
@@ -424,7 +424,7 @@ func (s *EthRPCTestSuite) TestEthGetBlockTransactionCountByHash() {
 }
 
 func (s *EthRPCTestSuite) TestEthGetBlockTransactionCountByNumber() {
-	number := 2384732
+	number := "2384732"
 	s.registerResponseError(errors.New("Error"))
 	count, err := s.rpc.EthGetBlockTransactionCountByNumber(number)
 	s.Require().NotNil(err)

@@ -29,7 +29,7 @@ func onNewStatusData() []byte {
 
 	//get the buffer from the pool, and cast it
 	buffer := bufferBool.Get().(*bytes.Buffer)
-	data := wrapper.Bytes(buffer)
+	data := wrapper.Bytes()
 
 	// Then put it back
 	buffer.Reset()

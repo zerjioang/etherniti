@@ -4,7 +4,6 @@
 package protocol
 
 import (
-	"bytes"
 	"strconv"
 
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
@@ -12,20 +11,26 @@ import (
 )
 
 type ServerStatusResponse struct {
-	Architecture string  `json:"arch"`
-	Os           string  `json:"os"`
-	Cpus         Cpus    `json:"cpus"`
-	Runtime      Runtime `json:"runtime"`
-	Version      Version `json:"version"`
-	Disk         Disk    `json:"disk"`
-	Memory       Memory  `json:"memory"`
-	Gc           Gc      `json:"gc"`
+	Disk   Disk   `json:"disk"`
+	Memory Memory `json:"memory"`
+	Gc     Gc     `json:"gc"`
 }
 
 func (r *ServerStatusResponse) Reset() {
 	r.Disk.Reset()
 	r.Memory.Reset()
 	r.Gc.Reset()
+}
+func (r *ServerStatusResponse) Bytes() []byte {
+	return str.GetJsonBytes(r)
+}
+
+type ServerInfoResponse struct {
+	Architecture string  `json:"arch"`
+	Os           string  `json:"os"`
+	Cpus         Cpus    `json:"cpus"`
+	Runtime      Runtime `json:"runtime"`
+	Version      Version `json:"version"`
 }
 
 type Cpus struct {
@@ -80,9 +85,8 @@ func (gc *Gc) Reset() {
 	gc.NumForcedGC = 0
 }
 
-func (r ServerStatusResponse) Bytes(buffer *bytes.Buffer) []byte {
-	raw, _ := str.FastMarshal(r)
-	return raw
+func (r ServerInfoResponse) Bytes() []byte {
+	return str.GetJsonBytes(r)
 }
 
 func itoa(v int) string {

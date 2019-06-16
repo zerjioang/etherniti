@@ -27,8 +27,8 @@ func BenchmarkParseBigInt(b *testing.B) {
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		_, _ = ParseBigInt("0xabc")
-		_, _ = ParseBigInt("$%1")
+		_, _, _ = ParseBigInt("0xabc")
+		_, _, _ = ParseBigInt("$%1")
 	}
 }
 

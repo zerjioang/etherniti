@@ -60,11 +60,13 @@ func TestParseInt(t *testing.T) {
 }
 
 func TestParseBigInt(t *testing.T) {
-	i, err := ParseBigInt("0xabc")
+	i, raw, err := ParseBigInt("0xabc")
 	assert.Nil(t, err)
+	assert.Equal(t, raw, "0xabc")
 	assert.Equal(t, int64(2748), i.Int64())
 
-	i, err = ParseBigInt("$%1")
+	i, raw, err = ParseBigInt("$%1")
+	assert.Equal(t, raw, "$%1")
 	assert.NotNil(t, err)
 }
 
