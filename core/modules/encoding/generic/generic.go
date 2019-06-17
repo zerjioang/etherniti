@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+type Writer func(byte)
+type StreamInterface interface {
+	Write(byte)
+}
+
 // encode buffer to given common
 func NbaseEncode(nb uint64, buf *bytes.Buffer, base string) {
 	l := uint64(len(base))

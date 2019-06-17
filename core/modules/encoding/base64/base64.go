@@ -2,13 +2,10 @@ package base64
 
 import (
 	"fmt"
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/encoding/generic"
 	"unsafe"
 )
-
-type writer func(byte)
-type StreamInterface interface {
-	Write(byte)
-}
 
 const (
 	StdPadding rune = '=' // Standard padding character
@@ -33,7 +30,7 @@ func init() {
 	case [2]byte{0xAB, 0xCD}:
 		fmt.Println("big endian")
 	default:
-		panic("Could not determine native endianness.")
+		logger.Error("could not determine native endianness.")
 	}
 }
 
@@ -118,7 +115,7 @@ func resolve(v uint) byte {
 	return charMap[v]
 }
 
-func EncodeToStream(src []byte, writer writer) {
+func EncodeToStream(src []byte, writer generic.Writer) {
 	//calculate group count
 	sizeof := len(src)
 	if sizeof == 0 {

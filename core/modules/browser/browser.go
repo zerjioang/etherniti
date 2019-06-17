@@ -2,12 +2,13 @@ package browser
 
 import (
 	"fmt"
+	"github.com/zerjioang/etherniti/core/logger"
 	"os/exec"
 	"runtime"
 )
 
 // open a link in your favorite browser
-func openBrowser(url string) {
+func OpenBrowser(url string) {
 	var err error
 
 	switch runtime.GOOS {
@@ -21,6 +22,6 @@ func openBrowser(url string) {
 		err = fmt.Errorf("unsupported platform")
 	}
 	if err != nil {
-		panic(err)
+		logger.Error("failed to open browser window: ", err)
 	}
 }
