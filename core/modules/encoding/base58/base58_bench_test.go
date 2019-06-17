@@ -7,7 +7,7 @@ func BenchmarkTrivialBase58Encoding(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_= TrivialBase58Encoding([]byte(testPairs[i].dec))
+		_ = TrivialBase58Encoding([]byte(testPairs[i].dec))
 	}
 }
 
@@ -25,7 +25,7 @@ func BenchmarkTrivialBase58Decoding(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_, _= TrivialBase58Decoding(testPairs[i].enc)
+		_, _ = TrivialBase58Decoding(testPairs[i].enc)
 	}
 }
 
@@ -34,6 +34,6 @@ func BenchmarkFastBase58Decoding(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_, _= FastBase58Decoding(testPairs[i].enc)
+		_, _ = FastBase58Decoding(testPairs[i].enc)
 	}
 }

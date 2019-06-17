@@ -6,11 +6,12 @@ import (
 )
 
 var (
-	hasUI bool
-	xorg = []byte("Xorg")
+	hasUI    bool
+	xorg     = []byte("Xorg")
 	xwayland = []byte("Xwayland")
 )
-func init(){
+
+func init() {
 	hasUI = detectUI()
 }
 
