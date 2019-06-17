@@ -91,8 +91,8 @@ func socketClient() {
 }
 
 // new http format socket client
-func socketHttpClient(socketPath string) http.Client {
-	httpc := http.Client{
+func socketHttpClient(socketPath string) *http.Client {
+	httpc := &http.Client{
 		Transport: &http.Transport{
 			DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
 				return net.Dial("unix", socketPath)

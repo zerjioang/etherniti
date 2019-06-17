@@ -31,7 +31,7 @@ var (
 	BlacklistedDomainFile = ResourcesDirInternalSecurity + "/domains.json"
 	TokenListFile         = ResourcesDirInternalTokens + "/list.json"
 	PhishingDomainFile    = ResourcesDirInternalSecurity + "/phishing.json"
-	AntiBotsFile          = ResourcesDirInternalBots + "/bots.json"
+	AntiBotsFile          = ResourcesDirInternalBots + "/bots"
 	TorExitFile           = ResourcesDirInternalTor + "/tor_exit"
 	TorAllFile            = ResourcesDirInternalTor + "/tor_all"
 	BadIpsFile            = ResourcesDirInternalBadIps + "/list_any_5"

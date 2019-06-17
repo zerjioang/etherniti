@@ -413,6 +413,7 @@ func (c *Context) FastBlob(code int, contentType string, b []byte) (err error) {
 		if c.OnSuccessCachePolicy > 0 {
 			timeStr := strconv.Itoa(c.OnSuccessCachePolicy)
 			h.Set("Cache-Control", "public, max-age="+timeStr) // 24h cache = 86400
+			h.Set("X-Cache", "HIT")
 		}
 	}
 	c.writeContentType(contentType)

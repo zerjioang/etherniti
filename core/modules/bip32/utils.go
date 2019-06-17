@@ -90,11 +90,11 @@ func addChecksumToBytes(data []byte) ([]byte, error) {
 }
 
 func base58Encode(data []byte) string {
-	return base58.Base58.EncodeToString(data)
+	return base58.FastBase58Encoding(data)
 }
 
 func base58Decode(data string) ([]byte, error) {
-	return base58.Base58.DecodeString(data)
+	return base58.FastBase58Decoding(data)
 }
 
 // Keys

@@ -9,6 +9,9 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/hashset"
 )
 
+const (
+	NEWLINE = "\n"
+)
 var (
 	badBotsList hashset.HashSetMutex
 )
@@ -16,5 +19,5 @@ var (
 func init() {
 	logger.Info("[module] loading anti-bots policy data")
 	badBotsList = hashset.NewHashSet()
-	badBotsList.LoadFromJsonArray(config.AntiBotsFile)
+	badBotsList.LoadFromRaw(config.AntiBotsFile, NEWLINE)
 }
