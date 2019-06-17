@@ -3157,7 +3157,7 @@
         "tags": [
           "web3"
         ],
-        "summary": "Get storage at given position",
+        "summary": "Get storage at given position/key",
         "description": "Returns the value from a storage position at a given address.",
         "operationId": "tx-storage",
         "consumes": [
