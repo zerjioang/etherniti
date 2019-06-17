@@ -3,6 +3,7 @@ package base64
 import (
 	"encoding/base64"
 	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/core/modules/encoding/generic"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ const (
 )
 
 type testWriter struct {
-	StreamInterface
+	generic.StreamInterface
 }
 
 func (w *testWriter) Write(b byte) {
