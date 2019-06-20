@@ -137,6 +137,7 @@ Atomic_Email_Hunter
 Atomz
 Atrop
 attach
+attache
 attrakt
 attrib
 attributor
@@ -254,6 +255,7 @@ Bookmark Buddy
 Bookmark.search.tool
 boris
 Bost
+Boston Project
 Boston.Project
 bosug
 bot
@@ -321,6 +323,7 @@ Cand
 Canon-WebRecord
 Canon-WebRecordPro
 captu
+capture
 CareerBot
 casper
 cataguru
@@ -444,6 +447,7 @@ CreativeCommons
 Cres
 crescent
 Crescent
+Crescent Internet ToolPak
 Crescent Internet ToolPak HTTP OLE Control
 cs-crawler
 cs-CZ
@@ -468,6 +472,7 @@ CyberSpyder
 CydralSpider
 D1GArabicEngine
 da
+DA
 DA$
 daoBot
 DARK
@@ -497,6 +502,7 @@ DelvuBot
 DepS
 Detect
 Deweb
+diagem
 DiaGem
 Diam
 Diamond
@@ -550,6 +556,7 @@ Download.Devil
 downloader
 Downloader
 download wonder
+Download Wonder
 Download.Wonder
 DOY
 drag
@@ -563,8 +570,10 @@ dsdl
 dsok
 DSurf
 dsurf15a
+DSurf15a
 DTAAgent
 DTS
+DTS.Agent
 dtSearchSpider
 Dual
 dumb
@@ -580,6 +589,7 @@ EARTHCOM
 EasouSpider
 EasyDL
 easydl/2.99
+EasyDL/2.99
 ebin
 ebingbong
 EBM-APPLE
@@ -608,8 +618,10 @@ email
 emailcollector
 EmailCollector
 EMail Exractor
+Email Extractor
 Email.Extractor
 EmailLeach
+email [NC,OR]
 EmailSearch
 emailsiphon
 EmailSiphon
@@ -655,6 +667,7 @@ EXPLOITER
 explorersearch
 Expre
 express webpictures
+Express WebPictures
 Extra
 extract
 Extractor
@@ -683,6 +696,7 @@ FatBot
 Favcollector
 Faviconizer
 FavOrg
+Favorites Sweeper
 Favorites.Sweeper
 Faxo
 FDM
@@ -695,6 +709,7 @@ feedfinder
 FelixIDE
 fembot
 fetch
+Fetch
 Fetch API Request
 fetch_ici
 FEZhead
@@ -720,6 +735,7 @@ Flash
 FlashCapture
 flashget
 FlashGet
+FlashGet WebWasher
 FlickBot
 flicky
 FlickySearchBot
@@ -754,6 +770,7 @@ frodo.at
 froGgle
 frontpage
 FrontPage
+FrontPage [NC,OR]
 Froola
 FSurf
 Fuck
@@ -777,6 +794,7 @@ GbPl
 gcreep
 Gener
 generate_infomine_category_classifiers
+Generic
 genevabot
 geni
 genieBot
@@ -798,6 +816,7 @@ GetSmart
 GetURL.rexx
 getweb!
 GetWeb!
+GetWebPage
 Giant
 gigabaz
 GigablastOpenSource
@@ -837,6 +856,7 @@ go!zilla
 go\\!zilla
 Go!Zilla
 Go.Zilla
+Go\!Zilla
 GPU p2p
 grab
 grabber
@@ -850,6 +870,7 @@ grapeFX
 grapeshot
 GrapeshotCrawler
 grbot
+Green Research
 Green.Research
 GreenYogi [ZSEBOT]
 Gromit
@@ -882,6 +903,7 @@ hailo
 HappyFunBot
 Harv
 harvest
+Harvest
 HarvestMan
 Hatena
 Hatena Antenna
@@ -930,6 +952,7 @@ Html Link Validator
 HTMLParser
 HTTPConnect
 httpdown
+http generic
 http.generic
 HTTPGet
 httplib
@@ -982,8 +1005,10 @@ imagefetch
 imagefortress
 ImagesHereImagesThereImagesEverywhere
 image stripper
+Image Stripper
 Image.Stripper
 image sucker
+Image Sucker
 Image.Sucker
 ImageVisu
 imds_monitor
@@ -998,6 +1023,7 @@ Indy
 indylabs_marius
 indy library
 indy*library
+Indy Library
 InelaBot
 Inet32 Ctrl
 inetbot
@@ -1075,6 +1101,7 @@ java/
 Java
 Java(tm)
 jbh*agent
+JBH agent
 JBH.agent
 Jbot
 JemmaTheTourist
@@ -1093,6 +1120,7 @@ JoBo
 JobSpider_BA
 JOC
 joc web spider
+JOC Web Spider
 JoeDog
 JoyScapeBot
 JSpyda
@@ -1211,9 +1239,11 @@ Linkie
 LinkLint
 linklooker
 Linkman
+LINKS ARoMATIZED
 LINKS.ARoMATIZED
 LinkScan
 LinksCrawler
+Link Sleuth
 Link.Sleuth
 LinksManager.com_bot
 LinkSweeper
@@ -1256,6 +1286,7 @@ Lydia Entity
 LynnBot
 Lytranslate
 Mac_F
+Mac Finder
 Mac.Finder
 Macintosh;.I;.PPC
 magi
@@ -1283,6 +1314,7 @@ masidani_bot_
 Mass
 masscan
 mass downloader
+Mass Downloader
 Mass.Downloader
 Mata
 Mata Hari
@@ -1331,6 +1363,7 @@ microsoft.url
 Microsoft.URL
 MIDo
 midown tool
+MIDown tool
 MIIx
 MIIxpc
 miner
@@ -1358,6 +1391,7 @@ mkdb
 mlbot
 MLM
 MMMoCrawl
+MMMtoCrawl/UrlDispatcherLLL
 MnoG
 mnoGoSearch
 mod_accessibility
@@ -1381,6 +1415,7 @@ MovableType
 mowserbot
 Mozdex
 Mozi
+Mozilla
 Mp3Bot
 MPF
 MQbot
@@ -1389,6 +1424,7 @@ MSE360
 msfrontpage
 ms frontpage*
 MSFrontPage
+MS FrontPage
 MS.FrontPage
 MSIE6
 MSIE_6.0
@@ -1481,12 +1517,16 @@ netsystemsresearch
 netsystemsresearch.com
 Net::Trackback
 net vampire
+Net Vampire
 Net.Vampire
 netX
 NetZ
 netzip
 NetZip
+NetZIP
+NetZip Downloader
 NetZip-Downloader
+NetZippy
 Neut
 newLISP
 NewMedhunt
@@ -1529,6 +1569,7 @@ Norb
 NoteworthyBot
 noxtrumbot
 NPbot
+NPBot
 NPBot-
 NRCan intranet
 NSDL_Search_Bot
@@ -1734,6 +1775,7 @@ PSurf
 psycheclone
 pub-crawler
 pucl
+puf
 puf$
 Pulse
 pulseBot
@@ -1899,9 +1941,11 @@ searchpreview
 Search Publisher
 SearchSpider.com
 searchterms
+searchterms.it
 search.updated.com
 search.usgs.gov
 SearQuBot
+Second Street Research
 Second.Street.Research
 Security.Kol
 Seekbot
@@ -1987,6 +2031,7 @@ smartwit.com
 Smurf
 sna-
 snag
+snagger
 snake
 Snake
 Snapbot
@@ -2050,6 +2095,7 @@ Squid-Prefetch
 SQ.Webscanner
 sqwid
 Sqworm
+SqWorm
 SrevBot
 sslbot
 SSM_Ag
@@ -2082,6 +2128,7 @@ subot
 suchclip
 Suck
 sucker
+Sucker
 Sume
 SumeetBot
 SumitBot
@@ -2211,6 +2258,7 @@ TridentSpider
 trivial
 Trovator
 True
+TrueRobot
 True_Robot
 tScholarsBot
 TsWebBot
@@ -2287,7 +2335,7 @@ USAF AFKN\
 usasearch
 UserAgent
 User-Agent
-U.S. Government Printing Office
+U.S Government Printing Office
 USS-Cosmix
 USyd
 USyd-NLP-Spider
@@ -2297,6 +2345,7 @@ vacuum
 Vacuum
 VadixBot
 vagabo
+vagabondo
 Vagabondo
 Valet
 Valid
@@ -2351,6 +2400,7 @@ W3C
 W3C_Unicorn
 W3C-WebCon
 w3m
+w3mir
 w3search
 wacbot
 walhello
@@ -2376,6 +2426,7 @@ WebaltBot
 webauto
 WebAuto
 webbandit
+Web bandit
 WebBandit
 webbot
 Webbot
@@ -2385,8 +2436,10 @@ WebCapture
 WebCat
 webcheck
 Webclip
+Webclipping
 Webclipping.com
 webcollage
+webcollector
 WebCollector
 webcopier
 WebCopier
@@ -2398,17 +2451,18 @@ webcrawl
 webcrawler
 webcrawl.net
 WebDat
+Web Data Extractor
 Web.Data.Extractor
 WebDav
 webdevil
 webdownloader
 web downloader
-Web.Downloader
 WebDownloader
+Web Downloader
+Web.Downloader
 Webdup
 WebEMail
 webemailextrac
-WebEMailExtrac
 WebEMailExtrac
 WebEnhancer
 WebFerret
@@ -2426,6 +2480,7 @@ webhook
 WebHook
 Web.Ima
 web image collector
+Web Image Collector
 Web.Image.Collector
 WebImages
 Webinator
@@ -2446,6 +2501,7 @@ webLyzard
 Web Magnet
 Webmaster
 WebmasterCoffee
+WEBMASTERS
 WebmasterWorld
 WebmasterWorldForumBot
 WebMin
@@ -2469,11 +2525,14 @@ WebSauger
 Webscan
 websearchbench
 website
+Website
 WebSite
 website extractor
+Website eXtractor
 Website.eXtractor
 websitemirror
 website quester
+Website Quester
 Website.Quester
 WebSnake
 Web-Sniffer
@@ -2489,6 +2548,7 @@ webstripper
 WebStripper
 websucker
 web sucker
+Web Sucker
 Web.Sucker
 WebTrafficExpress
 WebTre
@@ -2500,6 +2560,7 @@ WebWalker
 Webwasher
 WebWasher
 WebWatch
+webweasel
 WebWeasel
 webwhacker
 WebWhacker
@@ -2515,11 +2576,13 @@ WEP_S
 WEP.Search.00
 WeRelateBot
 wget
+Wget
 Whack
 whacker
 Whacker
 whisper
 whiz
+whizbang
 WhosTalking
 widow
 Widow
@@ -2586,6 +2649,7 @@ x$
 X12R1
 Xaldon
 xaldon webspider
+Xaldon WebSpider
 X-clawler
 xenu
 Xenu
@@ -2649,6 +2713,7 @@ zeus
 Zeus
 Zeus Link Scout
 zeuswebster
+Zeus Webster
 zgrab
 zibber-v
 zimeno
