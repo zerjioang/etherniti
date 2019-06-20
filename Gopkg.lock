@@ -34,7 +34,7 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:5f5090f05382959db941fa45acbeb7f4c5241aa8ac0f8f4393dec696e5953f53"
+  digest = "1:65a60756406f5c12bc0eadcfab55eeaff0e7ed5954817bf8fe70a07478026406"
   name = "github.com/dgraph-io/badger"
   packages = [
     ".",
@@ -45,8 +45,8 @@
     "y",
   ]
   pruneopts = "UT"
-  revision = "99233d725dbdd26d156c61b2f42ae1671b794656"
-  version = "v1.5.4"
+  revision = "acce481eab83cd96f2d5470802f8f8ab8d793431"
+  version = "v1.5.5"
 
 [[projects]]
   branch = "master"
@@ -238,7 +238,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:e89f2cdede55684adbe44b5566f55838ad2aee1dff348d14b73ccf733607b671"
+  digest = "1:eb04f69c8991e52eff33c428bd729e04208bf03235be88e4df0d88497c6861b9"
   name = "github.com/prometheus/client_golang"
   packages = [
     "prometheus",
@@ -246,8 +246,8 @@
     "prometheus/promhttp",
   ]
   pruneopts = "UT"
-  revision = "2641b987480bca71fb39738eb8c8b0d577cb1d76"
-  version = "v0.9.4"
+  revision = "4ab88e80c249ed361d3299e2930427d9ac43ef8d"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -266,8 +266,8 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "17f5ca1748182ddf24fc33a5a7caaaf790a52fcc"
-  version = "v0.4.1"
+  revision = "31bed53e4047fd6c510e43a941f90cb31be0972a"
+  version = "v0.6.0"
 
 [[projects]]
   digest = "1:403b810b43500b5b0a9a24a47347e31dc2783ccae8cf97c891b46f5b0496fa1a"
@@ -390,7 +390,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:38e28edd30381e8016d955cc5142a91c9dccaa733b5e0769a592118b0fc0eac9"
+  digest = "1:9710f0a428c213fa46bc4f3b394fd51ae7ec980f31408cb998e43a3c967b861d"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -417,23 +417,25 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "5c40567a22f818bd14a1ea7245dad9f8ef0691aa"
+  revision = "ea8f1a30c4438cc8b13f05538385ad8dc6049b43"
 
 [[projects]]
   branch = "master"
-  digest = "1:245513f26a0d2c70372c30182414e3f1881cba072e090ab005c7aa6dc32b4ff6"
+  digest = "1:3e56d74416dae82f071b9bd110a5098c193dd74d09d1b1996c9a7151b175b3d9"
   name = "golang.org/x/net"
   packages = [
     "context",
+    "internal/socks",
     "internal/timeseries",
+    "proxy",
     "trace",
   ]
   pruneopts = "UT"
-  revision = "d28f0bde5980168871434b95cfc858db9f2a7a99"
+  revision = "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a"
 
 [[projects]]
   branch = "master"
-  digest = "1:4ec4e6a762ff101d7350fd0011db0366c5a94baed48b9b25b177ef6458a6643e"
+  digest = "1:2506a1d45e71f2af21d64864a23fcd39cf6811b28bff4564f4730c4d9ea8acc3"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -441,11 +443,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "b47fdc937951267e2d980171881317deea47f29b"
+  revision = "6f217b454f458f9c81d48c1fff9e6f5ea6b0bbf2"
 
 [[projects]]
   branch = "master"
-  digest = "1:b656ed43b2171c520778ed2dc4cd220ddd0f69a003f6a9cda7692fb8016ed98f"
+  digest = "1:68449bfc1e5b44ce44b080e9b550ea0b9b35a84f2e625f307d12c9cf6fe6c8e2"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -463,7 +465,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "5aca471b1d59ca42d39ca6419e64061391b9a6ad"
+  revision = "4adf7a708c2de4c9ea24a1f351c2e1c9b82fbde8"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -481,7 +483,7 @@
   version = "v4.3.0"
 
 [[projects]]
-  digest = "1:7fcf8681ff737e3fa6b387448717283c2053058c5d7344c22a9a025b0dc5be4a"
+  digest = "1:ca7d1685b495a8037bd2532eb84231b7fc5649de546cf878e1a32f44a3d5234f"
   name = "gopkg.in/src-d/go-git.v4"
   packages = [
     ".",
@@ -527,8 +529,8 @@
     "utils/merkletrie/noder",
   ]
   pruneopts = "UT"
-  revision = "aa6f288c256ff8baf8a7745546a9752323dc0d89"
-  version = "v4.11.0"
+  revision = "f9a30199e7083bdda8adad3a4fa2ec42d25c1fdb"
+  version = "v4.12.0"
 
 [[projects]]
   digest = "1:78d374b493e747afa9fbb2119687e3740a7fb8d0ebabddfef0a012593aaecbb3"

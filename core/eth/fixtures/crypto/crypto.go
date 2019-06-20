@@ -154,6 +154,7 @@ func LoadECDSA(file string) (*ecdsa.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if _, err := io.ReadFull(fd, buf); err != nil {
 		_ = fd.Close()
 		return nil, err

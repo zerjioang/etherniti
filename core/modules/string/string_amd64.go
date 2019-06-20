@@ -1,5 +1,5 @@
-//+build !noasm
-//+build !appengine
+// +build !noasm
+// +build !appengine
 
 package string
 

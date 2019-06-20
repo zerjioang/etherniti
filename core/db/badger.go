@@ -18,7 +18,7 @@ import (
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
-	"github.com/zerjioang/etherniti/core/util/fs"
+	"github.com/zerjioang/etherniti/core/modules/fs"
 
 	"github.com/zerjioang/etherniti/core/data"
 
