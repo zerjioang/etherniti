@@ -211,7 +211,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 			Key:         data.Key,
 			Source:      ip.Ip2int(data.Ip),
 		},
-		Issuer:    "etherniti.org",
+		Issuer:    "proxy.etherniti.org",
 		ExpiresAt: now.Add(cfg.TokenExpiration()).Unix(),
 		NotBefore: now.Unix(),
 		IssuedAt:  now.Unix(),
