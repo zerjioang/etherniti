@@ -2,9 +2,10 @@ package base64
 
 import (
 	"fmt"
+	"unsafe"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/encoding/generic"
-	"unsafe"
 )
 
 const (

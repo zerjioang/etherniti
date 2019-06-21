@@ -2,9 +2,10 @@ package browser
 
 import (
 	"fmt"
-	"github.com/zerjioang/etherniti/core/logger"
 	"os/exec"
 	"runtime"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 // open a link in your favorite browser

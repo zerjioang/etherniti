@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zerjioang/etherniti/core/util/str"
+
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/httpclient"
@@ -134,7 +136,7 @@ func SendGridMailDelivery(data *model.Maildata) (json.RawMessage, error) {
 	} else {
 		emailStr := buildSendGridPayload(data)
 		logger.Debug("sending email via sendgrid api")
-		return httpclient.MakePost(defaultSendGridApiClient, sendgridUrl, defaultRequestHeader, emailStr)
+		return httpclient.MakePost(defaultSendGridApiClient, sendgridUrl, defaultRequestHeader, str.UnsafeBytes(emailStr))
 	}
 }
 

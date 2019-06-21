@@ -14,6 +14,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/zerjioang/etherniti/core/modules/stack"
+
 	"github.com/zerjioang/etherniti/core/modules/worker"
 
 	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
@@ -150,14 +152,18 @@ DATA - the return value of executed contract.
 func (rpc *EthRPC) makePostWithMethodParams(method string, params string) (json.RawMessage, error) {
 	if params == "" {
 		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `"}`
-		return rpc.makePostRaw(request)
+		return rpc.makePostString(request)
 	} else {
 		request := `{"id": 1,"jsonrpc": "2.0","method": "` + method + `","params":` + params + `}`
-		return rpc.makePostRaw(request)
+		return rpc.makePostString(request)
 	}
 }
 
-func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
+func (rpc *EthRPC) makePostString(data string) (json.RawMessage, error) {
+	return rpc.makePostBytes(str.UnsafeBytes(data))
+}
+
+func (rpc *EthRPC) makePostBytes(data []byte) (json.RawMessage, error) {
 
 	responseData, postErr := httpclient.MakePost(rpc.client, rpc.url, defaultRpcHeader, data)
 	if postErr != nil {
@@ -175,6 +181,10 @@ func (rpc *EthRPC) makePostRaw(data string) (json.RawMessage, error) {
 	}
 
 	return resp.Result, nil
+}
+
+func (rpc *EthRPC) proxyRequest(data []byte) (json.RawMessage, error) {
+	return httpclient.MakePost(rpc.client, rpc.url, defaultRpcHeader, data)
 }
 
 func unixSocketReader(r io.Reader, notifier chan worker.GoroutineResponse) {
@@ -1265,7 +1275,7 @@ func (rpc *EthRPC) ContractCall(contract string, methodName string, params strin
 		paramsStr := str.UnsafeString(abiparams)
 		data := paramsStr + "," + "," + gas + "," + gasprice
 		payload := rpc.generateCallPayload(contract, data, block)
-		raw, err := rpc.makePostRaw(payload)
+		raw, err := rpc.makePostString(payload)
 		if err == nil {
 			var data string
 			unErr := json.Unmarshal(raw, &data)
@@ -1278,7 +1288,7 @@ func (rpc *EthRPC) ContractCall(contract string, methodName string, params strin
 // post ethereum network contract with no parameters
 func (rpc *EthRPC) contractCallAbiParams(contract string, data string, block string) (string, error) {
 	payload := rpc.generateCallPayload(contract, data, block)
-	raw, err := rpc.makePostRaw(payload)
+	raw, err := rpc.makePostString(payload)
 	if err == nil {
 		var data string
 		unErr := json.Unmarshal(raw, &data)
@@ -1336,7 +1346,7 @@ func (rpc *EthRPC) Erc20BalanceOf(contract string, tokenOwner string) (json.RawM
 	// encode to hexadecimal abiparams
 	dataContent := hex.ToEthHex(abiparams)
 	req := rpc.generateCallPayload(contract, dataContent, model.LatestBlockNumber)
-	return rpc.makePostRaw(req)
+	return rpc.makePostString(req)
 }
 
 func (rpc *EthRPC) Erc20Allowance(contract string, tokenOwner string, spender string) (json.RawMessage, error) {
@@ -1438,6 +1448,11 @@ func Eth1Int64() int64 {
 // double quotes given string
 func (rpc *EthRPC) doubleQuote(data string) string {
 	return `"` + data + `"`
+}
+
+func (rpc *EthRPC) Proxy(requestContent []byte) ([]byte, stack.Error) {
+	result, err := rpc.proxyRequest(requestContent)
+	return result, stack.Ret(err)
 }
 
 func ResolveNetworkId(id string) string {

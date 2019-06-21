@@ -2,9 +2,10 @@ package fs_test
 
 import (
 	"crypto/rand"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/modules/fs"
-	"testing"
 )
 
 func TestFs(t *testing.T) {

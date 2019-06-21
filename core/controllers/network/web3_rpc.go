@@ -4,49 +4,42 @@
 package network
 
 import (
+	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
-// eth web3 controller
-type Web3DbController struct {
+// eth web3 rpc controller
+type Web3RpcController struct {
 	network *NetworkController
 }
 
 // constructor like function
-func NewWeb3DbController(network *NetworkController) Web3DbController {
-	ctl := Web3DbController{}
+func NewWeb3RpcController(network *NetworkController) Web3RpcController {
+	ctl := Web3RpcController{}
 	ctl.network = network
 	return ctl
 }
 
-// BEGIN of web3 db functions
-
-// dbPutString calls db protocol db_putString json-rpc call
-func (ctl *Web3DbController) dbPutString(c *echo.Context) error {
-	return errNotImplemented
+// proxy pass client rpc request to appropiate target node
+func (ctl *Web3RpcController) rpc(c *echo.Context) error {
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// once we have the rpc client, proxy pass the message
+	response, reqErr := client.Proxy(c.Body())
+	if reqErr.Occur() {
+		return api.StackError(c, reqErr)
+	}
+	//send back to the client received response
+	return api.SendRawSuccess(c, response)
 }
-
-// dbGetString calls db protocol db_getString json-rpc call
-func (ctl *Web3DbController) dbGetString(c *echo.Context) error {
-	return errNotImplemented
-}
-
-// dbPutHex calls db protocol db_putHex json-rpc call
-func (ctl *Web3DbController) dbPutHex(c *echo.Context) error {
-	return errNotImplemented
-}
-
-// dbGetHex calls db protocol db_getHex json-rpc call
-func (ctl *Web3DbController) dbGetHex(c *echo.Context) error {
-	return errNotImplemented
-}
-
-// END of web3 db functions
 
 // implemented method from interface RouterRegistrable
-func (ctl Web3DbController) RegisterRouters(router *echo.Group) {
-	router.GET("/db", ctl.dbGetString)
-	router.POST("/db", ctl.dbPutString)
-	router.GET("/db/hex", ctl.dbGetHex)
-	router.POST("/db/hex", ctl.dbPutHex)
+func (ctl Web3RpcController) RegisterRouters(router *echo.Group) {
+	logger.Debug("adding controller raw JSON-RPC call supports")
+	logger.Debug("exposing POST /rpc")
+	router.POST("/rpc", ctl.rpc)
 }

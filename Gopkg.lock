@@ -431,11 +431,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a"
+  revision = "3b0461eec859c4b73bb64fdc8285971fd33e3938"
 
 [[projects]]
   branch = "master"
-  digest = "1:2506a1d45e71f2af21d64864a23fcd39cf6811b28bff4564f4730c4d9ea8acc3"
+  digest = "1:7754f319449635a39e264fa6d2307dc9f165fc33b7e55143dc6477c9b9198bcc"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -443,11 +443,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "6f217b454f458f9c81d48c1fff9e6f5ea6b0bbf2"
+  revision = "bf70e4678053e8a9f269f32f9b29464e4a03a1e6"
 
 [[projects]]
   branch = "master"
-  digest = "1:68449bfc1e5b44ce44b080e9b550ea0b9b35a84f2e625f307d12c9cf6fe6c8e2"
+  digest = "1:11f2e01a9de9313a6752cde674f1c16e895efdcd328eb40ac5dbf3630e514360"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -465,7 +465,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "4adf7a708c2de4c9ea24a1f351c2e1c9b82fbde8"
+  revision = "1fa568393b23e69144eafde9840835928bb33567"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"

@@ -4,14 +4,18 @@
 package httpclient
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
+)
+
+const (
+	postMethod = "POST"
 )
 
 var (
@@ -22,22 +26,24 @@ var (
 			TLSHandshakeTimeout: 3 * time.Second,
 		},
 	}
+	br = bytes.NewReader(nil)
 )
 
-func MakePost(client *http.Client, url string, headers http.Header, data string) (json.RawMessage, error) {
-	return MakeCall(client, "POST", url, headers, data)
+func MakePost(client *http.Client, url string, headers http.Header, content []byte) (json.RawMessage, error) {
+	return MakeCall(client, postMethod, url, headers, content)
 }
 
-func MakeCall(client *http.Client, method string, url string, headers http.Header, data string) (json.RawMessage, error) {
-	log.Info("sending request: ", data)
-	if client == nil {
-		client = fallbackClient
-	}
-	req, err := http.NewRequest(method, url, strings.NewReader(data))
+func MakeCall(client *http.Client, method string, url string, headers http.Header, content []byte) (json.RawMessage, error) {
+	br.Reset(content)
+	req, err := http.NewRequest(method, url, br)
 	if err != nil {
 		return nil, err
 	}
 	req.Header = headers
+	//prepare the client to be used for requests
+	if client == nil {
+		client = fallbackClient
+	}
 	response, err := client.Do(req)
 	if err != nil {
 		return nil, err

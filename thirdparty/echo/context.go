@@ -19,6 +19,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/logger"
+
 	"github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -677,4 +679,20 @@ func (c *Context) IsHttps() bool {
 func (c *Context) RateLimitIdentifier() string {
 	clientIdentifier := c.RealIP()
 	return clientIdentifier
+}
+
+// the the content of the request body
+func (c *Context) Body() []byte {
+	var content []byte
+	body := c.request.Body
+	hasBody := body != nil
+	if hasBody {
+		var err error
+		content, err = ioutil.ReadAll(body)
+		if err == nil {
+			return content
+		}
+		logger.Error("failed to read request content body due to: ", err)
+	}
+	return content
 }

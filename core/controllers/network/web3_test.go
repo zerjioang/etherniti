@@ -6,10 +6,9 @@ package network_test
 import (
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/eth/rpc"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/controllers/network"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 

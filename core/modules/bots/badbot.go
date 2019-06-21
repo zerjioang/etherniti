@@ -12,6 +12,7 @@ import (
 const (
 	NEWLINE = "\n"
 )
+
 var (
 	badBotsList hashset.HashSetMutex
 )

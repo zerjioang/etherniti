@@ -21,7 +21,6 @@ const (
 	ethPriceApi   = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
 	ethTickersApi = "https://api.coinmarketcap.com/v1/ticker/"
 	get           = "GET"
-	none          = ""
 )
 
 var (
@@ -32,6 +31,7 @@ var (
 		}
 	*/
 	errNoResponse = errors.New("could not get eth price right now")
+	none          []byte
 )
 
 type coinMarketCapEthPriceResponse []struct {

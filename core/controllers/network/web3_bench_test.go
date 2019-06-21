@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/core/cmd"

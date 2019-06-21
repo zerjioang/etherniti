@@ -44,11 +44,22 @@ func init() {
 // return success response to client context
 func SendSuccess(c *echo.Context, logMsg []byte, response interface{}) error {
 	logger.Debug("sending success message to client")
-	logger.Info(str.UnsafeString(logMsg), " - ", response)
+	logger.Debug(str.UnsafeString(logMsg), " - ", response)
 	return c.FastBlob(
 		protocol.StatusOK,
 		echo.MIMEApplicationJSONCharsetUTF8,
 		ToSuccess(logMsg, response),
+	)
+}
+
+// return success response to client context
+func SendRawSuccess(c *echo.Context, content []byte) error {
+	logger.Debug("sending success message to client")
+	logger.Debug(str.UnsafeString(content))
+	return c.FastBlob(
+		protocol.StatusOK,
+		echo.MIMEApplicationJSONCharsetUTF8,
+		content,
 	)
 }
 

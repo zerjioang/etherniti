@@ -34,14 +34,15 @@
   "produces": [
     "application/json", "application/x-msgpack", "application/protobuf"
   ],
-  "tags": [{
-    "name": "auth",
-    "description": "Etherniti Web3 Proxy authenticator",
-    "externalDocs": {
-      "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
-      "url": "https://docs.etherniti.org/api/auth/"
-    }
-  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Etherniti Web3 Proxy authenticator",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
+        "url": "https://docs.etherniti.org/api/auth/"
+      }
+    },
     {
       "name": "public",
       "description": "Public Etherniti Web3 Proxy operations",
@@ -64,6 +65,14 @@
       "externalDocs": {
         "description": "Find out more about Etherniti, an Ethereum REST API public operations at",
         "url": "https://docs.etherniti.org/api/wallet/"
+      }
+    },
+    {
+      "name": "rpc",
+      "description": "Etherniti Web3 RPC",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API RPC at ",
+        "url": "https://docs.etherniti.org/api/rpc"
       }
     },
     {
@@ -149,6 +158,71 @@
   ],
   "schemes": ["http", "https", "unix"],
   "paths": {
+    "/web3/{network}/rpc": {
+      "post": {
+        "tags": [
+          "rpc"
+        ],
+        "summary": "Send arbitrary json-rpc request to web3 compatible node",
+        "description": "Send arbitrary json-rpc request to web3 compatible node",
+        "operationId": "web3-rpc",
+        "consumes": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {
+                "jsonrpc": "2.0",
+                "method": "db_getHex",
+                "params": ["testDB", "myKey"],
+                "id": 73
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/Web3RawJsonRpcResponse"
+          },
+          "400": {
+            "description": "Unsuccesful execution response of web3 rpc request",
+            "example": {
+              "jsonrpc": "2.0",
+              "id": 73,
+              "error": {
+                "code": -32601,
+                "message": "The method db_getHex does not exist/is not available"
+              }
+            }
+          }
+        }
+      }
+    },
     "/external/eth/price": {
       "get": {
         "tags": [
@@ -799,23 +873,24 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [{
-          "in": "path",
-          "name": "network",
-          "description": "target web3 protocol compatible network",
-          "type": "string",
-          "enum": [
-            "ropsten",
-            "rinkeby",
-            "kovan",
-            "mainnet",
-            "infura",
-            "quiknode",
-            "private"
-          ],
-          "example": "ropsten",
-          "required": true
-        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "network",
+            "description": "target web3 protocol compatible network",
+            "type": "string",
+            "enum": [
+              "ropsten",
+              "rinkeby",
+              "kovan",
+              "mainnet",
+              "infura",
+              "quiknode",
+              "private"
+            ],
+            "example": "ropsten",
+            "required": true
+          },
           {
             "in": "path",
             "name": "address",
@@ -4136,6 +4211,27 @@
           "code": 400,
           "msg": "Bad Request",
           "details": "please provide a connection profile token for this kind of call"
+        }
+      }
+    },
+    "Web3RawJsonRpcRequest": {
+      "description": "Raw JSON-RPC request content",
+      "schema": {
+        "example": {
+          "jsonrpc": "2.0",
+          "method": "db_getHex",
+          "params": ["testDB", "myKey"],
+          "id": 73
+        }
+      }
+    },
+    "Web3RawJsonRpcResponse": {
+      "description": "Raw JSON-RPC response content",
+      "schema": {
+        "example": {
+          "id":1,
+          "jsonrpc":"2.0",
+          "result": "0x68656c6c6f20776f726c64"
         }
       }
     }

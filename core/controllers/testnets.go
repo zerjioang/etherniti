@@ -43,6 +43,7 @@ type RestController struct {
 	shh     network.Web3ShhController
 	abi     network.AbiController
 	devops  network.DevOpsController
+	rpc     network.Web3RpcController
 }
 
 func init() {
@@ -61,7 +62,6 @@ func init() {
 	rinkebyCustom = cfg.RinkebyCustomEndpoint
 	kovanCustom = cfg.KovanCustomEndpoint
 	mainnetCustom = cfg.MainnetCustomEndpoint
-
 }
 
 // constructor like function
@@ -74,6 +74,7 @@ func newController(client *http.Client, peer string, name string) RestController
 	ctl.db = network.NewWeb3DbController(&ctl.network)
 	ctl.shh = network.NewWeb3ShhController(&ctl.network)
 	ctl.devops = network.NewDevOpsController(&ctl.network)
+	ctl.rpc = network.NewWeb3RpcController(&ctl.network)
 	ctl.abi = network.NewAbiController()
 	ctl.network.SetPeer(peer)
 	ctl.network.SetTargetName(name)
@@ -85,11 +86,12 @@ func newController(client *http.Client, peer string, name string) RestController
 func (ctl RestController) RegisterRouters(router *echo.Group) {
 	logger.Debug("registering rest controller api endpoints for network: ", ctl.network.Name())
 	ctl.network.RegisterRouters(router)
-	ctl.web3.RegisterRouters(router)
 	ctl.erc20.RegisterRouters(router)
+	ctl.web3.RegisterRouters(router)
 	ctl.db.RegisterRouters(router)
 	ctl.shh.RegisterRouters(router)
 	ctl.devops.RegisterRouters(router)
+	ctl.rpc.RegisterRouters(router)
 	ctl.abi.RegisterRouters(router)
 }
 

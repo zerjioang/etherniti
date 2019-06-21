@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/binary"
-	"github.com/zerjioang/etherniti/core/modules/fs"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/modules/fs"
 )
 
 func BenchmarkFs(b *testing.B) {
@@ -30,7 +31,7 @@ func BenchmarkFs(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_,_ = fs.ReadEntropy(rand.Reader, 16)
+			_, _ = fs.ReadEntropy(rand.Reader, 16)
 		}
 	})
 	b.Run("read-entropy-16", func(b *testing.B) {
@@ -38,7 +39,7 @@ func BenchmarkFs(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_,_ = fs.ReadEntropy16()
+			_, _ = fs.ReadEntropy16()
 		}
 	})
 }
