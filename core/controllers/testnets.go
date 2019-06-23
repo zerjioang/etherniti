@@ -12,27 +12,51 @@ import (
 )
 
 const (
+	httpId  = "http://"
+	httpsId = "https://"
+
 	ropsten  = "ropsten"
 	rinkeby  = "rinkeby"
 	kovan    = "kovan"
 	mainnet  = "mainnet"
 	infura   = "infura"
 	quiknode = "quiknode"
-	private  = "private"
+
+	// ganache testnet node pointing always to default ganache config
+	// http://127.0.0.1:7545
+	ganache = "ganache"
+
+	// private endpoints identifiers
+	private = "private"
+
+	//default endpoints
+	ganacheEndpoint = httpId + "127.0.0.1:7545"
+
+	//default infura public v3 endpoints
+	ropstenInfura = httpsId + "ropsten.infura.io/v3/"
+	rinkebyInfura = httpsId + "rinkeby.infura.io/v3/"
+	kovanInfura   = httpsId + "kovan.infura.io/v3/"
+	mainnetInfura = httpsId + "mainnet.infura.io/v3/"
+
+	UndefinedEndpoint = ""
 )
 
 var (
-	ropstenInfura = "https://ropsten.infura.io/v3/"
-	rinkebyInfura = "https://rinkeby.infura.io/v3/"
-	kovanInfura   = "https://kovan.infura.io/v3/"
-	mainnetInfura = "https://mainnet.infura.io/v3/"
-	infuraToken   = "" //4f61378203ca4da4a6b6601bc16a22ad
+	infuraToken = "" //4f61378203ca4da4a6b6601bc16a22ad
 
-	//custom endpoints
-	ropstenCustom = ""
-	rinkebyCustom = ""
-	kovanCustom   = ""
-	mainnetCustom = ""
+	// infura endpoints when user has a valid infura token
+	ropstenInfuraEndpoint = UndefinedEndpoint
+	rinkebyInfuraEndpoint = UndefinedEndpoint
+	kovanInfuraEndpoint   = UndefinedEndpoint
+	mainnetInfuraEndpoint = UndefinedEndpoint
+
+	//custom user provided endpoints (if exists)
+	// for connecting to different networks using it
+	// prefered provider: own node, infura, etc
+	ropstenCustom = UndefinedEndpoint
+	rinkebyCustom = UndefinedEndpoint
+	kovanCustom   = UndefinedEndpoint
+	mainnetCustom = UndefinedEndpoint
 )
 
 type RestController struct {
@@ -52,10 +76,10 @@ func init() {
 	infuraToken = cfg.InfuraToken()
 	//update all infura related urls
 	logger.Info("updating infura v3 endpoints with provided token")
-	ropstenInfura = ropstenInfura + infuraToken
-	rinkebyInfura = rinkebyInfura + infuraToken
-	kovanInfura = kovanInfura + infuraToken
-	mainnetInfura = mainnetInfura + infuraToken
+	ropstenInfuraEndpoint = ropstenInfura + infuraToken
+	rinkebyInfuraEndpoint = rinkebyInfura + infuraToken
+	kovanInfuraEndpoint = kovanInfura + infuraToken
+	mainnetInfuraEndpoint = mainnetInfura + infuraToken
 	// load custom endpoints if exists
 	logger.Info("loading user provided custom endpoints")
 	ropstenCustom = cfg.RopstenCustomEndpoint
@@ -76,6 +100,7 @@ func newController(client *http.Client, peer string, name string) RestController
 	ctl.devops = network.NewDevOpsController(&ctl.network)
 	ctl.rpc = network.NewWeb3RpcController(&ctl.network)
 	ctl.abi = network.NewAbiController()
+	//configure target network parameters
 	ctl.network.SetPeer(peer)
 	ctl.network.SetTargetName(name)
 	ctl.network.SetClient(client)
@@ -138,13 +163,19 @@ func NewMainNetController(client *http.Client) RestController {
 // constructor like function for user provided infura based connection
 func NewInfuraController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for infura network")
-	return newController(client, "", infura)
+	return newController(client, UndefinedEndpoint, infura)
 }
 
 // constructor like function for user provided infura based connection
 func NewQuikNodeController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for quiknode network")
-	return newController(client, "", quiknode)
+	return newController(client, UndefinedEndpoint, quiknode)
+}
+
+// constructor like function
+func NewGanacheController(client *http.Client) RestController {
+	logger.Debug("creating new web3 controller for ganache testrpc")
+	return newController(client, ganacheEndpoint, ganache)
 }
 
 // constructor like function

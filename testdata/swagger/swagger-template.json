@@ -34,15 +34,14 @@
   "produces": [
     "application/json", "application/x-msgpack", "application/protobuf"
   ],
-  "tags": [
-    {
-      "name": "auth",
-      "description": "Etherniti Web3 Proxy authenticator",
-      "externalDocs": {
-        "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
-        "url": "https://docs.etherniti.org/api/auth/"
-      }
-    },
+  "tags": [{
+    "name": "auth",
+    "description": "Etherniti Web3 Proxy authenticator",
+    "externalDocs": {
+      "description": "Find out more about Etherniti, an Ethereum REST API authentication at",
+      "url": "https://docs.etherniti.org/api/auth/"
+    }
+  },
     {
       "name": "public",
       "description": "Public Etherniti Web3 Proxy operations",
@@ -173,24 +172,25 @@
           "application/json", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "body",
             "required": true,
@@ -198,9 +198,9 @@
             "schema": {
               "example": {
                 "jsonrpc": "2.0",
-                "method": "db_getHex",
-                "params": ["testDB", "myKey"],
-                "id": 73
+                "method": "shh_version",
+                "params": [],
+                "id": 67
               }
             }
           }
@@ -213,10 +213,10 @@
             "description": "Unsuccesful execution response of web3 rpc request",
             "example": {
               "jsonrpc": "2.0",
-              "id": 73,
+              "id": 67,
               "error": {
                 "code": -32601,
-                "message": "The method db_getHex does not exist/is not available"
+                "message": "The method shh_version does not exist/is not available"
               }
             }
           }
@@ -873,24 +873,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "path",
             "name": "address",
@@ -1180,9 +1181,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1239,9 +1242,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1290,9 +1295,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1341,9 +1348,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -1403,9 +1412,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1457,9 +1468,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1508,9 +1521,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1559,9 +1574,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1610,9 +1627,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1674,9 +1693,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1725,9 +1746,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1776,9 +1799,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1827,9 +1852,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1878,9 +1905,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -1940,9 +1969,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2061,9 +2092,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2112,9 +2145,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2151,24 +2186,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "body",
             "name": "contract",
@@ -2214,24 +2250,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "body",
             "name": "contract",
@@ -2277,24 +2314,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "body",
             "name": "contract",
@@ -2352,9 +2390,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2403,9 +2443,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2454,9 +2496,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2493,24 +2537,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private"
-            ],
-            "example": "ropsten",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "path",
             "name": "address",
@@ -2567,9 +2612,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         }],
         "responses": {
@@ -2618,10 +2665,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -2680,9 +2728,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -2750,10 +2800,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -2819,10 +2870,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -2888,10 +2940,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -2957,10 +3010,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3026,10 +3080,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3092,10 +3147,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3170,10 +3226,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3257,10 +3314,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3337,10 +3395,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3408,10 +3467,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3470,10 +3530,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -3532,10 +3593,11 @@
             "mainnet",
             "infura",
             "quiknode",
-            "private"
+            "private",
+            "ganache"
           ],
-          "example": "ropsten",
-          "default": "ropsten",
+          "example": "ganache",
+          "default": "ganache",
           "required": true
         },
           {
@@ -4229,9 +4291,9 @@
       "description": "Raw JSON-RPC response content",
       "schema": {
         "example": {
-          "id":1,
-          "jsonrpc":"2.0",
-          "result": "0x68656c6c6f20776f726c64"
+          "id": 67,
+          "jsonrpc": "2.0",
+          "result": "2"
         }
       }
     }

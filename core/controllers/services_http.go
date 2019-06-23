@@ -31,6 +31,12 @@ func quiknodeJwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return defaultJwt(next, data.QuiknodeJwtErrorMessage)
 }
 
+func ganacheJwt(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		return next(c)
+	}
+}
+
 func privateJwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return defaultJwt(next, data.JwtErrorMessage)
 }
@@ -137,6 +143,10 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// /v1/web3/quiknode
 	quiknodeGroup := web3Group.Group("/quiknode", quiknodeJwt)
 	NewQuikNodeController(client).RegisterRouters(quiknodeGroup)
+
+	// /v1/web3/ganache
+	ganacheGroup := web3Group.Group("/ganache", ganacheJwt)
+	NewGanacheController(client).RegisterRouters(ganacheGroup)
 
 	// /v1/web3/private
 	privateGroup := web3Group.Group(constants.PrivateApi, privateJwt)

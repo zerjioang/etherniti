@@ -13,6 +13,15 @@ import (
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 )
 
+const (
+	// length of an ethereum address
+	AddressLengthBytes = 20
+	// length of ethereum address hexadecimal encoded
+	AddressLengthHexEncoded = AddressLengthBytes * 2
+	// length of ethereum address hexadecimal encoded and prefixed with '0x'
+	AddressLengthHexEncodedWithPrefix = 2 + AddressLengthHexEncoded
+)
+
 // an ethereum address is represented as 20 bytes
 // in 1Gb (1000000000 bytes), 50.000.000 addresses can be stored
 // as individual addresses.
@@ -84,7 +93,7 @@ func IsValidBlockNumber(blkStr string) bool {
 
 // IsZeroAddress validate if it's a 0 address
 func IsZeroAddress(addr string) bool {
-	if len(addr) == 42 {
+	if len(addr) == AddressLengthHexEncodedWithPrefix {
 		return addr == "0x0000000000000000000000000000000000000000"
 	}
 	return false
