@@ -30,3 +30,21 @@ function ok(){
 function log(){
 	echo "${bold_yellow}[ LOG ] $1${reset}"
 }
+
+function input(){
+	echo "${bold_cyan}[ INPUT ] ${reset}${normal_cyan}$1${reset}"	
+}
+
+function title(){
+	str=$1
+	upper=${str^^}
+	echo "${bold_white}
+$upper${reset}
+"	
+}
+
+function normal_white(){
+	str=$1
+	lower=${str^}
+	echo "${bold_white}$lower${reset}"	
+}
