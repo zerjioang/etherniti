@@ -73,7 +73,7 @@ func init() {
 func IsProfilingEnabled(opts *EthernitiOptions) bool {
 	logger.Debug("checking if profiling mode is enabled")
 	v, found := opts.envData.Read("X_ETHERNITI_ENABLE_PROFILER")
-	return found && v == true
+	return found && v == "true"
 }
 
 func IsDevelopment() bool {

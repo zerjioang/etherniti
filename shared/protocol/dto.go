@@ -142,14 +142,14 @@ type ContractCompileResponse struct {
 
 // api stack model dto
 type ApiError struct {
-	Desc []byte `json:"desc,omitempty"`
-	Err  []byte `json:"error,omitempty"`
+	Desc string `json:"desc,omitempty",msg:"desc"`
+	Err  string `json:"error,omitempty",msg:"error"`
 }
 
 // api error constructor like function
-func NewApiError(code int, details []byte) *ApiError {
+func NewApiError(code int, details string) *ApiError {
 	ae := ApiError{}
-	ae.Desc = str.UnsafeBytes(StatusText(code))
+	ae.Desc = StatusText(code)
 	ae.Err = details
 	return &ae
 }

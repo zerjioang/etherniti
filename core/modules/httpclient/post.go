@@ -56,6 +56,6 @@ func MakeCall(client *http.Client, method string, url string, headers http.Heade
 	//responseData readed, close body
 	_ = response.Body.Close()
 
-	log.Info("response received", str.UnsafeString(responseData))
+	log.Info("response received: ", str.UnsafeString(responseData))
 	return responseData, nil
 }

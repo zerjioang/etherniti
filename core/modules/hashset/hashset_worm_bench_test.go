@@ -8,26 +8,26 @@ import (
 	"testing"
 )
 
-func BenchmarkHashSet(b *testing.B) {
+func BenchmarkHashSetWORM(b *testing.B) {
 	b.Run("instantiate", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			_ = NewHashSetMutex()
+			_ = NewHashSetWORM()
 		}
 	})
 	b.Run("instantiate-ptr", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			_ = NewHashSetMutexPtr()
+			_ = NewHashSetWORMPtr()
 		}
 	})
 	b.Run("add", func(b *testing.B) {
 		b.Run("simple", func(b *testing.B) {
 			b.ReportAllocs()
 			b.ResetTimer()
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			for i := 0; i < b.N; i++ {
 				set.Add("test")
 			}
@@ -35,7 +35,7 @@ func BenchmarkHashSet(b *testing.B) {
 		b.Run("10000-items", func(b *testing.B) {
 			b.ReportAllocs()
 			b.ResetTimer()
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			for i := 0; i < b.N; i++ {
 				for i := 0; i < 10000; i++ {
 					set.Add(strconv.Itoa(i))
@@ -46,7 +46,7 @@ func BenchmarkHashSet(b *testing.B) {
 	b.Run("contains", func(b *testing.B) {
 		b.Run("simple", func(b *testing.B) {
 
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			set.Add("test")
 
 			b.ReportAllocs()
@@ -58,7 +58,7 @@ func BenchmarkHashSet(b *testing.B) {
 		b.Run("10000-items", func(b *testing.B) {
 
 			//add 10000 items first
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			for i := 0; i < 10000; i++ {
 				set.Add(strconv.Itoa(i))
 			}
@@ -89,14 +89,14 @@ func BenchmarkHashSet(b *testing.B) {
 	b.Run("count-0", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		for i := 0; i < b.N; i++ {
 			_ = set.Size()
 		}
 	})
 	b.Run("count-10000", func(b *testing.B) {
 		//add 10000 items first
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		for i := 0; i < 10000; i++ {
 			set.Add(strconv.Itoa(i))
 		}
@@ -110,14 +110,14 @@ func BenchmarkHashSet(b *testing.B) {
 	b.Run("size", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		for i := 0; i < b.N; i++ {
 			_ = set.Size()
 		}
 	})
 	b.Run("size-10000", func(b *testing.B) {
 		//add 10000 items first
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		for i := 0; i < 10000; i++ {
 			set.Add(strconv.Itoa(i))
 		}
@@ -131,7 +131,7 @@ func BenchmarkHashSet(b *testing.B) {
 	b.Run("clear", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		for i := 0; i < b.N; i++ {
 			set.Clear()
 		}

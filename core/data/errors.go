@@ -89,7 +89,7 @@ var (
 
 	ProfileTokenSuccess = []byte("profile token successfully created")
 
-	InfuraJwtErrorMessage   = []byte("please provide an Infura connection profile token including provided Infura endpoint URL (https://$NETWORK.infura.ioproto/v3/$PROJECT_ID) for this kind of call.")
+	InfuraJwtErrorMessage   = []byte("please provide an Infura connection profile token including provided Infura endpoint URL (https://$NETWORK.infura.io/v3/$PROJECT_ID) for this kind of call.")
 	QuiknodeJwtErrorMessage = []byte("please provide a QuikNode connection profile token including provided full peer endpoint URL")
 	UserJwtErrorMessage     = []byte("please provide a valid account token")
 	JwtErrorMessage         = []byte("please provide a private connection profile token for this kind of call")

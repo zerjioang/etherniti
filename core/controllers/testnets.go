@@ -33,10 +33,10 @@ const (
 	ganacheEndpoint = httpId + "127.0.0.1:7545"
 
 	//default infura public v3 endpoints
-	ropstenInfura = httpsId + "ropsten.infura.ioproto/v3/"
-	rinkebyInfura = httpsId + "rinkeby.infura.ioproto/v3/"
-	kovanInfura   = httpsId + "kovan.infura.ioproto/v3/"
-	mainnetInfura = httpsId + "mainnet.infura.ioproto/v3/"
+	ropstenInfura = httpsId + "ropsten.infura.io/v3/"
+	rinkebyInfura = httpsId + "rinkeby.infura.io/v3/"
+	kovanInfura   = httpsId + "kovan.infura.io/v3/"
+	mainnetInfura = httpsId + "mainnet.infura.io/v3/"
 
 	UndefinedEndpoint = ""
 )
@@ -139,25 +139,25 @@ func newInfuraController(client *http.Client, networkName, infuraEndpoint, fallb
 // constructor like function
 func NewRopstenController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for ropsten network")
-	return newInfuraController(client, ropsten, ropstenInfura, ropstenCustom)
+	return newInfuraController(client, ropsten, ropstenInfuraEndpoint, ropstenCustom)
 }
 
 // constructor like function
 func NewRinkebyController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for rinkeby network")
-	return newInfuraController(client, rinkeby, rinkebyInfura, rinkebyCustom)
+	return newInfuraController(client, rinkeby, rinkebyInfuraEndpoint, rinkebyCustom)
 }
 
 // constructor like function
 func NewKovanController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for kovan network")
-	return newInfuraController(client, kovan, kovanInfura, kovanCustom)
+	return newInfuraController(client, kovan, kovanInfuraEndpoint, kovanCustom)
 }
 
 // constructor like function
 func NewMainNetController(client *http.Client) RestController {
 	logger.Debug("creating new web3 controller for mainnet network")
-	return newInfuraController(client, mainnet, mainnetInfura, mainnetCustom)
+	return newInfuraController(client, mainnet, mainnetInfuraEndpoint, mainnetCustom)
 }
 
 // constructor like function for user provided infura based connection

@@ -14,11 +14,11 @@ const (
 )
 
 var (
-	badBotsList hashset.HashSetMutex
+	badBotsList hashset.HashSetWORM
 )
 
 func init() {
 	logger.Info("[module] loading anti-bots policy data")
-	badBotsList = hashset.NewHashSet()
+	badBotsList = hashset.NewHashSetWORM()
 	badBotsList.LoadFromRaw(config.AntiBotsFile, NEWLINE)
 }

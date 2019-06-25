@@ -4,7 +4,6 @@
 package api
 
 import (
-	"bytes"
 	"sync"
 
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
@@ -19,27 +18,25 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+const (
+	none = ""
+)
+
 var (
 	errorPool   sync.Pool
 	successPool sync.Pool
-	bufferPool  sync.Pool
 )
 
 func init() {
 	logger.Debug("loading api wrapper data")
 	errorPool = sync.Pool{
 		New: func() interface{} {
-			return protocol.NewApiError(protocol.StatusBadRequest, []byte{})
+			return protocol.NewApiError(protocol.StatusBadRequest, none)
 		},
 	}
 	successPool = sync.Pool{
 		New: func() interface{} {
 			return protocol.NewApiResponse([]byte{}, nil)
-		},
-	}
-	bufferPool = sync.Pool{
-		New: func() interface{} {
-			return new(bytes.Buffer)
 		},
 	}
 }
@@ -50,7 +47,7 @@ func SendSuccess(c *echo.Context, logMsg []byte, response interface{}) error {
 	logger.Debug(str.UnsafeString(logMsg), " - ", response)
 	return c.FastBlob(
 		protocol.StatusOK,
-		echo.MIMEApplicationJSONCharsetUTF8,
+		c.SelectecResponseContentType(),
 		ToSuccess(logMsg, response, c.ResponseSerializer()),
 	)
 }
@@ -61,7 +58,7 @@ func SendRawSuccess(c *echo.Context, content []byte) error {
 	logger.Debug(str.UnsafeString(content))
 	return c.FastBlob(
 		protocol.StatusOK,
-		echo.MIMEApplicationJSONCharsetUTF8,
+		c.SelectecResponseContentType(),
 		content,
 	)
 }
@@ -82,7 +79,7 @@ func SendSuccessPool(c *echo.Context, logMsg []byte, v interface{}) error {
 
 	return c.FastBlob(
 		protocol.StatusOK,
-		echo.MIMEApplicationJSONCharsetUTF8,
+		c.SelectecResponseContentType(),
 		rawBytes,
 	)
 }
@@ -91,7 +88,7 @@ func SendSuccessPool(c *echo.Context, logMsg []byte, v interface{}) error {
 func SendSuccessBlob(c *echo.Context, raw []byte) error {
 	logger.Debug("sending success blob message to client")
 	logger.Info(str.UnsafeString(raw))
-	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, raw)
+	return c.FastBlob(protocol.StatusOK, c.SelectecResponseContentType(), raw)
 }
 
 func Success(c *echo.Context, msg []byte, result []byte) error {
@@ -104,7 +101,7 @@ func Success(c *echo.Context, msg []byte, result []byte) error {
 	rawBytes := ioproto.GetBytesFromSerializer(c.ResponseSerializer(), item)
 	// put item back to the pool
 	successPool.Put(item)
-	return c.FastBlob(protocol.StatusOK, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	return c.FastBlob(protocol.StatusOK, c.SelectecResponseContentType(), rawBytes)
 }
 
 func ToSuccess(msg []byte, result interface{}, serializer io.Serializer) []byte {
@@ -118,7 +115,7 @@ func ToSuccess(msg []byte, result interface{}, serializer io.Serializer) []byte 
 	return rawBytes
 }
 
-func toErrorPool(msg []byte, serializer io.Serializer) []byte {
+func toErrorPool(msg string, serializer io.Serializer) []byte {
 	logger.Debug("converting api to error payload")
 	//get item from pool
 	item := errorPool.Get().(*protocol.ApiError)
@@ -129,7 +126,7 @@ func toErrorPool(msg []byte, serializer io.Serializer) []byte {
 	return rawBytes
 }
 
-func toError(code int, msg []byte, data []byte, serializer io.Serializer) []byte {
+func toError(code int, msg string, data string, serializer io.Serializer) []byte {
 	logger.Debug("converting data to error payload")
 	var item protocol.ApiError
 	item.Desc = msg
@@ -139,21 +136,23 @@ func toError(code int, msg []byte, data []byte, serializer io.Serializer) []byte
 }
 
 func ErrorBytes(msg string, serializer io.Serializer) []byte {
-	return toErrorPool(str.UnsafeBytes(msg), serializer)
+	return toErrorPool(msg, serializer)
 }
 
 func ErrorStr(c *echo.Context, msg []byte) error {
 	logger.Debug("converting error string to payload")
-	logger.Error(str.UnsafeString(msg))
-	rawBytes := toErrorPool(msg, c.ResponseSerializer())
-	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	msgstr := str.UnsafeString(msg)
+	logger.Error(msgstr)
+	rawBytes := toErrorPool(msgstr, c.ResponseSerializer())
+	return c.FastBlob(protocol.StatusBadRequest, c.SelectecResponseContentType(), rawBytes)
 }
 
 func ErrorWithMessage(c *echo.Context, code int, msg []byte, err error) error {
 	logger.Debug("converting error with message to payload")
 	logger.Error(err)
-	rawBytes := toError(code, msg, str.UnsafeBytes(err.Error()), c.ResponseSerializer())
-	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	msgstr := str.UnsafeString(msg)
+	rawBytes := toError(code, msgstr, err.Error(), c.ResponseSerializer())
+	return c.FastBlob(code, c.SelectecResponseContentType(), rawBytes)
 }
 
 func Error(c *echo.Context, err error) error {
@@ -164,13 +163,13 @@ func Error(c *echo.Context, err error) error {
 func ErrorCode(c *echo.Context, code int, err error) error {
 	logger.Debug("converting error with code to error payload")
 	logger.Error(err)
-	rawBytes := toError(code, str.UnsafeBytes(err.Error()), nil, c.ResponseSerializer())
-	return c.FastBlob(code, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	rawBytes := toError(code, err.Error(), none, c.ResponseSerializer())
+	return c.FastBlob(code, c.SelectecResponseContentType(), rawBytes)
 }
 
 func StackError(c *echo.Context, stackErr stack.Error) error {
 	logger.Debug("converting stack error to error payload")
 	logger.Error(stackErr)
-	rawBytes := toError(protocol.StatusBadRequest, stackErr.Bytes(), nil, c.ResponseSerializer())
-	return c.FastBlob(protocol.StatusBadRequest, echo.MIMEApplicationJSONCharsetUTF8, rawBytes)
+	rawBytes := toError(protocol.StatusBadRequest, stackErr.Error(), none, c.ResponseSerializer())
+	return c.FastBlob(protocol.StatusBadRequest, c.SelectecResponseContentType(), rawBytes)
 }

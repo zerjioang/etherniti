@@ -17,8 +17,8 @@ type EthernitiOptions struct {
 	envData *env.EnvConfig
 
 	// allowed cors domains
-	AllowedCorsOriginList hashset.HashSetMutex
-	AllowedHostnames      hashset.HashSetMutex
+	AllowedCorsOriginList hashset.HashSetWORM
+	AllowedHostnames      hashset.HashSetWORM
 	// user configured values
 	BlockTorConnections bool
 	// worker configuration
@@ -51,11 +51,11 @@ func (eo *EthernitiOptions) Init() {
 	eo.envData.Load()
 
 	// load CORS data
-	eo.AllowedCorsOriginList = hashset.NewHashSet()
+	eo.AllowedCorsOriginList = hashset.NewHashSetWORM()
 	eo.AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
 
 	// load hostnames data
-	eo.AllowedHostnames = hashset.NewHashSet()
+	eo.AllowedHostnames = hashset.NewHashSetWORM()
 	eo.AllowedHostnames.LoadFromRaw(HostsFile, "\n")
 
 	// preload env config from readed data

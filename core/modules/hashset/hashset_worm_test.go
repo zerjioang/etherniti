@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHashSet(t *testing.T) {
+func TestHashSetWORM(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		assert.NotNil(t, NewHashSetMutex())
+		assert.NotNil(t, NewHashSetWORM())
 	})
 	t.Run("add", func(t *testing.T) {
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		assert.NotNil(t, set)
 
 		set.Add("India")
@@ -24,14 +24,14 @@ func TestHashSet(t *testing.T) {
 	})
 	t.Run("count", func(t *testing.T) {
 		t.Run("count-0", func(t *testing.T) {
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			assert.NotNil(t, set)
 
 			assert.Equal(t, set.Size(), 0)
 		})
 
 		t.Run("count-1", func(t *testing.T) {
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			assert.NotNil(t, set)
 
 			set.Add("India")
@@ -40,7 +40,7 @@ func TestHashSet(t *testing.T) {
 		})
 
 		t.Run("count-0", func(t *testing.T) {
-			set := NewHashSetMutex()
+			set := NewHashSetWORM()
 			assert.NotNil(t, set)
 
 			set.Add("India")
@@ -53,7 +53,7 @@ func TestHashSet(t *testing.T) {
 	})
 
 	t.Run("double-clear", func(t *testing.T) {
-		set := NewHashSetMutex()
+		set := NewHashSetWORM()
 		assert.NotNil(t, set)
 
 		set.Add("India")

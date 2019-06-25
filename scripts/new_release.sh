@@ -50,6 +50,9 @@ function executeBuild(){
 	log "creating current etherniti.org arm proxy docker image"
 	bash ./scripts/docker/docker_build_pre_armhf.sh
 
+	log "uploading etherniti/proy:latest image to dockerhub"
+	docker push etherniti/proxy:latest 
+
 	log "checking differences between last tag and current tag"
 	diff=$(git log --pretty=oneline $PREVIOUS_TAG...$NEW_TAG)
 	echo $diff

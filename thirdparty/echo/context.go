@@ -70,7 +70,8 @@ type Context struct {
 	OnSuccessCachePolicy int
 	UserId               string
 	//request content type identification string
-	contentTypeMode io2.ContentTypeMode
+	acceptContentMode io2.ContentTypeMode
+	contentType       string
 	//response serialization protocol
 	// json, fastjson, xml, msgpack, gogoproto, etc
 	serializer io2.Serializer
@@ -92,15 +93,17 @@ const (
 )
 
 func (c *Context) Preload() {
-	c.isJson = c.request.Header.Get(HeaderContentType) == MIMEApplicationJSON || c.request.Header.Get(HeaderAccept) == MIMEApplicationJSON
+	acceptHeader := c.request.Header.Get(HeaderAccept)
+	//TODO content-type negotiation
+	c.contentType = acceptHeader
+	c.isJson = acceptHeader == MIMEApplicationJSON
 	c.isTls = c.request.TLS != nil
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()
 	c.ip = c.resolveRealIP()
 	c.intIp = ip.Ip2int(c.ip)
-	requestContentType := c.request.Header.Get(HeaderContentType)
 	//detect user requested data serialization method
-	c.serializer, c.contentTypeMode = ioproto.EncodingSelector(requestContentType)
+	c.serializer, c.acceptContentMode = ioproto.EncodingSelector(acceptHeader)
 }
 
 func (c *Context) writeContentType(value string) {
@@ -708,9 +711,12 @@ func (c *Context) Body() []byte {
 
 //return content type of the request
 func (c *Context) ContentType() io2.ContentTypeMode {
-	return c.contentTypeMode
+	return c.acceptContentMode
 }
 
 func (c *Context) ResponseSerializer() io2.Serializer {
 	return c.serializer
+}
+func (c *Context) SelectecResponseContentType() string {
+	return c.contentType
 }

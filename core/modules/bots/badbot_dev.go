@@ -9,7 +9,10 @@ package bots
 
 import "github.com/zerjioang/etherniti/core/modules/hashset"
 
-func GetBadBotsList() hashset.HashSetMutex {
+func init() {
 	badBotsList.Remove("apachebench")
+}
+
+func GetBadBotsList() hashset.HashSetWORM {
 	return badBotsList
 }

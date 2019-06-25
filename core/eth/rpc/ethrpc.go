@@ -14,6 +14,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/zerjioang/etherniti/core/data"
+
 	"github.com/zerjioang/etherniti/core/modules/stack"
 
 	"github.com/zerjioang/etherniti/core/modules/worker"
@@ -39,6 +41,7 @@ import (
 // https://github.com/ethereum/go-ethereum/blob/master/ethclient/ethclient.go
 type contractFunction func(string) (string, error)
 type ParamsCallback func() string
+type Web3Resolver func() (interface{}, error)
 
 var (
 	instance         = new(EthRPC)
@@ -80,7 +83,8 @@ type EthRPC struct {
 	// http client
 	client *http.Client
 	// debug flag
-	Debug bool
+	Debug           bool
+	connectionCache ConnectionCache
 }
 
 // New create new rpc client with given url
@@ -272,12 +276,35 @@ func (rpc *EthRPC) Web3Sha3(data []byte) (string, error) {
 	return hash, err
 }
 
+// web3 request resolver that includes cache support for all request given a known key
+func (rpc *EthRPC) resolve(key []byte, resolver Web3Resolver) (interface{}, error) {
+	cachedValue, found := rpc.cache.Get(key)
+	if found && cachedValue != nil {
+		//cache value found, so return it
+		return cachedValue, nil
+	} else {
+		// try to resolve the value
+		result, err := resolver()
+		if err != nil {
+			//error occurred while executing
+			return nil, err
+		} else {
+			//vale the result value in the cache
+			rpc.cache.Set(key, result)
+			return result, nil
+		}
+	}
+}
+
 // NetVersion returns the current network protocol version.
 func (rpc *EthRPC) NetVersion() (string, error) {
-	var version string
-
-	err := rpc.post("net_version", &version, nil)
-	return version, err
+	response, err := rpc.resolve(data.NetVersion, func() (interface{}, error) {
+		var version string
+		err := rpc.post("net_version", &version, nil)
+		return version, err
+	})
+	result, _ := response.(string)
+	return result, err
 }
 
 // NetListening returns true if client is actively listening for network connections.

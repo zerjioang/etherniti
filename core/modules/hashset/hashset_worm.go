@@ -7,55 +7,45 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
-	"sync"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
-var (
-	none struct{}
-)
-
-type HashSetMutex struct {
-	set  HashSet
-	lock *sync.RWMutex
+// HashSet WORM (Write Once Read Many)
+// is an unsafe data structure in where data is loaded once
+// for example, at init() functions an it is readed, after loading many times
+// avoiding further modifications after being loaded.
+type HashSetWORM struct {
+	set HashSet
 }
 
-func NewHashSetMutex() HashSetMutex {
-	hs := HashSetMutex{}
-	hs.lock = new(sync.RWMutex)
-	hs.set = HashSet{}
+func NewHashSetWORM() HashSetWORM {
+	hs := HashSetWORM{}
+	hs.set = NewHashSet()
 	return hs
 }
 
-func NewHashSetMutexPtr() *HashSetMutex {
-	hs := NewHashSetMutex()
+func NewHashSetWORMPtr() *HashSetWORM {
+	hs := NewHashSetWORM()
 	return &hs
 }
 
-func (s *HashSetMutex) Add(item string) {
-	s.lock.Lock()
+func (s *HashSetWORM) Add(item string) {
 	s.set[item] = none
-	s.lock.Unlock()
 }
 
-func (s *HashSetMutex) Clear() {
-	s.lock.Lock()
-	s.set = HashSet{}
-	s.lock.Unlock()
+func (s *HashSetWORM) Clear() {
+	s.set = NewHashSet()
 }
 
-func (s HashSetMutex) Contains(item string) bool {
-	s.lock.RLock()
-	_, contains := s.set[item]
-	s.lock.RUnlock()
-	return contains
+func (s HashSetWORM) Contains(item string) bool {
+	_, found := s.set[item]
+	return found
 }
 
-func (s HashSetMutex) MatchAny(item string) bool {
-	s.lock.RLock()
+func (s HashSetWORM) MatchAny(item string) bool {
 	found := false
 	for k := range s.set {
 		found = strings.Contains(item, k)
@@ -63,24 +53,19 @@ func (s HashSetMutex) MatchAny(item string) bool {
 			break
 		}
 	}
-	s.lock.RUnlock()
 	return found
 }
 
-func (s *HashSetMutex) Remove(item string) {
-	s.lock.Lock()
+func (s *HashSetWORM) Remove(item string) {
 	delete(s.set, item)
-	s.lock.Unlock()
 }
 
-func (s *HashSetMutex) Size() int {
-	s.lock.RLock()
+func (s *HashSetWORM) Size() int {
 	l := len(s.set)
-	s.lock.RUnlock()
 	return l
 }
 
-func (s *HashSetMutex) LoadFromJsonArray(path string) {
+func (s *HashSetWORM) LoadFromJsonArray(path string) {
 	if path != "" {
 		logger.Debug("loading hashset with json data")
 		data, err := ioutil.ReadFile(path)
@@ -99,7 +84,7 @@ func (s *HashSetMutex) LoadFromJsonArray(path string) {
 	}
 }
 
-func (s *HashSetMutex) LoadFromRaw(path string, splitChar string) {
+func (s *HashSetWORM) LoadFromRaw(path string, splitChar string) {
 	if path != "" {
 		logger.Debug("loading hashset with raw data")
 		data, err := ioutil.ReadFile(path)
@@ -114,12 +99,10 @@ func (s *HashSetMutex) LoadFromRaw(path string, splitChar string) {
 }
 
 // content loaded via this method will make to allocate data on the heap
-func (s *HashSetMutex) LoadFromArray(data []string) {
+func (s *HashSetWORM) LoadFromArray(data []string) {
 	if data != nil {
-		s.lock.Lock()
 		for _, v := range data {
 			s.set[v] = none
 		}
-		s.lock.Unlock()
 	}
 }
