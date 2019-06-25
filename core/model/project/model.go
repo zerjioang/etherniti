@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -64,8 +67,8 @@ type Project struct {
 func (project Project) Key() []byte {
 	return str.UnsafeBytes(project.ProjectId)
 }
-func (project Project) Value() []byte {
-	return str.GetJsonBytes(project)
+func (project Project) Value(serializer io.Serializer) []byte {
+	return ioproto.GetBytesFromSerializer(serializer, project)
 }
 func (project Project) New() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()

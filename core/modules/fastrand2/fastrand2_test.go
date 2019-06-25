@@ -190,7 +190,7 @@ func TestRandConcurrent(t *testing.T) {
 		// Read some random data into a large byte slice.
 		func() { Read(make([]byte, 16e3)) },
 
-		// Call io.Copy on the global reader.
+		// Call ioproto.Copy on the global reader.
 		func() { io.CopyN(new(bytes.Buffer), Reader, 16e3) },
 
 		// Call Intn

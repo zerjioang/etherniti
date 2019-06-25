@@ -2,6 +2,7 @@ package mixed
 
 import (
 	"github.com/zerjioang/etherniti/core/modules/stack"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -9,7 +10,7 @@ type Policy func(context *echo.Context, key string) error
 
 type DatabaseObjectInterface interface {
 	Key() []byte
-	Value() []byte
+	Value(serializer io.Serializer) []byte
 	// creates new instance
 	// to allow concurrent access, etc
 	New() DatabaseObjectInterface

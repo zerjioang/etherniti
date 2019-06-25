@@ -4,9 +4,10 @@
 package controllers
 
 import (
-	"bytes"
 	"io/ioutil"
 	"runtime"
+
+	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
 
@@ -47,8 +48,7 @@ var (
 	IndexWelcomeJson      string
 	indexWelcomeBytes     []byte
 	indexWelcomeHtmlBytes []byte
-	// info message bytes
-	infoBytes []byte
+	serverInfo            protocol.ServerInfoResponse
 	// internally used struct pools to reduce GC
 	statusPool = sync.Pool{
 		// New creates an object when the pool has nothing available to return.
@@ -59,14 +59,6 @@ var (
 			// temporary and re-usable.
 			wrapper := protocol.ServerStatusResponse{}
 			return wrapper
-		},
-	}
-	bufferBool = sync.Pool{
-		// New creates an object when the pool has nothing available to return.
-		// New must return an interface{} to make it flexible. You have to cast
-		// your type after getting it.
-		New: func() interface{} {
-			return new(bytes.Buffer)
 		},
 	}
 )
@@ -95,19 +87,17 @@ func LoadIndexConstants() {
 }
 
 func loadInfoBytes() {
-	wrapper := protocol.ServerInfoResponse{}
-	wrapper.Architecture = runtime.GOARCH
-	wrapper.Os = runtime.GOOS
-	wrapper.Runtime.Compiler = runtime.Compiler
+	serverInfo.Architecture = runtime.GOARCH
+	serverInfo.Os = runtime.GOOS
+	serverInfo.Runtime.Compiler = runtime.Compiler
 
-	wrapper.Version.Etherniti = banner.Version
-	wrapper.Version.Go = runtime.Version()
-	wrapper.Version.HTTP = echo.Version
+	serverInfo.Version.Etherniti = banner.Version
+	serverInfo.Version.Go = runtime.Version()
+	serverInfo.Version.HTTP = echo.Version
 
-	wrapper.Cpus.Cores = runtime.NumCPU()
+	serverInfo.Cpus.Cores = runtime.NumCPU()
 	// load cpu features
-	wrapper.Cpus.Features = cpuid.GetCpuFeatures()
-	infoBytes = wrapper.Bytes()
+	serverInfo.Cpus.Features = cpuid.GetCpuFeatures()
 }
 
 func NewIndexController() *IndexController {
@@ -124,7 +114,7 @@ func (ctl *IndexController) Index(c *echo.Context) error {
 
 func (ctl *IndexController) Info(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
-	return c.JSONBlob(protocol.StatusOK, infoBytes)
+	return api.SendSuccess(c, []byte("info"), serverInfo)
 }
 
 func (ctl *IndexController) Status(c *echo.Context) error {

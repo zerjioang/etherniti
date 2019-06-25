@@ -31,10 +31,12 @@ type SolcController struct {
 type CodeReader func(c *echo.Context) ([]string, error)
 
 var (
-	solcResponseCode    int
-	solcVersionResponse []byte
-	errNoContractData   = errors.New("failed to get request contract data")
-	noContractData      []string
+	solcResponseCode  int
+	solcVersionErr    error
+	solcVersionData   *solc.Solidity
+	errNoContractData = errors.New("failed to get request contract data")
+	errNoSolc         = errors.New("failed to get solc version")
+	noContractData    []string
 )
 
 func init() {
@@ -42,13 +44,13 @@ func init() {
 	solData, err := solc.SolidityVersion()
 	if solData == nil {
 		solcResponseCode = protocol.StatusBadRequest
-		solcVersionResponse = api.ErrorBytes("failed to get solc version")
+		solcVersionErr = errNoSolc
 	} else if err != nil {
 		solcResponseCode = protocol.StatusBadRequest
-		solcVersionResponse = api.ErrorBytes(err.Error())
+		solcVersionErr = err
 	} else {
 		solcResponseCode = protocol.StatusOK
-		solcVersionResponse = api.ToSuccess(data.SolcVersion, solData)
+		solcVersionData = solData
 	}
 }
 
@@ -58,7 +60,11 @@ func NewSolcController() SolcController {
 }
 
 func (ctl SolcController) version(c *echo.Context) error {
-	return c.FastBlob(solcResponseCode, echo.MIMEApplicationJSONCharsetUTF8, solcVersionResponse)
+	if solcResponseCode == 200 {
+		return api.SendSuccess(c, []byte("solc-version"), solcResponseCode)
+	} else {
+		return api.ErrorCode(c, solcResponseCode, solcVersionErr)
+	}
 }
 
 // solc --optimize --optimize-runs 200 --opcodes --bin --abi --hashes --asm erc20.sol

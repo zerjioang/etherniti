@@ -1,13 +1,117 @@
-[metadata]
-    codename = "etherniti"
-    author = "zerjioang"
+# Gopkg.toml example
+#
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
 
-ignored = [
-    "github.com/zerjioang/etherniti/testdata*",
-    "github.com/zerjioang/etherniti/scripts*",
-    "github.com/zerjioang/etherniti/secrets*",
-    "github.com/zerjioang/etherniti/ofus*"
-]
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/btcsuite/btcd"
+
+[[constraint]]
+  name = "github.com/dgraph-io/badger"
+  version = "1.5.5"
+
+[[constraint]]
+  name = "github.com/gorilla/websocket"
+  version = "1.4.0"
+
+[[constraint]]
+  name = "github.com/jarcoal/httpmock"
+  version = "1.0.4"
+
+[[constraint]]
+  name = "github.com/json-iterator/go"
+  version = "1.1.6"
+
+[[constraint]]
+  name = "github.com/mattn/go-colorable"
+  version = "0.1.2"
+
+[[constraint]]
+  name = "github.com/mattn/go-isatty"
+  version = "0.0.8"
+
+[[constraint]]
+  name = "github.com/olekukonko/tablewriter"
+  version = "0.0.1"
+
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "0.8.1"
+
+[[constraint]]
+  name = "github.com/pkg/profile"
+  version = "1.3.0"
+
+[[constraint]]
+  name = "github.com/prometheus/client_golang"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/shopspring/decimal"
+  version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "1.3.0"
+
+[[constraint]]
+  name = "github.com/tidwall/gjson"
+  version = "1.2.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/tmthrgd/go-hex"
+
+[[constraint]]
+  name = "github.com/valyala/bytebufferpool"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/zerjioang/go-bus"
+  version = "0.2.3"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/sys"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/tools"
+
+[[constraint]]
+  name = "gopkg.in/src-d/go-billy.v4"
+  version = "4.3.0"
+
+[[constraint]]
+  name = "gopkg.in/src-d/go-git.v4"
+  version = "4.12.0"
 
 [prune]
   go-tests = true

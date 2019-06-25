@@ -4,7 +4,6 @@
 package protocol
 
 import (
-	"bytes"
 	"encoding/json"
 
 	"github.com/zerjioang/etherniti/core/util/str"
@@ -147,32 +146,6 @@ type ApiError struct {
 	Err  []byte `json:"error,omitempty"`
 }
 
-var (
-	jsonBegin   = str.UnsafeBytes(`{`)
-	jsonEnd     = str.UnsafeBytes(`}`)
-	doubleQuote = str.UnsafeBytes(`"`)
-	descId      = str.UnsafeBytes(`"desc":"`)
-	errId       = str.UnsafeBytes(`,"error":"`)
-)
-
-func (e ApiError) Bytes(b *bytes.Buffer) []byte {
-	b.Reset()
-	// {"code":400,"msg":"test-error","details":""}
-	b.Write(jsonBegin)
-	if len(e.Desc) > 0 {
-		b.Write(descId)
-		b.Write(e.Desc)
-		b.Write(doubleQuote)
-	}
-	if len(e.Err) > 0 {
-		b.Write(errId)
-		b.Write(e.Err)
-		b.Write(doubleQuote)
-	}
-	b.Write(jsonEnd)
-	return b.Bytes()
-}
-
 // api error constructor like function
 func NewApiError(code int, details []byte) *ApiError {
 	ae := ApiError{}
@@ -183,27 +156,14 @@ func NewApiError(code int, details []byte) *ApiError {
 
 // api response model dto
 type ApiResponse struct {
-	Message []byte `json:"msg,omitempty"`
-	Data    []byte `json:"data,omitempty"`
+	Message string      `json:"msg,omitempty"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 // api response constructor like function
-func NewApiResponse(message []byte, payload []byte) *ApiResponse {
+func NewApiResponse(message []byte, payload interface{}) *ApiResponse {
 	ae := ApiResponse{}
-	ae.Message = message
+	ae.Message = str.UnsafeString(message)
 	ae.Data = payload
 	return &ae
-}
-
-func (e ApiResponse) Bytes(b *bytes.Buffer) []byte {
-	b.Reset()
-	b.WriteString(`{"msg":"`)
-	b.Write(e.Message)
-	b.Write(doubleQuote)
-	if e.Data != nil && len(e.Data) > 0 {
-		b.WriteString(`,"data":`)
-		b.Write(e.Data)
-	}
-	b.Write(jsonEnd)
-	return b.Bytes()
 }

@@ -6,8 +6,10 @@ package protocol
 import (
 	"strconv"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
-	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 type ServerStatusResponse struct {
@@ -21,8 +23,8 @@ func (r *ServerStatusResponse) Reset() {
 	r.Memory.Reset()
 	r.Gc.Reset()
 }
-func (r *ServerStatusResponse) Bytes() []byte {
-	return str.GetJsonBytes(r)
+func (r *ServerStatusResponse) Bytes(contentType string) []byte {
+	return ioproto.GetContentTypedBytes(contentType, r)
 }
 
 type ServerInfoResponse struct {
@@ -85,8 +87,9 @@ func (gc *Gc) Reset() {
 	gc.NumForcedGC = 0
 }
 
-func (r ServerInfoResponse) Bytes() []byte {
-	return str.GetJsonBytes(r)
+func (r ServerInfoResponse) Bytes(serializer io.Serializer) []byte {
+	raw, _ := serializer(r)
+	return raw
 }
 
 func itoa(v int) string {

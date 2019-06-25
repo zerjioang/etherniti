@@ -20,4 +20,4 @@ $# we rename the html file to index.html for convenience.
 $mv wasm_exec.html index.html
 $ls -l
 
- */
+*/

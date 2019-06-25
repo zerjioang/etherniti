@@ -4,9 +4,12 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 	"sync/atomic"
+
+	"github.com/zerjioang/etherniti/shared/constants"
 
 	"github.com/zerjioang/etherniti/core/modules/httpclient"
 
@@ -84,16 +87,16 @@ func (ctl *ExternalController) coinMarketCapTickers(c *echo.Context) error {
 			return errNoResponse
 		} else {
 			// store in cache
-			ethPriceResponse := api.ToSuccess(data.EthTicker, raw)
 			// cache response for next request
-			ctl.tickerCache.Store(ethPriceResponse)
+			ctl.tickerCache.Store(raw)
 			// return response to client
-			return api.SendSuccessBlob(c, ethPriceResponse)
+			c.OnSuccessCachePolicy = constants.CacheOneDay
+			return api.SendSuccess(c, []byte("tickers"), raw)
 		}
 	} else {
 		//value already set and stored in memory cache
 		// return response to client
-		return api.SendSuccessBlob(c, v.([]byte))
+		return api.SendSuccess(c, data.EthTicker, v.(json.RawMessage))
 	}
 }
 func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
@@ -111,16 +114,16 @@ func (ctl *ExternalController) coinMarketCapEthPrice(c *echo.Context) error {
 			return errNoResponse
 		} else {
 			// store in cache
-			ethPriceResponse := api.ToSuccess(data.EthPrice, raw)
 			// cache response for next request
-			ctl.priceCache.Store(ethPriceResponse)
+			ctl.priceCache.Store(raw)
 			// return response to client
-			return api.SendSuccessBlob(c, ethPriceResponse)
+			return api.SendSuccess(c, data.EthPrice, raw)
 		}
 	} else {
 		//value already set and stored in memory cache
 		// return response to client
-		return api.SendSuccessBlob(c, v.([]byte))
+		c.OnSuccessCachePolicy = constants.CacheOneDay
+		return api.SendSuccess(c, data.EthPrice, v.(json.RawMessage))
 	}
 }
 

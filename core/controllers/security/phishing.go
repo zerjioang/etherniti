@@ -7,7 +7,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
 
 	"github.com/zerjioang/etherniti/core/api"
 
@@ -33,6 +34,8 @@ var (
 	blackData    []byte
 	fuzzyData    []byte
 	responseName = []byte("domain analyzed")
+	//todo remove this in next releases. manage serializer on demand
+	defaultSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
 )
 
 func init() {
@@ -47,9 +50,9 @@ func init() {
 		logger.Error("could not unmarshal phising model data")
 		return
 	}
-	blackData = str.GetJsonBytes(pm.Blacklist)
-	whiteData = str.GetJsonBytes(pm.Whitelist)
-	fuzzyData = str.GetJsonBytes(pm.Fuzzylist)
+	blackData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Blacklist)
+	whiteData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Whitelist)
+	fuzzyData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Fuzzylist)
 }
 
 func PhishingBlacklistRawBytes() []byte {
@@ -92,7 +95,7 @@ func IsDangerousDomain(domain string) []byte {
 			Message: "the domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
 			Trust:   false,
 		}
-		return api.ToSuccess(responseName, responseData)
+		return api.ToSuccess(responseName, responseData, defaultSerializer)
 	} else {
 		responseData := response{
 			Title:   "clean domain detected",
@@ -100,6 +103,6 @@ func IsDangerousDomain(domain string) []byte {
 			Message: "the domain you requested has not been blacklisted.",
 			Trust:   true,
 		}
-		return api.ToSuccess(responseName, responseData)
+		return api.ToSuccess(responseName, responseData, defaultSerializer)
 	}
 }

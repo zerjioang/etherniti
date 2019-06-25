@@ -8,19 +8,22 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/config"
 
 	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (
-	collection *db.BadgerStorage
-	pool       *sync.Pool
-	analyze    bool
+	collection         *db.BadgerStorage
+	pool               *sync.Pool
+	analyze            bool
+	dbSerializer, mode = ioproto.EncodingModeSelector(io.ModeJson)
 )
 
 func init() {
@@ -66,7 +69,7 @@ func processAnalytics(ip string, r *http.Request) {
 		record["ua"] = r.UserAgent()
 		record["uri"] = r.URL.RequestURI()
 		// serialize the item
-		raw := str.GetJsonBytes(record)
+		raw := ioproto.GetBytesFromSerializer(dbSerializer, record)
 		// return the item to the pool
 		pool.Put(record)
 		// store on disk

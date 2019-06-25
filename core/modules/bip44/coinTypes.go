@@ -1087,7 +1087,7 @@ const (
 	TypePWR        uint32 = 0x800057e8 //  	PWRcoin
 	TypeBELL       uint32 = 0x800062a4 //  	Bellcoin
 	TypeESN        uint32 = 0x8000797e //  	EtherSocial Network
-	TypeThePowerIO uint32 = 0x80007a69 // ThePower.io
+	TypeThePowerIO uint32 = 0x80007a69 // ThePower.ioproto
 	TypeBTCS       uint32 = 0x80008456 //  	Bitcoin Stake
 	TypeBTT        uint32 = 0x80008888 //  	ByteTrade
 	TypeFXTC       uint32 = 0x80009468 //  	FixedTradeCoin

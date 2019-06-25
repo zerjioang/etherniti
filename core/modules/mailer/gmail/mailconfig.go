@@ -61,7 +61,7 @@ func newInternalServerConfig(opts *config.EthernitiOptions) *MailServerConfig {
 @deprecated use GetMailServerConfigInstanceInit() instead
 
 warning: this is a non-thread safe implementation of singleton.
-use at your own risk knowning variable io access
+use at your own risk knowning variable ioproto access
 */
 func GetMailServerConfigInstance() *MailServerConfig {
 	//not thread safe code

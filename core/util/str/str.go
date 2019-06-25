@@ -4,7 +4,6 @@
 package str
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"reflect"
 	"strconv"
@@ -54,30 +53,6 @@ func bytesToStr(b []byte) string {
 
 func UnsafeString(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
-}
-
-func StdMarshal(data interface{}) ([]byte, error) {
-	return json.Marshal(&data)
-}
-
-func FastMarshal(data interface{}) ([]byte, error) {
-	return jsonfast.Marshal(&data)
-}
-
-func FastUnMarshal(data []byte, v interface{}) error {
-	return jsonfast.Unmarshal(data, v)
-}
-
-func StdJsoniterMarshal(data interface{}) ([]byte, error) {
-	return jsonstd.Marshal(&data)
-}
-
-func GetJsonBytes(data interface{}) []byte {
-	if data != nil {
-		raw, _ := FastMarshal(data)
-		return raw
-	}
-	return empty
 }
 
 // converts ascii chars of a given string in lowercase
