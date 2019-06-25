@@ -3,6 +3,9 @@ package auth
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/shared/mixed"
 
 	"github.com/zerjioang/etherniti/core/modules/stack"
@@ -29,8 +32,8 @@ type AuthRequest struct {
 func (req *AuthRequest) Key() []byte {
 	return str.UnsafeBytes(str.ToLowerAscii(req.Email))
 }
-func (req *AuthRequest) Value() []byte {
-	return str.GetJsonBytes(req)
+func (req *AuthRequest) Value(serializer io.Serializer) []byte {
+	return ioproto.GetBytesFromSerializer(serializer, req)
 }
 func (req *AuthRequest) New() mixed.DatabaseObjectInterface {
 	return NewEmptyAuthRequestPtr()

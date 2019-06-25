@@ -7,6 +7,7 @@ eth-temp
 secrets
 testdata/swagger/swagger.json
 volumes/**
-*.out
-*.test
+**/*.out
+**/*.test
+**/*.wasm
 docs

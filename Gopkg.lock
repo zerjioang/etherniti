@@ -370,6 +370,17 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:01d5dc3bfb14cf8fb2c924dcf026231218604b8ed15daaa028875d49e7f09071"
+  name = "github.com/vmihailenco/msgpack"
+  packages = [
+    ".",
+    "codes",
+  ]
+  pruneopts = "UT"
+  revision = "c2fc210f30a2aca9db880cc017a92c169c999253"
+  version = "v4.0.4"
+
+[[projects]]
   digest = "1:172f94a6b3644a8f9e6b5e5b7fc9fe1e42d424f52a0300b2e7ab1e57db73f85d"
   name = "github.com/xanzy/ssh-agent"
   packages = ["."]
@@ -417,7 +428,7 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "ea8f1a30c4438cc8b13f05538385ad8dc6049b43"
+  revision = "cc06ce4a13d484c0101a9e92913248488a75786d"
 
 [[projects]]
   branch = "master"
@@ -435,7 +446,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7754f319449635a39e264fa6d2307dc9f165fc33b7e55143dc6477c9b9198bcc"
+  digest = "1:213da46d2d9744e2baa0db9ff4b24806ef1f30fddc0d72c63da03b518b92bebe"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -443,11 +454,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "bf70e4678053e8a9f269f32f9b29464e4a03a1e6"
+  revision = "c5567b49c5d04a5f83870795b8c0e2df43a8ce32"
 
 [[projects]]
   branch = "master"
-  digest = "1:11f2e01a9de9313a6752cde674f1c16e895efdcd328eb40ac5dbf3630e514360"
+  digest = "1:3396517c0bef28598ad00e4176a0fb07808b986d026a3c05d48d24778e65c92e"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -465,7 +476,27 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "1fa568393b23e69144eafde9840835928bb33567"
+  revision = "a101b041ded4588cfeb96c45f394050221b40f11"
+
+[[projects]]
+  digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
+  name = "google.golang.org/appengine"
+  packages = [
+    ".",
+    "datastore",
+    "datastore/internal/cloudkey",
+    "datastore/internal/cloudpb",
+    "internal",
+    "internal/app_identity",
+    "internal/base",
+    "internal/datastore",
+    "internal/log",
+    "internal/modules",
+    "internal/remote_api",
+  ]
+  pruneopts = "UT"
+  revision = "b2f4a3cf3c67576a2ee09e1fe62656a5086ce880"
+  version = "v1.6.1"
 
 [[projects]]
   digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
@@ -564,6 +595,7 @@
     "github.com/tidwall/gjson",
     "github.com/tmthrgd/go-hex",
     "github.com/valyala/bytebufferpool",
+    "github.com/vmihailenco/msgpack",
     "github.com/zerjioang/go-bus",
     "github.com/zerjioang/go-bus/mutex",
     "golang.org/x/crypto/bcrypt",

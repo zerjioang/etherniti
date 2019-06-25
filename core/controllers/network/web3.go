@@ -5,7 +5,6 @@ package network
 
 import (
 	"math/big"
-	"net/http"
 	"strconv"
 	"strings"
 
@@ -93,10 +92,10 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 			if err != nil {
 				return api.Error(c, err)
 			}
-			response := api.ToSuccess(data.Balance, BalanceResponse{Value: result, Raw: raw})
-			ctl.network.cache.Set(keyBytes, response)
 			c.OnSuccessCachePolicy = constants.CacheInfinite
-			return api.SendSuccessBlob(c, response)
+			//todo add support for dynamic encoding instead of nil
+			ctl.network.cache.Set(keyBytes, nil)
+			return api.SendSuccess(c, data.Balance, BalanceResponse{Value: result, Raw: raw})
 		}
 	} else {
 		// send invalid address message
@@ -126,8 +125,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 	if err != nil {
 		return api.Error(c, err)
 	}
-	response := api.ToSuccess(data.Balance, BalanceResponse{Value: result, Raw: raw})
-	return api.SendSuccess(c, data.BalanceAtBlock, response)
+	return api.SendSuccess(c, data.BalanceAtBlock, BalanceResponse{Value: result, Raw: raw})
 }
 
 // get node information
@@ -152,13 +150,11 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 
 	//try to get this information from the cache
 	key := data.NetVersion
-	result, found := ctl.network.cache.Get(key)
-	if found && result != nil {
+	cachedValue, found := ctl.network.cache.Get(key)
+	if found && cachedValue != nil {
 		//cache hit
 		logger.Info(key, ": cache hit")
-		response := api.ToSuccess(key, result.(string))
-		c.OnSuccessCachePolicy = constants.CacheInfinite
-		return api.SendSuccessBlob(c, response)
+		return api.SendSuccess(c, data.NetVersion, cachedValue)
 	} else {
 		//cache miss
 		logger.Info(key, ": cache miss")
@@ -173,11 +169,10 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 			// send invalid response message
 			return api.Error(c, err)
 		} else {
-			// save result in the cache
+			// save cachedValue in the cache
 			ctl.network.cache.Set(key, response)
 			c.OnSuccessCachePolicy = constants.CacheInfinite
-			response := api.ToSuccess(key, response)
-			return api.SendSuccessBlob(c, response)
+			return api.SendSuccess(c, data.NetVersion, response)
 		}
 	}
 }
@@ -187,13 +182,11 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 	//try to get this information from the cache
 	key := data.IsGanache
-	result, found := ctl.network.cache.Get(key)
-	if found && result != nil {
+	cachedValue, found := ctl.network.cache.Get(key)
+	if found && cachedValue != nil {
 		//cache hit
 		logger.Info(key, ": cache hit")
-		response := api.ToSuccess(key, result)
-		c.OnSuccessCachePolicy = constants.CacheInfinite
-		return api.SendSuccessBlob(c, response)
+		return api.SendSuccess(c, data.IsGanache, cachedValue)
 	} else {
 		//cache miss
 		logger.Info(key, ": cache miss")
@@ -208,9 +201,10 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 			// send invalid response message
 			return api.Error(c, err)
 		} else {
-			response := api.ToSuccess(data.IsGanache, d)
+			//set cached value
+			ctl.network.cache.Set(key, d)
 			c.OnSuccessCachePolicy = constants.CacheInfinite
-			return api.SendSuccessBlob(c, response)
+			return api.SendSuccess(c, data.IsGanache, d)
 		}
 	}
 }
@@ -245,9 +239,8 @@ func (ctl *Web3Controller) sha3(c *echo.Context) error {
 				// send invalid response message
 				return api.Error(c, err)
 			} else {
-				response := api.ToSuccess([]byte("sha3"), response)
 				c.OnSuccessCachePolicy = constants.CacheInfinite
-				return api.SendSuccessBlob(c, response)
+				return api.SendSuccess(c, data.Sha3, response)
 			}
 		} else {
 			return api.Error(c, errors.New("no input data provided for sha3"))
@@ -276,9 +269,8 @@ func (ctl *Web3Controller) netVersion(c *echo.Context) error {
 		var wrapper netVersion
 		wrapper.Version = response
 		wrapper.Name = ethrpc.ResolveNetworkId(response)
-		response := api.ToSuccess([]byte("net_version"), wrapper)
 		c.OnSuccessCachePolicy = constants.CacheInfinite
-		return api.SendSuccessBlob(c, response)
+		return api.SendSuccess(c, data.NetVersion, wrapper)
 	}
 }
 
@@ -309,9 +301,8 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	if found && result != nil {
 		//cache hit
 		logger.Info(method, ": cache hit")
-		response := api.ToSuccess(methodBytes, result)
 		c.OnSuccessCachePolicy = constants.CacheInfinite
-		return api.SendSuccessBlob(c, response)
+		return api.SendSuccess(c, methodBytes, result)
 	} else {
 		//cache miss
 		logger.Info(method, ": cache miss")
@@ -331,9 +322,8 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 		} else {
 			// save result in the cache
 			ctl.network.cache.Set(cacheKeyBytes, rpcResponse)
-			response := api.ToSuccess(methodBytes, rpcResponse)
 			c.OnSuccessCachePolicy = constants.CacheInfinite
-			return api.SendSuccessBlob(c, response)
+			return api.SendSuccess(c, methodBytes, rpcResponse)
 		}
 	}
 }
@@ -367,11 +357,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(protocol.StatusInternalServerError,
-			str.GetJsonBytes(
-				protocol.NewApiError(protocol.StatusInternalServerError, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.Error(c, err)
 	} else {
 		//iterate over account
 		for i := 0; i < len(list); i++ {
@@ -407,9 +393,8 @@ func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 		if err != nil {
 			return api.Error(c, err)
 		}
-		response := api.ToSuccess(data.IsContract, result)
 		c.OnSuccessCachePolicy = constants.CacheInfinite
-		return api.SendSuccessBlob(c, response)
+		return api.SendSuccess(c, data.IsContract, result)
 	}
 	// send invalid address message
 	return api.ErrorStr(c, data.MissingAddress)
@@ -433,11 +418,7 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 	raw, err := client.Erc20Name(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(protocol.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.Error(c, err)
 	} else {
 		unpacked := ""
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -468,12 +449,7 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 	}
 	raw, err := client.Erc20Symbol(contractAddress)
 	if err != nil {
-		// send invalid generation message
-		return c.JSONBlob(protocol.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.Error(c, err)
 	} else {
 		unpacked := ""
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -505,11 +481,7 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 	raw, err := client.Erc20TotalSupply(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(protocol.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(protocol.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -541,11 +513,7 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 	raw, err := client.Erc20Decimals(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -582,11 +550,7 @@ func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
 	raw, err := client.Erc20BalanceOf(contractAddress, address)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.BalanceOf, raw)
 	}
@@ -618,11 +582,7 @@ func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}
@@ -660,11 +620,7 @@ func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
 	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Transfer, raw)
 	}
@@ -724,11 +680,7 @@ func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
 	raw, err := client.EthSendTransaction(transaction)
 	if err != nil {
 		// send invalid generation message
-		return c.JSONBlob(http.StatusBadRequest,
-			str.GetJsonBytes(
-				protocol.NewApiError(http.StatusBadRequest, str.UnsafeBytes(err.Error())),
-			),
-		)
+		return api.Error(c, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}

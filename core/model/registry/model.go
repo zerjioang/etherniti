@@ -3,6 +3,9 @@ package registry
 import (
 	"encoding/json"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/model"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -57,8 +60,8 @@ func (r Registry) Validate() stack.Error {
 func (r Registry) Key() []byte {
 	return str.UnsafeBytes(r.Id())
 }
-func (r Registry) Value() []byte {
-	return str.GetJsonBytes(r)
+func (r Registry) Value(serializer io.Serializer) []byte {
+	return ioproto.GetBytesFromSerializer(serializer, r)
 }
 func (r Registry) New() mixed.DatabaseObjectInterface {
 	return NewEmptyRegistry()

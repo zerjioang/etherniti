@@ -11,7 +11,7 @@ import (
 
 // ErrLength reports an attempt to decode an odd-length input
 // using Decode or DecodeString.
-// The stream-based Decoder returns io.ErrUnexpectedEOF instead of ErrLength.
+// The stream-based Decoder returns ioproto.ErrUnexpectedEOF instead of ErrLength.
 var ErrLength = errors.New("encoding/hex: odd length hex string")
 
 // InvalidByteError values describe errors resulting from an invalid byte in a hex string.

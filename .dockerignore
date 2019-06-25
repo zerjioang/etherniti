@@ -17,6 +17,7 @@ readme
 docs
 site
 **/*.md
+**/*.wasm
 
 # ignore documentation builder
 **/python36_venv

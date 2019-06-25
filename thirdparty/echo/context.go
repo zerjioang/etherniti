@@ -19,13 +19,15 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	io2 "github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/core/util/ip"
 
 	"github.com/zerjioang/etherniti/shared/protocol"
 
-	jsoniter "github.com/json-iterator/go"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/eth/profile"
 	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
@@ -67,10 +69,14 @@ type Context struct {
 	// http client cache policy
 	OnSuccessCachePolicy int
 	UserId               string
+	//request content type identification string
+	contentTypeMode io2.ContentTypeMode
+	//response serialization protocol
+	// json, fastjson, xml, msgpack, gogoproto, etc
+	serializer io2.Serializer
 }
 
 var (
-	jsonfast           = jsoniter.ConfigFastest
 	noPeerAddressError = errors.New("no peer address to connect defined")
 	isDebug            = config.IsDevelopment()
 	fileCache          concurrentmap.ConcurrentMap
@@ -92,6 +98,9 @@ func (c *Context) Preload() {
 	c.SchemeName = c.resolveScheme()
 	c.ip = c.resolveRealIP()
 	c.intIp = ip.Ip2int(c.ip)
+	requestContentType := c.request.Header.Get(HeaderContentType)
+	//detect user requested data serialization method
+	c.serializer, c.contentTypeMode = ioproto.EncodingSelector(requestContentType)
 }
 
 func (c *Context) writeContentType(value string) {
@@ -353,7 +362,7 @@ func (c *Context) json(code int, i interface{}, indent string) error {
 
 //custom json encoder
 func (c *Context) JSON(code int, i interface{}) (err error) {
-	raw, encErr := jsonfast.Marshal(&i)
+	raw, encErr := c.serializer(i)
 	if encErr != nil {
 		return encErr
 	}
@@ -695,4 +704,13 @@ func (c *Context) Body() []byte {
 		logger.Error("failed to read request content body due to: ", err)
 	}
 	return content
+}
+
+//return content type of the request
+func (c *Context) ContentType() io2.ContentTypeMode {
+	return c.contentTypeMode
+}
+
+func (c *Context) ResponseSerializer() io2.Serializer {
+	return c.serializer
 }

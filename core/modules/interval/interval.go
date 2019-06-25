@@ -6,10 +6,12 @@ package interval
 import (
 	"sync/atomic"
 	"time"
+
+	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 type TaskMode uint8
-type OnExpired func() []byte
+type OnExpired func(ctx *echo.Context) []byte
 
 const (
 	Once TaskMode = iota
@@ -66,7 +68,7 @@ func (task *IntervalTask) Do() *IntervalTask {
 
 func (task *IntervalTask) triggerExpirationRoutine() {
 	// atomic/thread-safe
-	result := task.onExpired()
+	result := task.onExpired(nil)
 	task.atomicResult.Store(result)
 }
 

@@ -289,7 +289,7 @@ func NewRandomSeed() ([]byte, error) {
 	// Well that easy, just make go read 256 random bytes into a slice
 	s := make([]byte, 256)
 	//_, err := rand.Read(s)
-	//_, err := io.ReadFull(rand.Reader, s)
+	//_, err := ioproto.ReadFull(rand.Reader, s)
 	_, err := io.ReadAtLeast(rand.Reader, s, 256)
 	return s, err
 }

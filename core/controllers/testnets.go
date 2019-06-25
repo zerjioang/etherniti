@@ -33,10 +33,10 @@ const (
 	ganacheEndpoint = httpId + "127.0.0.1:7545"
 
 	//default infura public v3 endpoints
-	ropstenInfura = httpsId + "ropsten.infura.io/v3/"
-	rinkebyInfura = httpsId + "rinkeby.infura.io/v3/"
-	kovanInfura   = httpsId + "kovan.infura.io/v3/"
-	mainnetInfura = httpsId + "mainnet.infura.io/v3/"
+	ropstenInfura = httpsId + "ropsten.infura.ioproto/v3/"
+	rinkebyInfura = httpsId + "rinkeby.infura.ioproto/v3/"
+	kovanInfura   = httpsId + "kovan.infura.ioproto/v3/"
+	mainnetInfura = httpsId + "mainnet.infura.ioproto/v3/"
 
 	UndefinedEndpoint = ""
 )

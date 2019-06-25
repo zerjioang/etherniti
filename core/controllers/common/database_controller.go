@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/shared/protocol"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -20,6 +23,7 @@ var (
 	errInvalidCollectionName = errors.New("invalid collection name provided")
 	errUnauthorizedOp        = errors.New("unauthorized operation detected")
 	s                        = []byte(".")
+	dbSerializer, _          = ioproto.EncodingModeSelector(io.ModeJson)
 )
 
 type DatabaseController struct {
@@ -90,7 +94,7 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 				return errUnauthorizedOp
 			}
 			key := ctl.buildCompositeId(authId, string(requestedItem.Key()))
-			value := requestedItem.Value()
+			value := requestedItem.Value(dbSerializer)
 			fmt.Println(requestedItem)
 			writeErr := ctl.storage.PutUniqueKeyValue(key, value)
 			if writeErr != nil {
@@ -150,11 +154,11 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 				return api.StackError(c, updateErr)
 			}
 			// save result
-			storeErr := ctl.storage.SetRawKey(key, updatedItem.Value())
+			storeErr := ctl.storage.SetRawKey(key, updatedItem.Value(dbSerializer))
 			if storeErr != nil {
 				return api.Error(c, storeErr)
 			}
-			return api.SendSuccessBlob(c, updatedItem.Value())
+			return api.SendSuccessBlob(c, updatedItem.Value(dbSerializer))
 		}
 		return api.Error(c, canUpdateErr)
 	} else {
