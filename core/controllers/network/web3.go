@@ -99,7 +99,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 		}
 	} else {
 		// send invalid address message
-		return api.ErrorStr(c, data.MissingAddress)
+		return api.ErrorBytes(c, data.MissingAddress)
 	}
 }
 
@@ -115,7 +115,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 	//todo validate input parameters
 	if !eth.IsValidAddressLow(targetAddr) {
 		// send invalid address message
-		return api.ErrorStr(c, data.MissingAddress)
+		return api.ErrorBytes(c, data.MissingAddress)
 	}
 	if !eth.IsValidBlockNumber(block) {
 		//return error that block is invalid
@@ -215,7 +215,7 @@ func (ctl *Web3Controller) sha3(c *echo.Context) error {
 	if err := c.Bind(&model); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	content, found := model["data"]
 	if found && content != nil {
@@ -281,7 +281,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	// methodName example: /v1/web3/private/net/version
 	chunks := strings.Split(methodName, "/")
 	if len(chunks) < 5 {
-		return api.ErrorStr(c, data.InvalidUrlWeb3)
+		return api.ErrorBytes(c, data.InvalidUrlWeb3)
 	}
 	var key string
 	if len(chunks) == 6 {
@@ -318,7 +318,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 			return api.Error(c, err)
 		} else if rpcResponse == nil {
 			// send invalid response message
-			return api.ErrorStr(c, data.NetworkNoResponse)
+			return api.ErrorBytes(c, data.NetworkNoResponse)
 		} else {
 			// save result in the cache
 			ctl.network.cache.Set(cacheKeyBytes, rpcResponse)
@@ -397,7 +397,7 @@ func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 		return api.SendSuccess(c, data.IsContract, result)
 	}
 	// send invalid address message
-	return api.ErrorStr(c, data.MissingAddress)
+	return api.ErrorBytes(c, data.MissingAddress)
 }
 
 // Start ERC20 functions
@@ -407,7 +407,7 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -423,11 +423,11 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 		unpacked := ""
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
 		if decodeErr != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
 		err := erc20.LoadErc20Abi().Unpack(&unpacked, "name", rawBytes)
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, data.Name, unpacked)
 		}
@@ -439,7 +439,7 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -454,11 +454,11 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 		unpacked := ""
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
 		if decodeErr != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
 		err := erc20.LoadErc20Abi().Unpack(&unpacked, "symbol", rawBytes)
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, data.Symbol, unpacked)
 		}
@@ -470,7 +470,7 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -486,11 +486,11 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
 		if decodeErr != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
 		err := erc20.LoadErc20Abi().Unpack(&unpacked, "totalSupply", rawBytes)
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, data.TotalSupply, unpacked)
 		}
@@ -502,7 +502,7 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -518,11 +518,11 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
 		if decodeErr != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
 		err := erc20.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, data.Decimals, unpacked)
 		}
@@ -534,12 +534,12 @@ func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	address := c.Param("address")
 	//input data validation
 	if !eth.IsValidAddressLow(address) {
-		return api.ErrorStr(c, data.InvalidAccountAddress)
+		return api.ErrorBytes(c, data.InvalidAccountAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -561,17 +561,17 @@ func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	ownerAddress := c.Param("owner")
 	//input data validation
 	if !eth.IsValidAddressLow(ownerAddress) {
-		return api.ErrorStr(c, data.InvalidAccountOwner)
+		return api.ErrorBytes(c, data.InvalidAccountOwner)
 	}
 	spenderAddress := c.Param("spender")
 	//input data validation
 	if !eth.IsValidAddressLow(spenderAddress) {
-		return api.ErrorStr(c, data.InvalidAccountSpender)
+		return api.ErrorBytes(c, data.InvalidAccountSpender)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -598,18 +598,18 @@ func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	receiverAddress := c.Param("address")
 	//input data validation
 	if receiverAddress == "" {
-		return api.ErrorStr(c, data.InvalidReceiverAddress)
+		return api.ErrorBytes(c, data.InvalidReceiverAddress)
 	}
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
 	if amount == "" || pErr != nil {
-		return api.ErrorStr(c, data.InvalidTokenValue)
+		return api.ErrorBytes(c, data.InvalidTokenValue)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -658,13 +658,13 @@ func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
-		return api.ErrorStr(c, data.InvalidDstAddress)
+		return api.ErrorBytes(c, data.InvalidDstAddress)
 	}
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
 	if amount == "" || pErr != nil || tokenAmount <= 0 {
-		return api.ErrorStr(c, data.InvalidEtherValue)
+		return api.ErrorBytes(c, data.InvalidEtherValue)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -707,7 +707,7 @@ func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 		return api.SendSuccess(c, data.TransactionReceipt, result)
 	}
 	// send invalid address message
-	return api.ErrorStr(c, data.MissingAddress)
+	return api.ErrorBytes(c, data.MissingAddress)
 }
 
 // Blockchain Access
@@ -761,7 +761,7 @@ func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
 	if err := c.Bind(&tx); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	//make the call with json body
 	amount, err := client.EthEstimateGas(tx)
@@ -776,7 +776,7 @@ func (ctl *Web3Controller) compileCode(c *echo.Context, id []byte, compilerCall 
 	if err := c.Bind(&model); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	contractStr, found := model["contract"]
 	if found && len(contractStr) > 0 {
@@ -826,7 +826,7 @@ func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
 	addr := c.Param("address")
 	//input data validation
 	if !eth.IsValidAddressLow(addr) {
-		return api.ErrorStr(c, data.InvalidAccountAddress)
+		return api.ErrorBytes(c, data.InvalidAccountAddress)
 	}
 	//read block position
 	block := c.Param("block")
@@ -859,7 +859,7 @@ func (ctl *Web3Controller) getTransactionCount(c *echo.Context) error {
 	addr := c.Param("address")
 	//input data validation
 	if !eth.IsValidAddressLow(addr) {
-		return api.ErrorStr(c, data.InvalidAccountAddress)
+		return api.ErrorBytes(c, data.InvalidAccountAddress)
 	}
 	//read block position
 	block := c.Param("block")

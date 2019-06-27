@@ -22,7 +22,7 @@ func NewTokenController() TokenController {
 }
 
 func (ctl TokenController) whoisAddress(c *echo.Context) error {
-	return api.ErrorStr(c, data.NotImplemented)
+	return api.ErrorBytes(c, data.NotImplemented)
 }
 
 func (ctl TokenController) resolveContractAddress(c *echo.Context) error {

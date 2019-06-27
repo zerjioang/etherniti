@@ -51,7 +51,7 @@ func (ctl WalletController) Mnemonic(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 
 	// lowercase language
@@ -68,7 +68,7 @@ func (ctl WalletController) Mnemonic(c *echo.Context) error {
 		bip39.SetWordList(req.Language)
 	default:
 		//return invalid language error
-		return api.ErrorStr(c, data.MnemonicLanguageNotProvided)
+		return api.ErrorBytes(c, data.MnemonicLanguageNotProvided)
 	}
 
 	if req.Size != 128 &&
@@ -77,7 +77,7 @@ func (ctl WalletController) Mnemonic(c *echo.Context) error {
 		req.Size != 224 &&
 		req.Size != 256 {
 		//return invalid size error
-		return api.ErrorStr(c, data.MnemonicSizeNotSupported)
+		return api.ErrorBytes(c, data.MnemonicSizeNotSupported)
 	}
 
 	// create new Entropy from rand reader
@@ -85,7 +85,7 @@ func (ctl WalletController) Mnemonic(c *echo.Context) error {
 	entropyBytes, entropyErr := bip39.GenerateSecureEntropy(req.Size)
 	if entropyErr != nil {
 		//failed to get a full Entropy source
-		return api.ErrorStr(c, data.InvalidEntropySource)
+		return api.ErrorBytes(c, data.InvalidEntropySource)
 	}
 
 	// create Mnemonic based on user config and created Entropy source
@@ -113,7 +113,7 @@ func (ctl WalletController) HdWallet(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model:", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	response, err := ctl.createHdWallet(req)
 	if err != nil {
@@ -129,7 +129,7 @@ func (ctl WalletController) Entropy(c *echo.Context) error {
 
 	if req.Size <= 0 || req.Size > 4096*8 {
 		//return invalid size (exceeded btw) error
-		return api.ErrorStr(c, data.EntropySizeNotSupported)
+		return api.ErrorBytes(c, data.EntropySizeNotSupported)
 	}
 
 	response, err := ctl.generateSecureEntropy(req)
@@ -180,7 +180,7 @@ func (ctl WalletController) generateAddress(c *echo.Context) error {
 	if err != nil {
 		logger.Error("failed to generate ethereum account key", err)
 		// send invalid generation message
-		return api.ErrorStr(c, data.EthAccountFailed)
+		return api.ErrorBytes(c, data.EthAccountFailed)
 	}
 	address := eth.GetAddressFromPrivateKey(private)
 	privateKey := eth.GetPrivateKeyAsEthString(private)
@@ -203,7 +203,7 @@ func (ctl WalletController) isValidAddress(c *echo.Context) error {
 		return api.SendSuccess(c, data.EthAddressValidation, result)
 	}
 	// send invalid address message
-	return api.ErrorStr(c, data.MissingAddress)
+	return api.ErrorBytes(c, data.MissingAddress)
 }
 
 // implemented method from interface RouterRegistrable

@@ -135,11 +135,11 @@ func toError(code int, msg string, data string, serializer io.Serializer) []byte
 	return rawBytes
 }
 
-func ErrorBytes(msg string, serializer io.Serializer) []byte {
-	return toErrorPool(msg, serializer)
+func ErrorStr(c *echo.Context, msg string) error {
+	return ErrorBytes(c, str.UnsafeBytes(msg))
 }
 
-func ErrorStr(c *echo.Context, msg []byte) error {
+func ErrorBytes(c *echo.Context, msg []byte) error {
 	logger.Debug("converting error string to payload")
 	msgstr := str.UnsafeString(msg)
 	logger.Error(msgstr)
@@ -157,7 +157,7 @@ func ErrorWithMessage(c *echo.Context, code int, msg []byte, err error) error {
 
 func Error(c *echo.Context, err error) error {
 	logger.Debug("converting error to payload")
-	return ErrorStr(c, str.UnsafeBytes(err.Error()))
+	return ErrorBytes(c, str.UnsafeBytes(err.Error()))
 }
 
 func ErrorCode(c *echo.Context, code int, err error) error {

@@ -270,15 +270,15 @@
   version = "v0.6.0"
 
 [[projects]]
-  digest = "1:403b810b43500b5b0a9a24a47347e31dc2783ccae8cf97c891b46f5b0496fa1a"
+  digest = "1:366f5aa02ff6c1e2eccce9ca03a22a6d983da89eecff8a89965401764534eb7c"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
   ]
   pruneopts = "UT"
-  revision = "833678b5bb319f2d20a475cb165c6cc59c2cc77c"
-  version = "v0.0.2"
+  revision = "3f98efb27840a48a7a2898ec80be07674d19f9c8"
+  version = "v0.0.3"
 
 [[projects]]
   digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
@@ -446,7 +446,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:213da46d2d9744e2baa0db9ff4b24806ef1f30fddc0d72c63da03b518b92bebe"
+  digest = "1:7e3e63385ebe2dd5210be1534c516d8ae33c7ffac74126e5243d43ba7222e0d4"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -454,11 +454,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "c5567b49c5d04a5f83870795b8c0e2df43a8ce32"
+  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
 
 [[projects]]
   branch = "master"
-  digest = "1:3396517c0bef28598ad00e4176a0fb07808b986d026a3c05d48d24778e65c92e"
+  digest = "1:25571241a5b6ed2704cb22a2c56bebf8499bc342a146a48ca3a597842dd99292"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -476,7 +476,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "a101b041ded4588cfeb96c45f394050221b40f11"
+  revision = "0707a68ae860d085a25eb907ccaaa5dd7e6a0c6e"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"

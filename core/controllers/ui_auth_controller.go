@@ -6,6 +6,10 @@ package controllers
 import (
 	"time"
 
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/modules/checkmail"
+	"github.com/zerjioang/etherniti/core/modules/radix"
+
 	"github.com/zerjioang/etherniti/core/util/banner"
 
 	"github.com/zerjioang/etherniti/core/modules/fastime"
@@ -23,13 +27,26 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
 )
 
+const (
+	MinPasswordLen = 6
+)
+
 var (
 	// Create the JWT key used to create the signature
-	authTokenSecret = []byte(" cc03a2bc-4a01-43dd-bdfe-a65f4a6e1f2f ")
+	authTokenSecret = []byte("cc03a2bc-4a01-43dd-bdfe-a65f4a6e1f2f ")
+	// radix tree of common passwords used
+	rdx *radix.Tree
 )
 
 type UIAuthController struct {
 	common.DatabaseController
+}
+
+func init() {
+	logger.Debug("loading common password database into memory")
+	rdx = radix.New()
+	rdx.LoadFromRaw(config.BlacklistedPasswordFile, constants.NewLine)
+	logger.Debug("blacklisted database loaded")
 }
 
 // constructor like function
@@ -51,7 +68,7 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" {
 		logger.Info("logging user with email: ", req.Email)
@@ -61,7 +78,7 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 			pErr := db.Unserialize(item, &dto)
 			if pErr != nil {
 				logger.Error("failed to unserialize data: ", pErr.Error())
-				return api.ErrorStr(c, data.DatabaseError)
+				return api.ErrorBytes(c, data.DatabaseError)
 			} else {
 				// check if email and password matches
 				matches := req.Email == dto.Email && db.CompareHash(req.Password, dto.Password)
@@ -70,21 +87,21 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 					token, err := ctl.createToken(dto.Uuid)
 					if err != nil || token == "" {
 						logger.Error("failed to create authentication token: ", err)
-						return api.ErrorStr(c, data.InvalidLoginData)
+						return api.ErrorBytes(c, data.InvalidLoginData)
 					} else {
-						return api.Success(c, data.UserLogin, auth.NewLoginResponse(token).Json())
+						return api.SendSuccess(c, data.UserLogin, auth.NewLoginResponse(token))
 					}
 				} else {
-					return api.ErrorStr(c, data.InvalidLoginData)
+					return api.ErrorBytes(c, data.InvalidLoginData)
 				}
 			}
 		} else {
 			//db read error
 			// this code is trigger each time user fails a login attempt
-			return api.ErrorStr(c, data.FailedLoginVerification)
+			return api.ErrorBytes(c, data.FailedLoginVerification)
 		}
 	} else {
-		return api.ErrorStr(c, data.MissingLoginFields)
+		return api.ErrorBytes(c, data.MissingLoginFields)
 	}
 }
 
@@ -95,9 +112,27 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" && req.Username != "" {
+		// 1 check password length
+		if len(req.Password) < MinPasswordLen {
+			logger.Error("proxy minimum password policy forces to use more characters than provided password")
+			return api.ErrorStr(c, "proxy minimum password policy forces to use more characters than provided password")
+		}
+		// 2 check password against common database
+		_, found := rdx.Get(req.Password)
+		if found {
+			logger.Error("etherniti wont allow account registration with provided password")
+			return api.ErrorStr(c, "etherniti wont allow account registration with provided password")
+		}
+
+		// 3 check validate email
+		if !checkmail.FastEmailCheck(req.Email) {
+			logger.Error("invalid email provided in registration")
+			return api.ErrorStr(c, "invalid email provided in registration")
+		}
+
 		logger.Info("registering user with email: ", req.Email)
 		// hash user password
 		req.Password = db.Hash(req.Password)
@@ -106,12 +141,12 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 		saveErr := ctl.SetUniqueKey(str.UnsafeBytes(req.Email), db.Serialize(req))
 		if saveErr != nil {
 			logger.Error("failed to register new user due to: ", saveErr)
-			return api.ErrorStr(c, data.UserRegisterFailed)
+			return api.ErrorBytes(c, data.UserRegisterFailed)
 		} else {
-			return api.Success(c, data.RegistrationSuccess, nil)
+			return api.SendSuccess(c, data.RegistrationSuccess, nil)
 		}
 	}
-	return nil
+	return api.ErrorStr(c, "registration aborted due to missing fields")
 }
 
 // generate a token for given user.
@@ -122,10 +157,10 @@ func (ctl UIAuthController) token(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	logger.Error("failed to generate user token")
-	return api.ErrorStr(c, data.UserTokenFailed)
+	return api.ErrorBytes(c, data.UserTokenFailed)
 }
 
 // triggers user account recovery mecanisms
@@ -135,13 +170,13 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" {
 		logger.Info("recovering user with email: ", req.Email)
 		return api.Success(c, []byte("account recovery in progress"), nil)
 	}
-	return nil
+	return api.ErrorStr(c, "recovery aborted due to missing fields")
 }
 
 // validates recatpcha requests

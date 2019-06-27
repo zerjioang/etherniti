@@ -7,11 +7,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
 )
 
 type TaskMode uint8
-type OnExpired func(ctx *echo.Context) []byte
+type OnExpired func(serializer io.Serializer) []byte
 
 const (
 	Once TaskMode = iota

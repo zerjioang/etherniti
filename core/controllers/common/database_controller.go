@@ -106,7 +106,7 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 			return api.Error(c, canWriteErr)
 		}
 	}
-	return api.ErrorStr(c, data.FailedToProcess)
+	return api.ErrorBytes(c, data.FailedToProcess)
 }
 
 func (ctl *DatabaseController) GetKey(key []byte) ([]byte, error) {
@@ -162,7 +162,7 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 		}
 		return api.Error(c, canUpdateErr)
 	} else {
-		return api.ErrorStr(c, data.ProvideId)
+		return api.ErrorBytes(c, data.ProvideId)
 	}
 }
 
@@ -186,7 +186,7 @@ func (ctl *DatabaseController) Read(c *echo.Context) error {
 		}
 		return api.Error(c, canReadErr)
 	} else {
-		return api.ErrorStr(c, data.ProvideId)
+		return api.ErrorBytes(c, data.ProvideId)
 	}
 }
 
@@ -211,7 +211,7 @@ func (ctl *DatabaseController) Delete(c *echo.Context) error {
 		}
 		return api.Error(c, canDeleteErr)
 	} else {
-		return api.ErrorStr(c, data.ProvideId)
+		return api.ErrorBytes(c, data.ProvideId)
 	}
 }
 
@@ -228,7 +228,7 @@ func (ctl *DatabaseController) List(c *echo.Context) error {
 			return api.SendSuccess(c, str.UnsafeBytes(ctl.name), results)
 		}
 	}
-	return api.ErrorStr(c, data.NotAllowedToList)
+	return api.ErrorBytes(c, data.NotAllowedToList)
 }
 
 func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
@@ -251,7 +251,7 @@ func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
 			return api.SendSuccess(c, str.UnsafeBytes(ctl.name), results)
 		}
 	}
-	return api.ErrorStr(c, data.NotAllowedToList)
+	return api.ErrorBytes(c, data.NotAllowedToList)
 }
 
 // todo delegate rather than recall

@@ -37,7 +37,7 @@ func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
-		return api.ErrorStr(c, data.BindErr)
+		return api.ErrorBytes(c, data.BindErr)
 	}
 
 	// read from value
@@ -75,13 +75,13 @@ func (ctl *DevOpsController) sendTransaction(c *echo.Context) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
-		return api.ErrorStr(c, data.InvalidDstAddress)
+		return api.ErrorBytes(c, data.InvalidDstAddress)
 	}
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
 	if amount == "" || pErr != nil || tokenAmount <= 0 {
-		return api.ErrorStr(c, data.InvalidEtherValue)
+		return api.ErrorBytes(c, data.InvalidEtherValue)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -106,11 +106,11 @@ func (ctl *DevOpsController) callContract(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	methodName := c.Param("method")
 	if methodName == "" {
-		return api.ErrorStr(c, data.InvalidMethodName)
+		return api.ErrorBytes(c, data.InvalidMethodName)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)

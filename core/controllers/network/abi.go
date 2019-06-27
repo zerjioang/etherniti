@@ -32,13 +32,13 @@ func (ctl *AbiController) getAbi(c *echo.Context) error {
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.ProvideContractName)
+		return api.ErrorBytes(c, data.ProvideContractName)
 	} else {
 		d, found := ctl.abiData.Get(contractAddress)
 		if found {
 			return c.JSON(code, d)
 		} else {
-			return api.ErrorStr(c, data.NoResults)
+			return api.ErrorBytes(c, data.NoResults)
 		}
 	}
 }
@@ -49,20 +49,20 @@ func (ctl *AbiController) setAbi(c *echo.Context) error {
 
 	contractAddress := c.Param("contract")
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.ProvideContractAddress)
+		return api.ErrorBytes(c, data.ProvideContractAddress)
 	} else {
 		// read body abi data, if exists
 		req := abi.ABI{}
 		if err := c.Bind(&req); err != nil {
 			// return a binding error
 			logger.Error("failed to bind request data to model: ", err)
-			return api.ErrorStr(c, data.BindErr)
+			return api.ErrorBytes(c, data.BindErr)
 		}
 		if req.Methods != nil && len(req.Methods) > 0 {
 			ctl.abiData.Set(contractAddress, req)
 			return api.Success(c, data.LinkSuccess, nil)
 		} else {
-			return api.ErrorStr(c, data.InvalidAbi)
+			return api.ErrorBytes(c, data.InvalidAbi)
 		}
 	}
 }

@@ -64,7 +64,7 @@ func defaultJwt(next echo.HandlerFunc, errorMsg []byte) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		_, parseErr := c.ConnectionProfileSetup()
 		if parseErr != nil {
-			return api.ErrorStr(c, errorMsg)
+			return api.ErrorBytes(c, errorMsg)
 		}
 		return next(c)
 	}

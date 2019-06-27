@@ -109,7 +109,7 @@ func BenchmarkWrapper(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = ErrorStr(ctx, msg)
+			_ = ErrorBytes(ctx, msg)
 		}
 	})
 	b.Run("error", func(b *testing.B) {

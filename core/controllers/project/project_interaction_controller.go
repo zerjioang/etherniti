@@ -36,7 +36,7 @@ func (ctl *ProjectInteractionController) contractCall(context *echo.Context) err
 	uid := context.UserUuid()
 	if uid == "" {
 		logger.Error("could not read user authorization from request content")
-		return api.ErrorStr(context, []byte("unknown user. operation denied"))
+		return api.ErrorBytes(context, []byte("unknown user. operation denied"))
 	}
 	// read user project params: name and version/tag only
 	name := context.Param("project")
@@ -86,7 +86,7 @@ func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) 
 	uid := context.UserUuid()
 	if uid == "" {
 		logger.Error("could not read user authorization from request content")
-		return api.ErrorStr(context, []byte("unknown user. operation denied"))
+		return api.ErrorBytes(context, []byte("unknown user. operation denied"))
 	}
 	// read user project params: name and version/tag only
 	name := context.Param("project")
@@ -94,7 +94,7 @@ func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) 
 	methodName := context.Param("operation")
 	if methodName == "" {
 		logger.Error("failed to execute transaction request. operation is required")
-		return api.ErrorStr(context, []byte("an operation name is required"))
+		return api.ErrorBytes(context, []byte("an operation name is required"))
 	}
 	// try to read requested project by name and user id
 	projectData, err := ctl.projects.ReadProject(uid, name)

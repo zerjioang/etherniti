@@ -37,7 +37,7 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	raw, err := f(contractAddress)
 	if err != nil {
@@ -46,11 +46,11 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 	} else {
 		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 		}
 		err := erc20.LoadErc20Abi().Unpack(&unpacked, methodName, rawBytes)
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, str.UnsafeBytes(methodName), unpacked)
 		}
@@ -100,12 +100,12 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	address := c.Param("address")
 	//input data validation
 	if address == "" {
-		return api.ErrorStr(c, data.InvalidAccountAddress)
+		return api.ErrorBytes(c, data.InvalidAccountAddress)
 	}
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -119,11 +119,11 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 			var unpacked *big.Int
 			rawBytes, decodeErr := hex.FromEthHex(string(raw))
 			if decodeErr != nil {
-				return api.ErrorStr(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
+				return api.ErrorBytes(c, str.UnsafeBytes("failed to hex decode network response: "+decodeErr.Error()))
 			}
 			err := erc20.LoadErc20Abi().Unpack(&unpacked, "decimals", rawBytes)
 			if err != nil {
-				return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+				return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 			} else {
 				return api.SendSuccess(c, data.BalanceOf, unpacked)
 			}
@@ -136,7 +136,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -150,7 +150,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 		return api.ErrorCode(c, protocol.StatusBadRequest, err)
 	} else {
 		if err != nil {
-			return api.ErrorStr(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
+			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
 		} else {
 			return api.SendSuccess(c, data.Summary, raw)
 		}
@@ -162,17 +162,17 @@ func (ctl *Erc20Controller) allowance(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	ownerAddress := c.Param("owner")
 	//input data validation
 	if ownerAddress == "" {
-		return api.ErrorStr(c, data.InvalidAccountOwner)
+		return api.ErrorBytes(c, data.InvalidAccountOwner)
 	}
 	spenderAddress := c.Param("spender")
 	//input data validation
 	if spenderAddress == "" {
-		return api.ErrorStr(c, data.InvalidAccountSpender)
+		return api.ErrorBytes(c, data.InvalidAccountSpender)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -199,18 +199,18 @@ func (ctl *Erc20Controller) transfer(c *echo.Context) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
-		return api.ErrorStr(c, data.InvalidContractAddress)
+		return api.ErrorBytes(c, data.InvalidContractAddress)
 	}
 	receiverAddress := c.Param("address")
 	//input data validation
 	if receiverAddress == "" {
-		return api.ErrorStr(c, data.InvalidReceiverAddress)
+		return api.ErrorBytes(c, data.InvalidReceiverAddress)
 	}
 	amount := c.Param("amount")
 	tokenAmount, pErr := strconv.Atoi(amount)
 	//input data validation
 	if amount == "" || pErr != nil {
-		return api.ErrorStr(c, data.InvalidTokenValue)
+		return api.ErrorBytes(c, data.InvalidTokenValue)
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)

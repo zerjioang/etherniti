@@ -3,8 +3,17 @@
 
 package constants
 
+import "github.com/zerjioang/etherniti/core/modules/encoding/ioproto/json"
+
 const (
+	//new line character
+	NewLine = "\n"
 	// set system pointer size
 	PointerSize    = 32 + int(^uintptr(0)>>63<<5)
 	ownNodeCommand = `geth --fast --cache=1048 --testnet --unlock "0xmyaddress" --rpc --rpcapi "eth,net,web3" --rpccorsdomain '*' --rpcaddr localhost --rpcport 8545`
+)
+
+var (
+	// fallback data serialization method
+	FallbackSerializer = json.Serialize
 )

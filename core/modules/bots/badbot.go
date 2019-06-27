@@ -7,10 +7,7 @@ import (
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/hashset"
-)
-
-const (
-	NEWLINE = "\n"
+	"github.com/zerjioang/etherniti/shared/constants"
 )
 
 var (
@@ -20,5 +17,5 @@ var (
 func init() {
 	logger.Info("[module] loading anti-bots policy data")
 	badBotsList = hashset.NewHashSetWORM()
-	badBotsList.LoadFromRaw(config.AntiBotsFile, NEWLINE)
+	badBotsList.LoadFromRaw(config.AntiBotsFile, constants.NewLine)
 }

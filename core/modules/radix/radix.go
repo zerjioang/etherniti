@@ -4,8 +4,13 @@
 package radix
 
 import (
+	"io/ioutil"
 	"sort"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/shared/constants"
 )
 
 // WalkFn is used when walking the tree. Takes a
@@ -540,4 +545,22 @@ func (t *Tree) ToMap() map[string]interface{} {
 		return false
 	})
 	return out
+}
+
+func (t *Tree) LoadFromRaw(path string, separator string) {
+	if path != "" {
+		logger.Debug("loading radix tree with raw data")
+		data, err := ioutil.ReadFile(path)
+		if err != nil {
+			logger.Error("could not read source data")
+			return
+		}
+		var itemList []string
+		itemList = strings.Split(str.UnsafeString(data), constants.NewLine)
+		if itemList != nil {
+			for _, v := range itemList {
+				t.Insert(v, nil)
+			}
+		}
+	}
 }

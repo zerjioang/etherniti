@@ -338,7 +338,7 @@
         ],
         "summary": "Proxy welcome message",
         "description": "proxy welcome message or index message",
-        "operationId": "index",
+        "operationId": "hello",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
         ],
@@ -373,7 +373,7 @@
         ],
         "summary": "proxy status information",
         "description": "proxy information and versioning",
-        "operationId": "index",
+        "operationId": "info",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
         ],
@@ -452,7 +452,7 @@
           "schema": {
             "example": {
               "email": "jhon.doe@domain.tld",
-              "pwd": "123456"
+              "pwd": "jhondoe"
             }
           }
         }],
@@ -504,7 +504,7 @@
             "example": {
               "name": "jhon doe",
               "email": "jhon.doe@domain.tld",
-              "pwd": "123456"
+              "pwd": "jhondoe"
             }
           }
         }],
@@ -712,8 +712,8 @@
         "tags": [
           "wallet"
         ],
-        "summary": "Generate a bip39 mnemonic",
-        "description": "Generate a bip39 mnemonic with given customization details such as language, length, etc",
+        "summary": "Generate a BIP39 mnemonic",
+        "description": "Generate a BIP39 mnemonic with given customization details such as language, length, etc",
         "operationId": "mnemonic-bip39",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
