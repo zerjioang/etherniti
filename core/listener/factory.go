@@ -6,6 +6,7 @@ package listener
 import (
 	"github.com/zerjioang/etherniti/core/listener/http"
 	"github.com/zerjioang/etherniti/core/listener/https"
+	"github.com/zerjioang/etherniti/core/listener/mtls"
 	"github.com/zerjioang/etherniti/core/listener/socket"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 )
@@ -16,6 +17,8 @@ func FactoryListener(typeof listener.ServiceType) listener.ListenerInterface {
 		return http.NewHttpListener()
 	case listener.HttpsMode:
 		return https.NewHttpsListener()
+	case listener.MTLSMode:
+		return mtls.NewMtlsListener()
 	case listener.UnixMode:
 		return socket.NewSocketListener()
 	default:

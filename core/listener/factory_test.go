@@ -19,6 +19,10 @@ func TestFactoryListener(t *testing.T) {
 		ln := FactoryListener(listener.HttpsMode)
 		assert.NotNil(t, ln)
 	})
+	t.Run("factory-mtls", func(t *testing.T) {
+		ln := FactoryListener(listener.MTLSMode)
+		assert.NotNil(t, ln)
+	})
 	t.Run("factory-unix", func(t *testing.T) {
 		ln := FactoryListener(listener.UnixMode)
 		assert.NotNil(t, ln)

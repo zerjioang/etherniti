@@ -33,11 +33,6 @@ type UnixSocketListener struct {
 	mode bool
 }
 
-func (l UnixSocketListener) RunMode(socketPath string, background bool) {
-	l.path = socketPath
-	l.mode = background
-}
-
 func (l UnixSocketListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, a High Performance Web3 REST Proxy via unix sockets")
 	l.e = common.NewDefaultServer()
@@ -48,6 +43,12 @@ func (l UnixSocketListener) Listen(notifier chan error) {
 	} else {
 		l.foreground(notifier)
 	}
+}
+
+// fetch specific server configuration
+// this method will return nil for unix listener
+func (l UnixSocketListener) ServerConfig() *http.Server {
+	return nil
 }
 
 // create new socket listener instance

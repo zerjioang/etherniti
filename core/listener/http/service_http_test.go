@@ -12,7 +12,12 @@ import (
 
 func TestHttpListener(t *testing.T) {
 	t.Run("instantiation", func(t *testing.T) {
-		http.NewHttpListener()
+		l := http.NewHttpListener()
+		assert.NotNil(t, l)
+	})
+	t.Run("instantiation-custom", func(t *testing.T) {
+		l := http.NewHttpListener()
+		assert.NotNil(t, l)
 	})
 	t.Run("run", func(t *testing.T) {
 		s := http.NewHttpListener()

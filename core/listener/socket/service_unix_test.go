@@ -17,7 +17,6 @@ func TestUnixSocketListener(t *testing.T) {
 	t.Run("run", func(t *testing.T) {
 		s := NewSocketListener()
 		assert.NotNil(t, s)
-		s.RunMode("/tmp/go.sock", true)
 		notifier := make(chan error, 1)
 		s.Listen(notifier)
 		err := <-notifier
@@ -27,7 +26,6 @@ func TestUnixSocketListener(t *testing.T) {
 		s := NewSocketListener()
 		assert.NotNil(t, s)
 		// run the socket server
-		s.RunMode("/tmp/go.sock", true)
 		notifier := make(chan error, 1)
 		s.Listen(notifier)
 		err := <-notifier

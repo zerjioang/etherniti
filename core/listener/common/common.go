@@ -6,13 +6,27 @@ package common
 import (
 	"net/http"
 	"net/http/httptest"
+	"time"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
 var (
+	//default etherniti proxy configuration
 	cfg = config.GetDefaultOpts()
+	//listening ip:port
+	ListenAddr = cfg.GetListeningAddressWithPort()
+	// listening interface
+	ListenInterface = cfg.GetHttpInterface()
+	// define http server config for listener service
+	DefaultHttpServerConfig = http.Server{
+		Addr:         ListenAddr,
+		ReadTimeout:  3 * time.Second,
+		WriteTimeout: 3 * time.Second,
+	}
+	// listener shutdown timeout
+	ShutdownTimeout = 10 * time.Second
 )
 
 // create a mock  server for testing

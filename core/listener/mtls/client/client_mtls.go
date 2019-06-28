@@ -1,12 +1,13 @@
-package mtlsclient
+package client
 
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"github.com/zerjioang/etherniti/core/logger"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 /*
@@ -36,7 +37,8 @@ func init() {
 	// Load our CA certificate cert.pem
 	caCert, err := ioutil.ReadFile("cert.pem")
 	if err != nil {
-		logger.Error(err); return
+		logger.Error(err)
+		return
 	}
 	// Here, we read the cert.pem file and supply it as the root CA when creating the Client.
 	// Running the Client should now successfully display the following.
@@ -48,7 +50,7 @@ func init() {
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				Certificates: []tls.Certificate{cert},
-				RootCAs: caCertPool,
+				RootCAs:      caCertPool,
 			},
 		},
 	}

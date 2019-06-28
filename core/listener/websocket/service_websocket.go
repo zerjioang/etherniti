@@ -34,9 +34,6 @@ var (
 	}
 )
 
-func (l WebsocketListener) RunMode(address string, background bool) {
-}
-
 func (l WebsocketListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, a High Performance Web3 REST Proxy")
 	//deploy http server only

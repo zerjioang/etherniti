@@ -14,22 +14,4 @@ func BenchmarkUnixSocketListener(b *testing.B) {
 			NewSocketListener()
 		}
 	})
-	b.Run("runmode-foreground", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(1)
-		l := NewSocketListener()
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			l.RunMode("", false)
-		}
-	})
-	b.Run("runmode-background", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(1)
-		l := NewSocketListener()
-		b.ResetTimer()
-		for n := 0; n < b.N; n++ {
-			l.RunMode("", true)
-		}
-	})
 }

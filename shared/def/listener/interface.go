@@ -3,9 +3,11 @@
 
 package listener
 
+import "net/http"
+
 type ListenerInterface interface {
 	Listen(notifier chan error)
-	RunMode(string, bool)
+	ServerConfig() *http.Server
 }
 
 type ServiceType uint8
@@ -13,6 +15,7 @@ type ServiceType uint8
 const (
 	HttpMode ServiceType = iota
 	HttpsMode
+	MTLSMode
 	UnixMode
 	UnknownMode
 )

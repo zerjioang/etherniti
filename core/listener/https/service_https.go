@@ -4,12 +4,8 @@
 package https
 
 import (
-	"context"
 	"crypto/tls"
 	"net/http"
-	"os"
-	"os/signal"
-	"time"
 
 	http2 "github.com/zerjioang/etherniti/core/listener/http"
 
@@ -32,12 +28,6 @@ var (
 	//variables used when HTTPS is requested
 	localhostCert tls.Certificate
 	certEtr       error
-	// define http server config for http to https redirection
-	defaultHttpServerConfig = http.Server{
-		Addr:         cfg.GetListeningAddressWithPort(),
-		ReadTimeout:  3 * time.Second,
-		WriteTimeout: 3 * time.Second,
-	}
 )
 
 type HttpsListener struct {
@@ -46,7 +36,7 @@ type HttpsListener struct {
 
 func recoverFromPem() {
 	if r := recover(); r != nil {
-		logger.Info("recovered from pem", r)
+		logger.Error("recovered from pem", r)
 	}
 }
 
@@ -69,8 +59,14 @@ func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
 	return localhostCert, certEtr
 }
 
+//fetch specific server configuration
+func (l HttpsListener) ServerConfig() *http.Server {
+	return &common.DefaultHttpServerConfig
+}
+
 func (l HttpsListener) Listen(notifier chan error) {
 	logger.Info("loading Etherniti Proxy, a High Performance Web3 Multitenant REST Proxy")
+	logger.Info("loading https listener")
 	//build http server
 	httpServerInstance := common.NewServer(nil)
 	// add redirects from http to https
@@ -80,7 +76,7 @@ func (l HttpsListener) Listen(notifier chan error) {
 	// Start http server
 	go func() {
 		logger.Info("starting http server...")
-		err := httpServerInstance.StartServer(&defaultHttpServerConfig)
+		err := httpServerInstance.StartServer(&common.DefaultHttpServerConfig)
 		if err != nil {
 			logger.Error("shutting down http the server", err)
 			notifier <- err
@@ -104,37 +100,10 @@ func (l HttpsListener) Listen(notifier chan error) {
 			}
 		}
 	}()
-	//graceful shutdown of http and https server
-	l.shutdown(httpServerInstance, secureServer, notifier)
-}
-
-func (l HttpsListener) shutdown(httpInstance *echo.Echo, httpsInstance *echo.Echo, notifier chan error) {
-	// The make built-in returns a value of type T (not *T), and it's memory is
-	// initialized.
-	quit := make(chan os.Signal)
-
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	logger.Info("graceful shutdown of the service requested")
-	if httpInstance != nil {
-		logger.Info("shutting down http server...")
-		if err := httpInstance.Shutdown(ctx); err != nil {
-			logger.Error(err)
-			notifier <- err
-		}
-	}
-	if httpsInstance != nil {
-		logger.Info("shutting down https secure server...")
-		if err := httpsInstance.Shutdown(ctx); err != nil {
-			logger.Error(err)
-			notifier <- err
-		}
-	}
-	logger.Info("graceful shutdown executed for https listener")
-	logger.Info("exiting...")
-	notifier <- nil
-	cancel()
+	//graceful shutdown of http
+	l.ShutdownListener("http", httpServerInstance, notifier)
+	//graceful shutdown of https
+	l.ShutdownListener("https", secureServer, notifier)
 }
 
 func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
@@ -152,12 +121,16 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 	}
 
 	//configure custom secure server
-	return &http.Server{
-		Addr:         cfg.GetListeningAddressWithPort(),
-		ReadTimeout:  3 * time.Second,
-		WriteTimeout: 3 * time.Second,
-		TLSConfig:    &tlsConf,
-	}, nil
+	// which is default http config + tls data
+	secureServerConfig := common.DefaultHttpServerConfig
+	secureServerConfig.TLSConfig = &tlsConf
+	return &secureServerConfig, nil
+}
+
+// create new deployer instance
+func NewHttpsListenerCustom() HttpsListener {
+	d := HttpsListener{}
+	return d
 }
 
 // create new deployer instance

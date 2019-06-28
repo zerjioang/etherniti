@@ -18,4 +18,12 @@ func BenchmarkHttpListener(b *testing.B) {
 			https.NewHttpsListener()
 		}
 	})
+	b.Run("instantiation-custom", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = https.NewHttpsListenerCustom()
+		}
+	})
 }
