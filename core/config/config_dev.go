@@ -114,12 +114,12 @@ func Setup(opts *EthernitiOptions) error {
 //
 // and also 2 more: the CPU profile and the CPU trace.
 //
-// http://localhost:6060/debug/pprof/profile?seconds=5
-// http://localhost:6060/debug/pprof/trace?seconds=5
+// http://localhost:6060/debug/pprof/profile?seconds=15
+// http://localhost:6060/debug/pprof/trace?seconds=15
 //
 // run in the web
 //
-// go tool pprof -http=localhost:6060 profile.out
+// go tool pprof -http=localhost:6061 profile.out
 func runProfiler() {
 	go func() {
 		logger.Info("starting go profiler on 127.0.0.1:6060...")

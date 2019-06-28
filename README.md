@@ -32,6 +32,7 @@ You can copy and paste them to workspace.xml file or add them manually one by on
 <env name="X_ETHERNITI_TOKEN_SECRET" value="your-favourite-jwt-token-secret" />
 <env name="X_ETHERNITI_ENABLE_HTTPS_REDIRECT" value="false" />
 <env name="X_ETHERNITI_ENABLE_LOGGING" value="true" />
+<env name="X_ETHERNITI_ENABLE_PROFILER" value="true" />
 <env name="X_ETHERNITI_USE_UNIQUE_REQUEST_ID" value="false" />
 <env name="X_ETHERNITI_ENABLE_SECURITY" value="true" />
 <env name="X_ETHERNITI_ENABLE_ANALYTICS" value="true" />

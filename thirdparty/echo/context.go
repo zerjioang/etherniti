@@ -422,8 +422,7 @@ func (c *Context) FastBlob(code int, contentType string, b []byte) (err error) {
 			The max-age value sets a timespan for how
 			long to cache the resource (in seconds).
 		*/
-		r := c.Response()
-		h := r.Header()
+		h := c.response.Header()
 		if c.OnSuccessCachePolicy > 0 {
 			timeStr := strconv.Itoa(c.OnSuccessCachePolicy)
 			h.Set("Cache-Control", "public, max-age="+timeStr) // 24h cache = 86400
