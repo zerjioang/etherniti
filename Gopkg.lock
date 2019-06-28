@@ -458,7 +458,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:25571241a5b6ed2704cb22a2c56bebf8499bc342a146a48ca3a597842dd99292"
+  digest = "1:8cdf79d24f1dfb8175180df1ba89110fee2a018521befca9e38846e96a5e7c15"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -476,7 +476,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "0707a68ae860d085a25eb907ccaaa5dd7e6a0c6e"
+  revision = "212fb13d595e5faf79425c78ae101012873a81a1"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
