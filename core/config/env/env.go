@@ -55,6 +55,14 @@ func (c EnvConfig) String(key string) string {
 	return ""
 }
 
+func (c EnvConfig) Bool(key string, fallback bool) bool {
+	v := c.Lower(key)
+	if v != "" {
+		return v == "true"
+	}
+	return fallback
+}
+
 func (c EnvConfig) Lower(key string) string {
 	return strings.ToLower(c.String(key))
 }

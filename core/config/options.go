@@ -29,6 +29,11 @@ type EthernitiOptions struct {
 	RinkebyCustomEndpoint string
 	KovanCustomEndpoint   string
 	MainnetCustomEndpoint string
+	//users management configuration
+	useFirebaseManagement   bool
+	checkUsersEmailValidity bool
+	MinPasswordLen          int
+	webAuthNEnabled         bool
 }
 
 var (
@@ -50,6 +55,11 @@ func (eo *EthernitiOptions) Init() {
 	// read current os environment variables
 	eo.envData.Load()
 
+	// preload env config from readed data
+	eo.preload()
+}
+func (eo *EthernitiOptions) preload() {
+	logger.Debug("preloading proxy configuration")
 	// load CORS data
 	eo.AllowedCorsOriginList = hashset.NewHashSetWORM()
 	eo.AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
@@ -58,11 +68,6 @@ func (eo *EthernitiOptions) Init() {
 	eo.AllowedHostnames = hashset.NewHashSetWORM()
 	eo.AllowedHostnames.LoadFromRaw(HostsFile, "\n")
 
-	// preload env config from readed data
-	eo.preload()
-}
-func (eo *EthernitiOptions) preload() {
-	logger.Debug("preloading proxy configuration")
 	eo.BlockTorConnections = eo.resolveBlockTorConnections()
 	eo.MaxWorker = eo.envData.Int(XEthernitiMaxWorkers, 4)
 	eo.MaxQueue = eo.envData.Int(XEthernitiMaxQueue, 200)
@@ -71,6 +76,12 @@ func (eo *EthernitiOptions) preload() {
 	eo.RinkebyCustomEndpoint = eo.envData.String(XEthernitiRinkebyEndpoint)
 	eo.KovanCustomEndpoint = eo.envData.String(XEthernitiKovanEndpoint)
 	eo.MainnetCustomEndpoint = eo.envData.String(XEthernitiMainnetEndpoint)
+
+	//load users management configuration data
+	eo.useFirebaseManagement = eo.envData.Bool(XEthernitiUsersFirebase, false)     //disabled by default
+	eo.checkUsersEmailValidity = eo.envData.Bool(XEthernitiUsersCheckEmail, false) //disabled by default
+	eo.MinPasswordLen = eo.envData.Int(XEthernitiMinPasswordLength, 6)             //6 chars by default
+	eo.webAuthNEnabled = eo.envData.Bool(XEthernitiEnableWebAuthN, false)          //disabled by default
 }
 
 func (eo *EthernitiOptions) resolveBlockTorConnections() bool {

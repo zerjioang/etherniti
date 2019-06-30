@@ -51,4 +51,10 @@ const (
 	XEthernitiRinkebyEndpoint = "X_ETHERNITI_RINKEBY_ENDPOINT"
 	XEthernitiKovanEndpoint   = "X_ETHERNITI_KOVAN_ENDPOINT"
 	XEthernitiMainnetEndpoint = "X_ETHERNITI_MAINNET_ENDPOINT"
+
+	//user management configuration
+	XEthernitiUsersFirebase     = "X_ETHERNITI_USERS_FIREBASE"
+	XEthernitiUsersCheckEmail   = "X_ETHERNITI_CHECK_USER_EMAIL"
+	XEthernitiMinPasswordLength = "X_ETHERNITI_USERS_MIN_PWD_LEN"
+	XEthernitiEnableWebAuthN    = "X_ETHERNITI_ENABLE_WEBAUTHN"
 )
