@@ -55,7 +55,7 @@ var (
 		"name", "symbol", "decimals", "totalsupply",
 	}
 	defaultRpcHeader = http.Header{
-		"Content-Type": []string{httpclient.ApplicationJson},
+		"Content-Type": []string{httpclient.ApplicationJSON},
 	}
 )
 

@@ -101,7 +101,7 @@ func (set *HashSetAtomic) Remove(item string) {
 	set.mu.Unlock()
 }
 
-func (set *HashSetAtomic) LoadFromJsonArray(path string) {
+func (set *HashSetAtomic) LoadFromJSONArray(path string) {
 	if path != "" {
 		logger.Debug("loading hashset with json data")
 		data, err := ioutil.ReadFile(path)

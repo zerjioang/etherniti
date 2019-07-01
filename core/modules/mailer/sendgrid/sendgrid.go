@@ -105,7 +105,7 @@ func init() {
 	apiKey = cfg.SendGridApiKey()
 	//generate header used in all sendgrid request
 	defaultRequestHeader = http.Header{
-		"Content-Type":  []string{httpclient.ApplicationJson},
+		"Content-Type":  []string{httpclient.ApplicationJSON},
 		"Authorization": []string{"Bearer " + apiKey},
 	}
 	logger.Debug("creating sendgrid api client")

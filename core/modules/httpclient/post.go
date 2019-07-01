@@ -19,7 +19,7 @@ const (
 )
 
 var (
-	ApplicationJson = "application/json"
+	ApplicationJSON = "application/json"
 	fallbackClient  = &http.Client{
 		Timeout: time.Second * 3,
 		Transport: &http.Transport{

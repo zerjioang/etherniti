@@ -21,8 +21,14 @@ import (
 var (
 	//build-time variables
 	// default values when no data is found
+	
+	// Version is the built-variable that indicates compiled version data
 	Version = "latest"
+
+	// Commit is the built-variable that indicates compiled code commit
 	Commit  = "latest"
+
+	// Edition is the built-variable that indicates etherniti edition data
 	Edition = "oss"
 
 	// build commit hash value

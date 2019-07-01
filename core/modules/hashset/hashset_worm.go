@@ -65,7 +65,7 @@ func (s *HashSetWORM) Size() int {
 	return l
 }
 
-func (s *HashSetWORM) LoadFromJsonArray(path string) {
+func (s *HashSetWORM) LoadFromJSONArray(path string) {
 	if path != "" {
 		logger.Debug("loading hashset with json data")
 		data, err := ioutil.ReadFile(path)

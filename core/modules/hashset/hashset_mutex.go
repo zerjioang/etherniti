@@ -80,7 +80,7 @@ func (s *HashSetMutex) Size() int {
 	return l
 }
 
-func (s *HashSetMutex) LoadFromJsonArray(path string) {
+func (s *HashSetMutex) LoadFromJSONArray(path string) {
 	if path != "" {
 		logger.Debug("loading hashset with json data")
 		data, err := ioutil.ReadFile(path)
