@@ -270,7 +270,7 @@ func (rpc *EthRPC) Web3Sha3(data []byte) (string, error) {
 	var hash string
 	//prepare the params of the sha3 function
 	params := func() string {
-		return rpc.doubleQuote(fixtures.Encode(data))
+		return "[" + rpc.doubleQuote(fixtures.Encode(data)) + "]"
 	}
 	err := rpc.post("web3_sha3", &hash, params)
 	return hash, err
@@ -1423,14 +1423,14 @@ func (rpc *EthRPC) Erc20Transfer(contract string, address string, amount int) (j
 	return rpc.makePostWithMethodParams("eth_sendTransaction", params.String())
 }
 
-// Chain id returns taret network chain id
-func (rpc *EthRPC) ChainId() (*big.Int, error) {
-	var result big.Int
+// Chain id returns target network chain id
+func (rpc *EthRPC) ChainId() (string, error) {
+	var result string
 	err := rpc.post("eth_chainId", &result, nil)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return &result, nil
+	return result, nil
 }
 
 // curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}

@@ -74,21 +74,22 @@ func IsValidAddressLow(addr string) bool {
 //    String "latest" - for the latest mined block
 //    String "pending" - for the pending state/transactions
 func IsValidBlockNumber(blkStr string) bool {
-	if blkStr == "earliest" {
+	if blkStr == "" {
+		return false
+	} else if blkStr == "earliest" {
 		return true
-	}
-	if blkStr == "latest" {
+	} else if blkStr == "latest" {
 		return true
-	}
-	if blkStr == "pending" {
+	} else if blkStr == "pending" {
 		return true
+	} else {
+		//validate input is valid hex string
+		hasHexPrefix := len(blkStr) >= 2 && blkStr[0] == '0' && (blkStr[1] == 'x' || blkStr[1] == 'X')
+		if hasHexPrefix {
+			return common.IsHex(blkStr[2:])
+		}
+		return false
 	}
-	//validate input is valid hex string
-	hasHexPrefix := len(blkStr) >= 2 && blkStr[0] == '0' && (blkStr[1] == 'x' || blkStr[1] == 'X')
-	if hasHexPrefix {
-		return common.IsHex(blkStr[2:])
-	}
-	return false
 }
 
 // IsZeroAddress validate if it's a 0 address

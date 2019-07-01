@@ -3,7 +3,9 @@
 
 package eth
 
-import "testing"
+import (
+	"testing"
+)
 
 func BenchmarkAddress(b *testing.B) {
 	b.Run("convert-address", func(b *testing.B) {
@@ -65,5 +67,48 @@ func BenchmarkAddress(b *testing.B) {
 				_ = IsValidAddressLow(address0)
 			}
 		})
+	})
+}
+
+func BenchmarkIsValidBlock(b *testing.B) {
+	b.Run("empty-string", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsValidBlockNumber("")
+		}
+	})
+	b.Run("latest", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsValidBlockNumber("latest")
+		}
+	})
+	b.Run("earliest", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsValidBlockNumber("latest")
+		}
+	})
+	b.Run("pending", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsValidBlockNumber("latest")
+		}
+	})
+	b.Run("hex-string", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsValidBlockNumber("0xff")
+		}
 	})
 }

@@ -45,6 +45,29 @@ func TestIsValidAddress(t *testing.T) {
 	assert.True(t, result)
 }
 
+func TestIsValidBlock(t *testing.T) {
+	t.Run("empty-string", func(t *testing.T) {
+		result := IsValidBlockNumber("")
+		assert.False(t, result)
+	})
+	t.Run("latest", func(t *testing.T) {
+		result := IsValidBlockNumber("latest")
+		assert.True(t, result)
+	})
+	t.Run("earliest", func(t *testing.T) {
+		result := IsValidBlockNumber("latest")
+		assert.True(t, result)
+	})
+	t.Run("pending", func(t *testing.T) {
+		result := IsValidBlockNumber("latest")
+		assert.True(t, result)
+	})
+	t.Run("hex-string", func(t *testing.T) {
+		result := IsValidBlockNumber("0xff")
+		assert.True(t, result)
+	})
+}
+
 func TestGetAccountBalance(t *testing.T) {
 	// define the client
 	cli := ethrpc.NewDefaultRPC(ganacheTestEndpoint, false, testClient)

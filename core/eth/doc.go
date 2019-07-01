@@ -11,6 +11,12 @@ BenchmarkAddress/convert-address-4         	 10000000	          188 ns/op	   5.3
 BenchmarkAddress/is-zero-address-4         	300000000	         4.52 ns/op	 221.21 MB/s	       0 B/op	       0 allocs/op
 BenchmarkAddress/is-valid-address-4        	  1000000	         1164 ns/op	   0.86 MB/s	       0 B/op	       0 allocs/op
 
+BenchmarkIsValidBlock/empty-string-4         	300000000	         4.30 ns/op	 232.46 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIsValidBlock/latest-4               	300000000	         3.90 ns/op	 256.52 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIsValidBlock/earliest-4             	300000000	         4.25 ns/op	 235.46 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIsValidBlock/pending-4              	500000000	         3.98 ns/op	 251.47 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIsValidBlock/hex-string-4           	100000000	        12.4 ns/op	  80.42 MB/s	       0 B/op	       0 allocs/op
+
 optimization 1: we add a length check in each method
 
 BenchmarkAddress/convert-address-4     						    	  10000000	          187 ns/op	   5.34 MB/s	      48 B/op	       1 allocs/op
