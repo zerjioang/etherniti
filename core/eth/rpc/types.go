@@ -31,6 +31,12 @@ func (s *Syncing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Note the address to sign with must be unlocked.
+type NodeSignRequest struct {
+	Address string `json:"address"`
+	Data    string `json:"data"`
+}
+
 // TransactionData - input transaction object
 type TransactionData struct {
 	From   string `json:"from"`

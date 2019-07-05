@@ -501,11 +501,11 @@ func (s *EthRPCTestSuite) TestSendTransaction() {
 	t := TransactionData{
 		From:     "0x3cc1a3c082944b9dba70e490e481dd56",
 		To:       "0x1bf21cb1dc384d019a885a06973f7308",
-		Gas:      24900,
-		GasPrice: big.NewInt(5000000000),
-		Value:    big.NewInt(1000000000000000000), // 1 ETH
+		gas:      24900,
+		gasPrice: big.NewInt(5000000000),
+		value:    big.NewInt(1000000000000000000), // 1 ETH
 		Data:     "some data",
-		Nonce:    98384,
+		nonce:    98384,
 	}
 
 	result := "0xea1115eb5"

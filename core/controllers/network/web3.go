@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
+
 	"github.com/pkg/errors"
 
 	"github.com/zerjioang/etherniti/shared/constants"
@@ -795,7 +797,32 @@ func (ctl *Web3Controller) getCode(c *echo.Context) error {
 }
 
 func (ctl *Web3Controller) sign(c *echo.Context) error {
-	return ctl.network.Noop(c)
+	// read input parameters
+	var signReq *ethrpc.NodeSignRequest
+	if err := c.Bind(&signReq); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorBytes(c, data.BindErr)
+	}
+	//validate input params
+	if !eth.IsValidAddressLow(signReq.Address) {
+		return api.Error(c, data.ErrInvalidAddress)
+	}
+	if !common.IsOxPrefixedHex(signReq.Data) {
+		return api.Error(c, data.ErrInvalidPayload)
+	}
+
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// Returns code at a given address.
+	result, err := client.EthNodeSignRequest(signReq)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.EthSign, result)
 }
 
 func (ctl *Web3Controller) call(c *echo.Context) error {
@@ -1031,7 +1058,7 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	// as an Ethereum specific signature. This prevents misuse where a malicious DApp
 	// can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim.
 	// Note the address to sign with must be unlocked.
-	router.GET("/sign", ctl.sign)
+	router.POST("/sign", ctl.sign)
 
 	// eth_sendTransaction
 	router.POST("/send/tx", ctl.sendTransaction)

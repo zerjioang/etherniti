@@ -5,6 +5,7 @@ package protocol
 
 import (
 	"encoding/json"
+
 	"github.com/zerjioang/etherniti/core/util/str"
 )
 
@@ -131,7 +132,7 @@ type AbiLinkRequest json.RawMessage
 		"metadata": false
 	}
 }
- */
+*/
 type ContractCompilationOpts struct {
 	// Select desired EVM version. Either homestead,
 	//  tangerineWhistle, spuriousDragon, byzantium (default) or

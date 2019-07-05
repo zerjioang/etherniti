@@ -978,6 +978,79 @@
         }
       }
     },
+    "/web3/{network}/sign": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "The sign method calculates an Ethereum specific signature",
+        "description": "The sign method calculates an Ethereum specific signature with: sign(keccak256(Ethereum Signed Message: + len(message) + message))). By adding a prefix to the message makes the calculated signature recognisable as an Ethereum specific signature. This prevents misuse where a malicious DApp can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim. Note the address to sign with must be unlocked.",
+        "operationId": "web3-sign",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "contract",
+            "description": "data for signing process",
+            "example": {
+              "address": "0x9b2055d370f73ec7d8a03e965129118dc8f5bf83",
+              "data": "0xdeadbeaf"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signing response",
+            "schema": {
+              "example": {
+                "msg": "eth_sign",
+                "data": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d78601"
+              }
+            }
+          },
+          "400": {
+            "description": "invalid account address provided. check that account exists on target node and is currently unlocked",
+            "schema": {
+              "example": {
+                "desc": "cannot sign data; no private key. Error code: -32000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
     "/security/{source}": {
       "get": {
         "tags": [
@@ -1062,6 +1135,7 @@
         }
       }
     },
+
     "/solc/version": {
       "get": {
         "tags": [
@@ -2252,7 +2326,7 @@
               }
             }
           },
-          "400":{
+          "400": {
             "description": "method not supported due to bad configuration or deprecation",
             "example": {
               "desc": "The method eth_getCompilers does not exist/is not available. Error code: -32601"
@@ -3767,26 +3841,25 @@
         "security": [{
           "connectionProfileToken": []
         }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "network",
-            "description": "target web3 protocol compatible network",
-            "type": "string",
-            "enum": [
-              "ropsten",
-              "rinkeby",
-              "kovan",
-              "mainnet",
-              "infura",
-              "quiknode",
-              "private",
-              "ganache"
-            ],
-            "example": "ganache",
-            "default": "ganache",
-            "required": true
-          },
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
           {
             "in": "path",
             "name": "address",

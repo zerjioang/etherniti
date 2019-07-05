@@ -19,6 +19,7 @@ const (
 	ProvideValidDataStr      = "you have to provide valid data"
 	OperationNotSupportedStr = "operation not supported"
 	InvalidAddressStr        = "invalid address provided"
+	InvalidPayloadStr        = "invalid payload provided"
 )
 
 var (
@@ -47,6 +48,7 @@ var (
 	EstimateGas                 = []byte("estimate_gas")
 	GetStorage                  = []byte("get_storage")
 	GetCode                     = []byte("get_code")
+	EthSign                     = []byte("eth_sign")
 	Sha3                        = []byte("sha3")
 	ChainId                     = []byte("chain_id")
 	ShhVersion                  = []byte("shh_version")
@@ -129,6 +131,7 @@ var (
 
 var (
 	ErrInvalidAddress        = errors.New(InvalidAddressStr)
+	ErrInvalidPayload        = errors.New(InvalidPayloadStr)
 	ErrInvalidBlockHash      = errors.New("Invalid block hash provided")
 	ErrUnknownMode           = errors.New(ErrUnknownModeStr)
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)
