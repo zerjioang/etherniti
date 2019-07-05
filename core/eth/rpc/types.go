@@ -33,13 +33,21 @@ func (s *Syncing) UnmarshalJSON(data []byte) error {
 
 // TransactionData - input transaction object
 type TransactionData struct {
-	From     string   `json:"from"`
-	To       string   `json:"to"`
-	Gas      int      `json:"gas"`
-	GasPrice *big.Int `json:"price"`
-	Value    *big.Int `json:"value"`
-	Data     string   `json:"data"`
-	Nonce    int      `json:"nonce"`
+	From   string `json:"from"`
+	To     string `json:"to"`
+	gas    int
+	GasStr string `json:"gas"`
+
+	//calculate fields
+	gasPrice *big.Int
+	value    *big.Int
+
+	GasPriceStr string `json:"price"`
+	ValueStr    string `json:"value"`
+
+	Data     string `json:"data"`
+	nonce    int
+	NonceStr string `json:"nonce"`
 }
 
 // MarshalJSON implements the json.Unmarshaler interface.
@@ -50,23 +58,29 @@ func (t TransactionData) MarshalJSON() ([]byte, error) {
 	if t.To != "" {
 		params["to"] = t.To
 	}
-	if t.Gas > 0 {
-		params["gas"] = IntToHex(t.Gas)
+	if t.gas > 0 {
+		params["gas"] = IntToHex(t.gas)
 	}
-	if t.GasPrice != nil {
-		params["gasPrice"] = BigToHex(*t.GasPrice)
+	if t.gasPrice != nil {
+		params["gasPrice"] = BigToHex(*t.gasPrice)
 	}
-	if t.Value != nil {
-		params["value"] = BigToHex(*t.Value)
+	if t.value != nil {
+		params["value"] = BigToHex(*t.value)
 	}
 	if t.Data != "" {
 		params["data"] = t.Data
 	}
-	if t.Nonce > 0 {
-		params["nonce"] = IntToHex(t.Nonce)
+	if t.nonce > 0 {
+		params["nonce"] = IntToHex(t.nonce)
 	}
 
 	return json.Marshal(params)
+}
+func (t *TransactionData) SetValue(wei *big.Int) {
+	t.value = wei
+}
+func (t TransactionData) Value() *big.Int {
+	return t.value
 }
 
 // Transaction - transaction object

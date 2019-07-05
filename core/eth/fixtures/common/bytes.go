@@ -77,15 +77,17 @@ func isHexCharacter(c byte) bool {
 
 // IsHex validates whether each byte is valid hexadecimal string.
 func IsHex(str string) bool {
-	if len(str)%2 != 0 {
-		return false
-	}
 	for _, c := range []byte(str) {
 		if !isHexCharacter(c) {
 			return false
 		}
 	}
 	return true
+}
+
+// IsHex validates whether each byte is valid hexadecimal string.
+func IsOxPrefixedHex(str string) bool {
+	return str[0] == '0' && (str[1] == 'x' || str[1] == 'X') && IsHex(str[2:])
 }
 
 // Bytes2Hex returns the hexadecimal encoding of d.

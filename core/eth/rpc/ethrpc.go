@@ -97,7 +97,7 @@ func NewDefaultRPCPtr(url string, debug bool, client *http.Client) *EthRPC {
 func NewDefaultRPC(url string, debug bool, client *http.Client) EthRPC {
 	rpc := EthRPC{
 		url:    url,
-		cache:  cache.Instance(),
+		cache:  cache.NewMemoryCache(),
 		client: client,
 		Debug:  debug,
 	}
@@ -373,7 +373,7 @@ func (rpc *EthRPC) EthMining() (bool, error) {
 }
 
 // EthHashRate returns the number of hashes per second that the node is mining with.
-func (rpc *EthRPC) EthHashRate() (int, error) {
+func (rpc *EthRPC) EthHashRate() (int64, error) {
 	var response string
 	err := rpc.post("eth_hashrate", &response, nil)
 	if err != nil {
@@ -405,7 +405,7 @@ func (rpc *EthRPC) EthAccounts() ([]string, error) {
 }
 
 // EthBlockNumber returns the number of most recent block.
-func (rpc *EthRPC) EthBlockNumber() (int, error) {
+func (rpc *EthRPC) EthBlockNumber() (int64, error) {
 	var response string
 	if err := rpc.post("eth_blockNumber", &response, nil); err != nil {
 		return 0, err
@@ -439,7 +439,7 @@ func (rpc *EthRPC) EthGetStorageAt(data string, key string, block string) (strin
 }
 
 // EthGetTransactionCount returns the number of transactions sent from an address.
-func (rpc *EthRPC) EthGetTransactionCount(address string, block string) (int, error) {
+func (rpc *EthRPC) EthGetTransactionCount(address string, block string) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
@@ -452,7 +452,7 @@ func (rpc *EthRPC) EthGetTransactionCount(address string, block string) (int, er
 }
 
 // EthGetBlockTransactionCountByHash returns the number of transactions in a block from a block matching the given block hash.
-func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
+func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
@@ -465,7 +465,7 @@ func (rpc *EthRPC) EthGetBlockTransactionCountByHash(hash string) (int, error) {
 }
 
 // EthGetBlockTransactionCountByNumber returns the number of transactions in a block from a block matching the given block
-func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(blockNumber string) (int, error) {
+func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(blockNumber string) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
@@ -478,7 +478,7 @@ func (rpc *EthRPC) EthGetBlockTransactionCountByNumber(blockNumber string) (int,
 }
 
 // EthGetUncleCountByBlockHash returns the number of uncles in a block from a block matching the given block hash.
-func (rpc *EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
+func (rpc *EthRPC) EthGetUncleCountByBlockHash(hash string) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
@@ -491,7 +491,7 @@ func (rpc *EthRPC) EthGetUncleCountByBlockHash(hash string) (int, error) {
 }
 
 // EthGetUncleCountByBlockNumber returns the number of uncles in a block from a block matching the given block number.
-func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int, error) {
+func (rpc *EthRPC) EthGetUncleCountByBlockNumber(number int) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {
@@ -580,7 +580,7 @@ func (rpc *EthRPC) EthCall(transaction TransactionData, tag string) (string, err
 // EthEstimateGas makes a post or transaction, which won't be
 // added to the blockchain and returns the used gas, which can
 // be used for estimating the used gas.
-func (rpc *EthRPC) EthEstimateGas(transaction TransactionData) (int, error) {
+func (rpc *EthRPC) EthEstimateGas(transaction TransactionData) (int64, error) {
 	var response string
 	//prepare the params of the function
 	params := func() string {

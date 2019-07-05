@@ -84,12 +84,19 @@ func IsValidBlockNumber(blkStr string) bool {
 		return true
 	} else {
 		//validate input is valid hex string
-		hasHexPrefix := len(blkStr) >= 2 && blkStr[0] == '0' && (blkStr[1] == 'x' || blkStr[1] == 'X')
-		if hasHexPrefix {
-			return common.IsHex(blkStr[2:])
-		}
-		return false
+		return common.IsOxPrefixedHex(blkStr)
 	}
+}
+
+// a block hash is valid only if:
+// starts with 0x
+// is hexadecimal string of 32 bytes encoded data (64 bytes as hex string) + 0x prefix
+// example: 0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238
+func IsValidBlockHash(blockHash string) bool {
+	if len(blockHash) == 66 {
+		return common.IsOxPrefixedHex(blockHash)
+	}
+	return false
 }
 
 // IsZeroAddress validate if it's a 0 address

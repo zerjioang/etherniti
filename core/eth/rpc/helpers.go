@@ -19,7 +19,7 @@ import (
 )
 
 // ParseInt parse hex string value to int
-func ParseInt(value string) (int, error) {
+func ParseInt(value string) (int64, error) {
 	if value == "0x0" {
 		return 0, nil
 	}
@@ -28,7 +28,7 @@ func ParseInt(value string) (int, error) {
 		return 0, err
 	}
 
-	return int(i), nil
+	return i, nil
 }
 
 // ParseBigInt parse hex string value to big.Int
