@@ -7,6 +7,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/zerjioang/etherniti/core/logger"
+
 	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -14,8 +16,7 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
 	"github.com/zerjioang/etherniti/core/eth"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -34,6 +35,8 @@ type NetworkController struct {
 	networkName string
 	//ethereum interaction cache
 	cache *cache.MemoryCache
+	// predefined rpc client
+	rpclient *ethrpc.EthRPC
 }
 
 // constructor like function
@@ -45,6 +48,10 @@ func NewNetworkController() NetworkController {
 
 func (ctl *NetworkController) SetClient(c *http.Client) {
 	ctl.client = c
+}
+
+func (ctl *NetworkController) SetRpcClient(rpclient *ethrpc.EthRPC) {
+	ctl.rpclient = rpclient
 }
 
 func (ctl *NetworkController) SetPeer(peerLocation string) {
@@ -68,14 +75,23 @@ func (ctl *NetworkController) Name() string {
 }
 
 func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, error) {
-	// get our client context
-	client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer, ctl.client)
-	logger.Info("controller request using context id: ", cId)
-	if cliErr != nil {
-		logger.Error("failed to build an eth client from current context. missing connection url: ", cliErr)
-		return nil, cliErr
+	//check if current newtwork has a predefined rpc controller or not
+	// network with predefined controllers are: rinkeby, kovan, ganache, infura
+	logger.Info("checking if exists a predefined rpc client for current network")
+	if ctl.rpclient != nil {
+		return ctl.rpclient, nil
+	} else {
+		//predefiend rpc client not found. resolve it and setup
+		// get our client context
+		client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer, ctl.client)
+		logger.Info("controller request using context id: ", cId)
+		if cliErr != nil {
+			logger.Error("failed to build an eth client from current context. missing connection url: ", cliErr)
+			return nil, cliErr
+		}
+		ctl.rpclient = client
+		return client, nil
 	}
-	return client, nil
 }
 
 func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) {

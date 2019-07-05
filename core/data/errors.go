@@ -18,6 +18,7 @@ const (
 	ProvideProjectIdStr      = "you have to provide a valid project data"
 	ProvideValidDataStr      = "you have to provide valid data"
 	OperationNotSupportedStr = "operation not supported"
+	InvalidAddressStr        = "invalid address provided"
 )
 
 var (
@@ -45,6 +46,7 @@ var (
 	CompileSolidity             = []byte("compile_solidity")
 	EstimateGas                 = []byte("estimate_gas")
 	GetStorage                  = []byte("get_storage")
+	GetCode                     = []byte("get_code")
 	Sha3                        = []byte("sha3")
 	ChainId                     = []byte("chain_id")
 	ShhVersion                  = []byte("shh_version")
@@ -69,7 +71,9 @@ var (
 	InvalidMethodName      = []byte("invalid contract method name provided")
 	InvalidEtherValue      = []byte("invalid ether amount value provided")
 	InvalidTokenValue      = []byte("invalid token amount value provided")
-	InvalidDstAddress      = []byte("invalid destination address provided")
+	InvalidAddress         = []byte(InvalidAddressStr)
+	InvalidSrcAddress      = []byte("invalid source address (from) provided")
+	InvalidDstAddress      = []byte("invalid destination address (to) provided")
 	InvalidReceiverAddress = []byte("invalid transfer receiver address provided")
 	InvalidAccountOwner    = []byte("invalid account owner address provided")
 	InvalidAccountSpender  = []byte("invalid account spender address provided")
@@ -124,6 +128,7 @@ var (
 )
 
 var (
+	ErrInvalidAddress        = errors.New(InvalidAddressStr)
 	ErrInvalidBlockHash      = errors.New("Invalid block hash provided")
 	ErrUnknownMode           = errors.New(ErrUnknownModeStr)
 	ErrCannotReadSolcVersion = errors.New(SolcVersionFailedStr)

@@ -92,7 +92,7 @@ func (ctl *DevOpsController) sendTransaction(c *echo.Context) error {
 	//build our transaction
 	var transaction ethrpc.TransactionData
 	transaction.To = to
-	transaction.Value = eth.ToWei(tokenAmount, 0)
+	transaction.SetValue(eth.ToWei(tokenAmount, 0))
 
 	raw, err := client.EthSendTransaction(transaction)
 	if err != nil {

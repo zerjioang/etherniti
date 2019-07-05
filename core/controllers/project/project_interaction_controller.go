@@ -115,13 +115,13 @@ func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) 
 	web3Client := ethrpc.NewDefaultRPCPtr(endpoint, isDebug, ctl.client)
 	// proxy pass user request
 	result, err := web3Client.EthSendTransactionPtr(&ethrpc.TransactionData{
-		From:     "",
-		To:       contractVersion.Address,
-		Gas:      0,
-		GasPrice: nil,
-		Value:    nil,
-		Data:     "",
-		Nonce:    0,
+		From:        "",
+		To:          contractVersion.Address,
+		GasStr:      "",
+		GasPriceStr: "",
+		ValueStr:    "",
+		Data:        "",
+		NonceStr:    "",
 	})
 	if err != nil {
 		logger.Error("failed to call contract: ", err)

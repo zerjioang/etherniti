@@ -95,7 +95,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 			c.OnSuccessCachePolicy = constants.CacheInfinite
 			//todo add support for dynamic encoding instead of nil
 			ctl.network.cache.Set(keyBytes, nil)
-			return api.SendSuccess(c, data.Balance, BalanceResponse{Value: result, Raw: raw})
+			return api.SendSuccess(c, data.Balance, BalanceResponse{Value: result, Raw: raw, Eth: fixtures.ToEth(result).String()})
 		}
 	} else {
 		// send invalid address message
@@ -655,29 +655,59 @@ func (ctl *Web3Controller) erc20TransferFrom(c *echo.Context) error {
 
 // eth.sendTransaction({from:sender, to:receiver, value: amount})
 func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
-	to := c.Param("to")
-	//input data validation
-	if to == "" {
-		return api.ErrorBytes(c, data.InvalidDstAddress)
+	//read input data
+	var txData ethrpc.TransactionData
+	if err := c.Bind(&txData); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorBytes(c, data.BindErr)
 	}
-	amount := c.Param("amount")
-	tokenAmount, pErr := strconv.Atoi(amount)
-	//input data validation
-	if amount == "" || pErr != nil || tokenAmount <= 0 {
-		return api.ErrorBytes(c, data.InvalidEtherValue)
+
+	if txData.To == "" {
+		// to field can only be blank when requesting new contract deployments
+		// so assume this tx is a contract deployment
+		return ctl.sendContractDeploymentTransaction(c, &txData)
+	} else {
+		// assume this transaction is not a contract deployment
+		//input data validation
+		if !eth.IsValidAddressLow(txData.To) {
+			return api.ErrorBytes(c, data.InvalidDstAddress)
+		}
+
+		//input data validation
+		if !eth.IsValidAddressLow(txData.From) {
+			return api.ErrorBytes(c, data.InvalidSrcAddress)
+		}
+		//input data validation
+		if txData.ValueStr == "" {
+			return api.ErrorBytes(c, data.InvalidEtherValue)
+		}
+
+		// get our client context
+		client, cliErr := ctl.network.getRpcClient(c)
+		if cliErr != nil {
+			return api.Error(c, cliErr)
+		}
+
+		//send our transaction
+		raw, err := client.EthSendTransactionPtr(&txData)
+		if err != nil {
+			// send invalid generation message
+			return api.Error(c, err)
+		} else {
+			return api.SendSuccess(c, data.Allowance, raw)
+		}
 	}
+}
+
+func (ctl *Web3Controller) sendContractDeploymentTransaction(c *echo.Context, txData *ethrpc.TransactionData) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
-	//build our transaction
-	var transaction ethrpc.TransactionData
-	transaction.To = to
-	transaction.Value = eth.ToWei(tokenAmount, 0)
 
-	raw, err := client.EthSendTransaction(transaction)
+	raw, err := client.EthSendTransactionPtr(txData)
 	if err != nil {
 		// send invalid generation message
 		return api.Error(c, err)
@@ -692,7 +722,6 @@ func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 	txhash := c.Param("hash")
 	// check if not empty
 	if txhash != "" {
-
 		// get our client context
 		client, cliErr := ctl.network.getRpcClient(c)
 
@@ -736,7 +765,33 @@ func (ctl *Web3Controller) getUncleCountByBlockNumber(c *echo.Context) error {
 }
 
 func (ctl *Web3Controller) getCode(c *echo.Context) error {
-	return ctl.network.Noop(c)
+	// read input parameters
+	// 1 address
+	address := c.Param("address")
+	if !eth.IsValidAddressLow(address) {
+		return api.Error(c, data.ErrInvalidAddress)
+	}
+	// 2 block
+	block := c.Param("block")
+	if block != "" && !eth.IsValidBlockNumber(block) {
+		return api.Error(c, data.ErrInvalidBlockNumber)
+	}
+	// if user did not specify any block, set by default to latest
+	if block == "" {
+		block = "latest"
+	}
+
+	// get our client context
+	client, cliErr := ctl.network.getRpcClient(c)
+	if cliErr != nil {
+		return api.Error(c, cliErr)
+	}
+	// Returns code at a given address.
+	result, err := client.EthGetCode(address, block)
+	if err != nil {
+		return api.Error(c, err)
+	}
+	return api.SendSuccess(c, data.GetCode, result)
 }
 
 func (ctl *Web3Controller) sign(c *echo.Context) error {
@@ -885,9 +940,7 @@ func (ctl *Web3Controller) getTransactionCount(c *echo.Context) error {
 func (ctl *Web3Controller) getBlockTransactionCountByHash(c *echo.Context) error {
 	// read input parameters
 	hash := c.Param("hash")
-	//input data validation
-	// TODO add strong block hash validation here
-	if hash == "" {
+	if !eth.IsValidBlockHash(hash) {
 		return api.Error(c, data.ErrInvalidBlockHash)
 	}
 	// get our client context
@@ -957,20 +1010,19 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	//Returns the number of transactions in a block from a block matching the given block hash.
 
 	//eth_getBlockTransactionCountByNumber
-	router.GET("/tx/count/number/:number", ctl.getBlockTransactionCountByNumber)
+	router.GET("/tx/count/block/:number", ctl.getBlockTransactionCountByNumber)
 	//Returns the number of transactions in a block matching the given block number.
 
 	// eth_getUncleCountByBlockHash
-	// Returns the number of uncles in a block from a block matching the given block hash.
-	router.GET("/uncle/count/address/:address/:block", ctl.getUncleCountByBlockHash)
+	router.GET("/uncle/count/hash/:hash", ctl.getUncleCountByBlockHash)
 
 	// eth_getUncleCountByBlockNumber
-	// Returns the number of uncles in a block from a block matching the given block number.
-	router.GET("/uncle/count/number/:number", ctl.getUncleCountByBlockNumber)
+	// Returns the number of uncles in a block from a block matching the given block hash.
+	router.GET("/uncle/count/block/:block", ctl.getUncleCountByBlockNumber)
 
 	// eth_getCode
 	// Returns code at a given address.
-	router.GET("/code", ctl.getCode)
+	router.GET("/code/:address/:block", ctl.getCode)
 
 	// eth_sign
 	// The sign method calculates an Ethereum specific signature with:
@@ -982,16 +1034,16 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/sign", ctl.sign)
 
 	// eth_sendTransaction
-	router.GET("/send/tx", ctl.sendTransaction)
+	router.POST("/send/tx", ctl.sendTransaction)
 
 	// eth_sendRawTransaction
-	router.GET("/send/raw", ctl.sendRawTransaction)
+	router.POST("/send/raw", ctl.sendRawTransaction)
 
 	// eth_call
-	router.GET("/call", ctl.call)
+	router.POST("/call", ctl.call)
 
 	// eth_estimateGas
-	router.GET("/estimategas", ctl.estimateGas)
+	router.POST("/estimategas", ctl.estimateGas)
 
 	// eth_getBlockByHash
 
