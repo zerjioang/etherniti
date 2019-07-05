@@ -66,3 +66,7 @@ h1,h2,h3,h4,h5,ul,li,p,b,a,div,button,input,select {
     background-color: rgba(0, 0, 0, 0);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1cb086', endColorstr='#08e740', GradientType=1 );
 }
+/*color for textbox and texareas for users with dark theme*/
+.swagger-ui input[type="text"], .swagger-ui textarea {
+    color: black;
+}

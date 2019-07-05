@@ -5,7 +5,6 @@ package protocol
 
 import (
 	"encoding/json"
-
 	"github.com/zerjioang/etherniti/core/util/str"
 )
 
@@ -101,20 +100,69 @@ type HdWalletResponse struct {
 type AbiLinkRequest json.RawMessage
 
 // contract compilation options
+
+/*
+{
+	"evm-version": "evm",
+	"optimize": {
+		"enabled": true,
+		"runs": 200
+	},
+	"optimize-yul": false,
+	"gas": true,
+	"assemble": false,
+	"yul": false,
+	"strict-assembly": false,
+	"machine": "",
+	"link": false,
+	"metadata-literal": false,
+	"allow-paths": false,
+	"report": {
+		"ast": false,
+		"asm": false,
+		"opcodes": false,
+		"bin": true,
+		"bin-runtime": true,
+		"abi": false,
+		"ir": false,
+		"hashes": false,
+		"userdoc": false,
+		"devdoc": false,
+		"metadata": false
+	}
+}
+ */
 type ContractCompilationOpts struct {
 	// Select desired EVM version. Either homestead,
 	//  tangerineWhistle, spuriousDragon, byzantium (default) or
 	//  constantinople.
-	Optimize           bool
-	EstimateGas        bool
-	GenerateAsm        bool
-	GenerateOpcodes    bool
-	GenerateBin        bool
-	GenerateRuntimeBin bool
-	GenerateAbi        bool
-	GenerateHashes     bool
-	OptimizeRuns       int
-	EvmVersion         string
+	EvmVersion string `json:"evm-version"`
+	Optimize   struct {
+		Enabled bool `json:"enabled"`
+		Runs    int  `json:"runs"`
+	} `json:"optimize"`
+	OptimizeYul     bool   `json:"optimize-yul"`
+	Gas             bool   `json:"gas"`
+	Assemble        bool   `json:"assemble"`
+	Yul             bool   `json:"yul"`
+	StrictAssembly  bool   `json:"strict-assembly"`
+	Machine         string `json:"machine"`
+	Link            bool   `json:"link"`
+	MetadataLiteral bool   `json:"metadata-literal"`
+	AllowPaths      bool   `json:"allow-paths"`
+	Report          struct {
+		Ast        bool `json:"ast"`
+		Asm        bool `json:"asm"`
+		Opcodes    bool `json:"opcodes"`
+		Bin        bool `json:"bin"`
+		BinRuntime bool `json:"bin-runtime"`
+		Abi        bool `json:"abi"`
+		Ir         bool `json:"ir"`
+		Hashes     bool `json:"hashes"`
+		Userdoc    bool `json:"userdoc"`
+		Devdoc     bool `json:"devdoc"`
+		Metadata   bool `json:"metadata"`
+	} `json:"report"`
 }
 
 // contract compilation request dto
