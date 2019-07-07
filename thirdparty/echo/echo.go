@@ -566,16 +566,15 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c.Preload()
 
 	h := NotFoundHandler
+	rpath := getPath(r)
 
 	if e.premiddleware == nil {
-		e.router.Find(r.Method, getPath(r), c)
-		h = c.handler
-		h = applyMiddleware(h, e.middleware...)
+		e.router.Find(r.Method, rpath, c)
+		h = applyMiddleware(c.handler, e.middleware...)
 	} else {
 		h = func(c *Context) error {
-			e.router.Find(r.Method, getPath(r), c)
-			h := c.handler
-			h = applyMiddleware(h, e.middleware...)
+			e.router.Find(r.Method, rpath, c)
+			h = applyMiddleware(c.handler, e.middleware...)
 			return h(c)
 		}
 		h = applyMiddleware(h, e.premiddleware...)

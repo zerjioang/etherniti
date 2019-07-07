@@ -13,3 +13,11 @@ func NewHashSet() HashSet {
 func NewHashSetPtr() *HashSet {
 	return new(HashSet)
 }
+
+func NewHashUint32Set() HashUint32Set {
+	return HashUint32Set{}
+}
+
+func NewHashUint32SetPtr() *HashUint32Set {
+	return new(HashUint32Set)
+}
