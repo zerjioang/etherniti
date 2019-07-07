@@ -20,7 +20,7 @@ var (
 	// listening interface
 	ListenInterface = cfg.GetHttpInterface()
 	// define http server config for listener service
-	DefaultHttpServerConfig = http.Server{
+	DefaultHttpServerConfig = &http.Server{
 		Addr:         ListenAddr,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,

@@ -73,7 +73,7 @@ func init() {
 func (l MtlsListener) ServerConfig() *http.Server {
 	mtlsServer := common.DefaultHttpServerConfig
 	mtlsServer.TLSConfig = tlsConfig
-	return &mtlsServer
+	return mtlsServer
 }
 
 // create new deployer instance

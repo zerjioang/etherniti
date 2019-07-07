@@ -26,9 +26,10 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 
 // ShhVersion calls shh protocol shh_version json-rpc call
 func (ctl *Web3ShhController) shhVersion(c *echo.Context) error {
+	logger.Info("web3 shh controller request using context id: ", ctl.network.networkName)
+
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("web3 shh controller request using context id: ", ctl.network.networkName)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -92,6 +93,8 @@ func (ctl *Web3ShhController) shhGetMessages(c *echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3ShhController) RegisterRouters(router *echo.Group) {
+
+	logger.Debug("registering eth_shh methods")
 
 	router.GET("/shh/version", ctl.shhVersion)
 

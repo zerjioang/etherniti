@@ -51,8 +51,14 @@ var (
 			Format: accessLogFormat,
 		},
 	)
-	slashRemover = middleware.RemoveTrailingSlash()
+	slashRemover  = middleware.RemoveTrailingSlash()
+	isDevelopment bool
 )
+
+func init() {
+	logger.Debug("loading middleware data")
+	isDevelopment = config.IsDevelopment()
+}
 
 // custom http error handler. returns error messages as json
 func customHTTPErrorHandler(err error, c *echo.Context) {
@@ -189,9 +195,11 @@ func ApplyDefaultSecurityHeaders(c *echo.Context) {
 	//public-key-pins: pin-sha256="t/OMbKSZLWdYUDmhOyUzS+ptUbrdVgb6Tv2R+EMLxJM="; pin-sha256="PvQGL6PvKOp6Nk3Y9B7npcpeL40twdPwZ4kA2IiixqA="; pin-sha256="ZyZ2XrPkTuoiLk/BR5FseiIV/diN3eWnSewbAIUMcn8="; pin-sha256="0kDINA/6eVxlkns5z2zWv2/vHhxGne/W0Sau/ypt3HY="; pin-sha256="ktYQT9vxVN4834AQmuFcGlSysT1ZJAxg+8N1NkNG/N8="; pin-sha256="rwsQi0+82AErp+MzGE7UliKxbmJ54lR/oPheQFZURy8="; max-age=600; report-uri="https://www.keycdn.com"
 	rh.Set("X-Content-Type-Options", "nosniff")
 	// report-uri http://reportcollector.example.com/collector.cgi
-	if !config.IsDevelopment() {
+
+	if !isDevelopment {
 		rh.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.etherniti.org cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com")
 	}
+
 	rh.Set("Expect-Ct", "enforce, max-age=30")
 	rh.Set("X-Ua-Compatible", "IE=Edge,chrome=1")
 	rh.Set("Referrer-Policy", "same-origin")

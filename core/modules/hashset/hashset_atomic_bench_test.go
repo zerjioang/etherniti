@@ -128,12 +128,24 @@ func BenchmarkHashSetAtomic(b *testing.B) {
 			set.Size()
 		}
 	})
+
 	b.Run("clear", func(b *testing.B) {
-		b.ReportAllocs()
-		b.ResetTimer()
-		set := NewAtomicHashSet()
-		for i := 0; i < b.N; i++ {
-			set.Clear()
-		}
+		b.Run("clear-standard", func(b *testing.B) {
+			b.ReportAllocs()
+			b.ResetTimer()
+			set := NewAtomicHashSet()
+			for i := 0; i < b.N; i++ {
+				set.Clear()
+			}
+		})
+
+		b.Run("clear-fast", func(b *testing.B) {
+			b.ReportAllocs()
+			b.ResetTimer()
+			set := NewAtomicHashSet()
+			for i := 0; i < b.N; i++ {
+				set.Clear()
+			}
+		})
 	})
 }

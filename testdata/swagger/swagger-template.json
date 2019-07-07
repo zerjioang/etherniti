@@ -4,7 +4,7 @@
     "description": "$title definition",
     "version": "$version",
     "title": "$title",
-    "termsOfService": "https://www.etherniti.org/terms-of-service/",
+    "termsOfService": "https://docs.etherniti.org/about/tos/",
     "contact": {
       "email": "core@etherniti.org"
     },
@@ -2491,7 +2491,7 @@
     "/web3/{network}/compilers": {
       "get": {
         "tags": [
-          "web3"
+          "web3-compilers"
         ],
         "summary": "Get compilers information",
         "description": "Get target's network compilers information",
@@ -2550,7 +2550,7 @@
     "/web3/{network}/compile/solidity": {
       "get": {
         "tags": [
-          "web3"
+          "web3-compilers"
         ],
         "summary": "Compile solidity contract",
         "description": "Compile solidity raw contract data using target node",
@@ -2614,7 +2614,7 @@
     "/web3/{network}/compile/serpent": {
       "get": {
         "tags": [
-          "web3"
+          "web3-compilers"
         ],
         "summary": "Compile serpent contract",
         "description": "Compile serpent raw contract data using target node",
@@ -2678,7 +2678,7 @@
     "/web3/{network}/compile/lll": {
       "get": {
         "tags": [
-          "web3"
+          "web3-compilers"
         ],
         "summary": "Compile LLL contract",
         "description": "Compile LLL raw contract data using target node",
@@ -2742,10 +2742,10 @@
     "/web3/{network}/shh/version": {
       "get": {
         "tags": [
-          "web3"
+          "web3-shh"
         ],
-        "summary": "Get SHH protocol version",
-        "description": "Get target's network SHH protocol version",
+        "summary": "Returns the current whisper protocol version.",
+        "description": "Returns the current whisper protocol version.",
         "operationId": "web3-shh-version",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
@@ -2795,7 +2795,7 @@
     "/web3/{network}/shh/message": {
       "post": {
         "tags": [
-          "web3"
+          "web3-shh"
         ],
         "summary": "Sends a whisper message.",
         "description": "Get target's network and sends a whisper message.",
@@ -2848,7 +2848,7 @@
     "/web3/{network}/shh/identity": {
       "post": {
         "tags": [
-          "web3"
+          "web3-shh"
         ],
         "summary": "Create new SHH Identity",
         "description": "Creates new whisper identity in the client.",
@@ -2901,7 +2901,7 @@
     "/web3/{network}/ssh/identity/{address}": {
       "get": {
         "tags": [
-          "web3"
+          "web3-shh"
         ],
         "summary": "Check existance of an SHH Identity",
         "description": "Checks if the client hold the private keys for a given identity.",
@@ -2964,7 +2964,7 @@
     "/web3/{network}/shh/group": {
       "get": {
         "tags": [
-          "web3"
+          "web3-shh"
         ],
         "summary": "Get network version information",
         "description": "Get target's network",

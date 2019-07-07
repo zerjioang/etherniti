@@ -61,7 +61,7 @@ func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
 
 //fetch specific server configuration
 func (l HttpsListener) ServerConfig() *http.Server {
-	return &common.DefaultHttpServerConfig
+	return common.DefaultHttpServerConfig
 }
 
 func (l HttpsListener) Listen(notifier chan error) {
@@ -76,7 +76,7 @@ func (l HttpsListener) Listen(notifier chan error) {
 	// Start http server
 	go func() {
 		logger.Info("starting http server...")
-		err := httpServerInstance.StartServer(&common.DefaultHttpServerConfig)
+		err := httpServerInstance.StartServer(common.DefaultHttpServerConfig)
 		if err != nil {
 			logger.Error("shutting down http the server", err)
 			notifier <- err
@@ -124,7 +124,7 @@ func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 	// which is default http config + tls data
 	secureServerConfig := common.DefaultHttpServerConfig
 	secureServerConfig.TLSConfig = &tlsConf
-	return &secureServerConfig, nil
+	return secureServerConfig, nil
 }
 
 // create new deployer instance

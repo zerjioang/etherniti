@@ -23,7 +23,7 @@ type HttpListener struct{}
 
 //fetch specific server configuration
 func (l HttpListener) ServerConfig() *http.Server {
-	return &common.DefaultHttpServerConfig
+	return common.DefaultHttpServerConfig
 }
 
 func (l HttpListener) Listen(notifier chan error) {

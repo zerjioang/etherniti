@@ -33,21 +33,25 @@ func NewHashSetWORMPtr() *HashSetWORM {
 }
 
 func (s *HashSetWORM) Add(item string) {
-	s.set[item] = none
+	s.set.data[item] = none
 }
 
 func (s *HashSetWORM) Clear() {
 	s.set = NewHashSet()
 }
 
+func (s *HashSetWORM) ClearFast() {
+	s.set.ClearFast()
+}
+
 func (s HashSetWORM) Contains(item string) bool {
-	_, found := s.set[item]
+	_, found := s.set.data[item]
 	return found
 }
 
 func (s HashSetWORM) MatchAny(item string) bool {
 	found := false
-	for k := range s.set {
+	for k := range s.set.data {
 		found = strings.Contains(item, k)
 		if found {
 			break
@@ -57,11 +61,11 @@ func (s HashSetWORM) MatchAny(item string) bool {
 }
 
 func (s *HashSetWORM) Remove(item string) {
-	delete(s.set, item)
+	delete(s.set.data, item)
 }
 
 func (s *HashSetWORM) Size() int {
-	l := len(s.set)
+	l := len(s.set.data)
 	return l
 }
 
@@ -102,7 +106,7 @@ func (s *HashSetWORM) LoadFromRaw(path string, splitChar string) {
 func (s *HashSetWORM) LoadFromArray(data []string) {
 	if data != nil {
 		for _, v := range data {
-			s.set[v] = none
+			s.set.data[v] = none
 		}
 	}
 }

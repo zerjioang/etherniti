@@ -8,7 +8,7 @@ package monotonic
 import "testing"
 
 /*
-* Benchmark functions start with Benchmark not Tesb.
+* Benchmark functions start with Benchmark not Test.
 
 * Benchmark functions are run several times by the testing package.
   The value of b.N will increase each time until the benchmark runner

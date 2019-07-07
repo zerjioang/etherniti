@@ -400,6 +400,36 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    * Maps with slice values
    * Maps with string keys
 
+### Heap escape analysis
+
+```bash
+go build -gcflags='-m -m' $file.go
+```
+
+```bash
+go build -gcflags='-m -m' $file.go | grep 'function too complex'
+```
+
+```bash
+go build -gcflags='-m -m' $file.go | grep 'escapes to heap'
+```
+
+### Bound Check analysis
+
+Note: `bce` stands for `bound check elimination`
+ 
+```bash
+go build -gcflags=-d=ssa/check_bce/debug=1 $file.go
+```
+
+### Going deeper with `GOSSAFUNC`
+
+Note: `bce` stands for `bound check elimination`
+ 
+```bash
+GOSSAFUNC=pattern go build $file.go
+```
+
 ## License
 
 All rights reserved.

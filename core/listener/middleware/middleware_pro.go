@@ -45,11 +45,12 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 		ua := request.UserAgent()
 		ua = str.ToLowerAscii(ua)
 		if ua == "" {
-			//drop the request
+			// drop the request
 			logger.Warn("drop request: no user-agent provided")
 			return securityErr
 		} else if len(ua) < 4 || bots.GetBadBotsList().MatchAny(ua) {
-			//drop the request
+			// TODO bottleneck in the method that checks if a useragent is a bot or not
+			// drop the request
 			logger.Warn("drop request: provided user-agent is considered as a bot: ", ua)
 			return securityErr
 		}

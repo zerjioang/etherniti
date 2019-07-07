@@ -26,7 +26,7 @@ type HashSetMutex struct {
 func NewHashSetMutex() HashSetMutex {
 	hs := HashSetMutex{}
 	hs.lock = new(sync.RWMutex)
-	hs.set = HashSet{}
+	hs.set = NewHashSet()
 	return hs
 }
 
@@ -37,19 +37,25 @@ func NewHashSetMutexPtr() *HashSetMutex {
 
 func (s *HashSetMutex) Add(item string) {
 	s.lock.Lock()
-	s.set[item] = none
+	s.set.data[item] = none
 	s.lock.Unlock()
 }
 
 func (s *HashSetMutex) Clear() {
 	s.lock.Lock()
-	s.set = HashSet{}
+	s.set = NewHashSet()
+	s.lock.Unlock()
+}
+
+func (s *HashSetMutex) ClearFast() {
+	s.lock.Lock()
+	s.set.ClearFast()
 	s.lock.Unlock()
 }
 
 func (s HashSetMutex) Contains(item string) bool {
 	s.lock.RLock()
-	_, contains := s.set[item]
+	_, contains := s.set.data[item]
 	s.lock.RUnlock()
 	return contains
 }
@@ -57,7 +63,7 @@ func (s HashSetMutex) Contains(item string) bool {
 func (s HashSetMutex) MatchAny(item string) bool {
 	s.lock.RLock()
 	found := false
-	for k := range s.set {
+	for k := range s.set.data {
 		found = strings.Contains(item, k)
 		if found {
 			break
@@ -69,13 +75,13 @@ func (s HashSetMutex) MatchAny(item string) bool {
 
 func (s *HashSetMutex) Remove(item string) {
 	s.lock.Lock()
-	delete(s.set, item)
+	delete(s.set.data, item)
 	s.lock.Unlock()
 }
 
 func (s *HashSetMutex) Size() int {
 	s.lock.RLock()
-	l := len(s.set)
+	l := len(s.set.data)
 	s.lock.RUnlock()
 	return l
 }
@@ -118,7 +124,7 @@ func (s *HashSetMutex) LoadFromArray(data []string) {
 	if data != nil {
 		s.lock.Lock()
 		for _, v := range data {
-			s.set[v] = none
+			s.set.data[v] = none
 		}
 		s.lock.Unlock()
 	}

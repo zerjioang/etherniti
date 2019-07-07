@@ -81,7 +81,7 @@ func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, err
 	if ctl.rpclient != nil {
 		return ctl.rpclient, nil
 	} else {
-		//predefiend rpc client not found. resolve it and setup
+		// predefined rpc client not found. resolve it and setup
 		// get our client context
 		client, cId, cliErr := c.RecoverEthClientFromTokenOrPeerUrl(ctl.peer, ctl.client)
 		logger.Info("controller request using context id: ", cId)

@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/zerjioang/etherniti/core/bench"
 	"os"
 	"runtime"
 
@@ -66,6 +67,10 @@ func main() {
 	max := runtime.NumCPU()
 	logger.Info("setting GOMAXPROCS value to ", max)
 	runtime.GOMAXPROCS(max)
+	// run server benchmark evaluation function based on montecarlo pi generator
+	bench.CalculateScore()
+	logger.Info("current server runtime benchmark score: ", bench.GetScore(), " points")
+
 	//run the server
 	cmd.RunServer(notifier)
 	err := <-notifier

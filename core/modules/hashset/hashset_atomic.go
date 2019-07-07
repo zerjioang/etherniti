@@ -32,16 +32,16 @@ func NewAtomicHashSetPtr() HashSetAtomic {
 }
 
 func (set *HashSetAtomic) Add(item string) {
-	m1 := set.Read()      // load current value of the data structure
-	m2 := HashUint32Set{} // create a new value
-	for k, v := range m1 {
-		m2[k] = v // copy all data from the current object to the new one
+	m1 := set.Read()         // load current value of the data structure
+	m2 := NewHashUint32Set() // create a new value
+	for k, v := range m1.data {
+		m2.data[k] = v // copy all data from the current object to the new one
 	}
 	// hash item before adding it
 	hashedKey := aeshash.Hash(item)
-	set.mu.Lock()        // synchronize with other potential writers
-	m2[hashedKey] = none // do the update that we need
-	set.m.Store(m2)      // atomically replace the current object with the new one
+	set.mu.Lock()             // synchronize with other potential writers
+	m2.data[hashedKey] = none // do the update that we need
+	set.m.Store(m2)           // atomically replace the current object with the new one
 	set.mu.Unlock()
 	// At this point all new readers start working with the new version.
 	// The old version will be garbage collected once the existing readers
@@ -51,15 +51,15 @@ func (set *HashSetAtomic) Add(item string) {
 // this call is considered as unsafe because write locks are removed from it
 func (set *HashSetAtomic) UnsafeAddUint32(v uint32) {
 	d := set.Read()
-	d[v] = none    // do the update that we need
-	set.m.Store(d) // atomically replace the current object with the new one
+	d.data[v] = none // do the update that we need
+	set.m.Store(d)   // atomically replace the current object with the new one
 }
 
 func (set *HashSetAtomic) Read() HashUint32Set {
 	d := set.m.Load()
 	var item HashUint32Set
 	if d == nil {
-		item = HashUint32Set{}
+		item = NewHashUint32Set()
 		set.m.Store(item)
 	} else {
 		item = d.(HashUint32Set)
@@ -68,12 +68,19 @@ func (set *HashSetAtomic) Read() HashUint32Set {
 }
 
 func (set *HashSetAtomic) Size() int {
-	return len(set.Read())
+	return len(set.Read().data)
 }
 
 func (set *HashSetAtomic) Clear() {
 	set.mu.Lock() // synchronize with other potential writers
-	set.m.Store(HashUint32Set{})
+	set.m.Store(NewHashUint32Set())
+	set.mu.Unlock()
+}
+
+func (set *HashSetAtomic) ClearFast() {
+	set.mu.Lock() // synchronize with other potential writers
+	hs := set.Read()
+	hs.ClearFast()
 	set.mu.Unlock()
 }
 
@@ -81,13 +88,13 @@ func (set *HashSetAtomic) ContainsString(item string) bool {
 	source := set.m.Load().(HashUint32Set)
 	// hash item
 	hashedKey := aeshash.Hash(item)
-	_, contains := source[hashedKey]
+	_, contains := source.data[hashedKey]
 	return contains
 }
 
 func (set *HashSetAtomic) Contains(item uint32) bool {
 	source := set.m.Load().(HashUint32Set)
-	_, contains := source[item]
+	_, contains := source.data[item]
 	return contains
 }
 
@@ -96,7 +103,7 @@ func (set *HashSetAtomic) Remove(item string) {
 	source := set.m.Load().(HashUint32Set)
 	// hash item
 	hashedKey := aeshash.Hash(item)
-	delete(source, hashedKey)
+	delete(source.data, hashedKey)
 	set.m.Store(source)
 	set.mu.Unlock()
 }
@@ -141,7 +148,7 @@ func (set *HashSetAtomic) LoadFromArray(data []string) {
 		for _, v := range data {
 			// hash item
 			hashedKey := aeshash.Hash(v)
-			source[hashedKey] = none
+			source.data[hashedKey] = none
 		}
 		set.m.Store(source)
 		set.mu.Unlock()
