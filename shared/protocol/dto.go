@@ -5,6 +5,7 @@ package protocol
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/zerjioang/etherniti/core/util/str"
 )
@@ -215,4 +216,38 @@ func NewApiResponse(message []byte, payload interface{}) *ApiResponse {
 	ae.Message = str.UnsafeString(message)
 	ae.Data = payload
 	return &ae
+}
+
+type EthSignatureParseRequest struct {
+	//Eth message signature data encoded as hex string starting with 0x
+	Signature string `json:"signature"`
+}
+
+func (req *EthSignatureParseRequest) Validate() error {
+	if req.Signature == "" || len(req.Signature) == 0 {
+		return errors.New("empty signature data provided")
+	}
+	//todo check if signature string is hex valid
+	//todo check if signature string starts with 0x
+	return nil
+}
+
+type EthSignatureParseResponse struct {
+	R string `json:"r"`
+	S string `json:"s"`
+	V string `json:"v"`
+}
+
+type EthSha3Request struct {
+	// data to be signed with sha3
+	Data string `json:"data"`
+}
+
+func (req *EthSha3Request) Validate() error {
+	if req.Data == "" || len(req.Data) == 0 {
+		return errors.New("empty data provided for sha3 generation")
+	}
+	//todo check if signature string is hex valid
+	//todo check if signature string starts with 0x
+	return nil
 }

@@ -211,45 +211,86 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) sha3(c *echo.Context) error {
-	// 0 parse this http rquest body
-	var model map[string]interface{}
-	if err := c.Bind(&model); err != nil {
+func (ctl *Web3Controller) sha3Node(c *echo.Context) error {
+	// 0 parse this http request body
+	var req *protocol.EthSha3Request
+	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to model: ", err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
-	content, found := model["data"]
-	if found && content != nil {
-		//some data found in body content
-		// try to convert data to string
-		strData, ok := content.(string)
-		if ok && len(strData) > 0 {
-			//succesfully converted data to string
-			// 1 create a cache key
-			//ckey := "sha3:"+strData
-			// 2 fetch our ethereum client instance
-			// get our client context
-			client, cliErr := ctl.network.getRpcClient(c)
-			if cliErr != nil {
-				return api.Error(c, cliErr)
-			}
-			// 3 make the call
-			response, err := client.Web3Sha3(str.UnsafeBytes(strData))
-			// 4 process ethereum response
-			if err != nil {
-				// send invalid response message
-				return api.Error(c, err)
-			} else {
-				c.OnSuccessCachePolicy = constants.CacheInfinite
-				return api.SendSuccess(c, data.Sha3, response)
-			}
+	err := req.Validate()
+	if err == nil {
+		//succesfully converted data to string
+		// 1 create a cache key
+		//ckey := "sha3:"+strData
+		// 2 fetch our ethereum client instance
+		// get our client context
+		client, cliErr := ctl.network.getRpcClient(c)
+		if cliErr != nil {
+			return api.Error(c, cliErr)
+		}
+		// 3 make the call
+		response, err := client.Web3Sha3(str.UnsafeBytes(req.Data))
+		// 4 process ethereum response
+		if err != nil {
+			// send invalid response message
+			return api.Error(c, err)
 		} else {
-			return api.Error(c, errors.New("no input data provided for sha3"))
+			c.OnSuccessCachePolicy = constants.CacheInfinite
+			return api.SendSuccess(c, data.Sha3, response)
 		}
 	} else {
-		// no content send for key 'data'
-		return api.Error(c, errors.New("no input data provided for sha3 at request body"))
+		// error detected on input data
+		return api.Error(c, err)
+	}
+}
+
+func (ctl *Web3Controller) sha3BuiltIn(c *echo.Context) error {
+	// 1 parse this http request body
+	var req *protocol.EthSha3Request
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to model: ", err)
+		return api.ErrorBytes(c, data.BindErr)
+	}
+	// 2 validate input data
+	err := req.Validate()
+	if err == nil {
+		// 3 generate keccak-256 hash withut connecting to remote node
+		hash := fixtures.MessageHash(req.Data)
+		if hash == nil || len(hash) == 0 {
+			// send invalid response message
+			return api.Error(c, errors.New("failed to create keccak-256 of provided input data"))
+		} else {
+			c.OnSuccessCachePolicy = constants.CacheInfinite
+			return api.SendSuccess(c, data.Sha3, hex.ToEthHex(hash))
+		}
+	} else {
+		// error during data validation
+		return api.Error(c, err)
+	}
+}
+
+func (ctl *Web3Controller) parseSignature(c *echo.Context) error {
+	// 0 parse this http request body
+	var req *protocol.EthSignatureParseRequest
+	if err := c.Bind(&req); err != nil {
+		// return a binding error
+		logger.Error("failed to bind request data to req: ", err)
+		return api.ErrorBytes(c, data.BindErr)
+	}
+	err := req.Validate()
+	if err == nil {
+		// generate keccak-256 hash withut connecting to remote node
+		r, s, v := fixtures.ParseEthSignature(req.Signature)
+		resp := protocol.EthSignatureParseResponse{R: r, S: s, V: v}
+		c.OnSuccessCachePolicy = constants.CacheInfinite
+		return api.SendSuccess(c, data.EthSignatureParse, resp)
+	} else {
+		// error validating input data
+		logger.Error("error validating input data: ", err)
+		return api.Error(c, err)
 	}
 }
 
@@ -1010,7 +1051,8 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	router.GET("/is/ganache", ctl.isRunningGanache)
 
 	router.GET("/client/version", ctl.makeRpcCallNoParams)
-	router.POST("/sha3", ctl.sha3)
+	router.POST("/sha3/remote", ctl.sha3Node)
+	router.POST("/sha3/local", ctl.sha3BuiltIn)
 	router.GET("/net/version", ctl.netVersion)
 	router.GET("/net/listening", ctl.makeRpcCallNoParams)
 	router.GET("/net/peers", ctl.makeRpcCallNoParams)
@@ -1059,6 +1101,8 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	// can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim.
 	// Note the address to sign with must be unlocked.
 	router.POST("/sign", ctl.sign)
+	router.POST("/signparse", ctl.parseSignature)
+	router.POST("/ecrecover", ctl.parseSignature)
 
 	// eth_sendTransaction
 	router.POST("/send/tx", ctl.sendTransaction)

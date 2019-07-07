@@ -3,7 +3,9 @@
 
 package fixtures
 
-import "math/big"
+import (
+	"math/big"
+)
 
 const (
 	// number of bits in a big.Word
@@ -42,6 +44,18 @@ func ReadBits(bigint *big.Int, buf []byte) {
 			d >>= 8
 		}
 	}
+}
+
+// ParseEthSignature parses s as a hexadecimal encoded signature for given message
+// and returns, s, r and v values
+func ParseEthSignature(signature string) (r string, s string, v string) {
+	data := signature[2:]
+	s = "0x" + data[0:64]
+	r = "0x" + data[64:128]
+	v = "0x" + data[128:130]
+	//TODO NOTE: v must be a decimal number, hence the second v_decimal that turns hex v into decimal v.
+	// TODO check that the resulting v_decimal must be either 27 or 28!
+	return
 }
 
 // ParseBig256 parses s as a 256 bit integer in decimal or hexadecimal syntax.

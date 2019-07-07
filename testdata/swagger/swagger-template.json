@@ -1051,6 +1051,82 @@
         }
       }
     },
+    "/web3/{network}/signparse": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns parsed result of given ETH signature",
+        "description": "Returns parsed result of given ETH signature",
+        "operationId": "web3-sign-parse",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "signature",
+            "description": "signature data",
+            "example": {
+              "signature": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d78601"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signature parsing response",
+            "schema": {
+              "example": {
+                "msg": "eth_sign_parse",
+                "data": {
+                  "r": "0x1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d786",
+                  "s": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae",
+                  "v": "0x01"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid account address provided. check that account exists on target node and is currently unlocked",
+            "schema": {
+              "example": {
+                "desc": "cannot sign data; no private key. Error code: -32000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
     "/security/{source}": {
       "get": {
         "tags": [
@@ -1482,14 +1558,78 @@
         }
       }
     },
-    "/web3/{network}/sha3": {
+    "/web3/{network}/sha3/remote": {
       "post": {
         "tags": [
           "web3"
         ],
         "summary": "Returns Keccak-256 (not the standardized SHA3-256) of the given data.",
-        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data.",
-        "operationId": "web3-sha3",
+        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data. SHA3 calculation is delegated on target network node.",
+        "operationId": "web3-sha3-remote",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "data",
+            "description": " the data to convert into a SHA3 hash.",
+            "type": "string",
+            "example": {
+              "data": "hello-ethereum"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The SHA3 result of the given string.",
+            "schema": {
+              "example": {
+                "msg": "sha3",
+                "data": "0x0f6373f10eaf984d15d4e241eb91354401065bef332875a4ebe30a18e90509be"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/sha3/local": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns Keccak-256 (not the standardized SHA3-256) of the given data without connecting to any remote node.",
+        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data without connecting to any remote node.",
+        "operationId": "web3-sha3-local",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
         ],

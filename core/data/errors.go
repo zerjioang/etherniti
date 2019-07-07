@@ -49,9 +49,11 @@ var (
 	GetStorage                  = []byte("get_storage")
 	GetCode                     = []byte("get_code")
 	EthSign                     = []byte("eth_sign")
-	Sha3                        = []byte("sha3")
-	ChainId                     = []byte("chain_id")
-	ShhVersion                  = []byte("shh_version")
+	EthSignatureParse           = []byte("eth_sign_parse")
+
+	Sha3       = []byte("sha3")
+	ChainId    = []byte("chain_id")
+	ShhVersion = []byte("shh_version")
 
 	InvalidUrlWeb3    = []byte("invalid url or web3 method provided")
 	NetworkNoResponse = []byte("the network peer did not return any response")

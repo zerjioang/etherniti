@@ -11,6 +11,7 @@ import (
 	"math/big"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto/secp256k1"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -83,6 +84,14 @@ func Keccak256(data ...[]byte) []byte {
 		d.Write(b)
 	}
 	return d.Sum(nil)
+}
+
+// generates th sha3 hash of given message according to Ethereum format
+// eth_sign calculated the signature over keccak256("\x19Ethereum Signed Message:\n" + len(givenMessage) + givenMessage)))
+// this gives context to a signature and prevents signing of transactions.
+func MessageHash(msg string) []byte {
+	//raw := "\x19Ethereum Signed Message:\n" + strconv.Itoa(len(msg)) + msg
+	return Keccak256(str.UnsafeBytes(msg))
 }
 
 func FromECDSAPub(pub *ecdsa.PublicKey) []byte {
