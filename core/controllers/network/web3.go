@@ -294,6 +294,11 @@ func (ctl *Web3Controller) parseSignature(c *echo.Context) error {
 	}
 }
 
+// TODO implement this function
+func (ctl *Web3Controller) ecRecover(c *echo.Context) error {
+	return api.Error(c, errors.New("not implemented"))
+}
+
 func (ctl *Web3Controller) netVersion(c *echo.Context) error {
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -337,7 +342,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	//resolve method name from key value
 	method := methodMap[key]
 	methodBytes := str.UnsafeBytes(method)
-	//TODO : in private contenxt peer name is empty
+	//TODO : in private context peer name is empty
 	cacheKey := ctl.network.peer + ":" + method
 	cacheKeyBytes := str.UnsafeBytes(cacheKey)
 	result, found := ctl.network.cache.Get(cacheKeyBytes)
@@ -1102,7 +1107,8 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	// Note the address to sign with must be unlocked.
 	router.POST("/sign", ctl.sign)
 	router.POST("/signparse", ctl.parseSignature)
-	router.POST("/ecrecover", ctl.parseSignature)
+
+	router.POST("/ecrecover", ctl.ecRecover)
 
 	// eth_sendTransaction
 	router.POST("/send/tx", ctl.sendTransaction)

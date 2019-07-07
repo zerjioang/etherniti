@@ -51,7 +51,13 @@ var (
 	EthSign                     = []byte("eth_sign")
 	EthSignatureParse           = []byte("eth_sign_parse")
 
-	Sha3       = []byte("sha3")
+	Sha3 = []byte("sha3")
+
+	PutString = []byte("db_putString")
+	GetString = []byte("db_getString")
+	PutHex    = []byte("db_putHex")
+	GetHex    = []byte("db_getHex")
+
 	ChainId    = []byte("chain_id")
 	ShhVersion = []byte("shh_version")
 

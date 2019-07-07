@@ -251,3 +251,26 @@ func (req *EthSha3Request) Validate() error {
 	//todo check if signature string starts with 0x
 	return nil
 }
+
+type DbStorageRequest struct {
+	Database string `json:"database"` //Database name.
+	Key      string `json:"key"`      // Key name.
+	Value    string `json:"value"`    // String to store.
+}
+
+func (req *DbStorageRequest) Validate() error {
+	if req.Database == "" {
+		return errors.New("database name cannot be empty")
+	}
+	if req.Key == "" {
+		return errors.New("item key cannot be empty")
+	}
+	if req.Value == "" {
+		return errors.New("item value cannot be empty")
+	}
+	return nil
+}
+
+type DbStorageResponseRequest struct {
+	Value string `json:"value"`
+}
