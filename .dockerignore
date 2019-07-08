@@ -24,13 +24,22 @@ site
 
 # ignore dashboard files
 **/dashboard
-**/ci
-**/benchmark
+
 **\.idea
-**/test
-**/volumes
-**/secrets
+**/asm
+**/benchmarks
+**/ci
+**/docs
 **/rfc
 **/ofus
-**/asm
+**/secrets
+**/test
+**/volumes
 etherniti
+*.md
+*.yml
+Gopkg.toml
+Gopkg.lock
+*.conf
+LICENSE
+VERSION

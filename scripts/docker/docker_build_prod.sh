@@ -17,4 +17,8 @@ source ./docker_build.sh
 # move to project root dir from ./scripts to ./
 cd ../..
 
-build --build-arg BUILD_MODE=prod -t etherniti/proxy:latest
+build \
+	--build-arg BUILD_MODE=prod \
+	--build-arg BUILD_EDITION=pro \
+	--build-arg BUILD_VERSION=$BUILD_VERSION \
+	-t etherniti/proxy:latest

@@ -10,28 +10,28 @@ set -e
 
 function build(){
 	if ! existsImage "preloader"; then
-		echo "preloader docker image not found"
-		echo "building preloader image"
+		log "preloader docker image not found"
+		log "building preloader image"
 		docker build -f Dockerfile-preloader -t preloader:latest .
-		echo "preloader image built"
+		log "preloader image built"
 	else 
-		echo "using already built preloader docker image"
+		log "using already built preloader docker image"
 	fi
 
-	echo "Building container amd64 image from Dockerfile-dev"
+	title "Building container amd64 image from Dockerfile-dev"
 	docker build -f Dockerfile-dev "$@" .
 }
 
 function buildArm(){
 	if ! existsImage "preloader"; then
-		echo "preloader docker image not found"
-		echo "building preloader image"
+		log "preloader docker image not found"
+		log "building preloader image"
 		docker build -f Dockerfile-preloader -t preloader:latest .
-		echo "preloader image built"
+		log "preloader image built"
 	else 
-		echo "using already built preloader docker image"
+		log "using already built preloader docker image"
 	fi
 
-	echo "Building container arm image from Dockerfile-dev-arm"
+	title "Building container arm image from Dockerfile-dev-arm"
 	docker build -f Dockerfile-dev-arm "$@" .
 }
