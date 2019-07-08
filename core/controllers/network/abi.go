@@ -55,7 +55,7 @@ func (ctl *AbiController) setAbi(c *echo.Context) error {
 		req := abi.ABI{}
 		if err := c.Bind(&req); err != nil {
 			// return a binding error
-			logger.Error("failed to bind request data to model: ", err)
+			logger.Error(data.FailedToBind, err)
 			return api.ErrorBytes(c, data.BindErr)
 		}
 		if req.Methods != nil && len(req.Methods) > 0 {

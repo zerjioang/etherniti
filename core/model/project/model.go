@@ -112,7 +112,7 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 	//new project creation request
 	if err := context.Bind(&project); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return nil, data.ErrBind
 	}
 	// todo optimize this process

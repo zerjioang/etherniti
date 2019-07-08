@@ -134,49 +134,52 @@ type AbiLinkRequest json.RawMessage
 	}
 }
 */
+
 type ContractCompilationOpts struct {
 	// Select desired EVM version. Either homestead,
 	//  tangerineWhistle, spuriousDragon, byzantium (default) or
 	//  constantinople.
-	EvmVersion string `json:"evm-version"`
-	Optimize   struct {
-		Enabled bool `json:"enabled"`
-		Runs    int  `json:"runs"`
-	} `json:"optimize"`
-	OptimizeYul     bool   `json:"optimize-yul"`
-	Gas             bool   `json:"gas"`
-	Assemble        bool   `json:"assemble"`
-	Yul             bool   `json:"yul"`
-	StrictAssembly  bool   `json:"strict-assembly"`
-	Machine         string `json:"machine"`
-	Link            bool   `json:"link"`
-	MetadataLiteral bool   `json:"metadata-literal"`
-	AllowPaths      bool   `json:"allow-paths"`
-	Report          struct {
-		Ast        bool `json:"ast"`
-		Asm        bool `json:"asm"`
-		Opcodes    bool `json:"opcodes"`
-		Bin        bool `json:"bin"`
-		BinRuntime bool `json:"bin-runtime"`
-		Abi        bool `json:"abi"`
-		Ir         bool `json:"ir"`
-		Hashes     bool `json:"hashes"`
-		Userdoc    bool `json:"userdoc"`
-		Devdoc     bool `json:"devdoc"`
-		Metadata   bool `json:"metadata"`
-	} `json:"report"`
+	EvmVersion      string       `json:"evm-version"`
+	Optimize        OptimizeOpts `json:"optimize"`
+	OptimizeYul     bool         `json:"optimize-yul"`
+	Gas             bool         `json:"gas"`
+	Assemble        bool         `json:"assemble"`
+	Yul             bool         `json:"yul"`
+	StrictAssembly  bool         `json:"strict-assembly"`
+	Machine         string       `json:"machine"`
+	Link            bool         `json:"link"`
+	MetadataLiteral bool         `json:"metadata-literal"`
+	AllowPaths      bool         `json:"allow-paths"`
+	Report          ReportOpts   `json:"report"`
+}
+type OptimizeOpts struct {
+	Enabled bool `json:"enabled"`
+	Runs    int  `json:"runs"`
+}
+type ReportOpts struct {
+	Ast        bool `json:"ast"`
+	Asm        bool `json:"asm"`
+	Opcodes    bool `json:"opcodes"`
+	Bin        bool `json:"bin"`
+	BinRuntime bool `json:"bin-runtime"`
+	Abi        bool `json:"abi"`
+	Ir         bool `json:"ir"`
+	Hashes     bool `json:"hashes"`
+	Userdoc    bool `json:"userdoc"`
+	Devdoc     bool `json:"devdoc"`
+	Metadata   bool `json:"metadata"`
 }
 
 // contract compilation request dto
 type SingleFileContractCompileRequest struct {
-	ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
-	Contract                string `json:"contract" form:"contract" query:"contract"`
+	Opts     ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
+	Contract string                  `json:"contract" form:"contract" query:"contract"`
 }
 
 // contract compilation request dto
 type MultiFileContractCompileRequest struct {
-	ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
-	Contract                []string `json:"contract" form:"contract" query:"contract"`
+	Opts     ContractCompilationOpts `json:"opts" form:"opts" query:"opts"`
+	Contract []string                `json:"contract" form:"contract" query:"contract"`
 }
 
 // contract compilation response dto

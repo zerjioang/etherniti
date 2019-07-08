@@ -16,7 +16,7 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
 	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 

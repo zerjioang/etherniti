@@ -216,7 +216,7 @@ func (ctl *Web3Controller) sha3Node(c *echo.Context) error {
 	var req *protocol.EthSha3Request
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	err := req.Validate()
@@ -251,7 +251,7 @@ func (ctl *Web3Controller) sha3BuiltIn(c *echo.Context) error {
 	var req *protocol.EthSha3Request
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	// 2 validate input data
@@ -707,7 +707,7 @@ func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
 	var txData ethrpc.TransactionData
 	if err := c.Bind(&txData); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 
@@ -847,7 +847,7 @@ func (ctl *Web3Controller) sign(c *echo.Context) error {
 	var signReq *ethrpc.NodeSignRequest
 	if err := c.Bind(&signReq); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	//validate input params
@@ -888,7 +888,7 @@ func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
 	var tx ethrpc.TransactionData
 	if err := c.Bind(&tx); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	//make the call with json body
@@ -903,7 +903,7 @@ func (ctl *Web3Controller) compileCode(c *echo.Context, id []byte, compilerCall 
 	var model map[string]string
 	if err := c.Bind(&model); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	contractStr, found := model["contract"]

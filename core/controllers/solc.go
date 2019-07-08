@@ -28,15 +28,30 @@ import (
 type SolcController struct {
 }
 
-type CodeReader func(c *echo.Context) ([]string, error)
+type CodeReader func(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error)
 
 var (
-	solcResponseCode  int
-	solcVersionErr    error
-	solcVersionData   *solc.Solidity
-	errNoContractData = errors.New("failed to get request contract data")
-	errNoSolc         = errors.New("failed to get solc version")
-	noContractData    []string
+	solcResponseCode          int
+	solcVersionErr            error
+	solcVersionData           *solc.Solidity
+	errNoContractData         = errors.New("failed to get request contract data")
+	errNoSolc                 = errors.New("failed to get solc version")
+	noContractData            []string
+	defaultCompilationOptions = &protocol.ContractCompilationOpts{
+		EvmVersion: "petersburg",
+		Optimize: protocol.OptimizeOpts{
+			Enabled: true,
+			Runs:    200,
+		},
+		Gas:     true,
+		Machine: "evm",
+		Report: protocol.ReportOpts{
+			Opcodes:    true,
+			Bin:        true,
+			BinRuntime: true,
+			Hashes:     true,
+		},
+	}
 )
 
 func init() {
@@ -61,7 +76,7 @@ func NewSolcController() SolcController {
 
 func (ctl SolcController) version(c *echo.Context) error {
 	if solcResponseCode == 200 {
-		return api.SendSuccess(c, []byte("solc-version"), solcResponseCode)
+		return api.SendSuccess(c, data.SolcVersion, solcVersionData)
 	} else {
 		return api.ErrorCode(c, solcResponseCode, solcVersionErr)
 	}
@@ -69,7 +84,13 @@ func (ctl SolcController) version(c *echo.Context) error {
 
 // solc --optimize --optimize-runs 200 --opcodes --bin --abi --hashes --asm erc20.sol
 func (ctl SolcController) compileFromSources(c *echo.Context, codeReader CodeReader) error {
-	dataFiles, codeErr := codeReader(c)
+	// 1 read user solc configuration
+	// 2 read user source code
+	opts, dataFiles, codeErr := codeReader(c)
+	if opts == nil {
+		//use default compilation options
+		opts = defaultCompilationOptions
+	}
 	if codeErr != nil {
 		//error reading source code
 		return api.Error(c, codeErr)
@@ -102,46 +123,55 @@ func (ctl SolcController) compileFromSources(c *echo.Context, codeReader CodeRea
 	}
 }
 
-func (ctl SolcController) singleRawFileReader(c *echo.Context) ([]string, error) {
+func (ctl SolcController) singleRawFileReader(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error) {
 	//read request parameters encoded in the body
 	req := protocol.SingleFileContractCompileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
-		return noContractData, err
+		logger.Error(data.FailedToBind, err)
+		return &req.Opts, noContractData, err
 	}
 
 	if req.Contract == "" {
-		return noContractData, errNoContractData
+		return &req.Opts, noContractData, errNoContractData
 	} else {
-		return []string{req.Contract}, nil
+		return &req.Opts, []string{req.Contract}, nil
 	}
 }
 
-func (ctl SolcController) singleBase64FileReader(c *echo.Context) ([]string, error) {
+func (ctl SolcController) singleBase64FileReader(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error) {
 	//read request parameters encoded in the body
 	req := protocol.SingleFileContractCompileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
-		return noContractData, err
+		logger.Error(data.FailedToBind, err)
+		return &req.Opts, noContractData, err
 	}
 
 	if req.Contract == "" {
-		return noContractData, errNoContractData
+		return &req.Opts, noContractData, errNoContractData
 	} else {
 		//decode contract from base64 string to ascii
 		decoded, b64Err := base64.StdEncoding.DecodeString(req.Contract)
 		if b64Err != nil {
 			//b64 decoding error found
-			return noContractData, b64Err
+			return &req.Opts, noContractData, b64Err
 		} else {
-			return []string{str.UnsafeString(decoded)}, nil
+			return &req.Opts, []string{str.UnsafeString(decoded)}, nil
 		}
 	}
 }
 
-func (ctl SolcController) gitCodeReader(c *echo.Context) ([]string, error) {
+func (ctl SolcController) gitCodeReader(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error) {
+
+	// 1 read compilation settings
+	var opts *protocol.ContractCompilationOpts
+	if err := c.Bind(&opts); err != nil {
+		// return a binding error
+		logger.Error(data.FailedToBind, err)
+		return nil, noContractData, err
+	}
+
 	// Filesystem abstraction based on memory
 	fs := memfs.New()
 	// Git objects storer based on memory
@@ -157,42 +187,60 @@ func (ctl SolcController) gitCodeReader(c *echo.Context) ([]string, error) {
 		},*/
 	})
 	if err != nil {
-		return noContractData, err
+		return opts, noContractData, err
 	}
 
 	var repoFiles []string
 	dirFiles, err := fs.ReadDir(".")
 	if err != nil {
-		return noContractData, err
+		return opts, noContractData, err
 	} else {
 		for _, f := range dirFiles {
 			repoFiles = append(repoFiles, f.Name())
 		}
 	}
-	return repoFiles, nil
+	return opts, repoFiles, nil
 }
 
-func (ctl SolcController) uploadedZipReader(c *echo.Context) ([]string, error) {
+func (ctl SolcController) uploadedZipReader(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error) {
+
+	// 1 read compilation settings
+	var opts *protocol.ContractCompilationOpts
+	if err := c.Bind(&opts); err != nil {
+		// return a binding error
+		logger.Error(data.FailedToBind, err)
+		return nil, noContractData, err
+	}
+
 	// source zipped file
 	file, err := c.FormFile("file")
 	if err != nil {
-		return noContractData, err
+		return opts, noContractData, err
 	}
 	src, err := file.Open()
 	if err != nil {
-		return noContractData, err
+		return opts, noContractData, err
 	}
 	zippedBytes, err := ioutil.ReadAll(src)
 	if err != nil {
-		return noContractData, err
+		return opts, noContractData, err
 	}
 	_ = src.Close()
 	files, err := packers.Unzip(zippedBytes)
-	return files, err
+	return opts, files, err
 }
 
-func (ctl SolcController) uploadedTarGzReader(c *echo.Context) ([]string, error) {
-	return []string{}, nil
+func (ctl SolcController) uploadedTarGzReader(c *echo.Context) (*protocol.ContractCompilationOpts, []string, error) {
+
+	// 1 read compilation settings
+	var opts *protocol.ContractCompilationOpts
+	if err := c.Bind(&opts); err != nil {
+		// return a binding error
+		logger.Error(data.FailedToBind, err)
+		return nil, noContractData, err
+	}
+
+	return opts, []string{}, nil
 }
 
 func (ctl SolcController) compileModeSelector(c *echo.Context) error {

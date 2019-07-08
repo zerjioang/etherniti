@@ -4,7 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
+	"github.com/zerjioang/etherniti/shared/protocol/io"
+
 	"github.com/zerjioang/etherniti/core/logger"
+)
+
+var (
+	testSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
 )
 
 func BenchmarkProjectModel(b *testing.B) {
@@ -28,12 +35,12 @@ func BenchmarkProjectModel(b *testing.B) {
 			// Generate a seed to determine all keys from.
 			// This should be persisted, backed up, and secured
 			p := NewProject("", nil)
-			_ = p.Value()
+			_ = p.Value(testSerializer)
 		}
 	})
 	b.Run("deserialization-bench", func(b *testing.B) {
 		p := NewProject("", nil)
-		v := p.Value()
+		v := p.Value(testSerializer)
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)

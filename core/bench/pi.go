@@ -1,13 +1,14 @@
 package bench
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/monotonic"
 	"math"
 	"math/rand"
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/modules/monotonic"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 	runScore int64
 )
 
-func CalculateScore(){
+func CalculateScore() {
 	logger.Debug("benchmarking current server configuration")
 	logger.Debug("getting benchmark (multicore) score")
 	cores := runtime.NumCPU()
@@ -44,7 +45,7 @@ func CalculateScore(){
 
 	//pi := (float64(total) / float64(samples)) * 4
 	totalt := monotonic.Since(start)
-	score := float64(samples)/totalt.Seconds()
+	score := float64(samples) / totalt.Seconds()
 	runScore = int64(score)
 }
 

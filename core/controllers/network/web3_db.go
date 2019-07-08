@@ -31,7 +31,7 @@ func (ctl *Web3DbController) dbPutString(c *echo.Context) error {
 	var req *protocol.DbStorageRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	err := req.Validate()
@@ -77,7 +77,7 @@ func (ctl *Web3DbController) dbPutHex(c *echo.Context) error {
 	var req *protocol.DbStorageRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	err := req.Validate()
