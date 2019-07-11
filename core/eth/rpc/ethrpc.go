@@ -6,7 +6,6 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/valyala/fasthttp"
 	"io"
 	"math/big"
 	"net"
@@ -14,6 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/zerjioang/etherniti/core/data"
 

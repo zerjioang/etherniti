@@ -5,8 +5,9 @@ import (
 	"crypto/x509"
 	"io/ioutil"
 	"log"
-	"net/http"
+	"time"
 
+	"github.com/valyala/fasthttp"
 	"github.com/zerjioang/etherniti/core/logger"
 )
 
@@ -23,7 +24,7 @@ openssl req -newkey rsa:2048 \
 */
 
 var (
-	client *http.Client
+	client *fasthttp.Client
 )
 
 func init() {
@@ -45,33 +46,31 @@ func init() {
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
 	// On the Client, read and supply the key pair as the client certificate.
-	// Create a HTTPS client and supply the created CA pool
-	client = &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				Certificates: []tls.Certificate{cert},
-				RootCAs:      caCertPool,
-			},
+	client = &fasthttp.Client{
+		ReadTimeout:     time.Second * 3,
+		WriteTimeout:    time.Second * 3,
+		WriteBufferSize: 2048,
+		ReadBufferSize:  2048,
+		TLSConfig: &tls.Config{
+			Certificates: []tls.Certificate{cert},
+			RootCAs:      caCertPool,
 		},
 	}
 }
 
 // executes a mutual tls configured https requests
-func MakeRequest(url string) ([]byte, error) {
-	var body []byte
-	var err error
+func MakeRequest(client *fasthttp.Client, url string, content []byte) ([]byte, error) {
+	req := fasthttp.AcquireRequest()
+	req.SetRequestURI(url)                    //set URL
+	req.Header.SetMethodBytes([]byte("POST")) //set method mode
+	req.SetBody(content)                      //set body
+
+	res := fasthttp.AcquireResponse()
 	// Request /hello via the created HTTPS client over port 8443 via GET
-	r, err := client.Get(url)
+	err := client.Do(req, res)
 	if err != nil {
 		logger.Error(err)
-		return body, err
+		return nil, err
 	}
-	// Read the response body
-	body, err = ioutil.ReadAll(r.Body)
-	if err != nil {
-		logger.Error(err)
-		return body, err
-	}
-	_ = r.Body.Close()
-	return body, nil
+	return req.Body(), nil
 }

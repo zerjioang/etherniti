@@ -5,8 +5,8 @@ package project
 
 import (
 	"errors"
-	"net/http"
 
+	"github.com/valyala/fasthttp"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
@@ -20,11 +20,11 @@ var (
 
 type ProjectInteractionController struct {
 	projects *ProjectController
-	client   *http.Client
+	client   *fasthttp.Client
 }
 
 // constructor like function
-func NewProjectInteractionControllerPtr(p *ProjectController, client *http.Client) *ProjectInteractionController {
+func NewProjectInteractionControllerPtr(p *ProjectController, client *fasthttp.Client) *ProjectInteractionController {
 	pc := new(ProjectInteractionController)
 	pc.projects = p
 	pc.client = client

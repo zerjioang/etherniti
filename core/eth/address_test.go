@@ -5,9 +5,10 @@ package eth
 
 import (
 	"math/big"
-	"net/http"
 	"testing"
 	"time"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/stretchr/testify/assert"
 
@@ -26,11 +27,11 @@ const (
 )
 
 var (
-	testClient = &http.Client{
-		Timeout: time.Second * 3,
-		Transport: &http.Transport{
-			TLSHandshakeTimeout: 3 * time.Second,
-		},
+	testClient = &fasthttp.Client{
+		ReadTimeout:     time.Second * 3,
+		WriteTimeout:    time.Second * 3,
+		WriteBufferSize: 2048,
+		ReadBufferSize:  2048,
 	}
 )
 
