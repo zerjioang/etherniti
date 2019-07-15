@@ -4,9 +4,10 @@
 package main
 
 import (
-	"github.com/zerjioang/etherniti/core/bench"
 	"os"
 	"runtime"
+
+	"github.com/zerjioang/etherniti/core/bench"
 
 	"github.com/zerjioang/etherniti/core/controllers"
 

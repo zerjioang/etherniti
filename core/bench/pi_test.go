@@ -36,7 +36,7 @@ func TestMonteCarlo(t *testing.T) {
 
 	pi := (float64(total) / float64(samples)) * 4
 	totalt := monotonic.Since(start)
-	score := float64(samples)/totalt.Seconds()
+	score := float64(samples) / totalt.Seconds()
 
 	fmt.Println("Time: ", totalt)
 	fmt.Println("Score: ", int64(score))

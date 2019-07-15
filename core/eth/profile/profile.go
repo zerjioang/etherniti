@@ -209,7 +209,7 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 			RpcEndpoint: data.RpcEndpoint, //required
 			Address:     data.Address,     //required
 			Key:         data.Key,
-			Source:      ip.Ip2int(data.Ip),
+			Source:      ip.Ip2intLow(data.Ip),
 		},
 		Issuer:    "proxy.etherniti.org",
 		ExpiresAt: now.Add(cfg.TokenExpiration()).Unix(),

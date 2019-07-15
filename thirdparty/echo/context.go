@@ -101,7 +101,7 @@ func (c *Context) Preload() {
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()
 	c.ip = c.resolveRealIP()
-	c.intIp = ip.Ip2int(c.ip)
+	c.intIp = ip.Ip2intLow(c.ip)
 	//detect user requested data serialization method
 	c.serializer, c.acceptContentMode = ioproto.EncodingSelector(acceptHeader)
 }
