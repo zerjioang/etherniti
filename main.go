@@ -6,6 +6,7 @@ package main
 import (
 	"os"
 	"runtime"
+	"syscall"
 
 	"github.com/zerjioang/etherniti/core/bench"
 
@@ -46,6 +47,21 @@ func init() {
 	// show welcome banner
 	println(banner.WelcomeBanner())
 	controllers.LoadIndexConstants()
+	// hack 1
+	// Increase resources limitations
+	// adds logic to increase the soft limit on the max number of open files for the server process
+	var rLimit syscall.Rlimit
+	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
+		logger.Error(err)
+	}
+	rLimit.Cur = rLimit.Max
+	if err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
+		logger.Error(err)
+	}
+
+	// hack 2
+	// #!/bin/bash
+	// echo 2621440 >  /proc/sys/net/netfilter/nf_conntrack_max
 }
 
 // generate build sha1: git rev-parse --short HEAD

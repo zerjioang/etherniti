@@ -80,6 +80,38 @@
   version = "v1.12.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:368ba96ddacaae2fe265afcac3062a199908f7dc0c6569d6e05a7a13042cccf1"
+  name = "github.com/gobwas/httphead"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2c6c146eadee0b69f856f87e3e9f1d0cd6aad2f5"
+
+[[projects]]
+  digest = "1:bdfe3b97ff03e4f7252c74cfaefb20050a360c8fb760701014ebf99c9540abd1"
+  name = "github.com/gobwas/pool"
+  packages = [
+    ".",
+    "internal/pmath",
+    "pbufio",
+    "pbytes",
+  ]
+  pruneopts = "UT"
+  revision = "fa3125c39d7eca32e1387bb69b1b38dcb31b1e0b"
+  version = "v0.2.0"
+
+[[projects]]
+  digest = "1:aea6697202cefa9365797c4c8ad0a1dbdf15ba21600ddc599a9000629a2ecb6f"
+  name = "github.com/gobwas/ws"
+  packages = [
+    ".",
+    "wsutil",
+  ]
+  pruneopts = "UT"
+  revision = "05baaea2bbcfe8963301c62d9931c882d59595cd"
+  version = "v1.0.2"
+
+[[projects]]
   digest = "1:573ca21d3669500ff845bdebee890eb7fc7f0f50c59f2132f2a0c6b03d85086a"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
@@ -638,6 +670,8 @@
     "github.com/btcsuite/btcd/btcec",
     "github.com/dgraph-io/badger",
     "github.com/dgraph-io/badger/options",
+    "github.com/gobwas/ws",
+    "github.com/gobwas/ws/wsutil",
     "github.com/gorilla/websocket",
     "github.com/graphql-go/graphql",
     "github.com/jarcoal/httpmock",
@@ -667,6 +701,7 @@
     "golang.org/x/crypto/sha3",
     "golang.org/x/crypto/ssh",
     "golang.org/x/sys/cpu",
+    "golang.org/x/sys/unix",
     "golang.org/x/tools/go/buildutil",
     "golang.org/x/tools/go/loader",
     "golang.org/x/tools/refactor/importgraph",

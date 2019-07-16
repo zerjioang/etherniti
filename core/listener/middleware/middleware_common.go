@@ -162,7 +162,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// start websocket handler if requested
 	if edition.IsEnterprise() && cfg.IsWebSocketMode() {
 		logger.Info("[LAYER] /=> websocket")
-		e.GET("/ws", ws.WebsocketEntrypoint)
+		e.GET("/wsm", ws.WebsocketEntrypoint)
 	}
 
 	logger.Info("[LAYER] /=> static files")
