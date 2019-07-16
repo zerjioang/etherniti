@@ -188,8 +188,8 @@
     "zlib",
   ]
   pruneopts = "UT"
-  revision = "315059c39568ee89ae0c118bc6dc7306041543c3"
-  version = "v1.7.2"
+  revision = "23256797d1e4ccac36fad828362cdfef5b3aeb90"
+  version = "v1.7.4"
 
 [[projects]]
   digest = "1:923c4d7194b42e054b2eb8a6c62824ac55e23ececc1c7e48d4da69c971c55954"
@@ -402,12 +402,12 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:67c1fb183565bbfae97ac55c7cdaf86dbb245b128f2f9762c2e9b862d842a919"
+  digest = "1:46aea6ffe39c3d95c13640c2515236ed3c5cdffc3c78c6c0ed4edec2caf7a0dc"
   name = "github.com/tidwall/gjson"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d7c940e59395fdcaff4584cb442b2e7808f6711e"
-  version = "v1.3.0"
+  revision = "c5e72cdf74dff23857243dd662c465b810891c21"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:8453ddbed197809ee8ca28b06bd04e127bec9912deb4ba451fea7a1eca578328"
@@ -538,7 +538,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a401497567643b1f62cc7f7db6dc987307dabab80466210b2477c0cbd003c526"
+  digest = "1:34a0c43f2d706c6292cd418409b68ae23657c8a5e960ab97bc199972d4e86d0c"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -546,11 +546,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "6ec70d6a5542cba804c6d16ebe8392601a0b7b60"
+  revision = "fae7ac547cb717d141c433a2a173315e216b64c4"
 
 [[projects]]
   branch = "master"
-  digest = "1:837b4ffdade9def1f3afc69aaf126c4af65fbc49a9163ef040b5362d5eec3028"
+  digest = "1:a691850810bc4377409829d9e5cc9e9f64f5667e91bd2b5e851018926d2260f1"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -568,7 +568,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "286818132824cc7a932bc972207f079caafd739f"
+  revision = "b0712d6011d3000e445dee2964eb73448d9acdaf"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"

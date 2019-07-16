@@ -10,8 +10,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/bench"
 
-	"github.com/zerjioang/etherniti/core/bench"
-
 	"github.com/zerjioang/etherniti/core/controllers"
 
 	"github.com/zerjioang/etherniti/core/util/banner"
@@ -104,6 +102,7 @@ func main() {
 	bus.SharedBus().Shutdown()
 	logger.Info("all systems securely shutdown. exiting")
 }
+
 func showErrorInformation(e error) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Error", "Description"})
