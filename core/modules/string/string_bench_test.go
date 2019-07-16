@@ -297,7 +297,7 @@ func BenchmarkString(b *testing.B) {
 			b.ResetTimer()
 			exampleString := NewWith(example)
 			for n := 0; n < b.N; n++ {
-				_ = exampleString.HasPrefix("foo")
+				_ = exampleString.HasPrefix([]byte("foo"))
 			}
 		})
 	})
@@ -322,9 +322,6 @@ func BenchmarkString(b *testing.B) {
 			}
 		})
 	})
-	// BenchmarkString/is-hexadecimal/custom-12  	 5000000	       337 ns/op	   2.96 MB/s	       0 B/op	       0 allocs/op
-	// BenchmarkString/is-hexadecimal/custom-12  	50000000	        35.0 ns/op	  28.54 MB/s	       0 B/op	       0 allocs/op
-
 	b.Run("is-hexadecimal", func(b *testing.B) {
 		b.Run("custom", func(b *testing.B) {
 			example := []byte("d46d1326aed64ac499cc02a128339b99")

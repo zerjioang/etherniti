@@ -19,6 +19,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
 	io2 "github.com/zerjioang/etherniti/shared/protocol/io"
 
@@ -594,7 +596,7 @@ func (c *Context) CallerEthAddress() string {
 // it recovers the eth client linked to it
 // if peer url is provided, this peer address is used to dial
 // otherwise, token information is readed in order to custom peer dial
-func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string, httpClient *http.Client) (*ethrpc.EthRPC, string, error) {
+func (c *Context) RecoverEthClientFromTokenOrPeerUrl(peerUrl string, httpClient *fasthttp.Client) (*ethrpc.EthRPC, string, error) {
 	client := new(ethrpc.EthRPC)
 	var contextId string
 	// by default, peer url is used to dial

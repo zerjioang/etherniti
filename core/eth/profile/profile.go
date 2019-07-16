@@ -153,13 +153,13 @@ func CreateConnectionProfileToken(profile ConnectionProfile) (string, error) {
 	return token.SignedString(tokenSecretBytes)
 }
 
-func ParseConnectionProfileToken(tokenStr string) (*ConnectionProfile, error) {
+func ParseConnectionProfileToken(tokenData string) (*ConnectionProfile, error) {
 	var profile = NewConnectionProfilePtr()
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
 	// to the callback, providing flexibility.
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenData, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {

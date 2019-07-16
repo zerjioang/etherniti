@@ -36,7 +36,7 @@ func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 	req := protocol.DeployRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 

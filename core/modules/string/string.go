@@ -19,6 +19,8 @@ type String struct {
 	Data  unsafe.Pointer
 	Len   int
 	start uintptr
+	// raw content as byte array
+	raw []byte
 }
 
 func New() String {
@@ -30,6 +32,7 @@ func NewWith(data []byte) String {
 	s.Data = unsafe.Pointer(&data)
 	s.start = uintptr(unsafe.Pointer(&data[0]))
 	s.Len = len(data)
+	s.raw = data
 	return s
 }
 
@@ -195,30 +198,13 @@ func (c String) Contains(subStr []byte) bool {
 }
 
 // HasPrefix tests whether the string s begins with prefix.
-func (c String) HasPrefix(prefix string) bool {
-	if c.Len >= len(prefix) {
-		var eq = true
-		for i := 0; i < len(prefix) && eq; i++ {
-			eq = *(*byte)((unsafe.Pointer)(c.start + uintptr(i))) == prefix[i]
-		}
-		return eq
-	}
-	return false
+func (c String) HasPrefix(prefix []byte) bool {
+	return c.Len >= len(prefix) && bytes.Equal(c.raw[0:len(prefix)], prefix)
 }
 
 // HasSuffix tests whether the string s ends with suffix.
 func (c String) HasSuffix(suffix string) bool {
-	sl := len(suffix)
-	if c.Len >= sl {
-		var eq = true
-		for i := 0; i < sl && eq; i++ {
-			//read byte per byte starting from ending
-			v := *(*byte)((unsafe.Pointer)(c.start + uintptr(c.Len-i-1)))
-			eq = v == suffix[sl-i-1]
-		}
-		return eq
-	}
-	return false
+	return c.Len >= len(suffix) && c.String()[c.Len-len(suffix):] == suffix
 }
 
 // is numeric checks whether given string is numeric or not

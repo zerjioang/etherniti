@@ -11,6 +11,9 @@ import (
 	"net/http"
 	"strconv"
 	"testing"
+	"time"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 
@@ -18,6 +21,15 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/tidwall/gjson"
+)
+
+var (
+	testClient = &fasthttp.Client{
+		ReadTimeout:     time.Second * 3,
+		WriteTimeout:    time.Second * 3,
+		WriteBufferSize: 2048,
+		ReadBufferSize:  2048,
+	}
 )
 
 type EthRPCTestSuite struct {
@@ -64,7 +76,7 @@ func (s *EthRPCTestSuite) paramsEqual(body []byte, expected string) {
 }
 
 func (s *EthRPCTestSuite) SetupSuite() {
-	client := NewDefaultRPC("http://127.0.0.1:8545", true, new(http.Client))
+	client := NewDefaultRPC("http://127.0.0.1:8545", true, testClient)
 	s.rpc = &client
 
 	httpmock.Activate()

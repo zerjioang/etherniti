@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	FailedToBind             = "failed to bind request data to model: "
 	NotAuthorized            = "not authorized"
 	NotImplementedStr        = "not implemented"
 	ErrUnknownModeStr        = "unknown mode selected. Allowed modes are: single, git, zip, targz"

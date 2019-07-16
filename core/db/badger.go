@@ -37,7 +37,6 @@ type BadgerStorage struct {
 
 var (
 	defaultConfig = badger.Options{
-		DoNotCompact:        false,
 		LevelOneSize:        256 << 20,
 		LevelSizeMultiplier: 10,
 		TableLoadingMode:    options.LoadToRAM, // Mode in which LSM tree is loaded
@@ -234,7 +233,7 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 		if err := txn.Delete(key); err != nil {
 			if err == badger.ErrTxnTooBig {
 				it.Close()
-				err = txn.Commit(nil)
+				err = txn.Commit()
 				if err != nil {
 					return err
 				}
@@ -244,7 +243,7 @@ func (db *BadgerStorage) DeleteRange(min, max uint64) error {
 		}
 	}
 	it.Close()
-	err := txn.Commit(nil)
+	err := txn.Commit()
 	if err != nil {
 		return err
 	}
@@ -310,7 +309,7 @@ func NewBadgerStorageGC(options *Options) (*BadgerStorage, error) {
 
 	// build badger options
 	if options.BadgerOptions == nil {
-		defaultOpts := badger.DefaultOptions
+		defaultOpts := badger.DefaultOptions("")
 		options.BadgerOptions = &defaultOpts
 	}
 	options.BadgerOptions.Dir = options.Path

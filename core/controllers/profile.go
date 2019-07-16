@@ -37,7 +37,7 @@ func (ctl ProfileController) create(c *echo.Context) error {
 	req := protocol.ProfileRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	// add current user IP to request

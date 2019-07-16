@@ -81,7 +81,7 @@ func (req *AuthRequest) CanList(context *echo.Context) error {
 func (req *AuthRequest) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
 	if err := context.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return nil, stack.Ret(err)
 	}
 	return nil, data.ErrBind

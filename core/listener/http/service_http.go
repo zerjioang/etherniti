@@ -55,17 +55,17 @@ func (l HttpListener) ShutdownListener(listenerName string, instance *echo.Echo,
 
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	ctx, cancel := context.WithTimeout(context.Background(), common.ShutdownTimeout)
 	logger.Info("graceful shutdown of the service requested")
+	ctx, cancel := context.WithTimeout(context.Background(), common.ShutdownTimeout)
 	logger.Info("shutting down " + listenerName + " server listener service...")
 	if err := instance.Shutdown(ctx); err != nil {
 		logger.Error(err)
 		notifier <- err
 	}
+	cancel()
 	logger.Info("graceful shutdown executed for " + listenerName + " listener")
 	logger.Info("exiting...")
 	notifier <- nil
-	cancel()
 }
 
 // create new deployer instance

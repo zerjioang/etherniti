@@ -31,12 +31,13 @@ func BenchmarkAPI(b *testing.B) {
 		// disable logger
 		logger.Enabled(false)
 
-		b.ReportAllocs()
-		b.SetBytes(1)
-		b.ResetTimer()
 		//start benchmarking
 		req := httptest.NewRequest(http.MethodPost, constants.ApiVersion+"/web3/ganache/sha3/local", strings.NewReader(postData))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			//execute the request
 			rec := httptest.NewRecorder()

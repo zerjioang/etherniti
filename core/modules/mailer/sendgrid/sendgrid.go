@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/valyala/fasthttp"
 	"github.com/zerjioang/etherniti/core/util/str"
 
 	"github.com/zerjioang/etherniti/core/config"
@@ -95,7 +96,7 @@ var (
 	cfg                      = config.GetDefaultOpts()
 	apiKey                   = ""
 	defaultRequestHeader     http.Header
-	defaultSendGridApiClient *http.Client
+	defaultSendGridApiClient *fasthttp.Client
 	noApiKeyErr              = errors.New("no SENDGRID_API_KEY was defined")
 	spaceRemover             = regexp.MustCompile(`\s+`)
 )
@@ -109,11 +110,11 @@ func init() {
 		"Authorization": []string{"Bearer " + apiKey},
 	}
 	logger.Debug("creating sendgrid api client")
-	defaultSendGridApiClient = &http.Client{
-		Timeout: time.Second * 3,
-		Transport: &http.Transport{
-			TLSHandshakeTimeout: 3 * time.Second,
-		},
+	defaultSendGridApiClient = &fasthttp.Client{
+		ReadTimeout:     time.Second * 3,
+		WriteTimeout:    time.Second * 3,
+		WriteBufferSize: 2048,
+		ReadBufferSize:  2048,
 	}
 }
 

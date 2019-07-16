@@ -6,8 +6,9 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"net/http"
 	"sync/atomic"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/zerjioang/etherniti/shared/constants"
 
@@ -58,7 +59,7 @@ type coinMarketCapEthPriceResponse []struct {
 // token controller
 type ExternalController struct {
 	// http client
-	client *http.Client
+	client *fasthttp.Client
 	//cached value. concurrent safe that stores []byte
 	priceCache atomic.Value
 	//cached value. concurrent safe that stores []byte
@@ -66,7 +67,7 @@ type ExternalController struct {
 }
 
 // constructor like function
-func NewExternalController(client *http.Client) ExternalController {
+func NewExternalController(client *fasthttp.Client) ExternalController {
 	ctl := ExternalController{}
 	ctl.client = client
 	return ctl

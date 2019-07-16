@@ -105,7 +105,7 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 	//new registry creation request
 	if err := context.Bind(&r); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return nil, data.ErrBind
 	}
 	e := r.Validate()

@@ -5,8 +5,8 @@ package network
 
 import (
 	"errors"
-	"net/http"
 
+	"github.com/valyala/fasthttp"
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -16,7 +16,7 @@ import (
 	"github.com/zerjioang/etherniti/core/modules/cache"
 
 	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
@@ -28,7 +28,7 @@ var (
 // eth network controller
 type NetworkController struct {
 	// http client
-	client *http.Client
+	client *fasthttp.Client
 	//main connection peer address/ip
 	peer string
 	//connection name: mainet, ropsten, rinkeby, etc
@@ -46,7 +46,7 @@ func NewNetworkController() NetworkController {
 	return ctl
 }
 
-func (ctl *NetworkController) SetClient(c *http.Client) {
+func (ctl *NetworkController) SetClient(c *fasthttp.Client) {
 	ctl.client = c
 }
 

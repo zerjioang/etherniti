@@ -4,8 +4,9 @@
 package controllers
 
 import (
-	"net/http"
 	"time"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/zerjioang/etherniti/core/api"
@@ -81,11 +82,11 @@ func next(next echo.HandlerFunc) echo.HandlerFunc {
 func RegisterServices(e *echo.Echo) *echo.Group {
 
 	// create a shared instance of http client for all controllers
-	client := &http.Client{
-		Timeout: time.Second * 3,
-		Transport: &http.Transport{
-			TLSHandshakeTimeout: 3 * time.Second,
-		},
+	client := &fasthttp.Client{
+		ReadTimeout:     time.Second * 3,
+		WriteTimeout:    time.Second * 3,
+		WriteBufferSize: 2048,
+		ReadBufferSize:  2048,
 	}
 	// /v1
 	groupV1 := e.Group(constants.ApiVersion, next)

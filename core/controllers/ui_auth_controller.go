@@ -67,7 +67,7 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" {
@@ -111,7 +111,7 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" && req.Password != "" && req.Username != "" {
@@ -156,7 +156,7 @@ func (ctl UIAuthController) token(c *echo.Context) error {
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	logger.Error("failed to generate user token")
@@ -169,7 +169,7 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
-		logger.Error("failed to bind request data to model: ", err)
+		logger.Error(data.FailedToBind, err)
 		return api.ErrorBytes(c, data.BindErr)
 	}
 	if req.Email != "" {

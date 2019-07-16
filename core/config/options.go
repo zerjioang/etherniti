@@ -280,7 +280,7 @@ func (eo *EthernitiOptions) IsUnixSocketMode() bool {
 
 func (eo *EthernitiOptions) IsWebSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
-	return eo.envData.String(XEthernitiListeningMode) == "ws"
+	return eo.envData.String(XEthernitiListeningMode) == "wsm"
 }
 
 func (eo *EthernitiOptions) GetEmailUsername() string {

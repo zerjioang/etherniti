@@ -101,13 +101,13 @@ func TestString(t *testing.T) {
 		t.Run("success", func(t *testing.T) {
 			example := []byte("Foo-bar-HELLO-world")
 			exampleString := NewWith(example)
-			result := exampleString.HasPrefix("Foo")
+			result := exampleString.HasPrefix([]byte("Foo"))
 			assert.True(t, result)
 		})
 		t.Run("fail", func(t *testing.T) {
 			example := []byte("Foo-bar-HELLO-world")
 			exampleString := NewWith(example)
-			result := exampleString.HasPrefix("blablabla")
+			result := exampleString.HasPrefix([]byte("blablabla"))
 			assert.False(t, result)
 		})
 	})

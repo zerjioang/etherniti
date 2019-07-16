@@ -18,7 +18,7 @@ func TestProjectModel(t *testing.T) {
 	})
 	t.Run("deserialize", func(t *testing.T) {
 		p := NewProject("random-name", nil)
-		v := p.Value()
+		v := p.Value(testSerializer)
 		p2 := NewEmptyProject()
 		err := json.Unmarshal(v, &p2)
 		assert.Nil(t, err)

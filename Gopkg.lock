@@ -23,7 +23,7 @@
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "962a206e94e9151fe41bbd6d6464af4ba7168f50"
+  revision = "c26ffa870fd817666a857af1bf6498fabba1ffe3"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -34,19 +34,19 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:65a60756406f5c12bc0eadcfab55eeaff0e7ed5954817bf8fe70a07478026406"
+  digest = "1:6be8582a4f52ba2851d8a039eb9c3a3b90334b2820563d71e97de35580da128e"
   name = "github.com/dgraph-io/badger"
   packages = [
     ".",
     "options",
-    "protos",
+    "pb",
     "skl",
     "table",
     "y",
   ]
   pruneopts = "UT"
-  revision = "acce481eab83cd96f2d5470802f8f8ab8d793431"
-  version = "v1.5.5"
+  revision = "2fa005c9d4bf695277ab5214c1fbce3735b9562a"
+  version = "v1.6.0"
 
 [[projects]]
   branch = "master"
@@ -55,6 +55,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "6a90982ecee230ff6cba02d5bd386acc030be9d3"
+
+[[projects]]
+  digest = "1:6f9339c912bbdda81302633ad7e99a28dfa5a639c864061f1929510a9a64aa74"
+  name = "github.com/dustin/go-humanize"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9f541cc9db5d55bce703bd99987c9d5cb8eea45e"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:b498b36dbb2b306d1c5205ee5236c9e60352be8f9eea9bf08186723a9f75b4f3"
@@ -72,12 +80,44 @@
   version = "v1.12.0"
 
 [[projects]]
-  digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
+  branch = "master"
+  digest = "1:368ba96ddacaae2fe265afcac3062a199908f7dc0c6569d6e05a7a13042cccf1"
+  name = "github.com/gobwas/httphead"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2c6c146eadee0b69f856f87e3e9f1d0cd6aad2f5"
+
+[[projects]]
+  digest = "1:bdfe3b97ff03e4f7252c74cfaefb20050a360c8fb760701014ebf99c9540abd1"
+  name = "github.com/gobwas/pool"
+  packages = [
+    ".",
+    "internal/pmath",
+    "pbufio",
+    "pbytes",
+  ]
+  pruneopts = "UT"
+  revision = "fa3125c39d7eca32e1387bb69b1b38dcb31b1e0b"
+  version = "v0.2.0"
+
+[[projects]]
+  digest = "1:aea6697202cefa9365797c4c8ad0a1dbdf15ba21600ddc599a9000629a2ecb6f"
+  name = "github.com/gobwas/ws"
+  packages = [
+    ".",
+    "wsutil",
+  ]
+  pruneopts = "UT"
+  revision = "05baaea2bbcfe8963301c62d9931c882d59595cd"
+  version = "v1.0.2"
+
+[[projects]]
+  digest = "1:573ca21d3669500ff845bdebee890eb7fc7f0f50c59f2132f2a0c6b03d85086a"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   pruneopts = "UT"
-  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
-  version = "v1.3.1"
+  revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
@@ -86,6 +126,26 @@
   pruneopts = "UT"
   revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
   version = "v1.4.0"
+
+[[projects]]
+  digest = "1:7fbb40f65374cb64a7bf3f1f74e2cb4c4437d93bc3d8921cf7e3d7ad2ab20989"
+  name = "github.com/graphql-go/graphql"
+  packages = [
+    ".",
+    "gqlerrors",
+    "language/ast",
+    "language/kinds",
+    "language/lexer",
+    "language/location",
+    "language/parser",
+    "language/printer",
+    "language/source",
+    "language/typeInfo",
+    "language/visitor",
+  ]
+  pruneopts = "UT"
+  revision = "2b0b7340d2285b861482047fbf5de0488e021bea"
+  version = "v0.7.8"
 
 [[projects]]
   digest = "1:8cff1b38298ac6c9f02bce11df3a7b9026bba6540c52adcf3fc8b328bf0fc149"
@@ -118,6 +178,26 @@
   pruneopts = "UT"
   revision = "81db2a75821ed34e682567d48be488a1c3121088"
   version = "0.5"
+
+[[projects]]
+  digest = "1:823dc0f8e4cdad8d91e6aba4cdd985a035596a8aa02e9d2abf1bec347894c41f"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "flate",
+    "gzip",
+    "zlib",
+  ]
+  pruneopts = "UT"
+  revision = "315059c39568ee89ae0c118bc6dc7306041543c3"
+  version = "v1.7.2"
+
+[[projects]]
+  digest = "1:923c4d7194b42e054b2eb8a6c62824ac55e23ececc1c7e48d4da69c971c55954"
+  name = "github.com/klauspost/cpuid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "05a8198c0f5a27739aec358908d7e12c64ce6eb7"
+  version = "v1.2.1"
 
 [[projects]]
   digest = "1:7c084e0e780596dd2a7e20d25803909a9a43689c153de953520dfbc0b0e51166"
@@ -322,12 +402,12 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:7df351557a6d5c30804e7d6f7ed87f2fccb0619c08fcc84869a93f22bec96c11"
+  digest = "1:67c1fb183565bbfae97ac55c7cdaf86dbb245b128f2f9762c2e9b862d842a919"
   name = "github.com/tidwall/gjson"
   packages = ["."]
   pruneopts = "UT"
-  revision = "eee0b6226f0d1db2675a176fdfaa8419bcad4ca8"
-  version = "v1.2.1"
+  revision = "d7c940e59395fdcaff4584cb442b2e7808f6711e"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:8453ddbed197809ee8ca28b06bd04e127bec9912deb4ba451fea7a1eca578328"
@@ -368,6 +448,18 @@
   pruneopts = "UT"
   revision = "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7"
   version = "v1.0.0"
+
+[[projects]]
+  digest = "1:15ad8a80098fcc7a194b9db6b26d74072a852e4faa957848c8118193d3c69230"
+  name = "github.com/valyala/fasthttp"
+  packages = [
+    ".",
+    "fasthttputil",
+    "stackless",
+  ]
+  pruneopts = "UT"
+  revision = "e5f51c11919d4f66400334047b897ef0a94c6f3c"
+  version = "v20180529"
 
 [[projects]]
   digest = "1:01d5dc3bfb14cf8fb2c924dcf026231218604b8ed15daaa028875d49e7f09071"
@@ -428,7 +520,7 @@
     "ssh/knownhosts",
   ]
   pruneopts = "UT"
-  revision = "cc06ce4a13d484c0101a9e92913248488a75786d"
+  revision = "4def268fd1a49955bfb3dda92fe3db4f924f2285"
 
 [[projects]]
   branch = "master"
@@ -442,11 +534,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "3b0461eec859c4b73bb64fdc8285971fd33e3938"
+  revision = "da137c7871d730100384dbcf36e6f8fa493aef5b"
 
 [[projects]]
   branch = "master"
-  digest = "1:7e3e63385ebe2dd5210be1534c516d8ae33c7ffac74126e5243d43ba7222e0d4"
+  digest = "1:a401497567643b1f62cc7f7db6dc987307dabab80466210b2477c0cbd003c526"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -454,11 +546,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
+  revision = "6ec70d6a5542cba804c6d16ebe8392601a0b7b60"
 
 [[projects]]
   branch = "master"
-  digest = "1:8cdf79d24f1dfb8175180df1ba89110fee2a018521befca9e38846e96a5e7c15"
+  digest = "1:837b4ffdade9def1f3afc69aaf126c4af65fbc49a9163ef040b5362d5eec3028"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -476,7 +568,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "212fb13d595e5faf79425c78ae101012873a81a1"
+  revision = "286818132824cc7a932bc972207f079caafd739f"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
@@ -499,7 +591,7 @@
   version = "v1.6.1"
 
 [[projects]]
-  digest = "1:6252ee69502cea19153314d10afa5ac3a9ffa65e726ea531deb2e1c27ed50fe6"
+  digest = "1:e3ef28b0f652642312dc9c6075fd9e8c35acc9d1f82d9c2f0db4606c6a43a9ec"
   name = "gopkg.in/src-d/go-billy.v4"
   packages = [
     ".",
@@ -510,8 +602,8 @@
     "util",
   ]
   pruneopts = "UT"
-  revision = "982626487c60a5252e7d0b695ca23fb0fa2fd670"
-  version = "v4.3.0"
+  revision = "711f3aa5b30ce9bbc7d708792ca98b913cbbd4a5"
+  version = "v4.3.1"
 
 [[projects]]
   digest = "1:ca7d1685b495a8037bd2532eb84231b7fc5649de546cf878e1a32f44a3d5234f"
@@ -578,7 +670,10 @@
     "github.com/btcsuite/btcd/btcec",
     "github.com/dgraph-io/badger",
     "github.com/dgraph-io/badger/options",
+    "github.com/gobwas/ws",
+    "github.com/gobwas/ws/wsutil",
     "github.com/gorilla/websocket",
+    "github.com/graphql-go/graphql",
     "github.com/jarcoal/httpmock",
     "github.com/json-iterator/go",
     "github.com/mattn/go-colorable",
@@ -595,6 +690,7 @@
     "github.com/tidwall/gjson",
     "github.com/tmthrgd/go-hex",
     "github.com/valyala/bytebufferpool",
+    "github.com/valyala/fasthttp",
     "github.com/vmihailenco/msgpack",
     "github.com/zerjioang/go-bus",
     "github.com/zerjioang/go-bus/mutex",
@@ -605,6 +701,7 @@
     "golang.org/x/crypto/sha3",
     "golang.org/x/crypto/ssh",
     "golang.org/x/sys/cpu",
+    "golang.org/x/sys/unix",
     "golang.org/x/tools/go/buildutil",
     "golang.org/x/tools/go/loader",
     "golang.org/x/tools/refactor/importgraph",

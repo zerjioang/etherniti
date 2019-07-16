@@ -14,6 +14,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/zerjioang/etherniti/core/data"
 
 	"github.com/zerjioang/etherniti/core/modules/stack"
@@ -81,20 +83,20 @@ type EthRPC struct {
 	//ethereum interaction cache
 	cache *cache.MemoryCache
 	// http client
-	client *http.Client
+	client *fasthttp.Client
 	// debug flag
 	Debug           bool
 	connectionCache ConnectionCache
 }
 
 // New create new rpc client with given url
-func NewDefaultRPCPtr(url string, debug bool, client *http.Client) *EthRPC {
+func NewDefaultRPCPtr(url string, debug bool, client *fasthttp.Client) *EthRPC {
 	c := NewDefaultRPC(url, debug, client)
 	return &c
 }
 
 // New create new rpc client with given url
-func NewDefaultRPC(url string, debug bool, client *http.Client) EthRPC {
+func NewDefaultRPC(url string, debug bool, client *fasthttp.Client) EthRPC {
 	rpc := EthRPC{
 		url:    url,
 		cache:  cache.NewMemoryCache(),
