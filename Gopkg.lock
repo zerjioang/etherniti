@@ -80,12 +80,12 @@
   version = "v1.12.0"
 
 [[projects]]
-  digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
+  digest = "1:573ca21d3669500ff845bdebee890eb7fc7f0f50c59f2132f2a0c6b03d85086a"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   pruneopts = "UT"
-  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
-  version = "v1.3.1"
+  revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
@@ -94,6 +94,26 @@
   pruneopts = "UT"
   revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
   version = "v1.4.0"
+
+[[projects]]
+  digest = "1:7fbb40f65374cb64a7bf3f1f74e2cb4c4437d93bc3d8921cf7e3d7ad2ab20989"
+  name = "github.com/graphql-go/graphql"
+  packages = [
+    ".",
+    "gqlerrors",
+    "language/ast",
+    "language/kinds",
+    "language/lexer",
+    "language/location",
+    "language/parser",
+    "language/printer",
+    "language/source",
+    "language/typeInfo",
+    "language/visitor",
+  ]
+  pruneopts = "UT"
+  revision = "2b0b7340d2285b861482047fbf5de0488e021bea"
+  version = "v0.7.8"
 
 [[projects]]
   digest = "1:8cff1b38298ac6c9f02bce11df3a7b9026bba6540c52adcf3fc8b328bf0fc149"
@@ -126,6 +146,26 @@
   pruneopts = "UT"
   revision = "81db2a75821ed34e682567d48be488a1c3121088"
   version = "0.5"
+
+[[projects]]
+  digest = "1:823dc0f8e4cdad8d91e6aba4cdd985a035596a8aa02e9d2abf1bec347894c41f"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "flate",
+    "gzip",
+    "zlib",
+  ]
+  pruneopts = "UT"
+  revision = "315059c39568ee89ae0c118bc6dc7306041543c3"
+  version = "v1.7.2"
+
+[[projects]]
+  digest = "1:923c4d7194b42e054b2eb8a6c62824ac55e23ececc1c7e48d4da69c971c55954"
+  name = "github.com/klauspost/cpuid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "05a8198c0f5a27739aec358908d7e12c64ce6eb7"
+  version = "v1.2.1"
 
 [[projects]]
   digest = "1:7c084e0e780596dd2a7e20d25803909a9a43689c153de953520dfbc0b0e51166"
@@ -378,6 +418,18 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:15ad8a80098fcc7a194b9db6b26d74072a852e4faa957848c8118193d3c69230"
+  name = "github.com/valyala/fasthttp"
+  packages = [
+    ".",
+    "fasthttputil",
+    "stackless",
+  ]
+  pruneopts = "UT"
+  revision = "e5f51c11919d4f66400334047b897ef0a94c6f3c"
+  version = "v20180529"
+
+[[projects]]
   digest = "1:01d5dc3bfb14cf8fb2c924dcf026231218604b8ed15daaa028875d49e7f09071"
   name = "github.com/vmihailenco/msgpack"
   packages = [
@@ -454,7 +506,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7e3e63385ebe2dd5210be1534c516d8ae33c7ffac74126e5243d43ba7222e0d4"
+  digest = "1:a401497567643b1f62cc7f7db6dc987307dabab80466210b2477c0cbd003c526"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -462,11 +514,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
+  revision = "6ec70d6a5542cba804c6d16ebe8392601a0b7b60"
 
 [[projects]]
   branch = "master"
-  digest = "1:8cdf79d24f1dfb8175180df1ba89110fee2a018521befca9e38846e96a5e7c15"
+  digest = "1:837b4ffdade9def1f3afc69aaf126c4af65fbc49a9163ef040b5362d5eec3028"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -484,7 +536,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "72ffa07ba3db8d09f5215feec0f89464f3028f8e"
+  revision = "286818132824cc7a932bc972207f079caafd739f"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
@@ -587,6 +639,7 @@
     "github.com/dgraph-io/badger",
     "github.com/dgraph-io/badger/options",
     "github.com/gorilla/websocket",
+    "github.com/graphql-go/graphql",
     "github.com/jarcoal/httpmock",
     "github.com/json-iterator/go",
     "github.com/mattn/go-colorable",
@@ -603,6 +656,7 @@
     "github.com/tidwall/gjson",
     "github.com/tmthrgd/go-hex",
     "github.com/valyala/bytebufferpool",
+    "github.com/valyala/fasthttp",
     "github.com/vmihailenco/msgpack",
     "github.com/zerjioang/go-bus",
     "github.com/zerjioang/go-bus/mutex",
