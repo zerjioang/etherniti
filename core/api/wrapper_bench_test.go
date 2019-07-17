@@ -23,6 +23,7 @@ var (
 func BenchmarkWrapper(b *testing.B) {
 	b.Run("to-success", func(b *testing.B) {
 		data := []byte("message")
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -33,6 +34,7 @@ func BenchmarkWrapper(b *testing.B) {
 
 	b.Run("to-error", func(b *testing.B) {
 		msg := "this is an standard error message working as example"
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -42,6 +44,7 @@ func BenchmarkWrapper(b *testing.B) {
 	})
 	b.Run("to-error-pool", func(b *testing.B) {
 		msg := "this is an standard error message working as example"
+		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -50,10 +53,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("send-success", func(b *testing.B) {
+		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
 		ctx := common.NewContext(echo.New())
 		//disable logging
-		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -62,10 +65,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("send-success-pool", func(b *testing.B) {
+		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
 		ctx := common.NewContext(echo.New())
 		//disable logging
-		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -74,9 +77,9 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("send-success-blob", func(b *testing.B) {
-		ctx := common.NewContext(echo.New())
 		//disable logging
 		logger.Enabled(false)
+		ctx := common.NewContext(echo.New())
 		data := []byte(`{}`)
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -86,10 +89,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("success", func(b *testing.B) {
-		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
 		//disable logging
 		logger.Enabled(false)
+		msg := []byte("this is an standard error message working as example")
+		ctx := common.NewContext(echo.New())
 		data := []byte{}
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -99,10 +102,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("error-str", func(b *testing.B) {
-		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
 		//disable logging
 		logger.Enabled(false)
+		msg := []byte("this is an standard error message working as example")
+		ctx := common.NewContext(echo.New())
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -111,10 +114,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("error", func(b *testing.B) {
-		ctx := common.NewContext(echo.New())
-		e := errors.New("no error")
 		//disable logging
 		logger.Enabled(false)
+		ctx := common.NewContext(echo.New())
+		e := errors.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -123,10 +126,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("error-code", func(b *testing.B) {
-		ctx := common.NewContext(echo.New())
-		e := errors.New("no error")
 		//disable logging
 		logger.Enabled(false)
+		ctx := common.NewContext(echo.New())
+		e := errors.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
@@ -135,10 +138,10 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("stack-error", func(b *testing.B) {
-		ctx := common.NewContext(echo.New())
-		e := stack.New("no error")
 		//disable logging
 		logger.Enabled(false)
+		ctx := common.NewContext(echo.New())
+		e := stack.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()

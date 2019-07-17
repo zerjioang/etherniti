@@ -19,6 +19,7 @@ var (
 func CalculateScore() {
 	logger.Debug("benchmarking current server configuration")
 	logger.Debug("getting benchmark (multicore) score")
+
 	cores := runtime.NumCPU()
 	runtime.GOMAXPROCS(cores)
 

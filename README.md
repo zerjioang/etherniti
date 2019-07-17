@@ -1,12 +1,12 @@
 <p align="center">
   <img style="text-align:center;" width="200px" src="https://avatars3.githubusercontent.com/u/47393730?s=200&v=4" alt="etherniti" />
   <h3 align="center"><b>Etherniti</b></h3>
-  <p align="center">Multitenant High Performance Ethereum Webapi</p>
+  <p align="center">High Performance Web3 REST Proxy</p>
 </p>
 
-Welcome to **etherniti** project.
+Welcome to **Etherniti** project.
 
-A multitenant High Performance Ethereum WebAPI for smart contract inter-communication.
+A High Performance Web3 REST Proxy for smart contract inter-communication.
 
 ## Usage
 
@@ -394,41 +394,52 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
 
 ### Avoid the use of pointers in large heap scenarios
 
- * Strings, slices and time.Time all contain pointers
-   * Lots of strings
-   * Timestamps on objects using time.Time
-   * Maps with slice values
-   * Maps with string keys
+* Strings, slices and time.Time all contain pointers
+* Lots of strings
+* Timestamps on objects using time.Time
+* Maps with slice values
+* Maps with string keys
 
-### Heap escape analysis
+### Compilation time analysis
 
 ```bash
 go build -gcflags='-m -m' $file.go
 ```
 
+#### Detecting too complex functions
+
 ```bash
 go build -gcflags='-m -m' $file.go | grep 'function too complex'
 ```
+
+#### Detecting heap escapes
 
 ```bash
 go build -gcflags='-m -m' $file.go | grep 'escapes to heap'
 ```
 
-### Bound Check analysis
+#### Bound Check analysis
 
 Note: `bce` stands for `bound check elimination`
+Note: `ssa` stands for `static single assignment`
  
 ```bash
 go build -gcflags=-d=ssa/check_bce/debug=1 $file.go
 ```
 
-### Going deeper with `GOSSAFUNC`
+#### Other `ssa` flags
 
-Note: `bce` stands for `bound check elimination`
+```bash
+go build -gcflags=-d=ssa/insert_resched_checks/on,ssa/check/on
+```
+
+### Going deeper with `GOSSAFUNC`
  
 ```bash
 GOSSAFUNC=pattern go build $file.go
 ```
+
+Other environment [magical environment](https://github.com/golang/go/blob/master/src/cmd/go/internal/work/exec.go#L233) you might use are `GOCLOBBERDEADHASH`, `GOSSAFUNC`, `GO_SSA_PHI_LOC_CUTOFF`, `GOSSAHASH`
 
 ## License
 

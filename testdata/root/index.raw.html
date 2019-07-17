@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
    <html>
       <head>
-         <title>Etherniti, an Web3 REST Proxy</title>
+         <title>Etherniti - High Performance Web3 REST Proxy</title>
          <meta charset="utf-8" />
          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
          <style type="text/css">
@@ -3499,22 +3499,12 @@
          window.setTimeout(function() {
          $body.removeClass('is-preload');
          }, 100);
+         // show console message for curious people
+            console.log("Welcome to Etherniti");
+            console.log("High Performance Web3 REST Proxy");
+            console.log("Etherniti is a Multitenant High Performance Ethereum,Quorum and RSK compatible Web3 REST Proxy enabling fast prototyping features via its APIs. Also compatible with QuikNode, Infura, Alastria, Geth and Parity");
          });
-         
-         // Forms.
-         
-         // Hack: Activate non-input submits.
-         $('form').on('click', '.submit', function(event) {
-         
-         // Stop propagation, default.
-         	event.stopPropagation();
-         	event.preventDefault();
-         
-         // Submit form.
-         	$(this).parents('form').submit();
-         
-         });
-         
+
          })(jQuery);
       </script>
    </body>

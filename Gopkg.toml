@@ -31,11 +31,19 @@
 
 [[constraint]]
   name = "github.com/dgraph-io/badger"
-  version = "1.5.5"
+  version = "1.6.0"
+
+[[constraint]]
+  name = "github.com/gobwas/ws"
+  version = "1.0.2"
 
 [[constraint]]
   name = "github.com/gorilla/websocket"
   version = "1.4.0"
+
+[[constraint]]
+  name = "github.com/graphql-go/graphql"
+  version = "0.7.8"
 
 [[constraint]]
   name = "github.com/jarcoal/httpmock"
@@ -79,7 +87,7 @@
 
 [[constraint]]
   name = "github.com/tidwall/gjson"
-  version = "1.2.1"
+  version = "1.3.2"
 
 [[constraint]]
   branch = "master"
@@ -88,6 +96,14 @@
 [[constraint]]
   name = "github.com/valyala/bytebufferpool"
   version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/valyala/fasthttp"
+  version = "20180529.0.0"
+
+[[constraint]]
+  name = "github.com/vmihailenco/msgpack"
+  version = "4.0.4"
 
 [[constraint]]
   name = "github.com/zerjioang/go-bus"
@@ -107,7 +123,7 @@
 
 [[constraint]]
   name = "gopkg.in/src-d/go-billy.v4"
-  version = "4.3.0"
+  version = "4.3.1"
 
 [[constraint]]
   name = "gopkg.in/src-d/go-git.v4"
