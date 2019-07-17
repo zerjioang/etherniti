@@ -46,6 +46,21 @@ func TestIsValidAddress(t *testing.T) {
 	assert.True(t, result)
 }
 
+func TestIsValidBlockHash(t *testing.T) {
+	t.Run("empty-string", func(t *testing.T) {
+		result := IsValidBlockHash("")
+		assert.False(t, result)
+	})
+	t.Run("latest", func(t *testing.T) {
+		result := IsValidBlockHash("315615145")
+		assert.False(t, result)
+	})
+	t.Run("valid", func(t *testing.T) {
+		result := IsValidBlockHash("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238")
+		assert.True(t, result)
+	})
+}
+
 func TestIsValidBlock(t *testing.T) {
 	t.Run("empty-string", func(t *testing.T) {
 		result := IsValidBlockNumber("")
@@ -56,15 +71,57 @@ func TestIsValidBlock(t *testing.T) {
 		assert.True(t, result)
 	})
 	t.Run("earliest", func(t *testing.T) {
-		result := IsValidBlockNumber("latest")
+		result := IsValidBlockNumber("earliest")
 		assert.True(t, result)
 	})
+	t.Run("earliest-fail", func(t *testing.T) {
+		result := IsValidBlockNumber("earliestt")
+		assert.False(t, result)
+	})
 	t.Run("pending", func(t *testing.T) {
-		result := IsValidBlockNumber("latest")
+		result := IsValidBlockNumber("pending")
 		assert.True(t, result)
+	})
+	t.Run("pending-fail", func(t *testing.T) {
+		result := IsValidBlockNumber("pendiiing")
+		assert.False(t, result)
 	})
 	t.Run("hex-string", func(t *testing.T) {
 		result := IsValidBlockNumber("0xff")
+		assert.True(t, result)
+	})
+}
+
+func TestIsValidHexSignature(t *testing.T) {
+	t.Run("empty-string", func(t *testing.T) {
+		result := IsValidHexSignature("")
+		assert.False(t, result)
+	})
+	t.Run("latest", func(t *testing.T) {
+		result := IsValidHexSignature("315615145")
+		assert.False(t, result)
+	})
+	t.Run("earliest", func(t *testing.T) {
+		result := IsValidBlockNumber("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238")
+		assert.True(t, result)
+	})
+}
+
+func TestIsValidHexPrivateKey(t *testing.T) {
+	t.Run("empty-string", func(t *testing.T) {
+		result := IsValidHexPrivateKey("")
+		assert.False(t, result)
+	})
+	t.Run("latest", func(t *testing.T) {
+		result := IsValidHexPrivateKey("315615145")
+		assert.False(t, result)
+	})
+	t.Run("valid", func(t *testing.T) {
+		result := IsValidHexPrivateKey("cdfa05e62455fae56b1fea15607691975db23b6bef5342f9f50505769529d")
+		assert.True(t, result)
+	})
+	t.Run("0x-valid", func(t *testing.T) {
+		result := IsValidHexPrivateKey("0xcdfa05e62455fae56b1fea15607691975db23b6bef5342f9f50505769529d")
 		assert.True(t, result)
 	})
 }

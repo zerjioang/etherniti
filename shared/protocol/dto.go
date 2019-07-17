@@ -40,9 +40,25 @@ type EntropyRequest struct {
 	Size uint16 `json:"size" form:"size" query:"size"`
 }
 
+// ethereum transaction required data model dto
+type TransactionRequest struct {
+	// the address who makes the tx
+	From string `json:"from,omitempty"`
+	Auth struct {
+		// in case of being using a node account that needs to be unlocked
+		UnlockPassword string `json:"unlockPassword,omitempty"`
+		// in the case of signing the request in external application or device such as cold wallets
+		OfflineSignature string `json:"offlineSignature"`
+		// in case of not providing a signature and providing private key
+		PrivateKey string `json:"privateKey"`
+	} `json:"auth,omitempty"`
+}
+
 // new deploy request dto
 type DeployRequest struct {
-	Contract string `json:"contract"`
+	// optional transaction data required for signing and validation
+	Tx       TransactionRequest `json:"tx"`
+	Contract string             `json:"contract"`
 	Registry struct {
 		Register    string `json:"register"`
 		Name        string `json:"name"`

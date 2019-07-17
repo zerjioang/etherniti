@@ -11,12 +11,11 @@ import "testing"
 // BenchmarkSumForwardWithBoundsHack-12    	2000000000	         0.25 ns/op	4066.94 MB/s	       0 B/op	       0 allocs/op
 // BenchmarkSumBackward-12                 	2000000000	         0.49 ns/op	2037.94 MB/s	       0 B/op	       0 allocs/op
 
-
 func BenchmarkSumForward(b *testing.B) {
 
-	 b.ReportAllocs()
-	 b.SetBytes(1)
-	 b.ResetTimer()
+	b.ReportAllocs()
+	b.SetBytes(1)
+	b.ResetTimer()
 
 	// Create a slice of five integers
 	var nums []int

@@ -75,7 +75,7 @@ var (
 
 	SolcVersionFailed = []byte(SolcVersionFailedStr)
 
-	AddressNoSetupStr = "invalid ethereum address setup when creating connection profile. Please provide a alid address as 'from'"
+	AddressNoSetupStr = "invalid ethereum address setup when creating connection profile. Please provide a valid address as 'from'"
 
 	InvalidContractAddress = []byte("invalid contract address provided")
 	InvalidAccountAddress  = []byte("invalid account address provided")

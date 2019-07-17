@@ -189,6 +189,7 @@ func ApplyDefaultCommonHeaders(c *echo.Context) {
 	rh.Set("X-Bugbounty", "security@etherniti.org")
 	rh.Set("X-Coffee", "Latte")
 }
+
 // ApplyDefaultSecurityHeaders adds default security HTTP headers for an extra
 // security oriented hardening
 func ApplyDefaultSecurityHeaders(c *echo.Context) {

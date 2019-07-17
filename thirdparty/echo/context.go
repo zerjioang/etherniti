@@ -587,8 +587,11 @@ func (c *Context) ConnectionProfileSetup() (*profile.ConnectionProfile, error) {
 
 // get caller eth address
 func (c *Context) CallerEthAddress() string {
+	var from string
 	c.profileLock.Lock()
-	from := c.profileData.Address
+	if c.profileData != nil {
+		from = c.profileData.Address
+	}
 	c.profileLock.Unlock()
 	return from
 }
@@ -724,4 +727,10 @@ func (c *Context) ResponseSerializer() io2.Serializer {
 }
 func (c *Context) SelectecResponseContentType() string {
 	return c.contentType
+}
+
+// check whether current context has a jWT or not
+// TODO optimize
+func (c *Context) hasJWT() bool {
+	return c.ReadConnectionProfileToken() != ""
 }

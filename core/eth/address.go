@@ -111,3 +111,27 @@ func IsZeroAddress(addr string) bool {
 func IsXdigit(c byte) bool {
 	return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c >= '0' && c <= '9')
 }
+
+func IsValidHexSignature(signature string) bool {
+	if signature != "" && len(signature) == 130 {
+		return common.IsHex(signature)
+	}
+	return false
+}
+
+// hex encoded private key example: cdfa05e62455fae56b1fea15607691975db23b6bef5342f9f50505769529d
+// hex encoded private key example: 0xcdfa05e62455fae56b1fea15607691975db23b6bef5342f9f50505769529d
+
+func IsValidHexPrivateKey(pkey string) bool {
+	if pkey != "" {
+		switch len(pkey) {
+		case 61:
+			// private key does not contain 0x prefix
+			return common.IsHex(pkey)
+		case 63:
+			// private key contain 0x prefix
+			return common.IsOxPrefixedHex(pkey)
+		}
+	}
+	return false
+}

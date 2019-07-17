@@ -4,6 +4,7 @@
 package network
 
 import (
+	"github.com/pkg/errors"
 	"strconv"
 
 	"github.com/zerjioang/etherniti/core/data"
@@ -30,6 +31,61 @@ func NewDevOpsController(network *NetworkController) DevOpsController {
 	return ctl
 }
 
+func (ctl *DevOpsController) PrepareTransaction(c *echo.Context, req *protocol.TransactionRequest) error {
+
+	// detect if the http request is using a private context via jwt tokens or not
+	usesPrivateContext := c.hasJWT()
+	if usesPrivateContext {
+		// read tx from field from JWT token
+		// read from value
+		from, callerErr := ctl.network.getCallerAddress(c)
+		if callerErr != nil {
+			return api.Error(c, callerErr)
+		}
+		// 2 check if from address exists and is valid
+		if !eth.IsValidAddressLow(from) {
+			return errors.New("transaction data specified 'from' field is not a valid address")
+		} else {
+			//update request from data
+			req.From = from
+		}
+	} else {
+		// 1 check if we have some tx data
+		if req == nil {
+			return errors.New("transaction signing data not provided")
+		}
+		// 2 check if from address exists and is valid
+		if !eth.IsValidAddressLow(req.From) {
+			return errors.New("transaction data specified 'from' field is not a valid address")
+		}
+		// 3 check if we have at least one valid signing method
+		if req.Auth.UnlockPassword != "" {
+			// we have an unlock password to be used for signing
+			// sadly this method is currently not supported
+			return errors.New("node accounts are not supported in current version")
+		} else {
+			if req.Auth.OfflineSignature != "" {
+				// we have an unlock password to be used for signing
+				// sadly this method is currently not supported
+				return errors.New("node accounts are not supported in current version")
+			}
+			if !eth.IsValidHexSignature(req.Auth.OfflineSignature) {
+				// we have a valid signature provided for executing the transaction
+			} else {
+				// check if we have a valid hex encoded private key
+				if !eth.IsValidHexPrivateKey(req.Auth.PrivateKey) {
+					// we have a valid private key
+				} else {
+					//we do not have any suitable authentication/signing mechanism at the moment.
+					// return an error
+					return errors.New("invalid signing information provided. please provide tx signature or private key to execute the transaction")
+				}
+			}
+		}
+	}
+	return nil
+}
+
 func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 
 	//new deploy contract request
@@ -40,10 +96,10 @@ func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 		return api.ErrorBytes(c, data.BindErr)
 	}
 
-	// read from value
-	from, callerErr := ctl.network.getCallerAddress(c)
-	if callerErr != nil {
-		return api.Error(c, callerErr)
+	// prepare transaction data and validate for future signing process
+	txErr := ctl.PrepareTransaction(c, &req.Tx)
+	if txErr != nil {
+		return api.Error(c, txErr)
 	}
 
 	// get our client context
@@ -62,7 +118,7 @@ func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 		// gasPrice: Gas price used for deploys. Default is 100000000000 (100 Shannon).
 		// from: From address used during migrations. Defaults to the first available account provided by your Ethereum client.
 	}
-	raw, err := client.DeployContract(from, req.Contract, "4712388", "100000000000")
+	raw, err := client.DeployContract(req.Tx.From, req.Contract, "4712388", "100000000000")
 	if err != nil {
 		return api.Error(c, err)
 	} else {

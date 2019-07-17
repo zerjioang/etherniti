@@ -66,7 +66,7 @@ type Memory struct {
 	Alloc     uint64 `json:"alloc"`
 	Total     uint64 `json:"total"`
 	Sys       uint64 `json:"sys"`
-	App struct{
+	App       struct {
 		Alloc      uint64 `json:"allocMb"`
 		TotalAlloc uint64 `json:"totalMb"`
 		Sys        uint64 `json:"sysMb"`
