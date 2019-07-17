@@ -13,6 +13,7 @@ import (
 // this is open-source edition middleware
 func secure(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
+		ApplyDefaultCommonHeaders(c)
 		ApplyDefaultSecurityHeaders(c)
 		return next(c)
 	}

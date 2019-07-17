@@ -83,6 +83,10 @@ func (mem MemStatus) ReadPtr(wrapper *protocol.ServerStatusResponse) {
 	wrapper.Memory.Frees = mem.m.Frees
 	wrapper.Memory.Heapalloc = mem.m.HeapAlloc
 
+	wrapper.Memory.App.Alloc = mem.bToMb(mem.m.Alloc)
+	wrapper.Memory.App.TotalAlloc = mem.bToMb(mem.m.TotalAlloc)
+	wrapper.Memory.App.Sys = mem.bToMb(mem.m.Sys)
+
 	wrapper.Gc.Numgc = mem.m.NumGC
 	wrapper.Gc.NumForcedGC = mem.m.NumForcedGC
 }
@@ -99,4 +103,9 @@ func (mem MemStatus) monitor() {
 		//update latest reading information
 		mem.ReadMemory()
 	}
+}
+
+// converts memory units from bytes to mega bytes
+func (mem MemStatus) bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
 }

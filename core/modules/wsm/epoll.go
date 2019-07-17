@@ -39,7 +39,7 @@ func (e *Epoll) Add(conn net.Conn) error {
 	defer e.lock.Unlock()
 	e.connections[fd] = conn
 	if len(e.connections)%100 == 0 {
-		log.Printf("Total number of connections: %v", len(e.connections))
+		log.Printf("TotalAlloc number of connections: %v", len(e.connections))
 	}
 	return nil
 }
@@ -54,7 +54,7 @@ func (e *Epoll) Remove(conn net.Conn) error {
 	defer e.lock.Unlock()
 	delete(e.connections, fd)
 	if len(e.connections)%100 == 0 {
-		log.Printf("Total number of connections: %v", len(e.connections))
+		log.Printf("TotalAlloc number of connections: %v", len(e.connections))
 	}
 	return nil
 }

@@ -84,6 +84,8 @@ func LoadIndexConstants() {
 	IndexWelcomeJson = `{"name":"etherniti-public-api","description":"High Performance Web3 REST Proxy","cluster_name":"apollo-api","version":"` + banner.Version + `","commit":"` + banner.Commit + `","edition":"` + banner.Edition + `","env":"` + config.Env() + `","tagline":"dapps everywhere"}`
 	indexWelcomeBytes = []byte(IndexWelcomeJson)
 	indexWelcomeHtmlBytes, _ = ioutil.ReadFile(config.ResourcesIndexHtml)
+	// reload info bytes to update banner.Version value
+	loadInfoBytes()
 }
 
 func loadInfoBytes() {

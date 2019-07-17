@@ -120,6 +120,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 		rh.Set("Server", "Apache/2.0.54")
 		rh.Set("X-Powered-By", "PHP/5.1.6")
 
+		ApplyDefaultCommonHeaders(c)
 		ApplyDefaultSecurityHeaders(c)
 
 		return next(c)

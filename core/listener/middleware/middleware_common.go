@@ -180,6 +180,15 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	controllers.RegisterServices(e)
 }
 
+// ApplyDefaultCommonHeaders adds default Etherniti HTTP headers
+func ApplyDefaultCommonHeaders(c *echo.Context) {
+	// get request
+	response := c.Response()
+	rh := response.Header()
+	rh.Set("X-Ćontact", "admin@etherniti.org")
+	rh.Set("X-Bugbounty", "security@etherniti.org")
+	rh.Set("X-Coffee", "Latte")
+}
 // ApplyDefaultSecurityHeaders adds default security HTTP headers for an extra
 // security oriented hardening
 func ApplyDefaultSecurityHeaders(c *echo.Context) {

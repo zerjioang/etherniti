@@ -579,20 +579,25 @@
             "schema": {
               "example": {
                 "disk": {
-                  "all": 147,
-                  "used": 131,
-                  "free": 16
+                  "all": 248,
+                  "used": 79,
+                  "free": 168
                 },
                 "memory": {
-                  "frees": 73293,
-                  "heapalloc": 362286368,
-                  "alloc": 362286368,
-                  "total": 369013624,
-                  "sys": 487913720,
-                  "mallocs": 177358
+                  "frees": 238026,
+                  "heapalloc": 374252896,
+                  "mallocs": 586852,
+                  "alloc": 374252896,
+                  "total": 392078904,
+                  "sys": 627917048,
+                  "app": {
+                    "allocMb": 356,
+                    "totalMb": 373,
+                    "sysMb": 598
+                  }
                 },
                 "gc": {
-                  "numgc": 7,
+                  "numgc": 9,
                   "numForcedGC": 0
                 }
               }
@@ -728,11 +733,17 @@
         }],
         "responses": {
           "200": {
-            "description": "mnemonic response",
+            "description": "mnemonic successfully created response",
             "schema": {
               "example": {
                 "msg": "mnemonic successfully created",
-                "result": "acid coin captain hen eyebrow donor surround jar mirror copper leisure shield"
+                "data": {
+                  "size": 128,
+                  "language": "english",
+                  "mnemonic": "return aerobic bind combine wrap emerge woman culture coyote poverty genius random",
+                  "isEncrypted": false,
+                  "encSeed": ""
+                }
               }
             }
           }
@@ -785,7 +796,7 @@
           "wallet"
         ],
         "summary": "Generate a new Ethereum compatible account",
-        "description": "Generate a new Ethereum compatible account and get its address and key",
+        "description": "Generate a new Ethereum compatible account and get its address and key. Generated account IS NOT STORED, so keep it in a safe place for future use",
         "operationId": "new-account",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"

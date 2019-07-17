@@ -62,10 +62,15 @@ func (disk *Disk) Reset() {
 type Memory struct {
 	Frees     uint64 `json:"frees"`
 	Heapalloc uint64 `json:"heapalloc"`
+	Mallocs   uint64 `json:"mallocs"`
 	Alloc     uint64 `json:"alloc"`
 	Total     uint64 `json:"total"`
 	Sys       uint64 `json:"sys"`
-	Mallocs   uint64 `json:"mallocs"`
+	App struct{
+		Alloc      uint64 `json:"allocMb"`
+		TotalAlloc uint64 `json:"totalMb"`
+		Sys        uint64 `json:"sysMb"`
+	} `json:"app"`
 }
 
 func (memory *Memory) Reset() {
@@ -75,6 +80,10 @@ func (memory *Memory) Reset() {
 	memory.Total = 0
 	memory.Sys = 0
 	memory.Mallocs = 0
+	// reset app stats
+	memory.App.Alloc = 0
+	memory.App.TotalAlloc = 0
+	memory.App.Sys = 0
 }
 
 type Gc struct {
