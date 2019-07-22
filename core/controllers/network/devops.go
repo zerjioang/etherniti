@@ -4,8 +4,9 @@
 package network
 
 import (
-	"github.com/pkg/errors"
 	"strconv"
+
+	"github.com/pkg/errors"
 
 	"github.com/zerjioang/etherniti/core/data"
 
@@ -34,7 +35,7 @@ func NewDevOpsController(network *NetworkController) DevOpsController {
 func (ctl *DevOpsController) PrepareTransaction(c *echo.Context, req *protocol.TransactionRequest) error {
 
 	// detect if the http request is using a private context via jwt tokens or not
-	usesPrivateContext := c.hasJWT()
+	usesPrivateContext := c.HasJWT()
 	if usesPrivateContext {
 		// read tx from field from JWT token
 		// read from value

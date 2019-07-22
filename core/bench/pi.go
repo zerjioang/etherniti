@@ -14,6 +14,8 @@ import (
 var (
 	// runtime benchmark execution score
 	runScore int64
+	// total runtime
+	totalTime time.Duration
 )
 
 func CalculateScore() {
@@ -45,13 +47,17 @@ func CalculateScore() {
 	}
 
 	//pi := (float64(total) / float64(samples)) * 4
-	totalt := monotonic.Since(start)
-	score := float64(samples) / totalt.Seconds()
+	totalTime = monotonic.Since(start)
+	score := float64(samples) / totalTime.Seconds()
 	runScore = int64(score)
 }
 
 func GetScore() int64 {
 	return runScore
+}
+
+func GetBenchTime() time.Duration {
+	return totalTime
 }
 
 func MonteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {

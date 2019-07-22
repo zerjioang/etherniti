@@ -422,6 +422,38 @@
         }
       }
     },
+    "/score": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Proxy internal benchmark score",
+        "description": "Proxy internal benchmark score",
+        "operationId": "score",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy internal benchmark response",
+            "schema": {
+              "example": {
+                "msg":"bench_score",
+                "data":{
+                  "time":45784450,
+                  "score":655244302
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login": {
       "post": {
         "tags": [

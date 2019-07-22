@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"runtime"
 
+	"github.com/zerjioang/etherniti/core/bench"
+
 	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
@@ -141,11 +143,24 @@ func (ctl *IndexController) integrity() []byte {
 	return integrityTicker.Bytes()
 }
 
+// todo optimize struct creation. it should be created once, not every time is called by http clients. smae goes for byte array
+func (ctl *IndexController) score(c *echo.Context) error {
+	data := struct {
+		Time  time.Duration `json:"time"`
+		Score int64         `json:"score"`
+	}{
+		Time:  bench.GetBenchTime(),
+		Score: bench.GetScore(),
+	}
+	return api.SendSuccess(c, []byte("bench_score"), data)
+}
+
 // implemented method from interface RouterRegistrable
 func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", ctl.Index)
 	router.GET("/info", ctl.Info)
+	router.GET("/score", ctl.score)
 	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
 }

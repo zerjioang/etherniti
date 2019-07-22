@@ -562,8 +562,7 @@ func (e *Echo) ReleaseContext(c *Context) {
 func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Acquire Context
 	c := e.AcquireContext()
-	c.Reset(r, w)
-	c.Preload()
+	c.Preload(r, w)
 
 	h := NotFoundHandler
 	rpath := getPath(r)
@@ -586,6 +585,7 @@ func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Release Context
+	c.Reset()
 	e.ReleaseContext(c)
 }
 

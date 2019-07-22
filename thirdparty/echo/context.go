@@ -71,6 +71,9 @@ type Context struct {
 	// http client cache policy
 	OnSuccessCachePolicy int
 	UserId               string
+
+	//x-profile http header token
+	connectionToken string
 	//request content type identification string
 	acceptContentMode io2.ContentTypeMode
 	contentType       string
@@ -94,7 +97,11 @@ const (
 	indexPage     = "index.html"
 )
 
-func (c *Context) Preload() {
+func (c *Context) Preload(r *http.Request, w http.ResponseWriter) {
+	// re initialize current http request fields
+	c.request = r
+	c.response.reset(w)
+
 	acceptHeader := c.request.Header.Get(HeaderAccept)
 	//TODO content-type negotiation
 	c.contentType = acceptHeader
@@ -106,6 +113,8 @@ func (c *Context) Preload() {
 	c.intIp = ip.Ip2intLow(c.ip)
 	//detect user requested data serialization method
 	c.serializer, c.acceptContentMode = ioproto.EncodingSelector(acceptHeader)
+	// read connection profile token if exists
+	c.connectionToken = c.ReadConnectionProfileToken()
 }
 
 func (c *Context) writeContentType(value string) {
@@ -546,9 +555,9 @@ func (c *Context) Logger() Logger {
 	return c.echo.Logger
 }
 
-func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
-	c.request = r
-	c.response.reset(w)
+func (c *Context) Reset() {
+	c.request = nil
+	c.response.reset(nil)
 	c.query = nil
 	c.handler = NotFoundHandler
 	c.store = nil
@@ -568,6 +577,7 @@ func (c *Context) Reset(r *http.Request, w http.ResponseWriter) {
 	c.UserId = ""
 	c.acceptContentMode = io2.ModeJson
 	c.contentType = ""
+	c.connectionToken = ""
 
 }
 
@@ -729,8 +739,11 @@ func (c *Context) SelectecResponseContentType() string {
 	return c.contentType
 }
 
+func (c *Context) ConnectionToken() string {
+	return c.connectionToken
+}
+
 // check whether current context has a jWT or not
-// TODO optimize
-func (c *Context) hasJWT() bool {
-	return c.ReadConnectionProfileToken() != ""
+func (c *Context) HasJWT() bool {
+	return c.connectionToken != ""
 }
