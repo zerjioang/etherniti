@@ -4,6 +4,10 @@
 package controllers
 
 import (
+	"fmt"
+	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/etherniti/core/util/ip"
+	"github.com/zerjioang/etherniti/core/util/net/ping"
 	"io/ioutil"
 	"runtime"
 
@@ -143,6 +147,60 @@ func (ctl *IndexController) integrity() []byte {
 	return integrityTicker.Bytes()
 }
 
+func (ctl *IndexController) Ping(c *echo.Context) error {
+	targetIp := c.QueryParam("ip")
+	if !ip.IsIpv4(targetIp){
+		logger.Error("failed to read request target ip: ", data.ErrInvalidIpv4)
+		return api.Error(c, data.ErrInvalidIpv4)
+	}
+	response, err := ctl.ping(targetIp)
+	if err != nil {
+		return api.Error(c, err)
+	} else {
+		return api.SendSuccess(c, []byte("icmp_ping"), response)
+	}
+}
+
+func (ctl *IndexController) ping(addr string) (*ping.Statistics, error) {
+	pinger, err := ping.NewPinger(addr)
+	pinger.Count = -1
+	pinger.Interval = time.Second
+	pinger.Timeout = time.Second*100000
+	pinger.SetPrivileged(false)
+
+	if err != nil {
+		logger.Error("failed to create new ping tester: ", err.Error())
+		return nil, err
+	}
+	//set finish listener as channel
+	onFinishChan := make(chan *ping.Statistics)
+
+	pinger.OnRecv = func(pkt *ping.Packet) {
+		fmt.Printf("%d bytes from %s: icmp_seq=%d time=%v ttl=%v\n",
+			pkt.Nbytes,
+			pkt.IPAddr,
+			pkt.Seq,
+			pkt.Rtt,
+			pkt.Ttl,
+		)
+	}
+	pinger.OnFinish = func(stats *ping.Statistics) {
+		fmt.Printf("\n--- %s ping statistics ---\n",
+			stats.Addr,
+		)
+		fmt.Printf("%d packets transmitted, %d packets received, %v%% packet loss\n",
+			stats.PacketsSent, stats.PacketsRecv, stats.PacketLoss)
+		fmt.Printf("round-trip min/avg/max/stddev = %v/%v/%v/%v\n",
+			stats.MinRtt, stats.AvgRtt, stats.MaxRtt, stats.StdDevRtt)
+		onFinishChan <- stats
+	}
+
+	fmt.Printf("PING %s (%s):\n", pinger.Addr(), pinger.IPAddr())
+	pinger.Run()
+	result := <- onFinishChan
+	return result, nil
+}
+
 // todo optimize struct creation. it should be created once, not every time is called by http clients. smae goes for byte array
 func (ctl *IndexController) score(c *echo.Context) error {
 	data := struct {
@@ -163,4 +221,5 @@ func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	router.GET("/score", ctl.score)
 	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
+	router.GET("/ping", ctl.Ping)
 }

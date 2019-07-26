@@ -185,3 +185,9 @@ var (
 	ErrInvalidAuthenticationToken = []byte("invalid authentication token")
 	ErrMissingAuthenticationToken = []byte("missing authentication token")
 )
+
+
+// ip related errors
+var (
+	ErrInvalidIpv4 = errors.New("invalid IPv4 provided")
+)

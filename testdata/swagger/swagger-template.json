@@ -454,6 +454,60 @@
         }
       }
     },
+    "/ping": {
+      "get": {
+        "tags": [
+          "util"
+        ],
+        "summary": "Remote server ping test",
+        "description": "Remote server ping test utility",
+        "operationId": "icmp-ping",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ip",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "remote server IP",
+            "default": "127.0.0.1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "remote server ICMP ping test response",
+            "schema": {
+              "example": {
+                "name": "etherniti-public-api",
+                "description": "High Performance Web3 REST Proxy",
+                "cluster_name": "apollo-api",
+                "version": "1.0.0",
+                "commit": "latest",
+                "edition": "oss",
+                "env": "development",
+                "tagline": "dapps everywhere"
+              }
+            }
+          },
+          "400": {
+            "description": "invalid request provided. Ip mising or malformed",
+            "schema": {
+              "example": {
+                "desc": "invalid IPv4 provided"
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login": {
       "post": {
         "tags": [
@@ -469,17 +523,19 @@
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
         ],
         "deprecated": false,
-        "parameters": [{
-          "in": "body",
-          "required": true,
-          "name": "data",
-          "schema": {
-            "example": {
-              "email": "jhon.doe@domain.tld",
-              "pwd": "jhondoe"
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {
+                "email": "jhon.doe@domain.tld",
+                "pwd": "jhondoe"
+              }
             }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "login success message",

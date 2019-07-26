@@ -6,12 +6,18 @@ package ip
 import (
 	"encoding/binary"
 	"net"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 const (
 	asciiDot  uint8 = 46
 	asciiZero uint8 = 48
+)
+
+var (
+	ipRegex, _ = regexp.Compile(`^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$`)
 )
 
 // converts an IP address to uint32 value
@@ -79,4 +85,46 @@ func Int2ip(ipInt int64) string {
 	b3 := strconv.FormatInt(ipInt&0xff, 10)
 
 	return b0 + "." + b1 + "." + b2 + "." + b3
+}
+
+func IsIpv4(host string) bool {
+	parts := strings.Split(host, ".")
+	if len(parts) < 4 {
+		return false
+	}
+	for _,x := range parts {
+		if i, err := integerAtoi(x); err == nil {
+			if i < 0 || i > 255 {
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+	return true
+}
+
+func IsIpv4Regex(ipAddress string) bool {
+	ipAddress = strings.Trim(ipAddress, " ")
+	if ipRegex.MatchString(ipAddress) {
+		return true
+	}
+	return false
+}
+
+func atoi(s string) (int, error) {
+	return strconv.Atoi(s)
+}
+
+func integerAtoi(str string) (int, error) {
+	res := 0 // Initialize result
+
+	// Iterate through all characters of input string and
+	// update result
+	for i := 0; i < len(str); i++ {
+		res = res*10 + int(str[i] - '0')
+	}
+
+	// return result.
+	return res, nil
 }
