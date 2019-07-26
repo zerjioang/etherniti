@@ -43,8 +43,8 @@ func BenchmarkProcessPacket(b *testing.B) {
 		ttl:    24,
 	}
 
-	b.ReportAllocs()
 	b.SetBytes(1)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for k := 0; k < b.N; k++ {

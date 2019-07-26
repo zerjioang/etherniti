@@ -92,7 +92,7 @@ func IsIpv4(host string) bool {
 	if len(parts) < 4 {
 		return false
 	}
-	for _,x := range parts {
+	for _, x := range parts {
 		if i, err := integerAtoi(x); err == nil {
 			if i < 0 || i > 255 {
 				return false
@@ -122,7 +122,7 @@ func integerAtoi(str string) (int, error) {
 	// Iterate through all characters of input string and
 	// update result
 	for i := 0; i < len(str); i++ {
-		res = res*10 + int(str[i] - '0')
+		res = res*10 + int(str[i]-'0')
 	}
 
 	// return result.

@@ -486,14 +486,25 @@
             "description": "remote server ICMP ping test response",
             "schema": {
               "example": {
-                "name": "etherniti-public-api",
-                "description": "High Performance Web3 REST Proxy",
-                "cluster_name": "apollo-api",
-                "version": "1.0.0",
-                "commit": "latest",
-                "edition": "oss",
-                "env": "development",
-                "tagline": "dapps everywhere"
+                "msg": "icmp_ping",
+                "data": {
+                  "packets_recv": 2,
+                  "packets_sent": 2,
+                  "packet_loss": 0,
+                  "ip_addr": {
+                    "IP": "127.0.0.1",
+                    "Zone": ""
+                  },
+                  "addr": "127.0.0.1",
+                  "rtts": [
+                    39782047,
+                    37702048
+                  ],
+                  "min_rtt": 37702048,
+                  "max_rtt": 39782047,
+                  "avg_rtt": 38742047,
+                  "std_dev_rtt": 1039999
+                }
               }
             }
           },

@@ -101,20 +101,6 @@ func NewPinger(addr string) (*Pinger, error) {
 	}, nil
 }
 
-// helper module for new pinger
-func NewPingTester(addr string) (*Pinger, error) {
-	pinger, err := NewPinger(addr)
-	if err == nil {
-		pinger.ipv4 = true
-		pinger.addr = addr
-		pinger.network = "ip"
-		pinger.id = 123
-		pinger.Tracker = 456
-		pinger.Size = 0
-	}
-	return pinger, err
-}
-
 // Pinger represents ICMP packet sender/receiver
 type Pinger struct {
 	// Interval is the wait time between each packet send. Default is 1s.
@@ -200,35 +186,35 @@ type Packet struct {
 // pinger operation.
 type Statistics struct {
 	// PacketsRecv is the number of packets received.
-	PacketsRecv int
+	PacketsRecv int `json:"packets_recv"`
 
 	// PacketsSent is the number of packets sent.
-	PacketsSent int
+	PacketsSent int `json:"packets_sent"`
 
 	// PacketLoss is the percentage of packets lost.
-	PacketLoss float64
+	PacketLoss float64 `json:"packet_loss"`
 
 	// IPAddr is the address of the host being pinged.
-	IPAddr *net.IPAddr
+	IPAddr *net.IPAddr `json:"ip_addr"`
 
 	// Addr is the string address of the host being pinged.
-	Addr string
+	Addr string `json:"addr"`
 
 	// Rtts is all of the round-trip times sent via this pinger.
-	Rtts []time.Duration
+	Rtts []time.Duration `json:"rtts"`
 
 	// MinRtt is the minimum round-trip time sent via this pinger.
-	MinRtt time.Duration
+	MinRtt time.Duration `json:"min_rtt"`
 
 	// MaxRtt is the maximum round-trip time sent via this pinger.
-	MaxRtt time.Duration
+	MaxRtt time.Duration `json:"max_rtt"`
 
 	// AvgRtt is the average round-trip time sent via this pinger.
-	AvgRtt time.Duration
+	AvgRtt time.Duration `json:"avg_rtt"`
 
 	// StdDevRtt is the standard deviation of the round-trip times sent via
 	// this pinger.
-	StdDevRtt time.Duration
+	StdDevRtt time.Duration `json:"std_dev_rtt"`
 }
 
 // SetIPAddr sets the ip address of the target host.
@@ -311,6 +297,7 @@ func (p *Pinger) run() {
 	var wg sync.WaitGroup
 	recv := make(chan *packet, 5)
 	defer close(recv)
+
 	wg.Add(1)
 	go p.recvICMP(conn, recv, &wg)
 
@@ -321,6 +308,7 @@ func (p *Pinger) run() {
 
 	timeout := time.NewTicker(p.Timeout)
 	defer timeout.Stop()
+
 	interval := time.NewTicker(p.Interval)
 	defer interval.Stop()
 
@@ -330,7 +318,7 @@ func (p *Pinger) run() {
 			wg.Wait()
 			return
 		case <-timeout.C:
-			close(p.done)
+			p.Stop()
 			wg.Wait()
 			return
 		case <-interval.C:
@@ -348,7 +336,7 @@ func (p *Pinger) run() {
 			}
 		}
 		if p.Count > 0 && p.PacketsRecv >= p.Count {
-			close(p.done)
+			p.Stop()
 			wg.Wait()
 			return
 		}
@@ -442,7 +430,7 @@ func (p *Pinger) recvICMP(
 						// Read timeout
 						continue
 					} else {
-						close(p.done)
+						p.Stop()
 						return
 					}
 				}
@@ -574,7 +562,7 @@ func (p *Pinger) listen(netProto string) *icmp.PacketConn {
 	conn, err := icmp.ListenPacket(netProto, p.Source)
 	if err != nil {
 		fmt.Printf("Error listening for ICMP packets: %s\n", err.Error())
-		close(p.done)
+		p.Stop()
 		return nil
 	}
 	return conn

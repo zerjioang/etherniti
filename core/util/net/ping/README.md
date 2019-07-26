@@ -99,4 +99,3 @@ Error listening for ICMP packets: socket: The requested protocol has not been co
 ```
 
 This should without admin privileges. Tested on Windows 10.
-

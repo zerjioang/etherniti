@@ -5,11 +5,12 @@ package controllers
 
 import (
 	"fmt"
+	"io/ioutil"
+	"runtime"
+
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/net/ping"
-	"io/ioutil"
-	"runtime"
 
 	"github.com/zerjioang/etherniti/core/bench"
 
@@ -149,7 +150,7 @@ func (ctl *IndexController) integrity() []byte {
 
 func (ctl *IndexController) Ping(c *echo.Context) error {
 	targetIp := c.QueryParam("ip")
-	if !ip.IsIpv4(targetIp){
+	if !ip.IsIpv4(targetIp) {
 		logger.Error("failed to read request target ip: ", data.ErrInvalidIpv4)
 		return api.Error(c, data.ErrInvalidIpv4)
 	}
@@ -162,18 +163,17 @@ func (ctl *IndexController) Ping(c *echo.Context) error {
 }
 
 func (ctl *IndexController) ping(addr string) (*ping.Statistics, error) {
+
 	pinger, err := ping.NewPinger(addr)
-	pinger.Count = -1
-	pinger.Interval = time.Second
-	pinger.Timeout = time.Second*100000
+	pinger.Count = 5
+	pinger.Interval = time.Second * 1
+	pinger.Timeout = time.Second * 2 // max: count * interval
 	pinger.SetPrivileged(false)
 
 	if err != nil {
 		logger.Error("failed to create new ping tester: ", err.Error())
 		return nil, err
 	}
-	//set finish listener as channel
-	onFinishChan := make(chan *ping.Statistics)
 
 	pinger.OnRecv = func(pkt *ping.Packet) {
 		fmt.Printf("%d bytes from %s: icmp_seq=%d time=%v ttl=%v\n",
@@ -184,33 +184,39 @@ func (ctl *IndexController) ping(addr string) (*ping.Statistics, error) {
 			pkt.Ttl,
 		)
 	}
+
 	pinger.OnFinish = func(stats *ping.Statistics) {
 		fmt.Printf("\n--- %s ping statistics ---\n",
 			stats.Addr,
 		)
 		fmt.Printf("%d packets transmitted, %d packets received, %v%% packet loss\n",
-			stats.PacketsSent, stats.PacketsRecv, stats.PacketLoss)
+			stats.PacketsSent,
+			stats.PacketsRecv,
+			stats.PacketLoss,
+		)
 		fmt.Printf("round-trip min/avg/max/stddev = %v/%v/%v/%v\n",
-			stats.MinRtt, stats.AvgRtt, stats.MaxRtt, stats.StdDevRtt)
-		onFinishChan <- stats
+			stats.MinRtt,
+			stats.AvgRtt,
+			stats.MaxRtt,
+			stats.StdDevRtt,
+		)
 	}
 
-	fmt.Printf("PING %s (%s):\n", pinger.Addr(), pinger.IPAddr())
 	pinger.Run()
-	result := <- onFinishChan
-	return result, nil
+	s := pinger.Statistics()
+	return s, nil
 }
 
 // todo optimize struct creation. it should be created once, not every time is called by http clients. smae goes for byte array
 func (ctl *IndexController) score(c *echo.Context) error {
-	data := struct {
+	scoreWrapper := struct {
 		Time  time.Duration `json:"time"`
 		Score int64         `json:"score"`
 	}{
 		Time:  bench.GetBenchTime(),
 		Score: bench.GetScore(),
 	}
-	return api.SendSuccess(c, []byte("bench_score"), data)
+	return api.SendSuccess(c, []byte("bench_score"), scoreWrapper)
 }
 
 // implemented method from interface RouterRegistrable

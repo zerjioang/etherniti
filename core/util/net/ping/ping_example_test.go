@@ -1,6 +1,10 @@
+// make sure your linux device has unprivileged mode on using
+// sudo sysctl -w net.ipv4.ping_group_range="0   2147483647"
+
 package ping_test
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -10,13 +14,45 @@ import (
 	"github.com/zerjioang/etherniti/core/util/net/ping"
 )
 
-func TestExamplePing(t *testing.T) {
-	timeout := time.Second*100000
-	interval := time.Second
-	count := -1
-	privileged := false
+var usage = `
+Usage:
 
-	host := "127.0.0.1"
+    ping [-c count] [-i interval] [-t timeout] [--privileged] host
+
+Examples:
+
+    # ping google continuously
+    ping www.google.com
+
+    # ping google 5 times
+    ping -c 5 www.google.com
+
+    # ping google 5 times at 500ms intervals
+    ping -c 5 -i 500ms www.google.com
+
+    # ping google for 10 seconds
+    ping -t 10s www.google.com
+
+    # Send a privileged raw ICMP ping
+    sudo ping --privileged www.google.com
+`
+
+func TestExample(t *testing.T) {
+	timeout := flag.Duration("t", time.Second*100000, "")
+	interval := flag.Duration("i", time.Second, "")
+	count := flag.Int("c", -1, "")
+	privileged := flag.Bool("privileged", false, "")
+	flag.Usage = func() {
+		fmt.Printf(usage)
+	}
+	flag.Parse()
+
+	if flag.NArg() == 0 {
+		flag.Usage()
+		return
+	}
+
+	host := flag.Arg(0)
 	pinger, err := ping.NewPinger(host)
 	if err != nil {
 		fmt.Printf("ERROR: %s\n", err.Error())
@@ -44,10 +80,10 @@ func TestExamplePing(t *testing.T) {
 			stats.MinRtt, stats.AvgRtt, stats.MaxRtt, stats.StdDevRtt)
 	}
 
-	pinger.Count = count
-	pinger.Interval = interval
-	pinger.Timeout = timeout
-	pinger.SetPrivileged(privileged)
+	pinger.Count = *count
+	pinger.Interval = *interval
+	pinger.Timeout = *timeout
+	pinger.SetPrivileged(*privileged)
 
 	fmt.Printf("PING %s (%s):\n", pinger.Addr(), pinger.IPAddr())
 	pinger.Run()

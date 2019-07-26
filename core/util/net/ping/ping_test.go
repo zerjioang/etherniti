@@ -444,8 +444,16 @@ func TestStatisticsLossy(t *testing.T) {
 
 // Test helpers
 func makeTestPinger() *Pinger {
-	p, _ := NewPingTester("127.0.0.1")
-	return p
+	pinger, _ := NewPinger("127.0.0.1")
+
+	pinger.ipv4 = true
+	pinger.addr = "127.0.0.1"
+	pinger.network = "ip"
+	pinger.id = 123
+	pinger.Tracker = 456
+	pinger.Size = 0
+
+	return pinger
 }
 
 func AssertNoError(t *testing.T, err error) {
