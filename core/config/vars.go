@@ -57,4 +57,7 @@ const (
 	XEthernitiUsersCheckEmail   = "X_ETHERNITI_CHECK_USER_EMAIL"
 	XEthernitiMinPasswordLength = "X_ETHERNITI_USERS_MIN_PWD_LEN"
 	XEthernitiEnableWebAuthN    = "X_ETHERNITI_ENABLE_WEBAUTHN"
+
+	XEthernitiAdminKey    = "X_ETHERNITI_ADMIN_KEY"
+	XEthernitiAdminSecret = "X_ETHERNITI_ADMIN_SECRET"
 )

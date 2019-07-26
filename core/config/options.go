@@ -12,6 +12,12 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
+type AdminIdentity struct {
+	Key           string `json:"key"`
+	Secret        string `json:"secret"`
+	LoadedFromEnv bool   `json:"env"`
+}
+
 type EthernitiOptions struct {
 	//environment variables
 	envData *env.EnvConfig
@@ -34,6 +40,8 @@ type EthernitiOptions struct {
 	checkUsersEmailValidity bool
 	MinPasswordLen          int
 	webAuthNEnabled         bool
+	// proxy elevation admin data
+	Admin AdminIdentity
 }
 
 var (
@@ -72,6 +80,7 @@ func (eo *EthernitiOptions) preload() {
 	eo.MaxWorker = eo.envData.Int(XEthernitiMaxWorkers, 4)
 	eo.MaxQueue = eo.envData.Int(XEthernitiMaxQueue, 200)
 	// load if exists custom endpoints for public mainnets
+	logger.Debug("loading proxy service custom endpoints from env")
 	eo.RopstenCustomEndpoint = eo.envData.String(XEthernitiRopstenEndpoint)
 	eo.RinkebyCustomEndpoint = eo.envData.String(XEthernitiRinkebyEndpoint)
 	eo.KovanCustomEndpoint = eo.envData.String(XEthernitiKovanEndpoint)
@@ -82,6 +91,12 @@ func (eo *EthernitiOptions) preload() {
 	eo.checkUsersEmailValidity = eo.envData.Bool(XEthernitiUsersCheckEmail, false) //disabled by default
 	eo.MinPasswordLen = eo.envData.Int(XEthernitiMinPasswordLength, 6)             //6 chars by default
 	eo.webAuthNEnabled = eo.envData.Bool(XEthernitiEnableWebAuthN, false)          //disabled by default
+
+	// load admin identity data if exists
+	logger.Debug("loading proxy service admin identity key and secret from env")
+	eo.Admin.Key = eo.envData.String(XEthernitiAdminKey)
+	eo.Admin.Secret = eo.envData.String(XEthernitiAdminSecret)
+	eo.Admin.LoadedFromEnv = len(eo.Admin.Key) > 0 && len(eo.Admin.Secret) > 0
 }
 
 func (eo *EthernitiOptions) resolveBlockTorConnections() bool {
