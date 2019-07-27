@@ -10,14 +10,14 @@ set -e
 
 # move to script location
 cd "$(dirname "$0")"
-
-# source helper files
-source ./docker_version.sh
-source ./docker_build.sh
-source ./docker_helper.sh
-
 # move to project root dir from ./scripts to ./
 cd ../..
+
+# source helper files
+source ./scripts/colors.sh
+source ./scripts/docker/docker_version.sh
+source ./scripts/docker/docker_build.sh
+source ./scripts/docker/docker_helper.sh
 
 buildArm \
 	--build-arg BUILD_MODE=prod \

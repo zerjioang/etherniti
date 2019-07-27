@@ -13,6 +13,9 @@ cd "$(dirname "$0")"
 # move to project root dir from ./scripts/docker to ./
 cd ../..
 
+# load colored logs
+source ./scripts/colors.sh
+
 # docker helper files
 source ./scripts/docker/docker_helper.sh
 source ./scripts/docker/docker_build.sh
