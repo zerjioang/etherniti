@@ -39,27 +39,29 @@ var (
 	defaultConfig = badger.Options{
 		LevelOneSize:        256 << 20,
 		LevelSizeMultiplier: 10,
-		TableLoadingMode:    options.LoadToRAM, // Mode in which LSM tree is loaded
-		ValueLogLoadingMode: options.FileIO,    // options.MemoryMap,
+		TableLoadingMode:    options.MemoryMap, // options.LoadToRAM, // Mode in which LSM tree is loaded
+		ValueLogLoadingMode: options.MemoryMap, // options.FileIO,    // options.MemoryMap,
 		// table.MemoryMap to mmap() the tables.
 		// table.Nothing to not preload the tables.
 		MaxLevels:               7, // Size of table
 		MaxTableSize:            64 << 20,
-		NumCompactors:           1, // 3 // Number of concurrent compactions,
+		NumCompactors:           1, // 2 // Number of concurrent compactions,
 		NumLevelZeroTables:      5,
 		NumLevelZeroTablesStall: 10,
 		NumMemtables:            5,
 		SyncWrites:              true,
 		NumVersionsToKeep:       1,
+		CompactL0OnClose:        true,
 		// Nothing to read/write value log using standard File I/O
 		// MemoryMap to mmap() the value log files
 		// (2^30 - 1)*2 when mmapping < 2^31 - 1, max int32.
 		// -1 so 2*ValueLogFileSize won't overflow on 32-bit systems.
-		ValueLogFileSize: 1<<30 - 1, // Size of value log file
+		ValueLogFileSize: 1<<30 - 1,
 
 		ValueLogMaxEntries: 1000000,
 		ValueThreshold:     32,
 		Truncate:           false,
+		LogRotatesToFlush:  2,
 	}
 	uid = os.Getuid()
 	gid = os.Getgid()

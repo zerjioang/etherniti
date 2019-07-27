@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	logger.Debug("loading productin config module data")
+	logger.Debug("loading production config module data")
 	logger.Info("loading production ssl crypto material for https")
 	certPath := os.Getenv("X_ETHERNITI_SSL_CERT_FILE")
 	certPemBytes = loadCertBytes(certPath)

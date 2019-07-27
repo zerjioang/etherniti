@@ -27,8 +27,8 @@ docker run \
     --log-opt max-size=20m \
     --log-opt max-file=5 \
     --log-opt labels=production_status \
-    -e X_ETHERNITI_SSL_CERT_FILE=/etc/letsencrypt/live/etherniti.org/fullchain.pem \
-    -e X_ETHERNITI_SSL_KEY_FILE=/etc/letsencrypt/live/etherniti.org/privkey.pem \
+    -e X_ETHERNITI_SSL_CERT_FILE=/home/sergio/go/src/github.com/zerjioang/etherniti/secrets/letsencrypt/etc/certs/live/etherniti.org/fullchain.pem  \
+    -e X_ETHERNITI_SSL_KEY_FILE=/home/sergio/go/src/github.com/zerjioang/etherniti/secrets/letsencrypt/etc/certs/live/etherniti.org/privkey.pem \
     -e X_ETHERNITI_LOG_LEVEL="warn" \
     -e X_ETHERNITI_LISTENING_MODE="http" \
     -e X_ETHERNITI_LISTENING_PORT="8080" \
