@@ -36,7 +36,7 @@ func CalculateScore() {
 	wait.Add(cores)
 
 	for i := 0; i < cores; i++ {
-		go MonteCarlo(100.0, samples/cores, &counts[i], &wait)
+		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
 	}
 
 	wait.Wait()
@@ -60,7 +60,7 @@ func GetBenchTime() time.Duration {
 	return totalTime
 }
 
-func MonteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {
+func monteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {
 	var x, y float64
 	count := 0
 	seed := rand.NewSource(time.Now().UnixNano())

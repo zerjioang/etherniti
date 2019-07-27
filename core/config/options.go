@@ -12,10 +12,11 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
+// identity related data for proxy backend administrator
 type AdminIdentity struct {
-	Key           string `json:"key"`
-	Secret        string `json:"secret"`
-	LoadedFromEnv bool   `json:"env"`
+	Key           string `json:"key,omitempty"`
+	Secret        string `json:"secret,omitempty"`
+	LoadedFromEnv bool   `json:"env,omitempty"`
 }
 
 type EthernitiOptions struct {
@@ -53,6 +54,7 @@ var (
 )
 
 func init() {
+	logger.Debug("loading default options")
 	defaultOptions.Init()
 }
 

@@ -14,7 +14,7 @@ func GenerateAdmin(opts *EthernitiOptions) (string, string, error) {
 		return "", "", errors.New("failed to generate proxy admin identity data because could not load proxy configuration options")
 	} else {
 		if !opts.Admin.LoadedFromEnv {
-			logger.Debug("generating admin identity")
+			logger.Debug("generating admin identity since not provided by environment options")
 			accessKey := id.GenerateUUIDFromEntropy()
 			accessSecret := id.GenerateUUIDFromEntropy()
 			logger.Warn("proxy admin: key = ", accessKey, ", secret = ", accessSecret)
