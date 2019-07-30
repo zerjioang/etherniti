@@ -162,8 +162,13 @@ func (eo *EthernitiOptions) EnableServerCache() bool {
 	return v == "true"
 }
 func (eo *EthernitiOptions) EnableAnalytics() bool {
-	logger.Debug("reading analytics mode from env")
+	logger.Debug("reading notifier mode from env")
 	v := eo.envData.Lower(XEthernitiEnableAnalytics)
+	return v == "true"
+}
+func (eo *EthernitiOptions) EnableInternalAnalytics() bool {
+	logger.Debug("reading internal notifier mode from env")
+	v := eo.envData.Lower(XEthernitiEnableInternalAnalytics)
 	return v == "true"
 }
 func (eo *EthernitiOptions) EnableMetrics() bool {

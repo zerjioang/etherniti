@@ -36,6 +36,7 @@ You can copy and paste them to workspace.xml file or add them manually one by on
 <env name="X_ETHERNITI_USE_UNIQUE_REQUEST_ID" value="false" />
 <env name="X_ETHERNITI_ENABLE_SECURITY" value="true" />
 <env name="X_ETHERNITI_ENABLE_ANALYTICS" value="true" />
+<env name="X_ETHERNITI_ENABLE_INTERNAL_ANALYTICS" value="true" />
 <env name="X_ETHERNITI_ENABLE_CORS" value="true" />
 <env name="X_ETHERNITI_ENABLE_CACHE" value="true" />
 <env name="X_ETHERNITI_ENABLE_RATE_LIMIT" value="false" />

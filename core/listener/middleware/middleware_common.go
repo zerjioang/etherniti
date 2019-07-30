@@ -129,19 +129,25 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.Use(middleware.RequestID())
 	}
 
+	// Internal notifier allows the collection of notifier of etherniti proxy internal components and modules
+	if cfg.EnableInternalAnalytics() {
+		logger.Info("[LAYER] /=> adding internal notifier")
+		e.Use(cyber.InternalAnalytics)
+	}
+
 	if edition.IsEnterprise() {
-		// enable analytics for pro version and for those who requested
+		// enable notifier for pro version and for those who requested
 		if cfg.EnableCompression() {
 			// add gzip support if client requests it
 			logger.Info("[LAYER] /=> adding gzip compression")
 			e.Use(middleware.GzipWithConfig(gzipConfig))
 		}
-		// enable analytics for pro version and for those who requested
+		// enable notifier for pro version and for those who requested
 		if cfg.EnableAnalytics() {
-			logger.Info("[LAYER] /=> adding analytics")
+			logger.Info("[LAYER] /=> adding notifier")
 			e.Use(cyber.Analytics)
 		}
-		// enable analytics for pro version and for those who requested
+		// enable notifier for pro version and for those who requested
 		if cfg.EnableServerCache() {
 			logger.Info("[LAYER] /=> adding server cache")
 			e.Use(httpcache.HttpServerCache)

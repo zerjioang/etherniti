@@ -8,6 +8,8 @@ import (
 	"runtime"
 	"syscall"
 
+	"github.com/zerjioang/etherniti/shared/notifier"
+
 	"github.com/zerjioang/etherniti/core/bench"
 
 	"github.com/zerjioang/etherniti/core/controllers"
@@ -35,7 +37,7 @@ var (
 	Edition = "oss"
 
 	// build commit hash value
-	notifier = make(chan error, 1)
+	notifierChan = make(chan error, 1)
 )
 
 func init() {
@@ -90,8 +92,8 @@ func main() {
 	logger.Info("current server runtime benchmark score: ", bench.GetScore(), " points")
 
 	//run the server
-	cmd.RunServer(notifier)
-	err := <-notifier
+	cmd.RunServer(notifierChan)
+	err := <-notifierChan
 	if err != nil {
 		logger.Error("failed to execute etherniti proxy: ", err)
 		//print error details in a table
@@ -99,7 +101,7 @@ func main() {
 	}
 	logger.Info("shutting down remaining modules")
 	// finish graceful shutdown
-	bus.SharedBus().Emit(bus.PowerOffEvent)
+	bus.SharedBus().Emit(notifier.PowerOffEvent)
 	bus.SharedBus().Shutdown()
 	logger.Info("all systems securely shutdown. exiting")
 }

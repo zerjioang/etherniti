@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/zerjioang/etherniti/shared/notifier"
+
 	"github.com/dgraph-io/badger/options"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/util/codec"
@@ -104,7 +106,7 @@ func NewCollection(name string) (*BadgerStorage, error) {
 		return nil, openErr
 	}
 	// register for listening poweroff events
-	bus.SharedBus().Subscribe(bus.PowerOffEvent, func(message gobus.EventMessage) {
+	bus.SharedBus().Subscribe(notifier.PowerOffEvent, func(message gobus.EventMessage) {
 		logger.Debug("executing database poweroff routine in database: ", name)
 		err := collection.Close()
 		if err != nil {

@@ -1,8 +1,7 @@
-package bench_test
+package bench
 
 import (
 	"fmt"
-	"github.com/zerjioang/etherniti/core/bench"
 	"runtime"
 	"sync"
 	"testing"
@@ -25,7 +24,7 @@ func TestMonteCarlo(t *testing.T) {
 	wait.Add(cores)
 
 	for i := 0; i < cores; i++ {
-		go bench.monteCarlo(100.0, samples/cores, &counts[i], &wait)
+		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
 	}
 
 	wait.Wait()

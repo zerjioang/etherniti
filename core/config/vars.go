@@ -10,6 +10,7 @@ const (
 	XEthernitiEnableCors              = "X_ETHERNITI_ENABLE_CORS"
 	XEthernitiEnableRateLimit         = "X_ETHERNITI_ENABLE_RATE_LIMIT"
 	XEthernitiEnableAnalytics         = "X_ETHERNITI_ENABLE_ANALYTICS"
+	XEthernitiEnableInternalAnalytics = "X_ETHERNITI_ENABLE_INTERNAL_ANALYTICS"
 	XEthernitiEnableGzip              = "X_ETHERNITI_ENABLE_GZIP"
 	XEthernitiEnableServerCache       = "X_ETHERNITI_ENABLE_SERVER_CACHE"
 	XEthernitiEnableMetrics           = "X_ETHERNITI_ENABLE_METRICS"

@@ -6,6 +6,7 @@ package controllers
 import (
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/modules/counter32"
+	"github.com/zerjioang/etherniti/shared/notifier"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/shared/protocol"
@@ -49,6 +50,8 @@ func (ctl ProfileController) create(c *echo.Context) error {
 	if err == nil {
 		// increment created counter
 		profilesCreated.Increment()
+		// send internal event: new profile created
+		notifier.NewProfileRequestEvent.Emit()
 		return api.SendSuccess(c, data.ProfileTokenSuccess, token)
 	} else {
 		//token generation error

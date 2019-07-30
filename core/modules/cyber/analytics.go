@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/zerjioang/etherniti/shared/notifier"
+
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
 	"github.com/zerjioang/etherniti/shared/protocol/io"
 
@@ -30,7 +32,7 @@ func init() {
 	var err error
 	collection, err = db.NewCollection("access")
 	if err != nil {
-		logger.Error("failed to initialize access analytics db collection: ", err)
+		logger.Error("failed to initialize access notifier db collection: ", err)
 	}
 	pool = &sync.Pool{
 		New: func() interface{} {
@@ -40,7 +42,7 @@ func init() {
 	analyze = !config.IsDevelopment() && collection != nil
 }
 
-// check if http request host value is allowed or not
+// add a background client http request notifier modules
 func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		go processAnalytics(
@@ -52,14 +54,24 @@ func Analytics(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// Internal notifier
+func InternalAnalytics(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		// send new request event each time new http request is received
+		notifier.NewProxyRequestEvent.Emit()
+		// forward request to next middleware
+		return next(c)
+	}
+}
+
 // this method is called form a goroutine
 func processAnalytics(ip string, r *http.Request) {
 	if analyze {
-		// save request analytics data
+		// save request notifier data
 		n := fastime.Now()
 		// Get item from instance
 		record := pool.Get().(map[string]string)
-		// populate the access analytics item
+		// populate the access notifier item
 		record["time"] = strconv.Itoa(int(n.Unix()))
 		record["ip"] = ip
 		record["host"] = r.Host
@@ -75,7 +87,7 @@ func processAnalytics(ip string, r *http.Request) {
 		// store on disk
 		storeErr := collection.SetRawKey(n.SafeBytes(), raw)
 		if storeErr != nil {
-			logger.Error("failed to store analytics information due to error: ", storeErr)
+			logger.Error("failed to store notifier information due to error: ", storeErr)
 		}
 	}
 }

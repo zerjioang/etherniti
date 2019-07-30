@@ -1,10 +1,12 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package controllers
+package dashboard
 
 import (
 	"time"
+
+	"github.com/zerjioang/etherniti/shared/notifier"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/modules/checkmail"
@@ -143,6 +145,8 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 			logger.Error("failed to register new user due to: ", saveErr)
 			return api.ErrorBytes(c, data.UserRegisterFailed)
 		} else {
+			// send new account created internal event
+			notifier.NewDashboardAccountEvent.Emit()
 			return api.SendSuccess(c, data.RegistrationSuccess, nil)
 		}
 	}
