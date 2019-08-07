@@ -26,7 +26,7 @@ func NewWeb3ShhController(network *NetworkController) Web3ShhController {
 
 // ShhVersion calls shh protocol shh_version json-rpc call
 func (ctl *Web3ShhController) shhVersion(c *echo.Context) error {
-	logger.Info("web3 shh controller request using context id: ", ctl.network.networkName)
+	logger.Info("web3 shh controller request using context id: ", ctl.network.Name())
 
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)

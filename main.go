@@ -51,6 +51,7 @@ func init() {
 	// Increase resources limitations
 	// adds logic to increase the soft limit on the max number of open files for the server process
 	var rLimit syscall.Rlimit
+	logger.Info("increasing soft limit on the max number of open files for the server process")
 	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
 		logger.Error(err)
 	}
@@ -91,6 +92,7 @@ func main() {
 	//run the server
 	cmd.RunServer(notifier)
 	err := <-notifier
+
 	if err != nil {
 		logger.Error("failed to execute etherniti proxy: ", err)
 		//print error details in a table

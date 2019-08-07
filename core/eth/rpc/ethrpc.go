@@ -59,6 +59,9 @@ var (
 	defaultRpcHeader = http.Header{
 		"Content-Type": []string{httpclient.ApplicationJSON},
 	}
+	defaultGraphQLHeader = http.Header{
+		"Content-Type": []string{httpclient.ApplicationJSON},
+	}
 )
 
 var (
@@ -1494,6 +1497,12 @@ func (rpc *EthRPC) doubleQuote(data string) string {
 
 func (rpc *EthRPC) Proxy(requestContent []byte) ([]byte, stack.Error) {
 	result, err := rpc.proxyRequest(requestContent)
+	return result, stack.Ret(err)
+}
+
+// method that calls graph ql api of ethereum nodes (supported on geth +1.9.0)
+func (rpc *EthRPC) GraphQL(graphQLendpointURI string, qlQuery []byte) ([]byte, stack.Error) {
+	result, err := httpclient.MakePost(rpc.client, graphQLendpointURI, defaultGraphQLHeader, qlQuery)
 	return result, stack.Ret(err)
 }
 

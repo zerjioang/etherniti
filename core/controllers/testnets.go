@@ -33,30 +33,36 @@ const (
 	ganacheEndpoint = httpId + "127.0.0.1:7545"
 
 	//default infura public v3 endpoints
-	ropstenInfura = httpsId + "ropsten.infura.io/v3/"
-	rinkebyInfura = httpsId + "rinkeby.infura.io/v3/"
-	kovanInfura   = httpsId + "kovan.infura.io/v3/"
-	mainnetInfura = httpsId + "mainnet.infura.io/v3/"
-
-	UndefinedEndpoint = ""
+	ropstenInfura = "ropsten.infura.io/v3/"
+	rinkebyInfura = "rinkeby.infura.io/v3/"
+	kovanInfura   = "kovan.infura.io/v3/"
+	mainnetInfura = "mainnet.infura.io/v3/"
 )
 
 var (
 	infuraToken = "" //4f61378203ca4da4a6b6601bc16a22ad
 
+	// configure endpoints
+	UndefinedEndpoint = network.NewUndefinedConnection()
+
 	// infura endpoints when user has a valid infura token
-	ropstenInfuraEndpoint = UndefinedEndpoint
-	rinkebyInfuraEndpoint = UndefinedEndpoint
-	kovanInfuraEndpoint   = UndefinedEndpoint
-	mainnetInfuraEndpoint = UndefinedEndpoint
+	ropstenInfuraEndpoint = network.NewUndefinedConnection()
+	rinkebyInfuraEndpoint = network.NewUndefinedConnection()
+	kovanInfuraEndpoint   = network.NewUndefinedConnection()
+	mainnetInfuraEndpoint = network.NewUndefinedConnection()
 
 	//custom user provided endpoints (if exists)
 	// for connecting to different networks using it
 	// prefered provider: own node, infura, etc
-	ropstenCustom = UndefinedEndpoint
-	rinkebyCustom = UndefinedEndpoint
-	kovanCustom   = UndefinedEndpoint
-	mainnetCustom = UndefinedEndpoint
+	ropstenCustom = ""
+	rinkebyCustom = ""
+	kovanCustom   = ""
+	mainnetCustom = ""
+
+	privateInfura   = network.NewNodeConnection("", "", "", "", "", "", infura)
+	privateQuiknode = network.NewNodeConnection("", "", "", "", "", "", quiknode)
+	privateCustom   = network.NewNodeConnection("", "", "", "", "", "", private)
+	localGanache    = network.NewNodeConnection("", "", "", "", "", "", ganache)
 )
 
 type RestController struct {
@@ -68,6 +74,7 @@ type RestController struct {
 	abi     network.AbiController
 	devops  network.DevOpsController
 	rpc     network.Web3RpcController
+	graphql network.GraphqlController
 }
 
 func init() {
@@ -76,10 +83,10 @@ func init() {
 	infuraToken = cfg.InfuraToken()
 	//update all infura related urls
 	logger.Info("updating infura v3 endpoints with provided token")
-	ropstenInfuraEndpoint = ropstenInfura + infuraToken
-	rinkebyInfuraEndpoint = rinkebyInfura + infuraToken
-	kovanInfuraEndpoint = kovanInfura + infuraToken
-	mainnetInfuraEndpoint = mainnetInfura + infuraToken
+	ropstenInfuraEndpoint = network.NewNodeConnection(httpsId, ropstenInfura+infuraToken, "", "", "", "", ropsten)
+	rinkebyInfuraEndpoint = network.NewNodeConnection(httpsId, rinkebyInfura+infuraToken, "", "", "", "", rinkeby)
+	kovanInfuraEndpoint = network.NewNodeConnection(httpsId, kovanInfura+infuraToken, "", "", "", "", kovan)
+	mainnetInfuraEndpoint = network.NewNodeConnection(httpsId, mainnetInfura+infuraToken, "", "", "", "", mainnet)
 	// load custom endpoints if exists
 	logger.Info("loading user provided custom endpoints")
 	ropstenCustom = cfg.RopstenCustomEndpoint
@@ -89,7 +96,7 @@ func init() {
 }
 
 // constructor like function
-func newController(client *fasthttp.Client, peer string, name string) RestController {
+func newController(client *fasthttp.Client, connection *network.NodeConnection) RestController {
 	logger.Debug("creating new web3 controller")
 	ctl := RestController{}
 	ctl.network = network.NewNetworkController()
@@ -99,10 +106,11 @@ func newController(client *fasthttp.Client, peer string, name string) RestContro
 	ctl.shh = network.NewWeb3ShhController(&ctl.network)
 	ctl.devops = network.NewDevOpsController(&ctl.network)
 	ctl.rpc = network.NewWeb3RpcController(&ctl.network)
+	ctl.graphql = network.NewGraphqlController(&ctl.network)
 	ctl.abi = network.NewAbiController()
 	//configure target network parameters
-	ctl.network.SetPeer(peer)
-	ctl.network.SetTargetName(name)
+	ctl.network.SetConnection(connection)
+	ctl.network.SetTargetName(connection.Name())
 	ctl.network.SetClient(client)
 	return ctl
 }
@@ -117,69 +125,71 @@ func (ctl RestController) RegisterRouters(router *echo.Group) {
 	ctl.shh.RegisterRouters(router)
 	ctl.devops.RegisterRouters(router)
 	ctl.rpc.RegisterRouters(router)
+	ctl.graphql.RegisterRouters(router)
 	ctl.abi.RegisterRouters(router)
 }
 
 // constructor like function
-func newInfuraController(client *fasthttp.Client, networkName, infuraEndpoint, fallbackEndpoint string) RestController {
-	logger.Debug("creating new web3 controller for ", networkName, " network")
+func newInfuraController(client *fasthttp.Client, connection *network.NodeConnection, fallbackConnStr string) RestController {
+	logger.Debug("creating new web3 controller for ", connection.Name(), " network")
 
 	if infuraToken != "" && len(infuraToken) == 32 {
 		// infura based controller is supported with default url
-		return newController(client, infuraEndpoint, networkName)
-	} else if fallbackEndpoint != "" {
+		return newController(client, connection)
+	} else if fallbackConnStr != "" {
 		// infura based controller is supported with user provided URL
-		return newController(client, fallbackEndpoint, networkName)
+		fllbackConn := network.NodeConnectionFromString(fallbackConnStr)
+		return newController(client, fllbackConn)
 	} else {
 		// infura based controller not supported
-		return newController(client, "", "unknown")
+		return newController(client, connection)
 	}
 }
 
 // constructor like function
 func NewRopstenController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for ropsten network")
-	return newInfuraController(client, ropsten, ropstenInfuraEndpoint, ropstenCustom)
+	return newInfuraController(client, ropstenInfuraEndpoint, ropstenCustom)
 }
 
 // constructor like function
 func NewRinkebyController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for rinkeby network")
-	return newInfuraController(client, rinkeby, rinkebyInfuraEndpoint, rinkebyCustom)
+	return newInfuraController(client, rinkebyInfuraEndpoint, rinkebyCustom)
 }
 
 // constructor like function
 func NewKovanController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for kovan network")
-	return newInfuraController(client, kovan, kovanInfuraEndpoint, kovanCustom)
+	return newInfuraController(client, kovanInfuraEndpoint, kovanCustom)
 }
 
 // constructor like function
 func NewMainNetController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for mainnet network")
-	return newInfuraController(client, mainnet, mainnetInfuraEndpoint, mainnetCustom)
+	return newInfuraController(client, mainnetInfuraEndpoint, mainnetCustom)
 }
 
 // constructor like function for user provided infura based connection
 func NewInfuraController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for infura network")
-	return newController(client, UndefinedEndpoint, infura)
+	return newController(client, privateInfura)
 }
 
 // constructor like function for user provided infura based connection
 func NewQuikNodeController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for quiknode network")
-	return newController(client, UndefinedEndpoint, quiknode)
+	return newController(client, privateQuiknode)
 }
 
 // constructor like function
 func NewGanacheController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for ganache testrpc")
-	return newController(client, ganacheEndpoint, ganache)
+	return newController(client, localGanache)
 }
 
 // constructor like function
 func NewPrivateNetController(client *fasthttp.Client) RestController {
 	logger.Debug("creating new web3 controller for private network")
-	return newController(client, "", private)
+	return newController(client, privateCustom)
 }

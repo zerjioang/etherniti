@@ -171,7 +171,7 @@ func (ctl *DevOpsController) callContract(c *echo.Context) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("devops controller request using context id: ", ctl.network.networkName)
+	logger.Info("devops controller request using context id: ", ctl.network.Name())
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}

@@ -75,6 +75,14 @@
       }
     },
     {
+      "name": "graphql",
+      "description": "Etherniti Web3 QraphQL API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API QraphQL at ",
+        "url": "https://docs.etherniti.org/api/graphql"
+      }
+    },
+    {
       "name": "security",
       "description": "Etherniti Web3 Proxy Security API",
       "externalDocs": {
@@ -149,6 +157,64 @@
   ],
   "schemes": ["http", "https", "unix"],
   "paths": {
+    "/web3/{network}/ql": {
+      "post": {
+        "tags": [
+          "graphql"
+        ],
+        "summary": "Send arbitrary graphqlrequest to web3 compatible node",
+        "description": "Send arbitrary graphql request to web3 compatible node",
+        "operationId": "web3-graphql",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful execution response of web3 graphql request",
+            "example": {}
+          },
+          "400": {
+            "description": "unsuccesful execution response of web3 graphql request",
+            "example": {}
+          }
+        }
+      }
+    },
     "/web3/{network}/rpc": {
       "post": {
         "tags": [
@@ -163,6 +229,9 @@
         "produces": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
         ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
         "deprecated": false,
         "parameters": [{
           "in": "path",

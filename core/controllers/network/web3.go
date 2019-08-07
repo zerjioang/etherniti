@@ -73,7 +73,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 	// check if not empty
 	if targetAddr != "" {
 		//try to get this information from the cache
-		key := ctl.network.peer + "get_balance" + targetAddr
+		key := ctl.network.UniqueId() + "get_balance" + targetAddr
 		keyBytes := str.UnsafeBytes(key)
 		result, found := ctl.network.cache.Get(keyBytes)
 		if found && result != nil {
@@ -343,7 +343,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	method := methodMap[key]
 	methodBytes := str.UnsafeBytes(method)
 	//TODO : in private context peer name is empty
-	cacheKey := ctl.network.peer + ":" + method
+	cacheKey := ctl.network.UniqueId() + ":" + method
 	cacheKeyBytes := str.UnsafeBytes(cacheKey)
 	result, found := ctl.network.cache.Get(cacheKeyBytes)
 	if found && result != nil {
