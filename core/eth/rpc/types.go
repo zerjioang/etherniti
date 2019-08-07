@@ -16,6 +16,8 @@ type Syncing struct {
 	StartingBlock int
 	CurrentBlock  int
 	HighestBlock  int
+	PulledStates  int
+	KnownStates   int
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.

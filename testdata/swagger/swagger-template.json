@@ -1021,7 +1021,7 @@
         }
       }
     },
-    "/web3/{network}/sign": {
+    "/web3/{network}/tx/sign-remote": {
       "post": {
         "tags": [
           "web3-sign"
@@ -1170,7 +1170,7 @@
         }
       }
     },
-    "/web3/{network}/send/tx": {
+    "/web3/{network}/tx/send": {
       "post": {
         "tags": [
           "web3-tx"
@@ -1239,7 +1239,7 @@
         }
       }
     },
-    "/web3/{network}/send/raw": {
+    "/web3/{network}/tx/send-raw": {
       "post": {
         "tags": [
           "web3-tx"

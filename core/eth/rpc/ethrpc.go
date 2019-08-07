@@ -6,6 +6,7 @@ package ethrpc
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"math/big"
 	"net"
@@ -517,19 +518,6 @@ func (rpc *EthRPC) EthGetCode(address string, block string) (string, error) {
 	}
 	err := rpc.post("eth_getCode", &code, params)
 	return code, err
-}
-
-// EthSign signs data with a given address.
-// Calculates an Ethereum specific signature
-// with: sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
-func (rpc *EthRPC) EthNodeSignRequest(req *NodeSignRequest) (string, error) {
-	var signature string
-	//prepare the params of the function
-	params := func() string {
-		return "[" + rpc.doubleQuote(req.Address) + "," + rpc.doubleQuote(req.Data) + "]"
-	}
-	err := rpc.post("eth_sign", &signature, params)
-	return signature, err
 }
 
 // EthSign signs data with a given address.
@@ -1449,6 +1437,39 @@ func (rpc *EthRPC) ChainId() (string, error) {
 		return "", err
 	}
 	return result, nil
+}
+
+// NetworkID returns the network ID (also known as the chain ID) for this chain.
+func (rpc *EthRPC) NetworkId() (*big.Int, error) {
+	version := new(big.Int)
+	var ver string
+	ver, err := rpc.NetVersion()
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := version.SetString(ver, 10); !ok {
+		return nil, fmt.Errorf("invalid net_version result %q", ver)
+	}
+	return version, nil
+}
+
+// PendingNonceAt returns the account nonce of the given account in the pending state.
+// This is the nonce that should be used for the next transaction.
+func (rpc *EthRPC) PendingNonceAt(address string) (uint64, error) {
+	result, err := rpc.EthGetTransactionCount(address, "pending")
+	return uint64(result), err
+}
+
+// SuggestGasPrice retrieves the currently suggested gas price to allow a timely
+// execution of a transaction.
+func (rpc *EthRPC) SuggestGasPrice() (*big.Int, error) {
+	var response string
+	err := rpc.post("eth_gasPrice", &response, nil)
+	if err != nil {
+		return nil, err
+	}
+	v, _, err := ParseBigInt(response)
+	return v, err
 }
 
 // curl localhost:8545 -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from": "0x8aff0a12f3e8d55cc718d36f84e002c335df2f4a", "data": "606060405260728060106000396000f360606040526000357c0100000000000000000000000000000000000000000000000000000000900480636ffa1caa146037576035565b005b604b60048080359060200190919050506061565b6040518082815260200191505060405180910390f35b6000816002029050606d565b91905056"}],"id":1}

@@ -49,7 +49,8 @@ var (
 	EstimateGas                 = []byte("estimate_gas")
 	GetStorage                  = []byte("get_storage")
 	GetCode                     = []byte("get_code")
-	EthSign                     = []byte("eth_sign")
+	EthSign                     = []byte("eth_remote_sign")
+	EthLocalSign                = []byte("eth_local_sign")
 	EthSignatureParse           = []byte("eth_sign_parse")
 
 	Sha3 = []byte("sha3")
