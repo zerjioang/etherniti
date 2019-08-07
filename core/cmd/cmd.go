@@ -59,13 +59,12 @@ func RunServer(notifier chan error) {
 		}
 		// 4 get listening mode
 		logger.Info("starting etherniti proxy listener with requested mode")
-		mode := opts.ServiceListeningMode()
 
 		// 5 update value
 		serverStarted.Store(true)
 
 		// 6 run listener
-		go listener.FactoryListener(mode).Listen(notifier)
+		go listener.FactoryListener(opts.ListeningMode).Listen(notifier)
 	} else {
 		notifier <- errAlreadyStarted
 	}

@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	cfg         = config.GetDefaultOpts()
+	opts        = config.GetDefaultOpts()
 	securityErr = errors.New("not authorized. security policy not satisfied")
 	corsConfig  = middleware.CORSConfig{
 		AllowHeaders: []string{
@@ -77,7 +77,7 @@ func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		if c.IsHttp() {
 			req := c.Request()
-			return c.Redirect(301, cfg.GetRedirectUrl(req.Host, req.RequestURI))
+			return c.Redirect(301, opts.GetRedirectUrl(req.Host, req.RequestURI))
 		}
 		return next(c)
 	}
@@ -92,24 +92,24 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// log all single request
 	// configure logging level
 	// always enable logging for opensource and for those who requested
-	if edition.IsOpenSource() || cfg.EnableLogging() {
+	if edition.IsOpenSource() || opts.LoggingEnabled {
 		logger.Info("[LAYER] /=> logger level")
-		e.Logger.SetLevel(cfg.LogLevel())
+		e.Logger.SetLevel(opts.LogLevel)
 		e.Pre(loggerMiddleware)
 	}
 
 	// only for enterprise version, add suport for metrics
-	if edition.IsEnterprise() && cfg.EnableMetrics() {
+	if edition.IsEnterprise() && opts.MetricsEnabled {
 		logger.Info("[LAYER] /=> metrics")
 		e.Pre(prometheus.MetricsCollector)
 	}
 
-	if cfg.IsHttpMode() || cfg.IsHttpsMode() {
+	if opts.IsHttpMode() || opts.IsHttpsMode() {
 		// remove trailing slash for better usage
 		logger.Info("[LAYER] /=> trailing slash remover")
 		e.Pre(slashRemover)
 
-		if cfg.EnableSecureMode() {
+		if opts.SecureModeEnabled {
 			// antibots, crawler middleware
 			// avoid bots and crawlers
 			logger.Info("[LAYER] /=> adding security")
@@ -117,39 +117,39 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		}
 
 		// add CORS support
-		if cfg.EnableCors() {
+		if opts.CORSEnabled {
 			logger.Info("[LAYER] /=> adding CORS support")
 			e.Use(middleware.CORSWithConfig(corsConfig))
 		}
 	}
 
 	// Request ID middleware generates a unique id for a request.
-	if cfg.UseUniqueRequestId() {
+	if opts.UniqueIdsEnabled {
 		logger.Info("[LAYER] /=> adding unique request id")
 		e.Use(middleware.RequestID())
 	}
 
 	if edition.IsEnterprise() {
 		// enable analytics for pro version and for those who requested
-		if cfg.EnableCompression() {
+		if opts.CompressionEnabled {
 			// add gzip support if client requests it
 			logger.Info("[LAYER] /=> adding gzip compression")
 			e.Use(middleware.GzipWithConfig(gzipConfig))
 		}
 		// enable analytics for pro version and for those who requested
-		if cfg.EnableAnalytics() {
+		if opts.AnalyticsEnabled {
 			logger.Info("[LAYER] /=> adding analytics")
 			e.Use(cyber.Analytics)
 		}
 		// enable analytics for pro version and for those who requested
-		if cfg.EnableServerCache() {
+		if opts.ServerCacheEnabled {
 			logger.Info("[LAYER] /=> adding server cache")
 			e.Use(httpcache.HttpServerCache)
 		}
 	}
 
 	// always enable rate limit for opensource version and for those who requested
-	if edition.IsOpenSource() || cfg.EnableRateLimit() {
+	if edition.IsOpenSource() || opts.RateLimitEnabled {
 		// add rate limit control
 		logger.Info("[LAYER] /=> adding rate limit middleware")
 		e.Use(ratelimit.RateLimit)
@@ -160,7 +160,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	e.Use(middleware.Recover())
 
 	// start websocket handler if requested
-	if edition.IsEnterprise() && cfg.IsWebSocketMode() {
+	if edition.IsEnterprise() && opts.IsWebSocketMode() {
 		logger.Info("[LAYER] /=> websocket")
 		e.GET("/wsm", ws.WebsocketEntrypoint)
 	}

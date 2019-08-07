@@ -22,27 +22,22 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 	logger.Info("checking etherniti proxy server configuration before full startup")
 
 	// check log level
-	if opts.LogLevelStr() == "" {
+	if opts.LogLevelStr == "" {
 		logger.Error(logLevelErr)
 		return errors.New(logLevelErr)
 	}
 
-	// check log enabled
-	if opts.EnableLoggingStr() == "" {
-		logger.Warn("proxy logging status is not defined. Make sure your environment has correctly setup key ", XEthernitiEnableLogging, ". Allowed values are: true, false")
-	}
-
-	if opts.EnableSecureMode() {
+	if opts.SecureModeEnabled {
 		logger.Info("[INFO] enabling secure mode")
 	} else {
 		logger.Warn("[WARNING] secure mode is disabled")
 	}
 
-	if !opts.EnableCors() {
+	if !opts.CORSEnabled {
 		logger.Warn("[WARNING] CORS is disabled")
 	}
 
-	if !opts.EnableRateLimit() {
+	if !opts.RateLimitEnabled {
 		logger.Warn("[WARNING] rate limit is disabled")
 	} else {
 		logger.Warn("[WARNING] rate limit is enabled")
@@ -83,17 +78,17 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 	// proxy listener configuration checks
 
 	// check swagger address
-	if opts.GetSwaggerAddress() == "" {
+	if opts.SwaggerAddress == "" {
 		logger.Warn("[WARNING] missing swagger address. Make sure your environment has correctly setup key ", XEthernitiSwaggerAddress)
 		return errors.New("missing swagger address. Make sure your environment has correctly setup key " + XEthernitiSwaggerAddress)
 	}
 	// check listening address
-	if opts.GetListeningAddress() == "" {
+	if opts.ListeningAddress == "" {
 		logger.Warn("[WARNING] missing http listening address. Make sure your environment has correctly setup key ", XEthernitiListeningAddress)
 		return errors.New("missing http listening address. Make sure your environment has correctly setup key " + XEthernitiListeningAddress)
 	}
 	// check listening port
-	if opts.GetListeningPort() < 1024 {
+	if opts.ListeningPort < 1024 {
 		logger.Warn("[WARNING] selected listening port may require privileged access. Make sure your environment has correctly setup key ", XEthernitiListeningPort)
 		return errors.New("selected listening port may require privileged access. Make sure your environment has correctly setup key " + XEthernitiListeningPort)
 	}
@@ -104,12 +99,10 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 		return errors.New(msg)
 	}
 	// check listening mode
-	if opts.ServiceListeningModeStr() == "" {
+	if opts.ListeningModeStr == "" {
 		logger.Error(listeningModeErr)
 		return errors.New(listeningModeErr)
-	}
-
-	if opts.ServiceListeningMode() == listener.UnknownMode {
+	} else if opts.ListeningMode == listener.UnknownMode {
 		logger.Error(listeningModeErr)
 		return errors.New(listeningModeErr)
 	}

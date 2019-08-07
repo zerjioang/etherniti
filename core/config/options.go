@@ -8,6 +8,7 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/modules/hashset"
+	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
@@ -17,16 +18,28 @@ type EthernitiOptions struct {
 	envData *env.EnvConfig
 
 	//log level string
-	logLevelStr string
-	logLevel    log.Lvl
+	LogLevelStr string
+	LogLevel    log.Lvl
+
+	// feature configurations/activation
+	LoggingEnabled     bool
+	CORSEnabled        bool
+	SecureModeEnabled  bool
+	CompressionEnabled bool
+	RateLimitEnabled   bool
+	ServerCacheEnabled bool
+	AnalyticsEnabled   bool
+	MetricsEnabled     bool
+	UniqueIdsEnabled   bool
 
 	//swagger listening address
-	swaggerAddress string
+	SwaggerAddress string
 	// http service listening address
-	listeningAddress string
-	listeningPort    int
-	httpInterface    string
-	mode             string
+	ListeningAddress string
+	ListeningPort    int
+	HttpInterface    string
+	ListeningModeStr string
+	ListeningMode    listener.ServiceType
 
 	// allowed cors domains
 	AllowedCorsOriginList hashset.HashSetWORM
@@ -51,13 +64,23 @@ type EthernitiOptions struct {
 var (
 	// default etherniti proxy options
 	defaultOptions = &EthernitiOptions{
-		logLevelStr:             "debug",
-		logLevel:                log.DEBUG,
-		swaggerAddress:          "127.0.0.1",
-		listeningAddress:        "127.0.0.1",
-		listeningPort:           8080,
-		httpInterface:           "127.0.0.1",
-		mode:                    "http",
+		LogLevelStr:             "debug",
+		LogLevel:                log.DEBUG,
+		LoggingEnabled:          true,
+		CORSEnabled:             true,
+		SecureModeEnabled:       true,
+		CompressionEnabled:      true,
+		RateLimitEnabled:        true,
+		ServerCacheEnabled:      true,
+		AnalyticsEnabled:        true,
+		MetricsEnabled:          true,
+		UniqueIdsEnabled:        true,
+		SwaggerAddress:          "127.0.0.1",
+		ListeningAddress:        "127.0.0.1",
+		ListeningPort:           8080,
+		HttpInterface:           "127.0.0.1",
+		ListeningModeStr:        "http",
+		ListeningMode:           listener.HttpMode,
 		BlockTorConnections:     false,
 		MaxWorker:               4,
 		MaxQueue:                200,
@@ -95,27 +118,57 @@ func (eo *EthernitiOptions) conditionalOverwrite(readed, fallback string) string
 	}
 	return fallback
 }
+func (eo *EthernitiOptions) conditionalOverwriteBool(readed string, fallback bool) bool {
+	if readed == "true" {
+		return true
+	} else if readed == "false" {
+		return false
+	} else {
+		return fallback
+	}
+}
 
 func (eo *EthernitiOptions) preload() {
 	logger.Debug("preloading proxy configuration")
-	eo.logLevelStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiLogLevel), eo.logLevelStr)
+	eo.LogLevelStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiLogLevel), eo.LogLevelStr)
 	//resolve current logger level from string
-	eo.logLevel = eo.LogLevel()
+	eo.LogLevel = eo.logLevelResolver()
+
+	// load env variables to enable/disable modules
+	logger.Debug("reading log status from env")
+	eo.LoggingEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableLogging), eo.LoggingEnabled)
+	logger.Debug("reading cors mode from env")
+	eo.CORSEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableCors), eo.CORSEnabled)
+	logger.Debug("reading secure listening mode from env")
+	eo.SecureModeEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableSecurity), eo.SecureModeEnabled)
+	logger.Debug("reading compression listening mode from env")
+	eo.CompressionEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableGzip), eo.CompressionEnabled)
+	logger.Debug("reading rate limit listening mode from env")
+	eo.RateLimitEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableRateLimit), eo.RateLimitEnabled)
+	logger.Debug("reading server cache listening mode from env")
+	eo.ServerCacheEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableServerCache), eo.ServerCacheEnabled)
+	logger.Debug("reading analytics listening mode from env")
+	eo.AnalyticsEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableAnalytics), eo.AnalyticsEnabled)
+	logger.Debug("reading metrics listening mode env")
+	eo.MetricsEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiEnableMetrics), eo.MetricsEnabled)
+	logger.Debug("reading unique request id from env")
+	eo.UniqueIdsEnabled = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiUseUniqueRequestId), eo.UniqueIdsEnabled)
 
 	//load swagger ui address
 	logger.Debug("reading swagger address from env")
-	eo.swaggerAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiSwaggerAddress), eo.swaggerAddress)
+	eo.SwaggerAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiSwaggerAddress), eo.SwaggerAddress)
 
 	//service listening options
 	logger.Debug("reading requested listening ip address from env")
-	eo.listeningAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningAddress), eo.listeningAddress)
+	eo.ListeningAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningAddress), eo.ListeningAddress)
 	logger.Debug("reading requested listening port from env")
-	eo.listeningPort = eo.envData.Int(XEthernitiListeningPort, 8080)
+	eo.ListeningPort = eo.envData.Int(XEthernitiListeningPort, 8080)
 	logger.Debug("reading requested listening interface address from env")
-	eo.httpInterface = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningInterface), eo.httpInterface)
+	eo.HttpInterface = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningInterface), eo.HttpInterface)
 
-	//service listening mode
-	eo.mode = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningMode), eo.mode)
+	//service listening ListeningMode
+	eo.ListeningModeStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningMode), eo.ListeningModeStr)
+	eo.ListeningMode = eo.ServiceListeningModeResolver()
 
 	// load CORS data
 	eo.AllowedCorsOriginList = hashset.NewHashSetWORM()
@@ -125,7 +178,7 @@ func (eo *EthernitiOptions) preload() {
 	eo.AllowedHostnames = hashset.NewHashSetWORM()
 	eo.AllowedHostnames.LoadFromRaw(HostsFile, "\n")
 
-	eo.BlockTorConnections = eo.resolveBlockTorConnections()
+	eo.BlockTorConnections = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiBlockTorConnections), eo.BlockTorConnections)
 	eo.MaxWorker = eo.envData.Int(XEthernitiMaxWorkers, 4)
 	eo.MaxQueue = eo.envData.Int(XEthernitiMaxQueue, 200)
 	// load if exists custom endpoints for public mainnets
@@ -139,81 +192,6 @@ func (eo *EthernitiOptions) preload() {
 	eo.checkUsersEmailValidity = eo.envData.Bool(XEthernitiUsersCheckEmail, false) //disabled by default
 	eo.MinPasswordLen = eo.envData.Int(XEthernitiMinPasswordLength, 6)             //6 chars by default
 	eo.webAuthNEnabled = eo.envData.Bool(XEthernitiEnableWebAuthN, false)          //disabled by default
-}
-
-func (eo *EthernitiOptions) resolveBlockTorConnections() bool {
-	v := eo.envData.Lower(XEthernitiBlockTorConnections)
-	return v == "true"
-}
-
-func (eo *EthernitiOptions) LogLevelStr() string {
-	return eo.logLevelStr
-}
-func (eo *EthernitiOptions) LogLevel() log.Lvl {
-	eo.logLevelStr = strings.ToLower(eo.logLevelStr)
-	switch eo.logLevelStr {
-	case "debug":
-		return log.DEBUG
-	case "info":
-		return log.INFO
-	case "warn":
-		return log.WARN
-	case "error":
-		return log.ERROR
-	case "off":
-		return log.OFF
-	default:
-		return log.DEBUG
-	}
-}
-
-func (eo *EthernitiOptions) EnableLoggingStr() string {
-	return eo.envData.String(XEthernitiEnableLogging)
-}
-func (eo *EthernitiOptions) EnableLogging() bool {
-	logger.Debug("reading logging level from env")
-	v := eo.envData.Lower(XEthernitiEnableLogging)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableSecureMode() bool {
-	logger.Debug("reading secure mode from env")
-	v := eo.envData.Lower(XEthernitiEnableSecurity)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableCors() bool {
-	logger.Debug("reading cors mode from env")
-	v := eo.envData.Lower(XEthernitiEnableCors)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableRateLimit() bool {
-	logger.Debug("reading rate limit mode from env")
-	v := eo.envData.Lower(XEthernitiEnableRateLimit)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableCompression() bool {
-	logger.Debug("reading compression mode from env")
-	v := eo.envData.Lower(XEthernitiEnableGzip)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableServerCache() bool {
-	logger.Debug("reading server cache mode from env")
-	v := eo.envData.Lower(XEthernitiEnableServerCache)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableAnalytics() bool {
-	logger.Debug("reading analytics mode from env")
-	v := eo.envData.Lower(XEthernitiEnableAnalytics)
-	return v == "true"
-}
-func (eo *EthernitiOptions) EnableMetrics() bool {
-	logger.Debug("reading metrics mode env")
-	v := eo.envData.Lower(XEthernitiEnableMetrics)
-	return v == "true"
-}
-func (eo *EthernitiOptions) UseUniqueRequestId() bool {
-	logger.Debug("reading unique request id from env")
-	v := eo.envData.Lower(XEthernitiUseUniqueRequestId)
-	return v == "true"
 }
 
 func (eo *EthernitiOptions) RateLimit() uint32 {
@@ -244,13 +222,13 @@ func (eo *EthernitiOptions) TokenSecret() string {
 }
 
 func (eo *EthernitiOptions) DebugServer() bool {
-	logger.Debug("reading debug mode from env")
+	logger.Debug("reading debug listening mode from env")
 	v := eo.envData.Lower(XEthernitiDebugServer)
 	return v == "true"
 }
 
 func (eo *EthernitiOptions) HideServerData() bool {
-	logger.Debug("reading debug mode from env")
+	logger.Debug("reading debug listening mode from env")
 	v := eo.envData.Lower(XEthernitiHideServerDataInConsole)
 	return v == "true"
 }
@@ -266,28 +244,16 @@ func (eo *EthernitiOptions) TokenExpiration() fastime.Duration {
 	return fastime.Duration(v) * fastime.Second
 }
 
-func (eo *EthernitiOptions) GetSwaggerAddress() string {
-	return eo.swaggerAddress
-}
-
-func (eo *EthernitiOptions) GetListeningAddress() string {
-	return eo.listeningAddress
-}
-
 func (eo *EthernitiOptions) GetListeningAddressWithPort() string {
-	return eo.GetListeningAddress() + ":" + eo.GetListeningPortStr()
-}
-
-func (eo *EthernitiOptions) GetListeningPort() int {
-	return eo.listeningPort
+	return eo.ListeningAddress + ":" + eo.GetListeningPortStr()
 }
 
 func (eo *EthernitiOptions) GetListeningPortStr() string {
-	return strconv.Itoa(eo.listeningPort)
+	return strconv.Itoa(eo.ListeningPort)
 }
 
 func (eo *EthernitiOptions) GetHttpInterface() string {
-	return eo.httpInterface
+	return eo.HttpInterface
 }
 
 //simply converts http requests into https
@@ -315,23 +281,28 @@ func (eo *EthernitiOptions) InfuraToken() string {
 }
 
 func (eo *EthernitiOptions) IsHttpMode() bool {
-	logger.Debug("checking if http mode is enabled")
-	return eo.mode == "http"
+	logger.Debug("checking if http listening mode is enabled")
+	return eo.ListeningMode == listener.HttpMode
 }
 
 func (eo *EthernitiOptions) IsHttpsMode() bool {
-	logger.Debug("checking if https mode is enabled")
-	return eo.mode == "https"
+	logger.Debug("checking if https listening mode is enabled")
+	return eo.ListeningMode == listener.HttpsMode
 }
 
 func (eo *EthernitiOptions) IsUnixSocketMode() bool {
-	logger.Debug("checking if socket mode is enabled")
-	return eo.mode == "socket"
+	logger.Debug("checking if socket listening mode is enabled")
+	return eo.ListeningMode == listener.UnixMode
 }
 
 func (eo *EthernitiOptions) IsWebSocketMode() bool {
-	logger.Debug("checking if socket mode is enabled")
-	return eo.mode == "wsm"
+	logger.Debug("checking if socket listening mode is enabled")
+	return eo.ListeningMode == listener.WebsocketMode
+}
+
+func (eo *EthernitiOptions) IsSecureWebSocketMode() bool {
+	logger.Debug("checking if secure socket listening mode is enabled")
+	return eo.ListeningMode == listener.SecureWebsocketMode
 }
 
 func (eo *EthernitiOptions) GetEmailUsername() string {
@@ -358,21 +329,39 @@ func (eo *EthernitiOptions) SendGridApiKey() string {
 	return eo.envData.String(XEthernitiSendgridApiKey)
 }
 
-func (eo *EthernitiOptions) ServiceListeningModeStr() string {
-	logger.Debug("reading service listening mode")
-	return eo.mode
-}
-func (eo *EthernitiOptions) ServiceListeningMode() listener.ServiceType {
-	v := eo.ServiceListeningModeStr()
-	switch v {
+func (eo *EthernitiOptions) ServiceListeningModeResolver() listener.ServiceType {
+	eo.ListeningModeStr = str.ToLowerAscii(eo.ListeningModeStr)
+	switch eo.ListeningModeStr {
 	case "http":
 		return listener.HttpMode
 	case "https":
 		return listener.HttpsMode
-	case "socket":
+	case "socket", "unix", "ipc":
 		return listener.UnixMode
+	case "ws", "websocket":
+		return listener.WebsocketMode
+	case "wss", "securewebsocket":
+		return listener.SecureWebsocketMode
 	default:
 		return listener.UnknownMode
+	}
+}
+
+func (eo *EthernitiOptions) logLevelResolver() log.Lvl {
+	eo.LogLevelStr = strings.ToLower(eo.LogLevelStr)
+	switch eo.LogLevelStr {
+	case "debug":
+		return log.DEBUG
+	case "info":
+		return log.INFO
+	case "warn":
+		return log.WARN
+	case "error":
+		return log.ERROR
+	case "off":
+		return log.OFF
+	default:
+		return log.DEBUG
 	}
 }
 

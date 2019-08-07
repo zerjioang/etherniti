@@ -17,5 +17,7 @@ const (
 	HttpsMode
 	MTLSMode
 	UnixMode
+	WebsocketMode
+	SecureWebsocketMode
 	UnknownMode
 )
