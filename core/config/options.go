@@ -16,6 +16,18 @@ type EthernitiOptions struct {
 	//environment variables
 	envData *env.EnvConfig
 
+	//log level string
+	logLevelStr string
+	logLevel    log.Lvl
+
+	//swagger listening address
+	swaggerAddress string
+	// http service listening address
+	listeningAddress string
+	listeningPort    int
+	httpInterface    string
+	mode             string
+
 	// allowed cors domains
 	AllowedCorsOriginList hashset.HashSetWORM
 	AllowedHostnames      hashset.HashSetWORM
@@ -38,7 +50,26 @@ type EthernitiOptions struct {
 
 var (
 	// default etherniti proxy options
-	defaultOptions = &EthernitiOptions{}
+	defaultOptions = &EthernitiOptions{
+		logLevelStr:             "debug",
+		logLevel:                log.DEBUG,
+		swaggerAddress:          "127.0.0.1",
+		listeningAddress:        "127.0.0.1",
+		listeningPort:           8080,
+		httpInterface:           "127.0.0.1",
+		mode:                    "http",
+		BlockTorConnections:     false,
+		MaxWorker:               4,
+		MaxQueue:                200,
+		RopstenCustomEndpoint:   "",
+		RinkebyCustomEndpoint:   "",
+		KovanCustomEndpoint:     "",
+		MainnetCustomEndpoint:   "",
+		useFirebaseManagement:   false,
+		checkUsersEmailValidity: false,
+		MinPasswordLen:          6,
+		webAuthNEnabled:         false,
+	}
 	//default token expiration time when users does not provide one
 	// 10 minute
 	defaultTokenExpirationTime = 10 * fastime.Minute
@@ -58,8 +89,34 @@ func (eo *EthernitiOptions) Init() {
 	// preload env config from readed data
 	eo.preload()
 }
+func (eo *EthernitiOptions) conditionalOverwrite(readed, fallback string) string {
+	if readed != "" {
+		return readed
+	}
+	return fallback
+}
+
 func (eo *EthernitiOptions) preload() {
 	logger.Debug("preloading proxy configuration")
+	eo.logLevelStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiLogLevel), eo.logLevelStr)
+	//resolve current logger level from string
+	eo.logLevel = eo.LogLevel()
+
+	//load swagger ui address
+	logger.Debug("reading swagger address from env")
+	eo.swaggerAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiSwaggerAddress), eo.swaggerAddress)
+
+	//service listening options
+	logger.Debug("reading requested listening ip address from env")
+	eo.listeningAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningAddress), eo.listeningAddress)
+	logger.Debug("reading requested listening port from env")
+	eo.listeningPort = eo.envData.Int(XEthernitiListeningPort, 8080)
+	logger.Debug("reading requested listening interface address from env")
+	eo.httpInterface = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningInterface), eo.httpInterface)
+
+	//service listening mode
+	eo.mode = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningMode), eo.mode)
+
 	// load CORS data
 	eo.AllowedCorsOriginList = hashset.NewHashSetWORM()
 	eo.AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
@@ -90,12 +147,11 @@ func (eo *EthernitiOptions) resolveBlockTorConnections() bool {
 }
 
 func (eo *EthernitiOptions) LogLevelStr() string {
-	return eo.envData.String(XEthernitiLogLevel)
+	return eo.logLevelStr
 }
 func (eo *EthernitiOptions) LogLevel() log.Lvl {
-	value := eo.envData.String(XEthernitiLogLevel)
-	value = strings.ToLower(value)
-	switch value {
+	eo.logLevelStr = strings.ToLower(eo.logLevelStr)
+	switch eo.logLevelStr {
 	case "debug":
 		return log.DEBUG
 	case "info":
@@ -211,13 +267,11 @@ func (eo *EthernitiOptions) TokenExpiration() fastime.Duration {
 }
 
 func (eo *EthernitiOptions) GetSwaggerAddress() string {
-	logger.Debug("reading swagger address from env")
-	return eo.envData.String(XEthernitiSwaggerAddress)
+	return eo.swaggerAddress
 }
 
 func (eo *EthernitiOptions) GetListeningAddress() string {
-	logger.Debug("reading requested listening ip address from env")
-	return eo.envData.String(XEthernitiListeningAddress)
+	return eo.listeningAddress
 }
 
 func (eo *EthernitiOptions) GetListeningAddressWithPort() string {
@@ -225,18 +279,15 @@ func (eo *EthernitiOptions) GetListeningAddressWithPort() string {
 }
 
 func (eo *EthernitiOptions) GetListeningPort() int {
-	logger.Debug("reading requested listening port from env")
-	return eo.envData.Int(XEthernitiListeningPort, 8080)
+	return eo.listeningPort
 }
 
 func (eo *EthernitiOptions) GetListeningPortStr() string {
-	logger.Debug("reading requested listening port from env")
-	return eo.envData.String(XEthernitiListeningPort)
+	return strconv.Itoa(eo.listeningPort)
 }
 
 func (eo *EthernitiOptions) GetHttpInterface() string {
-	logger.Debug("reading requested listening interface address from env")
-	return eo.envData.String(XEthernitiListeningInterface)
+	return eo.httpInterface
 }
 
 //simply converts http requests into https
@@ -265,22 +316,22 @@ func (eo *EthernitiOptions) InfuraToken() string {
 
 func (eo *EthernitiOptions) IsHttpMode() bool {
 	logger.Debug("checking if http mode is enabled")
-	return eo.envData.String(XEthernitiListeningMode) == "http"
+	return eo.mode == "http"
 }
 
 func (eo *EthernitiOptions) IsHttpsMode() bool {
 	logger.Debug("checking if https mode is enabled")
-	return eo.envData.String(XEthernitiListeningMode) == "https"
+	return eo.mode == "https"
 }
 
 func (eo *EthernitiOptions) IsUnixSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
-	return eo.envData.String(XEthernitiListeningMode) == "socket"
+	return eo.mode == "socket"
 }
 
 func (eo *EthernitiOptions) IsWebSocketMode() bool {
 	logger.Debug("checking if socket mode is enabled")
-	return eo.envData.String(XEthernitiListeningMode) == "wsm"
+	return eo.mode == "wsm"
 }
 
 func (eo *EthernitiOptions) GetEmailUsername() string {
@@ -309,7 +360,7 @@ func (eo *EthernitiOptions) SendGridApiKey() string {
 
 func (eo *EthernitiOptions) ServiceListeningModeStr() string {
 	logger.Debug("reading service listening mode")
-	return eo.envData.String(XEthernitiListeningMode)
+	return eo.mode
 }
 func (eo *EthernitiOptions) ServiceListeningMode() listener.ServiceType {
 	v := eo.ServiceListeningModeStr()

@@ -4,8 +4,9 @@ import (
 	"crypto/ecdsa"
 	"errors"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
 	"math/big"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"

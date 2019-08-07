@@ -62,7 +62,7 @@ var (
 	privateInfura   = network.NewNodeConnection("", "", "", "", "", "", infura)
 	privateQuiknode = network.NewNodeConnection("", "", "", "", "", "", quiknode)
 	privateCustom   = network.NewNodeConnection("", "", "", "", "", "", private)
-	localGanache    = network.NewNodeConnection("", "", "", "", "", "", ganache)
+	localGanache    = network.NewNodeConnection("http://", "127.0.0.1", "7545", "8547", "", "", "ganache")
 )
 
 type RestController struct {

@@ -162,7 +162,7 @@
         "tags": [
           "graphql"
         ],
-        "summary": "Send arbitrary graphqlrequest to web3 compatible node",
+        "summary": "Send arbitrary graphql request to web3 compatible node",
         "description": "Send arbitrary graphql request to web3 compatible node",
         "operationId": "web3-graphql",
         "consumes": [

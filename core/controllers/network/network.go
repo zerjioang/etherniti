@@ -42,7 +42,7 @@ type NetworkController struct {
 // constructor like function
 func NewNetworkController() NetworkController {
 	ctl := NetworkController{}
-	ctl.connection = NewNodeConnection("http://", "127.0.0.1", "8545", "8547", "", "", "default")
+	ctl.connection = NewNodeConnection("http://", "127.0.0.1", "7545", "8547", "", "", "default")
 	ctl.cache = cache.NewMemoryCache()
 	return ctl
 }

@@ -49,11 +49,11 @@ func CheckConfiguration(opts *EthernitiOptions) error {
 	}
 
 	// check infura token
-	if opts.InfuraToken() == "" {
+	t := opts.InfuraToken()
+	if t == "" {
 		logger.Warn(infuraKeyErr)
 		logger.Warn("infura provider is disabled until valid token is provided")
-	}
-	if len(opts.InfuraToken()) != 32 {
+	} else if len(t) != 32 {
 		logger.Error(infuraKeyLenErr)
 		return errors.New(infuraKeyLenErr)
 	}

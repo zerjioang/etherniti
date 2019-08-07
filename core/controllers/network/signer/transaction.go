@@ -19,9 +19,10 @@ package signer
 import (
 	"container/heap"
 	"errors"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
 	"math/big"
 	"sync/atomic"
+
+	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
 
 	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
