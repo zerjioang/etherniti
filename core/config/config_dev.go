@@ -71,7 +71,7 @@ func init() {
 
 //check if profiling is enabled or not
 func IsProfilingEnabled(opts *EthernitiOptions) bool {
-	logger.Debug("checking if profiling mode is enabled")
+	logger.Debug("checking if profiling ListeningMode is enabled")
 	v, found := opts.envData.Read("X_ETHERNITI_ENABLE_PROFILER")
 	return found && v == "true"
 }
@@ -85,7 +85,7 @@ func IsDevelopment() bool {
 // development only
 func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
 	logger.Debug("reading swagger address with port from env")
-	return opts.GetSwaggerAddress() + ":" + opts.GetListeningPortStr()
+	return opts.SwaggerAddress + ":" + opts.GetListeningPortStr()
 }
 
 func Env() string {
@@ -96,7 +96,7 @@ func Env() string {
 // setup server config
 func Setup(opts *EthernitiOptions) error {
 	logger.Debug("loading additional development setup config")
-	// enable profile mode if requested
+	// enable profile ListeningMode if requested
 	if edition.IsEnterprise() && IsProfilingEnabled(opts) {
 		go runProfiler()
 	}

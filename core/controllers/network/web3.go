@@ -73,7 +73,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 	// check if not empty
 	if targetAddr != "" {
 		//try to get this information from the cache
-		key := ctl.network.peer + "get_balance" + targetAddr
+		key := ctl.network.UniqueId() + "get_balance" + targetAddr
 		keyBytes := str.UnsafeBytes(key)
 		result, found := ctl.network.cache.Get(keyBytes)
 		if found && result != nil {
@@ -343,7 +343,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
 	method := methodMap[key]
 	methodBytes := str.UnsafeBytes(method)
 	//TODO : in private context peer name is empty
-	cacheKey := ctl.network.peer + ":" + method
+	cacheKey := ctl.network.UniqueId() + ":" + method
 	cacheKeyBytes := str.UnsafeBytes(cacheKey)
 	result, found := ctl.network.cache.Get(cacheKeyBytes)
 	if found && result != nil {
@@ -842,7 +842,7 @@ func (ctl *Web3Controller) getCode(c *echo.Context) error {
 	return api.SendSuccess(c, data.GetCode, result)
 }
 
-func (ctl *Web3Controller) sign(c *echo.Context) error {
+func (ctl *Web3Controller) signRemote(c *echo.Context) error {
 	// read input parameters
 	var signReq *ethrpc.NodeSignRequest
 	if err := c.Bind(&signReq); err != nil {
@@ -864,7 +864,7 @@ func (ctl *Web3Controller) sign(c *echo.Context) error {
 		return api.Error(c, cliErr)
 	}
 	// Returns code at a given address.
-	result, err := client.EthNodeSignRequest(signReq)
+	result, err := client.EthSign(signReq.Address, signReq.Data)
 	if err != nil {
 		return api.Error(c, err)
 	}
@@ -879,6 +879,10 @@ func (ctl *Web3Controller) sendRawTransaction(c *echo.Context) error {
 	return ctl.network.Noop(c)
 }
 
+// EstimateGas tries to estimate the gas needed to execute a specific transaction based on
+// the current pending state of the backend blockchain. There is no guarantee that this is
+// the true gas limit requirement as other transactions may be added or removed by miners,
+// but it should provide a basis for setting a reasonable default.
 func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
@@ -1105,16 +1109,18 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	// as an Ethereum specific signature. This prevents misuse where a malicious DApp
 	// can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim.
 	// Note the address to sign with must be unlocked.
-	router.POST("/sign", ctl.sign)
+	router.POST("/tx/sign-remote", ctl.signRemote)
+	router.POST("/tx/sign-local", ctl.signTransactionLocal)
+
 	router.POST("/signparse", ctl.parseSignature)
 
 	router.POST("/ecrecover", ctl.ecRecover)
 
 	// eth_sendTransaction
-	router.POST("/send/tx", ctl.sendTransaction)
+	router.POST("/tx/send", ctl.sendTransaction)
 
 	// eth_sendRawTransaction
-	router.POST("/send/raw", ctl.sendRawTransaction)
+	router.POST("/tx/send-raw", ctl.sendRawTransaction)
 
 	// eth_call
 	router.POST("/call", ctl.call)

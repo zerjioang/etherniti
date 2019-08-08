@@ -140,7 +140,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
+	logger.Info("erc20 controller request using context id: ", ctl.network.Name())
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -176,7 +176,7 @@ func (ctl *Erc20Controller) allowance(c *echo.Context) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
+	logger.Info("erc20 controller request using context id: ", ctl.network.Name())
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}
@@ -214,7 +214,7 @@ func (ctl *Erc20Controller) transfer(c *echo.Context) error {
 	}
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
-	logger.Info("erc20 controller request using context id: ", ctl.network.networkName)
+	logger.Info("erc20 controller request using context id: ", ctl.network.Name())
 	if cliErr != nil {
 		return api.Error(c, cliErr)
 	}

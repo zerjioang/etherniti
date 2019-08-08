@@ -251,6 +251,26 @@ func (req *EthSignatureParseRequest) Validate() error {
 	return nil
 }
 
+type EthSignRequest struct {
+	From       string `json:"from"`
+	To         string `json:"to"`
+	PrivateKey string `json:"private"`
+}
+
+func (req *EthSignRequest) Validate() error {
+	//todo check if signature string is hex valid
+	//todo check if signature string starts with 0x
+	if req.PrivateKey == "" {
+		return errors.New("private key is missing in request")
+	}
+	//todo check if signature string is hex valid
+	//todo check if signature string starts with 0x
+	if req.To == "" {
+		return errors.New("from field is missing in request")
+	}
+	return nil
+}
+
 type EthSignatureParseResponse struct {
 	R string `json:"r"`
 	S string `json:"s"`

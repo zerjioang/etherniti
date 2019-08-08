@@ -92,7 +92,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	}
 	// /v1
 	groupV1 := e.Group(constants.ApiVersion, next)
-	if cfg.EnableMetrics() {
+	if cfg.MetricsEnabled {
 		logger.Info("registering prometheus_metrics metrics collector endpoint")
 		e.GET("/metrics", echo.WrapHandler(
 			promhttp.Handler(),

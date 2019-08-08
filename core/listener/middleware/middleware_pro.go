@@ -66,14 +66,14 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			//port defined in host header
 			hostname = chunks[0]
 		}
-		allowed := cfg.AllowedHostnames.Contains(hostname)
+		allowed := opts.AllowedHostnames.Contains(hostname)
 		if !allowed {
 			// drop the request
 			logger.Warn("drop request: provided request does not specifies a valid host name in http headers")
 			return securityErr
 		}
 
-		if cfg.BlockTorConnections {
+		if opts.BlockTorConnections {
 			// add rate limit control
 			logger.Info("[LAYER] tor connections blocker middleware added")
 			//get current request ip

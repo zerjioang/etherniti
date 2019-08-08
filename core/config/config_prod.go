@@ -59,7 +59,7 @@ func IsDevelopment() bool {
 // 80 and 443
 func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
 	logger.Debug("reading swagger address port from env")
-	return opts.GetSwaggerAddress()
+	return opts.SwaggerAddress
 }
 
 func Env() string {
