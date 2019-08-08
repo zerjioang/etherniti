@@ -129,8 +129,14 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.Use(middleware.RequestID())
 	}
 
+	// Internal notifier allows the collection of notifier of etherniti proxy internal components and modules
+	if opts.MetricsEnabled {
+		logger.Info("[LAYER] /=> adding internal metrics")
+		e.Use(cyber.InternalAnalytics)
+	}
+
 	if edition.IsEnterprise() {
-		// enable analytics for pro version and for those who requested
+		// enable compression for pro version and for those who requested
 		if opts.CompressionEnabled {
 			// add gzip support if client requests it
 			logger.Info("[LAYER] /=> adding gzip compression")
@@ -141,7 +147,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 			logger.Info("[LAYER] /=> adding analytics")
 			e.Use(cyber.Analytics)
 		}
-		// enable analytics for pro version and for those who requested
+		// enable server cache for pro version and for those who requested
 		if opts.ServerCacheEnabled {
 			logger.Info("[LAYER] /=> adding server cache")
 			e.Use(httpcache.HttpServerCache)
@@ -162,7 +168,8 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// start websocket handler if requested
 	if edition.IsEnterprise() && opts.IsWebSocketMode() {
 		logger.Info("[LAYER] /=> websocket")
-		e.GET("/wsm", ws.WebsocketEntrypoint)
+		ws.InitWebsocketHub()
+		e.GET("/ws", ws.WebsocketEntrypoint)
 	}
 
 	logger.Info("[LAYER] /=> static files")

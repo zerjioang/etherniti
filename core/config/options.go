@@ -13,6 +13,11 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
+type EthernitiAdminOptions struct {
+	Key string
+	Secret string
+	LoadedFromEnv bool
+}
 type EthernitiOptions struct {
 	//environment variables
 	envData *env.EnvConfig
@@ -20,6 +25,9 @@ type EthernitiOptions struct {
 	//log level string
 	LogLevelStr string
 	LogLevel    log.Lvl
+
+	// proxy manager configuration
+	Admin EthernitiAdminOptions
 
 	// feature configurations/activation
 	LoggingEnabled     bool

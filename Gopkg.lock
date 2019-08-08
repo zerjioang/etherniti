@@ -164,20 +164,20 @@
   revision = "d14ea06fba99483203c19d92cfcd13ebe73135f4"
 
 [[projects]]
-  digest = "1:f5a2051c55d05548d2d4fd23d244027b59fbd943217df8aa3b5e170ac2fd6e1b"
+  digest = "1:709cd2a2c29cc9b89732f6c24846bbb9d6270f28ef5ef2128cc73bd0d6d7bff9"
   name = "github.com/json-iterator/go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "0ff49de124c6f76f8494e194af75bde0f1a49a29"
-  version = "v1.1.6"
+  revision = "27518f6661eba504be5a7a9a9f6d9460d892ade3"
+  version = "v1.1.7"
 
 [[projects]]
-  digest = "1:ae5f4d0779a45e2cb3075d8b3ece6c623e171407f4aac83521392ff06d188871"
+  digest = "1:fd7f169f32c221b096c74e756bda16fe22d3bb448bbf74042fd0700407a1f92f"
   name = "github.com/kevinburke/ssh_config"
   packages = ["."]
   pruneopts = "UT"
-  revision = "81db2a75821ed34e682567d48be488a1c3121088"
-  version = "0.5"
+  revision = "6cfae18c12b8934b1afba3ce8159476fdef666ba"
+  version = "1.0"
 
 [[projects]]
   digest = "1:823dc0f8e4cdad8d91e6aba4cdd985a035596a8aa02e9d2abf1bec347894c41f"
@@ -241,7 +241,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:98106f39567779e63f6343e803b2d08424e098dd9b063384e5385510eebab3fd"
+  digest = "1:eadbae203486b5761192111d2ee89f3948fb83777736bb5b9eb12d6c7a0c9699"
   name = "github.com/mmcloughlin/avo"
   packages = [
     "attr",
@@ -259,7 +259,7 @@
     "x86",
   ]
   pruneopts = "UT"
-  revision = "cad456ebdea789b868f5ef4e2da867fe0af0521e"
+  revision = "8f9778883698ee18d683ff2d650b587b0633c7d4"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -284,14 +284,6 @@
   pruneopts = "UT"
   revision = "e6d60cf7ba1f42d86d54cdf5508611c4aafb3970"
   version = "v0.0.1"
-
-[[projects]]
-  digest = "1:b2ee62e09bec113cf086d2ce0769efcc7bf79481aba8373fd8f7884e94df3462"
-  name = "github.com/pelletier/go-buffruneio"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "c37440a7cf42ac63b919c752ca73a85067e05992"
-  version = "v0.2.0"
 
 [[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
@@ -524,21 +516,27 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3e56d74416dae82f071b9bd110a5098c193dd74d09d1b1996c9a7151b175b3d9"
+  digest = "1:11ae5b83a1e748943977cb5e2565423f4da63dec1e66949e0de6c66857e63344"
   name = "golang.org/x/net"
   packages = [
+    "bpf",
     "context",
+    "icmp",
+    "internal/iana",
+    "internal/socket",
     "internal/socks",
     "internal/timeseries",
+    "ipv4",
+    "ipv6",
     "proxy",
     "trace",
   ]
   pruneopts = "UT"
-  revision = "da137c7871d730100384dbcf36e6f8fa493aef5b"
+  revision = "ca1201d0de80cfde86cb01aea620983605dfe99b"
 
 [[projects]]
   branch = "master"
-  digest = "1:34a0c43f2d706c6292cd418409b68ae23657c8a5e960ab97bc199972d4e86d0c"
+  digest = "1:592884773baa2f2871cfce60531595d30690c5afdd4fde35773204e2b625020e"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -546,7 +544,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "fae7ac547cb717d141c433a2a173315e216b64c4"
+  revision = "fc99dfbffb4e5ed5758a37e31dd861afe285406b"
 
 [[projects]]
   branch = "master"
@@ -568,7 +566,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "e98af230987614b97d20a34f8062bf3fa0fe2376"
+  revision = "db2fa46ec33c618b29a7c6935439e6800b3078a8"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
@@ -700,6 +698,9 @@
     "golang.org/x/crypto/ripemd160",
     "golang.org/x/crypto/sha3",
     "golang.org/x/crypto/ssh",
+    "golang.org/x/net/icmp",
+    "golang.org/x/net/ipv4",
+    "golang.org/x/net/ipv6",
     "golang.org/x/sys/cpu",
     "golang.org/x/sys/unix",
     "golang.org/x/tools/go/buildutil",

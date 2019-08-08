@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func BenchmarkIpToUint32(b *testing.B) {
+func BenchmarkIpUtils(b *testing.B) {
 
 	b.Run("ip-to-int-default", func(b *testing.B) {
 		val := "10.41.132.6"
@@ -44,6 +44,24 @@ func BenchmarkIpToUint32(b *testing.B) {
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			_ = IpToInt2(example)
+		}
+	})
+	// BenchmarkIpUtils/is-valid-ipv4-4         	 5000000	       209 ns/op	   4.78 MB/s	      64 B/op	       1 allocs/op
+	// BenchmarkIpUtils/is-valid-ipv4-4             10000000	       210 ns/op	   4.75 MB/s	      64 B/op	       1 allocs/op
+	b.Run("is-valid-ipv4", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsIpv4("10.41.132.6")
+		}
+	})
+	b.Run("is-valid-ipv4-regex", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			_ = IsIpv4Regex("10.41.132.6")
 		}
 	})
 }

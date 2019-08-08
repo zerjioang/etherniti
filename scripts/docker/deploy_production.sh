@@ -10,8 +10,8 @@ set -e
 
 #source ./colors.sh
 
-echo "downloading etherniti/proxy:pro docker image"
-docker pull etherniti/proxy:pro
+echo "downloading etherniti/proxy-oss:$(arch)-latest docker image"
+docker pull etherniti/proxy-oss:$(arch)-latest
 
 echo "stopping previous proxy containers..."
 docker stop api && docker rm api
@@ -30,6 +30,6 @@ docker run \
         --log-opt max-file=5 \
         --log-opt labels=production_status \
         -v $(pwd)/volumes/data:/home/etherniti/.etherniti \
-        etherniti/proxy:pro
+        etherniti/proxy-oss:$(arch)-latest
 
 echo "etherniti proxy container deployed"

@@ -1,10 +1,12 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package controllers
+package dashboard
 
 import (
 	"time"
+
+	"github.com/zerjioang/etherniti/shared/notifier"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/modules/checkmail"
@@ -117,14 +119,14 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 	if req.Email != "" && req.Password != "" && req.Username != "" {
 		// 1 check password length
 		if len(req.Password) < MinPasswordLen {
-			logger.Error("proxy minimum password policy forces to use more characters than provided password")
-			return api.ErrorStr(c, "proxy minimum password policy forces to use more characters than provided password")
+			logger.Error("etherniti proxy minimum password policy forces to use more characters than provided password")
+			return api.ErrorStr(c, "Etherniti proxy minimum password policy forces to use more characters than provided password")
 		}
 		// 2 check password against common database
 		_, found := rdx.Get(req.Password)
 		if found {
 			logger.Error("etherniti wont allow account registration with provided password")
-			return api.ErrorStr(c, "etherniti wont allow account registration with provided password")
+			return api.ErrorStr(c, "Etherniti wont allow account registration with provided password. Provided account password was found on a known dictionary. Please use stronger password combination")
 		}
 
 		// 3 check validate email
@@ -143,6 +145,8 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 			logger.Error("failed to register new user due to: ", saveErr)
 			return api.ErrorBytes(c, data.UserRegisterFailed)
 		} else {
+			// send new account created internal event
+			notifier.NewDashboardAccountEvent.Emit()
 			return api.SendSuccess(c, data.RegistrationSuccess, nil)
 		}
 	}

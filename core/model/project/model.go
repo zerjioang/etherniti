@@ -70,6 +70,7 @@ func (project Project) Key() []byte {
 func (project Project) Value(serializer io.Serializer) []byte {
 	return ioproto.GetBytesFromSerializer(serializer, project)
 }
+// this function creates new instances of Project
 func (project Project) New() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()
 }
@@ -184,10 +185,10 @@ func NewDBProject() mixed.DatabaseObjectInterface {
 }
 
 func NewProject(name string, mtdt *metadata.Metadata) *Project {
-	p := new(Project)
+	p := NewEmptyProject()
 	p.Name = name
 	p.Metadata = mtdt
 	p.ProjectId = id.GenerateIDString().String()
 	p.ProjectSecret = id.GenerateIDString().String()
-	return p
+	return &p
 }

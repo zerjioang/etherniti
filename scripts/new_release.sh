@@ -37,16 +37,16 @@ function executeBuild(){
 
 	# create requested tag
 	log "creating tag $NEW_TAG"
-	#git tag -a $NEW_TAG -m "$NEW_TAG" 
+	git tag -a $NEW_TAG -m "$NEW_TAG" 
 
 	log "uploading current tag ($NEW_TAG) version"
-	#git push --tags
+	git push --tags
 
 	log "creating current version docker images"
-	
+
 	log "creating current oss docker image"
 	bash ./scripts/docker/docker_build_oss.sh
-	
+
 	log "creating current etherniti.org arm proxy docker image"
 	bash ./scripts/docker/docker_build_pre_armhf.sh
 

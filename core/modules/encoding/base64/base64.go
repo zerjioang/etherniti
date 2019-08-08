@@ -1,7 +1,6 @@
 package base64
 
 import (
-	"fmt"
 	"unsafe"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -27,9 +26,9 @@ func init() {
 
 	switch buf {
 	case [2]byte{0xCD, 0xAB}:
-		fmt.Println("little endian")
+		logger.Debug("little endian")
 	case [2]byte{0xAB, 0xCD}:
-		fmt.Println("big endian")
+		logger.Debug("big endian")
 	default:
 		logger.Error("could not determine native endianness.")
 	}

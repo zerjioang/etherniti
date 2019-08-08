@@ -2,7 +2,6 @@ package common
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
@@ -95,12 +94,11 @@ func (ctl *DatabaseController) Create(c *echo.Context) error {
 			}
 			key := ctl.buildCompositeId(authId, string(requestedItem.Key()))
 			value := requestedItem.Value(dbSerializer)
-			fmt.Println(requestedItem)
 			writeErr := ctl.storage.PutUniqueKeyValue(key, value)
 			if writeErr != nil {
 				return api.Error(c, writeErr)
 			} else {
-				return api.Success(c, data.SuccessfullyCreated, value)
+				return api.SendSuccess(c, data.SuccessfullyCreated, requestedItem)
 			}
 		} else {
 			return api.Error(c, canWriteErr)

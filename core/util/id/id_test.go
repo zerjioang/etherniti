@@ -3,7 +3,11 @@
 
 package id
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"github.com/zerjioang/etherniti/core/util/str"
+	"testing"
+)
 
 func TestGenerateUUID(t *testing.T) {
 	t.Run("uuid-entropy", func(t *testing.T) {
@@ -14,11 +18,16 @@ func TestGenerateUUID(t *testing.T) {
 			t.Error("failed to create uuid from entropy")
 		}
 	})
-}
 
-func TestGenerateID(t *testing.T) {
 	t.Run("id-entropy", func(t *testing.T) {
 		value := GenerateIDString()
 		t.Log("uuid value:", value.String())
+	})
+
+	t.Run("random-str-charset", func(t *testing.T) {
+		idstr := RandomStr(32)
+		assert.NotNil(t, idstr)
+		assert.Equal(t, len(idstr), 32)
+		t.Log(str.UnsafeString(idstr))
 	})
 }

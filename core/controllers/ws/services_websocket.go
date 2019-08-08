@@ -6,11 +6,12 @@ import (
 )
 
 var (
-	hub = NewHub()
+	hub *Hub
 )
 
-func init() {
+func InitWebsocketHub() {
 	logger.Info("loading websocket hub")
+	hub = NewHub()
 	go hub.run()
 }
 

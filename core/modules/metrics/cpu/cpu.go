@@ -1,7 +1,7 @@
 package cpu
 
 import (
-	"fmt"
+	"github.com/zerjioang/etherniti/core/logger"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -43,7 +43,7 @@ func getCPUSample() (idle, total uint64) {
 			for i := 1; i < numFields; i++ {
 				val, err := strconv.ParseUint(fields[i], 10, 64)
 				if err != nil {
-					fmt.Println("Error: ", i, fields[i], err)
+					logger.Error("Error: ", i, fields[i], err)
 				}
 				total += val // tally up all the numbers to get total ticks
 				if i == 4 {  // idle is the 5th field in the cpu line

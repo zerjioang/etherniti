@@ -6,6 +6,8 @@ package controllers
 import (
 	"time"
 
+	"github.com/zerjioang/etherniti/core/controllers/dashboard"
+
 	"github.com/valyala/fasthttp"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -49,7 +51,7 @@ func userJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			logger.Error("missing authentication token")
 			return api.ErrorWithMessage(c, protocol.StatusUnauthorized, data.ErrMissingAuthenticationToken, data.ErrMissingAuthentication)
 		}
-		decodedAuthData, err := ParseAuthenticationToken(tokenData)
+		decodedAuthData, err := dashboard.ParseAuthenticationToken(tokenData)
 		if err != nil {
 			logger.Error("failed to process authentication token: ", err)
 			return api.ErrorWithMessage(c, protocol.StatusUnauthorized, data.ErrInvalidAuthenticationToken, err)
@@ -104,7 +106,12 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// add authentication controller to root
 	// /v1/auth/...
 	// register ui rest
-	NewUIAuthController().RegisterRouters(groupV1)
+	dashboard.NewUIAuthController().RegisterRouters(groupV1)
+
+	// register dashboard required apis
+	// /dashboard/stats
+	internalGroup := groupV1.Group("/internal", next)
+	dashboard.NewProxyStatsController().RegisterRouters(internalGroup)
 
 	// /v1/...
 	indexCtl.RegisterRouters(groupV1)

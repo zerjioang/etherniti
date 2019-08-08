@@ -8,6 +8,8 @@
 # exit script on error
 set -e
 
+armArch="armv7l"
+
 function build(){
 	if ! existsImage "preloader"; then
 		log "preloader docker image not found"

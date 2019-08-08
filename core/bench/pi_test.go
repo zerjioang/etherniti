@@ -24,7 +24,7 @@ func TestMonteCarlo(t *testing.T) {
 	wait.Add(cores)
 
 	for i := 0; i < cores; i++ {
-		go MonteCarlo(100.0, samples/cores, &counts[i], &wait)
+		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
 	}
 
 	wait.Wait()

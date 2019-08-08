@@ -35,7 +35,10 @@ func RunServer(notifier chan error) {
 		// load etherniti proxy configuration
 		opts := config.GetDefaultOpts()
 
-		// setup current execution environment
+		// 0 generate root/superadmin proxy identity for management
+		config.GenerateAdmin(opts)
+
+		// 1 setup current execution environment
 		err := config.Setup(opts)
 		if err != nil {
 			// env error configuration found

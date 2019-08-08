@@ -10,6 +10,7 @@ const (
 	XEthernitiEnableCors              = "X_ETHERNITI_ENABLE_CORS"
 	XEthernitiEnableRateLimit         = "X_ETHERNITI_ENABLE_RATE_LIMIT"
 	XEthernitiEnableAnalytics         = "X_ETHERNITI_ENABLE_ANALYTICS"
+	XEthernitiEnableInternalAnalytics = "X_ETHERNITI_ENABLE_INTERNAL_ANALYTICS"
 	XEthernitiEnableGzip              = "X_ETHERNITI_ENABLE_GZIP"
 	XEthernitiEnableServerCache       = "X_ETHERNITI_ENABLE_SERVER_CACHE"
 	XEthernitiEnableMetrics           = "X_ETHERNITI_ENABLE_METRICS"
@@ -57,4 +58,7 @@ const (
 	XEthernitiUsersCheckEmail   = "X_ETHERNITI_CHECK_USER_EMAIL"
 	XEthernitiMinPasswordLength = "X_ETHERNITI_USERS_MIN_PWD_LEN"
 	XEthernitiEnableWebAuthN    = "X_ETHERNITI_ENABLE_WEBAUTHN"
+
+	XEthernitiAdminKey    = "X_ETHERNITI_ADMIN_KEY"
+	XEthernitiAdminSecret = "X_ETHERNITI_ADMIN_SECRET"
 )
