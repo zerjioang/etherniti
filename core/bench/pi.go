@@ -18,7 +18,13 @@ var (
 	totalTime time.Duration
 )
 
-func CalculateScore() {
+func init(){
+	logger.Debug("loading internal p.o.s.t bencharmink")
+	calculateScore()
+
+}
+
+func calculateScore() {
 	logger.Debug("benchmarking current server configuration")
 	logger.Debug("getting benchmark (multicore) score")
 

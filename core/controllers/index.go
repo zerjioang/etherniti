@@ -12,8 +12,6 @@ import (
 	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/core/util/net/ping"
 
-	"github.com/zerjioang/etherniti/core/bench"
-
 	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/zerjioang/etherniti/core/modules/cpuid"
@@ -207,24 +205,11 @@ func (ctl *IndexController) ping(addr string) (*ping.Statistics, error) {
 	return s, nil
 }
 
-// todo optimize struct creation. it should be created once, not every time is called by http clients. smae goes for byte array
-func (ctl *IndexController) score(c *echo.Context) error {
-	scoreWrapper := struct {
-		Time  time.Duration `json:"time"`
-		Score int64         `json:"score"`
-	}{
-		Time:  bench.GetBenchTime(),
-		Score: bench.GetScore(),
-	}
-	return api.SendSuccess(c, []byte("bench_score"), scoreWrapper)
-}
-
 // implemented method from interface RouterRegistrable
 func (ctl *IndexController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing index controller methods")
 	router.GET("/", ctl.Index)
 	router.GET("/info", ctl.Info)
-	router.GET("/score", ctl.score)
 	router.GET("/metrics", ctl.Status)
 	router.GET("/integrity", ctl.Integrity)
 	router.GET("/ping", ctl.Ping)

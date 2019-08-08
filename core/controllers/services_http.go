@@ -110,8 +110,8 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 
 	// register dashboard required apis
 	// /dashboard/stats
-	dashboardGroup := groupV1.Group("/dashboard", next)
-	dashboard.NewUIStatsController().RegisterRouters(dashboardGroup)
+	internalGroup := groupV1.Group("/internal", next)
+	dashboard.NewProxyStatsController().RegisterRouters(internalGroup)
 
 	// /v1/...
 	indexCtl.RegisterRouters(groupV1)

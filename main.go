@@ -87,8 +87,7 @@ func main() {
 	logger.Info("setting GOMAXPROCS value to ", max)
 	runtime.GOMAXPROCS(max)
 
-	// run server benchmark evaluation function based on montecarlo pi generator
-	bench.CalculateScore()
+	// read server benchmark evaluation function based on montecarlo pi generator
 	logger.Info("current server runtime benchmark score: ", bench.GetScore(), " points")
 
 	//run the server

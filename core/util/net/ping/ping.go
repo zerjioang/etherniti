@@ -47,6 +47,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/zerjioang/etherniti/core/logger"
 	"math"
 	"math/rand"
 	"net"
@@ -303,7 +304,7 @@ func (p *Pinger) run() {
 
 	err := p.sendICMP(conn)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 
 	timeout := time.NewTicker(p.Timeout)
@@ -327,12 +328,12 @@ func (p *Pinger) run() {
 			}
 			err = p.sendICMP(conn)
 			if err != nil {
-				fmt.Println("FATAL: ", err.Error())
+				logger.Error("fatal error sending icmp: ", err.Error())
 			}
 		case r := <-recv:
 			err := p.processPacket(r)
 			if err != nil {
-				fmt.Println("FATAL: ", err.Error())
+				logger.Error("fatal error processing icmp packet: ", err.Error())
 			}
 		}
 		if p.Count > 0 && p.PacketsRecv >= p.Count {

@@ -4,7 +4,9 @@
 package dashboard
 
 import (
+	"github.com/zerjioang/etherniti/core/bench"
 	"sync/atomic"
+	"time"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/bus"
@@ -14,7 +16,7 @@ import (
 	"github.com/zerjioang/go-bus"
 )
 
-type UIStatsController struct {
+type ProxyStatsController struct {
 }
 
 type ProxyStats struct {
@@ -35,10 +37,19 @@ func (s *ProxyStats) Defaults() {
 
 var (
 	atomicStats atomic.Value
+	scoreWrapper struct {
+		Time  time.Duration `json:"time"`
+		Score int64         `json:"score"`
+	}
 )
 
 func init() {
 	logger.Debug("loading proxy statistics wrapper")
+	//load internal benchmarking data
+	scoreWrapper.Score = bench.GetScore()
+	scoreWrapper.Time = bench.GetBenchTime()
+
+	// initialize proxy statistics wrapper
 	var stats ProxyStats
 	stats.Defaults()
 	//save current data
@@ -70,21 +81,26 @@ func init() {
 }
 
 // constructor like function
-func NewUIStatsController() UIStatsController {
-	uiCtl := UIStatsController{}
+func NewProxyStatsController() ProxyStatsController {
+	uiCtl := ProxyStatsController{}
 	return uiCtl
 }
 
 // load current proxy statistics
-func (ctl UIStatsController) stats(c *echo.Context) error {
+func (ctl ProxyStatsController) internalAnalytics(c *echo.Context) error {
 	statsData, ok := atomicStats.Load().(ProxyStats)
 	if ok {
-		return api.SendSuccess(c, []byte("proxy_stats"), statsData)
+		return api.SendSuccess(c, []byte("proxy_internal_analytics"), statsData)
 	}
 	return api.ErrorStr(c, "failed to get proxy dashboard statistics")
 }
 
-func (ctl UIStatsController) RegisterRouters(router *echo.Group) {
-	logger.Debug("exposing ui stats controller methods")
-	router.GET("/stats", ctl.stats)
+func (ctl ProxyStatsController) score(c *echo.Context) error {
+	return api.SendSuccess(c, []byte("proxy_score"), scoreWrapper)
+}
+
+func (ctl ProxyStatsController) RegisterRouters(router *echo.Group) {
+	logger.Debug("exposing ui internalAnalytics controller methods")
+	router.GET("/analytics", ctl.internalAnalytics)
+	router.GET("/score", ctl.score)
 }
