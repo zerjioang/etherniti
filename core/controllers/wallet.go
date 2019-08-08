@@ -172,7 +172,7 @@ func (ctl WalletController) createHdWallet(request protocol.NewHdWalletRequest) 
 }
 
 // generates an ethereum new account (address+key)
-func (ctl WalletController) generateAddress(c *echo.Context) error {
+func (ctl WalletController) newWallet(c *echo.Context) error {
 
 	// Create an account
 	private, err := eth.GenerateNewKey()
@@ -209,11 +209,12 @@ func (ctl WalletController) isValidAddress(c *echo.Context) error {
 // implemented method from interface RouterRegistrable
 func (ctl WalletController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing wallet controller methods")
-	router.POST("/wallet", ctl.generateAddress)
+	router.POST("/wallet", ctl.newWallet)
+	router.POST("/hdwallet", ctl.HdWallet)
+
+	router.POST("/wallet/mnemonic/bip39", ctl.Mnemonic)
 	router.GET("/wallet/verify/:address", ctl.isValidAddress)
 	router.GET("/wallet/entropy/:bits", ctl.Entropy)
-	router.POST("/wallet/mnemonic/bip39", ctl.Mnemonic)
-	router.POST("/wallet/hd/bip32", ctl.HdWallet)
 }
 
 func (ctl WalletController) getIntParam(c *echo.Context, key string) uint16 {
