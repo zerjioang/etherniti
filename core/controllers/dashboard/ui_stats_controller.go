@@ -4,16 +4,17 @@
 package dashboard
 
 import (
-	"github.com/zerjioang/etherniti/core/bench"
 	"sync/atomic"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/bench"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/notifier"
 	"github.com/zerjioang/etherniti/thirdparty/echo"
-	"github.com/zerjioang/go-bus"
+	gobus "github.com/zerjioang/go-bus"
 )
 
 type ProxyStatsController struct {
@@ -36,7 +37,7 @@ func (s *ProxyStats) Defaults() {
 }
 
 var (
-	atomicStats atomic.Value
+	atomicStats  atomic.Value
 	scoreWrapper struct {
 		Time  time.Duration `json:"time"`
 		Score int64         `json:"score"`

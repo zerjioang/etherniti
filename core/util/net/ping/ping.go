@@ -47,13 +47,14 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/zerjioang/etherniti/core/logger"
 	"math"
 	"math/rand"
 	"net"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/logger"
 
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"

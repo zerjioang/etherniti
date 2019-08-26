@@ -7,6 +7,8 @@ import (
 	"errors"
 	"sync/atomic"
 
+	"github.com/zerjioang/etherniti/core/modules/browser"
+
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/listener"
 
@@ -36,8 +38,12 @@ func RunServer(notifier chan error) {
 		opts := config.GetDefaultOpts()
 
 		// 0 generate root/superadmin proxy identity for management
-		config.GenerateAdmin(opts)
-
+		_, _, adminErr := config.GenerateAdmin(opts)
+		if adminErr != nil {
+			// env error configuration found
+			notifier <- adminErr
+			return
+		}
 		// 1 setup current execution environment
 		err := config.Setup(opts)
 		if err != nil {
@@ -68,6 +74,17 @@ func RunServer(notifier chan error) {
 
 		// 6 run listener
 		go listener.FactoryListener(opts.ListeningMode).Listen(notifier)
+
+		// 7 open web browser if requested on desktop computer
+		if opts.OpenBrowserOnSuccess && browser.HasGraphicInterface() {
+			uri := opts.GetURI()
+			logger.Debug("opening URI in local web browser")
+			logger.Debug("opening URI: ", uri)
+			navErr := browser.OpenBrowser(uri)
+			if navErr != nil {
+				logger.Error("failed to open web browser on local navigator due to: ", navErr)
+			}
+		}
 	} else {
 		notifier <- errAlreadyStarted
 	}

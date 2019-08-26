@@ -4,10 +4,11 @@
 package controllers
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/shared/protocol"
-	"testing"
 )
 
 func TestWalletController(t *testing.T) {

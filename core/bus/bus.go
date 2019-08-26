@@ -2,7 +2,7 @@ package bus
 
 import (
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/go-bus"
+	gobus "github.com/zerjioang/go-bus"
 	"github.com/zerjioang/go-bus/mutex"
 )
 

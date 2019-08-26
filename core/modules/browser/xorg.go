@@ -3,6 +3,8 @@ package browser
 import (
 	"bytes"
 	"os/exec"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 var (
@@ -12,6 +14,7 @@ var (
 )
 
 func init() {
+	logger.Debug("detecting if current server has graphic interface...")
 	hasUI = detectUI()
 }
 

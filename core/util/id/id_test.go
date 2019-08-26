@@ -4,9 +4,10 @@
 package id
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/util/str"
-	"testing"
 )
 
 func TestGenerateUUID(t *testing.T) {

@@ -1,10 +1,11 @@
 package cpu
 
 import (
-	"github.com/zerjioang/etherniti/core/logger"
 	"io/ioutil"
 	"strconv"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/logger"
 )
 
 const (

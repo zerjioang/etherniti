@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"testing"
+
 	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
-	"testing"
 )
 
 func BenchmarkWalletController(b *testing.B) {
@@ -16,7 +17,7 @@ func BenchmarkWalletController(b *testing.B) {
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_,_ = eth.GenerateNewKey()
+			_, _ = eth.GenerateNewKey()
 		}
 	})
 }

@@ -14,8 +14,8 @@ import (
 )
 
 type EthernitiAdminOptions struct {
-	Key string
-	Secret string
+	Key           string
+	Secret        string
 	LoadedFromEnv bool
 }
 type EthernitiOptions struct {
@@ -48,6 +48,8 @@ type EthernitiOptions struct {
 	HttpInterface    string
 	ListeningModeStr string
 	ListeningMode    listener.ServiceType
+	// automatic browser open configuration
+	OpenBrowserOnSuccess bool
 
 	// allowed cors domains
 	AllowedCorsOriginList hashset.HashSetWORM
@@ -89,6 +91,7 @@ var (
 		HttpInterface:           "127.0.0.1",
 		ListeningModeStr:        "http",
 		ListeningMode:           listener.HttpMode,
+		OpenBrowserOnSuccess:    true,
 		BlockTorConnections:     false,
 		MaxWorker:               4,
 		MaxQueue:                200,
@@ -178,6 +181,9 @@ func (eo *EthernitiOptions) preload() {
 	eo.ListeningModeStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningMode), eo.ListeningModeStr)
 	eo.ListeningMode = eo.ServiceListeningModeResolver()
 
+	// load browser automatic opening mode
+	eo.OpenBrowserOnSuccess = eo.conditionalOverwriteBool(eo.envData.Lower(XEthernitiAutoOpenBrowser), eo.OpenBrowserOnSuccess)
+
 	// load CORS data
 	eo.AllowedCorsOriginList = hashset.NewHashSetWORM()
 	eo.AllowedCorsOriginList.LoadFromRaw(CorsFile, "\n")
@@ -254,6 +260,9 @@ func (eo *EthernitiOptions) TokenExpiration() fastime.Duration {
 
 func (eo *EthernitiOptions) GetListeningAddressWithPort() string {
 	return eo.ListeningAddress + ":" + eo.GetListeningPortStr()
+}
+func (eo *EthernitiOptions) GetURI() string {
+	return "http://" + eo.GetListeningAddressWithPort()
 }
 
 func (eo *EthernitiOptions) GetListeningPortStr() string {
