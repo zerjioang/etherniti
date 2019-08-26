@@ -26,6 +26,14 @@
   revision = "130ea5bddde33df32b06a1cdb42a6316eb73cff5"
 
 [[projects]]
+  branch = "master"
+  digest = "1:02dd29fe15e4b7b02775e49397dfd97f7fdbd8692aa49c4baa1aff128f92f927"
+  name = "github.com/christophberger/grada"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "5b073dc6bb9952bad0284bccfbe38ed447a40e75"
+
+[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
@@ -686,6 +694,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/btcsuite/btcd/btcec",
+    "github.com/christophberger/grada",
     "github.com/dgraph-io/badger",
     "github.com/dgraph-io/badger/options",
     "github.com/gobwas/ws",

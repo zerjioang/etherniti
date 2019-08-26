@@ -18,6 +18,7 @@ docs
 site
 **/*.md
 **/*.wasm
+**/*.bench
 
 # ignore documentation builder
 **/python36_venv

@@ -9,6 +9,9 @@ import (
 	"testing"
 )
 
+var CompilerHackDoNotOptimize string
+var CompilerHackDoNotOptimizeInt int
+
 func BenchmarkStringUtils(b *testing.B) {
 
 	b.Run("to-lower-std", func(b *testing.B) {
@@ -16,9 +19,11 @@ func BenchmarkStringUtils(b *testing.B) {
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
 		b.ResetTimer()
+		var s string
 		for n := 0; n < b.N; n++ {
-			_ = strings.ToLower(val)
+			s = strings.ToLower(val)
 		}
+		CompilerHackDoNotOptimize = s
 	})
 	b.Run("ToLowerAscii", func(b *testing.B) {
 		b.Run("empty", func(b *testing.B) {
@@ -26,18 +31,22 @@ func BenchmarkStringUtils(b *testing.B) {
 			b.SetBytes(1)
 			val := ""
 			b.ResetTimer()
+			var s string
 			for n := 0; n < b.N; n++ {
-				_ = ToLowerAscii(val)
+				s = ToLowerAscii(val)
 			}
+			CompilerHackDoNotOptimize = s
 		})
 		b.Run("with-content", func(b *testing.B) {
 			b.ReportAllocs()
 			b.SetBytes(1)
 			val := "Hello World, This is AWESOME"
 			b.ResetTimer()
+			var s string
 			for n := 0; n < b.N; n++ {
-				_ = ToLowerAscii(val)
+				s = ToLowerAscii(val)
 			}
+			CompilerHackDoNotOptimize = s
 		})
 	})
 	b.Run("ToLowerAscii-bytes", func(b *testing.B) {
@@ -45,9 +54,33 @@ func BenchmarkStringUtils(b *testing.B) {
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
 		b.ResetTimer()
+		var s string
 		for n := 0; n < b.N; n++ {
-			_ = ToLowerAscii(val)
+			s = ToLowerAscii(val)
 		}
+		CompilerHackDoNotOptimize = s
+	})
+	b.Run("tolower-bytes", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
+		var s string
+		for n := 0; n < b.N; n++ {
+			s = toLower(val)
+		}
+		CompilerHackDoNotOptimize = s
+	})
+	b.Run("ToLowerAscii-std-bytes", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		val := "Hello World, This is AWESOME"
+		b.ResetTimer()
+		var s string
+		for n := 0; n < b.N; n++ {
+			s = strings.ToLower(val)
+		}
+		CompilerHackDoNotOptimize = s
 	})
 
 	b.Run("len-std", func(b *testing.B) {
@@ -55,18 +88,22 @@ func BenchmarkStringUtils(b *testing.B) {
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
 		b.ResetTimer()
+		var i int
 		for n := 0; n < b.N; n++ {
-			_ = len(val)
+			i = len(val)
 		}
+		CompilerHackDoNotOptimizeInt = i
 	})
 	b.Run("len-custom", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
 		val := "Hello World, This is AWESOME"
 		b.ResetTimer()
+		var i int
 		for n := 0; n < b.N; n++ {
-			_ = strLen(val)
+			i = strLen(val)
 		}
+		CompilerHackDoNotOptimizeInt = i
 	})
 }
 
@@ -74,6 +111,7 @@ func BenchmarkGetJsonBytes(b *testing.B) {
 	b.Run("get-bytes-nil", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
+
 		for i := 0; i < b.N; i++ {
 			GetJsonBytes(nil)
 		}

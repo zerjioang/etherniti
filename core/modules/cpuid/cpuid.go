@@ -50,6 +50,9 @@ func init() {
 func GetCpuFeatures() CpuFeatures {
 	return cpuFeatures
 }
+func GetCpuFeaturesPtr() *CpuFeatures {
+	return &cpuFeatures
+}
 
 // determineCPUFeatures populates flags in global cpu variable by querying CPUID.
 func determineCPUFeatures() {
@@ -61,8 +64,9 @@ func determineCPUFeatures() {
 	_, _, ecx1, edx1 := cpuid(1, 0)
 
 	cpuFeatures.HasSSE2 = isSet(edx1, 26)
-	cpuFeatures.HasSSE3 = isSet(ecx1, 0)
-	cpuFeatures.HasPCLMULQDQ = isSet(ecx1, 0)
+	c1 := isSet(ecx1, 0)
+	cpuFeatures.HasSSE3 = c1
+	cpuFeatures.HasPCLMULQDQ = c1
 	cpuFeatures.HasSSSE3 = isSet(ecx1, 9)
 	cpuFeatures.HasFMA = isSet(ecx1, 12)
 	cpuFeatures.HasSSE41 = isSet(ecx1, 19)
@@ -92,7 +96,7 @@ func determineCPUFeatures() {
 	cpuFeatures.HasAVX512DQ = isSet(ebx7, 17)
 
 	cpuFeatures.HasBMI1 = isSet(ebx7, 3)
-	cpuFeatures.HasAVX2 = isSet(ebx7, 5) && osSupportsAVX
+	cpuFeatures.HasAVX2 = osSupportsAVX && isSet(ebx7, 5)
 	cpuFeatures.HasBMI2 = isSet(ebx7, 8)
 	cpuFeatures.HasERMS = isSet(ebx7, 9)
 	cpuFeatures.HasADX = isSet(ebx7, 19)
