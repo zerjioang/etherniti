@@ -13,8 +13,8 @@ import (
 
 // IP address lengths (bytes).
 const (
-	IPv4len = 4
-	IPv6len = 16
+	IPv4len         = 4
+	IPv6len         = 16
 	asciiDot  uint8 = 46
 	asciiZero uint8 = 48
 )
@@ -100,14 +100,14 @@ const big = 0xFFFFFF
 // minimum size of an ip address is 0.0.0.0
 // 7 chars
 func IsIpv4(s string) bool {
+	if len(s) == 0 {
+		// Missing octets.
+		return false
+	}
 	if len(s) < 7 {
 		return false
 	}
 	for i := 0; i < IPv4len; i++ {
-		if len(s) == 0 {
-			// Missing octets.
-			return false
-		}
 		if i > 0 {
 			if s[0] != '.' {
 				return false
@@ -123,11 +123,14 @@ func IsIpv4(s string) bool {
 		for i = 0; i < len(s) && '0' <= s[i] && s[i] <= '9'; i++ {
 			n = n*10 + int(s[i]-'0')
 			if n >= big {
-				n = big; ok = false
+				n = big
+				ok = false
 			}
 		}
 		if i == 0 {
-			n = 0; i = 0; ok = false
+			n = 0
+			i = 0
+			ok = false
 		} else {
 			ok = true
 		}
