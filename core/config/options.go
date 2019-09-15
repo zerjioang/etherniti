@@ -72,8 +72,8 @@ type EthernitiOptions struct {
 var (
 	// default etherniti proxy options
 	defaultOptions = &EthernitiOptions{
-		LogLevelStr:             "debug",
-		LogLevel:                log.DEBUG,
+		LogLevelStr:             "warn",
+		LogLevel:                log.WARN,
 		LoggingEnabled:          true,
 		CORSEnabled:             true,
 		SecureModeEnabled:       true,
@@ -141,6 +141,8 @@ func (eo *EthernitiOptions) preload() {
 	eo.LogLevelStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiLogLevel), eo.LogLevelStr)
 	//resolve current logger level from string
 	eo.LogLevel = eo.logLevelResolver()
+	logger.Debug("updating log level to specified level: ", eo.LogLevel)
+	logger.Level(eo.LogLevel)
 
 	// load env variables to enable/disable modules
 	logger.Debug("reading log status from env")

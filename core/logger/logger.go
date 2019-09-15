@@ -9,7 +9,7 @@ import "github.com/zerjioang/etherniti/thirdparty/gommon/log"
 var (
 	// custom internal logger with custom format
 	customLog     *log.Logger
-	defaultHeader = `{"time":"${time_unix_nano}","level":"${level}","prefix":"${prefix}"}`
+	defaultHeader = `{"prefix":"${prefix}","time":"${time_unix_nano}","level":"${level}"}`
 )
 
 func init() {
@@ -25,6 +25,10 @@ func Enabled(status bool) {
 	} else {
 		customLog.SetLevel(log.OFF)
 	}
+}
+
+func Level(v log.Lvl){
+	customLog.SetLevel(v)
 }
 
 // custom warn format logger

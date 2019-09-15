@@ -83,26 +83,38 @@ type response struct {
 	Message string `json:"message"`
 }
 
+var (
+	// dangerous domain preloaded response in order to avoid GC overhead
+	dangerousDomainResponse = response{
+		Title:   "deceptive domain detected",
+		Domain:  "domain here",
+		Message: "the domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
+		Trust:   false,
+	}
+	// clean domain preloaded response in order to avoid GC overhead
+	cleanDomainResponse = response{
+		Title:   "clean domain detected",
+		Domain:  "domain here",
+		Message: "the domain you requested has not been blacklisted.",
+		Trust:   true,
+	}
+)
 func isDangerous(domain string) bool {
 	return contains(pm.Blacklist, domain) || contains(DomainBlacklist(), domain)
 }
 func IsDangerousDomain(domain string) []byte {
-	warn := isDangerous(domain)
-	if warn {
-		responseData := response{
-			Title:   "deceptive domain detected",
-			Domain:  domain,
-			Message: "the domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content.",
-			Trust:   false,
-		}
-		return api.ToSuccess(responseName, responseData, defaultSerializer)
-	} else {
-		responseData := response{
-			Title:   "clean domain detected",
-			Domain:  domain,
-			Message: "the domain you requested has not been blacklisted.",
-			Trust:   true,
-		}
-		return api.ToSuccess(responseName, responseData, defaultSerializer)
+	// minimum valid domain length for domains a.b
+	var responseData response
+	warn := false
+	if len(domain) > 3 {
+		warn = isDangerous(domain)
 	}
+	if warn {
+		dangerousDomainResponse.Domain = domain
+		responseData = dangerousDomainResponse
+	} else {
+		cleanDomainResponse.Domain = domain
+		responseData = cleanDomainResponse
+	}
+	return api.ToSuccess(responseName, responseData, defaultSerializer)
 }

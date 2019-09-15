@@ -13,5 +13,6 @@ cd "$(dirname "$0")"
 # move to project root dir from ./ci scripts to ./
 cd ..
 
+echo "install script"
 # download required dependencies
 ./scripts/dep.sh
