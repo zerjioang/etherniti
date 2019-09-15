@@ -9,7 +9,7 @@ import (
 )
 
 // open a link in your favorite browser
-func OpenBrowser(url string) {
+func OpenBrowser(url string) error {
 	var err error
 
 	switch runtime.GOOS {
@@ -25,4 +25,5 @@ func OpenBrowser(url string) {
 	if err != nil {
 		logger.Error("failed to open browser window: ", err)
 	}
+	return err
 }

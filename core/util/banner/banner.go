@@ -19,12 +19,12 @@ _/ __ \   __\  |  \_/ __ \_  __ \/    \|  \   __\  |
  \___  >__| |___|  /\___  >__|  |___|  /__||__| |__|
      \/          \/     \/           \/
 
-  Official Page  |        https://www.etherniti.org
-  Documentation  |       https://docs.etherniti.org
-  Github         |     https://github.com/etherniti
-  Issues         | https://github.com/etherniti/rfc
+  Official Page    |        https://www.etherniti.org
+  Documentation    |       https://docs.etherniti.org
+  Github           |     https://github.com/etherniti
+  Issues           | https://github.com/etherniti/rfc
 
-  Contact at     |               help@etherniti.org
+  Contact at       |               help@etherniti.org
   
   Build information:
 

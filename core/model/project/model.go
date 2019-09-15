@@ -70,6 +70,7 @@ func (project Project) Key() []byte {
 func (project Project) Value(serializer io.Serializer) []byte {
 	return ioproto.GetBytesFromSerializer(serializer, project)
 }
+
 // this function creates new instances of Project
 func (project Project) New() mixed.DatabaseObjectInterface {
 	return NewEmptyProject()

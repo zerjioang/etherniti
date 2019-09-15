@@ -11,7 +11,10 @@ import (
 	"strings"
 )
 
+// IP address lengths (bytes).
 const (
+	IPv4len         = 4
+	IPv6len         = 16
 	asciiDot  uint8 = 46
 	asciiZero uint8 = 48
 )
@@ -87,29 +90,61 @@ func Int2ip(ipInt int64) string {
 	return b0 + "." + b1 + "." + b2 + "." + b3
 }
 
-func IsIpv4(host string) bool {
-	parts := strings.Split(host, ".")
-	if len(parts) < 4 {
+func IsIpv4Net(host string) bool {
+	return net.ParseIP(host) != nil
+}
+
+// Bigger than we need, not too big to worry about overflow
+const big = 0xFFFFFF
+
+// minimum size of an ip address is 0.0.0.0
+// 7 chars
+func IsIpv4(s string) bool {
+	if len(s) == 0 {
+		// Missing octets.
 		return false
 	}
-	for _, x := range parts {
-		if i, err := integerAtoi(x); err == nil {
-			if i < 0 || i > 255 {
+	if len(s) < 7 {
+		return false
+	}
+	for i := 0; i < IPv4len; i++ {
+		if i > 0 {
+			if s[0] != '.' {
 				return false
 			}
+			s = s[1:]
+		}
+		// dtoi
+		var n int
+		var i int
+		var ok bool
+		// Decimal to integer.
+		// Returns number, characters consumed, success.
+		for i = 0; i < len(s) && '0' <= s[i] && s[i] <= '9'; i++ {
+			n = n*10 + int(s[i]-'0')
+			if n >= big {
+				n = big
+				ok = false
+			}
+		}
+		if i == 0 {
+			n = 0
+			i = 0
+			ok = false
 		} else {
+			ok = true
+		}
+		if !ok || n > 0xFF {
 			return false
 		}
+		s = s[i:]
 	}
 	return true
 }
 
 func IsIpv4Regex(ipAddress string) bool {
 	ipAddress = strings.Trim(ipAddress, " ")
-	if ipRegex.MatchString(ipAddress) {
-		return true
-	}
-	return false
+	return ipRegex.MatchString(ipAddress)
 }
 
 func atoi(s string) (int, error) {
@@ -121,6 +156,7 @@ func integerAtoi(str string) (int, error) {
 
 	// Iterate through all characters of input string and
 	// update result
+	_ = str[len(str)-1]
 	for i := 0; i < len(str); i++ {
 		res = res*10 + int(str[i]-'0')
 	}

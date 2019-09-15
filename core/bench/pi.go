@@ -18,7 +18,7 @@ var (
 	totalTime time.Duration
 )
 
-func init(){
+func init() {
 	logger.Debug("loading internal p.o.s.t bencharmink")
 	calculateScore()
 

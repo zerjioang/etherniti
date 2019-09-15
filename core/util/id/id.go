@@ -5,9 +5,9 @@ package id
 
 import (
 	"crypto/rand"
-	mrand "math/rand"
 	"encoding/hex"
 	"io"
+	mrand "math/rand"
 	"time"
 
 	"github.com/zerjioang/etherniti/core/modules/snowflake"
@@ -116,12 +116,10 @@ func ReadAtLeast(r io.Reader, buf [RawUuidSize]byte, min int) (n int, err error)
 	return
 }
 
-
-
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-var(
+var (
 	seededRand = mrand.New(mrand.NewSource(time.Now().UnixNano()))
 )
 
@@ -133,7 +131,7 @@ func StringWithCharset(length int, charset string) []byte {
 	_ = charset[clen-1]
 	_ = b[length-1]
 
-	for i :=0; i<length; i++ {
+	for i := 0; i < length; i++ {
 		b[i] = charset[seededRand.Intn(clen)]
 	}
 	return b

@@ -30,6 +30,7 @@ const (
 	XEthernitiListeningPort      = "X_ETHERNITI_LISTENING_PORT"
 	XEthernitiListeningInterface = "X_ETHERNITI_LISTENING_INTERFACE"
 	XEthernitiListeningMode      = "X_ETHERNITI_LISTENING_MODE"
+	XEthernitiAutoOpenBrowser    = "X_ETHERNITI_AUTO_OPEN_BROWSER"
 
 	// infura service configuration
 	XEthernitiInfuraToken = "X_ETHERNITI_INFURA_TOKEN"
