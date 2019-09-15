@@ -26,7 +26,7 @@ You can copy and paste them to workspace.xml file or add them manually one by on
 <env name="X_ETHERNITI_LOG_LEVEL" value="debug" />
 <env name="X_ETHERNITI_SSL_CERT_FILE" value="/etc/letsencrypt/live/etherniti.org/fullchain.pem" />
 <env name="X_ETHERNITI_SSL_KEY_FILE" value="/etc/letsencrypt/live/etherniti.org/privkey.pem" />
-<env name="X_ETHERNITI_HTTPS_PORT" value="4430" />
+<env name="X_ETHERNITI_SECURE_LISTENING_PORT" value="4430" />
 <env name="X_ETHERNITI_DEBUG_SERVER" value="true" />
 <env name="X_ETHERNITI_HIDE_SERVER_DATA_IN_CONSOLE" value="true" />
 <env name="X_ETHERNITI_TOKEN_SECRET" value="your-favourite-jwt-token-secret" />

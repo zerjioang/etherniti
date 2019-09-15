@@ -30,7 +30,7 @@ func (ctl SecurityController) domainBlacklist(c *echo.Context) error {
 
 // return a whitelist of non phishing sites,
 // This list is maintained by the MetaMask project at
-// https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
+// https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json
 func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.PhishingWhitelistRawBytes())
@@ -39,7 +39,7 @@ func (ctl SecurityController) phisingWhitelist(c *echo.Context) error {
 // return a blacklist of phishing sites,
 // as well as a whitelist and a fuzzylist.
 // This list is maintained by the MetaMask project at
-// https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json .
+// https://github.com/MetaMask/eth-phishing-detect/blob/master/src/config.json
 func (ctl SecurityController) phisingBlacklist(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
 	return api.SendSuccessBlob(c, security.PhishingBlacklistRawBytes())
