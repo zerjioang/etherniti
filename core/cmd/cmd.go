@@ -73,7 +73,8 @@ func RunServer(notifier chan error) {
 		serverStarted.Store(true)
 
 		// 6 run listener
-		go listener.FactoryListener(opts.ListeningMode).Listen(notifier)
+		listenerHandler := listener.FactoryListener(opts.ListeningMode)
+		go listenerHandler.Listen(notifier)
 
 		// 7 open web browser if requested on desktop computer
 		if opts.OpenBrowserOnSuccess && browser.HasGraphicInterface() {

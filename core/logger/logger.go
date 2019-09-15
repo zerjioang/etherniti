@@ -27,7 +27,7 @@ func Enabled(status bool) {
 	}
 }
 
-func Level(v log.Lvl){
+func Level(v log.Lvl) {
 	customLog.SetLevel(v)
 }
 

@@ -32,6 +32,34 @@ func TestGetEnvironment(t *testing.T) {
 		cfg := New()
 		cfg.Load()
 	})
+	t.Run("read-env-all-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				cfg := New()
+				cfg.Load()
+				assert.NotNil(t, cfg)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
+	t.Run("read-env-all-shared-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		cfg := New()
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				cfg.Load()
+				assert.NotNil(t, cfg)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
 	t.Run("read-env-key", func(t *testing.T) {
 		cfg := New()
 		cfg.Load()
@@ -50,6 +78,36 @@ func TestGetEnvironment(t *testing.T) {
 				v, found := cfg.Read("HOME")
 				assert.NotNil(t, v)
 				assert.True(t, found)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
+	t.Run("string-env-key-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		cfg := New()
+		cfg.Load()
+		for i := 0; i < total; i++ {
+			go func() {
+				v := cfg.String("HOME")
+				assert.NotNil(t, v)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
+	t.Run("int-env-key-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		cfg := New()
+		cfg.Load()
+		for i := 0; i < total; i++ {
+			go func() {
+				v := cfg.Int("HOME", 0)
+				assert.NotNil(t, v)
 				g.Done()
 			}()
 		}

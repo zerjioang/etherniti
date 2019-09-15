@@ -21,42 +21,46 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
 )
 
-// openssl genrsa -out server.key 2048
-// openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
-// Country name (2 letter code) [AU]:ES
-// State or Province name (full name) [Some-State]:Biscay
-// Locality name (eg, city) []:Bilbao
-// Organization name (eg, company) [Internet Widgits Pty Ltd]:Etherniti Project
-// Organizational Unit name (eg, section) []:Etherniti CyberSecurity Team
-// Common name (e.g. server FQDN or YOUR name) []:localhost
-// Email Address []:
+// openssl req -newkey rsa:2048 \
+//  -new -nodes -x509 \
+//  -days 3650 \
+//  -out cert.pem \
+//  -keyout key.pem \
+//  -subj "/C=ES/ST=Biscay/L=Bilbao/O=Etherniti/OU=Cyber Unit/CN=127.0.0.1
 
 const (
+	// openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
+	// certificate signed for 127.0.0.1
 	certPem = `-----BEGIN CERTIFICATE-----
-MIICkjCCAhigAwIBAgIJANdeA9flJMlnMAoGCCqGSM49BAMCMIGGMQswCQYDVQQG
-EwJFUzEPMA0GA1UECAwGQmlzY2F5MQ8wDQYDVQQHDAZCaWxiYW8xGjAYBgNVBAoM
-EUV0aGVybml0aSBQcm9qZWN0MSUwIwYDVQQLDBxFdGhlcm5pdGkgQ3liZXJTZWN1
-cml0eSBUZWFtMRIwEAYDVQQDDAlsb2NhbGhvc3QwHhcNMTkwMjI1MTAzNjAzWhcN
-MjkwMjIyMTAzNjAzWjCBhjELMAkGA1UEBhMCRVMxDzANBgNVBAgMBkJpc2NheTEP
-MA0GA1UEBwwGQmlsYmFvMRowGAYDVQQKDBFFdGhlcm5pdGkgUHJvamVjdDElMCMG
-A1UECwwcRXRoZXJuaXRpIEN5YmVyU2VjdXJpdHkgVGVhbTESMBAGA1UEAwwJbG9j
-YWxob3N0MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEdfDTiXG01evJo+H8iELSM5rB
-u73ZODqPMpPyqxTXA8/r+juHqs+65USA+VsCk5wMaTWxTq4nMTonOu3+zqkySa1F
-/uOp7HBbTGclLreYiRn0tsjKML8Hvoj8sHPm/Wdzo1AwTjAdBgNVHQ4EFgQU4LQl
-3Q8zGmnYBQicOBloJirneBgwHwYDVR0jBBgwFoAU4LQl3Q8zGmnYBQicOBloJirn
-eBgwDAYDVR0TBAUwAwEB/zAKBggqhkjOPQQDAgNoADBlAjEAmXDYP8TNLczRAmoq
-5ijranWuzCXD4vJZFs84XO4/J/sh5Pz+TcCZFFChAODmuWd5AjB/PgnS1lMBJsEY
-MfAwQl1+hKBNFvv0i5fsIM00QSgK/Eys3wfWf4nROAH4V/T+T98=
------END CERTIFICATE-----`
+MIICyjCCAlCgAwIBAgIUaDW7PwiRieONBAxj2l57fJ2nToIwCgYIKoZIzj0EAwIw
+gZsxCzAJBgNVBAYTAkVTMQ8wDQYDVQQIDAZCaXNjYXkxDzANBgNVBAcMBkJpbGJh
+bzESMBAGA1UECgwJRXRoZXJuaXRpMRYwFAYDVQQLDA1DeWJlcnNlY3VyaXR5MRIw
+EAYDVQQDDAkxMjcuMC4wLjExKjAoBgkqhkiG9w0BCQEWG2N5YmVyc2VjdXJpdHlA
+ZXRoZXJuaXRpLm9yZzAeFw0xOTA5MTUxOTUyMzJaFw0yOTA5MTIxOTUyMzJaMIGb
+MQswCQYDVQQGEwJFUzEPMA0GA1UECAwGQmlzY2F5MQ8wDQYDVQQHDAZCaWxiYW8x
+EjAQBgNVBAoMCUV0aGVybml0aTEWMBQGA1UECwwNQ3liZXJzZWN1cml0eTESMBAG
+A1UEAwwJMTI3LjAuMC4xMSowKAYJKoZIhvcNAQkBFhtjeWJlcnNlY3VyaXR5QGV0
+aGVybml0aS5vcmcwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATTFv0BHZZLNTUD0GXq
+/3aueh7HW4GXbE186ERf57nE/Sf/F7ZLUs150Nlh/IZ8zAkCB8Fnaci5+C0Te7Ur
+GgzIAuNwkEscUtYxW/YisLpjof7ZmgkOoxd8zAR7b2Vo3DajUzBRMB0GA1UdDgQW
+BBQPVPtmu22NeQx0tOzoIzgmyIBrPzAfBgNVHSMEGDAWgBQPVPtmu22NeQx0tOzo
+IzgmyIBrPzAPBgNVHRMBAf8EBTADAQH/MAoGCCqGSM49BAMCA2gAMGUCMDnihM83
+iJEwae0ORhPDzRPllH4ajsx5zV3L5ogOQWDaWCWrreoOtm4509LhDoBhkgIxAIQG
+oCjNcgx0rP+/Y5zqIdlmfIVWlj4oKZhd4gJeSV5qkqVS8qqkAy3TCFWyy3aiYQ==
+-----END CERTIFICATE-----
 
+`
+
+	// openssl genrsa -out server.key 4096
+	// openssl ecparam -genkey -name secp384r1 -out server.key
 	keyPem = `-----BEGIN EC PARAMETERS-----
 BgUrgQQAIg==
 -----END EC PARAMETERS-----
 -----BEGIN EC PRIVATE KEY-----
-MIGkAgEBBDBZL5r9/Rkt1T7RP86URs4HnRtJlfmN24mRgrxYNmiw09hNvOau6r4v
-N9OXUhEAg3SgBwYFK4EEACKhZANiAAR18NOJcbTV68mj4fyIQtIzmsG7vdk4Oo8y
-k/KrFNcDz+v6O4eqz7rlRID5WwKTnAxpNbFOricxOic67f7OqTJJrUX+46nscFtM
-ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
+MIGkAgEBBDBPC3gEQ9iLy1erH3+oZnCqXpOqMwxBLnlSY9nXBype9Iw0gDgLljxV
+w8g67Pd4+iagBwYFK4EEACKhZANiAATTFv0BHZZLNTUD0GXq/3aueh7HW4GXbE18
+6ERf57nE/Sf/F7ZLUs150Nlh/IZ8zAkCB8Fnaci5+C0Te7UrGgzIAuNwkEscUtYx
+W/YisLpjof7ZmgkOoxd8zAR7b2Vo3DY=
 -----END EC PRIVATE KEY-----
 `
 )

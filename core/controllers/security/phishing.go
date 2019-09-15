@@ -99,6 +99,7 @@ var (
 		Trust:   true,
 	}
 )
+
 func isDangerous(domain string) bool {
 	return contains(pm.Blacklist, domain) || contains(DomainBlacklist(), domain)
 }

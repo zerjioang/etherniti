@@ -35,7 +35,7 @@ func (l HttpListener) Listen(notifier chan error) {
 	logger.Info("interface: ", common.ListenInterface)
 	logger.Info("endpoint: ", common.ListenAddr)
 	swagger.ConfigureFromTemplate()
-	// Start server
+	// Start http server
 	go func() {
 		logger.Info("server listening")
 		err := e.StartServer(l.ServerConfig())
@@ -68,7 +68,7 @@ func (l HttpListener) ShutdownListener(listenerName string, instance *echo.Echo,
 	notifier <- nil
 }
 
-// create new deployer instance
+// create new http listener instance
 func NewHttpListenerCustom() HttpListener {
 	d := HttpListener{}
 	return d

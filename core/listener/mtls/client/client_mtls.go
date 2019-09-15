@@ -59,7 +59,7 @@ func init() {
 }
 
 // executes a mutual tls configured https requests
-func MakeRequest(client *fasthttp.Client, url string, content []byte) ([]byte, error) {
+func mTLSRequest(client *fasthttp.Client, url string, content []byte) ([]byte, error) {
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(url)                    //set URL
 	req.Header.SetMethodBytes([]byte("POST")) //set method mode

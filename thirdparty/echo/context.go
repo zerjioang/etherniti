@@ -317,8 +317,7 @@ func (c *Context) Set(key string, val interface{}) {
 }
 
 func (c *Context) Bind(i interface{}) error {
-	err := json.NewDecoder(c.request.Body).Decode(i)
-	return err
+	return json.NewDecoder(c.request.Body).Decode(i)
 }
 
 func (c *Context) Render(code int, name string, data interface{}) (err error) {
