@@ -31,7 +31,7 @@ func TestIndexHandler(t *testing.T) {
 
 	//build this test execution context
 	c := e.NewContext(req, rec)
-	c.Preload()
+	c.Preload(req, rec)
 
 	// build our controller
 	ctl := controllers.NewIndexController()
