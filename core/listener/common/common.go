@@ -17,11 +17,19 @@ var (
 	cfg = config.GetDefaultOpts()
 	//listening ip:port
 	ListenAddr = cfg.GetListeningAddressWithPort()
+	// secure listening ip:port
+	ListenAddrSecure = cfg.GetListeningSecureAddressWithPort()
 	// listening interface
 	ListenInterface = cfg.GetHttpInterface()
 	// define http server config for listener service
 	DefaultHttpServerConfig = &http.Server{
 		Addr:         ListenAddr,
+		ReadTimeout:  3 * time.Second,
+		WriteTimeout: 3 * time.Second,
+	}
+	// define https server config for listener service
+	DefaultHttpsServerConfig = &http.Server{
+		Addr:         ListenAddrSecure,
 		ReadTimeout:  3 * time.Second,
 		WriteTimeout: 3 * time.Second,
 	}

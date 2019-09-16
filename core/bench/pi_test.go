@@ -17,7 +17,7 @@ func TestMonteCarlo(t *testing.T) {
 
 	counts := make([]int, cores)
 
-	// 30 milion samples
+	// 30 million samples
 	samples := 30000000
 
 	start := monotonic.Now()

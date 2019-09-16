@@ -43,11 +43,12 @@ type EthernitiOptions struct {
 	//swagger listening address
 	SwaggerAddress string
 	// http service listening address
-	ListeningAddress string
-	ListeningPort    int
-	HttpInterface    string
-	ListeningModeStr string
-	ListeningMode    listener.ServiceType
+	ListeningAddress    string
+	ListeningPort       int
+	SecureListeningPort int
+	HttpInterface       string
+	ListeningModeStr    string
+	ListeningMode       listener.ServiceType
 	// automatic browser open configuration
 	OpenBrowserOnSuccess bool
 
@@ -74,8 +75,8 @@ type EthernitiOptions struct {
 var (
 	// default etherniti proxy options
 	defaultOptions = &EthernitiOptions{
-		LogLevelStr:             "debug",
-		LogLevel:                log.DEBUG,
+		LogLevelStr:             "warn",
+		LogLevel:                log.WARN,
 		LoggingEnabled:          true,
 		CORSEnabled:             true,
 		SecureModeEnabled:       true,
@@ -88,6 +89,7 @@ var (
 		SwaggerAddress:          "127.0.0.1",
 		ListeningAddress:        "127.0.0.1",
 		ListeningPort:           8080,
+		SecureListeningPort:     4430,
 		HttpInterface:           "127.0.0.1",
 		ListeningModeStr:        "http",
 		ListeningMode:           listener.HttpMode,
@@ -144,6 +146,8 @@ func (eo *EthernitiOptions) preload() {
 	eo.LogLevelStr = eo.conditionalOverwrite(eo.envData.String(XEthernitiLogLevel), eo.LogLevelStr)
 	//resolve current logger level from string
 	eo.LogLevel = eo.logLevelResolver()
+	logger.Debug("updating log level to specified level: ", eo.LogLevel)
+	logger.Level(eo.LogLevel)
 
 	// load env variables to enable/disable modules
 	logger.Debug("reading log status from env")
@@ -174,6 +178,9 @@ func (eo *EthernitiOptions) preload() {
 	eo.ListeningAddress = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningAddress), eo.ListeningAddress)
 	logger.Debug("reading requested listening port from env")
 	eo.ListeningPort = eo.envData.Int(XEthernitiListeningPort, 8080)
+	logger.Debug("reading requested secure listening port from env")
+	eo.SecureListeningPort = eo.envData.Int(XEthernitiSecureListeningPort, 4430)
+
 	logger.Debug("reading requested listening interface address from env")
 	eo.HttpInterface = eo.conditionalOverwrite(eo.envData.String(XEthernitiListeningInterface), eo.HttpInterface)
 
@@ -261,6 +268,9 @@ func (eo *EthernitiOptions) TokenExpiration() fastime.Duration {
 func (eo *EthernitiOptions) GetListeningAddressWithPort() string {
 	return eo.ListeningAddress + ":" + eo.GetListeningPortStr()
 }
+func (eo *EthernitiOptions) GetListeningSecureAddressWithPort() string {
+	return eo.ListeningAddress + ":" + eo.GetSecureListeningPortStr()
+}
 func (eo *EthernitiOptions) GetURI() string {
 	return "http://" + eo.GetListeningAddressWithPort()
 }
@@ -269,13 +279,17 @@ func (eo *EthernitiOptions) GetListeningPortStr() string {
 	return strconv.Itoa(eo.ListeningPort)
 }
 
+func (eo *EthernitiOptions) GetSecureListeningPortStr() string {
+	return strconv.Itoa(eo.SecureListeningPort)
+}
+
 func (eo *EthernitiOptions) GetHttpInterface() string {
 	return eo.HttpInterface
 }
 
 //simply converts http requests into https
 func (eo *EthernitiOptions) GetRedirectUrl(host string, path string) string {
-	return "https://" + eo.GetListeningAddressWithPort() + path
+	return "https://" + eo.GetListeningSecureAddressWithPort() + path
 }
 
 // get SSL certificate cert.pem from proper source:

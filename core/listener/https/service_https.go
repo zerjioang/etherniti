@@ -7,7 +7,7 @@ import (
 	"crypto/tls"
 	"net/http"
 
-	http2 "github.com/zerjioang/etherniti/core/listener/http"
+	base "github.com/zerjioang/etherniti/core/listener/http"
 
 	"github.com/zerjioang/etherniti/core/listener/middleware"
 
@@ -26,12 +26,12 @@ var (
 	//default etherniti proxy configuration
 	cfg = config.GetDefaultOpts()
 	//variables used when HTTPS is requested
-	localhostCert tls.Certificate
-	certEtr       error
+	proxyCertificate tls.Certificate
+	certErr          error
 )
 
 type HttpsListener struct {
-	http2.HttpListener
+	base.HttpListener
 }
 
 func recoverFromPem() {
@@ -46,7 +46,7 @@ func init() {
 	keyBytes := cfg.GetKeyPem()
 	if certBytes != nil && len(certBytes) > 0 &&
 		keyBytes != nil && len(keyBytes) > 0 {
-		localhostCert, certEtr = tls.X509KeyPair(
+		proxyCertificate, certErr = tls.X509KeyPair(
 			certBytes,
 			keyBytes,
 		)
@@ -56,7 +56,7 @@ func init() {
 }
 
 func (l HttpsListener) GetLocalHostTLS() (tls.Certificate, error) {
-	return localhostCert, certEtr
+	return proxyCertificate, certErr
 }
 
 //fetch specific server configuration
@@ -78,7 +78,7 @@ func (l HttpsListener) Listen(notifier chan error) {
 		logger.Info("starting http server...")
 		err := httpServerInstance.StartServer(common.DefaultHttpServerConfig)
 		if err != nil {
-			logger.Error("shutting down http the server", err)
+			logger.Error("shutting down http the server: ", err)
 			notifier <- err
 		}
 	}()
@@ -88,14 +88,14 @@ func (l HttpsListener) Listen(notifier chan error) {
 	go func() {
 		s, err := l.buildServerConfig(secureServer)
 		if err != nil {
-			logger.Error("failed to build https server configuration", err)
+			logger.Error("failed to build https server configuration: ", err)
 			notifier <- err
 		} else {
 			logger.Info("starting https server...")
 			swagger.ConfigureFromTemplate()
 			err := secureServer.StartServer(s)
 			if err != nil {
-				logger.Error("shutting down https the server", err)
+				logger.Error("shutting down https the server: ", err)
 				notifier <- err
 			}
 		}
@@ -109,21 +109,34 @@ func (l HttpsListener) Listen(notifier chan error) {
 func (l HttpsListener) buildServerConfig(e *echo.Echo) (*http.Server, error) {
 	cert, err := l.GetLocalHostTLS()
 	if err != nil {
-		log.Fatal("failed to setup TLS configuration due to stack", err)
+		log.Fatal("failed to setup TLS configuration due to error: ", err)
 		return nil, err
 	}
 
-	//prepare tls configuration
-	var tlsConf tls.Config
-	tlsConf.Certificates = []tls.Certificate{cert}
+	// prepare tls configuration
+	// and get a perfect SSL Labs Score
+	tlsConf := &tls.Config{
+		MinVersion:               tls.VersionTLS12,
+		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+		},
+		Certificates: []tls.Certificate{cert},
+	}
 	if !e.DisableHTTP2 {
 		tlsConf.NextProtos = append(tlsConf.NextProtos, "h2")
 	}
 
 	//configure custom secure server
 	// which is default http config + tls data
-	secureServerConfig := common.DefaultHttpServerConfig
-	secureServerConfig.TLSConfig = &tlsConf
+	secureServerConfig := common.DefaultHttpsServerConfig
+	secureServerConfig.TLSConfig = tlsConf
 	return secureServerConfig, nil
 }
 
@@ -136,6 +149,6 @@ func NewHttpsListenerCustom() HttpsListener {
 // create new deployer instance
 func NewHttpsListener() listener.ListenerInterface {
 	d := HttpsListener{}
-	d.HttpListener = http2.NewHttpListenerCustom()
+	d.HttpListener = base.NewHttpListenerCustom()
 	return d
 }

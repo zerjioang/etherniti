@@ -6,13 +6,14 @@ package middleware
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/modules/metrics/grafana"
+	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus"
+
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/controllers/ws"
 	"github.com/zerjioang/etherniti/core/modules/cyber"
 	"github.com/zerjioang/etherniti/core/modules/httpcache"
 	"github.com/zerjioang/etherniti/core/server/ratelimit"
-
-	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus"
 
 	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
 
@@ -100,7 +101,11 @@ func ConfigureServerRoutes(e *echo.Echo) {
 
 	// only for enterprise version, add suport for metrics
 	if edition.IsEnterprise() && opts.MetricsEnabled {
-		logger.Info("[LAYER] /=> metrics")
+		logger.Info("[LAYER] /=> grafana metrics")
+		e.Pre(grafana.MetricsCollector)
+	}
+	if edition.IsEnterprise() && opts.MetricsEnabled {
+		logger.Info("[LAYER] /=> promoetheus metrics")
 		e.Pre(prometheus.MetricsCollector)
 	}
 

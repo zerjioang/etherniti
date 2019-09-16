@@ -26,11 +26,12 @@ const (
 	XEthernitiSwaggerAddress          = "X_ETHERNITI_SWAGGER_ADDRESS"
 
 	// proxy listener configuration
-	XEthernitiListeningAddress   = "X_ETHERNITI_LISTENING_ADDRESS"
-	XEthernitiListeningPort      = "X_ETHERNITI_LISTENING_PORT"
-	XEthernitiListeningInterface = "X_ETHERNITI_LISTENING_INTERFACE"
-	XEthernitiListeningMode      = "X_ETHERNITI_LISTENING_MODE"
-	XEthernitiAutoOpenBrowser    = "X_ETHERNITI_AUTO_OPEN_BROWSER"
+	XEthernitiListeningAddress    = "X_ETHERNITI_LISTENING_ADDRESS"
+	XEthernitiListeningPort       = "X_ETHERNITI_LISTENING_PORT"
+	XEthernitiSecureListeningPort = "X_ETHERNITI_SECURE_LISTENING_PORT"
+	XEthernitiListeningInterface  = "X_ETHERNITI_LISTENING_INTERFACE"
+	XEthernitiListeningMode       = "X_ETHERNITI_LISTENING_MODE"
+	XEthernitiAutoOpenBrowser     = "X_ETHERNITI_AUTO_OPEN_BROWSER"
 
 	// infura service configuration
 	XEthernitiInfuraToken = "X_ETHERNITI_INFURA_TOKEN"

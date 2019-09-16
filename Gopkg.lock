@@ -587,7 +587,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "3720d1ec36787cbb1ba1d4b76e4b0049db3ea911"
+  revision = "1d8cfc4bd2ca13365f3f4e2ee8712d92172aa1ed"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"

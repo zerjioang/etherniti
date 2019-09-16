@@ -10,7 +10,7 @@ import (
 )
 
 func BenchmarkEnvironment(b *testing.B) {
-	b.Run("get-env", func(b *testing.B) {
+	b.Run("new-env", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -19,7 +19,7 @@ func BenchmarkEnvironment(b *testing.B) {
 			_ = New()
 		}
 	})
-	b.Run("get-env-parallel", func(b *testing.B) {
+	b.Run("new-env-parallel", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)

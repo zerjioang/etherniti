@@ -3428,7 +3428,7 @@
           <title>Etherniti - High Performance Web3 REST Proxy</title>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,500" rel="stylesheet">
+          <link href="/static/css/ibm-plex-sans.css" rel="stylesheet">
          <style type="text/css">
             *, html, body, p, div {
                font-family: 'IBM Plex Sans', sans-serif;
@@ -3450,8 +3450,9 @@
                background: #171717;
             }
          </style>
+         <link href="/static/css/cleanscroll.css" rel="stylesheet">
          <noscript>
-            <link rel="stylesheet" href="assets/css/noscript.css" />
+            <link rel="stylesheet" href="/static/css/noscript.css" />
          </noscript>
       </head>
       <body class="is-preload bg-gradient">
@@ -3473,7 +3474,7 @@
          </section>
       </div>
       <!-- Scripts -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+      <script src="/static/js/jquery.min.js"></script>
       <script type="text/javascript">
          (function($) {
          
@@ -3498,7 +3499,7 @@
          // Play initial animations on page load.
          $window.on('load', function() {
          window.setTimeout(function() {
-         $body.removeClass('is-preload');
+          $body.removeClass('is-preload');
          }, 100);
          // show console message for curious people
             console.log("Welcome to Etherniti");

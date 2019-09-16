@@ -4,7 +4,7 @@
     "description": "$title definition",
     "version": "$version",
     "title": "$title",
-    "termsOfService": "https://docs.etherniti.org/about/tos/",
+    "termsOfService": "https://docs.etherniti.org/about/",
     "contact": {
       "email": "core@etherniti.org"
     },

@@ -10,7 +10,7 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/listener/common"
-	http2 "github.com/zerjioang/etherniti/core/listener/http"
+	base "github.com/zerjioang/etherniti/core/listener/http"
 	"github.com/zerjioang/etherniti/core/listener/https"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/def/listener"
@@ -54,16 +54,24 @@ func init() {
 	// The first two items are the most imporant!
 	// Without them there is a potential authentication bypass vulnerability.
 	tlsConfig = &tls.Config{
+		// TLS 1.2 because we can
+		MinVersion:       tls.VersionTLS12,
+		CurvePreferences: []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		// PFS because we can but this will reject client with RSA certificates
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+		},
 		// Ensure that we only use our "CA" to validate certificates
 		ClientCAs: caCertPool,
 		// Reject any TLS certificate that cannot be validated
 		ClientAuth: tls.RequireAndVerifyClientCert,
-		// PFS because we can but this will reject client with RSA certificates
-		CipherSuites: []uint16{tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384},
 		// Force it server side
 		PreferServerCipherSuites: true,
-		// TLS 1.2 because we can
-		MinVersion: tls.VersionTLS12,
 	}
 	tlsConfig.BuildNameToCertificate()
 }
@@ -71,7 +79,7 @@ func init() {
 // fetch specific server configuration
 // in this case, we return basic http configuration + mtls configuration
 func (l MtlsListener) ServerConfig() *http.Server {
-	mtlsServer := common.DefaultHttpServerConfig
+	mtlsServer := common.DefaultHttpsServerConfig
 	mtlsServer.TLSConfig = tlsConfig
 	return mtlsServer
 }
@@ -79,6 +87,6 @@ func (l MtlsListener) ServerConfig() *http.Server {
 // create new deployer instance
 func NewMtlsListener() listener.ListenerInterface {
 	d := MtlsListener{}
-	d.HttpListener = http2.NewHttpListenerCustom()
+	d.HttpListener = base.NewHttpListenerCustom()
 	return d
 }
