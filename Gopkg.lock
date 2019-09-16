@@ -267,7 +267,7 @@
     "x86",
   ]
   pruneopts = "UT"
-  revision = "bb615f61ce85790a1667efc145c66e917cce1a39"
+  revision = "0bcbe827310c5a75981497d63dec804cb7ec5448"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -350,7 +350,7 @@
   version = "v0.7.0"
 
 [[projects]]
-  digest = "1:8232537905152d6a0b116b9af5a0868fcac0e84eb02ec5a150624c077bdedb0b"
+  digest = "1:a210815b437763623ecca8eb91e6a0bf4f2d6773c5a6c9aec0e28f19e5fd6deb"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
@@ -358,8 +358,8 @@
     "internal/util",
   ]
   pruneopts = "UT"
-  revision = "00ec24a6a2d86e7074629c8384715dbb05adccd8"
-  version = "v0.0.4"
+  revision = "499c85531f756d1129edd26485a5f73871eeb308"
+  version = "v0.0.5"
 
 [[projects]]
   digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
@@ -537,7 +537,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:dbaa411edf3f112593eafafdd3d403a3022b252f706546fdba5e4634923b7061"
+  digest = "1:0c7e14ebe388b07867c4b557190437be866cb513b43ba7ea82247d9e80f92c37"
   name = "golang.org/x/net"
   packages = [
     "bpf",
@@ -553,11 +553,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "24e19bdeb0f2d062d8e2640d50a7aaf2a7f80e7a"
+  revision = "c8589233b77dde5edd2205ba8a4fb5c9c2472556"
 
 [[projects]]
   branch = "master"
-  digest = "1:c040f0e35e4c568e8fb286b0a7d91483e43ab4cfae1a2e10fecb387d1ce5ab46"
+  digest = "1:7f8bcb69ec5161b8d897e4584b9f27705eb6b051bb1b46695ae524c2907848c3"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -565,7 +565,7 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "c3b328c6e5a763a2bfc82a48b4bd855037210934"
+  revision = "1a3b71a79e4aff00d87e69e0744746d7d67a3f8f"
 
 [[projects]]
   branch = "master"
@@ -587,7 +587,7 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "1d8cfc4bd2ca13365f3f4e2ee8712d92172aa1ed"
+  revision = "e45ffcd953cceb219dc536e24468c0d22a5be010"
 
 [[projects]]
   digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
@@ -733,6 +733,7 @@
     "golang.org/x/net/ipv6",
     "golang.org/x/sys/cpu",
     "golang.org/x/sys/unix",
+    "golang.org/x/tools/go/ast/astutil",
     "golang.org/x/tools/go/buildutil",
     "golang.org/x/tools/go/loader",
     "golang.org/x/tools/refactor/importgraph",
