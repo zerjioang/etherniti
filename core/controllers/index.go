@@ -41,6 +41,11 @@ type IndexController struct {
 	// use channels: https://talks.golang.org/2012/concurrency.slide#25
 }
 
+const (
+	//bytes of welcome message in xml
+	IndeWelcomeXml = `<?xml version="1.0" encoding="UTF-8"?>
+<root><cluster_name>apollo-api</cluster_name><commit>latest</commit><description>High Performance Web3 REST Proxy</description><edition>oss</edition><env>development</env><name>etherniti-public-api</name><tagline>dapps everywhere</tagline><version>latest</version></root>`
+)
 var (
 	// monitor disk usage and get basic stats
 	diskMonitor *disk.DiskStatus
@@ -66,6 +71,7 @@ var (
 			return wrapper
 		},
 	}
+	infoBytes = []byte("info")
 )
 
 func init() {
@@ -73,11 +79,9 @@ func init() {
 	diskMonitor = disk.DiskUsagePtr()
 	// monitor memory usage and get basic stats
 	memMonitor = mem.MemStatusMonitor()
-	// integrity ticker (24h)
-	//integrityTicker = interval.NewTask(24 * time.Hour, interval.Loop).Do()
-	integrityTicker = interval.NewTask("integrity", 5*time.Second, interval.Loop, true, onNewIntegrityData).Do()
-	// status ticker update each 5s
-	statusTicker = interval.NewTask("status", 5*time.Second, interval.Loop, true, onNewStatusData).Do()
+	integrityTicker = interval.NewTask("integrity", 24*time.Hour, interval.Loop, true, onNewIntegrityData).Do()
+	// status ticker update each 10s
+	statusTicker = interval.NewTask("status", 10*time.Second, interval.Loop, true, onNewStatusData).Do()
 	// start monitoring root path
 	diskMonitor.Start("/")
 	// load info bytes
@@ -115,19 +119,21 @@ func (ctl *IndexController) Index(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
 	if c.IsJsonRequest() {
 		return c.JSONBlob(protocol.StatusOK, indexWelcomeBytes)
+	} else if c.IsXmlRequest() {
+		return c.FastBlob(protocol.StatusOK, echo.MIMEXml, []byte(IndeWelcomeXml))
 	}
 	return c.HTMLBlob(protocol.StatusOK, indexWelcomeHtmlBytes)
 }
 
 func (ctl *IndexController) Info(c *echo.Context) error {
 	c.OnSuccessCachePolicy = constants.CacheInfinite
-	return api.SendSuccess(c, []byte("info"), serverInfo)
+	return api.SendSuccess(c, infoBytes, serverInfo)
 }
 
 func (ctl *IndexController) Status(c *echo.Context) error {
-	data := ctl.status()
+	d := ctl.status()
 	c.OnSuccessCachePolicy = 5
-	return c.JSONBlob(protocol.StatusOK, data)
+	return c.JSONBlob(protocol.StatusOK, d)
 }
 
 func (ctl *IndexController) status() []byte {
@@ -137,9 +143,9 @@ func (ctl *IndexController) status() []byte {
 // return server side integrity message signed with private ecdsa key
 // concurrency safe
 func (ctl *IndexController) Integrity(c *echo.Context) error {
-	data := ctl.integrity()
+	d := ctl.integrity()
 	c.OnSuccessCachePolicy = constants.CacheOneDay
-	return c.JSONBlob(protocol.StatusOK, data)
+	return c.JSONBlob(protocol.StatusOK, d)
 }
 
 func (ctl *IndexController) integrity() []byte {
@@ -160,19 +166,20 @@ func (ctl *IndexController) Ping(c *echo.Context) error {
 	}
 }
 
+// This library attempts to send an "unprivileged" ping via UDP. On linux, this must be enabled by setting
+//
+// sudo sysctl -w net.ipv4.ping_group_range="0   2147483647"
 func (ctl *IndexController) ping(addr string) (*ping.Statistics, error) {
 
 	pinger, err := ping.NewPinger(addr)
-	pinger.Count = 5
-	pinger.Interval = time.Second * 1
-	pinger.Timeout = time.Second * 2 // max: count * interval
-	pinger.SetPrivileged(false)
-
 	if err != nil {
 		logger.Error("failed to create new ping tester: ", err.Error())
 		return nil, err
 	}
-
+	pinger.Count = 5
+	pinger.Interval = time.Second * 1
+	pinger.Timeout = time.Second * 2 // max: count * interval
+	pinger.SetPrivileged(false)
 	pinger.OnRecv = func(pkt *ping.Packet) {
 		fmt.Printf("%d bytes from %s: icmp_seq=%d time=%v ttl=%v\n",
 			pkt.Nbytes,

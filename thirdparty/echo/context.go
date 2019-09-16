@@ -62,6 +62,7 @@ type Context struct {
 
 	//boots data cache value
 	isJson     bool
+	isXml     bool
 	isTls      bool
 	isWs       bool
 	SchemeType constants.RequestScheme
@@ -106,6 +107,7 @@ func (c *Context) Preload(r *http.Request, w http.ResponseWriter) {
 	//TODO content-type negotiation
 	c.contentType = acceptHeader
 	c.isJson = acceptHeader == MIMEApplicationJSON
+	c.isXml = acceptHeader == MIMEXml
 	c.isTls = c.request.TLS != nil
 	c.isWs = strings.ToLower(c.request.Header.Get(HeaderUpgrade)) == "websocket"
 	c.SchemeName = c.resolveScheme()
@@ -670,6 +672,9 @@ func (c *Context) ReadToken(tokenName string) string {
 
 func (c *Context) IsJsonRequest() bool {
 	return c.isJson
+}
+func (c *Context) IsXmlRequest() bool {
+	return c.isXml
 }
 
 // read user email

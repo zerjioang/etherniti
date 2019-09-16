@@ -505,7 +505,7 @@
           "internal"
         ],
         "summary": "Proxy internal benchmark score",
-        "description": "Proxy internal benchmark score",
+        "description": "Proxy internal benchmark score. It measures computational resources against current server architecture and configuration. You can use this metric to compare different service providers in order to get a well balance between computing power and pricing.",
         "operationId": "internal-score",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
