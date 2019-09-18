@@ -1,6 +1,6 @@
 #include<stdbool.h>
 
-# define level 32
+#define level 32
 
 bool isDigit(char c) {
   if ( c >= '0' && c <= '9' )   
