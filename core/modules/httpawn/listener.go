@@ -1,4 +1,4 @@
-package fasthttp
+package httpawn
 
 import (
 	"fmt"
@@ -7,33 +7,21 @@ import (
 	"time"
 )
 
-/*var (
-	socketRequestPool *sync.Pool
+const (
+	messageBufferSize         = 1024
+	concurrentConnectionsSize = 128
+	separator                 = "\n"
 )
 
-func init(){
-	initPool()
-}
+var (
+	separatorRaw = []byte(separator)
+)
 
-// Func to init pool
-func initPool() {
-	socketRequestPool = &sync.Pool {
-		New: func()interface{} {
-			return new(socketRequest)
-		},
-	}
-}*/
+func Serve(address string, r *Router) error {
 
-type socketRequest struct {
-	client net.Conn
-	raw    []byte
-}
-
-func Serve(address string) error {
-
-	newConns := make(chan net.Conn, 128)
-	deadConns := make(chan net.Conn, 128)
-	parser := make(chan socketRequest, 128)
+	newConns := make(chan net.Conn, concurrentConnectionsSize)
+	deadConns := make(chan net.Conn, concurrentConnectionsSize)
+	parser := make(chan *socketRequest, concurrentConnectionsSize)
 
 	println("serving tcp")
 	l, err := net.Listen("tcp4", address)
@@ -61,7 +49,7 @@ func Serve(address string) error {
 		// reads socket data and converts it to []byte
 		case conn := <-newConns:
 			go func() {
-				buf := make([]byte, 1024)
+				buf := make([]byte, messageBufferSize)
 				for {
 					nr, err := conn.Read(buf)
 					if err != nil {
@@ -69,7 +57,7 @@ func Serve(address string) error {
 						break
 					} else {
 						raw := buf[0:nr]
-						parser <- socketRequest{client: conn, raw:raw}
+						parser <- sPool.Load(conn, raw)
 					}
 				}
 			}()
@@ -78,11 +66,15 @@ func Serve(address string) error {
 			_ = deadConn.Close()
 		// process readed []byte data and writes a response back to the client
 		case req := <-parser:
-			// todo process http request
+			header, body := processHttpRequest(r, req)
 			// write response back to the client
-			_,_ = req.client.Write(req.raw)
+			_, _ = req.client.Write(header)
+			_, _ = req.client.Write(separatorRaw)
+			_, _ = req.client.Write(body)
 			// close the connection with that client
 			_ = req.client.Close()
+			// put request back in the pool
+			sPool.Store(req)
 		}
 	}
 	return l.Close()

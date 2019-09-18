@@ -31,6 +31,9 @@ import (
 // go tool pprof -http=:6060 heap.out
 func TestLauncher(t *testing.T) {
 	t.Run("main-test", func(t *testing.T) {
+		Launcher()
+	})
+	t.Run("main-test-profiling", func(t *testing.T) {
 		// create a locking channel for notification
 		notif := make(chan bool)
 		// we need a webserver to get the pprof webserver
@@ -38,7 +41,7 @@ func TestLauncher(t *testing.T) {
 			notif <- true
 			log.Println(http.ListenAndServe("localhost:6060", nil))
 		}()
-		<- notif
+		<-notif
 		log.Println("running etherniti code with profiling enabled")
 		Launcher()
 	})
