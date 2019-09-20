@@ -56,7 +56,8 @@ func Serve(address string) error {
 		}
 	}()
 
-	for {
+	listen := true
+	for listen {
 		select {
 		// reads socket data and converts it to []byte
 		case conn := <-newConns:
@@ -69,7 +70,7 @@ func Serve(address string) error {
 						break
 					} else {
 						raw := buf[0:nr]
-						parser <- socketRequest{client: conn, raw:raw}
+						parser <- socketRequest{client: conn, raw: raw}
 					}
 				}
 			}()
@@ -80,7 +81,7 @@ func Serve(address string) error {
 		case req := <-parser:
 			// todo process http request
 			// write response back to the client
-			_,_ = req.client.Write(req.raw)
+			_, _ = req.client.Write(req.raw)
 			// close the connection with that client
 			_ = req.client.Close()
 		}

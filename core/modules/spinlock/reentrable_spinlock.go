@@ -13,14 +13,14 @@ import (
 )
 
 // Reentrant allowable spin locks
-type spinLock struct {
+type ReentrableSpinLock struct {
 	owner int
 	count int
 }
 
-func (sl *spinLock) Lock() {
+func (sl *ReentrableSpinLock) Lock() {
 	me := GetGoroutineId()
-	if sl.owner == me {/// If the current thread has acquired the lock, the number of threads increases by one, and then returns
+	if sl.owner == me { /// If the current thread has acquired the lock, the number of threads increases by one, and then returns
 		sl.count++
 		return
 	}
@@ -29,11 +29,11 @@ func (sl *spinLock) Lock() {
 		runtime.Gosched()
 	}
 }
-func (sl *spinLock) Unlock() {
+func (sl *ReentrableSpinLock) Unlock() {
 	if sl.owner != GetGoroutineId() {
 		panic("illegalMonitorStateError")
 	}
-	if sl. count > 0 {// if greater than 0, it means that the current thread has acquired the lock many times, and the release lock is simulated by subtracting count from one.
+	if sl.count > 0 { // if greater than 0, it means that the current thread has acquired the lock many times, and the release lock is simulated by subtracting count from one.
 		sl.count--
 	} else {
 		// If count== 0, the lock can be released, which ensures that the number of acquisitions of the lock is the same as the number of releases of the lock.
@@ -59,7 +59,6 @@ func GetGoroutineId() int {
 }
 
 func NewSpinLock() sync.Locker {
-	var lock spinLock
+	var lock ReentrableSpinLock
 	return &lock
 }
-

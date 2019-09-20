@@ -38,7 +38,7 @@ func TestLauncher(t *testing.T) {
 			notif <- true
 			log.Println(http.ListenAndServe("localhost:6060", nil))
 		}()
-		<- notif
+		<-notif
 		log.Println("running etherniti code with profiling enabled")
 		Launcher()
 	})

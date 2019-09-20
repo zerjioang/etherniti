@@ -62,7 +62,7 @@ type Context struct {
 
 	//boots data cache value
 	isJson     bool
-	isXml     bool
+	isXml      bool
 	isTls      bool
 	isWs       bool
 	SchemeType constants.RequestScheme

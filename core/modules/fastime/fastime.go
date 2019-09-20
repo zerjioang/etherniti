@@ -5,19 +5,28 @@ package fastime
 
 import (
 	"encoding/binary"
-	"time"
 	"unsafe"
 )
 
+// A Duration represents the elapsed time between two instants
+// as an int64 nanosecond count. The representation limits the
+// largest representable duration to approximately 290 years.
 type Duration int64
 
 // Nanoseconds returns the duration as an integer nanosecond count.
 func (d Duration) Nanoseconds() int64 { return int64(d) }
 
-func (d Duration) Duration() time.Duration {
-	return time.Duration(d)
-}
-
+// Common durations. There is no definition for units of Day or larger
+// to avoid confusion across daylight savings time zone transitions.
+//
+// To count the number of units in a Duration, divide:
+//	second := time.Second
+//	fmt.Print(int64(second/time.Millisecond)) // prints 1000
+//
+// To convert an integer number of units to a Duration, multiply:
+//	seconds := 10
+//	fmt.Print(time.Duration(seconds)*time.Second) // prints 10s
+//
 const (
 	Nanosecond  Duration = 1
 	Microsecond          = 1000 * Nanosecond
@@ -33,34 +42,40 @@ type FastTime struct {
 	sec  int64
 }
 
-func (fastTime FastTime) Unix() int64 {
-	return fastTime.sec
+func (t FastTime) Unix() int64 {
+	return t.sec
 }
 
-func (fastTime FastTime) Nanos() uint32 {
-	return fastTime.nsec
+func (t FastTime) Nanos() uint32 {
+	return t.nsec
 }
 
-func (fastTime FastTime) SafeBytes() []byte {
+func (t FastTime) SafeBytes() []byte {
 	buf := make([]byte, binary.MaxVarintLen64)
-	n := binary.PutVarint(buf, fastTime.sec)
+	n := binary.PutVarint(buf, t.sec)
 	return buf[:n]
 }
 
-func (fastTime FastTime) UnsafeBytes() []byte {
-	return (*[8]byte)(unsafe.Pointer(&fastTime.sec))[:]
+func (t FastTime) UnsafeBytes() []byte {
+	return (*[8]byte)(unsafe.Pointer(&t.sec))[:]
 }
 
-func (fastTime FastTime) Add(duration Duration) FastTime {
+func (t FastTime) Add(duration Duration) FastTime {
 	ns := duration.Nanoseconds()
-	fastTime.nsec += uint32(ns)
-	fastTime.sec += ns / 1000000000
-	return fastTime
+	t.nsec += uint32(ns)
+	t.sec += ns / 1000000000
+	return t
+}
+
+func Unix() int64 {
+	_, t := internalNow()
+	return t
 }
 
 func Now() FastTime {
-	t := time.Now()
-	return FromTime(t.Nanosecond(), t.Unix())
+	t := FastTime{}
+	t.now()
+	return t
 }
 
 func FromTime(nanos int, unix int64) FastTime {
@@ -68,4 +83,8 @@ func FromTime(nanos int, unix int64) FastTime {
 		nsec: uint32(nanos),
 		sec:  unix,
 	}
+}
+
+func NewFastTime() FastTime {
+	return FastTime{}
 }

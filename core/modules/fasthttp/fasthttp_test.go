@@ -41,7 +41,7 @@ func TestServe(t *testing.T) {
 			notif <- true
 			log.Println(http.ListenAndServe("localhost:6060", nil))
 		}()
-		<- notif
+		<-notif
 		log.Println("running fasthttp code with profiling enabled")
 		_ = Serve("localhost:3333")
 	})

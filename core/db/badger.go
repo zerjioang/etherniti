@@ -344,8 +344,8 @@ func NewBadgerStorageGC(options *Options) (*BadgerStorage, error) {
 			threshold = options.GCThreshold
 		}
 
-		storage.vlogTicker = time.NewTicker(gcInterval.Duration())
-		storage.mandatoryVlogTicker = time.NewTicker(mandatoryGCInterval.Duration())
+		storage.vlogTicker = time.NewTicker(time.Duration(gcInterval))
+		storage.mandatoryVlogTicker = time.NewTicker(time.Duration(mandatoryGCInterval))
 		go storage.runVlogGC(storage.instance, threshold)
 	}
 

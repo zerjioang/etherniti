@@ -46,6 +46,7 @@ const (
 	IndeWelcomeXml = `<?xml version="1.0" encoding="UTF-8"?>
 <root><cluster_name>apollo-api</cluster_name><commit>latest</commit><description>High Performance Web3 REST Proxy</description><edition>oss</edition><env>development</env><name>etherniti-public-api</name><tagline>dapps everywhere</tagline><version>latest</version></root>`
 )
+
 var (
 	// monitor disk usage and get basic stats
 	diskMonitor *disk.DiskStatus

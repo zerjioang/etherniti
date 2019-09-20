@@ -24,6 +24,11 @@ func TestFastTime(t *testing.T) {
 
 		}
 	})
+	t.Run("struct-now", func(t *testing.T) {
+		tt := NewFastTime()
+		tt.now()
+		t.Log(tt)
+	})
 	t.Run("add", func(t *testing.T) {
 		tm2 := Now()
 		u := tm2.Add(Nanosecond * 200)
@@ -33,12 +38,14 @@ func TestFastTime(t *testing.T) {
 			t.Error("failed to add time")
 		}
 	})
-	t.Run("unix", func(t *testing.T) {
+	t.Run("struct-unix", func(t *testing.T) {
 		tm2 := Now()
 		u := tm2.Unix()
-		if u > 0 {
-
-		}
+		t.Log(u)
+	})
+	t.Run("global-unix", func(t *testing.T) {
+		timenow := Unix()
+		t.Log(timenow)
 	})
 	t.Run("safe-bytes", func(t *testing.T) {
 		tm2 := Now()

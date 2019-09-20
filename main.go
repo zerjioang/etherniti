@@ -4,13 +4,14 @@
 package main
 
 import (
+	"os"
+	"runtime"
+	"syscall"
+
 	"github.com/zerjioang/etherniti/core/bench"
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/shared/notifier"
-	"os"
-	"runtime"
-	"syscall"
 
 	"github.com/zerjioang/etherniti/core/controllers"
 
@@ -71,7 +72,7 @@ func main() {
 	Launcher()
 }
 
-func Launcher(){
+func Launcher() {
 	/*
 		The GOMAXPROCS variable limits the number of operating system threads
 		that can execute user-level Go code simultaneously. There is no limit
