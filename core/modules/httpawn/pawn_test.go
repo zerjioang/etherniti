@@ -3,6 +3,8 @@ package httpawn_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/zerjioang/etherniti/core/modules/httpawn"
 )
 
@@ -12,6 +14,7 @@ func TestPawnServer(t *testing.T) {
 		server.GET("/", func(ctx *httpawn.Context) {
 			ctx.String("Hello World!")
 		})
-		server.Start(":8080")
+		err := server.Start(":8080")
+		assert.NoError(t, err)
 	})
 }

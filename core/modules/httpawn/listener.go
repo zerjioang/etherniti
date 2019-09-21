@@ -31,9 +31,10 @@ func Serve(address string, r *Router) error {
 	// some randomness
 	rand.Seed(time.Now().Unix())
 
-	// use a goroutine to accept new clients connections up to 128
+	// use a goroutine to accept new clients connections up to concurrentConnectionsSize without blocking
 	go func() {
 		for {
+			// TODO reuse connection objects
 			conn, err := l.Accept()
 			// customize our connection for performance
 			if err != nil {
@@ -72,6 +73,7 @@ func Serve(address string, r *Router) error {
 			_, _ = req.client.Write(separatorRaw)
 			_, _ = req.client.Write(body)
 			// close the connection with that client
+			// note: do not close connection if keep alive requested
 			_ = req.client.Close()
 			// put request back in the pool
 			sPool.Store(req)
