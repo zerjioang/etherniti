@@ -196,8 +196,8 @@
     "zlib",
   ]
   pruneopts = "UT"
-  revision = "9342d2c87674fc9ed5324d5d77d5f11f328bc11b"
-  version = "v1.8.3"
+  revision = "dbe23c5a61c1539a54e8a2927ca1a2e7bcc92caf"
+  version = "v1.8.4"
 
 [[projects]]
   digest = "1:923c4d7194b42e054b2eb8a6c62824ac55e23ececc1c7e48d4da69c971c55954"
@@ -249,7 +249,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7e8b852581596acce37bcb939a05d7d5ff27156045b50057e659e299c16fc1ca"
+  digest = "1:1c0746cc5facc7d8d3b77e4035d0df68fe72e01bd9833d9a566780a54c4be43a"
   name = "github.com/mmcloughlin/avo"
   packages = [
     "attr",
@@ -267,7 +267,7 @@
     "x86",
   ]
   pruneopts = "UT"
-  revision = "0bcbe827310c5a75981497d63dec804cb7ec5448"
+  revision = "c8004ba627cacd7bab12cf9243c2f14d89c71cbe"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -553,11 +553,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "c8589233b77dde5edd2205ba8a4fb5c9c2472556"
+  revision = "1a5e07d1ff72da30f660d3c95b312a20be31173c"
 
 [[projects]]
   branch = "master"
-  digest = "1:7f8bcb69ec5161b8d897e4584b9f27705eb6b051bb1b46695ae524c2907848c3"
+  digest = "1:bc63533a3e3dfb2e7b8b4b73581509ee32907f5c996a42b34f7de14a37a87a1c"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -565,11 +565,11 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "1a3b71a79e4aff00d87e69e0744746d7d67a3f8f"
+  revision = "0a153f010e6963173baba2306531d173aa843137"
 
 [[projects]]
   branch = "master"
-  digest = "1:55348d3c0dfffc1d4c8f4c6df4979acbeb82e6017d07fc4fd9c6ff1581fdfce1"
+  digest = "1:17323c4ee7c9ff5e2a67e217dd9dd0bd997e40ea31fc379b8e88bc5071e58d1f"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -587,10 +587,10 @@
     "refactor/importgraph",
   ]
   pruneopts = "UT"
-  revision = "e45ffcd953cceb219dc536e24468c0d22a5be010"
+  revision = "5eefd052ad727afc5e2e7b034c752b9d3d902b3b"
 
 [[projects]]
-  digest = "1:5d92636929931c2313387f6e312e4f0133cc4d30b47648aa145ff71143078ef0"
+  digest = "1:f8682de0e439bdcae1a139638fc5acac906bf9bb4d8e9485c5a425e451b9e221"
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -606,8 +606,8 @@
     "internal/remote_api",
   ]
   pruneopts = "UT"
-  revision = "5f2a59506353b8d5ba8cbbcd9f3c1f41f1eaf079"
-  version = "v1.6.2"
+  revision = "c71d63e301d75423acb410203c747cad31e9a5e7"
+  version = "v1.6.3"
 
 [[projects]]
   digest = "1:1b76f20b7719c244d5a25cb4588d516d2c50fc019505343c4908abcf2bcd8420"
