@@ -158,13 +158,61 @@
       "name": "external",
       "description": "Etherniti Web3 Proxy External API",
       "externalDocs": {
-        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy External resources at",
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy External API resources at",
         "url": "https://docs.etherniti.org/api/external"
+      }
+    },
+    {
+      "name": "ui",
+      "description": "Etherniti Web3 Proxy Dashboard Helper API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Dashboard Helper API at",
+        "url": "https://docs.etherniti.org/api/ui"
       }
     }
   ],
   "schemes": ["http", "https", "unix"],
   "paths": {
+    "/ui/bug": {
+      "post": {
+        "tags": [
+          "ui"
+        ],
+        "summary": "Report a bug to Etherniti maintainers",
+        "description": "Send a bug report or feature request to etherniti maintainers in order to be notified",
+        "operationId": "ui-bug-report",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response of bug report",
+            "example": {}
+          },
+          "400": {
+            "description": "unsuccesful response of bug report",
+            "example": {}
+          }
+        }
+      }
+    },
     "/web3/{network}/ql": {
       "post": {
         "tags": [

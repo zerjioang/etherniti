@@ -126,7 +126,7 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 		_, found := rdx.Get(req.Password)
 		if found {
 			logger.Error("etherniti wont allow account registration with provided password")
-			return api.ErrorStr(c, "Etherniti wont allow account registration with provided password. Provided account password was found on a known dictionary. Please use stronger password combination")
+			return api.ErrorStr(c, "Etherniti wont allow account registration with provided password because it was found on a known dictionary. Please use stronger password combination to Etherniti platform in order to have secure credentials.")
 		}
 
 		// 3 check validate email

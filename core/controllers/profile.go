@@ -21,6 +21,7 @@ type ProfileController struct {
 
 var (
 	//atomic counters stored on heap
+	// which supports concurrent access
 	profilesCreated counter32.Count32
 )
 

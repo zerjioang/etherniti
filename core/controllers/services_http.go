@@ -121,6 +121,11 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	NewSolcController().RegisterRouters(groupV1)
 
 	//register external api calls
+
+	// ui helper calls
+	uiGroup := groupV1.Group("/ui", next)
+	NewUIController(client).RegisterRouters(uiGroup)
+
 	// coin market cap: get eth price data
 	externalGroup := groupV1.Group("/external", next)
 	NewExternalController(client).RegisterRouters(externalGroup)
