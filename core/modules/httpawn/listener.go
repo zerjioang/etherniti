@@ -45,7 +45,8 @@ func Serve(address string, r *Router) error {
 		}
 	}()
 
-	for {
+	listen := true
+	for listen {
 		select {
 		// reads socket data and converts it to []byte
 		case conn := <-newConns:

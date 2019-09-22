@@ -18,6 +18,38 @@ func BenchmarkFastTime(b *testing.B) {
 			_ = Now()
 		}
 	})
+
+	b.Run("fastime-now-parallel", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		b.RunParallel(func(pb *testing.PB) {
+			for pb.Next() {
+				Now()
+			}
+		})
+	})
+
+	b.Run("fastime-struct-now", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			tt := NewFastTime()
+			tt.now()
+		}
+	})
+
+	b.Run("fastime-struct-reuse-now", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		tt := NewFastTime()
+		for n := 0; n < b.N; n++ {
+			tt.now()
+		}
+	})
+
 	b.Run("fastime-now-unix", func(b *testing.B) {
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -68,6 +100,17 @@ func BenchmarkFastTime(b *testing.B) {
 }
 
 func BenchmarkStandardTime(b *testing.B) {
+
+	b.Run("standard-parallel", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(1)
+		b.ResetTimer()
+		b.RunParallel(func(pb *testing.PB) {
+			for pb.Next() {
+				time.Now()
+			}
+		})
+	})
 
 	b.Run("standard-now", func(b *testing.B) {
 		b.ReportAllocs()
