@@ -23,9 +23,6 @@ site
 # ignore documentation builder
 **/python36_venv
 
-# ignore dashboard files
-**/dashboard
-
 **\.idea
 **/asm
 **/benchmarks
