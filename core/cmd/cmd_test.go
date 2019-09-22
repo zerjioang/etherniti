@@ -1,9 +1,10 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-package cmd
+package cmd_test
 
 import (
+	"github.com/zerjioang/etherniti/core/cmd"
 	"sync"
 	"testing"
 	"time"
@@ -12,7 +13,7 @@ import (
 func TestCmd(t *testing.T) {
 	t.Run("run-server", func(t *testing.T) {
 		notifier := make(chan error, 1)
-		RunServer(notifier)
+		cmd.RunServer(notifier)
 		time.Sleep(time.Millisecond * 200)
 	})
 	t.Run("run-server-goroutines", func(t *testing.T) {
@@ -22,7 +23,7 @@ func TestCmd(t *testing.T) {
 		notifier := make(chan error, total)
 		for i := 0; i < total; i++ {
 			go func() {
-				RunServer(notifier)
+				cmd.RunServer(notifier)
 				time.Sleep(time.Millisecond * 200)
 				g.Done()
 			}()

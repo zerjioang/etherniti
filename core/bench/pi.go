@@ -1,11 +1,11 @@
 package bench
 
 import (
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"math"
 	"math/rand"
 	"runtime"
 	"sync"
-	"time"
 
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/monotonic"
@@ -15,11 +15,11 @@ var (
 	// runtime benchmark execution score
 	runScore int64
 	// total runtime
-	totalTime time.Duration
+	totalTime fastime.Duration
 )
 
 func init() {
-	logger.Debug("loading internal p.o.s.t bencharmink")
+	logger.Debug("loading internal P.O.S.T benchmarking")
 	calculateScore()
 
 }
@@ -42,7 +42,7 @@ func calculateScore() {
 	wait.Add(cores)
 
 	for i := 0; i < cores; i++ {
-		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
+		go MonteCarlo(100.0, samples/cores, &counts[i], &wait)
 	}
 
 	wait.Wait()
@@ -62,14 +62,14 @@ func GetScore() int64 {
 	return runScore
 }
 
-func GetBenchTime() time.Duration {
+func GetBenchTime() fastime.Duration {
 	return totalTime
 }
 
-func monteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {
+func MonteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {
 	var x, y float64
 	count := 0
-	seed := rand.NewSource(time.Now().UnixNano())
+	seed := rand.NewSource(fastime.Unix())
 	random := rand.New(seed)
 
 	for i := 0; i < reps; i++ {

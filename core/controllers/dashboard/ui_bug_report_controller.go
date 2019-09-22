@@ -5,6 +5,7 @@ package dashboard
 
 import (
 	"errors"
+
 	"github.com/valyala/fasthttp"
 
 	"github.com/zerjioang/etherniti/core/api"
@@ -33,7 +34,6 @@ func NewUIController(client *fasthttp.Client) UIController {
 func (ctl UIController) bugReport(c *echo.Context) error {
 	return api.Error(c, ErrFeatureNotAvailable)
 }
-
 
 // implemented method from interface RouterRegistrable
 func (ctl UIController) RegisterRouters(router *echo.Group) {

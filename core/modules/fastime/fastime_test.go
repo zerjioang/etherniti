@@ -10,6 +10,13 @@ import (
 
 func TestFastTime(t *testing.T) {
 
+	t.Run("comparison", func(t *testing.T) {
+		unixStdTime := time.Now().UnixNano()
+		fastTime := Unix()
+		t.Log(unixStdTime, fastTime)
+		diff := fastTime - unixStdTime
+		t.Log(diff)
+	})
 	t.Run("duration", func(t *testing.T) {
 		var d Duration
 		d = Nanosecond * 200

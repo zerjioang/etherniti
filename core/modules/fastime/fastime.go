@@ -16,6 +16,10 @@ type Duration int64
 // Nanoseconds returns the duration as an integer nanosecond count.
 func (d Duration) Nanoseconds() int64 { return int64(d) }
 
+func (d Duration) Seconds() float64 {
+	return float64(d.Nanoseconds() / 1000000)
+}
+
 // Common durations. There is no definition for units of Day or larger
 // to avoid confusion across daylight savings time zone transitions.
 //
