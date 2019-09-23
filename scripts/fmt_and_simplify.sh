@@ -27,4 +27,4 @@ do
 	gofmt -s -w ${file}
 done
 
-echo "Code formatting done!"
+echo "(fmt and simplify) Code formatting done!"

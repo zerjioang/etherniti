@@ -39,4 +39,4 @@ do
 	${GOPATH}/bin/gotests -excl Benchmark.* -w ${file}
 done
 
-ok "Code formatting done!"
+ok "(gotests) Code formatting done!"

@@ -7,8 +7,9 @@ FROM preloader:latest as compiler
 
 MAINTAINER team@etherniti.org
 
-LABEL IMAGE             proxy-etherniti
-LABEL PROJECT           etherniti
+LABEL IMAGE=proxy-etherniti
+LABEL PROJECT=etherniti
+LABEL VERSION=1.1
 
 # production build parameters
 ARG BASE=/go/src/github.com/zerjioang/etherniti
@@ -18,110 +19,79 @@ ARG BUILD_VERSION=latest
 ARG FILE=proxy
 ARG ETHERNITI_GOOS=linux
 ARG ETHERNITI_GOARCH=amd64
-ARG USER=etherniti
+ARG TARGET_USER=etherniti
+ARG TARGET_GROUP=ethergroup
 ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/testdata
-
-ENV USER                etherniti
 
 # add source code to docker image for multistage build
 WORKDIR                 $BASE
 COPY                  . $BASE
 
-# Create user ${USER} and compile
-RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password -q ${USER} && \
+# optimize code for production compilation
+RUN echo "Preparing code for production deployment" && \
+    chmod +x ./scripts/prepare_production.sh && \
+    ././scripts/prepare_production.sh && \
+    rm ./scripts/prepare_production.sh && \
+    echo "create user and compile" && \
+    addgroup ${TARGET_GROUP} && \
+    adduser --system --no-create-home --gecos "'${TARGET_GROUP}'" --disabled-password -q ${TARGET_USER} && \
     ./scripts/docker/compile_build.sh ${FILE} && \
     rm -rf .git && \
-    chmod +x ${FILE} && \
-    chown ${USER} ${FILE} && \
+    upx -9 -v $FILE && \
     ls -alh
 
 FROM ethereum/solc:stable as solcompiler
 
 # BEGIN: install modified version of glibc
-FROM alpine:3.9
+FROM alpine:3.10.2
 
-# generate solc executable file
-COPY --from=solcompiler /usr/bin/solc            /usr/bin/solc
-
-# Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
-ENV LANG=C.UTF-8
-
-RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
-    ALPINE_GLIBC_PACKAGE_VERSION="2.29-r0" && \
-    ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
-    echo \
-        "-----BEGIN PUBLIC KEY-----\
-        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApZ2u1KJKUu/fW4A25y9m\
-        y70AGEa/J3Wi5ibNVGNn1gT1r0VfgeWd0pUybS4UmcHdiNzxJPgoWQhV2SSW1JYu\
-        tOqKZF5QSN6X937PTUpNBjUvLtTQ1ve1fp39uf/lEXPpFpOPL88LKnDBgbh7wkCp\
-        m2KzLVGChf83MS0ShL6G9EQIAUxLm99VpgRjwqTQ/KfzGtpke1wqws4au0Ab4qPY\
-        KXvMLSPLUp7cfulWvhmZSegr5AdhNw5KNizPqCJT8ZrGvgHypXyiFvvAH5YRtSsc\
-        Zvo9GI2e2MaZyo9/lvb+LbLEJZKEQckqRj4P26gmASrZEPStwc+yqy1ShHLA0j6m\
-        1QIDAQAB\
-        -----END PUBLIC KEY-----" | sed 's/   */\n/g' > "/etc/apk/keys/sgerrand.rsa.pub" && \
-    wget \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
-    apk add --no-cache \
-        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
-    \
-    rm "/etc/apk/keys/sgerrand.rsa.pub" && \
-    /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true && \
-    echo "export LANG=$LANG" > /etc/profile.d/locale.sh && \
-    \
-    apk del glibc-i18n && \
-    \
-    rm "/root/.wget-hsts" && \
-    apk del .build-dependencies && \
-    rm \
-        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
-
-# END: install modified version of glibc for alpine
+# inject here your GLIBC code if needed
 
 ARG X_ETHERNITI_INTERACTION_PORT="8080 4430"
-ARG USER=etherniti
+ARG TARGET_USER=etherniti
+ARG TARGET_GROUP=ethergroup
 ARG EXEC=proxy
-ARG BASE=src/github.com/zerjioang/etherniti/testdata
+ARG BASE=src/github.com/zerjioang/etherniti
+ARG TESTDATA=${BASE}/testdata
+ARG BASEDIR=/var/lib/etherniti
 
-ENV GOPATH=/home/${USER}/go
-ENV PATH="/home/${USER}:${PATH}"
-WORKDIR /home/${USER}
+ENV GOPATH=${BASEDIR}/go
+ENV PATH="${BASEDIR}/:${PATH}"
+ENV USER=${TARGET_USER}
+WORKDIR ${BASEDIR}
 
-# create user $USER
-RUN addgroup -S appgroup && \
-    adduser -S ${USER} -G appgroup && \
+# copy hardening script
+COPY ./scripts/docker/hardening.sh ${BASEDIR}/hardening.sh
+
+# create user $TARGET_USER
+# create dirs
+# and run hardening script
+RUN mkdir -p ${BASEDIR} && \
+    addgroup -S ${TARGET_GROUP} && \
+    adduser -S ${TARGET_USER} -G ${TARGET_GROUP} && \
     mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/testdata && \
-    mkdir -p $HOME/.etherniti && chmod +rwx -R $HOME
-
-EXPOSE $X_ETHERNITI_INTERACTION_PORT
+    mkdir -p ${BASEDIR}/data && \
+    chmod +x hardening.sh && ./hardening.sh && rm hardening.sh
 
 # copy proxy resource files
+# make sure to use same names as TARGET_USER and TARGET_GROUP
 
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/root            ${GOPATH}/${BASE}/root
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/internal        ${GOPATH}/${BASE}/internal
-COPY --from=compiler --chown=etherniti:appgroup /go/${BASE}/swagger         ${GOPATH}/${BASE}/swagger
+# copy solc executable file
+COPY --from=solcompiler /usr/bin/solc   /usr/bin/solc
+COPY --from=compiler --chown=etherniti:ethergroup /go/${TESTDATA}/       ${GOPATH}/${TESTDATA}/
+COPY --from=compiler --chown=etherniti:ethergroup /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=compiler --chown=etherniti:ethergroup /go/${BASE}/proxy ${EXEC}
 
-COPY --from=compiler --chown=etherniti:appgroup /etc/ssl/certs/ca-certificates.crt                     /etc/ssl/certs/ca-certificates.crt
-COPY --from=compiler --chown=etherniti:appgroup /go/src/github.com/zerjioang/etherniti/proxy           ${EXEC}
+EXPOSE ${X_ETHERNITI_INTERACTION_PORT}
 
-EXPOSE $X_ETHERNITI_INTERACTION_PORT
-
-RUN pwd && \
+# apply correct permissions
+RUN chmod +rwx -R ${BASEDIR} && \
+    chown -R ${TARGET_USER}:${TARGET_GROUP} ${BASEDIR} && \
     ls -alh && \
-    cd $HOME && \
-    chown -R etherniti:appgroup . && \
-    ls -alh
+    stat ${BASEDIR}/data
 
 # change to non root user for execution
-USER ${USER}
+USER ${TARGET_USER}
 
 # set container entrypoint
 CMD ["proxy"]

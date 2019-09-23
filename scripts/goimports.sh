@@ -30,4 +30,4 @@ do
 	${GOPATH}/bin/goimports -v -w ${file}
 done
 
-echo "Code formatting done!"
+echo "(goimports) Code formatting done!"
