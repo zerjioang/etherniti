@@ -13,7 +13,7 @@ import (
 // get current edition details
 // atomic/thread-safe
 func Edition() constants.Edition {
-	return constants.Enterprise
+	return constants.Pro
 }
 
 // additional configuration setup for Pro/Subscription (pro) edition

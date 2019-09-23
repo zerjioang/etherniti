@@ -51,6 +51,7 @@ k/KrFNcDz+v6O4eqz7rlRID5WwKTnAxpNbFOricxOic67f7OqTJJrUX+46nscFtM
 ZyUut5iJGfS2yMowvwe+iPywc+b9Z3M=
 -----END EC PRIVATE KEY-----
 `
+	environmentName = "staging"
 )
 
 func init() {
@@ -83,7 +84,7 @@ func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
 
 func Env() string {
 	logger.Debug("reading server environment name")
-	return "staging"
+	return environmentName
 }
 
 // setup server config

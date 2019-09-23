@@ -26,11 +26,12 @@ var (
 		Skipper:   DefaultSkipper,
 		Generator: generator,
 	}
+	defaultRequestIdMiddleware = RequestIDWithConfig(DefaultRequestIDConfig)
 )
 
 // RequestID returns a X-Request-ID middleware.
 func RequestID() echo.MiddlewareFunc {
-	return RequestIDWithConfig(DefaultRequestIDConfig)
+	return defaultRequestIdMiddleware
 }
 
 // RequestIDWithConfig returns a X-Request-ID middleware with config.
@@ -63,5 +64,5 @@ func RequestIDWithConfig(config RequestIDConfig) echo.MiddlewareFunc {
 }
 
 func generator() string {
-	return random.String(32)
+	return random.RandomUUID32()
 }
