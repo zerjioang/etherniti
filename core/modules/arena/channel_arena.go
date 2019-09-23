@@ -14,37 +14,37 @@ package arena
 // allocation is required, instead of just one, can significantly reduce the amount of
 // work performed by GC. This technique is called arena allocation.
 //
-// The NewArena type’s Pop method returns a pointer to an element in the slice and allocates
+// The NewChannelArena type’s Pop method returns a pointer to an element in the slice and allocates
 // in chunks of 10,000 when the slice becomes empty.
 
-// Arena is a free list that provides quick access to pre-allocated byte
+// ChannelArena is a free list that provides quick access to pre-allocated byte
 // slices, greatly reducing memory churn and effectively disabling GC for these
-// allocations. After the Arena is created, a slice of bytes can be requested by
+// allocations. After the ChannelArena is created, a slice of bytes can be requested by
 // calling Pop(). The caller is responsible for calling Push(), which puts the
 // blocks back in the queue for later usage. The bytes given by Pop() are *not*
 // zeroed, so the caller should only read positions that it knows to have been
 // overwitten. That can be done by shortening the slice at the right place,
 // based on the count of bytes returned by Write() and similar functions.
-type Arena chan []byte
+type ChannelArena chan []byte
 
-func NewArena(numBlocks int, blockSize int) Arena {
-	// blocks: is a list of Arena
-	blocks := make(Arena, numBlocks)
+func NewChannelArena(numBlocks int, blockSize int) ChannelArena {
+	// blocks: is a list of ChannelArena
+	blocks := make(ChannelArena, numBlocks)
 	for i := 0; i < numBlocks; i++ {
 		blocks <- make([]byte, blockSize)
 	}
 	return blocks
 }
 
-func (a Arena) Pop() (x []byte) {
+func (a ChannelArena) Pop() (x []byte) {
 	return <-a
 }
 
-func (a Arena) Push(x []byte) {
+func (a ChannelArena) Push(x []byte) {
 	x = x[:cap(x)]
 	a <- x
 }
 
-func (a Arena) PushByte(x byte) {
+func (a ChannelArena) PushByte(x byte) {
 	a <- []byte{x}
 }

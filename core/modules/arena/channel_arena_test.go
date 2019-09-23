@@ -8,16 +8,16 @@ import (
 
 func TestArena(t *testing.T) {
 	t.Run("instantiate", func(t *testing.T) {
-		a := NewArena(1000, 1024)
+		a := NewChannelArena(1000, 1024)
 		assert.NotNil(t, a)
 	})
 	t.Run("pop-push", func(t *testing.T) {
-		a := NewArena(1000, 1024)
+		a := NewChannelArena(1000, 1024)
 		assert.NotNil(t, a)
 		a.Push(a.Pop())
 	})
 	t.Run("insert", func(t *testing.T) {
-		a := NewArena(1000, 1024)
+		a := NewChannelArena(1000, 1024)
 		assert.NotNil(t, a)
 		l := a.Pop()
 		l[0] = 'a'
