@@ -27,7 +27,7 @@ func (m *signingMethodNone) Alg() string {
 	return "none"
 }
 
-// Only allow 'none' alg type if UnsafeAllowNoneSignatureType is specified as the key
+// Only allow 'none' alg type if UnsafeAllowNoneSignatureType is specified as the Key
 func (m *signingMethodNone) Verify(signingString, signature string, key interface{}) (err error) {
 	// Key must be UnsafeAllowNoneSignatureType to prevent accidentally
 	// accepting 'none' signing method
@@ -46,7 +46,7 @@ func (m *signingMethodNone) Verify(signingString, signature string, key interfac
 	return nil
 }
 
-// Only allow 'none' signing if UnsafeAllowNoneSignatureType is specified as the key
+// Only allow 'none' signing if UnsafeAllowNoneSignatureType is specified as the Key
 func (m *signingMethodNone) Sign(signingString string, key interface{}) (string, error) {
 	if _, ok := key.(unsafeNoneMagicConstant); ok {
 		return "", nil

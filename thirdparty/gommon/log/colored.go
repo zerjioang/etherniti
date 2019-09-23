@@ -11,6 +11,9 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
+var (
+	colorableOut = colorable.NewColorableStdout()
+)
 func output() io.Writer {
-	return colorable.NewColorableStdout()
+	return colorableOut
 }

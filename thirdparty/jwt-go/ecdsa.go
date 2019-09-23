@@ -57,7 +57,7 @@ func (m *SigningMethodECDSA) Alg() string {
 }
 
 // Implements the Verify method from SigningMethod
-// For this verify method, key must be an ecdsa.PublicKey struct
+// For this verify method, Key must be an ecdsa.PublicKey struct
 func (m *SigningMethodECDSA) Verify(signingString, signature string, key interface{}) error {
 	var err error
 
@@ -67,7 +67,7 @@ func (m *SigningMethodECDSA) Verify(signingString, signature string, key interfa
 		return err
 	}
 
-	// Get the key
+	// Get the Key
 	var ecdsaKey *ecdsa.PublicKey
 	switch k := key.(type) {
 	case *ecdsa.PublicKey:
@@ -99,9 +99,9 @@ func (m *SigningMethodECDSA) Verify(signingString, signature string, key interfa
 }
 
 // Implements the Sign method from SigningMethod
-// For this signing method, key must be an ecdsa.PrivateKey struct
+// For this signing method, Key must be an ecdsa.PrivateKey struct
 func (m *SigningMethodECDSA) Sign(signingString string, key interface{}) (string, error) {
-	// Get the key
+	// Get the Key
 	var ecdsaKey *ecdsa.PrivateKey
 	switch k := key.(type) {
 	case *ecdsa.PrivateKey:

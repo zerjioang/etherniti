@@ -5,5 +5,5 @@ type Edition uint8
 const (
 	Unknown Edition = iota
 	OpenSource
-	Enterprise
+	Pro
 )

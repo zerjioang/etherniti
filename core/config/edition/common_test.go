@@ -94,7 +94,7 @@ func TestConfigExtra(t *testing.T) {
 	})
 	t.Run("is-enterprise", func(t *testing.T) {
 		e := edition.IsEnterprise()
-		if edition.Edition() == constants.Enterprise {
+		if edition.Edition() == constants.Pro {
 			assert.True(t, e)
 		} else {
 			assert.False(t, e)
@@ -107,7 +107,7 @@ func TestConfigExtra(t *testing.T) {
 		for i := 0; i < total; i++ {
 			go func() {
 				e := edition.IsEnterprise()
-				if edition.Edition() == constants.Enterprise {
+				if edition.Edition() == constants.Pro {
 					assert.True(t, e)
 				} else {
 					assert.False(t, e)

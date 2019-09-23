@@ -76,6 +76,10 @@ func Unix() int64 {
 	return t
 }
 
+func UnixNano() int64 {
+	return Unix()
+}
+
 func Now() FastTime {
 	t := FastTime{}
 	t.now()

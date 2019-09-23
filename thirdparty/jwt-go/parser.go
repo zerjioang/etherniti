@@ -17,7 +17,7 @@ type Parser struct {
 }
 
 // Parse, validate, and return a token.
-// keyFunc will receive the parsed token and should return the key for validating.
+// keyFunc will receive the parsed token and should return the Key for validating.
 // If everything is kosher, err will be nil
 func (p *Parser) Parse(tokenString string, keyFunc Keyfunc) (*Token, error) {
 	return p.ParseWithClaims(tokenString, MapClaims{}, keyFunc)
@@ -45,7 +45,7 @@ func (p *Parser) ParseWithClaims(tokenString string, claims Claims, keyFunc Keyf
 		}
 	}
 
-	// Lookup key
+	// Lookup Key
 	var key interface{}
 	if keyFunc == nil {
 		// keyFunc was not provided.  short circuiting validation

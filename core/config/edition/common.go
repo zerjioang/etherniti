@@ -13,7 +13,7 @@ var (
 func init() {
 	e := Edition()
 	isOpen = e == constants.OpenSource
-	isPro = e == constants.Enterprise
+	isPro = e == constants.Pro
 	isValid = e != constants.Unknown
 }
 

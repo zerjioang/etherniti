@@ -10,11 +10,11 @@ func BenchmarkArena(b *testing.B) {
 		b.ReportAllocs()
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			_ = NewArena(1000, 1024)
+			_ = NewChannelArena(1000, 1024)
 		}
 	})
 	b.Run("push-pop", func(b *testing.B) {
-		a := NewArena(1000, 1024)
+		a := NewChannelArena(1000, 1024)
 
 		b.SetBytes(1)
 		b.ReportAllocs()
@@ -24,7 +24,7 @@ func BenchmarkArena(b *testing.B) {
 		}
 	})
 	b.Run("insert", func(b *testing.B) {
-		a := NewArena(1000, 1024)
+		a := NewChannelArena(1000, 1024)
 
 		b.SetBytes(1)
 		b.ReportAllocs()

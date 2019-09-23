@@ -10,7 +10,7 @@ import (
 )
 
 // Implements the HMAC-SHA family of signing methods signing methods
-// Expects key type of []byte for both signing and validation
+// Expects Key type of []byte for both signing and validation
 type SigningMethodHMAC struct {
 	Name string
 	Hash crypto.Hash
@@ -50,7 +50,7 @@ func (m *SigningMethodHMAC) Alg() string {
 
 // Verify the signature of HSXXX tokens.  Returns nil if the signature is valid.
 func (m *SigningMethodHMAC) Verify(signingString, signature string, key interface{}) error {
-	// Verify the key is the right type
+	// Verify the Key is the right type
 	keyBytes, ok := key.([]byte)
 	if !ok {
 		return ErrInvalidKeyType
@@ -68,7 +68,7 @@ func (m *SigningMethodHMAC) Verify(signingString, signature string, key interfac
 	}
 
 	// This signing method is symmetric, so we validate the signature
-	// by reproducing the signature from the signing string and key, then
+	// by reproducing the signature from the signing string and Key, then
 	// comparing that against the provided signature.
 	hasher := hmac.New(m.Hash.New, keyBytes)
 	hasher.Write([]byte(signingString))
