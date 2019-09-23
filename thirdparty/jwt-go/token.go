@@ -11,14 +11,14 @@ import (
 )
 
 // TimeFunc provides the current time when parsing token to validate "exp" claim (expiration time).
-// You can override it to use another time value.  This is useful for testing or if your
+// You can override it to use another time Value.  This is useful for testing or if your
 // server uses a different time zone than your tokens.
 var TimeFunc = time.Now
 
 // Parse methods use this callback function to supply
-// the key for verification.  The function receives the parsed,
+// the Key for verification.  The function receives the parsed,
 // but unverified Token.  This allows you to use properties in the
-// Header of the token (such as `kid`) to identify which key to use.
+// Header of the token (such as `kid`) to identify which Key to use.
 type Keyfunc func(*Token) (interface{}, error)
 
 // A JWT Token.  Different fields will be used depending on whether you're
@@ -86,7 +86,7 @@ func (t *Token) SigningString() (string, error) {
 }
 
 // Parse, validate, and return a token.
-// keyFunc will receive the parsed token and should return the key for validating.
+// keyFunc will receive the parsed token and should return the Key for validating.
 // If everything is kosher, err will be nil
 func Parse(tokenString string, keyFunc Keyfunc) (*Token, error) {
 	return new(Parser).Parse(tokenString, keyFunc)

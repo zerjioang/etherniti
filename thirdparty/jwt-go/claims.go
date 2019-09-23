@@ -37,7 +37,7 @@ func (c StandardClaims) Valid() error {
 	now := TimeFunc().Unix()
 
 	// The claims below are optional, by default, so if they are set to the
-	// default value in Go, let's not fail the verification for them.
+	// default Value in Go, let's not fail the verification for them.
 	if c.VerifyExpiresAt(now, false) == false {
 		delta := time.Unix(now, 0).Sub(time.Unix(c.ExpiresAt, 0))
 		vErr.Inner = fmt.Errorf("token is expired by %v", delta)
@@ -62,31 +62,31 @@ func (c StandardClaims) Valid() error {
 }
 
 // Compares the aud claim against cmp.
-// If required is false, this method will return true if the value matches or is unset
+// If required is false, this method will return true if the Value matches or is unset
 func (c *StandardClaims) VerifyAudience(cmp string, req bool) bool {
 	return verifyAud(c.Audience, cmp, req)
 }
 
 // Compares the exp claim against cmp.
-// If required is false, this method will return true if the value matches or is unset
+// If required is false, this method will return true if the Value matches or is unset
 func (c *StandardClaims) VerifyExpiresAt(cmp int64, req bool) bool {
 	return verifyExp(c.ExpiresAt, cmp, req)
 }
 
 // Compares the iat claim against cmp.
-// If required is false, this method will return true if the value matches or is unset
+// If required is false, this method will return true if the Value matches or is unset
 func (c *StandardClaims) VerifyIssuedAt(cmp int64, req bool) bool {
 	return verifyIat(c.IssuedAt, cmp, req)
 }
 
 // Compares the iss claim against cmp.
-// If required is false, this method will return true if the value matches or is unset
+// If required is false, this method will return true if the Value matches or is unset
 func (c *StandardClaims) VerifyIssuer(cmp string, req bool) bool {
 	return verifyIss(c.Issuer, cmp, req)
 }
 
 // Compares the nbf claim against cmp.
-// If required is false, this method will return true if the value matches or is unset
+// If required is false, this method will return true if the Value matches or is unset
 func (c *StandardClaims) VerifyNotBefore(cmp int64, req bool) bool {
 	return verifyNbf(c.NotBefore, cmp, req)
 }

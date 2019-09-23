@@ -82,7 +82,7 @@ func (m *SigningMethodRSA) Sign(signingString string, key interface{}) (string, 
 	var rsaKey *rsa.PrivateKey
 	var ok bool
 
-	// Validate type of key
+	// Validate type of Key
 	if rsaKey, ok = key.(*rsa.PrivateKey); !ok {
 		return "", ErrInvalidKey
 	}
