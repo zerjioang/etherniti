@@ -2,11 +2,12 @@ package jwt_test
 
 import (
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/pkg/profile"
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
-	"testing"
-	"time"
 )
 
 var (

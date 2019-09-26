@@ -5,10 +5,11 @@ import (
 	"crypto"
 	"crypto/hmac"
 	"encoding/base64"
-	"github.com/pkg/errors"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/zerjioang/etherniti/core/util/str"
 )
 
 const (

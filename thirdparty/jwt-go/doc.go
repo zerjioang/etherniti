@@ -31,4 +31,3 @@ package jwt
 
 // after using byte arrays for data conversion and trimming
 // BenchmarkJwt/low-level-implementation-12        	 1000000	      2104 ns/op	   0.48 MB/s	    1056 B/op	      13 allocs/op
-

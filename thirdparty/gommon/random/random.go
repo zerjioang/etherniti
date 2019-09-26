@@ -5,10 +5,11 @@ package random
 
 import (
 	"bytes"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"math/rand"
 	"strings"
 	"unsafe"
+
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 )
 
 type (
@@ -25,12 +26,12 @@ const (
 	Alphanumeric = Alphabetic + Numeric
 	Symbols      = "`" + `~!@#$%^&*()-_+={}[]|\;:"<>,./?`
 	Hex          = Numeric + "abcdef"
-	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	letterBytes  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 )
 
 var (
 	global = New()
-	src = rand.NewSource(fastime.UnixNano())
+	src    = rand.NewSource(fastime.UnixNano())
 )
 
 func New() *Random {
@@ -63,6 +64,7 @@ const (
 var (
 	b [32]byte
 )
+
 func RandStringBytesMaskImpr(n int) string {
 	b := make([]byte, n)
 	// A rand.Int63() generates 63 random bits, enough for letterIdxMax letters!

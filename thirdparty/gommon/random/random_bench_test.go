@@ -1,8 +1,9 @@
 package random_test
 
 import (
-	"github.com/zerjioang/etherniti/thirdparty/gommon/random"
 	"testing"
+
+	"github.com/zerjioang/etherniti/thirdparty/gommon/random"
 )
 
 func BenchmarkRandom(b *testing.B) {

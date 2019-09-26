@@ -503,7 +503,7 @@ func (_Token *TokenFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *To
 		for {
 			select {
 			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
+				// AdquireContext log arrived, parse the event and forward to the user
 				event := new(TokenApproval)
 				if err := _Token.contract.UnpackLog(event, "Approval", log); err != nil {
 					return err
@@ -645,7 +645,7 @@ func (_Token *TokenFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *To
 		for {
 			select {
 			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
+				// AdquireContext log arrived, parse the event and forward to the user
 				event := new(TokenTransfer)
 				if err := _Token.contract.UnpackLog(event, "Transfer", log); err != nil {
 					return err

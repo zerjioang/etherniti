@@ -4,9 +4,10 @@
 package random_test
 
 import (
-	"github.com/zerjioang/etherniti/thirdparty/gommon/random"
 	"regexp"
 	"testing"
+
+	"github.com/zerjioang/etherniti/thirdparty/gommon/random"
 
 	"github.com/stretchr/testify/assert"
 )
