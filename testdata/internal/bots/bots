@@ -1,3 +1,4 @@
+
 192.comAgent
 1Noonbot
 1on1searchBot
@@ -102,6 +103,7 @@ AONDE-Spider
 apachebench
 Apexoo
 APIs-Google
+ApiTool
 Aport
 appie
 Aqua_Products
@@ -1352,6 +1354,8 @@ metaquerier.cs.uiuc.edu
 METASpider
 Metaspin
 Metaspinner
+MetaSr
+MetaSr 1.0
 MetaURI
 MetaURI API
 Mete
@@ -1794,6 +1798,7 @@ PycURL
 PyQ
 Pyth
 pythonic-crawler
+python-requests
 Python-urllib
 PythonWikipediaBot
 q1
@@ -2401,6 +2406,8 @@ VSE
 vspider
 VSyn
 w0000t
+w00tw00t
+w00tw00t.at.blackhats.romanian.anti-sec
 W3C
 W3C_Unicorn
 W3C-WebCon
@@ -2731,6 +2738,7 @@ ZipppBot
 Zixy
 zmao
 zmeu
+ZmEu
 ZoomSpider
 ZuiBot
 ZumBot
