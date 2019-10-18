@@ -4,10 +4,11 @@
 package cmd_test
 
 import (
-	"github.com/zerjioang/etherniti/core/cmd"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/zerjioang/etherniti/core/cmd"
 )
 
 func TestCmd(t *testing.T) {

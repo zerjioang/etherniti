@@ -4,9 +4,10 @@
 package dashboard
 
 import (
+	"sync/atomic"
+
 	"github.com/zerjioang/etherniti/core/bench"
 	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"sync/atomic"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/bus"
@@ -39,7 +40,7 @@ var (
 	atomicStats  atomic.Value
 	scoreWrapper struct {
 		Time  fastime.Duration `json:"time"`
-		Score int64         `json:"score"`
+		Score int64            `json:"score"`
 	}
 )
 

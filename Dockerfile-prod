@@ -102,8 +102,9 @@ RUN echo "listing users" && \
 
 # after hardening, we copy all files to create a empty new image
 
-FROM scratch
-COPY --from=hardened / /
+# FROM scratch
+# locked by: install bash, or sh only inside image
+# COPY --from=hardened / /
 
 # change to non root user for execution
 USER ${TARGET_USER}

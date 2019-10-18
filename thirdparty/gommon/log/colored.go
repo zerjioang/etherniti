@@ -14,6 +14,7 @@ import (
 var (
 	colorableOut = colorable.NewColorableStdout()
 )
+
 func output() io.Writer {
 	return colorableOut
 }

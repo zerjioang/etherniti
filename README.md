@@ -10,11 +10,32 @@ A High Performance Web3 REST Proxy for smart contract inter-communication.
 
 ## Usage
 
-```$bash
+```bash
 docker run \
     -it \
     -d etherniti/proxy-oss:latest
 ```
+
+## Deployment
+
+You can configure your server to use a RT kernel via:
+
+```bash
+sudo apt-get install linux-headers-lowlatency
+sudo apt-get install linux-lowlatency
+sudo update-grub
+```
+
+After that, run:
+
+```bash
+docker run \
+    -it \
+    -d etherniti/proxy-oss:latest
+```
+
+Not: add as many environment variables as needed in order to customize your deployment.
+
 ## Development
 
 ### Using Intellij GoLand

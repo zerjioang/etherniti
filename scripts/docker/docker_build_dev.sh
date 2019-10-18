@@ -25,8 +25,14 @@ source ./scripts/docker/docker_version.sh
 source ./scripts/colors.sh
 
 log "Etherniti Proxy OSS ($BUILD_VERSION, $edition, $mode) docker image"
-#our proxy configuration
-edition="dev"
+# our proxy configuration: 
+# oss: open source version
+# pro: premium version
+edition="oss"
+# our execution environment:
+# dev: development
+# pre: staging
+# prod: production
 mode="pre"
 # get current os system architecture
 osarch=$(arch)

@@ -1,0 +1,34 @@
+* `df58072e7ac83794e866eed5eb1b59538382902d`: implemented UI bug reporting tool. Minimal info reporting by this time.
+* `38bcf480b3b289fb416e7ca4d8d9d2567c3fcef0`: merge conflicts solved.
+* `e96811291e17eabd3d1d161973a888364fab9c04`: upgraded internal http server to httpawn to bootstrap speed.
+* `f2e115aef792b1d9e1c774047c43397a6f546b13`: added highwayhash non crypto-oriende hashing algorithm for internal usage.
+* `1fcff273556528cf685b548dcaf977bdf24ed622`: spinlock and fasttime modules updated.
+413147fb346a071d9aea43bb587c7fa79bd72d06 working on low latency http server implemention called httpawn as part of etherniti server implementation. Currently is using echo server.
+* `8bcec4ab9a0a161560f4404345930473c75a8aed`: changes in core_modules.
+* `5ec26bfacf616e065434dd2ac9a51f90273fe22a`: Bringing vendor into sync.
+* `16f37d00177d69e3da701a75573f4364612c5237`: detection of xml content type added.
+* `f4d4aaa7442c2aa007445cd73c4489e9513aff81`: Merge branch 'develop' of github.com:zerjioang/etherniti into develop.
+* `f0a9c0c759aabde8b584a0895f82ccd4ab36241c`: minor changes.
+* `b44a4c632e501cb05e2cb802ef71b911ab3991d1`: updated domain phishing databases.
+ab23eb663e7b88f64e43e0d6d7d129328815748f minor changes in TLS implementation in order to have a true working redirection from http to https using different ports.
+* `b72ae3a6d41a07817a73d1595cc50082309043d9`: Merge branch 'develop' of github.com:zerjioang/etherniti into develop.
+* `cd3135dab3e8bd01f25a6bf3c31879f3ce56c068`: minor changes.
+* `c07b0d969fb166239124f004e75f81f6e2f1e0b1`: Bringing vendor into sync.
+* `4e12f7919b7c8d1eac047fea3c3c9035260fd898`: updated ipv4 detection method.
+* `5515a6a9a93b2082d189b63a9737d757bb9049ba`: updated ipv4 detection method.
+* `6809602d29d649cda8f3cc94aadb8686c1640be8`: added bechtest tool to automatically execute benchmark comparisons.
+756afcd64073bfab4630299a0ba8ec5306089e6b Automatic browser triggering via X_ETHERNITI_AUTO_OPEN_BROWSER environment variable. When setup to 'true' local desktop web browser will be open at specified Etherniti Proxy endpoint
+* `9370126d8a1e5ddbd26608f2b05417e00bf4547f`: added swagger ui favicons and clean scrollbar mode too.
+* `6fd4b9243f76f3c0156aad2bfe2fd8faf68fbee2`: added static files that are needed to load proxy landing page.
+* `bb3034af77be5def5326d9bfc0c1432febd791be`: Merge branch 'develop' of github.com:zerjioang/etherniti into develop.
+* `12899fef1406e226bcffc20aafe4c5f555c23b02`: key generation benchmarking.
+* `609c0e09b80456efb5fd30baddc431becfdf73c9`: merge conflicts solved.
+* `14b828bff1d5481c5483720fb236fcb498d51274`: integration changes for dashboard.etherniti.org.
+* `e572e7addc16aad516e9b3b7e95354cf2c278a59`: proxy options updated to allow more usable deployments.
+c3cf2f61d99cddfdc81a59b796b11ef785a5d2d4 updated boot sequence to allow deployments with no environment variables. Default configuration is loaded instead.
+* `3c90b7505edcd40b5433d93f1a8165ecea7db421`: added support for both local and remote signing of transactions.
+* `f03712628cd47068aa25c714e1dd086d40ff9065`: added support for both local and remote signing of transactions.
+* `c88d4bd1f3881a5e86df4c185b7ce47761fd4c45`: graphql compatibility added when geth +1.9.0 is used.
+* `4278e977018e7edb32f2acc0a375932abfd91a2b`: added support for internal component and module analytics via message bus..
+* `68f9d80d12a49195a5b2041d288b680e5e555375`: added portscan for json-rpc port lookup.
+* `50208f39d864f79115f02620f5a079a0ff1b1a02`: updated ci scripts.

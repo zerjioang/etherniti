@@ -6,8 +6,9 @@ package jwt
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"strings"
+
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 )
 
 // TimeFunc provides the current time when parsing token to validate "exp" claim (expiration time).

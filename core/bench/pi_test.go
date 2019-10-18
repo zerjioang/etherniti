@@ -2,10 +2,11 @@ package bench_test
 
 import (
 	"fmt"
-	"github.com/zerjioang/etherniti/core/bench"
 	"runtime"
 	"sync"
 	"testing"
+
+	"github.com/zerjioang/etherniti/core/bench"
 
 	"github.com/zerjioang/etherniti/core/modules/monotonic"
 )
