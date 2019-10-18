@@ -4,6 +4,8 @@
 package fastime
 
 import (
+	"github.com/stretchr/testify/assert"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -63,6 +65,16 @@ func TestFastTime(t *testing.T) {
 		tm2 := Now()
 		raw := tm2.UnsafeBytes()
 		t.Log(raw)
+	})
+	t.Run("format", func(t *testing.T) {
+		// get current date time
+		millis := Now().Unix()
+		timeStr := time.Unix(millis, 0).Format(time.RFC3339)
+		millisStr := strconv.FormatInt(millis, 10)
+		t.Log(millis)
+		t.Log(timeStr)
+		t.Log(millisStr)
+		assert.Equal(t, len(millisStr), 10)
 	})
 }
 

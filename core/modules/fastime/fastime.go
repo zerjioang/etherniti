@@ -47,7 +47,7 @@ type FastTime struct {
 }
 
 func (t FastTime) Unix() int64 {
-	return t.sec
+	return t.sec / 1e9
 }
 
 func (t FastTime) Nanos() uint32 {
@@ -67,7 +67,7 @@ func (t FastTime) UnsafeBytes() []byte {
 func (t FastTime) Add(duration Duration) FastTime {
 	ns := duration.Nanoseconds()
 	t.nsec += uint32(ns)
-	t.sec += ns / 1000000000
+	t.sec += ns / 10e9
 	return t
 }
 
