@@ -74,7 +74,7 @@ type EthernitiOptions struct {
 
 var (
 	// default etherniti proxy options
-	defaultOptions = &EthernitiOptions{
+	defaultOptions = EthernitiOptions{
 		LogLevelStr:             "warn",
 		LogLevel:                log.WARN,
 		LoggingEnabled:          true,
@@ -396,6 +396,6 @@ func (eo *EthernitiOptions) logLevelResolver() log.Lvl {
 	}
 }
 
-func GetDefaultOpts() *EthernitiOptions {
+func GetDefaultOpts() EthernitiOptions {
 	return defaultOptions
 }
