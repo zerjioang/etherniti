@@ -108,6 +108,9 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 	// register ui rest
 	dashboard.NewUIAuthController().RegisterRouters(groupV1)
 
+	// add api key based authentication mechanism
+	dashboard.NewApiKeysAuthController().RegisterRouters(groupV1)
+
 	// register dashboard required apis
 	// /dashboard/stats
 	internalGroup := groupV1.Group("/internal", next)

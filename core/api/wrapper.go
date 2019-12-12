@@ -140,11 +140,15 @@ func ErrorStr(c *echo.Context, msg string) error {
 }
 
 func ErrorBytes(c *echo.Context, msg []byte) error {
+	return ErrorBytesWithCode(c, protocol.StatusBadRequest, msg)
+}
+
+func ErrorBytesWithCode(c *echo.Context, code int, msg []byte) error {
 	logger.Debug("converting error string to payload")
 	msgstr := str.UnsafeString(msg)
 	logger.Error(msgstr)
 	rawBytes := toErrorPool(msgstr, c.ResponseSerializer())
-	return c.FastBlob(protocol.StatusBadRequest, c.SelectecResponseContentType(), rawBytes)
+	return c.FastBlob(code, c.SelectecResponseContentType(), rawBytes)
 }
 
 func ErrorWithMessage(c *echo.Context, code int, msg []byte, err error) error {

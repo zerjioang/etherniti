@@ -4,17 +4,11 @@
 package dashboard
 
 import (
-	"time"
-
 	"github.com/zerjioang/etherniti/shared/notifier"
 
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/modules/checkmail"
 	"github.com/zerjioang/etherniti/core/modules/radix"
-
-	"github.com/zerjioang/etherniti/core/util/banner"
-
-	"github.com/zerjioang/etherniti/core/modules/fastime"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/common"
@@ -81,30 +75,25 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 			if pErr != nil {
 				logger.Error("failed to unserialize data: ", pErr.Error())
 				return api.ErrorBytes(c, data.DatabaseError)
-			} else {
-				// check if email and password matches
-				matches := req.Email == dto.Email && db.CompareHash(req.Password, dto.Password)
-				if matches {
-					// create authentication token
-					token, err := ctl.createToken(dto.Uuid)
-					if err != nil || token == "" {
-						logger.Error("failed to create authentication token: ", err)
-						return api.ErrorBytes(c, data.InvalidLoginData)
-					} else {
-						return api.SendSuccess(c, data.UserLogin, auth.NewLoginResponse(token))
-					}
-				} else {
+			}
+			// check if email and password matches
+			matches := req.Email == dto.Email && db.CompareHash(req.Password, dto.Password)
+			if matches {
+				// create authentication token
+				token, err := createToken(dto.Uuid)
+				if err != nil || token == "" {
+					logger.Error("failed to create authentication token: ", err)
 					return api.ErrorBytes(c, data.InvalidLoginData)
 				}
+				return api.SendSuccess(c, data.UserLogin, auth.NewLoginResponse(token))
 			}
-		} else {
-			//db read error
-			// this code is trigger each time user fails a login attempt
-			return api.ErrorBytes(c, data.FailedLoginVerification)
+			return api.ErrorBytes(c, data.InvalidLoginData)
 		}
-	} else {
-		return api.ErrorBytes(c, data.MissingLoginFields)
+		//db read error
+		// this code is trigger each time user fails a login attempt
+		return api.ErrorBytes(c, data.FailedLoginVerification)
 	}
+	return api.ErrorBytes(c, data.MissingLoginFields)
 }
 
 // registers new user data in the api sever
@@ -144,11 +133,10 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 		if saveErr != nil {
 			logger.Error("failed to register new user due to: ", saveErr)
 			return api.ErrorBytes(c, data.UserRegisterFailed)
-		} else {
-			// send new account created internal event
-			notifier.NewDashboardAccountEvent.Emit()
-			return api.SendSuccess(c, data.RegistrationSuccess, nil)
 		}
+		// send new account created internal event
+		notifier.NewDashboardAccountEvent.Emit()
+		return api.SendSuccess(c, data.RegistrationSuccess, nil)
 	}
 	return api.ErrorStr(c, "registration aborted due to missing fields")
 }
@@ -196,33 +184,6 @@ func (ctl UIAuthController) RegisterRouters(router *echo.Group) {
 	router.POST("/auth/recover", ctl.recover)
 	router.POST("/auth/token", ctl.token)
 	router.POST("/auth/recaptcha", ctl.recaptcha)
-}
-func (ctl UIAuthController) createToken(userUuid string) (string, error) {
-	type Claims struct {
-		User    string `json:"sid"`
-		Version string `json:"version"`
-		jwt.StandardClaims
-	}
-	// Declare the expiration time of the token
-	now := fastime.Now()
-	// here, we have kept it as 20 minutes
-	expirationTime := time.Now().Add(20 * time.Minute)
-	claims := &Claims{
-		User: userUuid,
-		StandardClaims: jwt.StandardClaims{
-			// In JWT, the expiry time is expressed as unix milliseconds
-			ExpiresAt: expirationTime.Unix(),
-			Issuer:    "etherniti.org",
-			NotBefore: now.Unix(),
-			IssuedAt:  now.Unix(),
-		},
-		Version: banner.Version,
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// Sign and get the complete encoded token as a string using the secret
-	return token.SignedString(authTokenSecret)
 }
 
 func ParseAuthenticationToken(tokenStr string) (auth.AuthRequest, error) {

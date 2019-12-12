@@ -683,8 +683,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "User login",
-        "description": "User login and authentication",
+        "summary": "User login with email and password",
+        "description": "User login and authentication with email and password",
         "operationId": "auth-login",
         "consumes": [
           "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
@@ -701,6 +701,57 @@
             "example": {
               "email": "jhon.doe@domain.tld",
               "pwd": "jhondoe"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "login success message",
+            "schema": {
+              "example": {
+                "msg": "login",
+                "data": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiNDhjZWFmYzUzM2VlNDE4YzhhMjgwNWI5OTkxZjlkOTAiLCJleHAiOjE1NTgyOTAxMjF9.vAuZNSh9KHz5xJeJ2sJ8aTf0J9DUPFdAQAZKaBUVa0E"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid authentication message",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "failed to process your login request at this moment. Please try it later",
+                "details": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/key": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User login using API key and API secret",
+        "description": "User login using API key and API secret",
+        "operationId": "auth-api-keys",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "key": "8ff0922f05a9402da62e7757a01fc465",
+              "secret": "337b3618b63c49a782ddecb1a0941a48"
             }
           }
         }],
