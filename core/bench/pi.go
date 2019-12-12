@@ -1,6 +1,7 @@
 package bench
 
 import (
+	"github.com/zerjioang/etherniti/core/modules/monotonic"
 	"math"
 	"math/rand"
 	"runtime"
@@ -8,7 +9,11 @@ import (
 	"time"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/monotonic"
+)
+
+const (
+	// 30 milion samples
+	samples = 30000000
 )
 
 var (
@@ -16,46 +21,49 @@ var (
 	runScore int64
 	// total runtime
 	totalTime time.Duration
+	// calculated flag
+	calculated bool
 )
 
 func init() {
-	logger.Debug("loading internal p.o.s.t bencharmink")
+	logger.Debug("loading internal p.o.s.t bencharking")
 	calculateScore()
-
 }
 
 func calculateScore() {
-	logger.Debug("benchmarking current server configuration")
-	logger.Debug("getting benchmark (multicore) score")
+	if !calculated {
+		logger.Debug("benchmarking current server configuration")
+		logger.Debug("getting benchmark (multicore) score")
 
-	cores := runtime.NumCPU()
-	runtime.GOMAXPROCS(cores)
+		cores := runtime.NumCPU()
+		runtime.GOMAXPROCS(cores)
 
-	var wait sync.WaitGroup
+		logger.Debug("calculating score using all server cores: ", cores)
 
-	counts := make([]int, cores)
+		var wait sync.WaitGroup
 
-	// 30 milion samples
-	samples := 30000000
+		counts := make([]int, cores)
 
-	start := monotonic.Now()
-	wait.Add(cores)
+		start := monotonic.Now()
+		wait.Add(cores)
 
-	for i := 0; i < cores; i++ {
-		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
+		for i := 0; i < cores; i++ {
+			go monteCarlo(100.0, samples/cores, &counts[i], &wait)
+		}
+
+		wait.Wait()
+
+		total := 0
+		for i := 0; i < cores; i++ {
+			total += counts[i]
+		}
+
+		//pi := (float64(total) / float64(samples)) * 4
+		totalTime = monotonic.Since(start)
+		score := float64(samples) / totalTime.Seconds()
+		runScore = int64(score)
+		calculated = true
 	}
-
-	wait.Wait()
-
-	total := 0
-	for i := 0; i < cores; i++ {
-		total += counts[i]
-	}
-
-	//pi := (float64(total) / float64(samples)) * 4
-	totalTime = monotonic.Since(start)
-	score := float64(samples) / totalTime.Seconds()
-	runScore = int64(score)
 }
 
 func GetScore() int64 {

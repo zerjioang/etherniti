@@ -65,13 +65,6 @@ func init() {
 	// echo 2621440 >  /proc/sys/net/netfilter/nf_conntrack_max
 }
 
-// generate build sha1: git rev-parse --short HEAD
-// compile passing -ldflags "-X main.Build <build sha1>"
-// example: go build -ldflags "-X main.Build a1064bc" example.go
-func main() {
-	Launcher()
-}
-
 func Launcher() {
 	/*
 		The GOMAXPROCS variable limits the number of operating system threads
@@ -117,4 +110,11 @@ func showErrorInformation(e error) {
 	)
 	table.Append([]string{"failed to execute etherniti proxy", e.Error()})
 	table.Render()
+}
+
+// generate build sha1: git rev-parse --short HEAD
+// compile passing -ldflags "-X main.Build <build sha1>"
+// example: go build -ldflags "-X main.Build a1064bc" example.go
+func main() {
+	Launcher()
 }

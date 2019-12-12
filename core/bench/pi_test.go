@@ -1,45 +1,69 @@
 package bench
 
 import (
-	"fmt"
-	"runtime"
+	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
-
-	"github.com/zerjioang/etherniti/core/modules/monotonic"
 )
 
 func TestMonteCarlo(t *testing.T) {
-	cores := runtime.NumCPU()
-	runtime.GOMAXPROCS(cores)
-
-	var wait sync.WaitGroup
-
-	counts := make([]int, cores)
-
-	// 30 million samples
-	samples := 30000000
-
-	start := monotonic.Now()
-	wait.Add(cores)
-
-	for i := 0; i < cores; i++ {
-		go monteCarlo(100.0, samples/cores, &counts[i], &wait)
-	}
-
-	wait.Wait()
-
-	total := 0
-	for i := 0; i < cores; i++ {
-		total += counts[i]
-	}
-
-	pi := (float64(total) / float64(samples)) * 4
-	totalt := monotonic.Since(start)
-	score := float64(samples) / totalt.Seconds()
-
-	fmt.Println("Time: ", totalt)
-	fmt.Println("Score: ", int64(score))
-	fmt.Println("pi: ", pi)
-	fmt.Println("")
+	t.Run("calculate-score", func(t *testing.T) {
+		calculateScore()
+	})
+	t.Run("calculate-score-goroutines", func(t *testing.T) {
+		var g sync.WaitGroup
+		total := 20
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				calculateScore()
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
+	t.Run("get-score", func(t *testing.T) {
+		calculateScore()
+		v := GetScore()
+		assert.NotNil(t, v)
+		assert.True(t, v > 0)
+	})
+	t.Run("get-score-goroutines", func(t *testing.T) {
+		// calculate score once
+		calculateScore()
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				v := GetScore()
+				assert.NotNil(t, v)
+				assert.True(t, v > 0)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
+	t.Run("get-bench-time", func(t *testing.T) {
+		calculateScore()
+		v := GetBenchTime().Nanoseconds()
+		assert.NotNil(t, v)
+		assert.True(t, v > 0)
+	})
+	t.Run("get-benchtime-goroutines", func(t *testing.T) {
+		// calculate score once
+		calculateScore()
+		var g sync.WaitGroup
+		total := 200
+		g.Add(total)
+		for i := 0; i < total; i++ {
+			go func() {
+				v := GetBenchTime()
+				assert.NotNil(t, v)
+				assert.True(t, v > 0)
+				g.Done()
+			}()
+		}
+		g.Wait()
+	})
 }

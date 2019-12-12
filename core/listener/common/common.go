@@ -63,6 +63,7 @@ func NewContext(e *echo.Echo) *echo.Context {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
+	c.Preload(req, rec)
 	return c
 }
 
@@ -71,5 +72,6 @@ func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.R
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
+	c.Preload(req, rec)
 	return req, rec, c
 }

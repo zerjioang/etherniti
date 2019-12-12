@@ -15,6 +15,34 @@ docker run \
     -it \
     -d etherniti/proxy-oss:latest
 ```
+
+## Prerequisites
+
+### Minimum hardware requirements
+
+* 256 MB of RAM
+* 1 GB of drive space (although 10 GB is a recommended minimum if running Jenkins as a Docker container)
+   
+### Recommended hardware configuration for small DAPPs
+
+* 1 GB+ of RAM
+* 50 GB+ of drive space
+
+## Installation platforms
+
+This section describes how to install/run Jenkins on different platforms and operating systems.
+Docker
+
+### Docker
+
+Docker is a platform for running applications in an isolated environment called a "container" (or Docker container). Applications like Etherniti can be downloaded as read-only "images" (or Docker images), each of which is run in Docker as a container. A Docker container is in effect a "running instance" of a Docker image. From this perspective, an image is stored permanently more or less (i.e. insofar as image updates are published), whereas containers are stored temporarily. Read more about these concepts in the Docker documentation’s Getting Started, Part 1: Orientation and setup page.
+
+Docker’s fundamental platform and container design means that a single Docker image (for any given application like Etherniti) can be run on any supported operating system (macOS, Linux and Windows) or cloud service (AWS and Azure) which is also running Docker.
+
+### Unikernels
+
+Cooming Soon
+
 ## Development
 
 ### Using Intellij GoLand

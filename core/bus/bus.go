@@ -26,3 +26,7 @@ func Subscribe(topic string, listener gobus.EventListener) {
 func Emit(topic string) {
 	sb.Emit(topic)
 }
+
+func EmitWithMessage(topic string, data map[string]interface{}) {
+	sb.EmitWithMessage(topic, data)
+}

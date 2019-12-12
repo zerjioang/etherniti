@@ -42,8 +42,12 @@ type FastTime struct {
 	sec  int64
 }
 
-func (t FastTime) Unix() int64 {
+func (t FastTime) Raw() int64 {
 	return t.sec
+}
+
+func (t FastTime) Unix() int64 {
+	return t.sec/1000000000
 }
 
 func (t FastTime) Nanos() uint32 {
