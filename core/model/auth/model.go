@@ -27,8 +27,8 @@ type AuthRequest struct {
 	Email                         string             `json:"email" form:"email" query:"email"`
 	Password                      string             `json:"pwd" form:"pwd" query:"pwd"`
 	// for api key based authentication
-	ApiKey                      string             `json:"key,omitempty" form:"key" query:"key"`
-	ApiSecret                      string             `json:"secret,omitempty" form:"secret" query:"secret"`
+	ApiKey    string `json:"key,omitempty" form:"key" query:"key"`
+	ApiSecret string `json:"secret,omitempty" form:"secret" query:"secret"`
 }
 
 // implementation of interface DatabaseObjectInterface

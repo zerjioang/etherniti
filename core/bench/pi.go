@@ -6,7 +6,8 @@ import (
 	"math/rand"
 	"runtime"
 	"sync"
-	"time"
+
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 
 	"github.com/zerjioang/etherniti/core/logger"
 )
@@ -20,13 +21,13 @@ var (
 	// runtime benchmark execution score
 	runScore int64
 	// total runtime
-	totalTime time.Duration
+	totalTime fastime.Duration
 	// calculated flag
 	calculated bool
 )
 
 func init() {
-	logger.Debug("loading internal p.o.s.t bencharking")
+	logger.Debug("loading internal P.O.S.T benchmarking")
 	calculateScore()
 }
 
@@ -70,14 +71,14 @@ func GetScore() int64 {
 	return runScore
 }
 
-func GetBenchTime() time.Duration {
+func GetBenchTime() fastime.Duration {
 	return totalTime
 }
 
 func monteCarlo(radius float64, reps int, result *int, wait *sync.WaitGroup) {
 	var x, y float64
 	count := 0
-	seed := rand.NewSource(time.Now().UnixNano())
+	seed := rand.NewSource(fastime.Unix())
 	random := rand.New(seed)
 
 	for i := 0; i < reps; i++ {

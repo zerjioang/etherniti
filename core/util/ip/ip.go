@@ -30,6 +30,9 @@ func Ip2int(ip string) uint32 {
 }
 
 func Ip2intLow(ip string) uint32 {
+	if ip == "" {
+		return 0
+	}
 	var octets [4][4]byte
 	var currentOctect uint8 = 0
 	var currentOctectPos uint8 = 0

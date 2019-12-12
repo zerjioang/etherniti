@@ -119,12 +119,12 @@ var (
 
 	DatabaseError = []byte("failed to process your login request at this moment. Please try it later")
 
-	InvalidLoginData        = []byte("invalid username or password provided")
-	InvalidLoginAPIKeyData        = []byte("invalid API key or API secret provided")
-	MissingLoginFields      = []byte("invalid login data provided. please fill all required fields")
-	MissingAPIKeyLoginFields      = []byte("an API Key or API secret is missing")
-	FailedLoginVerification = []byte("failed to verify your login information at this time. Please try it few minutes later.")
-	RegistrationSuccess     = []byte("registration successfully finished. Please verify your account with the message sent to your inbox.")
+	InvalidLoginData         = []byte("invalid username or password provided")
+	InvalidLoginAPIKeyData   = []byte("invalid API key or API secret provided")
+	MissingLoginFields       = []byte("invalid login data provided. please fill all required fields")
+	MissingAPIKeyLoginFields = []byte("an API Key or API secret is missing")
+	FailedLoginVerification  = []byte("failed to verify your login information at this time. Please try it few minutes later.")
+	RegistrationSuccess      = []byte("registration successfully finished. Please verify your account with the message sent to your inbox.")
 
 	MnemonicLanguageNotProvided = []byte("provided language is not supported")
 	MnemonicSizeNotSupported    = []byte("provided mnemonic size is not supported. allowed sizes are: 128,160,192,224,256")

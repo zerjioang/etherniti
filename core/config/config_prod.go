@@ -1,8 +1,6 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build !dev
-// +build !pre
 // +build prod
 
 package config
@@ -57,7 +55,7 @@ func IsDevelopment() bool {
 // read swagger url domain: ip or FQDN
 // no port allowed in pre and prod. default port is used
 // 80 and 443
-func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
+func GetSwaggerAddressWithPort(opts EthernitiOptions) string {
 	logger.Debug("reading swagger address port from env")
 	return opts.SwaggerAddress
 }

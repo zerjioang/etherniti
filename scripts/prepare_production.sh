@@ -29,10 +29,10 @@ done
 ./scripts/fmt.sh
 ./scripts/fmt_and_simplify.sh
 # go vet
-./scripts/govet.sh -tags "dev oss"
-./scripts/govet.sh -tags "pre oss"
-./scripts/govet.sh -tags "prod oss"
+# ./scripts/govet.sh -tags "dev oss"
+# ./scripts/govet.sh -tags "pre oss"
+# ./scripts/govet.sh -tags "prod oss"
 
-./scripts/govet.sh -tags "dev pro"
-./scripts/govet.sh -tags "pre pro"
-./scripts/govet.sh -tags "prod pro"
+# ./scripts/govet.sh -tags "dev pro"
+# ./scripts/govet.sh -tags "pre pro"
+# ./scripts/govet.sh -tags "prod pro"

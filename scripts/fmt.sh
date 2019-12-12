@@ -23,4 +23,4 @@ do
 	go fmt $file
 done
 
-echo "Code formatting done!"
+echo "(fmt) Code formatting done!"

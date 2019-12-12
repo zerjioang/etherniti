@@ -18,10 +18,10 @@ ARG BUILD_VERSION=latest
 ARG FILE=proxy
 ARG ETHERNITI_GOOS=linux
 ARG ETHERNITI_GOARCH=amd64
-ARG USER=etherniti
+ARG TARGET_USER=etherniti
 ARG RESOURCE_DIR=/go/src/github.com/zerjioang/etherniti/testdata
 
-ENV USER                etherniti
+ENV USER                ${TARGET_USER}
 
 # add source code to docker image for multistage build
 WORKDIR                 $BASE
@@ -33,7 +33,11 @@ RUN adduser --system --no-create-home --gecos 'ethernitigrp' --disabled-password
     rm -rf .git && \
     chmod +x ${FILE} && \
     chown ${USER} ${FILE} && \
-    ls -alh
+    ls -alh && \
+    mkdir -p $GOPATH/src/github.com/zerjioang/etherniti/testdata && \
+    mkdir -p $HOME/data && \
+    chmod +rwx -R $HOME && \
+    chown ${TARGET_USER} -R $HOME/data
 
 FROM etherniti/solc-armv7l:latest
 
@@ -48,7 +52,8 @@ ARG BASE=src/github.com/zerjioang/etherniti/testdata
 
 ENV GOPATH=/${USER}/go
 ENV PATH="/${USER}:${PATH}"
-WORKDIR /${USER}
+ENV USER=${TARGET_USER}
+WORKDIR /${TARGET_USER}
 
 EXPOSE $X_ETHERNITI_INTERACTION_PORT
 

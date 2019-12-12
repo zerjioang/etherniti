@@ -61,7 +61,7 @@ func (ctl ApiKeysAuthController) login(c *echo.Context) error {
 			}
 			return api.ErrorBytes(c, data.InvalidLoginData)
 		}
-		if readErr.Error() == "Key not found"{
+		if readErr.Error() == "Key not found" {
 			return api.ErrorBytes(c, data.InvalidLoginAPIKeyData)
 		}
 		// internal server erro while executing db call operation

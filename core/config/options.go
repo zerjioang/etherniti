@@ -74,7 +74,7 @@ type EthernitiOptions struct {
 
 var (
 	// default etherniti proxy options
-	defaultOptions = &EthernitiOptions{
+	defaultOptions = EthernitiOptions{
 		LogLevelStr:             "warn",
 		LogLevel:                log.WARN,
 		LoggingEnabled:          true,
@@ -86,11 +86,11 @@ var (
 		AnalyticsEnabled:        true,
 		MetricsEnabled:          true,
 		UniqueIdsEnabled:        true,
-		SwaggerAddress:          "127.0.0.1",
-		ListeningAddress:        "127.0.0.1",
+		SwaggerAddress:          "0.0.0.0",
+		ListeningAddress:        "0.0.0.0",
 		ListeningPort:           8080,
 		SecureListeningPort:     4430,
-		HttpInterface:           "127.0.0.1",
+		HttpInterface:           "0.0.0.0",
 		ListeningModeStr:        "http",
 		ListeningMode:           listener.HttpMode,
 		OpenBrowserOnSuccess:    true,
@@ -396,6 +396,6 @@ func (eo *EthernitiOptions) logLevelResolver() log.Lvl {
 	}
 }
 
-func GetDefaultOpts() *EthernitiOptions {
+func GetDefaultOpts() EthernitiOptions {
 	return defaultOptions
 }

@@ -8,8 +8,8 @@ import (
 	"encoding/hex"
 	"io"
 	mrand "math/rand"
-	"time"
 
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 	"github.com/zerjioang/etherniti/core/modules/snowflake"
 
 	"github.com/zerjioang/etherniti/core/logger"
@@ -120,7 +120,7 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 var (
-	seededRand = mrand.New(mrand.NewSource(time.Now().UnixNano()))
+	seededRand = mrand.New(mrand.NewSource(fastime.Unix()))
 )
 
 //BenchmarkGenerateUUID/random-str-charset-4        	 2000000	       888 ns/op	   1.13 MB/s	      64 B/op	       2 allocs/op

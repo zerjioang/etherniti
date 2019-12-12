@@ -38,7 +38,7 @@ func RunServer(notifier chan error) {
 		opts := config.GetDefaultOpts()
 
 		// 0 generate root/superadmin proxy identity for management
-		_, _, adminErr := config.GenerateAdmin(opts)
+		_, _, adminErr := config.GenerateAdmin(&opts)
 		if adminErr != nil {
 			// env error configuration found
 			notifier <- adminErr
@@ -60,7 +60,7 @@ func RunServer(notifier chan error) {
 			return
 		}
 		// 3 check proxy server configuration
-		configErr := config.CheckConfiguration(opts)
+		configErr := config.CheckConfiguration(&opts)
 		if configErr != nil {
 			// proxy configuration error configuration found
 			notifier <- configErr

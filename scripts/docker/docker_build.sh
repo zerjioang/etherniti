@@ -21,7 +21,7 @@ function build(){
 	fi
 
 	title "Building container amd64 image from Dockerfile-dev"
-	docker build -f Dockerfile-dev "$@" .
+	docker build -f Dockerfile-prod "$@" .
 }
 
 function buildArm(){

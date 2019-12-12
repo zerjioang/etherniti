@@ -5,9 +5,9 @@ package dashboard
 
 import (
 	"sync/atomic"
-	"time"
 
 	"github.com/zerjioang/etherniti/core/bench"
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/bus"
@@ -39,8 +39,8 @@ func (s *ProxyStats) Defaults() {
 var (
 	atomicStats  atomic.Value
 	scoreWrapper struct {
-		Time  time.Duration `json:"time"`
-		Score int64         `json:"score"`
+		Time  fastime.Duration `json:"time"`
+		Score int64            `json:"score"`
 	}
 )
 

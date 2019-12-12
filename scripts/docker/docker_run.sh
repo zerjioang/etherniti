@@ -52,7 +52,7 @@ docker run \
     -e X_ETHERNITI_RATELIMIT=10 \
     -e X_ETHERNITI_RATE_LIMIT_UNITS=10 \
     -e X_ETHERNITI_INFURA_TOKEN="153d442fd9d1449abb44150e515d1060" \
-    -v $(pwd)/volumes/data:/root/.etherniti:rw \
+    -v $(pwd)/volumes/var/lib/etherniti/data:/var/lib/etherniti/data:rw \
     -v /etc/letsencrypt:/etc/letsencrypt \
     etherniti/proxy-oss:$(arch)-latest
 

@@ -162,7 +162,7 @@ function compile(){
             GODEBUG=${GODEBUG} \
             go build \
                 -tags "${TAGS}"\
-                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}'" \
+                -ldflags "-s -w -X 'main.Commit=${hash}' -X 'main.Edition=${BUILD_EDITION}' -X 'main.Version=${BUILD_VERSION}' -linkmode=external -extldflags -static" \
                 -o $outputname
         else
             echo "compiling production version..."

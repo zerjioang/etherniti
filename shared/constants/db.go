@@ -3,10 +3,7 @@
 
 package constants
 
-import "os"
-
 // database config
 var (
-	Home             = os.Getenv("HOME")
-	DatabaseRootPath = Home + "/.etherniti/"
+	DatabaseRootPath = "/var/lib/etherniti/data/"
 )

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache 2
 # 
 
-FROM golang:1.12.6
+FROM golang:1.13.3
 
 MAINTAINER team@etherniti.org
 

@@ -12,7 +12,7 @@ import (
 
 var (
 	testSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
-	scoreVar int64
+	scoreVar          int64
 )
 
 func BenchmarkPi(b *testing.B) {
@@ -72,4 +72,3 @@ func BenchmarkPi(b *testing.B) {
 		}
 	})
 }
-

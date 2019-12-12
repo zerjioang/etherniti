@@ -26,7 +26,12 @@ source ./scripts/colors.sh
 
 log "Etherniti Proxy OSS ($BUILD_VERSION, $edition, $mode) docker image"
 #our proxy configuration
+# editions: oss, pro
 edition="oss"
+# modes: dev, pre, prod
+# dev: dynamically linked
+# prod: statically linked
+# pre: statically linked
 mode="pre"
 # get current os system architecture
 osarch=$(arch)

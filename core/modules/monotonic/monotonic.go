@@ -7,8 +7,9 @@
 package monotonic
 
 import (
-	"time"
 	_ "unsafe" // required to use //go:linkname
+
+	"github.com/zerjioang/etherniti/core/modules/fastime"
 )
 
 //go:noescape
@@ -27,6 +28,6 @@ func Now() uint64 {
 
 // Since returns the amount of time that has elapsed since t. t should be
 // the result of a call to Now() on the same machine.
-func Since(t uint64) time.Duration {
-	return time.Duration(uint64(nanotime()) - t)
+func Since(t uint64) fastime.Duration {
+	return fastime.Duration(uint64(nanotime()) - t)
 }

@@ -127,7 +127,7 @@ func RegisterServices(e *echo.Echo) *echo.Group {
 
 	// ui helper calls
 	uiGroup := groupV1.Group("/ui", next)
-	NewUIController(client).RegisterRouters(uiGroup)
+	dashboard.NewUIController(client).RegisterRouters(uiGroup)
 
 	// coin market cap: get eth price data
 	externalGroup := groupV1.Group("/external", next)

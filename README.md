@@ -10,12 +10,13 @@ A High Performance Web3 REST Proxy for smart contract inter-communication.
 
 ## Usage
 
-```$bash
+```bash
 docker run \
     -it \
     -d etherniti/proxy-oss:latest
 ```
 
+<<<<<<< HEAD
 ## Prerequisites
 
 ### Minimum hardware requirements
@@ -42,6 +43,27 @@ Docker’s fundamental platform and container design means that a single Docker 
 ### Unikernels
 
 Cooming Soon
+=======
+## Deployment
+
+You can configure your server to use a RT kernel via:
+
+```bash
+sudo apt-get install linux-headers-lowlatency
+sudo apt-get install linux-lowlatency
+sudo update-grub
+```
+
+After that, run:
+
+```bash
+docker run \
+    -it \
+    -d etherniti/proxy-oss:latest
+```
+
+Not: add as many environment variables as needed in order to customize your deployment.
+>>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
 
 ## Development
 

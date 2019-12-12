@@ -1,9 +1,7 @@
 // Copyright etherniti
 // SPDX-License-Identifier: Apache License 2.0
 
-// +build dev !dev
-// +build !pre
-// +build !prod
+// +build dev
 
 package config
 
@@ -74,7 +72,7 @@ func init() {
 }
 
 //check if profiling is enabled or not
-func IsProfilingEnabled(opts *EthernitiOptions) bool {
+func IsProfilingEnabled(opts EthernitiOptions) bool {
 	logger.Debug("checking if profiling ListeningMode is enabled")
 	v, found := opts.envData.Read("X_ETHERNITI_ENABLE_PROFILER")
 	return found && v == "true"
@@ -87,7 +85,7 @@ func IsDevelopment() bool {
 
 // allow swagger ui access via ip and port or domain and port.
 // development only
-func GetSwaggerAddressWithPort(opts *EthernitiOptions) string {
+func GetSwaggerAddressWithPort(opts EthernitiOptions) string {
 	logger.Debug("reading swagger address with port from env")
 	return opts.SwaggerAddress + ":" + opts.GetListeningPortStr()
 }
@@ -98,7 +96,7 @@ func Env() string {
 }
 
 // setup server config
-func Setup(opts *EthernitiOptions) error {
+func Setup(opts EthernitiOptions) error {
 	logger.Debug("loading additional development setup config")
 	// enable profile ListeningMode if requested
 	if edition.IsEnterprise() && IsProfilingEnabled(opts) {

@@ -4,12 +4,22 @@
 package fastime
 
 import (
+	"strconv"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFastTime(t *testing.T) {
 
+	t.Run("comparison", func(t *testing.T) {
+		unixStdTime := time.Now().UnixNano()
+		fastTime := Unix()
+		t.Log(unixStdTime, fastTime)
+		diff := fastTime - unixStdTime
+		t.Log(diff)
+	})
 	t.Run("duration", func(t *testing.T) {
 		var d Duration
 		d = Nanosecond * 200
@@ -56,6 +66,16 @@ func TestFastTime(t *testing.T) {
 		tm2 := Now()
 		raw := tm2.UnsafeBytes()
 		t.Log(raw)
+	})
+	t.Run("format", func(t *testing.T) {
+		// get current date time
+		millis := Now().Unix()
+		timeStr := time.Unix(millis, 0).Format(time.RFC3339)
+		millisStr := strconv.FormatInt(millis, 10)
+		t.Log(millis)
+		t.Log(timeStr)
+		t.Log(millisStr)
+		assert.Equal(t, len(millisStr), 10)
 	})
 }
 
