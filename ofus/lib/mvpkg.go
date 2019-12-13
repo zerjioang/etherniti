@@ -11,7 +11,6 @@ import (
 	"go/ast"
 	"go/build"
 	"go/format"
-	"go/parser"
 	"go/token"
 	"log"
 	"os"
@@ -20,7 +19,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"sort"
 	"strconv"
 	"strings"
 	"text/template"
@@ -363,64 +361,4 @@ func sameLine(fset *token.FileSet, x, y token.Pos) bool {
 
 var moveDirectory = func(from, to string) error {
 	return os.Rename(from, to)
-}
-
-// loadProgram loads the specified set of packages (plus their tests)
-// and all their dependencies, from source, through the specified build
-// context.  Only packages in pkgs will have their functions bodies typechecked.
-func loadProgram(ctxt *build.Context, pkgs map[string]bool) (*loader.Program, error) {
-	conf := loader.Config{
-		Build:      ctxt,
-		ParserMode: parser.ParseComments,
-
-		// TODO(adonovan): enable this.  Requires making a lot of code more robust!
-		AllowErrors: false,
-	}
-	// Optimization: don't type-check the bodies of functions in our
-	// dependencies, since we only need exported package members.
-	conf.TypeCheckFuncBodies = func(p string) bool {
-		return pkgs[p] || pkgs[strings.TrimSuffix(p, "_test")]
-	}
-
-	var list []string
-	for pkg := range pkgs {
-		list = append(list, pkg)
-	}
-	sort.Strings(list)
-	for _, pkg := range list {
-		log.Printf("Loading package: %s", pkg)
-	}
-
-	for pkg := range pkgs {
-		conf.ImportWithTests(pkg)
-	}
-
-	// Ideally we would just return conf.Load() here, but go/types
-	// reports certain "soft" errors that gc does not (Go issue 14596).
-	// As a workaround, we set AllowErrors=true and then duplicate
-	// the loader's error checking but allow soft errors.
-	// It would be nice if the loader API permitted "AllowErrors: soft".
-	conf.AllowErrors = true
-	prog, err := conf.Load()
-	if err != nil {
-		return nil, err
-	}
-
-	var errpkgs []string
-	// Report hard errors in indirectly imported packages.
-	for _, info := range prog.AllPackages {
-		if info.Errors != nil && len(info.Errors) > 0 {
-			errpkgs = append(errpkgs, info.Pkg.Path())
-		}
-	}
-	if errpkgs != nil {
-		var more string
-		if len(errpkgs) > 3 {
-			more = fmt.Sprintf(" and %d more", len(errpkgs)-3)
-			errpkgs = errpkgs[:3]
-		}
-		return nil, fmt.Errorf("couldn't load packages due to errors: %s%s",
-			strings.Join(errpkgs, ", "), more)
-	}
-	return prog, nil
 }

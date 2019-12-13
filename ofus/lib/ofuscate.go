@@ -206,14 +206,47 @@ func (of Ofuscator) skipPath(file string) bool {
 
 // concurrency safe
 func (of Ofuscator) isWhiteListed(filename string) bool {
-	return filename == "AUTHORS" ||
+	lower := strings.ToLower(filename)
+	if strings.LastIndex(lower, ".md") != -1 {
+		// exclude markdown files
+		return true
+	}
+	if strings.LastIndex(lower, ".toml") != -1 {
+		// exclude toml files
+		return true
+	}
+	if strings.LastIndex(lower, ".lock") != -1 {
+		// exclude lock files
+		return true
+	}
+	if strings.LastIndex(lower, ".sum") != -1 {
+		// exclude go modules sum files
+		return true
+	}
+	if strings.LastIndex(lower, ".yml") != -1 {
+		// exclude yml or yaml
+		return true
+	}
+	if strings.LastIndex(lower, ".yaml") != -1 {
+		// exclude yml or yaml
+		return true
+	}
+	if strings.Index(lower, "dockerfile") != -1 {
+		// exclude dockerfile files
+		return true
+	}
+	if strings.LastIndex(lower, ".c") != -1 {
+		// exclude c files
+		return true
+	}
+	if strings.LastIndex(lower, ".h") != -1 {
+		// exclude c header files
+		return true
+	}
+	return filename == ".dockerignore" ||
+		filename == "AUTHORS" ||
 		filename == "LICENSE" ||
-		filename == "VERSION" ||
-		filename == "MAINTAINERS.md" ||
-		filename == "CONTRIBUTING.md" ||
-		filename == "Gopkg.toml" ||
-		filename == "Gopkg.lock" ||
-		filename == "README.md"
+		filename == "VERSION"
 }
 
 // concurrency safe

@@ -1,4 +1,4 @@
-package lib
+package ast
 
 import (
 	"fmt"
@@ -455,7 +455,7 @@ func Imports(fset *token.FileSet, f *ast.File) [][]*ast.ImportSpec {
 			break
 		}
 
-		group := []*ast.ImportSpec{}
+		var group []*ast.ImportSpec
 
 		var lastLine int
 		for _, spec := range genDecl.Specs {

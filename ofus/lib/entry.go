@@ -3,7 +3,10 @@
 
 package lib
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 type OfusEntry struct {
 	originalPath         string
@@ -23,10 +26,21 @@ func (entry OfusEntry) OfuscatedBasePath() string {
 }
 
 func (entry OfusEntry) OfuscatedFilePath() string {
-	if entry.ofuscatedPackageName == "" {
-		return "out/src/elf/" + entry.ofuscatedFilename + entry.extension
+	isGoTestFile := strings.LastIndex(strings.ToLower(entry.originalPath), "_test.go") != -1
+	if isGoTestFile {
+		// process test file
+		ofusName := "out/src/elf/" + entry.ofuscatedPackageName + "/" + entry.ofuscatedFilename
+		if entry.ofuscatedPackageName == "" {
+			ofusName = "out/src/elf/" + entry.ofuscatedFilename
+		}
+		return ofusName + "_test.go"
+	} else {
+		ofusName := "out/src/elf/" + entry.ofuscatedPackageName + "/" + entry.ofuscatedFilename + entry.extension
+		if entry.ofuscatedPackageName == "" {
+			ofusName = "out/src/elf/" + entry.ofuscatedFilename + entry.extension
+		}
+		return ofusName
 	}
-	return "out/src/elf/" + entry.ofuscatedPackageName + "/" + entry.ofuscatedFilename + entry.extension
 }
 
 func (entry OfusEntry) createDstOfuscatedDir() error {

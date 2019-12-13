@@ -196,13 +196,8 @@
     "zlib",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
   revision = "438db640fd672278e44bb9bec0b979358e7e9c76"
   version = "v1.9.4"
-=======
-  revision = "dbe23c5a61c1539a54e8a2927ca1a2e7bcc92caf"
-  version = "v1.8.4"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
 
 [[projects]]
   digest = "1:4a29eeb25603debe8f2098a9902c4d3851034cf70d33be428826e86e8c30a1b0"
@@ -246,11 +241,7 @@
 
 [[projects]]
   branch = "master"
-<<<<<<< HEAD
   digest = "1:b0eb641b43b44b196880360efaf95e5916cb2bea747935932694b7003ea8adb3"
-=======
-  digest = "1:1c0746cc5facc7d8d3b77e4035d0df68fe72e01bd9833d9a566780a54c4be43a"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
   name = "github.com/mmcloughlin/avo"
   packages = [
     "attr",
@@ -268,11 +259,7 @@
     "x86",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
   revision = "15d6a9a17e5386cb169227dd4dea9a23100a5029"
-=======
-  revision = "c8004ba627cacd7bab12cf9243c2f14d89c71cbe"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -558,19 +545,11 @@
     "trace",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
   revision = "c0dbc17a35534bf2e581d7a942408dc936316da4"
 
 [[projects]]
   branch = "master"
   digest = "1:d64bdbbc412a0f740a9116c0aa53be94c804e24a6fd9c44de36e3063ec98e5a2"
-=======
-  revision = "1a5e07d1ff72da30f660d3c95b312a20be31173c"
-
-[[projects]]
-  branch = "master"
-  digest = "1:bc63533a3e3dfb2e7b8b4b73581509ee32907f5c996a42b34f7de14a37a87a1c"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
   name = "golang.org/x/sys"
   packages = [
     "cpu",
@@ -578,19 +557,11 @@
     "windows",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
   revision = "ac6580df4449443a05718fd7858c1f91ad5f8d20"
 
 [[projects]]
   branch = "master"
-  digest = "1:37952ee16bd5170d0cc0859b0aa67d4b3b38a54548511ff28d451de57b6a695a"
-=======
-  revision = "0a153f010e6963173baba2306531d173aa843137"
-
-[[projects]]
-  branch = "master"
-  digest = "1:17323c4ee7c9ff5e2a67e217dd9dd0bd997e40ea31fc379b8e88bc5071e58d1f"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
+  digest = "1:6939018b510ece8f8909a17e316739b9a7a19059aa67ca15541fe8d5f9cf97aa"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -606,19 +577,13 @@
     "internal/gopathwalk",
     "internal/semver",
     "refactor/importgraph",
+    "refactor/satisfy",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
-  revision = "98df123772120179846dbe20280e26b427d64dd6"
+  revision = "7093a17b0467e77fb41804b2754a44f54a8c9ca2"
 
 [[projects]]
   digest = "1:f4d6f1de81abede35943b5f9d8106c9a4579d3ea5a19d0991be3055e3383254b"
-=======
-  revision = "5eefd052ad727afc5e2e7b034c752b9d3d902b3b"
-
-[[projects]]
-  digest = "1:f8682de0e439bdcae1a139638fc5acac906bf9bb4d8e9485c5a425e451b9e221"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -634,13 +599,8 @@
     "internal/remote_api",
   ]
   pruneopts = "UT"
-<<<<<<< HEAD
   revision = "971852bfffca25b069c31162ae8f247a3dba083b"
   version = "v1.6.5"
-=======
-  revision = "c71d63e301d75423acb410203c747cad31e9a5e7"
-  version = "v1.6.3"
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
 
 [[projects]]
   digest = "1:1b76f20b7719c244d5a25cb4588d516d2c50fc019505343c4908abcf2bcd8420"
@@ -769,7 +729,9 @@
     "golang.org/x/tools/go/ast/astutil",
     "golang.org/x/tools/go/buildutil",
     "golang.org/x/tools/go/loader",
+    "golang.org/x/tools/go/types/typeutil",
     "golang.org/x/tools/refactor/importgraph",
+    "golang.org/x/tools/refactor/satisfy",
     "gopkg.in/src-d/go-billy.v4/memfs",
     "gopkg.in/src-d/go-git.v4",
     "gopkg.in/src-d/go-git.v4/storage/memory",
