@@ -1,11 +1,24 @@
 package config
 
 import (
+	"bytes"
 	"errors"
-
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/core/util/fs"
 	"github.com/zerjioang/etherniti/core/util/id"
 )
+
+var (
+	isDockerContainerDetected bool
+)
+
+func init() {
+	logger.Info("checking if application is running under docker environment")
+	isDockerContainerDetected = bytes.Contains(fs.ReadAll(" /proc/self/cgroup"), []byte(":/docker/")) ||
+		bytes.Contains(fs.ReadAll(" /proc/1/cgroup"), []byte(":/docker/")) ||
+		bytes.Contains(fs.ReadAll(" /proc/1/cgroup"), []byte(":/docker/")) ||
+		fs.Exists("/.dockerenv")
+}
 
 // generate proxy service admin identity
 func GenerateAdmin(opts *EthernitiOptions) (string, string, error) {
@@ -26,4 +39,12 @@ func GenerateAdmin(opts *EthernitiOptions) (string, string, error) {
 			return opts.Admin.Key, opts.Admin.Secret, nil
 		}
 	}
+}
+
+// ls -ali / | sed '2!d' |awk {'print $1'}
+// inside docker alpine: 6554197
+// inside docker ubuntu:latest 7884073
+// inside host: 2
+func IsDocker() bool {
+	return isDockerContainerDetected
 }

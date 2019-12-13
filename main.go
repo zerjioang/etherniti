@@ -4,14 +4,14 @@
 package main
 
 import (
-	"os"
-	"runtime"
-	"syscall"
-
 	"github.com/zerjioang/etherniti/core/bench"
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/cmd"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/etherniti/core/modules/fdlimit"
 	"github.com/zerjioang/etherniti/shared/notifier"
+	"os"
+	"runtime"
 
 	"github.com/zerjioang/etherniti/core/controllers"
 
@@ -46,19 +46,21 @@ func init() {
 	banner.Edition = Edition
 	// show welcome banner
 	println(banner.WelcomeBanner())
+	// load application internal constants
 	controllers.LoadIndexConstants()
+	// detect if the application is executing inside of docker container or not
+	isDocker := config.IsDocker()
+	if isDocker {
+		logger.Info("etherniti is running inside docker instance")
+	}
 	// hack 1
 	// Increase resources limitations
 	// adds logic to increase the soft limit on the max number of open files for the server process
-	var rLimit syscall.Rlimit
-	logger.Info("increasing soft limit on the max number of open files for the server process")
-	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
-		logger.Error(err)
+	currentVal, raiseErr := fdlimit.RaiseMax()
+	if raiseErr != nil {
+		logger.Error(raiseErr)
 	}
-	rLimit.Cur = rLimit.Max
-	if err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
-		logger.Error(err)
-	}
+	logger.Info("current server fd limit established at: ", currentVal)
 
 	// hack 2
 	// #!/bin/bash
