@@ -16,4 +16,11 @@ BenchmarkPi/get-score-12               	1000000000	         0.251 ns/op	3985.16 
 BenchmarkPi/get-bench-time-12          	1000000000	         0.255 ns/op	3924.03 MB/s	       0 B/op	       0 allocs/op
 
 after caching calculate-score results, since we only execute once at bootime, we get
+
+BenchmarkPi/calculate-score-4         					 241417473	          4.75 ns/op	 210.59 MB/s	       0 B/op	       0 allocs/op
+BenchmarkPi/get-score-4               					1000000000	         0.397 ns/op	2521.17 MB/s	       0 B/op	       0 allocs/op
+BenchmarkPi/get-score-with-local-variable-4         	1000000000	         0.450 ns/op	2223.16 MB/s	       0 B/op	       0 allocs/op
+BenchmarkPi/get-score-with-global-variable-4        	1000000000	         0.435 ns/op	2297.75 MB/s	       0 B/op	       0 allocs/op
+BenchmarkPi/get-bench-time-4                        	1000000000	         0.391 ns/op	2555.08 MB/s	       0 B/op	       0 allocs/op
+
 */

@@ -18,6 +18,15 @@ type EthernitiAdminOptions struct {
 	Secret        string
 	LoadedFromEnv bool
 }
+
+type AuthenticationOptions struct {
+	UseFirebaseManagement   bool   `json:"use_firebase_management"`
+	CheckUsersEmailValidity bool   `json:"check_users_email_validity"`
+	MinPasswordLen          int    `json:"min_password_len"`
+	WebAuthNEnabled         bool   `json:"web_auth_n_enabled"`
+	ConfirmationRedirectUrl string `json:"confirmation_redirect_url"`
+}
+
 type EthernitiOptions struct {
 	//environment variables
 	envData *env.EnvConfig
@@ -65,46 +74,46 @@ type EthernitiOptions struct {
 	RinkebyCustomEndpoint string
 	KovanCustomEndpoint   string
 	MainnetCustomEndpoint string
-	//users management configuration
-	useFirebaseManagement   bool
-	checkUsersEmailValidity bool
-	MinPasswordLen          int
-	webAuthNEnabled         bool
+	// users management configuration
+	Authentication AuthenticationOptions `json:"authentication"`
 }
 
 var (
 	// default etherniti proxy options
 	defaultOptions = EthernitiOptions{
-		LogLevelStr:             "warn",
-		LogLevel:                log.WARN,
-		LoggingEnabled:          true,
-		CORSEnabled:             true,
-		SecureModeEnabled:       true,
-		CompressionEnabled:      true,
-		RateLimitEnabled:        true,
-		ServerCacheEnabled:      true,
-		AnalyticsEnabled:        true,
-		MetricsEnabled:          true,
-		UniqueIdsEnabled:        true,
-		SwaggerAddress:          "0.0.0.0",
-		ListeningAddress:        "0.0.0.0",
-		ListeningPort:           8080,
-		SecureListeningPort:     4430,
-		HttpInterface:           "0.0.0.0",
-		ListeningModeStr:        "http",
-		ListeningMode:           listener.HttpMode,
-		OpenBrowserOnSuccess:    true,
-		BlockTorConnections:     false,
-		MaxWorker:               4,
-		MaxQueue:                200,
-		RopstenCustomEndpoint:   "",
-		RinkebyCustomEndpoint:   "",
-		KovanCustomEndpoint:     "",
-		MainnetCustomEndpoint:   "",
-		useFirebaseManagement:   false,
-		checkUsersEmailValidity: false,
-		MinPasswordLen:          6,
-		webAuthNEnabled:         false,
+		LogLevelStr:           "warn",
+		LogLevel:              log.WARN,
+		LoggingEnabled:        true,
+		CORSEnabled:           true,
+		SecureModeEnabled:     true,
+		CompressionEnabled:    true,
+		RateLimitEnabled:      true,
+		ServerCacheEnabled:    true,
+		AnalyticsEnabled:      true,
+		MetricsEnabled:        true,
+		UniqueIdsEnabled:      true,
+		SwaggerAddress:        "0.0.0.0",
+		ListeningAddress:      "0.0.0.0",
+		ListeningPort:         8080,
+		SecureListeningPort:   4430,
+		HttpInterface:         "0.0.0.0",
+		ListeningModeStr:      "http",
+		ListeningMode:         listener.HttpMode,
+		OpenBrowserOnSuccess:  true,
+		BlockTorConnections:   false,
+		MaxWorker:             4,
+		MaxQueue:              200,
+		RopstenCustomEndpoint: "",
+		RinkebyCustomEndpoint: "",
+		KovanCustomEndpoint:   "",
+		MainnetCustomEndpoint: "",
+		Authentication: AuthenticationOptions{
+			UseFirebaseManagement:   false,
+			CheckUsersEmailValidity: false,
+			MinPasswordLen:          6,
+			WebAuthNEnabled:         false,
+			ConfirmationRedirectUrl: "https://dashboard.etherniti.org",
+		},
 	}
 	//default token expiration time when users does not provide one
 	// 10 minute
@@ -209,10 +218,10 @@ func (eo *EthernitiOptions) preload() {
 	eo.MainnetCustomEndpoint = eo.envData.String(XEthernitiMainnetEndpoint)
 
 	//load users management configuration data
-	eo.useFirebaseManagement = eo.envData.Bool(XEthernitiUsersFirebase, false)     //disabled by default
-	eo.checkUsersEmailValidity = eo.envData.Bool(XEthernitiUsersCheckEmail, false) //disabled by default
-	eo.MinPasswordLen = eo.envData.Int(XEthernitiMinPasswordLength, 6)             //6 chars by default
-	eo.webAuthNEnabled = eo.envData.Bool(XEthernitiEnableWebAuthN, false)          //disabled by default
+	eo.Authentication.UseFirebaseManagement = eo.envData.Bool(XEthernitiUsersFirebase, false)     //disabled by default
+	eo.Authentication.CheckUsersEmailValidity = eo.envData.Bool(XEthernitiUsersCheckEmail, false) //disabled by default
+	eo.Authentication.MinPasswordLen = eo.envData.Int(XEthernitiMinPasswordLength, 6)             //6 chars by default
+	eo.Authentication.WebAuthNEnabled = eo.envData.Bool(XEthernitiEnableWebAuthN, false)          //disabled by default
 }
 
 func (eo *EthernitiOptions) RateLimit() uint32 {

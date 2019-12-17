@@ -71,3 +71,13 @@ func UnsafeEncodeToStringPooled(src []byte) string {
 	hexpool.Put(buf)
 	return *(*string)(unsafe.Pointer(&dst))
 }
+
+func EncodeString(src []byte) string {
+	buf := new(bytes.Buffer)
+	for i := 0; i < len(src); i++ {
+		v := src[i]
+		buf.WriteByte(hextableData[v>>4])
+		buf.WriteByte(hextableData[v&0x0f])
+	}
+	return buf.String()
+}

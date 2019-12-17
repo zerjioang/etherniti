@@ -3,6 +3,10 @@ package auth
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/modules/secure"
+	"github.com/zerjioang/etherniti/core/modules/secure/chacha20"
+	"github.com/zerjioang/etherniti/core/util/hex"
+
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
 	"github.com/zerjioang/etherniti/shared/protocol/io"
 
@@ -18,6 +22,21 @@ import (
 	"github.com/zerjioang/etherniti/thirdparty/echo"
 )
 
+var (
+	confirmationEncoder *chacha20.ChachaEncoder
+)
+
+type AccountState uint8
+
+const (
+	AccountUnknown AccountState = iota
+	AccountEmailConfirmationPending
+	AccountEmailConfirmed
+	AccountBlocked
+	AccountUnderInvestigation
+	AccountRecoveryRequested
+)
+
 // new login request dto
 type AuthRequest struct {
 	mixed.DatabaseObjectInterface `json:"_,omitempty"`
@@ -29,6 +48,17 @@ type AuthRequest struct {
 	// for api key based authentication
 	ApiKey    string `json:"key,omitempty" form:"key" query:"key"`
 	ApiSecret string `json:"secret,omitempty" form:"secret" query:"secret"`
+	// for account confirmation
+	Confirmation string `json:"confirmation,omitempty"`
+	// for account state management
+	Status AccountState `json:"status,omitempty"`
+}
+
+func init() {
+	logger.Debug("creating confirmation link secret")
+	pwd := secure.Keygen256()
+	logger.Debug("creating confirmation link encoder")
+	confirmationEncoder = chacha20.NewChachaEncoderParams([]byte(pwd))
 }
 
 // implementation of interface DatabaseObjectInterface
@@ -88,6 +118,47 @@ func (req *AuthRequest) Bind(context *echo.Context) (mixed.DatabaseObjectInterfa
 		return nil, stack.Ret(err)
 	}
 	return nil, data.ErrBind
+}
+
+// IsValidConfirmation detects whether given confirmation string is valid or not
+func (req *AuthRequest) IsValidConfirmation() (string, error) {
+	if req == nil {
+		return "", errors.New("missing account confirmation payload")
+	}
+	if req.Confirmation == "" {
+		return "", errors.New("missing account confirmation data")
+	}
+	// chacha20 nonce is always 48 hex encoded, so thats the minimum length allowed in the confirmation link
+	if len(req.Confirmation) <= 48 {
+		return "", errors.New("invalid or corrupted confirmation data")
+	}
+	// split nonce and encrypted content
+	nonce := req.Confirmation[0:48]
+	ciphertext := req.Confirmation[48:]
+	nonceRaw, _ := hex.DecodeString(nonce)
+	cipherRaw, _ := hex.DecodeString(ciphertext)
+	plaintext, err := confirmationEncoder.Decrypt(cipherRaw, nonceRaw)
+	if err != nil {
+		logger.Error("failed to verify confirmation link due to: ", err)
+		return "", errors.New("confirmation link is not valid or has expired")
+	}
+	if plaintext == nil || len(plaintext) == 0 {
+		logger.Error("failed to verify confirmation link message due to: ", err)
+		return "", errors.New("confirmation link message is not valid")
+	}
+	return string(plaintext), nil
+}
+
+// genConfirmationCode generates an email account confirmation code for current suer
+func (req *AuthRequest) GenConfirmationCode() (string, error) {
+	cipher, nonce, err := confirmationEncoder.Encrypt([]byte(req.Email))
+	if err != nil {
+		logger.Error("failed to generate account confirmation link code due to: ", err)
+		return "", err
+	}
+	// return confirmation code as nonce:cipher
+	code := hex.EncodeString(nonce) + hex.EncodeString(cipher)
+	return code, nil
 }
 
 func NewEmptyAuthRequestPtr() *AuthRequest {

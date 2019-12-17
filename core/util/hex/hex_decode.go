@@ -20,13 +20,26 @@ type InvalidByteError byte
 func init() {
 }
 
-// DecodeString returns the bytes represented by the hexadecimal string s.
+// UnsafeDecodeString returns the bytes represented by the hexadecimal string s.
 //
-// DecodeString expects that src contains only hexadecimal
+// UnsafeDecodeString expects that src contains only hexadecimal
 // characters and that src has even length.
 // If the input is malformed, DecodeString returns
 // the bytes decoded before the error.
 func UnsafeDecodeString(s string) ([]byte, error) {
+	//make string mutable
+	src := []byte(s)
+	// We can use the source slice itself as the destination
+	// because the decode loop increments by one and then the 'seen' byte is not used anymore.
+	n, err := decodeUnsafe(src, src)
+	return src[:n], err
+}
+
+// DecodeString expects that src contains only hexadecimal
+// characters and that src has even length.
+// If the input is malformed, DecodeString returns
+// the bytes decoded before the error.
+func DecodeString(s string) ([]byte, error) {
 	//make string mutable
 	src := []byte(s)
 	// We can use the source slice itself as the destination
@@ -36,7 +49,7 @@ func UnsafeDecodeString(s string) ([]byte, error) {
 }
 
 // todo: WIP
-func decode(dst, src []byte) (int, error) {
+func decodeUnsafe(dst, src []byte) (int, error) {
 
 	start := uintptr(unsafe.Pointer(&dst[0]))
 	step := unsafe.Sizeof(dst[0])
@@ -57,6 +70,38 @@ func decode(dst, src []byte) (int, error) {
 		c := src[i*2]
 		if _, ok := fromHexChar(c); !ok {
 			return i, InvalidByteError(c)
+		}
+		return i, ErrLength
+	}
+	return i, nil
+}
+
+// Decode decodes src into DecodedLen(len(src)) bytes,
+// returning the actual number of bytes written to dst.
+//
+// Decode expects that src contains only hexadecimal
+// characters and that src has even length.
+// If the input is malformed, Decode returns the number
+// of bytes decoded before the error.
+func decode(dst, src []byte) (int, error) {
+	i, j := 0, 1
+	for ; j < len(src); j += 2 {
+		a, ok := fromHexChar(src[j-1])
+		if !ok {
+			return i, InvalidByteError(src[j-1])
+		}
+		b, ok := fromHexChar(src[j])
+		if !ok {
+			return i, InvalidByteError(src[j])
+		}
+		dst[i] = (a << 4) | b
+		i++
+	}
+	if len(src)%2 == 1 {
+		// Check for invalid char before reporting bad length,
+		// since the invalid char (if present) is an earlier problem.
+		if _, ok := fromHexChar(src[j-1]); !ok {
+			return i, InvalidByteError(src[j-1])
 		}
 		return i, ErrLength
 	}

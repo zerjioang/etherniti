@@ -4,14 +4,15 @@
 package main
 
 import (
+	"os"
+	"runtime"
+
 	"github.com/zerjioang/etherniti/core/bench"
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/modules/fdlimit"
 	"github.com/zerjioang/etherniti/shared/notifier"
-	"os"
-	"runtime"
 
 	"github.com/zerjioang/etherniti/core/controllers"
 

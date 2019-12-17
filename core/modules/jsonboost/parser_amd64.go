@@ -31,8 +31,8 @@ func Lookup(json string, key string) string {
 	resultPtr := unsafe.Pointer(&resultRaw)
 
 	errorCode := _lookup(
-		&jsonRaw[0],                        // json key we want to read. simple o dot formatted &keyRaw[0]
-		&keyRaw[0],                         // json raw we want to parse looking for key content &jsonRaw[0]
+		unsafe.Pointer(&jsonRaw[0]),        // json key we want to read. simple o dot formatted &keyRaw[0]
+		unsafe.Pointer(&keyRaw[0]),         // json raw we want to parse looking for key content &jsonRaw[0]
 		unsafe.Pointer(uintptr(len(json))), // length of the key json
 		unsafe.Pointer(uintptr(len(key))),  // length of the raw json
 		resultPtr,

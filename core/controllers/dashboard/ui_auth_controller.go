@@ -34,6 +34,12 @@ var (
 	rdx *radix.Tree
 )
 
+// todo remove this global
+var (
+	// load etherniti proxy configuration
+	opts = config.GetDefaultOpts()
+)
+
 type UIAuthController struct {
 	common.DatabaseController
 }
@@ -46,8 +52,8 @@ func init() {
 }
 
 // constructor like function
-func NewUIAuthController() UIAuthController {
-	uiCtl := UIAuthController{}
+func NewUIAuthController() *UIAuthController {
+	uiCtl := &UIAuthController{}
 	var err error
 	uiCtl.DatabaseController, err = common.NewDatabaseController("", "auth", auth.NewDBAuthModel)
 	if err != nil {
@@ -57,7 +63,7 @@ func NewUIAuthController() UIAuthController {
 }
 
 // logins user data and returns access token
-func (ctl UIAuthController) login(c *echo.Context) error {
+func (ctl *UIAuthController) login(c *echo.Context) error {
 
 	//new login request
 	req := auth.NewEmptyAuthRequest()
@@ -79,13 +85,26 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 			// check if email and password matches
 			matches := req.Email == dto.Email && db.CompareHash(req.Password, dto.Password)
 			if matches {
-				// create authentication token
-				token, err := createToken(dto.Uuid)
-				if err != nil || token == "" {
-					logger.Error("failed to create authentication token: ", err)
-					return api.ErrorBytes(c, data.InvalidLoginData)
+				// 1 if account state is unknown send a confirmation link to email
+				// 2 if confirmation is pending show error
+				// if account confirmed, create authentication token
+				switch req.Status {
+				case auth.AccountUnknown:
+					// todo send a confirmation link
+					break
+				case auth.AccountEmailConfirmationPending:
+					// todo wait until a confirmation
+					break
+				case auth.AccountEmailConfirmed:
+					token, err := createToken(dto.Uuid)
+					if err != nil || token == "" {
+						logger.Error("failed to create authentication token: ", err)
+						return api.ErrorBytes(c, data.InvalidLoginData)
+					}
+					return api.SendSuccess(c, data.UserLogin, auth.NewLoginResponse(token))
+				default:
+					// do not login. account might be blocked, under investigation or in recovery
 				}
-				return api.SendSuccess(c, data.UserLogin, auth.NewLoginResponse(token))
 			}
 			return api.ErrorBytes(c, data.InvalidLoginData)
 		}
@@ -97,7 +116,7 @@ func (ctl UIAuthController) login(c *echo.Context) error {
 }
 
 // registers new user data in the api sever
-func (ctl UIAuthController) register(c *echo.Context) error {
+func (ctl *UIAuthController) register(c *echo.Context) error {
 	//new login request
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
@@ -129,6 +148,12 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 		req.Password = db.Hash(req.Password)
 		req.Uuid = id.GenerateIDString().UnsafeString()
 		req.Role = constants.StandardUser
+		code, genErr := req.GenConfirmationCode()
+		if genErr != nil {
+			logger.Error("failed to create email verification code")
+			return api.ErrorBytes(c, data.UserRegisterFailed)
+		}
+		req.Confirmation = code
 		saveErr := ctl.SetUniqueKey(str.UnsafeBytes(req.Email), db.Serialize(req))
 		if saveErr != nil {
 			logger.Error("failed to register new user due to: ", saveErr)
@@ -141,9 +166,48 @@ func (ctl UIAuthController) register(c *echo.Context) error {
 	return api.ErrorStr(c, "registration aborted due to missing fields")
 }
 
+// account creation confirmation link
+func (ctl *UIAuthController) confirm(c *echo.Context) error {
+	//new account confirmation request
+	req := auth.NewEmptyAuthRequest()
+	req.Confirmation = c.Param("msg")
+	accountEmailId, err := req.IsValidConfirmation()
+	if err != nil {
+		// return a binding error
+		logger.Error(data.FailedToBind, err)
+		return api.Error(c, err)
+	}
+	logger.Error("confirming user account via confirmation link")
+	dbkey := []byte(accountEmailId)
+	item, readErr := ctl.GetKey(dbkey)
+	if readErr == nil {
+		pErr := db.Unserialize(item, &req)
+		if pErr != nil {
+			logger.Error("failed to unserialize data: ", pErr)
+			return api.ErrorBytes(c, data.AccountConfirmDbError)
+		}
+		// check if account status is pending confirmation
+		if !(req.Status == auth.AccountEmailConfirmationPending || req.Status == auth.AccountUnknown) {
+			logger.Error("unauthorized account update due to invalid state. The account must be [Unknown, PendincConfirmation]")
+			// show 'expiration like'' message to the users
+			return api.ErrorBytes(c, data.AccountConfirmDeniedError)
+		}
+		// update current user status to account confirmed
+		req.Status = auth.AccountEmailConfirmed
+		// store account updated
+		updateErr := ctl.UpdateKey(dbkey, db.Serialize(req))
+		if updateErr != nil {
+			logger.Error("failed to update user authentication data: ", updateErr)
+			return api.ErrorBytes(c, data.AccountConfirmUpdateError)
+		}
+	}
+	// redirect to dashboard
+	return api.Redirect(c, opts.Authentication.ConfirmationRedirectUrl)
+}
+
 // generate a token for given user.
 // this functions allows to firebase registered users to work with the proxy
-func (ctl UIAuthController) token(c *echo.Context) error {
+func (ctl *UIAuthController) token(c *echo.Context) error {
 	//new login request
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
@@ -156,7 +220,7 @@ func (ctl UIAuthController) token(c *echo.Context) error {
 }
 
 // triggers user account recovery mecanisms
-func (ctl UIAuthController) recover(c *echo.Context) error {
+func (ctl *UIAuthController) recover(c *echo.Context) error {
 	//new recovery request
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
@@ -173,14 +237,15 @@ func (ctl UIAuthController) recover(c *echo.Context) error {
 
 // validates recatpcha requests
 // more info at: https://www.google.com/recaptcha/admin/site/346227166
-func (ctl UIAuthController) recaptcha(c *echo.Context) error {
+func (ctl *UIAuthController) recaptcha(c *echo.Context) error {
 	return data.ErrNotImplemented
 }
 
-func (ctl UIAuthController) RegisterRouters(router *echo.Group) {
+func (ctl *UIAuthController) RegisterRouters(router *echo.Group) {
 	logger.Debug("exposing ui controller methods")
 	router.POST("/auth/login", ctl.login)
 	router.POST("/auth/register", ctl.register)
+	router.GET("/auth/confirm/:msg", ctl.confirm)
 	router.POST("/auth/recover", ctl.recover)
 	router.POST("/auth/token", ctl.token)
 	router.POST("/auth/recaptcha", ctl.recaptcha)

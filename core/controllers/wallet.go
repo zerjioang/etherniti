@@ -101,6 +101,8 @@ func (ctl WalletController) Mnemonic(c *echo.Context) error {
 		response.IsEncrypted = req.Secret != ""
 		response.Mnemonic = mnemomic
 		if response.IsEncrypted {
+			// clear plaintext mnemonic
+			response.Mnemonic = ""
 			encryptedSeed := bip39.NewSeed(mnemomic, req.Secret)
 			response.EncryptedSeed = hex.EncodeToString(encryptedSeed)
 		}

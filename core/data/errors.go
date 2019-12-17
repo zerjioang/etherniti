@@ -117,7 +117,10 @@ var (
 	UserRegistered     = []byte("user registered")
 	UserRegisterFailed = []byte("failed to register new user account")
 
-	DatabaseError = []byte("failed to process your login request at this moment. Please try it later")
+	DatabaseError             = []byte("failed to process your login request at this moment. Please try it later")
+	AccountConfirmDbError     = []byte("failed to process your account confirmation request at this moment. Please try it later")
+	AccountConfirmUpdateError = []byte("failed to update your account confirmation at this moment. Please try it later")
+	AccountConfirmDeniedError = []byte("failed to confirm your account. The confirmation code has expired")
 
 	InvalidLoginData         = []byte("invalid username or password provided")
 	InvalidLoginAPIKeyData   = []byte("invalid API key or API secret provided")

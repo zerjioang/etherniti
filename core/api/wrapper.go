@@ -177,3 +177,7 @@ func StackError(c *echo.Context, stackErr stack.Error) error {
 	rawBytes := toError(protocol.StatusBadRequest, stackErr.Error(), none, c.ResponseSerializer())
 	return c.FastBlob(protocol.StatusBadRequest, c.SelectecResponseContentType(), rawBytes)
 }
+
+func Redirect(c *echo.Context, url string) error {
+	return c.Redirect(protocol.StatusTemporaryRedirect, url)
+}

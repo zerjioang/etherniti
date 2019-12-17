@@ -1,11 +1,12 @@
 package bench
 
 import (
-	"github.com/zerjioang/etherniti/core/modules/monotonic"
 	"math"
 	"math/rand"
 	"runtime"
 	"sync"
+
+	"github.com/zerjioang/etherniti/core/modules/monotonic"
 
 	"github.com/zerjioang/etherniti/core/modules/fastime"
 

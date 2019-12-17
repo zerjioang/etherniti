@@ -4,10 +4,11 @@
 package bench
 
 import (
+	"testing"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
 	"github.com/zerjioang/etherniti/shared/protocol/io"
-	"testing"
 )
 
 var (
@@ -60,6 +61,9 @@ func BenchmarkPi(b *testing.B) {
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
 			scoreVar = GetScore()
+		}
+		if scoreVar != 0 {
+
 		}
 	})
 	b.Run("get-bench-time", func(b *testing.B) {

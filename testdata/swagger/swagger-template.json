@@ -864,6 +864,36 @@
         }
       }
     },
+    "/auth/confirm/{msg}": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Confirmation of user account creation",
+        "description": "confirmation of user account creation",
+        "operationId": "auth-account-confirm",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "name": "msg",
+          "description": "confirmation code",
+          "required": true,
+          "default": "vntrugo39pfbrb"
+        }],
+        "responses": {
+          "200": {
+            "description": "if successful, it will redirect the user to dashboard login view"
+          }
+        }
+      }
+    },
     "/metrics": {
       "get": {
         "tags": [

@@ -580,7 +580,7 @@
     "refactor/satisfy",
   ]
   pruneopts = "UT"
-  revision = "7093a17b0467e77fb41804b2754a44f54a8c9ca2"
+  revision = "04c2e8eff935f58e9a5568b6b73542f91e0491e6"
 
 [[projects]]
   digest = "1:f4d6f1de81abede35943b5f9d8106c9a4579d3ea5a19d0991be3055e3383254b"

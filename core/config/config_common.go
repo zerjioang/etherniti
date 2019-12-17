@@ -3,6 +3,7 @@ package config
 import (
 	"bytes"
 	"errors"
+
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/util/fs"
 	"github.com/zerjioang/etherniti/core/util/id"

@@ -115,6 +115,10 @@ func (ctl *DatabaseController) SetKey(key []byte, value []byte) error {
 	return ctl.storage.SetRawKey(key, value)
 }
 
+func (ctl *DatabaseController) UpdateKey(key []byte, value []byte) error {
+	return ctl.storage.SetRawKey(key, value)
+}
+
 func (ctl *DatabaseController) SetUniqueKey(key []byte, value []byte) error {
 	return ctl.storage.PutUniqueKeyValue(key, value)
 }
