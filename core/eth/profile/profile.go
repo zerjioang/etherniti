@@ -5,17 +5,15 @@ package profile
 
 import (
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/util/banner"
-	"github.com/zerjioang/etherniti/core/util/ip"
 	"github.com/zerjioang/etherniti/shared/constants"
-
-	"github.com/zerjioang/etherniti/core/util/id"
-
-	"github.com/zerjioang/etherniti/shared/protocol"
+	"github.com/zerjioang/etherniti/shared/dto"
+	"github.com/zerjioang/etherniti/util/banner"
+	"github.com/zerjioang/go-hpc/lib/uuid/randomuuid"
+	jwt "github.com/zerjioang/go-hpc/thirdparty/jwt-go"
+	"github.com/zerjioang/go-hpc/util/ip"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
+	"github.com/zerjioang/go-hpc/lib/fastime"
 )
 
 var (
@@ -26,7 +24,7 @@ var (
 // default data for connection profile
 type ConnectionProfile struct {
 	jwt.Claims `json:"_,omitempty"`
-	protocol.ProfileRequest
+	dto.ProfileRequest
 
 	// user type of role: admin, standard, premium, etc
 	UserRole constants.UserRole `json:"role"`
@@ -200,12 +198,12 @@ func NewConnectionProfilePtr() *ConnectionProfile {
 }
 
 //constructor like function
-func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfile {
+func NewConnectionProfileWithData(data dto.ProfileRequest) ConnectionProfile {
 	now := fastime.Now()
 	p := ConnectionProfile{
-		Id: id.GenerateUUIDFromEntropy(),
-		ProfileRequest: protocol.ProfileRequest{
-			AccountId:   id.GenerateIDString().UnsafeString(),
+		Id: randomuuid.GenerateUUIDFromEntropy(),
+		ProfileRequest: dto.ProfileRequest{
+			AccountId:   randomuuid.GenerateIDString().UnsafeString(),
 			RpcEndpoint: data.RpcEndpoint, //required
 			Address:     data.Address,     //required
 			Key:         data.Key,
@@ -228,9 +226,9 @@ func NewConnectionProfileWithData(data protocol.ProfileRequest) ConnectionProfil
 func NewDefaultConnectionProfile() ConnectionProfile {
 	now := fastime.Now()
 	return ConnectionProfile{
-		Id:       id.GenerateUUIDFromEntropy(),
+		Id:       randomuuid.GenerateUUIDFromEntropy(),
 		UserRole: constants.StandardUser,
-		ProfileRequest: protocol.ProfileRequest{
+		ProfileRequest: dto.ProfileRequest{
 			RpcEndpoint: "http://127.0.0.1:8545",
 			Address:     "0x0",
 			Key:         "0x0",

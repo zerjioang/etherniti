@@ -14,8 +14,8 @@ import (
 
 // configuration data type
 type EnvConfig struct {
-	l    atomic.Value
-	data map[string]interface{}
+	readed atomic.Value
+	data   map[string]interface{}
 }
 
 // Constructor like function for new Env config data wrappers
@@ -23,13 +23,13 @@ func New() *EnvConfig {
 	logger.Debug("creating new enviroment data")
 	cfg := new(EnvConfig)
 	cfg.data = make(map[string]interface{})
-	cfg.l.Store(false)
+	cfg.readed.Store(false)
 	return cfg
 }
 
 //read environment ariables
 func (c *EnvConfig) Load() {
-	if c.l.Load() == false {
+	if c.readed.Load() == false {
 		logger.Debug("reading environment variables from current operating system")
 		for _, e := range os.Environ() {
 			pair := strings.Split(e, "=")
@@ -42,7 +42,7 @@ func (c *EnvConfig) Load() {
 		}
 	}
 	//mark the env config as readed from env
-	c.l.Store(true)
+	c.readed.Store(true)
 }
 func (c EnvConfig) String(key string) string {
 	v, ok := c.Read(key)

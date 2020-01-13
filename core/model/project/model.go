@@ -4,8 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/go-hpc/lib/uuid/randomuuid"
+
+	"github.com/zerjioang/etherniti/shared"
+
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
+
+	"github.com/zerjioang/go-hpc/common"
+	"github.com/zerjioang/go-hpc/shared/db"
 
 	"github.com/zerjioang/etherniti/core/model"
 
@@ -13,11 +19,8 @@ import (
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/metadata"
 	"github.com/zerjioang/etherniti/core/model/registry/version"
-	"github.com/zerjioang/etherniti/core/modules/stack"
-	"github.com/zerjioang/etherniti/core/util/id"
-	"github.com/zerjioang/etherniti/core/util/str"
-	"github.com/zerjioang/etherniti/shared/mixed"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/stack"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 var (
@@ -27,8 +30,8 @@ var (
 )
 
 type Project struct {
-	// implement interface to be a rest-db-crud able struct
-	mixed.DatabaseObjectInterface `json:"_,omitempty"`
+	// implement interface to be a rest-db-badger-crud able struct
+	db.DaoInterface `json:"_,omitempty"`
 
 	// internal project id assigned
 	ProjectId string `json:"id,omitempty"`
@@ -63,54 +66,54 @@ type Project struct {
 	Metadata *metadata.Metadata `json:"metadata,omitempty"`
 }
 
-// implementation of interface DatabaseObjectInterface
+// implementation of interface DaoInterface
 func (project Project) Key() []byte {
 	return str.UnsafeBytes(project.ProjectId)
 }
-func (project Project) Value(serializer io.Serializer) []byte {
-	return ioproto.GetBytesFromSerializer(serializer, project)
+func (project Project) Value(serializer common.Serializer) []byte {
+	return encoding.GetBytesFromSerializer(serializer, project)
 }
 
 // this function creates new instances of Project
-func (project Project) New() mixed.DatabaseObjectInterface {
+func (project Project) NewDao() db.DaoInterface {
 	return NewEmptyProject()
 }
 
 // custom validation logic for read operation
 // return nil if everyone can read
-func (project Project) CanRead(context *echo.Context, key string) error {
+func (project Project) CanRead(context *shared.EthernitiContext, key string) error {
 	// todo check if current project id belongs to current user
 	return nil
 }
 
 // custom validation logic for update operation
 // return nil if everyone can update
-func (project Project) CanUpdate(context *echo.Context, key string) error {
+func (project Project) CanUpdate(context *shared.EthernitiContext, key string) error {
 	// todo check if current project id belongs to current user
 	return nil
 }
 
 // custom validation logic for delete operation
 // return nil if everyone can delete
-func (project Project) CanDelete(context *echo.Context, key string) error {
+func (project Project) CanDelete(context *shared.EthernitiContext, key string) error {
 	// todo check if current project id belongs to current user
 	return nil
 }
 
 // custom validation logic for write operation
 // return nil if everyone can write
-func (project Project) CanWrite(context *echo.Context) error {
+func (project Project) CanWrite(context *shared.EthernitiContext) error {
 	return nil
 }
 
 // custom validation logic for list operation
 // return nil if everyone can list
-func (project Project) CanList(context *echo.Context) error {
+func (project Project) CanList(context *shared.EthernitiContext) error {
 	// todo check if current project id belongs to current user
 	return nil
 }
 
-func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
+func (project Project) Bind(context *shared.EthernitiContext) (db.DaoInterface, stack.Error) {
 	//new project creation request
 	if err := context.Bind(&project); err != nil {
 		// return a binding error
@@ -121,14 +124,14 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 	// external clients will never be able to bind some fields, so delete them
 	project.ProjectSecret = ""
 	project.Metadata = nil
-	project.ProjectId = id.GenerateIDString().String()
+	project.ProjectId = randomuuid.GenerateIDString().String()
 
 	e := project.Validate()
 	if e.Occur() {
 		logger.Error("failed to validate request project data: ", e.Error())
 		return nil, e
 	} else {
-		if context.IntIp() == 0 || context.AuthenticatedUserUuid() == "" {
+		if context.IntIp() == 0 || context.UserId() == "" {
 			logger.Error("failed to create new project: authentication data is incomplete")
 			return nil, data.ErrStackProject
 		} else {
@@ -139,7 +142,7 @@ func (project Project) Bind(context *echo.Context) (mixed.DatabaseObjectInterfac
 }
 
 // converts byte sequence to go project struct
-func (project Project) Decode(data []byte) (mixed.DatabaseObjectInterface, stack.Error) {
+func (project Project) Decode(data []byte) (db.DaoInterface, stack.Error) {
 	o := NewEmptyProject()
 	err := json.Unmarshal(data, &o)
 	return o, stack.Ret(err)
@@ -161,7 +164,7 @@ func (project Project) ResolveContract(version string) (*version.ContractVersion
 	return nil, errContractNotFound
 }
 
-func (project Project) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
+func (project Project) Update(o db.DaoInterface) (db.DaoInterface, stack.Error) {
 	newPrj, ok := o.(Project)
 	if !ok {
 		return nil, model.UnsupportedDataErr
@@ -181,7 +184,7 @@ func NewEmptyProject() Project {
 	return Project{}
 }
 
-func NewDBProject() mixed.DatabaseObjectInterface {
+func NewDBProject() db.DaoInterface {
 	return NewEmptyProject()
 }
 
@@ -189,7 +192,7 @@ func NewProject(name string, mtdt *metadata.Metadata) *Project {
 	p := NewEmptyProject()
 	p.Name = name
 	p.Metadata = mtdt
-	p.ProjectId = id.GenerateIDString().String()
-	p.ProjectSecret = id.GenerateIDString().String()
+	p.ProjectId = randomuuid.GenerateIDString().String()
+	p.ProjectSecret = randomuuid.GenerateIDString().String()
 	return &p
 }

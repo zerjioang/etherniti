@@ -6,11 +6,11 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config/env"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"github.com/zerjioang/etherniti/core/modules/hashset"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/def/listener"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
+	"github.com/zerjioang/go-hpc/lib/fastime"
+	"github.com/zerjioang/go-hpc/lib/hashset"
+	"github.com/zerjioang/go-hpc/thirdparty/gommon/log"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 type EthernitiAdminOptions struct {
@@ -347,7 +347,7 @@ func (eo *EthernitiOptions) IsSecureWebSocketMode() bool {
 
 func (eo *EthernitiOptions) GetEmailUsername() string {
 	logger.Debug("reading email username from env")
-	return eo.envData.String(XEthernitiEmailUsername)
+	return eo.envData.String(XEthernitiGmailUsername)
 }
 
 func (eo *EthernitiOptions) GetEmailPassword() string {
@@ -356,11 +356,11 @@ func (eo *EthernitiOptions) GetEmailPassword() string {
 }
 func (eo *EthernitiOptions) GetEmailServer() string {
 	logger.Debug("reading email server name and port from env")
-	return eo.envData.String(XEthernitiEmailServer)
+	return eo.envData.String(XEthernitiGmailServer)
 }
 func (eo *EthernitiOptions) GetEmailServerOnly() string {
 	logger.Debug("reading email server name from env")
-	return eo.envData.String(XEthernitiEmailServerOnly)
+	return eo.envData.String(XEthernitiGmailServerOnly)
 }
 
 // sendgrid service configuration

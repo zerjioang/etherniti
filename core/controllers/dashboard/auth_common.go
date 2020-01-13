@@ -3,9 +3,9 @@ package dashboard
 import (
 	"time"
 
-	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"github.com/zerjioang/etherniti/core/util/banner"
-	"github.com/zerjioang/etherniti/thirdparty/jwt-go"
+	"github.com/zerjioang/etherniti/util/banner"
+	"github.com/zerjioang/go-hpc/lib/fastime"
+	jwt "github.com/zerjioang/go-hpc/thirdparty/jwt-go"
 )
 
 func createToken(userUuid string) (string, error) {

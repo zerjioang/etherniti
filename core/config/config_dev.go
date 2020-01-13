@@ -12,11 +12,11 @@ import (
 	"github.com/zerjioang/etherniti/core/config/edition"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/go-hpc/util/str"
 
 	_ "net/http/pprof" //adds 2,5Mb to final executable when imported
 
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
+	"github.com/zerjioang/go-hpc/thirdparty/gommon/log"
 )
 
 // openssl req -newkey rsa:2048 \
@@ -72,7 +72,7 @@ func init() {
 }
 
 //check if profiling is enabled or not
-func IsProfilingEnabled(opts EthernitiOptions) bool {
+func IsProfilingEnabled(opts *EthernitiOptions) bool {
 	logger.Debug("checking if profiling ListeningMode is enabled")
 	v, found := opts.envData.Read("X_ETHERNITI_ENABLE_PROFILER")
 	return found && v == "true"
@@ -96,7 +96,7 @@ func Env() string {
 }
 
 // setup server config
-func Setup(opts EthernitiOptions) error {
+func Setup(opts *EthernitiOptions) error {
 	logger.Debug("loading additional development setup config")
 	// enable profile ListeningMode if requested
 	if edition.IsEnterprise() && IsProfilingEnabled(opts) {

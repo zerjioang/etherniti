@@ -5,10 +5,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/zerjioang/etherniti/shared"
+
+	"github.com/zerjioang/etherniti/core/controllers/index"
+
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestIndexHandler(t *testing.T) {
@@ -30,15 +33,14 @@ func TestIndexHandler(t *testing.T) {
 	rec := httptest.NewRecorder()
 
 	//build this test execution context
-	c := e.NewContext(req, rec)
-	c.Preload(req, rec)
+	ctx := shared.AdquireContext(e.NewContext(req, rec))
 
 	// build our controller
-	ctl := controllers.NewIndexController()
-	runErr := ctl.Index(c)
+	ctl := index.NewIndexController()
+	runErr := ctl.Index(ctx)
 	assert.Nil(t, runErr)
 
 	// Check the status code is what we expect.
 	assert.Equal(t, rec.Code, http.StatusOK, "handler returned wrong status code")
-	assert.Equal(t, rec.Body.String(), controllers.IndexWelcomeJson, "handler returned unexpected body")
+	assert.Equal(t, rec.Body.String(), index.IndexWelcomeJson, "handler returned unexpected body")
 }

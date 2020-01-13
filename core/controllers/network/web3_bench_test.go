@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
 
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/shared/constants"

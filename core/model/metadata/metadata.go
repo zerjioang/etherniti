@@ -1,8 +1,8 @@
 package metadata
 
 import (
-	"github.com/zerjioang/etherniti/core/modules/fastime"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/fastime"
 )
 
 type Metadata struct {
@@ -14,10 +14,10 @@ type Metadata struct {
 	Ip uint32 `json:"issued"`
 }
 
-func NewMetadata(ctx *echo.Context) *Metadata {
+func NewMetadata(ctx *shared.EthernitiContext) *Metadata {
 	mtdt := new(Metadata)
 	mtdt.Ip = ctx.IntIp()
-	mtdt.Owner = ctx.UserId
+	mtdt.Owner = ctx.UserId()
 	mtdt.CreationDate = fastime.Now().Unix()
 	return mtdt
 }

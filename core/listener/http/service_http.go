@@ -16,7 +16,7 @@ import (
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 type HttpListener struct{}

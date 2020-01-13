@@ -7,17 +7,20 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+	"github.com/zerjioang/etherniti/shared"
+
+	"github.com/zerjioang/go-hpc/lib/codes"
+	"github.com/zerjioang/go-hpc/lib/eth/paramencoder/erc20"
 
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/util/str"
-	"github.com/zerjioang/etherniti/shared/protocol"
+	"github.com/zerjioang/go-hpc/util/str"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
+	"github.com/zerjioang/go-hpc/lib/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // eth erc20 controller
@@ -33,7 +36,7 @@ func NewErc20Controller(network *NetworkController) Erc20Controller {
 }
 
 // generic method that executes queries against erc20 contract
-func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
+func (ctl *Erc20Controller) queryContract(c *shared.EthernitiContext, methodName string, f func(contract string) (string, error), unpacked interface{}) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -42,7 +45,7 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 	raw, err := f(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		rawBytes, decodeErr := hex.FromEthHex(raw)
 		if decodeErr != nil {
@@ -58,7 +61,7 @@ func (ctl *Erc20Controller) queryContract(c *echo.Context, methodName string, f 
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) name(c *echo.Context) error {
+func (ctl *Erc20Controller) name(c *shared.EthernitiContext) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		return ctl.queryContract(c, "name", rpcClient.Erc20Name, new(string))
@@ -67,7 +70,7 @@ func (ctl *Erc20Controller) name(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) symbol(c *echo.Context) error {
+func (ctl *Erc20Controller) symbol(c *shared.EthernitiContext) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		return ctl.queryContract(c, "symbol", rpcClient.Erc20Symbol, new(string))
@@ -76,7 +79,7 @@ func (ctl *Erc20Controller) symbol(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) totalSupply(c *echo.Context) error {
+func (ctl *Erc20Controller) totalSupply(c *shared.EthernitiContext) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		var unpacked *big.Int
@@ -86,7 +89,7 @@ func (ctl *Erc20Controller) totalSupply(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) decimals(c *echo.Context) error {
+func (ctl *Erc20Controller) decimals(c *shared.EthernitiContext) error {
 	rpcClient, err := ctl.network.getRpcClient(c)
 	if err == nil {
 		var unpacked *big.Int
@@ -96,7 +99,7 @@ func (ctl *Erc20Controller) decimals(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
+func (ctl *Erc20Controller) balanceof(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -114,7 +117,7 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 		raw, err := client.Erc20BalanceOf(contractAddress, address)
 		if err != nil {
 			// send invalid generation message
-			return api.ErrorCode(c, protocol.StatusBadRequest, err)
+			return api.ErrorCode(c, codes.StatusBadRequest, err)
 		} else {
 			var unpacked *big.Int
 			rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -132,7 +135,7 @@ func (ctl *Erc20Controller) balanceof(c *echo.Context) error {
 }
 
 // get the summary of information of given erc20 contract at given target network
-func (ctl *Erc20Controller) summary(c *echo.Context) error {
+func (ctl *Erc20Controller) summary(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -147,7 +150,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 	raw, err := client.Erc20Summary(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		if err != nil {
 			return api.ErrorBytes(c, str.UnsafeBytes("failed to decode network response: "+err.Error()))
@@ -158,7 +161,7 @@ func (ctl *Erc20Controller) summary(c *echo.Context) error {
 }
 
 // get the allowance status of the contract at given target network
-func (ctl *Erc20Controller) allowance(c *echo.Context) error {
+func (ctl *Erc20Controller) allowance(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -183,7 +186,7 @@ func (ctl *Erc20Controller) allowance(c *echo.Context) error {
 	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}
@@ -195,7 +198,7 @@ func (ctl *Erc20Controller) allowance(c *echo.Context) error {
 // - Owner's account must have sufficient balance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) transfer(c *echo.Context) error {
+func (ctl *Erc20Controller) transfer(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -221,7 +224,7 @@ func (ctl *Erc20Controller) transfer(c *echo.Context) error {
 	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}
@@ -236,7 +239,7 @@ func (ctl *Erc20Controller) transfer(c *echo.Context) error {
 // recommends that there are no checks for the approval double-spend attack
 // as this should be implemented in user interfaces
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) Approve(c *echo.Context) error {
+func (ctl *Erc20Controller) Approve(c *shared.EthernitiContext) error {
 	return nil
 }
 
@@ -250,7 +253,7 @@ func (ctl *Erc20Controller) Approve(c *echo.Context) error {
 // - Spender must have sufficient allowance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Erc20Controller) TransferFrom(c *echo.Context) error {
+func (ctl *Erc20Controller) TransferFrom(c *shared.EthernitiContext) error {
 	return nil
 }
 
@@ -258,12 +261,12 @@ func (ctl *Erc20Controller) TransferFrom(c *echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl Erc20Controller) RegisterRouters(router *echo.Group) {
-	router.GET("/erc20/:contract/summary", ctl.summary)
-	router.GET("/erc20/:contract/name", ctl.name)
-	router.GET("/erc20/:contract/symbol", ctl.symbol)
-	router.GET("/erc20/:contract/totalsupply", ctl.totalSupply)
-	router.GET("/erc20/:contract/decimals", ctl.decimals)
-	router.GET("/erc20/:contract/balanceof/:address", ctl.balanceof)
-	router.GET("/erc20/:contract/allowance/:owner/to/:spender", ctl.allowance)
-	router.GET("/erc20/:contract/transfer/:address/:amount", ctl.transfer)
+	router.GET("/erc20/:contract/summary", wrap.Call(ctl.summary))
+	router.GET("/erc20/:contract/name", wrap.Call(ctl.name))
+	router.GET("/erc20/:contract/symbol", wrap.Call(ctl.symbol))
+	router.GET("/erc20/:contract/totalsupply", wrap.Call(ctl.totalSupply))
+	router.GET("/erc20/:contract/decimals", wrap.Call(ctl.decimals))
+	router.GET("/erc20/:contract/balanceof/:address", wrap.Call(ctl.balanceof))
+	router.GET("/erc20/:contract/allowance/:owner/to/:spender", wrap.Call(ctl.allowance))
+	router.GET("/erc20/:contract/transfer/:address/:amount", wrap.Call(ctl.transfer))
 }

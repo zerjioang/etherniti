@@ -7,17 +7,18 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/etherniti/shared"
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/stack"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/stack"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
 )
 
 var (
-	testSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
+	testSerializer, _ = encoding.EncodingModeSelector(protocol.ModeJson)
 )
 
 func BenchmarkWrapper(b *testing.B) {
@@ -53,100 +54,108 @@ func BenchmarkWrapper(b *testing.B) {
 		}
 	})
 	b.Run("send-success", func(b *testing.B) {
+		//disable logging
 		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
-		//disable logging
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = SendSuccess(ctx, msg, "")
+			_ = SendSuccess(c, msg, "")
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("send-success-pool", func(b *testing.B) {
 		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		//disable logging
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = SendSuccessPool(ctx, msg, "")
+			_ = SendSuccessPool(c, msg, "")
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("send-success-blob", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		data := []byte(`{}`)
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = SendSuccessBlob(ctx, data)
+			_ = SendSuccessBlob(c, data)
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("success", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		data := []byte{}
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = Success(ctx, msg, data)
+			_ = Success(c, msg, data)
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("error-str", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
 		msg := []byte("this is an standard error message working as example")
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = ErrorBytes(ctx, msg)
+			_ = ErrorBytes(c, msg)
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("error", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		e := errors.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = Error(ctx, e)
+			_ = Error(c, e)
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("error-code", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		e := errors.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = ErrorCode(ctx, 400, e)
+			_ = ErrorCode(c, 400, e)
 		}
+		shared.ReleaseContext(c)
 	})
 	b.Run("stack-error", func(b *testing.B) {
 		//disable logging
 		logger.Enabled(false)
-		ctx := common.NewContext(echo.New())
+		c := shared.AdquireContext(common.NewContext(echo.New()))
 		e := stack.New("no error")
 		b.ReportAllocs()
 		b.SetBytes(1)
 		b.ResetTimer()
 		for n := 0; n < b.N; n++ {
-			_ = StackError(ctx, e)
+			_ = StackError(c, e)
 		}
+		shared.ReleaseContext(c)
 	})
 }

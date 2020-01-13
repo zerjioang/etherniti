@@ -3,10 +3,13 @@ package network
 import (
 	"errors"
 
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // eth web3 graphql controller
@@ -22,7 +25,7 @@ func NewGraphqlController(network *NetworkController) GraphqlController {
 }
 
 // profile abi data getter
-func (ctl *GraphqlController) query(c *echo.Context) error {
+func (ctl *GraphqlController) query(c *shared.EthernitiContext) error {
 	req := c.Body()
 	if req == nil || len(req) == 0 {
 		// return a binding error
@@ -48,5 +51,5 @@ func (ctl *GraphqlController) query(c *echo.Context) error {
 func (ctl GraphqlController) RegisterRouters(router *echo.Group) {
 	logger.Debug("adding controller raw GRAPHQL call supports")
 	logger.Debug("exposing POST /graphql")
-	router.POST("/ql", ctl.query)
+	router.POST("/ql", wrap.Call(ctl.query))
 }

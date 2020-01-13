@@ -122,7 +122,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   1.0 MB github.com/zerjioang/etherniti/vendor/github.com/prometheus/client_golang/prometheus
   932 kB crypto/tls
   871 kB math/big
-  766 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto/secp256k1
+  766 kB github.com/zerjioang/go-hpc/lib/eth/fixtures/crypto/secp256k1
   753 kB encoding/gob
   713 kB syscall
   631 kB crypto/x509
@@ -131,14 +131,14 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   594 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/openpgp/packet
   570 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/format/packfile
   546 kB encoding/json
-  535 kB github.com/zerjioang/etherniti/thirdparty/echo
+  535 kB github.com/zerjioang/go-hpc/thirdparty/echo
   510 kB html/template
   509 kB text/template/parse
   508 kB github.com/zerjioang/etherniti/vendor/github.com/gorilla/websocket
   495 kB github.com/zerjioang/etherniti/core/controllers
   447 kB vendor/golang_org/x/text/unicode/norm
   424 kB time
-  421 kB github.com/zerjioang/etherniti/core/eth/rpc
+  421 kB github.com/zerjioang/go-hpc/lib/eth/rpc
   415 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/protocol/packp
   410 kB github.com/zerjioang/etherniti/vendor/github.com/prometheus/procfs
   403 kB regexp/syntax
@@ -152,7 +152,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   330 kB github.com/zerjioang/etherniti/core/controllers/network
   328 kB github.com/zerjioang/etherniti/vendor/github.com/sergi/go-diff/diffmatchpatch
   328 kB compress/flate
-  322 kB github.com/zerjioang/etherniti/core/eth/fixtures/abi
+  322 kB github.com/zerjioang/go-hpc/lib/eth/fixtures/abi
   321 kB github.com/zerjioang/etherniti/vendor/github.com/prometheus/common/expfmt
   320 kB github.com/zerjioang/etherniti/vendor/golang.org/x/net/trace
   319 kB os
@@ -163,7 +163,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   271 kB encoding/asn1
   269 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/openpgp
   265 kB github.com/zerjioang/etherniti/vendor/github.com/kevinburke/ssh_config
-  263 kB github.com/zerjioang/etherniti/thirdparty/decimal
+  263 kB github.com/zerjioang/go-hpc/thirdparty/decimal
   260 kB vendor/golang_org/x/crypto/cryptobyte
   247 kB github.com/zerjioang/etherniti/vendor/github.com/tidwall/gjson
   246 kB strconv
@@ -173,7 +173,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   225 kB unicode
   222 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/transport/server
   219 kB os/exec
-  209 kB github.com/zerjioang/etherniti/thirdparty/jwt-go
+  209 kB github.com/zerjioang/go-hpc/thirdparty/jwt-go
   204 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/format/idxfile
   204 kB math
   201 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/table
@@ -197,11 +197,11 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   155 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/transport/internal/common
   154 kB encoding/binary
   152 kB net/textproto
-  150 kB github.com/zerjioang/etherniti/thirdparty/echo/middleware
+  150 kB github.com/zerjioang/go-hpc/thirdparty/echo/middleware
   149 kB net/url
   148 kB github.com/zerjioang/etherniti/vendor/github.com/src-d/gcfg
   148 kB mime/multipart
-  147 kB github.com/zerjioang/etherniti/core/modules/bip39/wordlists
+  147 kB github.com/zerjioang/go-hpc/lib/bip39/wordlists
   147 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/config
   144 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/y
   140 kB crypto/cipher
@@ -235,40 +235,40 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   101 kB github.com/zerjioang/etherniti/core/config
   100 kB github.com/zerjioang/etherniti/core/listener/socket
    99 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-billy.v4/helper/chroot
-   98 kB github.com/zerjioang/etherniti/thirdparty/middleware/logger
+   98 kB github.com/zerjioang/go-hpc/thirdparty/middleware/logger
    98 kB vendor/golang_org/x/text/transform
    98 kB crypto/aes
    98 kB github.com/zerjioang/etherniti/vendor/github.com/dgryski/go-farm
-   96 kB github.com/zerjioang/etherniti/core/modules/metrics/prometheus_metrics
+   96 kB github.com/zerjioang/go-hpc/lib/metrics/prometheus_metrics
    96 kB math/rand
    94 kB vendor/golang_org/x/crypto/chacha20poly1305
-   94 kB github.com/zerjioang/etherniti/core/modules/concurrentmap
+   94 kB github.com/zerjioang/go-hpc/lib/concurrentmap
    93 kB context
    93 kB expvar
    92 kB github.com/zerjioang/etherniti/core/model/auth
    90 kB path/filepath
-   90 kB github.com/zerjioang/etherniti/core/eth/fixtures
-   89 kB github.com/zerjioang/etherniti/core/modules/solc
-   88 kB github.com/zerjioang/etherniti/thirdparty/gommon/log
+   90 kB github.com/zerjioang/go-hpc/lib/eth/fixtures
+   89 kB github.com/zerjioang/go-hpc/lib/solc
+   88 kB github.com/zerjioang/go-hpc/thirdparty/gommon/log
    87 kB crypto/ecdsa
    85 kB github.com/zerjioang/etherniti/core/listener/http
    85 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/format/diff
    85 kB github.com/zerjioang/etherniti/vendor/github.com/emirpasic/gods/lists/arraylist
    85 kB compress/bzip2
    83 kB net/http/pprof
-   82 kB github.com/zerjioang/etherniti/core/modules/radix
+   82 kB github.com/zerjioang/go-hpc/lib/radix
    81 kB github.com/zerjioang/etherniti/vendor/github.com/src-d/gcfg/token
    81 kB github.com/zerjioang/etherniti/core/server/ratelimit
    81 kB github.com/zerjioang/etherniti/core/listener/common
    79 kB crypto/sha512
    78 kB hash/fnv
-   78 kB github.com/zerjioang/etherniti/core/modules/cyber
+   78 kB github.com/zerjioang/go-hpc/lib/cyber
    78 kB image/color
-   75 kB github.com/zerjioang/etherniti/core/eth
+   75 kB github.com/zerjioang/go-hpc/lib/eth
    72 kB crypto/sha256
    72 kB encoding/base64
    71 kB github.com/zerjioang/etherniti/vendor/github.com/beorn7/perks/quantile
-   71 kB github.com/zerjioang/etherniti/core/modules/bip32
+   71 kB github.com/zerjioang/go-hpc/lib/bip32
    71 kB github.com/zerjioang/etherniti/vendor/github.com/emirpasic/gods/trees/binaryheap
    71 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/transport/file
    70 kB github.com/zerjioang/etherniti/vendor/github.com/src-d/gcfg/scanner
@@ -276,23 +276,23 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    69 kB github.com/zerjioang/etherniti/vendor/github.com/tidwall/pretty
    68 kB github.com/zerjioang/etherniti/shared/mixed
    68 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/transport
-   68 kB github.com/zerjioang/etherniti/thirdparty/gommon/color
+   68 kB github.com/zerjioang/go-hpc/thirdparty/gommon/color
    68 kB github.com/zerjioang/etherniti/vendor/github.com/pkg/errors
    67 kB crypto/x509/pkix
    66 kB compress/gzip
    65 kB vendor/golang_org/x/net/http/httpproxy
-   65 kB github.com/zerjioang/etherniti/core/modules/bip39
-   63 kB github.com/zerjioang/etherniti/core/modules/hashset
+   65 kB github.com/zerjioang/go-hpc/lib/bip39
+   63 kB github.com/zerjioang/go-hpc/lib/hashset
    62 kB github.com/zerjioang/etherniti/core/model/metadata
-   62 kB github.com/zerjioang/etherniti/core/eth/profile
+   62 kB github.com/zerjioang/go-hpc/lib/eth/profile
    60 kB net/http/internal
-   59 kB github.com/zerjioang/etherniti/core/eth/fixtures/crypto
+   59 kB github.com/zerjioang/go-hpc/lib/eth/fixtures/crypto
    58 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/format/objfile
    58 kB text/tabwriter
    58 kB github.com/zerjioang/etherniti/vendor/github.com/modern-go/concurrent
-   58 kB github.com/zerjioang/etherniti/core/modules/snowflake
+   58 kB github.com/zerjioang/go-hpc/lib/snowflake
    58 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/ioutil
-   57 kB github.com/zerjioang/etherniti/thirdparty/template
+   57 kB github.com/zerjioang/go-hpc/thirdparty/template
    57 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/merkletrie/filesystem
    57 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/bcrypt
    57 kB net/http/httptrace
@@ -315,7 +315,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    47 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/storage
    47 kB github.com/zerjioang/etherniti/vendor/github.com/valyala/bytebufferpool
    46 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/revlist
-   46 kB github.com/zerjioang/etherniti/core/eth/fixtures/common/math
+   46 kB github.com/zerjioang/go-hpc/lib/eth/fixtures/common/math
    46 kB github.com/zerjioang/etherniti/vendor/github.com/AndreasBriese/bbloom
    45 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-billy.v4/util
    45 kB compress/zlib
@@ -334,12 +334,12 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    37 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/ripemd160
    36 kB crypto/dsa
    36 kB github.com/zerjioang/etherniti/vendor/github.com/prometheus/client_golang/prometheus/internal
-   36 kB github.com/zerjioang/etherniti/core/modules/httpclient
+   36 kB github.com/zerjioang/go-hpc/lib/httpclient
    36 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/blowfish
    36 kB github.com/zerjioang/etherniti/vendor/github.com/emirpasic/gods/utils
-   36 kB github.com/zerjioang/etherniti/core/eth/fixtures/common
-   34 kB github.com/zerjioang/etherniti/core/util/id
-   34 kB github.com/zerjioang/etherniti/core/modules/encoding
+   36 kB github.com/zerjioang/go-hpc/lib/eth/fixtures/common
+   34 kB github.com/zerjioang/go-hpc/util/id
+   34 kB github.com/zerjioang/go-hpc/lib/encoding
    33 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/ed25519
    32 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/format/pktline
    32 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/merkletrie/noder
@@ -347,14 +347,14 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    31 kB path
    30 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/merkletrie/index
    30 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/curve25519
-   30 kB github.com/zerjioang/etherniti/core/eth/rpc/model
+   30 kB github.com/zerjioang/go-hpc/lib/eth/rpc/model
    30 kB vendor/golang_org/x/crypto/curve25519
    30 kB github.com/zerjioang/etherniti/vendor/github.com/zerjioang/go-bus/mutex
    29 kB github.com/zerjioang/etherniti/vendor/github.com/jbenet/go-context/io
    29 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/transport/client
    28 kB github.com/zerjioang/etherniti/vendor/github.com/pelletier/go-buffruneio
    28 kB github.com/zerjioang/etherniti/core/server/mem
-   27 kB github.com/zerjioang/etherniti/core/modules/worker
+   27 kB github.com/zerjioang/go-hpc/lib/worker
    27 kB github.com/zerjioang/etherniti/vendor/github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg
    27 kB runtime/trace
    26 kB vendor/golang_org/x/net/http/httpguts
@@ -362,7 +362,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    26 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/binary
    26 kB unicode/utf8
    26 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/plumbing/filemode
-   25 kB github.com/zerjioang/etherniti/core/modules/tor
+   25 kB github.com/zerjioang/go-hpc/lib/tor
    25 kB internal/singleflight
    24 kB crypto
    24 kB math/bits
@@ -370,30 +370,30 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    22 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/openpgp/elgamal
    22 kB github.com/zerjioang/etherniti/vendor/github.com/mattn/go-colorable
    22 kB hash/adler32
-   21 kB github.com/zerjioang/etherniti/core/modules/fastime
+   21 kB github.com/zerjioang/go-hpc/lib/fastime
    21 kB github.com/zerjioang/etherniti/core/controllers/security
-   21 kB github.com/zerjioang/etherniti/core/modules/packers
+   21 kB github.com/zerjioang/go-hpc/lib/packers
    21 kB github.com/zerjioang/etherniti/core/server/disk
    21 kB runtime/debug
-   20 kB github.com/zerjioang/etherniti/core/eth/paramencoder/erc20
-   20 kB github.com/zerjioang/etherniti/core/modules/integrity
+   20 kB github.com/zerjioang/go-hpc/lib/eth/paramencoder/erc20
+   20 kB github.com/zerjioang/go-hpc/lib/integrity
    20 kB github.com/zerjioang/etherniti/vendor/gopkg.in/warnings.v0
    19 kB github.com/zerjioang/etherniti/core/data
-   19 kB github.com/zerjioang/etherniti/core/modules/interval
+   19 kB github.com/zerjioang/go-hpc/lib/interval
    19 kB github.com/zerjioang/etherniti/vendor/github.com/mitchellh/go-homedir
    19 kB crypto/rc4
    18 kB sync/atomic
-   18 kB github.com/zerjioang/etherniti/core/eth/paramencoder
+   18 kB github.com/zerjioang/go-hpc/lib/eth/paramencoder
    17 kB vendor/golang_org/x/crypto/poly1305
-   16 kB github.com/zerjioang/etherniti/core/util/str
+   16 kB github.com/zerjioang/go-hpc/util/str
    16 kB github.com/zerjioang/etherniti/vendor/github.com/tidwall/match
    15 kB image/internal/imageutil
    15 kB github.com/zerjioang/etherniti/vendor/github.com/emirpasic/gods/lists
    15 kB internal/bytealg
    14 kB hash
-   14 kB github.com/zerjioang/etherniti/core/modules/cache
+   14 kB github.com/zerjioang/go-hpc/lib/cache
    14 kB container/heap
-   14 kB github.com/zerjioang/etherniti/core/modules/counter32
+   14 kB github.com/zerjioang/go-hpc/lib/counter32
    14 kB github.com/zerjioang/etherniti/vendor/github.com/xanzy/ssh-agent
    14 kB crypto/hmac
    13 kB internal/testlog
@@ -401,26 +401,26 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
    12 kB github.com/zerjioang/etherniti/core/logger
    12 kB github.com/zerjioang/etherniti/core/controllers/tokenlist
    12 kB github.com/zerjioang/etherniti/vendor/github.com/prometheus/procfs/internal/fs
-   12 kB github.com/zerjioang/etherniti/core/modules/stack
+   12 kB github.com/zerjioang/go-hpc/lib/stack
    12 kB github.com/zerjioang/etherniti/vendor/golang.org/x/net/context
-   11 kB github.com/zerjioang/etherniti/core/util/ip
+   11 kB github.com/zerjioang/go-hpc/util/ip
    11 kB github.com/zerjioang/etherniti/core/cmd
    11 kB runtime/internal/sys
    11 kB github.com/zerjioang/etherniti/vendor/gopkg.in/src-d/go-git.v4/utils/diff
    10 kB runtime/internal/atomic
   9.8 kB github.com/zerjioang/etherniti/vendor/github.com/matttproud/golang_protobuf_extensions/pbutil
   9.8 kB github.com/zerjioang/etherniti/core/model/registry/version
-  8.6 kB github.com/zerjioang/etherniti/thirdparty/gommon/random
-  8.6 kB github.com/zerjioang/etherniti/core/modules/encoding/base58
-  8.5 kB github.com/zerjioang/etherniti/core/util/banner
+  8.6 kB github.com/zerjioang/go-hpc/thirdparty/gommon/random
+  8.6 kB github.com/zerjioang/go-hpc/lib/encoding/base58
+  8.5 kB github.com/zerjioang/go-hpc/util/banner
   8.4 kB github.com/zerjioang/etherniti/core/listener
   8.0 kB unicode/utf16
   7.9 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/pbkdf2
   7.9 kB github.com/zerjioang/etherniti/vendor/github.com/zerjioang/go-bus
   7.7 kB crypto/internal/randutil
-  7.5 kB github.com/zerjioang/etherniti/core/modules/badips
-  7.4 kB github.com/zerjioang/etherniti/core/modules/encoding/hex
-  7.1 kB github.com/zerjioang/etherniti/core/modules/bots
+  7.5 kB github.com/zerjioang/go-hpc/lib/badips
+  7.4 kB github.com/zerjioang/go-hpc/lib/encoding/hex
+  7.1 kB github.com/zerjioang/go-hpc/lib/bots
   6.7 kB encoding
   6.4 kB github.com/zerjioang/etherniti/core/bus
   6.4 kB github.com/zerjioang/etherniti/vendor/github.com/emirpasic/gods/trees
@@ -429,7 +429,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   5.7 kB crypto/subtle
   5.6 kB internal/syscall/unix
   5.2 kB github.com/zerjioang/etherniti/shared/constants
-  4.4 kB github.com/zerjioang/etherniti/core/modules/aeshash
+  4.4 kB github.com/zerjioang/go-hpc/lib/aeshash
   4.3 kB github.com/zerjioang/etherniti/shared/def/listener
   4.2 kB internal/nettrace
   3.6 kB internal/race
@@ -437,7 +437,7 @@ Following, **etherniti** dependencies are listed, orderer by impact on final exe
   3.3 kB github.com/zerjioang/etherniti/vendor/golang.org/x/crypto/internal/subtle
   3.1 kB crypto/internal/subtle
   2.5 kB github.com/zerjioang/etherniti/vendor/github.com/mattn/go-isatty
-  2.1 kB github.com/zerjioang/etherniti/core/util/fs
+  2.1 kB github.com/zerjioang/go-hpc/util/fs
   1.5 kB github.com/zerjioang/etherniti/vendor/github.com/dgraph-io/badger/options
 ```
 

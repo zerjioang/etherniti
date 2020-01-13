@@ -9,14 +9,13 @@ release:
 
 # Build customization
 builds:
-    # You can have multiple builds defined as a yaml list
-  -
-    # Path to main.go file or main package.
+  # You can have multiple builds defined as a yaml list
+  - # Path to main.go file or main package.
     # Default is `.`.
     main: ./main.go
     binary: etherniti
-    #hooks:
-      #post: /bin/sh script.sh
+      #hooks:
+    #post: /bin/sh script.sh
     # -s
     #This flag strips all the symbol information from the artifact produced.
     # If say you are a few KB/MB off from your binary fitting on
@@ -65,12 +64,12 @@ changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-    - '^dev:'
-    - 'README'
-    - Merge pull request
-    - Merge branch
+      - '^docs:'
+      - '^test:'
+      - '^dev:'
+      - 'README'
+      - Merge pull request
+      - Merge branch
 
 nfpm:
   name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
@@ -94,8 +93,8 @@ nfpm:
 
   # Formats to be generated.
   formats:
-      - deb
-      - rpm
+    - deb
+    - rpm
 
   # Packages your package depends on.
   dependencies:
@@ -126,6 +125,6 @@ archive:
     - LICENSE
     - VERSION
     - AUTHORS
-    
+
 git:
   short_hash: true

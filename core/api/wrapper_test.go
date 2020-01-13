@@ -8,15 +8,19 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/zerjioang/etherniti/shared"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/listener/common"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestWrapper(t *testing.T) {
 	t.Run("send-error", func(t *testing.T) {
-		err := Error(common.NewContext(echo.New()), errors.New("test-error"))
+		c := shared.AdquireContext(common.NewContext(echo.New()))
+		err := Error(c, errors.New("test-error"))
 		assert.Nil(t, err)
+		shared.ReleaseContext(c)
 	})
 	t.Run("send-error-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
@@ -24,16 +28,20 @@ func TestWrapper(t *testing.T) {
 		g.Add(total)
 		for i := 0; i < total; i++ {
 			go func() {
-				err := Error(common.NewContext(echo.New()), errors.New("test-error"))
+				c := shared.AdquireContext(common.NewContext(echo.New()))
+				err := Error(c, errors.New("test-error"))
 				assert.Nil(t, err)
 				g.Done()
+				shared.ReleaseContext(c)
 			}()
 		}
 		g.Wait()
 	})
 	t.Run("send-success", func(t *testing.T) {
-		err := SendSuccess(common.NewContext(echo.New()), []byte("message"), "")
+		c := shared.AdquireContext(common.NewContext(echo.New()))
+		err := SendSuccess(c, []byte("message"), "")
 		assert.Nil(t, err)
+		shared.ReleaseContext(c)
 	})
 	t.Run("send-success-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
@@ -41,16 +49,20 @@ func TestWrapper(t *testing.T) {
 		g.Add(total)
 		for i := 0; i < total; i++ {
 			go func() {
-				err := SendSuccess(common.NewContext(echo.New()), []byte("message"), "")
+				c := shared.AdquireContext(common.NewContext(echo.New()))
+				err := SendSuccess(c, []byte("message"), "")
 				assert.Nil(t, err)
 				g.Done()
+				shared.ReleaseContext(c)
 			}()
 		}
 		g.Wait()
 	})
 	t.Run("send-success-blob", func(t *testing.T) {
-		err := SendSuccessBlob(common.NewContext(echo.New()), nil)
+		c := shared.AdquireContext(common.NewContext(echo.New()))
+		err := SendSuccessBlob(c, nil)
 		assert.Nil(t, err)
+		shared.ReleaseContext(c)
 	})
 	t.Run("send-success-blob-goroutines", func(t *testing.T) {
 		var g sync.WaitGroup
@@ -58,9 +70,11 @@ func TestWrapper(t *testing.T) {
 		g.Add(total)
 		for i := 0; i < total; i++ {
 			go func() {
-				err := SendSuccessBlob(common.NewContext(echo.New()), nil)
+				c := shared.AdquireContext(common.NewContext(echo.New()))
+				err := SendSuccessBlob(c, nil)
 				assert.Nil(t, err)
 				g.Done()
+				shared.ReleaseContext(c)
 			}()
 		}
 		g.Wait()

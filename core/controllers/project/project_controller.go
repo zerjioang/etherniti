@@ -7,7 +7,7 @@ import (
 	"github.com/zerjioang/etherniti/core/controllers/common"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/project"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 type ProjectController struct {
@@ -18,7 +18,7 @@ type ProjectController struct {
 func NewProjectController() ProjectController {
 	pc := ProjectController{}
 	var err error
-	pc.DatabaseController, err = common.NewDatabaseController("", "projects", project.NewDBProject)
+	pc.DatabaseController, err = common.NewDatabaseController("", "", "projects", project.NewDBProject)
 	if err != nil {
 		logger.Error("failed to create project controller ", err)
 	}

@@ -8,18 +8,21 @@ import (
 	"hash/fnv"
 	"strconv"
 
-	"github.com/valyala/fasthttp"
+	web3 "github.com/zerjioang/go-hpc/lib/eth/rpc/client"
+
+	"github.com/zerjioang/etherniti/shared"
+
 	"github.com/zerjioang/etherniti/core/logger"
 
 	"github.com/zerjioang/etherniti/core/api"
 
 	"github.com/zerjioang/etherniti/core/data"
 
-	"github.com/zerjioang/etherniti/core/modules/cache"
+	"github.com/zerjioang/go-hpc/lib/cache"
 
-	"github.com/zerjioang/etherniti/core/eth"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/eth"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -30,7 +33,7 @@ var (
 // eth network controller
 type NetworkController struct {
 	// http client
-	client *fasthttp.Client
+	client *web3.EthClient
 	// node connection information
 	connection *NodeConnection
 	//ethereum interaction cache
@@ -47,7 +50,7 @@ func NewNetworkController() NetworkController {
 	return ctl
 }
 
-func (ctl *NetworkController) SetClient(c *fasthttp.Client) {
+func (ctl *NetworkController) SetClient(c *web3.EthClient) {
 	ctl.client = c
 }
 
@@ -79,7 +82,7 @@ func (ctl *NetworkController) Name() string {
 	return ctl.connection.Name()
 }
 
-func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, error) {
+func (ctl *NetworkController) getRpcClient(c *shared.EthernitiContext) (*ethrpc.EthRPC, error) {
 	//check if current newtwork has a predefined rpc controller or not
 	// network with predefined controllers are: rinkeby, kovan, ganache, infura
 	logger.Info("checking if exists a predefined rpc client for current network")
@@ -100,7 +103,7 @@ func (ctl *NetworkController) getRpcClient(c *echo.Context) (*ethrpc.EthRPC, err
 	}
 }
 
-func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) {
+func (ctl *NetworkController) getCallerAddress(c *shared.EthernitiContext) (string, error) {
 	from := c.CallerEthAddress()
 	if !eth.IsValidAddressLow(from) {
 		return "", errInvalidAddress
@@ -108,7 +111,7 @@ func (ctl *NetworkController) getCallerAddress(c *echo.Context) (string, error) 
 	return from, nil
 }
 
-func (ctl *NetworkController) Noop(c *echo.Context) error {
+func (ctl *NetworkController) Noop(c *shared.EthernitiContext) error {
 	return api.Error(c, errors.New("not implemented"))
 }
 

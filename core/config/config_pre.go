@@ -8,7 +8,7 @@ package config
 import (
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 // openssl genrsa -out server.key 2048

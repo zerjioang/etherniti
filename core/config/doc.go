@@ -7,8 +7,8 @@ package config
 
 Initial package performance:
 
-go test -bench=. -benchmem -cpu=1,2,4
-go test -bench=. -benchmem -benchtime=5s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
+go test -pibench=. -benchmem -cpu=1,2,4
+go test -pibench=. -benchmem -benchtime=5s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
 go tool -web pprof profile.out
 go tool -web pprof memprofile.out
 go tool pprof -http=localhost:6060 memprofile.out

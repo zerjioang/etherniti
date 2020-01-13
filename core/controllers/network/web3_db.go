@@ -5,11 +5,13 @@ package network
 
 import (
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
 	"github.com/zerjioang/etherniti/core/data"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/shared"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/shared/protocol"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared/dto"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // eth web3 controller
@@ -24,11 +26,11 @@ func NewWeb3DbController(network *NetworkController) Web3DbController {
 	return ctl
 }
 
-// BEGIN of web3 db functions
+// BEGIN of web3 db-badger functions
 
-// dbPutString calls db protocol db_putString json-rpc call
-func (ctl *Web3DbController) dbPutString(c *echo.Context) error {
-	var req *protocol.DbStorageRequest
+// dbPutString calls db-badger protocol db_putString json-rpc call
+func (ctl *Web3DbController) dbPutString(c *shared.EthernitiContext) error {
+	var req *dto.DbStorageRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -54,9 +56,9 @@ func (ctl *Web3DbController) dbPutString(c *echo.Context) error {
 	}
 }
 
-// dbGetString calls db protocol db_getString json-rpc call
-func (ctl *Web3DbController) dbGetString(c *echo.Context) error {
-	db := c.Param("db")
+// dbGetString calls db-badger protocol db_getString json-rpc call
+func (ctl *Web3DbController) dbGetString(c *shared.EthernitiContext) error {
+	db := c.Param("db-badger")
 	key := c.Param("key")
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -72,9 +74,9 @@ func (ctl *Web3DbController) dbGetString(c *echo.Context) error {
 	}
 }
 
-// dbPutHex calls db protocol db_putHex json-rpc call
-func (ctl *Web3DbController) dbPutHex(c *echo.Context) error {
-	var req *protocol.DbStorageRequest
+// dbPutHex calls db-badger protocol db_putHex json-rpc call
+func (ctl *Web3DbController) dbPutHex(c *shared.EthernitiContext) error {
+	var req *dto.DbStorageRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -100,9 +102,9 @@ func (ctl *Web3DbController) dbPutHex(c *echo.Context) error {
 	}
 }
 
-// dbGetHex calls db protocol db_getHex json-rpc call
-func (ctl *Web3DbController) dbGetHex(c *echo.Context) error {
-	db := c.Param("db")
+// dbGetHex calls db-badger protocol db_getHex json-rpc call
+func (ctl *Web3DbController) dbGetHex(c *shared.EthernitiContext) error {
+	db := c.Param("db-badger")
 	key := c.Param("key")
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -118,15 +120,15 @@ func (ctl *Web3DbController) dbGetHex(c *echo.Context) error {
 	}
 }
 
-// END of web3 db functions
+// END of web3 db-badger functions
 
 // implemented method from interface RouterRegistrable
 func (ctl Web3DbController) RegisterRouters(router *echo.Group) {
 	logger.Debug("registerind eth_db methods")
 
-	router.POST("/db/string", ctl.dbPutString)
-	router.GET("/db/string/:db/:key", ctl.dbGetString)
+	router.POST("/db-badger/string", wrap.Call(ctl.dbPutString))
+	router.GET("/db-badger/string/:db-badger/:key", wrap.Call(ctl.dbGetString))
 
-	router.POST("/db/hex", ctl.dbPutHex)
-	router.GET("/db/hex/:db/:key", ctl.dbGetHex)
+	router.POST("/db-badger/hex", wrap.Call(ctl.dbPutHex))
+	router.GET("/db-badger/hex/:db-badger/:key", wrap.Call(ctl.dbGetHex))
 }

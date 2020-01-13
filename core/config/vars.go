@@ -37,10 +37,10 @@ const (
 	XEthernitiInfuraToken = "X_ETHERNITI_INFURA_TOKEN"
 
 	//gmail email service configuration
-	XEthernitiEmailUsername    = "X_ETHERNITI_EMAIL_USERNAME"
+	XEthernitiGmailUsername    = "X_ETHERNITI_GMAIL_USERNAME"
 	XEthernitiGmailAccessToken = "X_ETHERNITI_GMAIL_ACCESS_TOKEN"
-	XEthernitiEmailServer      = "X_ETHERNITI_EMAIL_SERVER"
-	XEthernitiEmailServerOnly  = "X_ETHERNITI_EMAIL_SERVER_ONLY"
+	XEthernitiGmailServer      = "X_ETHERNITI_GMAIL_SERVER"
+	XEthernitiGmailServerOnly  = "X_ETHERNITI_GMAIL_SERVER_ONLY"
 
 	//sendgrid email service configuration
 	XEthernitiSendgridApiKey = "X_ETHERNITI_SENDGRID_API_KEY"

@@ -13,16 +13,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/zerjioang/etherniti/core/util/banner"
+	"github.com/zerjioang/etherniti/util/banner"
 
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/shared/def/listener"
 
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 
 	"github.com/zerjioang/etherniti/core/logger"
 
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
+	"github.com/zerjioang/go-hpc/thirdparty/gommon/log"
 )
 
 // UNIX domain sockets are a method by which processes on the same host can communicate

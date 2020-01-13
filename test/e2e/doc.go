@@ -4,7 +4,7 @@
 package e2e
 
 /*
-go test -bench=. -race -benchmem -benchtime=2s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
+go test -pibench=. -race -benchmem -benchtime=2s -cpu=1,2,4 -memprofile memprofile.out -cpuprofile profile.out
 go tool pprof -http=localhost:6060 profile.out
 
 initial performance benchmark

@@ -6,25 +6,27 @@ package middleware
 import (
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/modules/metrics/grafana"
-	"github.com/zerjioang/etherniti/core/modules/metrics/prometheus"
+	"github.com/zerjioang/etherniti/core/controllers/providers"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/codes"
+
+	"github.com/zerjioang/etherniti/core/middleware/grafana"
+	"github.com/zerjioang/etherniti/core/middleware/httpcache"
+	"github.com/zerjioang/etherniti/core/middleware/prometheus"
+	"github.com/zerjioang/etherniti/core/middleware/security"
 
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/controllers/ws"
-	"github.com/zerjioang/etherniti/core/modules/cyber"
-	"github.com/zerjioang/etherniti/core/modules/httpcache"
-	"github.com/zerjioang/etherniti/core/server/ratelimit"
+	"github.com/zerjioang/etherniti/core/middleware/ratelimit"
 
-	middlewareLogger "github.com/zerjioang/etherniti/thirdparty/middleware/logger"
+	middlewareLogger "github.com/zerjioang/go-hpc/thirdparty/middleware/logger"
 
-	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/thirdparty/echo/middleware"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/middleware"
 
-	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/config"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -62,23 +64,20 @@ func init() {
 }
 
 // custom http error handler. returns error messages as json
-func customHTTPErrorHandler(err error, c *echo.Context) {
-	// use code snippet below to customize http return code
-	/*
-		code := protocol.StatusInternalServerError
-		if he, ok := err.(*echo.HTTPError); ok {
-			code = he.Code
-		}
-	*/
-	_ = api.Error(c, err)
+func customHTTPErrorHandler(err error, c echo.Context) {
+	code := codes.StatusInternalServerError
+	if he, ok := err.(*echo.HTTPError); ok {
+		code = he.Code
+	}
+	_ = c.JSON(code, map[string]string{"error": err.Error()})
 }
 
 // http to http redirect function
 func HttpsRedirect(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c *echo.Context) error {
-		if c.IsHttp() {
-			req := c.Request()
-			return c.Redirect(301, opts.GetRedirectUrl(req.Host, req.RequestURI))
+	return func(c echo.Context) error {
+		cc, ok := c.(*shared.EthernitiContext)
+		if ok && cc.IsHttp() {
+			return c.Redirect(301, opts.GetRedirectUrl(cc.RequestHost(), cc.RequestUrl()))
 		}
 		return next(c)
 	}
@@ -105,7 +104,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.Pre(grafana.MetricsCollector)
 	}
 	if edition.IsEnterprise() && opts.MetricsEnabled {
-		logger.Info("[LAYER] /=> promoetheus metrics")
+		logger.Info("[LAYER] /=> prometheus metrics")
 		e.Pre(prometheus.MetricsCollector)
 	}
 
@@ -128,6 +127,10 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		}
 	}
 
+	// middleware to extend our context
+	// This middleware should be registered before any other middleware.
+	e.Use(shared.EthernitiContextMiddleware)
+
 	// Request ID middleware generates a unique id for a request.
 	if opts.UniqueIdsEnabled {
 		logger.Info("[LAYER] /=> adding unique request id")
@@ -137,7 +140,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 	// Internal notifier allows the collection of notifier of etherniti proxy internal components and modules
 	if opts.MetricsEnabled {
 		logger.Info("[LAYER] /=> adding internal metrics")
-		e.Use(cyber.InternalAnalytics)
+		e.Use(security.InternalAnalytics)
 	}
 
 	if edition.IsEnterprise() {
@@ -150,7 +153,7 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		// enable analytics for pro version and for those who requested
 		if opts.AnalyticsEnabled {
 			logger.Info("[LAYER] /=> adding analytics")
-			e.Use(cyber.Analytics)
+			e.Use(security.Analytics)
 		}
 		// enable server cache for pro version and for those who requested
 		if opts.ServerCacheEnabled {
@@ -177,23 +180,22 @@ func ConfigureServerRoutes(e *echo.Echo) {
 		e.GET("/ws", ws.WebsocketEntrypoint)
 	}
 
-	logger.Info("[LAYER] /=> static files")
 	//load root static folder
-	e.Static("/", config.ResourcesDirRoot)
-
-	e.Static("/phpinfo.php", config.ResourcesDirPHP)
-
 	// load swagger ui files
-	logger.Info("[LAYER] /=> swagger files")
-	e.Static("/swagger", config.ResourcesDirSwagger)
+	logger.Info("[LAYER] /=> static files")
+	e.Static("/", config.ResourcesDirRoot)
+	// logger.Info("[LAYER] /=> swagger files")
+	// e.Static("/swagger", config.ResourcesDirSwagger)
+	// load fake php files
+	e.Static("/phpinfo.php", config.ResourcesDirPHP)
 
 	//http, https, unix socket
 	// register services version 1 api calls
-	controllers.RegisterServices(e)
+	providers.RegisterServices(e)
 }
 
 // ApplyDefaultCommonHeaders adds default Etherniti HTTP headers
-func ApplyDefaultCommonHeaders(c *echo.Context) {
+func ApplyDefaultCommonHeaders(c echo.Context) {
 	// get request
 	response := c.Response()
 	rh := response.Header()
@@ -204,7 +206,7 @@ func ApplyDefaultCommonHeaders(c *echo.Context) {
 
 // ApplyDefaultSecurityHeaders adds default security HTTP headers for an extra
 // security oriented hardening
-func ApplyDefaultSecurityHeaders(c *echo.Context) {
+func ApplyDefaultSecurityHeaders(c echo.Context) {
 	// get request
 	response := c.Response()
 	rh := response.Header()

@@ -8,7 +8,7 @@ import (
 
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
-	"github.com/zerjioang/etherniti/core/modules/wsm"
+	"github.com/zerjioang/go-hpc/lib/wsm"
 
 	"github.com/zerjioang/etherniti/core/listener/https"
 	"github.com/zerjioang/etherniti/core/listener/middleware"

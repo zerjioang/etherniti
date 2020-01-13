@@ -6,15 +6,18 @@ package dashboard
 import (
 	"sync/atomic"
 
-	"github.com/zerjioang/etherniti/core/bench"
-	"github.com/zerjioang/etherniti/core/modules/fastime"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+
+	"github.com/zerjioang/go-hpc/lib/fastime"
+	"github.com/zerjioang/go-hpc/lib/pibench"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/etherniti/shared"
 	"github.com/zerjioang/etherniti/shared/notifier"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
 	gobus "github.com/zerjioang/go-bus"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 type ProxyStatsController struct {
@@ -47,8 +50,8 @@ var (
 func init() {
 	logger.Debug("loading proxy statistics wrapper")
 	//load internal benchmarking data
-	scoreWrapper.Score = bench.GetScore()
-	scoreWrapper.Time = bench.GetBenchTime()
+	scoreWrapper.Score = pibench.GetScore()
+	scoreWrapper.Time = pibench.GetBenchTime()
 
 	// initialize proxy statistics wrapper
 	var stats ProxyStats
@@ -88,7 +91,7 @@ func NewProxyStatsController() ProxyStatsController {
 }
 
 // load current proxy statistics
-func (ctl ProxyStatsController) internalAnalytics(c *echo.Context) error {
+func (ctl ProxyStatsController) internalAnalytics(c *shared.EthernitiContext) error {
 	statsData, ok := atomicStats.Load().(ProxyStats)
 	if ok {
 		return api.SendSuccess(c, []byte("proxy_internal_analytics"), statsData)
@@ -96,12 +99,12 @@ func (ctl ProxyStatsController) internalAnalytics(c *echo.Context) error {
 	return api.ErrorStr(c, "failed to get proxy dashboard statistics")
 }
 
-func (ctl ProxyStatsController) score(c *echo.Context) error {
+func (ctl ProxyStatsController) score(c *shared.EthernitiContext) error {
 	return api.SendSuccess(c, []byte("proxy_score"), scoreWrapper)
 }
 
 func (ctl ProxyStatsController) RegisterRouters(router *echo.Group) {
 	logger.Debug("exposing ui internalAnalytics controller methods")
-	router.GET("/analytics", ctl.internalAnalytics)
-	router.GET("/score", ctl.score)
+	router.GET("/analytics", wrap.Call(ctl.internalAnalytics))
+	router.GET("/score", wrap.Call(ctl.score))
 }

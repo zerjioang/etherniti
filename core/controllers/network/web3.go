@@ -8,30 +8,35 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
+	"github.com/zerjioang/etherniti/shared/dto"
+
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+
+	"github.com/zerjioang/go-hpc/lib/codes"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/common"
 
 	"github.com/pkg/errors"
 
+	"github.com/zerjioang/etherniti/shared"
 	"github.com/zerjioang/etherniti/shared/constants"
 
-	"github.com/zerjioang/etherniti/core/eth/paramencoder/erc20"
+	"github.com/zerjioang/go-hpc/lib/eth/paramencoder/erc20"
 
 	"github.com/zerjioang/etherniti/core/data"
 
-	"github.com/zerjioang/etherniti/core/eth"
+	"github.com/zerjioang/go-hpc/lib/eth"
 
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
 
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/go-hpc/util/str"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/hex"
+	"github.com/zerjioang/go-hpc/lib/encoding/hex"
 
 	"github.com/zerjioang/etherniti/core/api"
-	"github.com/zerjioang/etherniti/shared/protocol"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -68,7 +73,7 @@ func NewWeb3Controller(network *NetworkController) Web3Controller {
 }
 
 // get the balance of given ethereum address and target network
-func (ctl *Web3Controller) getBalance(c *echo.Context) error {
+func (ctl *Web3Controller) getBalance(c *shared.EthernitiContext) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
@@ -106,7 +111,7 @@ func (ctl *Web3Controller) getBalance(c *echo.Context) error {
 }
 
 // check if an ethereum address is a contract address
-func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
+func (ctl *Web3Controller) getBalanceAtBlock(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -131,7 +136,7 @@ func (ctl *Web3Controller) getBalanceAtBlock(c *echo.Context) error {
 }
 
 // get node information
-func (ctl *Web3Controller) getNodeInfo(c *echo.Context) error {
+func (ctl *Web3Controller) getNodeInfo(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 
@@ -148,7 +153,7 @@ func (ctl *Web3Controller) getNodeInfo(c *echo.Context) error {
 }
 
 // get node information
-func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
+func (ctl *Web3Controller) getNetworkVersion(c *shared.EthernitiContext) error {
 
 	//try to get this information from the cache
 	key := data.NetVersion
@@ -181,7 +186,7 @@ func (ctl *Web3Controller) getNetworkVersion(c *echo.Context) error {
 
 // this functions detects is web3_clientVersion information is
 // EthereumJS TestRPC/v2.5.5-beta.0/ethereum-js or similar
-func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
+func (ctl *Web3Controller) isRunningGanache(c *shared.EthernitiContext) error {
 	//try to get this information from the cache
 	key := data.IsGanache
 	cachedValue, found := ctl.network.cache.Get(key)
@@ -211,9 +216,9 @@ func (ctl *Web3Controller) isRunningGanache(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) sha3Node(c *echo.Context) error {
+func (ctl *Web3Controller) sha3Node(c *shared.EthernitiContext) error {
 	// 0 parse this http request body
-	var req *protocol.EthSha3Request
+	var req *dto.EthSha3Request
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -246,9 +251,9 @@ func (ctl *Web3Controller) sha3Node(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) sha3BuiltIn(c *echo.Context) error {
+func (ctl *Web3Controller) sha3BuiltIn(c *shared.EthernitiContext) error {
 	// 1 parse this http request body
-	var req *protocol.EthSha3Request
+	var req *dto.EthSha3Request
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -272,9 +277,9 @@ func (ctl *Web3Controller) sha3BuiltIn(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) parseSignature(c *echo.Context) error {
+func (ctl *Web3Controller) parseSignature(c *shared.EthernitiContext) error {
 	// 0 parse this http request body
-	var req *protocol.EthSignatureParseRequest
+	var req *dto.EthSignatureParseRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to req: ", err)
@@ -284,7 +289,7 @@ func (ctl *Web3Controller) parseSignature(c *echo.Context) error {
 	if err == nil {
 		// generate keccak-256 hash withut connecting to remote node
 		r, s, v := fixtures.ParseEthSignature(req.Signature)
-		resp := protocol.EthSignatureParseResponse{R: r, S: s, V: v}
+		resp := dto.EthSignatureParseResponse{R: r, S: s, V: v}
 		c.OnSuccessCachePolicy = constants.CacheInfinite
 		return api.SendSuccess(c, data.EthSignatureParse, resp)
 	} else {
@@ -295,11 +300,11 @@ func (ctl *Web3Controller) parseSignature(c *echo.Context) error {
 }
 
 // TODO implement this function
-func (ctl *Web3Controller) ecRecover(c *echo.Context) error {
+func (ctl *Web3Controller) ecRecover(c *shared.EthernitiContext) error {
 	return api.Error(c, errors.New("not implemented"))
 }
 
-func (ctl *Web3Controller) netVersion(c *echo.Context) error {
+func (ctl *Web3Controller) netVersion(c *shared.EthernitiContext) error {
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
 		return api.Error(c, cliErr)
@@ -322,7 +327,7 @@ func (ctl *Web3Controller) netVersion(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
+func (ctl *Web3Controller) makeRpcCallNoParams(c *shared.EthernitiContext) error {
 	//resolve method name from url
 	methodName := c.Request().URL.Path
 	//try to get this information from the cache
@@ -384,7 +389,7 @@ func (ctl *Web3Controller) makeRpcCallNoParams(c *echo.Context) error {
   "id": 1
 }
 */
-func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
+func (ctl *Web3Controller) getAccountsWithBalance(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 
@@ -427,7 +432,7 @@ func (ctl *Web3Controller) getAccountsWithBalance(c *echo.Context) error {
 }
 
 // check if an ethereum address is a contract address
-func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
+func (ctl *Web3Controller) isContractAddress(c *shared.EthernitiContext) error {
 	targetAddr := c.Param("address")
 	// check if not empty
 	if targetAddr != "" {
@@ -451,7 +456,7 @@ func (ctl *Web3Controller) isContractAddress(c *echo.Context) error {
 // Start ERC20 functions
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Name(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -483,7 +488,7 @@ func (ctl *Web3Controller) erc20Name(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Symbol(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -514,7 +519,7 @@ func (ctl *Web3Controller) erc20Symbol(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
+func (ctl *Web3Controller) erc20totalSupply(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -529,7 +534,7 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 	raw, err := client.Erc20TotalSupply(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -546,7 +551,7 @@ func (ctl *Web3Controller) erc20totalSupply(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
+func (ctl *Web3Controller) erc20decimals(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -561,7 +566,7 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 	raw, err := client.Erc20Decimals(contractAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		var unpacked *big.Int
 		rawBytes, decodeErr := hex.FromEthHex(string(raw))
@@ -578,7 +583,7 @@ func (ctl *Web3Controller) erc20decimals(c *echo.Context) error {
 }
 
 // get the total supply of the contract at given target network
-func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Balanceof(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -598,14 +603,14 @@ func (ctl *Web3Controller) erc20Balanceof(c *echo.Context) error {
 	raw, err := client.Erc20BalanceOf(contractAddress, address)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.BalanceOf, raw)
 	}
 }
 
 // get the allowance status of the contract at given target network
-func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Allowance(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -630,7 +635,7 @@ func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 	raw, err := client.Erc20Allowance(contractAddress, ownerAddress, spenderAddress)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Allowance, raw)
 	}
@@ -642,7 +647,7 @@ func (ctl *Web3Controller) erc20Allowance(c *echo.Context) error {
 // - Owner's account must have sufficient balance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Transfer(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -668,7 +673,7 @@ func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
 	raw, err := client.Erc20Transfer(contractAddress, receiverAddress, tokenAmount)
 	if err != nil {
 		// send invalid generation message
-		return api.ErrorCode(c, protocol.StatusBadRequest, err)
+		return api.ErrorCode(c, codes.StatusBadRequest, err)
 	} else {
 		return api.SendSuccess(c, data.Transfer, raw)
 	}
@@ -683,7 +688,7 @@ func (ctl *Web3Controller) erc20Transfer(c *echo.Context) error {
 // recommends that there are no checks for the approval double-spend attack
 // as this should be implemented in user interfaces
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20Approve(c *echo.Context) error {
+func (ctl *Web3Controller) erc20Approve(c *shared.EthernitiContext) error {
 	return nil
 }
 
@@ -697,12 +702,12 @@ func (ctl *Web3Controller) erc20Approve(c *echo.Context) error {
 // - Spender must have sufficient allowance to transfer
 // - 0 value transfers are allowed
 // ------------------------------------------------------------------------
-func (ctl *Web3Controller) erc20TransferFrom(c *echo.Context) error {
+func (ctl *Web3Controller) erc20TransferFrom(c *shared.EthernitiContext) error {
 	return nil
 }
 
 // eth.sendTransaction({from:sender, to:receiver, value: amount})
-func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
+func (ctl *Web3Controller) sendTransaction(c *shared.EthernitiContext) error {
 	//read input data
 	var txData ethrpc.TransactionData
 	if err := c.Bind(&txData); err != nil {
@@ -748,7 +753,7 @@ func (ctl *Web3Controller) sendTransaction(c *echo.Context) error {
 	}
 }
 
-func (ctl *Web3Controller) sendContractDeploymentTransaction(c *echo.Context, txData *ethrpc.TransactionData) error {
+func (ctl *Web3Controller) sendContractDeploymentTransaction(c *shared.EthernitiContext, txData *ethrpc.TransactionData) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -766,7 +771,7 @@ func (ctl *Web3Controller) sendContractDeploymentTransaction(c *echo.Context, tx
 
 // END of ERC20 functions
 
-func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
+func (ctl *Web3Controller) getTransactionByHash(c *shared.EthernitiContext) error {
 	txhash := c.Param("hash")
 	// check if not empty
 	if txhash != "" {
@@ -790,7 +795,7 @@ func (ctl *Web3Controller) getTransactionByHash(c *echo.Context) error {
 // Blockchain Access
 
 // ChainId retrieves the current chain ID for transaction replay protection.
-func (ctl *Web3Controller) chainId(c *echo.Context) error {
+func (ctl *Web3Controller) chainId(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -804,15 +809,15 @@ func (ctl *Web3Controller) chainId(c *echo.Context) error {
 	return api.SendSuccess(c, data.ChainId, result)
 }
 
-func (ctl *Web3Controller) getUncleCountByBlockHash(c *echo.Context) error {
+func (ctl *Web3Controller) getUncleCountByBlockHash(c *shared.EthernitiContext) error {
 	return ctl.network.Noop(c)
 }
 
-func (ctl *Web3Controller) getUncleCountByBlockNumber(c *echo.Context) error {
+func (ctl *Web3Controller) getUncleCountByBlockNumber(c *shared.EthernitiContext) error {
 	return ctl.network.Noop(c)
 }
 
-func (ctl *Web3Controller) getCode(c *echo.Context) error {
+func (ctl *Web3Controller) getCode(c *shared.EthernitiContext) error {
 	// read input parameters
 	// 1 address
 	address := c.Param("address")
@@ -842,7 +847,7 @@ func (ctl *Web3Controller) getCode(c *echo.Context) error {
 	return api.SendSuccess(c, data.GetCode, result)
 }
 
-func (ctl *Web3Controller) signRemote(c *echo.Context) error {
+func (ctl *Web3Controller) signRemote(c *shared.EthernitiContext) error {
 	// read input parameters
 	var signReq *ethrpc.NodeSignRequest
 	if err := c.Bind(&signReq); err != nil {
@@ -871,11 +876,11 @@ func (ctl *Web3Controller) signRemote(c *echo.Context) error {
 	return api.SendSuccess(c, data.EthSign, result)
 }
 
-func (ctl *Web3Controller) call(c *echo.Context) error {
+func (ctl *Web3Controller) call(c *shared.EthernitiContext) error {
 	return ctl.network.Noop(c)
 }
 
-func (ctl *Web3Controller) sendRawTransaction(c *echo.Context) error {
+func (ctl *Web3Controller) sendRawTransaction(c *shared.EthernitiContext) error {
 	return ctl.network.Noop(c)
 }
 
@@ -883,7 +888,7 @@ func (ctl *Web3Controller) sendRawTransaction(c *echo.Context) error {
 // the current pending state of the backend blockchain. There is no guarantee that this is
 // the true gas limit requirement as other transactions may be added or removed by miners,
 // but it should provide a basis for setting a reasonable default.
-func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
+func (ctl *Web3Controller) estimateGas(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -903,7 +908,7 @@ func (ctl *Web3Controller) estimateGas(c *echo.Context) error {
 	return api.SendSuccess(c, data.EstimateGas, amount)
 }
 
-func (ctl *Web3Controller) compileCode(c *echo.Context, id []byte, compilerCall func(code string) ([]string, error)) error {
+func (ctl *Web3Controller) compileCode(c *shared.EthernitiContext, id []byte, compilerCall func(code string) ([]string, error)) error {
 	var model map[string]string
 	if err := c.Bind(&model); err != nil {
 		// return a binding error
@@ -922,7 +927,7 @@ func (ctl *Web3Controller) compileCode(c *echo.Context, id []byte, compilerCall 
 	return api.Error(c, errors.New("invalid source contract content provided in the request"))
 }
 
-func (ctl *Web3Controller) compileLLL(c *echo.Context) error {
+func (ctl *Web3Controller) compileLLL(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -932,7 +937,7 @@ func (ctl *Web3Controller) compileLLL(c *echo.Context) error {
 	return ctl.compileCode(c, data.CompileLLL, client.EthCompileLLL)
 }
 
-func (ctl *Web3Controller) compileSolidity(c *echo.Context) error {
+func (ctl *Web3Controller) compileSolidity(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -942,7 +947,7 @@ func (ctl *Web3Controller) compileSolidity(c *echo.Context) error {
 	return ctl.compileCode(c, data.CompileSolidity, client.EthCompileSolidity)
 }
 
-func (ctl *Web3Controller) compileSerpent(c *echo.Context) error {
+func (ctl *Web3Controller) compileSerpent(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -954,7 +959,7 @@ func (ctl *Web3Controller) compileSerpent(c *echo.Context) error {
 
 // TODO implement the method
 // Returns the value from a storage position at a given address.
-func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
+func (ctl *Web3Controller) ethGetStorageAt(c *shared.EthernitiContext) error {
 	addr := c.Param("address")
 	//input data validation
 	if !eth.IsValidAddressLow(addr) {
@@ -986,7 +991,7 @@ func (ctl *Web3Controller) ethGetStorageAt(c *echo.Context) error {
 }
 
 // Returns the number of transactions sent from an address.
-func (ctl *Web3Controller) getTransactionCount(c *echo.Context) error {
+func (ctl *Web3Controller) getTransactionCount(c *shared.EthernitiContext) error {
 	// read input parameters
 	addr := c.Param("address")
 	//input data validation
@@ -1014,7 +1019,7 @@ func (ctl *Web3Controller) getTransactionCount(c *echo.Context) error {
 }
 
 // Returns the number of transactions in a block from a block matching the given block hash.
-func (ctl *Web3Controller) getBlockTransactionCountByHash(c *echo.Context) error {
+func (ctl *Web3Controller) getBlockTransactionCountByHash(c *shared.EthernitiContext) error {
 	// read input parameters
 	hash := c.Param("hash")
 	if !eth.IsValidBlockHash(hash) {
@@ -1034,7 +1039,7 @@ func (ctl *Web3Controller) getBlockTransactionCountByHash(c *echo.Context) error
 }
 
 // Returns the number of transactions in a block matching the given block number.
-func (ctl *Web3Controller) getBlockTransactionCountByNumber(c *echo.Context) error {
+func (ctl *Web3Controller) getBlockTransactionCountByNumber(c *shared.EthernitiContext) error {
 	// read input parameters
 	number := c.Param("number")
 	//input data validation
@@ -1057,50 +1062,50 @@ func (ctl *Web3Controller) getBlockTransactionCountByNumber(c *echo.Context) err
 // implemented method from interface RouterRegistrable
 func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
-	router.GET("/is/ganache", ctl.isRunningGanache)
+	router.GET("/is/ganache", wrap.Call(ctl.isRunningGanache))
 
-	router.GET("/client/version", ctl.makeRpcCallNoParams)
-	router.POST("/sha3/remote", ctl.sha3Node)
-	router.POST("/sha3/local", ctl.sha3BuiltIn)
-	router.GET("/net/version", ctl.netVersion)
-	router.GET("/net/listening", ctl.makeRpcCallNoParams)
-	router.GET("/net/peers", ctl.makeRpcCallNoParams)
-	router.GET("/protocol/version", ctl.makeRpcCallNoParams)
-	router.GET("/syncing", ctl.makeRpcCallNoParams)
-	router.GET("/coinbase", ctl.makeRpcCallNoParams)
-	router.GET("/mining", ctl.makeRpcCallNoParams)
-	router.GET("/hashrate", ctl.makeRpcCallNoParams)
-	router.GET("/gasprice", ctl.makeRpcCallNoParams)
-	router.GET("/accounts", ctl.makeRpcCallNoParams)
-	router.GET("/accounts/balanced", ctl.getAccountsWithBalance)
-	router.GET("/block/latest", ctl.makeRpcCallNoParams)
-	router.GET("/balance/:address", ctl.getBalance)
-	router.GET("/balance/:address/block/:block", ctl.getBalanceAtBlock)
+	router.GET("/client/version", wrap.Call(ctl.makeRpcCallNoParams))
+	router.POST("/sha3/remote", wrap.Call(ctl.sha3Node))
+	router.POST("/sha3/local", wrap.Call(ctl.sha3BuiltIn))
+	router.GET("/net/version", wrap.Call(ctl.netVersion))
+	router.GET("/net/listening", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/net/peers", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/protocol/version", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/syncing", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/coinbase", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/mining", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/hashrate", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/gasprice", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/accounts", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/accounts/balanced", wrap.Call(ctl.getAccountsWithBalance))
+	router.GET("/block/latest", wrap.Call(ctl.makeRpcCallNoParams))
+	router.GET("/balance/:address", wrap.Call(ctl.getBalance))
+	router.GET("/balance/:address/block/:block", wrap.Call(ctl.getBalanceAtBlock))
 
 	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getstorageat
-	router.GET("/storage/:address/:block/:position", ctl.ethGetStorageAt)
+	router.GET("/storage/:address/:block/:position", wrap.Call(ctl.ethGetStorageAt))
 
 	// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount
-	router.GET("/tx/count/address/:address/:block", ctl.getTransactionCount)
+	router.GET("/tx/count/address/:address/:block", wrap.Call(ctl.getTransactionCount))
 
 	// eth_getBlockTransactionCountByHash
-	router.GET("/tx/count/hash/:hash", ctl.getBlockTransactionCountByHash)
+	router.GET("/tx/count/hash/:hash", wrap.Call(ctl.getBlockTransactionCountByHash))
 	//Returns the number of transactions in a block from a block matching the given block hash.
 
 	//eth_getBlockTransactionCountByNumber
-	router.GET("/tx/count/block/:number", ctl.getBlockTransactionCountByNumber)
+	router.GET("/tx/count/block/:number", wrap.Call(ctl.getBlockTransactionCountByNumber))
 	//Returns the number of transactions in a block matching the given block number.
 
 	// eth_getUncleCountByBlockHash
-	router.GET("/uncle/count/hash/:hash", ctl.getUncleCountByBlockHash)
+	router.GET("/uncle/count/hash/:hash", wrap.Call(ctl.getUncleCountByBlockHash))
 
 	// eth_getUncleCountByBlockNumber
 	// Returns the number of uncles in a block from a block matching the given block hash.
-	router.GET("/uncle/count/block/:block", ctl.getUncleCountByBlockNumber)
+	router.GET("/uncle/count/block/:block", wrap.Call(ctl.getUncleCountByBlockNumber))
 
 	// eth_getCode
 	// Returns code at a given address.
-	router.GET("/code/:address/:block", ctl.getCode)
+	router.GET("/code/:address/:block", wrap.Call(ctl.getCode))
 
 	// eth_sign
 	// The sign method calculates an Ethereum specific signature with:
@@ -1109,24 +1114,24 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 	// as an Ethereum specific signature. This prevents misuse where a malicious DApp
 	// can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim.
 	// Note the address to sign with must be unlocked.
-	router.POST("/tx/sign-remote", ctl.signRemote)
-	router.POST("/tx/sign-local", ctl.signTransactionLocal)
+	router.POST("/tx/sign-remote", wrap.Call(ctl.signRemote))
+	router.POST("/tx/sign-local", wrap.Call(ctl.signTransactionLocal))
 
-	router.POST("/signparse", ctl.parseSignature)
+	router.POST("/signparse", wrap.Call(ctl.parseSignature))
 
-	router.POST("/ecrecover", ctl.ecRecover)
+	router.POST("/ecrecover", wrap.Call(ctl.ecRecover))
 
 	// eth_sendTransaction
-	router.POST("/tx/send", ctl.sendTransaction)
+	router.POST("/tx/send", wrap.Call(ctl.sendTransaction))
 
 	// eth_sendRawTransaction
-	router.POST("/tx/send-raw", ctl.sendRawTransaction)
+	router.POST("/tx/send-raw", wrap.Call(ctl.sendRawTransaction))
 
 	// eth_call
-	router.POST("/call", ctl.call)
+	router.POST("/call", wrap.Call(ctl.call))
 
 	// eth_estimateGas
-	router.POST("/estimategas", ctl.estimateGas)
+	router.POST("/estimategas", wrap.Call(ctl.estimateGas))
 
 	// eth_getBlockByHash
 
@@ -1148,26 +1153,26 @@ func (ctl Web3Controller) RegisterRouters(router *echo.Group) {
 
 	//eth_getCompilers (DEPRECATED)
 	//deprecated calls
-	router.GET("/compilers", ctl.makeRpcCallNoParams)
+	router.GET("/compilers", wrap.Call(ctl.makeRpcCallNoParams))
 
 	// eth_compileSolidity (DEPRECATED)
-	router.GET("/compile/solidity", ctl.compileSolidity)
+	router.GET("/compile/solidity", wrap.Call(ctl.compileSolidity))
 	// eth_compileLLL (DEPRECATED)
-	router.GET("/compile/lll", ctl.compileLLL)
+	router.GET("/compile/lll", wrap.Call(ctl.compileLLL))
 	// eth_compileSerpent (DEPRECATED)
-	router.GET("/compile/serpent", ctl.compileSerpent)
+	router.GET("/compile/serpent", wrap.Call(ctl.compileSerpent))
 
-	router.GET("/chain/id", ctl.chainId)
+	router.GET("/chain/id", wrap.Call(ctl.chainId))
 
-	router.GET("/tx/send", ctl.sendTransaction)
-	router.GET("/tx/receipt/:hash", ctl.getTransactionByHash)
-	router.GET("/is/contract/:address", ctl.isContractAddress)
+	router.GET("/tx/send", wrap.Call(ctl.sendTransaction))
+	router.GET("/tx/receipt/:hash", wrap.Call(ctl.getTransactionByHash))
+	router.GET("/is/contract/:address", wrap.Call(ctl.isContractAddress))
 
-	router.GET("/erc20/:contract/name", ctl.erc20Name)
-	router.GET("/erc20/:contract/symbol", ctl.erc20Symbol)
-	router.GET("/erc20/:contract/totalsupply", ctl.erc20totalSupply)
-	router.GET("/erc20/:contract/decimals", ctl.erc20decimals)
-	router.GET("/erc20/:contract/balanceof/:address", ctl.erc20Balanceof)
-	router.GET("/erc20/:contract/allowance/:owner/to/:spender", ctl.erc20Allowance)
-	router.GET("/erc20/:contract/transfer/:address/:amount", ctl.erc20Transfer)
+	router.GET("/erc20/:contract/name", wrap.Call(ctl.erc20Name))
+	router.GET("/erc20/:contract/symbol", wrap.Call(ctl.erc20Symbol))
+	router.GET("/erc20/:contract/totalsupply", wrap.Call(ctl.erc20totalSupply))
+	router.GET("/erc20/:contract/decimals", wrap.Call(ctl.erc20decimals))
+	router.GET("/erc20/:contract/balanceof/:address", wrap.Call(ctl.erc20Balanceof))
+	router.GET("/erc20/:contract/allowance/:owner/to/:spender", wrap.Call(ctl.erc20Allowance))
+	router.GET("/erc20/:contract/transfer/:address/:amount", wrap.Call(ctl.erc20Transfer))
 }

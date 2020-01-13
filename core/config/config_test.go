@@ -18,7 +18,7 @@ import (
 func TestConfig(t *testing.T) {
 	t.Run("IsProfilingEnabled", func(t *testing.T) {
 		opts := config.GetDefaultOpts()
-		data := config.IsProfilingEnabled(opts)
+		data := config.IsProfilingEnabled(&opts)
 		assert.NotNil(t, data)
 	})
 	t.Run("IsProfilingEnabled-goroutines", func(t *testing.T) {
@@ -28,7 +28,7 @@ func TestConfig(t *testing.T) {
 		opts := config.GetDefaultOpts()
 		for i := 0; i < total; i++ {
 			go func() {
-				data := config.IsProfilingEnabled(opts)
+				data := config.IsProfilingEnabled(&opts)
 				assert.NotNil(t, data)
 				g.Done()
 			}()
@@ -37,7 +37,7 @@ func TestConfig(t *testing.T) {
 	})
 	t.Run("setup", func(t *testing.T) {
 		opts := config.GetDefaultOpts()
-		err := config.Setup(opts)
+		err := config.Setup(&opts)
 		assert.Nil(t, err)
 	})
 	t.Run("setup-goroutines", func(t *testing.T) {
@@ -47,7 +47,7 @@ func TestConfig(t *testing.T) {
 		opts := config.GetDefaultOpts()
 		for i := 0; i < total; i++ {
 			go func() {
-				err := config.Setup(opts)
+				err := config.Setup(&opts)
 				assert.Nil(t, err)
 				g.Done()
 			}()

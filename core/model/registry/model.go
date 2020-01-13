@@ -3,26 +3,29 @@ package registry
 import (
 	"encoding/json"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/go-hpc/lib/uuid/randomuuid"
+
+	"github.com/zerjioang/etherniti/shared"
+
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
+
+	"github.com/zerjioang/go-hpc/shared/db"
 
 	"github.com/zerjioang/etherniti/core/model"
+	"github.com/zerjioang/go-hpc/common"
 
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/eth"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/metadata"
 	"github.com/zerjioang/etherniti/core/model/registry/version"
-	"github.com/zerjioang/etherniti/core/modules/stack"
-	"github.com/zerjioang/etherniti/core/util/id"
-	"github.com/zerjioang/etherniti/core/util/str"
-	"github.com/zerjioang/etherniti/shared/mixed"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/eth"
+	"github.com/zerjioang/go-hpc/lib/stack"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 type Registry struct {
-	// implement interface to be a rest-db-crud able struct
-	mixed.DatabaseObjectInterface `json:"_,omitempty"`
+	// implement interface to be a rest-db-badger-crud able struct
+	db.DaoInterface `json:"_,omitempty"`
 
 	// unique registry identifier used for database storage
 	Uuid [8]byte `json:"sid"`
@@ -56,52 +59,52 @@ func (r Registry) Validate() stack.Error {
 	return stack.Nil()
 }
 
-// implementation of interface DatabaseObjectInterface
+// implementation of interface DaoInterface
 func (r Registry) Key() []byte {
 	return str.UnsafeBytes(r.Id())
 }
-func (r Registry) Value(serializer io.Serializer) []byte {
-	return ioproto.GetBytesFromSerializer(serializer, r)
+func (r Registry) Value(serializer common.Serializer) []byte {
+	return encoding.GetBytesFromSerializer(serializer, r)
 }
-func (r Registry) New() mixed.DatabaseObjectInterface {
-	return NewEmptyRegistry()
+func (r Registry) NewDao() db.DaoInterface {
+	return NewEmptyRegistryDao()
 }
 
 // custom validation logic for read operation
 // return nil if everyone can read
-func (r Registry) CanRead(context *echo.Context, key string) error {
+func (r Registry) CanRead(context *shared.EthernitiContext, key string) error {
 	// todo check if current r id belongs to current user
 	return nil
 }
 
 // custom validation logic for update operation
 // return nil if everyone can update
-func (r Registry) CanUpdate(context *echo.Context, key string) error {
+func (r Registry) CanUpdate(context *shared.EthernitiContext, key string) error {
 	// todo check if current r id belongs to current user
 	return nil
 }
 
 // custom validation logic for delete operation
 // return nil if everyone can delete
-func (r Registry) CanDelete(context *echo.Context, key string) error {
+func (r Registry) CanDelete(context *shared.EthernitiContext, key string) error {
 	// todo check if current r id belongs to current user
 	return nil
 }
 
 // custom validation logic for write operation
 // return nil if everyone can write
-func (r Registry) CanWrite(context *echo.Context) error {
+func (r Registry) CanWrite(context *shared.EthernitiContext) error {
 	return nil
 }
 
 // custom validation logic for list operation
 // return nil if everyone can list
-func (r Registry) CanList(context *echo.Context) error {
+func (r Registry) CanList(context *shared.EthernitiContext) error {
 	// todo check if current r id belongs to current user
 	return nil
 }
 
-func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
+func (r Registry) Bind(context *shared.EthernitiContext) (db.DaoInterface, stack.Error) {
 	//new registry creation request
 	if err := context.Bind(&r); err != nil {
 		// return a binding error
@@ -116,7 +119,7 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 		// get required data to build a new registry item
 		intIP := context.IntIp()
 		// get user uuid
-		projectOwner := context.AuthenticatedUserUuid()
+		projectOwner := context.UserId()
 
 		if intIP == 0 || projectOwner == "" {
 			logger.Error("failed to create new registry: missing data")
@@ -128,7 +131,7 @@ func (r Registry) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, st
 	}
 }
 
-func (r Registry) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectInterface, stack.Error) {
+func (r Registry) Update(o db.DaoInterface) (db.DaoInterface, stack.Error) {
 	newRg, ok := o.(*Registry)
 	if newRg == nil || !ok {
 		return nil, model.UnsupportedDataErr
@@ -138,24 +141,20 @@ func (r Registry) Update(o mixed.DatabaseObjectInterface) (mixed.DatabaseObjectI
 	return r, stack.Nil()
 }
 
-func NewEmptyRegistry() Registry {
-	return Registry{}
-}
-
-func NewDBRegistry() mixed.DatabaseObjectInterface {
-	return NewEmptyRegistry()
+func NewEmptyRegistryDao() db.DaoInterface {
+	return &Registry{}
 }
 
 // converts byte sequence to go registry struct
-func (r Registry) Decode(data []byte) (mixed.DatabaseObjectInterface, stack.Error) {
-	o := NewEmptyRegistry()
+func (r Registry) Decode(data []byte) (db.DaoInterface, stack.Error) {
+	o := NewEmptyRegistryDao()
 	err := json.Unmarshal(data, &o)
 	return o, stack.Ret(err)
 }
 
 func NewRegistry(name string, description string, major int, minor int, mtdt *metadata.Metadata) *Registry {
 	p := new(Registry)
-	p.Uuid = id.GenerateSnowFlakeId()
+	p.Uuid = randomuuid.GenerateSnowFlakeId()
 	p.Name = name
 	p.Description = description
 	p.Version.Major = major

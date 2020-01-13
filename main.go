@@ -7,16 +7,16 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/zerjioang/etherniti/core/bench"
+	"github.com/zerjioang/etherniti/core/controllers/index"
+
 	"github.com/zerjioang/etherniti/core/bus"
 	"github.com/zerjioang/etherniti/core/cmd"
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/modules/fdlimit"
 	"github.com/zerjioang/etherniti/shared/notifier"
+	"github.com/zerjioang/go-hpc/lib/fdlimit"
+	"github.com/zerjioang/go-hpc/lib/pibench"
 
-	"github.com/zerjioang/etherniti/core/controllers"
-
-	"github.com/zerjioang/etherniti/core/util/banner"
+	"github.com/zerjioang/etherniti/util/banner"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/zerjioang/etherniti/core/logger"
@@ -48,7 +48,7 @@ func init() {
 	// show welcome banner
 	println(banner.WelcomeBanner())
 	// load application internal constants
-	controllers.LoadIndexConstants()
+	index.LoadIndexConstants()
 	// detect if the application is executing inside of docker container or not
 	isDocker := config.IsDocker()
 	if isDocker {
@@ -87,7 +87,7 @@ func Launcher() {
 	runtime.GOMAXPROCS(max)
 
 	// read server benchmark evaluation function based on montecarlo pi generator
-	logger.Info("current server runtime benchmark score: ", bench.GetScore(), " points")
+	logger.Info("current server runtime benchmark score: ", pibench.GetScore(), " points")
 
 	//run the server
 	cmd.RunServer(notifierChan)

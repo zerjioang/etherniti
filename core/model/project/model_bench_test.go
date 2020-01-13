@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
-
 	"github.com/zerjioang/etherniti/core/logger"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
 )
 
 var (
-	testSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
+	testSerializer, _ = encoding.EncodingModeSelector(protocol.ModeJson)
 )
 
 func BenchmarkProjectModel(b *testing.B) {
@@ -26,7 +25,7 @@ func BenchmarkProjectModel(b *testing.B) {
 			_ = NewProject("", nil)
 		}
 	})
-	b.Run("serialization-bench", func(b *testing.B) {
+	b.Run("serialization-pibench", func(b *testing.B) {
 		logger.Enabled(false)
 		b.ReportAllocs()
 		b.SetBytes(1)
@@ -38,7 +37,7 @@ func BenchmarkProjectModel(b *testing.B) {
 			_ = p.Value(testSerializer)
 		}
 	})
-	b.Run("deserialization-bench", func(b *testing.B) {
+	b.Run("deserialization-pibench", func(b *testing.B) {
 		p := NewProject("", nil)
 		v := p.Value(testSerializer)
 		logger.Enabled(false)

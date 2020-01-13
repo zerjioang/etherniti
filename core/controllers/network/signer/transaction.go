@@ -22,10 +22,10 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/rlp"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/common"
 )
 
 var (

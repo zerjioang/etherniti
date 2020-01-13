@@ -6,12 +6,14 @@ package project
 import (
 	"errors"
 
-	"github.com/valyala/fasthttp"
 	"github.com/zerjioang/etherniti/core/api"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
 	"github.com/zerjioang/etherniti/core/data"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/eth/rpc"
+	"github.com/zerjioang/go-hpc/lib/eth/rpc/client"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -20,40 +22,40 @@ var (
 
 type ProjectInteractionController struct {
 	projects *ProjectController
-	client   *fasthttp.Client
+	client   *client.EthClient
 }
 
 // constructor like function
-func NewProjectInteractionControllerPtr(p *ProjectController, client *fasthttp.Client) *ProjectInteractionController {
+func NewProjectInteractionControllerPtr(p *ProjectController, client *client.EthClient) *ProjectInteractionController {
 	pc := new(ProjectInteractionController)
 	pc.projects = p
 	pc.client = client
 	return pc
 }
 
-func (ctl *ProjectInteractionController) contractCall(context *echo.Context) error {
+func (ctl *ProjectInteractionController) contractCall(c *shared.EthernitiContext) error {
 	// read user authentication uuid
-	uid := context.UserUuid()
+	uid := c.AuthUserUuid()
 	if uid == "" {
 		logger.Error("could not read user authorization from request content")
-		return api.ErrorBytes(context, []byte("unknown user. operation denied"))
+		return api.ErrorBytes(c, []byte("unknown user. operation denied"))
 	}
 	// read user project params: name and version/tag only
-	name := context.Param("project")
-	version := context.Param("version")
-	methodName := context.Param("operation")
+	name := c.Param("project")
+	version := c.Param("version")
+	methodName := c.Param("operation")
 	// try to read requested project by name and user id
 	projectData, err := ctl.projects.ReadProject(uid, name)
 	if err != nil {
 		logger.Error("failed to read project data: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
 	//recover connection details from project data
 	endpoint := projectData.Endpoint
 	contractVersion, err := projectData.ResolveContract(version)
 	if err != nil {
 		logger.Error("failed to fetch requested contract version. Make sure it is exist and version data is correct: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
 
 	params := ""
@@ -76,38 +78,38 @@ func (ctl *ProjectInteractionController) contractCall(context *echo.Context) err
 	)
 	if err != nil {
 		logger.Error("failed to call contract: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
-	return api.SendSuccess(context, []byte("contract_call"), []byte(result))
+	return api.SendSuccess(c, []byte("contract_call"), []byte(result))
 }
 
-func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) error {
+func (ctl *ProjectInteractionController) sendTransaction(c *shared.EthernitiContext) error {
 	// read user authentication uuid
-	uid := context.UserUuid()
+	uid := c.AuthUserUuid()
 	if uid == "" {
 		logger.Error("could not read user authorization from request content")
-		return api.ErrorBytes(context, []byte("unknown user. operation denied"))
+		return api.ErrorBytes(c, []byte("unknown user. operation denied"))
 	}
 	// read user project params: name and version/tag only
-	name := context.Param("project")
-	version := context.Param("version")
-	methodName := context.Param("operation")
+	name := c.Param("project")
+	version := c.Param("version")
+	methodName := c.Param("operation")
 	if methodName == "" {
 		logger.Error("failed to execute transaction request. operation is required")
-		return api.ErrorBytes(context, []byte("an operation name is required"))
+		return api.ErrorBytes(c, []byte("an operation name is required"))
 	}
 	// try to read requested project by name and user id
 	projectData, err := ctl.projects.ReadProject(uid, name)
 	if err != nil {
 		logger.Error("failed to read project data: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
 	//recover connection details from project data
 	endpoint := projectData.Endpoint
 	contractVersion, err := projectData.ResolveContract(version)
 	if err != nil {
 		logger.Error("failed to fetch requested contract version. Make sure it is exist and version data is correct: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
 
 	isDebug := true
@@ -125,28 +127,28 @@ func (ctl *ProjectInteractionController) sendTransaction(context *echo.Context) 
 	})
 	if err != nil {
 		logger.Error("failed to call contract: ", err)
-		return api.Error(context, err)
+		return api.Error(c, err)
 	}
-	return api.SendSuccess(context, []byte("contract_call"), []byte(result))
+	return api.SendSuccess(c, []byte("contract_call"), []byte(result))
 }
 
-func (ctl *ProjectInteractionController) proxyPassProject(context *echo.Context) error {
-	switch context.Request().Method {
+func (ctl *ProjectInteractionController) proxyPassProject(c *shared.EthernitiContext) error {
+	switch c.Request().Method {
 	case "GET":
 		// contract call
-		return ctl.contractCall(context)
+		return ctl.contractCall(c)
 	case "POST":
 		// send transaction
-		return ctl.sendTransaction(context)
+		return ctl.sendTransaction(c)
 	default:
 		// operation not supported
-		return api.StackError(context, data.ErrOperationNotSupported)
+		return api.StackError(c, data.ErrOperationNotSupported)
 	}
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl ProjectInteractionController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing custom projects interaction controller methods")
-	router.GET(":project/:version/:operation", ctl.proxyPassProject)
-	router.POST(":project/:version/:operation", ctl.proxyPassProject)
+	router.GET(":project/:version/:operation", wrap.Call(ctl.proxyPassProject))
+	router.POST(":project/:version/:operation", wrap.Call(ctl.proxyPassProject))
 }

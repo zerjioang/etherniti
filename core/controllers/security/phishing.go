@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
 
 	"github.com/zerjioang/etherniti/core/api"
 
@@ -35,7 +35,7 @@ var (
 	fuzzyData    []byte
 	responseName = []byte("domain analyzed")
 	//todo remove this in next releases. manage serializer on demand
-	defaultSerializer, _ = ioproto.EncodingModeSelector(io.ModeJson)
+	defaultSerializer, _ = encoding.EncodingModeSelector(protocol.ModeJson)
 )
 
 func init() {
@@ -50,9 +50,9 @@ func init() {
 		logger.Error("could not unmarshal phising model data")
 		return
 	}
-	blackData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Blacklist)
-	whiteData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Whitelist)
-	fuzzyData = ioproto.GetBytesFromSerializer(defaultSerializer, pm.Fuzzylist)
+	blackData = encoding.GetBytesFromSerializer(defaultSerializer, pm.Blacklist)
+	whiteData = encoding.GetBytesFromSerializer(defaultSerializer, pm.Whitelist)
+	fuzzyData = encoding.GetBytesFromSerializer(defaultSerializer, pm.Fuzzylist)
 }
 
 func PhishingBlacklistRawBytes() []byte {

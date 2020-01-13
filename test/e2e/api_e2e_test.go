@@ -11,7 +11,7 @@ import (
 	"github.com/zerjioang/etherniti/core/listener/common"
 	"github.com/zerjioang/etherniti/core/listener/middleware"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestAPI(t *testing.T) {

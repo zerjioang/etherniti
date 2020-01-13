@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/modules/entropy"
+	"github.com/zerjioang/go-hpc/lib/entropy"
 
 	"github.com/zerjioang/etherniti/shared/def/listener"
 

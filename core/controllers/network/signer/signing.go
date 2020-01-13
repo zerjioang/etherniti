@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures/rlp"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/rlp"
 
-	"github.com/zerjioang/etherniti/core/eth/fixtures"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/params"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/crypto"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/params"
 )
 
 var (

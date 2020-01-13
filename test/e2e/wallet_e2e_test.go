@@ -8,10 +8,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/zerjioang/etherniti/shared"
+
+	"github.com/zerjioang/etherniti/core/controllers/wallet"
+
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/core/controllers"
-	"github.com/zerjioang/etherniti/shared/protocol"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/lib/codes"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestWalletController(t *testing.T) {
@@ -22,12 +25,13 @@ func TestWalletController(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/v1/wallet/entropy/20", nil)
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
-		ctl := controllers.NewWalletController()
+		ctx := shared.AdquireContext(e.NewContext(req, rec))
+		ctl := wallet.NewWalletController()
 
 		// Assertions
-		if assert.NoError(t, ctl.Entropy(c)) {
-			assert.Equal(t, protocol.StatusBadRequest, rec.Code)
+		if assert.NoError(t, ctl.Entropy(ctx)) {
+			assert.Equal(t, codes.StatusBadRequest, rec.Code)
 		}
+		shared.ReleaseContext(ctx)
 	})
 }

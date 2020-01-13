@@ -6,12 +6,14 @@ package dashboard
 import (
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/common"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/core/model/auth"
-	"github.com/zerjioang/etherniti/shared/protocol"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/codes"
+	"github.com/zerjioang/go-hpc/lib/db/badgerdb"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 type ApiKeysAuthController struct {
@@ -22,7 +24,7 @@ type ApiKeysAuthController struct {
 func NewApiKeysAuthController() ApiKeysAuthController {
 	uiCtl := ApiKeysAuthController{}
 	var err error
-	uiCtl.DatabaseController, err = common.NewDatabaseController("", "apikeys", auth.NewDBAuthModel)
+	uiCtl.DatabaseController, err = common.NewDatabaseController("", "", "apikeys", auth.NewDBAuthModel)
 	if err != nil {
 		logger.Error("failed to create authentication controller ", err)
 	}
@@ -30,7 +32,7 @@ func NewApiKeysAuthController() ApiKeysAuthController {
 }
 
 // login with provided api key and secret pair
-func (ctl ApiKeysAuthController) login(c *echo.Context) error {
+func (ctl ApiKeysAuthController) login(c *shared.EthernitiContext) error {
 	//new login request
 	req := auth.NewEmptyAuthRequest()
 	if err := c.Bind(&req); err != nil {
@@ -43,7 +45,7 @@ func (ctl ApiKeysAuthController) login(c *echo.Context) error {
 		item, readErr := ctl.GetKey([]byte(req.ApiKey))
 		if readErr == nil {
 			dto := auth.NewEmptyAuthRequest()
-			pErr := db.Unserialize(item, &dto)
+			pErr := badgerdb.Unserialize(item, &dto)
 			if pErr != nil {
 				logger.Error("failed to unserialize api key data: ", pErr.Error())
 				return api.ErrorBytes(c, data.DatabaseError)
@@ -64,8 +66,8 @@ func (ctl ApiKeysAuthController) login(c *echo.Context) error {
 		if readErr.Error() == "Key not found" {
 			return api.ErrorBytes(c, data.InvalidLoginAPIKeyData)
 		}
-		// internal server erro while executing db call operation
-		return api.ErrorBytesWithCode(c, protocol.StatusInternalServerError, data.InvalidLoginAPIKeyData)
+		// internal server erro while executing db-badger call operation
+		return api.ErrorBytesWithCode(c, codes.StatusInternalServerError, data.InvalidLoginAPIKeyData)
 	}
 	logger.Error("failed to generate user token due to missing api key or secret in the request")
 	return api.ErrorBytes(c, data.MissingAPIKeyLoginFields)
@@ -73,5 +75,5 @@ func (ctl ApiKeysAuthController) login(c *echo.Context) error {
 
 func (ctl ApiKeysAuthController) RegisterRouters(router *echo.Group) {
 	logger.Debug("exposing api-key based authentication controller methods")
-	router.POST("/auth/key", ctl.login)
+	router.POST("/auth/key", wrap.Call(ctl.login))
 }

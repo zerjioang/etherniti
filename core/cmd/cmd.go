@@ -7,13 +7,14 @@ import (
 	"errors"
 	"sync/atomic"
 
-	"github.com/zerjioang/etherniti/core/modules/browser"
+	"github.com/zerjioang/etherniti/core/controllers/index"
+
+	"github.com/zerjioang/go-hpc/lib/browser"
 
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/listener"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/core/controllers"
 	"github.com/zerjioang/etherniti/core/logger"
 	"github.com/zerjioang/etherniti/shared/constants"
 )
@@ -25,7 +26,7 @@ var (
 )
 
 func init() {
-	controllers.LoadIndexConstants()
+	index.LoadIndexConstants()
 	logger.Info("system running with pointers size of: ", constants.PointerSize, " bits")
 	serverStarted.Store(false)
 }
@@ -45,7 +46,7 @@ func RunServer(notifier chan error) {
 			return
 		}
 		// 1 setup current execution environment
-		err := config.Setup(opts)
+		err := config.Setup(&opts)
 		if err != nil {
 			// env error configuration found
 			notifier <- err

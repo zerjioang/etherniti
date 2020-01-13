@@ -9,21 +9,35 @@ package middleware
 import (
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/modules/bots"
-	"github.com/zerjioang/etherniti/core/modules/tor"
-	ip2 "github.com/zerjioang/etherniti/core/util/ip"
+	"github.com/zerjioang/etherniti/core/config"
+	"github.com/zerjioang/go-hpc/lib/torips"
 
-	"github.com/zerjioang/etherniti/core/modules/badips"
-	"github.com/zerjioang/etherniti/core/util/str"
+	"github.com/zerjioang/etherniti/core/data"
+	"github.com/zerjioang/go-hpc/lib/bots"
+	ip2 "github.com/zerjioang/go-hpc/util/ip"
+
+	"github.com/zerjioang/go-hpc/lib/badips"
+	"github.com/zerjioang/go-hpc/util/str"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
+
+func init() {
+	//load blacklisted ip data
+	logger.Info("loading list of blacklisted IPs")
+	badips.Init(config.BadIpsFile, false)
+	logger.Info("blacklisted IPs list loaded")
+
+	// load blacklisted ua data
+	logger.Info("loading list of blacklisted bots")
+	badips.Init(config.AntiBotsFile, false)
+	logger.Info("blacklisted bots list loaded")
+}
 
 // this is enterprise edition middleware
 func secure(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c *echo.Context) error {
+	return func(c echo.Context) error {
 		// get request
 		request := c.Request()
 		h := request.Header
@@ -48,7 +62,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			// drop the request
 			logger.Warn("drop request: no user-agent provided")
 			return securityErr
-		} else if len(ua) < 4 || bots.GetBadBotsList().MatchAny(ua) {
+		} else if len(ua) < 4 || bots.MatchAny(ua) {
 			// TODO bottleneck in the method that checks if a useragent is a bot or not
 			// drop the request
 			logger.Warn("drop request: provided user-agent is considered as a bot: ", ua)
@@ -79,7 +93,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 			//get current request ip
 			requestIp := request.RemoteAddr
 			ipUint32 := ip2.Ip2intLow(requestIp)
-			found := tor.TornodeSet.Contains(ipUint32)
+			found := torips.IsBackListedIp(ipUint32)
 			if !found {
 				//received request IP is not blacklisted
 				return next(c)
@@ -87,7 +101,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 				// received request is done using on of the blacklisted tor nodes
 				//return rate limit excedeed message
 				logger.Warn("drop request: provided request is done using on of the blacklisted tor nodes")
-				return c.FastBlob(200, echo.MIMEApplicationJSON, data.ErrBlockTorConnection)
+				return c.Blob(200, echo.MIMEApplicationJSON, data.ErrBlockTorConnection)
 			}
 		}
 		// add keep alive headers in the response if requested by the client
@@ -117,7 +131,7 @@ func secure(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		// add fake server header
-		rh.Set("Server", "Apache/2.0.54")
+		rh.Set("Server", "Apache/2.0.54 (Debian)")
 		rh.Set("X-Powered-By", "PHP/5.1.6")
 
 		ApplyDefaultCommonHeaders(c)

@@ -2,7 +2,7 @@ package ws
 
 import (
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -15,7 +15,7 @@ func InitWebsocketHub() {
 	go hub.run()
 }
 
-func WebsocketEntrypoint(c *echo.Context) error {
+func WebsocketEntrypoint(c echo.Context) error {
 	logger.Info("loading websocket entry point")
 	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {

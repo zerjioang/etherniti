@@ -1,0 +1,5381 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Etherniti: High Performance Web3 REST Proxy definition",
+    "version": "latest",
+    "title": "Etherniti: High Performance Web3 REST Proxy",
+    "termsOfService": "https://docs.etherniti.org/about/",
+    "contact": {
+      "email": "core@etherniti.org"
+    },
+    "license": {
+      "name": "Etherniti License",
+      "url": "https://docs.etherniti.org/about/license/"
+    },
+    "x-apisguru-categories": [
+      "iot",
+      "etherniti",
+      "web3",
+      "ethereum",
+      "blockchain"
+    ],
+    "x-logo": {
+      "url": "/favicon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "x-preferred": true,
+    "x-providerName": "etherniti.org"
+  },
+  "host": "127.0.0.1:8080",
+  "basePath": "/v1",
+  "consumes": [
+    "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+  ],
+  "produces": [
+    "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+  ],
+  "tags": [{
+    "name": "auth",
+    "description": "Etherniti Web3 Proxy Auth API",
+    "externalDocs": {
+      "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy authentication at",
+      "url": "https://docs.etherniti.org/api/auth/"
+    }
+  },
+    {
+      "name": "public",
+      "description": "Public Etherniti Web3 Proxy Public API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy public operations at",
+        "url": "https://docs.etherniti.org/api/public-operations/"
+      }
+    },
+    {
+      "name": "internal",
+      "description": "Internal Etherniti Web3 Proxy Metrics and Analytics API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti Web3 Proxy Metrics and Analytics API operations at",
+        "url": "https://docs.etherniti.org/api/public-operations/"
+      }
+    },
+    {
+      "name": "profile",
+      "description": "Etherniti Web3 Proxy Profiles API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy public operations at",
+        "url": "https://docs.etherniti.org/api/profile-management/"
+      }
+    },
+    {
+      "name": "wallet",
+      "description": "Etherniti Web3 Proxy Wallet API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy public operations at",
+        "url": "https://docs.etherniti.org/api/wallet/"
+      }
+    },
+    {
+      "name": "rpc",
+      "description": "Etherniti Web3 RPC API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy RPC at",
+        "url": "https://docs.etherniti.org/api/rpc"
+      }
+    },
+    {
+      "name": "graphql",
+      "description": "Etherniti Web3 QraphQL API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, an Ethereum REST API QraphQL at ",
+        "url": "https://docs.etherniti.org/api/graphql"
+      }
+    },
+    {
+      "name": "security",
+      "description": "Etherniti Web3 Proxy Security API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy security services at",
+        "url": "https://docs.etherniti.org/api/security"
+      }
+    },
+    {
+      "name": "web3",
+      "description": "Etherniti Web3 Proxy Web3 API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy web3 implementation at",
+        "url": "https://docs.etherniti.org/api/web3"
+      }
+    },
+    {
+      "name": "solc",
+      "description": "Etherniti Web3 Proxy Solc API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy solc compiler implementation at",
+        "url": "https://docs.etherniti.org/api/solc"
+      }
+    },
+    {
+      "name": "registry",
+      "description": "Etherniti Web3 Registry API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Contract Name Service implementation at",
+        "url": "https://docs.etherniti.org/api/registry"
+      }
+    },
+    {
+      "name": "devops",
+      "description": "Etherniti Web3 Devops API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Devops helpers implementation at",
+        "url": "https://docs.etherniti.org/api/devops"
+      }
+    },
+    {
+      "name": "erc20",
+      "description": "Etherniti Web3 Proxy ERC20 Management API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy ERC20 management at",
+        "url": "https://docs.etherniti.org/api/erc20"
+      }
+    },
+    {
+      "name": "project",
+      "description": "Etherniti Web3 Proxy Projects API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Projects management at",
+        "url": "https://docs.etherniti.org/api/public/projects/"
+      }
+    },
+    {
+      "name": "dapps",
+      "description": "Etherniti Web3 Proxy DApps API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Dapps interaction at",
+        "url": "https://docs.etherniti.org/api/dapps"
+      }
+    },
+    {
+      "name": "external",
+      "description": "Etherniti Web3 Proxy External API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy External API resources at",
+        "url": "https://docs.etherniti.org/api/external"
+      }
+    },
+    {
+      "name": "ui",
+      "description": "Etherniti Web3 Proxy Dashboard Helper API",
+      "externalDocs": {
+        "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy Dashboard Helper API at",
+        "url": "https://docs.etherniti.org/api/ui"
+      }
+    }
+  ],
+  "schemes": ["http", "https", "unix"],
+  "paths": {
+    "/ui/bug": {
+      "post": {
+        "tags": [
+          "ui"
+        ],
+        "summary": "Report a bug to Etherniti maintainers",
+        "description": "Send a bug report or feature request to etherniti maintainers in order to be notified",
+        "operationId": "ui-bug-report",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "deprecated": false,
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response of bug report",
+            "example": {}
+          },
+          "400": {
+            "description": "unsuccesful response of bug report",
+            "example": {}
+          }
+        }
+      }
+    },
+    "/web3/{network}/ql": {
+      "post": {
+        "tags": [
+          "graphql"
+        ],
+        "summary": "Send arbitrary graphql request to web3 compatible node",
+        "description": "Send arbitrary graphql request to web3 compatible node",
+        "operationId": "web3-graphql",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful execution response of web3 graphql request",
+            "example": {}
+          },
+          "400": {
+            "description": "unsuccesful execution response of web3 graphql request",
+            "example": {}
+          }
+        }
+      }
+    },
+    "/web3/{network}/rpc": {
+      "post": {
+        "tags": [
+          "rpc"
+        ],
+        "summary": "Send arbitrary json-rpc request to web3 compatible node",
+        "description": "Send arbitrary json-rpc request to web3 compatible node",
+        "operationId": "web3-rpc",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {
+                "jsonrpc": "2.0",
+                "method": "shh_version",
+                "params": [],
+                "id": 67
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/Web3RawJsonRpcResponse"
+          },
+          "400": {
+            "description": "Unsuccesful execution response of web3 rpc request",
+            "example": {
+              "jsonrpc": "2.0",
+              "id": 67,
+              "error": {
+                "code": -32601,
+                "message": "The method shh_version does not exist/is not available"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/eth/price": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Ethereum pricing information",
+        "description": "Get updated information about ethereum pricing and its market value",
+        "operationId": "eth-price",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "ethereum pricing response",
+            "schema": {
+              "example": {
+                "msg": "ethereum-price",
+                "data": [{
+                  "id": "ethereum",
+                  "name": "Ethereum",
+                  "symbol": "ETH",
+                  "rank": "2",
+                  "price_usd": "247.985082119",
+                  "price_btc": "0.03133506",
+                  "24h_volume_usd": "7426852583.39",
+                  "market_cap_usd": "26387116224.0",
+                  "available_supply": "106406063.0",
+                  "total_supply": "106406063.0",
+                  "max_supply": null,
+                  "percent_change_1h": "-0.33",
+                  "percent_change_24h": "-1.02",
+                  "percent_change_7d": "-7.13",
+                  "last_updated": "1560008121"
+                }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/eth/ticker": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Ethereum ticking information",
+        "description": "Get updated information about ethereum ticking and its market value",
+        "operationId": "eth-ticker",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "ethereum ticking response",
+            "schema": {
+              "example": {
+                "msg": "tickers",
+                "data": [{
+                  "id": "bitcoin",
+                  "name": "Bitcoin",
+                  "symbol": "BTC",
+                  "rank": "1",
+                  "price_usd": "7963.71200392",
+                  "price_btc": "1.0",
+                  "24h_volume_usd": "18394012988.6",
+                  "market_cap_usd": "141392218524",
+                  "available_supply": "17754562.0",
+                  "total_supply": "17754562.0",
+                  "max_supply": "21000000.0",
+                  "percent_change_1h": "-0.25",
+                  "percent_change_24h": "0.71",
+                  "percent_change_7d": "1.95",
+                  "last_updated": "1560333393"
+                },
+                  {
+                    "id": "ethereum",
+                    "name": "Ethereum",
+                    "symbol": "ETH",
+                    "rank": "2",
+                    "price_usd": "247.855638453",
+                    "price_btc": "0.03118757",
+                    "24h_volume_usd": "7944674908.65",
+                    "market_cap_usd": "26386060354.0",
+                    "available_supply": "106457374.0",
+                    "total_supply": "106457374.0",
+                    "max_supply": null,
+                    "percent_change_1h": "-0.29",
+                    "percent_change_24h": "1.06",
+                    "percent_change_7d": "1.32",
+                    "last_updated": "1560333383"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hi": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Proxy welcome message",
+        "description": "proxy welcome message or index message",
+        "operationId": "hello",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy welcome message",
+            "schema": {
+              "example": {
+                "name": "etherniti-public-api",
+                "description": "High Performance Web3 REST Proxy",
+                "cluster_name": "apollo-api",
+                "version": "1.0.0",
+                "commit": "latest",
+                "edition": "oss",
+                "env": "development",
+                "tagline": "dapps everywhere"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "proxy status information",
+        "description": "proxy information and versioning",
+        "operationId": "info",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy information message",
+            "schema": {
+              "example": {
+                "arch": "amd64",
+                "os": "linux",
+                "cpus": {
+                  "cores": 4,
+                  "features": {
+                    "bmi_2": true,
+                    "osxsave": true,
+                    "aes": true,
+                    "vaes": false,
+                    "avx": true,
+                    "avx_512_f": false,
+                    "avx_512_vl": false,
+                    "avx_512_dq": false,
+                    "sse_2": true,
+                    "sse_3": true,
+                    "pclmulqdq": true,
+                    "ssse_3": true,
+                    "fma": true,
+                    "sse_41": true,
+                    "sse_42": true,
+                    "popcnt": true,
+                    "bmi_1": true,
+                    "avx_2": true,
+                    "erms": true,
+                    "adx": true,
+                    "enabled_avx": true,
+                    "enabled_avx_512": false
+                  }
+                },
+                "runtime": {
+                  "compiler": "gc"
+                },
+                "version": {
+                  "etherniti": "",
+                  "http": "4.0.0",
+                  "go": "go1.11.4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/score": {
+      "get": {
+        "tags": [
+          "internal"
+        ],
+        "summary": "Proxy internal benchmark score",
+        "description": "Proxy internal benchmark score. It measures computational resources against current server architecture and configuration. You can use this metric to compare different service providers in order to get a well balance between computing power and pricing.",
+        "operationId": "internal-score",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy internal benchmark response",
+            "schema": {
+              "example": {
+                "msg": "proxy_score",
+                "data": {
+                  "time": 45784450,
+                  "score": 655244302
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/analytics": {
+      "get": {
+        "tags": [
+          "internal"
+        ],
+        "summary": "Proxy internal analytics",
+        "description": "Proxy internal analytics",
+        "operationId": "internal-analytics",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy internal analytics response",
+            "schema": {
+              "example": {
+                "msg": "proxy_internal_analytics",
+                "data": {
+                  "requests": 16,
+                  "uptime": 99.9,
+                  "tx": 0,
+                  "contracts": 0,
+                  "accounts": 1,
+                  "profiles": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "tags": [
+          "util"
+        ],
+        "summary": "Remote server ping test",
+        "description": "Remote server ping test utility",
+        "operationId": "icmp-ping",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "query",
+          "name": "ip",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "remote server IP",
+          "default": "127.0.0.1"
+        }],
+        "responses": {
+          "200": {
+            "description": "remote server ICMP ping test response",
+            "schema": {
+              "example": {
+                "msg": "icmp_ping",
+                "data": {
+                  "packets_recv": 2,
+                  "packets_sent": 2,
+                  "packet_loss": 0,
+                  "ip_addr": {
+                    "IP": "127.0.0.1",
+                    "Zone": ""
+                  },
+                  "addr": "127.0.0.1",
+                  "rtts": [
+                    39782047,
+                    37702048
+                  ],
+                  "min_rtt": 37702048,
+                  "max_rtt": 39782047,
+                  "avg_rtt": 38742047,
+                  "std_dev_rtt": 1039999
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid request provided. Ip mising or malformed",
+            "schema": {
+              "example": {
+                "desc": "invalid IPv4 provided"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User login with email and password",
+        "description": "User login and authentication with email and password",
+        "operationId": "auth-login",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "email": "jhon.doe@domain.tld",
+              "pwd": "jhondoe"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "login success message",
+            "schema": {
+              "example": {
+                "msg": "login",
+                "data": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiNDhjZWFmYzUzM2VlNDE4YzhhMjgwNWI5OTkxZjlkOTAiLCJleHAiOjE1NTgyOTAxMjF9.vAuZNSh9KHz5xJeJ2sJ8aTf0J9DUPFdAQAZKaBUVa0E"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid authentication message",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "failed to process your login request at this moment. Please try it later",
+                "details": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/key": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User login using API key and API secret",
+        "description": "User login using API key and API secret",
+        "operationId": "auth-api-keys",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "key": "8ff0922f05a9402da62e7757a01fc465",
+              "secret": "337b3618b63c49a782ddecb1a0941a48"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "login success message",
+            "schema": {
+              "example": {
+                "msg": "login",
+                "data": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiNDhjZWFmYzUzM2VlNDE4YzhhMjgwNWI5OTkxZjlkOTAiLCJleHAiOjE1NTgyOTAxMjF9.vAuZNSh9KHz5xJeJ2sJ8aTf0J9DUPFdAQAZKaBUVa0E"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid authentication message",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "failed to process your login request at this moment. Please try it later",
+                "details": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "New user registration",
+        "description": "New user registration and account creation",
+        "operationId": "auth-register",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "name": "jhon doe",
+              "email": "jhon.doe@domain.tld",
+              "pwd": "jhondoe"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "user registration response message",
+            "schema": {
+              "example": {
+                "msg": "registration successfully finished. Please verify your account with the message sent to your inbox."
+              }
+            }
+          },
+          "400": {
+            "description": "user registration failed message",
+            "schema": {
+              "example": {
+                "msg": "failed to register new user account"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/recover": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User account recovery",
+        "description": "User account recovery",
+        "operationId": "auth-recover",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "data",
+          "schema": {
+            "example": {
+              "email": "jhon.doe@domain.tld"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "user account recovery response message",
+            "schema": {
+              "example": {
+                "msg": "account recovery in progress"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/confirm/{msg}": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Confirmation of user account creation",
+        "description": "confirmation of user account creation",
+        "operationId": "auth-account-confirm",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "name": "msg",
+          "description": "confirmation code",
+          "required": true,
+          "default": "vntrugo39pfbrb"
+        }],
+        "responses": {
+          "200": {
+            "description": "if successful, it will redirect the user to dashboard login view"
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Proxy health metrics",
+        "description": "Read proxy instance internal metrics and health status",
+        "operationId": "status",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy internal metrics collection",
+            "schema": {
+              "example": {
+                "disk": {
+                  "all": 248,
+                  "used": 79,
+                  "free": 168
+                },
+                "memory": {
+                  "frees": 238026,
+                  "heapalloc": 374252896,
+                  "mallocs": 586852,
+                  "alloc": 374252896,
+                  "total": 392078904,
+                  "sys": 627917048,
+                  "app": {
+                    "allocMb": 356,
+                    "totalMb": 373,
+                    "sysMb": 598
+                  }
+                },
+                "gc": {
+                  "numgc": 9,
+                  "numForcedGC": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrity": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Check remote proxy integrity status",
+        "description": "Get digitally signed integrity message from proxy instance can compare signature validity with provided public key",
+        "operationId": "integrity",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "proxy integrity response",
+            "schema": {
+              "example": {
+                "message": "Hello from Etherniti Proxy. Today message generated at 2019-03-25T10:46:35+01:00",
+                "millis": "1553507195",
+                "hash": "a9e6b0dd821862e184bfaaa16a6a8af7e802330bef2978267910076acef29500",
+                "signature": "303c021c538c3ac6685239032cbdf64f6d079d48c18da3e536bfe0ced278a132021c10c6acc3bb9b6b745e729544ffb1b19ddd2706095523d152dfeefce6"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "post": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Create a connection profile using prefered provider",
+        "description": "Create a connection profile using prefered provider. Choose between, public node, private node, infura, etc",
+        "operationId": "profile",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "profile",
+          "schema": {
+            "example": {
+              "endpoint": "http://127.0.0.1:7545",
+              "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "profile creation response",
+            "schema": {
+              "example": {
+                "msg": "profile token successfully created",
+                "result": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmRwb2ludCI6Imh0dHA6Ly8xNzIuMTY4LjAuMiIsImFkZHJlc3MiOiIweEU3MjBjMzQxYmQ2NjRBOEY3ZWJDM2Y3NUNDRTkzQkQ2YmE2ZDc2NTQiLCJrZXkiOiIiLCJ2ZXJzaW9uIjoxLCJ2YWxpZGl0eSI6ZmFsc2UsImV4cCI6MTU1NDQ5MzM0MywianRpIjoiZTMzZjhkNTUtM2YzNS00OWQwLTg5ZTgtOWNiMjMzYThiYmQzIiwiaWF0IjoxNTU0MTMzMzQzLCJpc3MiOiJldGhlcm5pdGkub3JnIiwibmJmIjoxNTU0MTMzMzQzfQ.__b0kA8JnwLv0ceI03LRDzt8m3pemoIf_8_0GX76MJg"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/count": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Count created profiles",
+        "description": "Get the number of profiles created in last cycle",
+        "operationId": "profile-count",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "profile count response",
+            "schema": {
+              "example": {
+                "count": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/mnemonic/bip39": {
+      "post": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Generate a BIP39 mnemonic",
+        "description": "Generate a BIP39 mnemonic with given customization details such as language, length, etc",
+        "operationId": "mnemonic-bip39",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "body",
+          "required": true,
+          "name": "configuration",
+          "schema": {
+            "example": {
+              "language": "english",
+              "size": 128,
+              "secret": "my-s33d-p4ssw0rd"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "mnemonic successfully created response",
+            "schema": {
+              "example": {
+                "msg": "mnemonic successfully created",
+                "data": {
+                  "size": 128,
+                  "language": "english",
+                  "mnemonic": "return aerobic bind combine wrap emerge woman culture coyote poverty genius random",
+                  "isEncrypted": false,
+                  "encSeed": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/entropy/{bits}": {
+      "get": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Get a entropy of N bits",
+        "description": "Get a entropy data from secured source such as /dev/random",
+        "operationId": "mnemonic-entropy",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "required": true,
+          "name": "bits",
+          "description": "Requested entropy bit size",
+          "type": "number",
+          "schema": {
+            "example": 192
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "entropy data response",
+            "schema": {
+              "example": {
+                "msg": "entropy data generated",
+                "data": {
+                  "entropy": "abWCKX7EmwiIWxKTnQMIZjisv5Y="
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet": {
+      "post": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Generate a new Ethereum compatible account",
+        "description": "Generate a new Ethereum compatible account and get its address and key. Generated account IS NOT STORED, so keep it in a safe place for future use",
+        "operationId": "new-account",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "account creation response",
+            "schema": {
+              "example": {
+                "msg": "ethereum account created",
+                "data": {
+                  "address": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654",
+                  "key": "a2821a66b157b1bd98bb872dd14786f989ea345f700073a3bdb579102edb84c7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/verify/{address}": {
+      "get": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Verify Ethereum address",
+        "description": "Verify if given Ethereum address is valid or not",
+        "operationId": "verify-address",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "address",
+          "description": "Ethereum address to be validated",
+          "schema": {
+            "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/is/contract/{address}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Verify if an Ethereum address belongs to an existing contract",
+        "description": "Verify if given Ethereum contract address is a contract holder address or not",
+        "operationId": "has-contract",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Ethereum contract address to be validated",
+            "schema": {
+              "example": "0xE720c341bd664A8F7ebC3f75CCE93BD6ba6d7654"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "verification response",
+            "schema": {
+              "example": {
+                "msg": "address validation checked",
+                "result": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/sign-remote": {
+      "post": {
+        "tags": [
+          "web3-sign"
+        ],
+        "summary": "The sign method calculates an Ethereum specific signature",
+        "description": "The sign method calculates an Ethereum specific signature with: sign(keccak256(Ethereum Signed Message: + len(message) + message))). By adding a prefix to the message makes the calculated signature recognisable as an Ethereum specific signature. This prevents misuse where a malicious DApp can sign arbitrary data (e.g. transaction) and use the signature to impersonate the victim. Note the address to sign with must be unlocked.",
+        "operationId": "web3-sign",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "contract",
+            "description": "data for signing process",
+            "example": {
+              "address": "0x9b2055d370f73ec7d8a03e965129118dc8f5bf83",
+              "data": "0xdeadbeaf"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signing response",
+            "schema": {
+              "example": {
+                "msg": "eth_sign",
+                "data": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d78601"
+              }
+            }
+          },
+          "400": {
+            "description": "invalid account address provided. check that account exists on target node and is currently unlocked",
+            "schema": {
+              "example": {
+                "desc": "cannot sign data; no private key. Error code: -32000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/signparse": {
+      "post": {
+        "tags": [
+          "web3-sign"
+        ],
+        "summary": "Returns parsed result of given ETH signature",
+        "description": "Returns parsed result of given ETH signature",
+        "operationId": "web3-sign-parse",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "signature",
+            "description": "signature data",
+            "example": {
+              "signature": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d78601"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signature parsing response",
+            "schema": {
+              "example": {
+                "msg": "eth_sign_parse",
+                "data": {
+                  "r": "0x1593e77639790d8427ce148a05647184debcd8c857547d3e9fb66b5b0639d786",
+                  "s": "0x94b42757b84b48b5649a67542bb69bb864d460fef824687417f05df09d2145ae",
+                  "v": "0x01"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid account address provided. check that account exists on target node and is currently unlocked",
+            "schema": {
+              "example": {
+                "desc": "cannot sign data; no private key. Error code: -32000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/send": {
+      "post": {
+        "tags": [
+          "web3-tx"
+        ],
+        "summary": "Send a transaction",
+        "description": "Creates new message call transaction or a contract creation, if the data field contains code.",
+        "operationId": "web3-send-tx",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {
+                "from": "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+                "gas": "0x76c0",
+                "gasPrice": "0x9184e72a000",
+                "value": "0x9184e72a",
+                "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+              }
+            }
+
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the transaction hash, or the zero hash if the transaction is not yet available.",
+            "example": {
+              "msg": "send_transaction",
+              "data": "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"
+            }
+          },
+          "400": {
+            "description": "Unsuccesful execution response of web3 send transaction request",
+            "example": {
+              "msg": "tx_err",
+              "data": "failed to execute tx"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/send-raw": {
+      "post": {
+        "tags": [
+          "web3-tx"
+        ],
+        "summary": "Send a transaction",
+        "description": "Creates new message call transaction or a contract creation, if the data field contains code.",
+        "operationId": "web3-send-tx",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "required": true,
+            "name": "data",
+            "schema": {
+              "example": {
+                "from": "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+                "gas": "0x76c0",
+                "gasPrice": "0x9184e72a000",
+                "value": "0x9184e72a",
+                "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+              }
+            }
+
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the transaction hash, or the zero hash if the transaction is not yet available.",
+            "example": {
+              "msg": "send_transaction",
+              "data": "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"
+            }
+          },
+          "400": {
+            "description": "Unsuccesful execution response of web3 send transaction request",
+            "example": {
+              "msg": "tx_err",
+              "data": "failed to execute tx"
+            }
+          }
+        }
+      }
+    },
+    "/security/{source}": {
+      "get": {
+        "tags": [
+          "security"
+        ],
+        "summary": "Blacklisted domain list",
+        "description": "Get a list of Blacklisted domain based on OSINT (Open Source Intelligence)",
+        "operationId": "security-domains",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "source",
+          "description": "Source of information",
+          "enum": [
+            "domain-blacklist",
+            "phishing-whitelist",
+            "phishing-blacklist",
+            "phishing-fuzzing"
+          ],
+          "default": "domain-blacklist",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "blacklisted domain list",
+            "schema": {
+              "example": [
+                "a",
+                "b",
+                "..."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/security/check/{domain}": {
+      "get": {
+        "tags": [
+          "security"
+        ],
+        "summary": "Check domain name status",
+        "description": "Check the trust level of given domain and stop scamming and malware attempts",
+        "operationId": "phishing-check",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "name": "domain",
+          "description": "suspicious domain name to be scanned",
+          "schema": {
+            "example": "my.suspicious.domain.tld"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "suspicious domain analysis results",
+            "schema": {
+              "example": {
+                "msg": "domain analyzed",
+                "data": {
+                  "domain": "my.suspicious.wallet.domain.tld",
+                  "trust": false,
+                  "score": 7,
+                  "title": "Deceptive domain detected",
+                  "message": "The domain you requested has been identified as being potentially problematic. This could be because a user has reported a problem, a black-list service reported a problem, or because we have detected potentially malicious content."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/solc/version": {
+      "get": {
+        "tags": [
+          "solc"
+        ],
+        "summary": "Solidity compiler version",
+        "description": "Get the version of Solidity compiler",
+        "operationId": "solc-version",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc compiler version response",
+            "schema": {
+              "example": {
+                "msg": "solc version",
+                "data": {
+                  "path": "/usr/bin/solc",
+                  "version": "0.4.24",
+                  "full_version": "solc, the solidity compiler commandline interface\nVersion: 0.4.24+commit.e67f0147.Linux.g++\n",
+                  "major": 0,
+                  "minor": 4,
+                  "patch": 24
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "failed to get solc version"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/solc/compile/{mode}": {
+      "post": {
+        "tags": [
+          "solc"
+        ],
+        "summary": "Compile a contract using solc",
+        "description": "Compile a contract using solc",
+        "operationId": "solc-compile",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "parameters": [{
+          "in": "path",
+          "type": "string",
+          "name": "mode",
+          "description": "solc compiler allowed modes",
+          "enum": [
+            "single-raw",
+            "single-base64",
+            "git",
+            "zip",
+            "targz"
+          ],
+          "required": true
+        },
+          {
+            "in": "body",
+            "type": "string",
+            "name": "contract",
+            "description": "solidity base64 encoded contract source code",
+            "required": true,
+            "example": {
+              "contract": "cHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjYuMDsKCmNvbnRyYWN0IE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgb3duZXIgb2YgdGhlIHR5cGUgYWRkcmVzcyAqLwogICAgYWRkcmVzcyBvd25lcjsKCiAgICAvKiBUaGlzIGNvbnN0cnVjdG9yIGlzIGV4ZWN1dGVkIGF0IGluaXRpYWxpemF0aW9uIGFuZCBzZXRzIHRoZSBvd25lciBvZiB0aGUgY29udHJhY3QgKi8KICAgIGNvbnN0cnVjdG9yKCkgcHVibGljIHsgb3duZXIgPSBtc2cuc2VuZGVyOyB9CgogICAgLyogRnVuY3Rpb24gdG8gcmVjb3ZlciB0aGUgZnVuZHMgb24gdGhlIGNvbnRyYWN0ICovCiAgICBmdW5jdGlvbiBraWxsKCkgcHVibGljIHsgaWYgKG1zZy5zZW5kZXIgPT0gb3duZXIpIHNlbGZkZXN0cnVjdChtc2cuc2VuZGVyKTsgfQp9Cgpjb250cmFjdCBHcmVldGVyIGlzIE1vcnRhbCB7CiAgICAvKiBEZWZpbmUgdmFyaWFibGUgZ3JlZXRpbmcgb2YgdGhlIHR5cGUgc3RyaW5nICovCiAgICBzdHJpbmcgZ3JlZXRpbmc7CgogICAgLyogVGhpcyBydW5zIHdoZW4gdGhlIGNvbnRyYWN0IGlzIGV4ZWN1dGVkICovCiAgICBjb25zdHJ1Y3RvcihzdHJpbmcgbWVtb3J5IF9ncmVldGluZykgcHVibGljIHsKICAgICAgICBncmVldGluZyA9IF9ncmVldGluZzsKICAgIH0KCiAgICAvKiBNYWluIGZ1bmN0aW9uICovCiAgICBmdW5jdGlvbiBncmVldCgpIHB1YmxpYyB2aWV3IHJldHVybnMgKHN0cmluZyBtZW1vcnkpIHsKICAgICAgICByZXR1cm4gZ3JlZXRpbmc7CiAgICB9Cn0K",
+              "opts": {
+                "evm-version": "evm",
+                "optimize": {
+                  "enabled": true,
+                  "runs": 200
+                },
+                "optimize-yul": false,
+                "gas": true,
+                "assemble": false,
+                "yul": false,
+                "strict-assembly": false,
+                "machine": "",
+                "link": false,
+                "metadata-literal": false,
+                "allow-paths": false,
+                "report": {
+                  "ast": false,
+                  "asm": false,
+                  "opcodes": false,
+                  "bin": true,
+                  "bin-runtime": true,
+                  "abi": false,
+                  "ir": false,
+                  "hashes": false,
+                  "userdoc": false,
+                  "devdoc": false,
+                  "metadata": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solidity Solc Compiler compilation response",
+            "schema": {
+              "example": {
+                "msg": "solc version",
+                "data": {
+                  "msg": "solc contract compiler",
+                  "result": [{
+                    "code": "0x608060405234801561001057600080fd5b506040516102d43803806102d483398101604052805160008054600160a060020a0319163317905501805161004c906001906020840190610053565b50506100ee565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009457805160ff19168380011785556100c1565b828001600101855582156100c1579182015b828111156100c15782518255916020019190600101906100a6565b506100cd9291506100d1565b5090565b6100eb91905b808211156100cd57600081556001016100d7565b90565b6101d7806100fd6000396000f30060806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
+                    "runtime": "0x60806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
+                    "language": "Solidity",
+                    "languageVersion": "0.4.24",
+                    "compilerVersion": "0.4.24",
+                    "compilerOptions": "--combined-json bin,bin-runtime,srcmap,srcmap-runtime,abi,userdoc,devdoc,metadata --optimize",
+                    "abiDefinition": [{
+                      "constant": false,
+                      "inputs": [],
+                      "name": "kill",
+                      "outputs": [],
+                      "payable": false,
+                      "stateMutability": "nonpayable",
+                      "type": "function"
+                    },
+                      {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "greet",
+                        "outputs": [{
+                          "name": "",
+                          "type": "string"
+                        }],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                      },
+                      {
+                        "inputs": [{
+                          "name": "_greeting",
+                          "type": "string"
+                        }],
+                        "payable": false,
+                        "stateMutability": "nonpayable",
+                        "type": "constructor"
+                      }
+                    ]
+                  }]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solidity Solc bad request response",
+            "schema": {
+              "example": {
+                "code": 400,
+                "msg": "Bad Request",
+                "details": "unknown mode selected. Allowed modes are: single, git, zip, targz"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/chain/id": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network chain id",
+        "description": "Read target network client provided chain id. Returns the currently configured chain id, a value used in replay-protected transaction signing as introduced by EIP-155.",
+        "operationId": "chain-id",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "web3 chain id response",
+            "schema": {
+              "example": {
+                "msg": "eth_chainid",
+                "data": "4"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "406": {
+            "description": "Method eth_chainId is not supported",
+            "schema": {
+              "example": {
+                "desc": "Method eth_chainId not supported.. Error code: -32000"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/is/ganache": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Detect whether target network is Ganache or not",
+        "description": "Detect whether target network is running Truffle Ganache or is a real, disttributed and decentralized Ethereum/Quorum network",
+        "operationId": "is-ganache",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum ganache evaluation response",
+            "schema": {
+              "example": {
+                "msg": "is_ganache",
+                "data": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/client/version": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get the current client version.",
+        "description": "Get target Ethereum or Quorum network client version details",
+        "operationId": "web3-client-version",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "The current client version.",
+            "schema": {
+              "example": {
+                "msg": "web3_clientVersion",
+                "data": "Geth/v1.8.22-omnibus-260f7fbd/linux-amd64/go1.11.1"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/sha3/remote": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns Keccak-256 (not the standardized SHA3-256) of the given data.",
+        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data. SHA3 calculation is delegated on target network node.",
+        "operationId": "web3-sha3-remote",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "data",
+            "description": " the data to convert into a SHA3 hash.",
+            "type": "string",
+            "example": {
+              "data": "hello-ethereum"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The SHA3 result of the given string.",
+            "schema": {
+              "example": {
+                "msg": "sha3",
+                "data": "0x0f6373f10eaf984d15d4e241eb91354401065bef332875a4ebe30a18e90509be"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/sha3/local": {
+      "post": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns Keccak-256 (not the standardized SHA3-256) of the given data without connecting to any remote node.",
+        "description": "Returns Keccak-256 (not the standardized SHA3-256) of the given data without connecting to any remote node.",
+        "operationId": "web3-sha3-local",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "data",
+            "description": " the data to convert into a SHA3 hash.",
+            "type": "string",
+            "example": {
+              "data": "hello-ethereum"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The SHA3 result of the given string.",
+            "schema": {
+              "example": {
+                "msg": "sha3",
+                "data": "0x0f6373f10eaf984d15d4e241eb91354401065bef332875a4ebe30a18e90509be"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/net/version": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network version information",
+        "description": "Get target's network",
+        "operationId": "web3-net-version",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network X response",
+            "schema": {
+              "example": {
+                "msg": "net_version",
+                "data": {
+                  "version": "3",
+                  "name": "Ropsten Testnet"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/net/listening": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Check node status and evaluate if it is listening or not",
+        "description": "Returns true if client is actively listening for network connections.",
+        "operationId": "web3-listening",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns true if client is actively listening for network connections.",
+            "schema": {
+              "example": {
+                "msg": "eth_listening",
+                "data": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/net/peers": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network peers connected to the client",
+        "description": "Get target Ethereum or Quorum network peers details. Returns number of peers currently connected to the client.",
+        "operationId": "web3-net-peers",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks peer information response as integer indicating the number of connected peers.",
+            "schema": {
+              "example": {
+                "msg": "net_peerCount",
+                "data": "0x2"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/protocol/version": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network protocol version information",
+        "description": "Get target Ethereum or Quorum network protocol version details",
+        "operationId": "web3-protocol-version",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum protocol version information response",
+            "schema": {
+              "example": {
+                "msg": "eth_protocolVersion",
+                "data": "0x54"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/syncing": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get network syncing status",
+        "description": "Get target Ethereum or Quorum network syncing status and its details",
+        "operationId": "web3-syncing",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum syncing information response when peer is syncing",
+            "schema": {
+              "example": {
+                "msg": "eth_syncing",
+                "data": {
+                  "startingBlock": "0x384",
+                  "currentBlock": "0x386",
+                  "highestBlock": "0x454"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ethereum syncing information response when peer client is not sycned/syncing",
+            "schema": {
+              "example": {
+                "msg": "eth_syncing",
+                "data": false
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/coinbase": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get the client coinbase address.",
+        "description": "Get target Ethereum or Quorum network's client coinbase address.",
+        "operationId": "web3-coinbase",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum coinbase response",
+            "schema": {
+              "example": {
+                "msg": "eth_coinbase",
+                "data": "0x99579b05b90782013beddec2cbd7919b0d224b84"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/mining": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get target network mining status",
+        "description": "Returns true if client is actively mining new blocks.",
+        "operationId": "web3-mining",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum mining response",
+            "schema": {
+              "example": {
+                "msg": "eth_mining",
+                "data": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/hashrate": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns the number of hashes per second that the node is mining with.",
+        "description": "Get target's network number of hashes per second that is mining with.",
+        "operationId": "web3-hashrate",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum hashrate response",
+            "schema": {
+              "example": {
+                "msg": "eth_hashrate",
+                "data": "0x38a"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/gasprice": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get the current price per gas in wei.",
+        "description": "Get target's network current price per gas in wei",
+        "operationId": "web3-gas-price",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "a hex code of an integer representing the current gas price in wei.",
+            "schema": {
+              "example": {
+                "msg": "eth_gasPrice",
+                "data": "0x09184e72a000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/accounts": {
+      "get": {
+        "tags": [
+          "web3-accounts"
+        ],
+        "summary": "Get stored accounts in peer ",
+        "description": "Get stored accounts in peer information and owned by target peer node/client.",
+        "operationId": "web3-accounts",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum peer node owned accounts response",
+            "schema": {
+              "example": {
+                "msg": "eth_accounts",
+                "data": [
+                  "0x99579b05b90782013beddec2cbd7919b0d224b84",
+                  "0xccfd6c216b0240557d0d1b2db09cc7bf5211ae36",
+                  "0x15d4a31a6d9290107788a9266d1fd03cf04e9bb7",
+                  "0x9621fd269dc62d3af7d33cf92f18518f190ce28d",
+                  "0x043f8bf5e470507592cde0ed2babc304ce386bbc",
+                  "0x0e492caf43987685854e74806b81ab200288eb64",
+                  "0xc5f76b5dee2a58ecd5b9134aa256515625dcc06a",
+                  "0x6696a3a4af596af393e33934556eb7d399a26d3d",
+                  "0x4f44eeda34652c731407a55edfd4e41411cd9dbe",
+                  "0x449fa20449a86301b4f4b4dc4f7d1141da9aa413"
+                ]
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/accounts/balanced": {
+      "get": {
+        "tags": [
+          "web3-accounts"
+        ],
+        "summary": "Get stored accounts in peer with balance information",
+        "description": "Get the details of stored accounts in peer filesystem including the balance data of each account",
+        "operationId": "web3-accounts-balanced",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "ethereum peer node owned accounts response including its balance status",
+            "schema": {
+              "example": {
+                "msg": "accounts_balanced",
+                "data": [{
+                  "account": "0x3deb1894dc2d3e1b4a073f520e516c2df6f45b88",
+                  "balance": "99986951860000000000",
+                  "eth": "99.98695186",
+                  "raw": "56b9902f68d620800",
+                  "key": "secret"
+                },
+                  {
+                    "account": "0xd1f8cf87d0718e5796e64728189f30b3e7ecdd0c",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x6d9ee6a876dd47a480e33f62a5bca27df2687979",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x0911f623a0b7a7b2c710981c9d07683d02585a20",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0xa11905b71fedb7fa4fffa9587151613117cf1d88",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x991c4e53687640f2dedc944b52b0636fd079c207",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x918fffe19d351afa5b6eb407438d1733a09a23d5",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0xb473031f113ef6d07beb4515242eeb9c7fe1a4a2",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0x20f99fa2229213bf68f814a2618f664e1422834e",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  },
+                  {
+                    "account": "0xbff6bb9962728eaed93bee00bb42ecebe7f6f0fe",
+                    "balance": "100000000000000000000",
+                    "eth": "100",
+                    "raw": "56bc75e2d63100000",
+                    "key": "secret"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/block/latest": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get the number of most recent block.",
+        "description": "Get target's network most recent block.",
+        "operationId": "web3-block-latest",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network integer indicating the current block number the client is on.",
+            "schema": {
+              "example": {
+                "msg": "eth_blockNumber",
+                "data": "0xc94"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compilers": {
+      "get": {
+        "tags": [
+          "web3-compilers"
+        ],
+        "summary": "Get compilers information",
+        "description": "Get target's network compilers information",
+        "operationId": "web3-compilers",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network X response",
+            "schema": {
+              "example": {
+                "msg": "eth_getCompilers",
+                "data": []
+              }
+            }
+          },
+          "400": {
+            "description": "method not supported due to bad configuration or deprecation",
+            "example": {
+              "desc": "The method eth_getCompilers does not exist/is not available. Error code: -32601"
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compile/solidity": {
+      "get": {
+        "tags": [
+          "web3-compilers"
+        ],
+        "summary": "Compile solidity contract",
+        "description": "Compile solidity raw contract data using target node",
+        "operationId": "web3-compiler-solidity",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "solidity compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_solidity",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compile/serpent": {
+      "get": {
+        "tags": [
+          "web3-compilers"
+        ],
+        "summary": "Compile serpent contract",
+        "description": "Compile serpent raw contract data using target node",
+        "operationId": "web3-compiler-serpent",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "/* some serpent */"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "serpent compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_serpent",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/compile/lll": {
+      "get": {
+        "tags": [
+          "web3-compilers"
+        ],
+        "summary": "Compile LLL contract",
+        "description": "Compile LLL raw contract data using target node",
+        "operationId": "web3-compiler-lll",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": true,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "contract source code",
+            "type": "object",
+            "example": {
+              "contract": "(returnlll (suicide (caller)))"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lll compilation response response",
+            "schema": {
+              "example": {
+                "msg": "compile_lll",
+                "data": []
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/shh/version": {
+      "get": {
+        "tags": [
+          "web3-shh"
+        ],
+        "summary": "Returns the current whisper protocol version.",
+        "description": "Returns the current whisper protocol version.",
+        "operationId": "web3-shh-version",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network SHH protocol version response",
+            "schema": {
+              "example": {
+                "msg": "shh_version",
+                "result": "2"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/shh/message": {
+      "post": {
+        "tags": [
+          "web3-shh"
+        ],
+        "summary": "Sends a whisper message.",
+        "description": "Get target's network and sends a whisper message.",
+        "operationId": "web3-shh-send",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network X response",
+            "schema": {
+              "example": {
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/shh/identity": {
+      "post": {
+        "tags": [
+          "web3-shh"
+        ],
+        "summary": "Create new SHH Identity",
+        "description": "Creates new whisper identity in the client.",
+        "operationId": "web3-shh-id",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "60 Bytes as the address of the new identity.",
+            "schema": {
+              "example": {
+                "msg": "shh_newIdentity",
+                "result": "0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/ssh/identity/{address}": {
+      "get": {
+        "tags": [
+          "web3-shh"
+        ],
+        "summary": "Check existance of an SHH Identity",
+        "description": "Checks if the client hold the private keys for a given identity.",
+        "operationId": "web3-shh-has-id",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "The identity address to check.",
+            "type": "string",
+            "example": "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
+            "default": "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns true if the client holds the privatekey for that identity, otherwise false.",
+            "schema": {
+              "example": {
+                "msg": "shh_has_identity",
+                "result": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/shh/group": {
+      "get": {
+        "tags": [
+          "web3-shh"
+        ],
+        "summary": "Get network version information",
+        "description": "Get target's network",
+        "operationId": "web3-shh-group",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "target network X response",
+            "schema": {
+              "example": {
+                "msg": "net_version",
+                "result": "3"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/balance/{address}": {
+      "get": {
+        "tags": [
+          "web3-balance"
+        ],
+        "summary": "Get the balance of an account",
+        "description": "Get target Ethereum account balance",
+        "operationId": "web3-account-balance",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address to be checked",
+            "type": "string",
+            "example": "0x0f220b086ef5Dd45df31D867A36e9d2DF13Ea342",
+            "default": "0x0f220b086ef5Dd45df31D867A36e9d2DF13Ea342",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "target network balance response",
+            "schema": {
+              "example": {
+                "msg": "balance",
+                "data": {
+                  "wei": 100000000000000000000,
+                  "raw": "56bc75e2d63100000",
+                  "eth": "100"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/balance/{address}/block/{block}": {
+      "get": {
+        "tags": [
+          "web3-balance"
+        ],
+        "summary": "Get the balance of an account at given block number",
+        "description": "Get target Ethereum account balance at given block number",
+        "operationId": "web3-account-balance-block",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address to be checked",
+            "type": "string",
+            "example": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+            "default": "0xCd626bc764E1d553e0D75a42f5c4156B91a63F23",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "block",
+            "description": "Number of the block to be checked",
+            "type": "string",
+            "example": "latest",
+            "default": "latest",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "target network balance response",
+            "schema": {
+              "example": {
+                "msg": "balance",
+                "data": {
+                  "wei": 100000000000000000000,
+                  "raw": "56bc75e2d63100000",
+                  "eth": "100"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/summary": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Get summary of ERC 20 smart contract",
+        "description": "Read the overall information of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-summary",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum name information response",
+            "schema": {
+              "example": {
+                "msg": "name",
+                "result": "Glocoin"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method name does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/name": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read the name of ERC 20 smart contract",
+        "description": "Read the name of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-name",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum name information response",
+            "schema": {
+              "example": {
+                "msg": "name",
+                "result": "Glocoin"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method name does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/symbol": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read the symbol of ERC 20 smart contract",
+        "description": "Read the symbol of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-symbol",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum symbol information response",
+            "schema": {
+              "example": {
+                "msg": "symbol",
+                "result": "GLC"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method symbol does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/totalsupply": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read total supply of ERC 20 smart contract",
+        "description": "Read total supply of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-totalsupply",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks peer information response",
+            "schema": {
+              "example": {
+                "msg": "totalSupply",
+                "result": 1000000
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method totalSupply does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/decimals": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read decimal value of ERC 20 smart contract",
+        "description": "Read decimal value of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-decimals",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks peer information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method decimals does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/balanceof/{address}": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read the balance of given address for selected ERC 20 smart contract",
+        "description": "Read the balance of given address of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-balance",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "address of the account to be readed",
+            "type": "string",
+            "example": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "default": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks ERC20 contract balanceof response",
+            "schema": {
+              "example": {
+                "msg": "balanceof",
+                "result": "0x00000000000000000000000000000000000000000000000000000000000186a0"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method balanceof does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/erc20/{contract}/allowance/{owner}/to/{spender}": {
+      "get": {
+        "tags": [
+          "erc20"
+        ],
+        "summary": "Read the allowance of given address for selected ERC 20 smart contract",
+        "description": "Read the allowance of given address of ERC 20 smart contract providing contract address and target network specification",
+        "operationId": "erc20-allowance",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "contract",
+            "description": "address of the contract to be queried. Example address of GLOcoin is shown for Ropsten network",
+            "type": "string",
+            "example": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "default": "0x63dc97b81319e17ad5f9c6cff7e0442abe48bc92",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "owner",
+            "description": "owner address of the account to be checked",
+            "type": "string",
+            "example": "0x32C9cbb237538515B20EB5e2ef74836A4334C6Ab",
+            "default": "0x32C9cbb237538515B20EB5e2ef74836A4334C6Ab",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "spender",
+            "description": "spender address allowed to to operations with the funds",
+            "type": "string",
+            "example": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "default": "0xc7b1ba32e7842d88b9cac26fee63a2853df1a625",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks peer ERC20 contract allowance response",
+            "schema": {
+              "example": {
+                "msg": "allowance",
+                "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method allowance does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/storage/{address}/{block}/{key}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get storage at given position/key",
+        "description": "Returns the value from a storage position at a given address.",
+        "operationId": "tx-storage",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address",
+            "type": "string",
+            "example": "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+            "default": "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "block",
+            "description": "integer block number, or the string 'latest', 'earliest' or 'pending'",
+            "type": "string",
+            "example": "latest",
+            "default": "latest",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "description": "hexadecimal encoded key of the storage to be retrieved",
+            "type": "string",
+            "example": "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+            "default": "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks storage response",
+            "schema": {
+              "example": {
+                "msg": "get_storage",
+                "result": "0x000000000000000000000000000000000000000000000000000000000000162e"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/count/address/{address}/{block}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get Transaction count by Address",
+        "description": "Returns the number of transactions sent from an address.",
+        "operationId": "tx-count",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "Address",
+            "type": "string",
+            "example": "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+            "default": "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "block",
+            "description": "integer block number, or the string 'latest', 'earliest' or 'pending'",
+            "type": "string",
+            "example": "latest",
+            "default": "latest",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks transaction receipt response",
+            "schema": {
+              "example": {
+                "msg": "transaction_count",
+                "data": 200
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/count/hash/{hash}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get Transaction count by Hash",
+        "description": "Returns the number of transactions in a block from a block matching the given block hash.",
+        "operationId": "tx-count-hash",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "hash",
+            "description": "32 Bytes - hash of a block.",
+            "type": "string",
+            "example": "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
+            "default": "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "integer of the number of transactions in this block.",
+            "schema": {
+              "example": {
+                "msg": "transaction_count_hash",
+                "result": "0x1"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/count/block/{number}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Get Transaction count by Block number",
+        "description": "Returns the number of transactions in a block matching the given block number.",
+        "operationId": "tx-count-block-number",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "number",
+            "description": "Hexadecimal block number or 'earliest', 'latest' or 'pending'",
+            "type": "string",
+            "example": "latest",
+            "default": "latest",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "integer of the number of transactions in this block.",
+            "schema": {
+              "example": {
+                "msg": "transaction_count_block_number",
+                "data": 208
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/web3/{network}/tx/receipt/{hash}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "get transaction receipt",
+        "description": "Read transaction receipt",
+        "operationId": "tx-receipt",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "hash",
+            "description": "transaction hash",
+            "type": "string",
+            "example": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",
+            "default": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks transaction receipt response",
+            "schema": {
+              "example": {
+                "msg": "transaction_receipt",
+                "data": {
+                  "TransactionHash": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",
+                  "TransactionIndex": 0,
+                  "BlockHash": "0x43d32d536accca748357c894334be54bd9a69e31e4b654b3a5b54ed9b9afbdf3",
+                  "BlockNumber": 3,
+                  "CumulativeGasUsed": 217469,
+                  "GasUsed": 217469,
+                  "ContractAddress": "0x81ee9370d5721dab40b7f78ec78d8a1679868c0b",
+                  "Logs": [],
+                  "LogsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                  "Root": "",
+                  "Status": "0x1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method totalSupply does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/code/{address}/{block}": {
+      "get": {
+        "tags": [
+          "web3"
+        ],
+        "summary": "Returns code at a given address.",
+        "description": "Returns code at a given address.",
+        "operationId": "get-code",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "address",
+            "description": "contract address",
+            "type": "string",
+            "example": "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+            "default": "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "block",
+            "description": "integer block number, or the string 'latest', 'earliest' or 'pending'",
+            "type": "string",
+            "example": "0x2",
+            "default": "0x2",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks transaction receipt response",
+            "schema": {
+              "example": {
+                "msg": "transaction_receipt",
+                "data": {
+                  "TransactionHash": "0xb3836ae74ad88fcf8050b8140d6a83af7bee794f1c4511b1db7b445cd7382b24",
+                  "TransactionIndex": 0,
+                  "BlockHash": "0x43d32d536accca748357c894334be54bd9a69e31e4b654b3a5b54ed9b9afbdf3",
+                  "BlockNumber": 3,
+                  "CumulativeGasUsed": 217469,
+                  "GasUsed": 217469,
+                  "ContractAddress": "0x81ee9370d5721dab40b7f78ec78d8a1679868c0b",
+                  "Logs": [],
+                  "LogsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                  "Root": "",
+                  "Status": "0x1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method totalSupply does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/db/{mode}": {
+      "post": {
+        "tags": [
+          "web3-db"
+        ],
+        "summary": "Stores a string in the local database",
+        "description": "Returns string from the local database. Note this function is deprecated and will be removed in the future.",
+        "operationId": "web3-db-write",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "mode",
+            "description": "database mode",
+            "type": "string",
+            "enum": [
+              "string",
+              "hex"
+            ],
+            "example": "string",
+            "default": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "data",
+            "description": "data to be stored in local database",
+            "type": "string",
+            "example": {
+              "database": "test",
+              "key": "foo",
+              "value": "bar"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "local database response",
+            "schema": {
+              "example": {
+                "msg": "db_putString",
+                "data": false
+              }
+            }
+          },
+          "401": {
+            "description": "invalid profile",
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "description": "unprocessable entity",
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method db_putHex does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/db/{mode}/{db}/{key}": {
+      "get": {
+        "tags": [
+          "web3-db"
+        ],
+        "summary": "Read a value from local database",
+        "description": "Returns string from the local database. Note this function is deprecated and will be removed in the future.",
+        "operationId": "web3-db-read",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "mode",
+            "description": "database mode",
+            "type": "string",
+            "enum": [
+              "string",
+              "hex"
+            ],
+            "example": "string",
+            "default": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "db",
+            "description": "database name",
+            "type": "string",
+            "example": "test",
+            "default": "test",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "description": "item key name",
+            "type": "string",
+            "example": "foo",
+            "default": "foo",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "database value read response",
+            "schema": {
+              "example": {
+                "msg": "db_getString",
+                "data": "0x00"
+              }
+            }
+          },
+          "401": {
+            "description": "invalid profile",
+            "$ref": "#responses/ProfileInvalidError"
+          },
+          "422": {
+            "description": "unprocessable entity",
+            "example": {
+              "code": 422,
+              "msg": "Unprocessable entity",
+              "details": "The method db_getHex does not exist/is not available. Error code: -32601"
+            }
+          }
+        }
+      }
+    },
+    "/web3/{network}/devops/deploy": {
+      "post": {
+        "tags": [
+          "devops"
+        ],
+        "summary": "smart contract deployment devops helper",
+        "description": "Compile, deploy and register your smart contract in just one single call",
+        "operationId": "devops-deploy",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "network",
+          "description": "target web3 protocol compatible network",
+          "type": "string",
+          "enum": [
+            "ropsten",
+            "rinkeby",
+            "kovan",
+            "mainnet",
+            "infura",
+            "quiknode",
+            "private",
+            "ganache"
+          ],
+          "example": "ganache",
+          "default": "ganache",
+          "required": true
+        },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "deployment configuration and parameters",
+            "type": "string",
+            "required": true,
+            "example": {
+              "tx": {
+                "from": "0xF3744617E74d3f2e4DEfd20006104F9ddb9b9Bc0",
+                "auth": {
+                  "unlockPassword": "hello123",
+                  "offlineSignature": "",
+                  "privateKey": "782cdfa05e62455fae56b1fea15607691975db23b6bef5342f9f50505769529d"
+                }
+              },
+              "contract": "0x608060405234801561001057600080fd5b506040516102d43803806102d483398101604052805160008054600160a060020a0319163317905501805161004c906001906020840190610053565b50506100ee565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009457805160ff19168380011785556100c1565b828001600101855582156100c1579182015b828111156100c15782518255916020019190600101906100a6565b506100cd9291506100d1565b5090565b6100eb91905b808211156100cd57600081556001016100d7565b90565b6101d7806100fd6000396000f30060806040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610050578063cfae321714610067575b600080fd5b34801561005c57600080fd5b506100656100f1565b005b34801561007357600080fd5b5061007c610116565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100b657818101518382015260200161009e565b50505050905090810190601f1680156100e35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff163314156101145733ff5b565b60018054604080516020601f600260001961010087891615020190951694909404938401819004810282018101909252828152606093909290918301828280156101a15780601f10610176576101008083540402835291602001916101a1565b820191906000526020600020905b81548152906001019060200180831161018457829003601f168201915b50505050509050905600a165627a7a72305820a4cf3f84f77424d0e613bbd9ab04aad559d43eb812ca40719db8afcfed7a1e3f0029",
+              "registry": {
+                "register": "true",
+                "name": "example contract",
+                "description": "this is an example contract",
+                "version": "1.0"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ethereum, Quorum, RSK and Web3 networks peer information response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/my/projects": {
+      "post": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Create new project",
+        "description": "Create new project in user workspace",
+        "operationId": "project-new",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "body",
+          "name": "data",
+          "description": "project details",
+          "type": "string",
+          "required": true,
+          "example": {
+            "name": "test-project",
+            "description": "project description",
+            "image": "https://domain.tld/path/to/icon-png",
+            "secret": "abc123",
+            "endpoint": "http://127.0.0.1:8545",
+            "gas": "100000",
+            "gasPrice": "100000",
+            "block": "latest"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "response of new project creation request",
+            "schema": {
+              "example": {
+                "msg": "successfully created",
+                "data": {
+                  "id": "736e0aacddc14899bf120b2e22d34b00",
+                  "name": "test-project",
+                  "description": "project description",
+                  "image": "https://domain.tld/path/to/icon-png",
+                  "endpoint": "http://127.0.0.1:8545",
+                  "gas": "100000",
+                  "gasPrice": "100000",
+                  "block": "latest",
+                  "metadata": {
+                    "created": 1564573531,
+                    "owner": "712dad1bd1d24f8fbfccec12f98297fd",
+                    "issued": 2130706433
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "List user projects",
+        "description": "List projects in user workspace",
+        "operationId": "project-list",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "response of user project list",
+            "schema": {
+              "example": {
+                "msg": "projects",
+                "data": [
+                  {
+                    "id": "736e0aacddc14899bf120b2e22d34b00",
+                    "name": "test-project",
+                    "description": "project description",
+                    "image": "https://domain.tld/path/to/icon-png",
+                    "endpoint": "http://127.0.0.1:8545",
+                    "gas": "100000",
+                    "gasPrice": "100000",
+                    "block": "latest",
+                    "metadata": {
+                      "created": 1564573531,
+                      "owner": "712dad1bd1d24f8fbfccec12f98297fd",
+                      "issued": 2130706433
+                    }
+                  },
+                  {
+                    "id": "b2331069e06b4fa89bcc727d0a3c421f",
+                    "name": "test-project",
+                    "description": "project description",
+                    "image": "https://domain.tld/path/to/icon-png",
+                    "endpoint": "http://127.0.0.1:8545",
+                    "gas": "100000",
+                    "gasPrice": "100000",
+                    "block": "latest",
+                    "metadata": {
+                      "created": 1564573213,
+                      "owner": "712dad1bd1d24f8fbfccec12f98297fd",
+                      "issued": 2130706433
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/my/projects/{id}": {
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get specific project details",
+        "description": "Get specific project details",
+        "operationId": "project-details",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "project id",
+          "type": "string",
+          "required": true,
+          "example": "736e0aacddc14899bf120b2e22d34b00",
+          "default": "736e0aacddc14899bf120b2e22d34b00"
+        }],
+        "responses": {
+          "200": {
+            "description": "requested project details",
+            "schema": {
+              "example": {
+                "id": "736e0aacddc14899bf120b2e22d34b00",
+                "name": "test-project",
+                "description": "project description",
+                "image": "https://domain.tld/path/to/icon-png",
+                "endpoint": "http://127.0.0.1:8545",
+                "gas": "100000",
+                "gasPrice": "100000",
+                "block": "latest",
+                "metadata": {
+                  "created": 1564573531,
+                  "owner": "712dad1bd1d24f8fbfccec12f98297fd",
+                  "issued": 2130706433
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Update existing project details",
+        "description": "Update existing project details",
+        "operationId": "project-update",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "project id",
+          "type": "string",
+          "required": true,
+          "example": "cfb79f10bd524a57bc330cf1a48d213b",
+          "default": "cfb79f10bd524a57bc330cf1a48d213b"
+        },
+          {
+            "in": "body",
+            "name": "data",
+            "description": "project details",
+            "type": "string",
+            "required": true,
+            "example": {
+              "name": "test-project"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response of project update",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Delete existing project",
+        "description": "Delete existing project from user workspace",
+        "operationId": "project-delete",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "project id",
+          "type": "string",
+          "required": true,
+          "example": "cfb79f10bd524a57bc330cf1a48d213b",
+          "default": "cfb79f10bd524a57bc330cf1a48d213b"
+        }],
+        "responses": {
+          "200": {
+            "description": "response of project delete operation",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/my/registry": {
+      "post": {
+        "tags": [
+          "registry"
+        ],
+        "summary": "Create new registry",
+        "description": "Create new registry in user workspace",
+        "operationId": "registry-new",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "body",
+          "name": "data",
+          "description": "registry details",
+          "type": "string",
+          "required": true,
+          "example": {
+            "name": "test-registry"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "response of new registry creation request",
+            "schema": {
+              "example": {
+                "msg": "registry successfully created",
+                "details": "a1ebf4afd9e9462cb5dedc0e83efea17"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "registry"
+        ],
+        "summary": "List user registry",
+        "description": "List registry in user workspace",
+        "operationId": "registry-list",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "response of new registry creation request",
+            "schema": {
+              "example": [{
+                "sid": "24293a7cb63a4c82b205f24a5158dd03",
+                "name": "test-registry",
+                "owner": "ac51633e37924e65b87bd0b9d59528d7",
+                "id": "466e3553eff348e294ea81d22a0fd8c7",
+                "secret": "25796d4cc11046ed9380b0ec0e22066c",
+                "created": 1557756771,
+                "ip": 2130706433
+              }]
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/my/registry/{id}": {
+      "get": {
+        "tags": [
+          "registry"
+        ],
+        "summary": "Get specific registry details",
+        "description": "Get specific registry details",
+        "operationId": "registry-details",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "registry id",
+          "type": "string",
+          "required": true,
+          "example": "cfb79f10bd524a57bc330cf1a48d213b",
+          "default": "cfb79f10bd524a57bc330cf1a48d213b"
+        }],
+        "responses": {
+          "200": {
+            "description": "details of etherniti proxy created registry",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "registry"
+        ],
+        "summary": "Update existing registry details",
+        "description": "Update existing registry details",
+        "operationId": "registry-update",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "registry id",
+          "type": "string",
+          "required": true,
+          "example": "cfb79f10bd524a57bc330cf1a48d213b",
+          "default": "cfb79f10bd524a57bc330cf1a48d213b"
+        },
+          {
+            "in": "body",
+            "name": "data",
+            "description": "registry details",
+            "type": "string",
+            "required": true,
+            "example": {
+              "name": "test-registry"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "details of etherniti proxy created registry",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "registry"
+        ],
+        "summary": "Delete existing registry",
+        "description": "Delete existing registry from user workspace",
+        "operationId": "registry-delete",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "accountToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "registry id",
+          "type": "string",
+          "required": true,
+          "example": "cfb79f10bd524a57bc330cf1a48d213b",
+          "default": "cfb79f10bd524a57bc330cf1a48d213b"
+        }],
+        "responses": {
+          "200": {
+            "description": "response of registry delete operation",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    },
+    "/dapps/{project}/{version}/{operation}": {
+      "get": {
+        "tags": [
+          "dapps"
+        ],
+        "summary": "Make read operation",
+        "description": "Make read operation against a Web3 smart contract",
+        "operationId": "dapps-read",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "project",
+          "description": "Project name or ID",
+          "type": "string",
+          "example": "votingContract",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "version",
+            "description": "project version tag",
+            "type": "string",
+            "example": "latest",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "operation",
+            "description": "smart contract operation name",
+            "type": "string",
+            "example": "vote",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "smart contract read operation response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dapps"
+        ],
+        "summary": "Make write operation",
+        "description": "Make write operation against a Web3 smart contract",
+        "operationId": "dapps-write",
+        "consumes": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "produces": [
+          "application/json", "application/xml", "application/x-msgpack", "application/protobuf"
+        ],
+        "deprecated": false,
+        "security": [{
+          "connectionProfileToken": []
+        }],
+        "parameters": [{
+          "in": "path",
+          "name": "project",
+          "description": "Project name or ID",
+          "type": "string",
+          "example": "votingContract",
+          "required": true
+        },
+          {
+            "in": "path",
+            "name": "version",
+            "description": "project version tag",
+            "type": "string",
+            "example": "latest",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "operation",
+            "description": "smart contract operation name",
+            "type": "string",
+            "example": "vote",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "parameters",
+            "description": "smart contract operation name",
+            "type": "string",
+            "example": "{}",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "smart contract write operation response",
+            "schema": {
+              "example": {}
+            }
+          },
+          "401": {
+            "$ref": "#responses/ProfileInvalidError"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "accountToken": {
+      "type": "apiKey",
+      "description": "Etherniti REST API Account token",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "connectionProfileToken": {
+      "type": "apiKey",
+      "description": "Etherniti REST API Proxy connection profile token",
+      "name": "X-Etherniti-Profile",
+      "in": "header"
+    }
+  },
+  "responses": {
+    "ProfileInvalidError": {
+      "description": "Connection Profile token is missing, was expired or is invalid",
+      "schema": {
+        "example": {
+          "code": 400,
+          "msg": "Bad Request",
+          "details": "please provide a connection profile token for this kind of call"
+        }
+      }
+    },
+    "Web3RawJsonRpcRequest": {
+      "description": "Raw JSON-RPC request content",
+      "schema": {
+        "example": {
+          "jsonrpc": "2.0",
+          "method": "db_getHex",
+          "params": ["testDB", "myKey"],
+          "id": 73
+        }
+      }
+    },
+    "Web3RawJsonRpcResponse": {
+      "description": "Raw JSON-RPC response content",
+      "schema": {
+        "example": {
+          "id": 67,
+          "jsonrpc": "2.0",
+          "result": "2"
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "externalDocs": {
+    "description": "Find out more about Etherniti, a High Performance Web3 REST Proxy at https://www.etherniti.org and https://docs.etherniti.org",
+    "url": "https://docs.etherniti.org"
+  }
+}

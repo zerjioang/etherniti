@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"errors"
 
+	"github.com/zerjioang/go-hpc/lib/fs"
+	"github.com/zerjioang/go-hpc/lib/uuid/randomuuid"
+
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util/fs"
-	"github.com/zerjioang/etherniti/core/util/id"
 )
 
 var (
@@ -29,8 +30,8 @@ func GenerateAdmin(opts *EthernitiOptions) (string, string, error) {
 	} else {
 		if !opts.Admin.LoadedFromEnv {
 			logger.Debug("generating admin identity since not provided by environment options")
-			accessKey := id.GenerateUUIDFromEntropy()
-			accessSecret := id.GenerateUUIDFromEntropy()
+			accessKey := randomuuid.GenerateUUIDFromEntropy()
+			accessSecret := randomuuid.GenerateUUIDFromEntropy()
 			logger.Warn("proxy admin: key = ", accessKey, ", secret = ", accessSecret)
 			opts.Admin.Key = accessKey
 			opts.Admin.Secret = accessSecret

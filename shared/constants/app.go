@@ -3,7 +3,7 @@
 
 package constants
 
-import "github.com/zerjioang/etherniti/core/modules/encoding/ioproto/json"
+import "github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding/json"
 
 const (
 	//new line character

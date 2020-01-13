@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestNetworkController(t *testing.T) {
@@ -21,7 +21,7 @@ func TestNetworkController(t *testing.T) {
 		// create example group
 		// create example group
 		testGroup := e.Group("", func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c *echo.Context) error {
+			return func(c echo.Context) error {
 				return next(c)
 			}
 		})

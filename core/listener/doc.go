@@ -5,7 +5,7 @@ package listener
 
 /*
 
-initial package benchmarking: go test -bench=. -benchmem -benchtime=2s -cpu=1,2,4
+initial package benchmarking: go test -pibench=. -benchmem -benchtime=2s -cpu=1,2,4
 
 BenchmarkFactoryListener/factory-http                   2000000000               2.72 ns/op     2942.84 MB/s           0 B/op          0 allocs/op
 BenchmarkFactoryListener/factory-http-2                 2000000000               2.69 ns/op     2976.69 MB/s           0 B/op          0 allocs/op

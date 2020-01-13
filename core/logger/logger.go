@@ -3,7 +3,7 @@
 
 package logger
 
-import "github.com/zerjioang/etherniti/thirdparty/gommon/log"
+import "github.com/zerjioang/go-hpc/thirdparty/gommon/log"
 
 // global logger for internal procedures
 var (

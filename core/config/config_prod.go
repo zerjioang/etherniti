@@ -10,7 +10,7 @@ import (
 	"os"
 
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/gommon/log"
+	"github.com/zerjioang/go-hpc/thirdparty/gommon/log"
 )
 
 var (

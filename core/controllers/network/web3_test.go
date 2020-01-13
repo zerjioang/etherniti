@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/zerjioang/etherniti/core/controllers/network"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 func TestWeb3Controller(t *testing.T) {
@@ -23,7 +23,7 @@ func TestWeb3Controller(t *testing.T) {
 		// create example group
 		// create example group
 		testGroup := e.Group("", func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c *echo.Context) error {
+			return func(c echo.Context) error {
 				return next(c)
 			}
 		})

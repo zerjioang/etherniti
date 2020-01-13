@@ -6,18 +6,23 @@ package network
 import (
 	"strconv"
 
+	"github.com/zerjioang/etherniti/shared/dto"
+
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+
+	"github.com/zerjioang/etherniti/shared"
+
 	"github.com/pkg/errors"
 
 	"github.com/zerjioang/etherniti/core/data"
 
-	"github.com/zerjioang/etherniti/core/eth"
-	"github.com/zerjioang/etherniti/shared/protocol"
+	"github.com/zerjioang/go-hpc/lib/eth"
 
 	"github.com/zerjioang/etherniti/core/api"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
-	"github.com/zerjioang/etherniti/core/eth/rpc/model"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
+	"github.com/zerjioang/go-hpc/lib/eth/rpc/model"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // eth devops controller
@@ -32,7 +37,7 @@ func NewDevOpsController(network *NetworkController) DevOpsController {
 	return ctl
 }
 
-func (ctl *DevOpsController) PrepareTransaction(c *echo.Context, req *protocol.TransactionRequest) error {
+func (ctl *DevOpsController) PrepareTransaction(c *shared.EthernitiContext, req *dto.TransactionRequest) error {
 
 	// detect if the http request is using a private context via jwt tokens or not
 	usesPrivateContext := c.HasJWT()
@@ -87,10 +92,10 @@ func (ctl *DevOpsController) PrepareTransaction(c *echo.Context, req *protocol.T
 	return nil
 }
 
-func (ctl *DevOpsController) deployContract(c *echo.Context) error {
+func (ctl *DevOpsController) deployContract(c *shared.EthernitiContext) error {
 
 	//new deploy contract request
-	req := protocol.DeployRequest{}
+	req := dto.DeployRequest{}
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -128,7 +133,7 @@ func (ctl *DevOpsController) deployContract(c *echo.Context) error {
 }
 
 // eth.sendTransaction({from:sender, to:receiver, value: amount})
-func (ctl *DevOpsController) sendTransaction(c *echo.Context) error {
+func (ctl *DevOpsController) sendTransaction(c *shared.EthernitiContext) error {
 	to := c.Param("to")
 	//input data validation
 	if to == "" {
@@ -159,7 +164,7 @@ func (ctl *DevOpsController) sendTransaction(c *echo.Context) error {
 	}
 }
 
-func (ctl *DevOpsController) callContract(c *echo.Context) error {
+func (ctl *DevOpsController) callContract(c *shared.EthernitiContext) error {
 	contractAddress := c.Param("contract")
 	//input data validation
 	if contractAddress == "" {
@@ -193,7 +198,7 @@ func (ctl *DevOpsController) callContract(c *echo.Context) error {
 
 // implemented method from interface RouterRegistrable
 func (ctl DevOpsController) RegisterRouters(router *echo.Group) {
-	router.POST("/devops/deploy", ctl.deployContract)
-	router.GET("/devops/call/:contract/:method", ctl.callContract)
-	router.POST("/devops/call/:contract/:method", ctl.callContract)
+	router.POST("/devops/deploy", wrap.Call(ctl.deployContract))
+	router.GET("/devops/call/:contract/:method", wrap.Call(ctl.callContract))
+	router.POST("/devops/call/:contract/:method", wrap.Call(ctl.callContract))
 }

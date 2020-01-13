@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/zerjioang/etherniti/core/config"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -58,7 +58,7 @@ func NewServer(configurator func(e *echo.Echo)) *echo.Echo {
 }
 
 // creates a new echo context
-func NewContext(e *echo.Echo) *echo.Context {
+func NewContext(e *echo.Echo) echo.Context {
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
@@ -67,7 +67,7 @@ func NewContext(e *echo.Echo) *echo.Context {
 	return c
 }
 
-func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.ResponseRecorder, *echo.Context) {
+func NewContextFromSocket(e *echo.Echo, data []byte) (*http.Request, *httptest.ResponseRecorder, echo.Context) {
 	req := httptest.NewRequest(http.MethodPost, "/", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()

@@ -6,10 +6,13 @@ package network
 import (
 	"strings"
 
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/modules/stack"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/stack"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // eth web3 rpc controller
@@ -25,7 +28,7 @@ func NewWeb3RpcController(network *NetworkController) Web3RpcController {
 }
 
 // proxy pass client rpc request to appropiate target node
-func (ctl *Web3RpcController) rpc(c *echo.Context) error {
+func (ctl *Web3RpcController) rpc(c *shared.EthernitiContext) error {
 	// get our client context
 	client, cliErr := ctl.network.getRpcClient(c)
 	if cliErr != nil {
@@ -42,7 +45,7 @@ func (ctl *Web3RpcController) rpc(c *echo.Context) error {
 
 // remove sensitive data from error messages
 // sensitive data might be: peer node address, IPs, etc
-func (ctl *Web3RpcController) ReturnErrorNoSensitiveData(c *echo.Context, reqErr stack.Error) error {
+func (ctl *Web3RpcController) ReturnErrorNoSensitiveData(c *shared.EthernitiContext, reqErr stack.Error) error {
 	// if error is a connection refused error or contains http://
 	// lets hide full error content since it can disclose sensitive information such as peer node IP
 	errStr := reqErr.Error()
@@ -59,5 +62,5 @@ func (ctl *Web3RpcController) ReturnErrorNoSensitiveData(c *echo.Context, reqErr
 func (ctl Web3RpcController) RegisterRouters(router *echo.Group) {
 	logger.Debug("adding controller raw JSON-RPC call supports")
 	logger.Debug("exposing POST /rpc")
-	router.POST("/rpc", ctl.rpc)
+	router.POST("/rpc", wrap.Call(ctl.rpc))
 }

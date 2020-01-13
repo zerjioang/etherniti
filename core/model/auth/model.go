@@ -3,23 +3,23 @@ package auth
 import (
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/modules/secure"
-	"github.com/zerjioang/etherniti/core/modules/secure/chacha20"
-	"github.com/zerjioang/etherniti/core/util/hex"
+	"github.com/zerjioang/etherniti/shared"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
 
-	"github.com/zerjioang/etherniti/shared/mixed"
+	"github.com/zerjioang/go-hpc/common"
+	"github.com/zerjioang/go-hpc/lib/db/badgerdb"
+	"github.com/zerjioang/go-hpc/shared/db"
 
-	"github.com/zerjioang/etherniti/core/modules/stack"
+	"github.com/zerjioang/go-hpc/lib/secure"
+	"github.com/zerjioang/go-hpc/lib/secure/chacha20"
+	"github.com/zerjioang/go-hpc/lib/stack"
+	"github.com/zerjioang/go-hpc/util/hex"
 
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util/str"
 	"github.com/zerjioang/etherniti/shared/constants"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 var (
@@ -39,12 +39,12 @@ const (
 
 // new login request dto
 type AuthRequest struct {
-	mixed.DatabaseObjectInterface `json:"_,omitempty"`
-	Uuid                          string             `json:"sid,omitempty"`
-	Username                      string             `json:"name,omitempty" form:"name" query:"name"`
-	Role                          constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
-	Email                         string             `json:"email" form:"email" query:"email"`
-	Password                      string             `json:"pwd" form:"pwd" query:"pwd"`
+	db.DaoInterface `json:"_,omitempty"`
+	Uuid            string             `json:"sid,omitempty"`
+	Username        string             `json:"name,omitempty" form:"name" query:"name"`
+	Role            constants.UserRole `json:"role,omitempty" form:"role" query:"role"`
+	Email           string             `json:"email" form:"email" query:"email"`
+	Password        string             `json:"pwd" form:"pwd" query:"pwd"`
 	// for api key based authentication
 	ApiKey    string `json:"key,omitempty" form:"key" query:"key"`
 	ApiSecret string `json:"secret,omitempty" form:"secret" query:"secret"`
@@ -61,45 +61,39 @@ func init() {
 	confirmationEncoder = chacha20.NewChachaEncoderParams([]byte(pwd))
 }
 
-// implementation of interface DatabaseObjectInterface
+// implementation of interface DaoInterface
 func (req *AuthRequest) Key() []byte {
 	return str.UnsafeBytes(str.ToLowerAscii(req.Email))
 }
-func (req *AuthRequest) Value(serializer io.Serializer) []byte {
-	return ioproto.GetBytesFromSerializer(serializer, req)
-}
-func (req *AuthRequest) New() mixed.DatabaseObjectInterface {
-	return NewEmptyAuthRequestPtr()
+func (req *AuthRequest) Value(serializer common.Serializer) []byte {
+	return encoding.GetBytesFromSerializer(serializer, req)
 }
 
 // custom validation logic for read operation
 // return nil if everyone can read
-func (req *AuthRequest) CanRead(context *echo.Context, key string) error {
+func (req *AuthRequest) CanRead(context *shared.EthernitiContext, key string) error {
 	return nil
 }
 
 // custom validation logic for update operation
 // return nil if everyone can update
-func (req *AuthRequest) CanUpdate(context *echo.Context, key string) error {
-	if context.User().Role() != constants.AdminUser {
-		return data.ErrNotAuthorized
-	}
-	return nil
+func (req *AuthRequest) CanUpdate(context *shared.EthernitiContext, key string) error {
+	return data.ErrNotAuthorized
 }
 
 // custom validation logic for delete operation
 // return nil if everyone can delete
-func (req *AuthRequest) CanDelete(context *echo.Context, key string) error {
+func (req *AuthRequest) CanDelete(context *shared.EthernitiContext, key string) error {
 	return nil
 }
 
 // custom validation logic for write operation
 // return nil if everyone can write
-func (req *AuthRequest) CanWrite(context *echo.Context) error {
+func (req *AuthRequest) CanWrite(context *shared.EthernitiContext) error {
 	if req.Email != "" && req.Password != "" && req.Username != "" {
 		logger.Info("registering user with email: ", req.Email)
 		// hash user password
-		req.Password = db.Hash(req.Password)
+		req.Password = badgerdb.Hash(req.Password)
 		return nil
 	}
 	return errors.New("you have to provide a valid email, password and username")
@@ -107,11 +101,11 @@ func (req *AuthRequest) CanWrite(context *echo.Context) error {
 
 // custom validation logic for list operation
 // return nil if everyone can list
-func (req *AuthRequest) CanList(context *echo.Context) error {
+func (req *AuthRequest) CanList(context *shared.EthernitiContext) error {
 	return data.ErrListingNotSupported
 }
 
-func (req *AuthRequest) Bind(context *echo.Context) (mixed.DatabaseObjectInterface, stack.Error) {
+func (req *AuthRequest) Bind(context *shared.EthernitiContext) (db.DaoInterface, stack.Error) {
 	if err := context.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error(data.FailedToBind, err)
@@ -161,6 +155,10 @@ func (req *AuthRequest) GenConfirmationCode() (string, error) {
 	return code, nil
 }
 
+func (req *AuthRequest) PrimaryKey() []byte {
+	return str.UnsafeBytes(req.Email)
+}
+
 func NewEmptyAuthRequestPtr() *AuthRequest {
 	return new(AuthRequest)
 }
@@ -169,6 +167,6 @@ func NewEmptyAuthRequest() AuthRequest {
 	return AuthRequest{}
 }
 
-func NewDBAuthModel() mixed.DatabaseObjectInterface {
+func NewDBAuthModel() db.DaoInterface {
 	return NewEmptyAuthRequestPtr()
 }

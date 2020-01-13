@@ -4,40 +4,43 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/zerjioang/etherniti/core/modules/encoding/ioproto"
-	"github.com/zerjioang/etherniti/shared/protocol/io"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
+	"github.com/zerjioang/go-hpc/lib/stack"
 
-	"github.com/zerjioang/etherniti/shared/protocol"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol"
+	"github.com/zerjioang/go-hpc/thirdparty/echo/protocol/encoding"
+
+	"github.com/zerjioang/go-hpc/lib/db/badgerdb"
+	"github.com/zerjioang/go-hpc/shared/db"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/db"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/core/util/str"
-	"github.com/zerjioang/etherniti/shared/mixed"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/util/str"
 )
 
 var (
 	errInvalidCollectionName = errors.New("invalid collection name provided")
 	errUnauthorizedOp        = errors.New("unauthorized operation detected")
 	s                        = []byte(".")
-	dbSerializer, _          = ioproto.EncodingModeSelector(io.ModeJson)
+	dbSerializer, _          = encoding.EncodingModeSelector(protocol.ModeJson)
 )
 
 type DatabaseController struct {
-	storage *db.BadgerStorage
+	storage *badgerdb.BadgerStorage
 	name    string
 	// data model generator function. it will create a new struct
-	modelGenerator func() mixed.DatabaseObjectInterface
+	modelGenerator func() db.DaoInterface
 	// data model used in this collection
-	model mixed.DatabaseObjectInterface
+	model db.DaoInterface
 	// path prepend string
 	pathPrepend string
 }
 
 // constructor like function
-func NewDatabaseController(pathPrepend string, collection string, modelGenerator func() mixed.DatabaseObjectInterface) (DatabaseController, error) {
+func NewDatabaseController(pathPrepend, dbPath, collection string, modelGenerator func() db.DaoInterface) (DatabaseController, error) {
 	dbctl := DatabaseController{}
 	if collection == "" {
 		return dbctl, errInvalidCollectionName
@@ -71,29 +74,33 @@ func NewDatabaseController(pathPrepend string, collection string, modelGenerator
 
 	// database initialization method
 	var err error
-	dbctl.storage, err = db.NewCollection(collection)
+	dbctl.storage, err = badgerdb.NewCollection(dbPath, collection)
 	if err != nil {
-		logger.Error("failed to initialize database db collection: ", err)
+		logger.Error("failed to initialize database db-badger collection: ", err)
 	}
 	return dbctl, err
 }
 
-func (ctl *DatabaseController) Create(c *echo.Context) error {
-	requestedItem, err := ctl.modelGenerator().Bind(c)
+func (ctl *DatabaseController) Create(c *shared.EthernitiContext) error {
+	daoItem := ctl.modelGenerator()
+	daoItem.Decode(c.Body())
+	// convert dao bject to dao-with-api object
+	requestedItem, err := ctl.toRequestItem(daoItem)
 	if err.Occur() {
 		return api.StackError(c, err)
 	}
+
 	if requestedItem != nil {
 		canWriteErr := requestedItem.CanWrite(c)
 		if canWriteErr == nil {
 			// check if current user Id is valid, exists.
 			// source: auth-jwt-token
-			authId := c.AuthenticatedUserUuid()
+			authId := c.AuthUserUuid()
 			if authId == "" {
 				return errUnauthorizedOp
 			}
-			key := ctl.buildCompositeId(authId, string(requestedItem.Key()))
-			value := requestedItem.Value(dbSerializer)
+			key := ctl.buildCompositeId(authId, string(daoItem.Key()))
+			value := daoItem.Value(dbSerializer)
 			writeErr := ctl.storage.PutUniqueKeyValue(key, value)
 			if writeErr != nil {
 				return api.Error(c, writeErr)
@@ -123,14 +130,20 @@ func (ctl *DatabaseController) SetUniqueKey(key []byte, value []byte) error {
 	return ctl.storage.PutUniqueKeyValue(key, value)
 }
 
-func (ctl *DatabaseController) Update(c *echo.Context) error {
+func (ctl *DatabaseController) Update(c *shared.EthernitiContext) error {
 	modelId := c.Param("id")
 	if modelId != "" {
-		canUpdateErr := ctl.model.CanUpdate(c, modelId)
+		daoItem := ctl.modelGenerator()
+		// convert dao bject to dao-with-api object
+		requestedItem, err := ctl.toRequestItem(daoItem)
+		if err.Occur() {
+			return api.StackError(c, err)
+		}
+		canUpdateErr := requestedItem.CanUpdate(c, modelId)
 		if canUpdateErr == nil {
 			// check if current user Id is valid, exists.
 			// source: auth-jwt-token
-			authId := c.AuthenticatedUserUuid()
+			authId := c.AuthUserUuid()
 			if authId == "" {
 				return errUnauthorizedOp
 			}
@@ -146,7 +159,7 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 				return api.StackError(c, objErr)
 			}
 			// now update readed object content with user provided content in request body
-			requestedItem, bindErr := ctl.modelGenerator().Bind(c)
+			requestedItem, bindErr := daoItem.Decode(c.Body())
 			if bindErr.Occur() {
 				return api.StackError(c, bindErr)
 			}
@@ -168,14 +181,20 @@ func (ctl *DatabaseController) Update(c *echo.Context) error {
 	}
 }
 
-func (ctl *DatabaseController) Read(c *echo.Context) error {
+func (ctl *DatabaseController) Read(c *shared.EthernitiContext) error {
 	modelId := c.Param("id")
 	if modelId != "" {
-		canReadErr := ctl.model.CanRead(c, modelId)
+		daoItem := ctl.modelGenerator()
+		// convert dao bject to dao-with-api object
+		requestedItem, err := ctl.toRequestItem(daoItem)
+		if err.Occur() {
+			return api.StackError(c, err)
+		}
+		canReadErr := requestedItem.CanRead(c, modelId)
 		if canReadErr == nil {
 			// check if current user Id is valid, exists.
 			// source: auth-jwt-token
-			authId := c.AuthenticatedUserUuid()
+			authId := c.AuthUserUuid()
 			if authId == "" {
 				return errUnauthorizedOp
 			}
@@ -192,14 +211,20 @@ func (ctl *DatabaseController) Read(c *echo.Context) error {
 	}
 }
 
-func (ctl *DatabaseController) Delete(c *echo.Context) error {
+func (ctl *DatabaseController) Delete(c *shared.EthernitiContext) error {
 	modelId := c.Param("id")
 	if modelId != "" {
-		canDeleteErr := ctl.model.CanDelete(c, modelId)
+		daoItem := ctl.modelGenerator()
+		// convert dao bject to dao-with-api object
+		requestedItem, err := ctl.toRequestItem(daoItem)
+		if err.Occur() {
+			return api.StackError(c, err)
+		}
+		canDeleteErr := requestedItem.CanDelete(c, modelId)
 		if canDeleteErr == nil {
 			// check if current user Id is valid, exists.
 			// source: auth-jwt-token
-			authId := c.AuthenticatedUserUuid()
+			authId := c.AuthUserUuid()
 			if authId == "" {
 				return errUnauthorizedOp
 			}
@@ -217,9 +242,15 @@ func (ctl *DatabaseController) Delete(c *echo.Context) error {
 	}
 }
 
-func (ctl *DatabaseController) List(c *echo.Context) error {
-	canList := ctl.model.CanList(c)
-	if canList == nil {
+func (ctl *DatabaseController) List(c *shared.EthernitiContext) error {
+	daoItem := ctl.modelGenerator()
+	// convert dao bject to dao-with-api object
+	requestedItem, err := ctl.toRequestItem(daoItem)
+	if err.Occur() {
+		return api.StackError(c, err)
+	}
+	canListErr := requestedItem.CanList(c)
+	if canListErr == nil {
 		results, err := ctl.storage.List("", ctl.model)
 		if err != nil {
 			return api.Error(c, err)
@@ -233,12 +264,18 @@ func (ctl *DatabaseController) List(c *echo.Context) error {
 	return api.ErrorBytes(c, data.NotAllowedToList)
 }
 
-func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
-	canList := ctl.model.CanList(c)
-	if canList == nil {
+func (ctl *DatabaseController) ListOwnerOnly(c *shared.EthernitiContext) error {
+	daoItem := ctl.modelGenerator()
+	// convert dao bject to dao-with-api object
+	requestedItem, err := ctl.toRequestItem(daoItem)
+	if err.Occur() {
+		return api.StackError(c, err)
+	}
+	canListErr := requestedItem.CanList(c)
+	if canListErr == nil {
 		// check if current user Id is valid, exists.
 		// source: auth-jwt-token
-		authId := c.AuthenticatedUserUuid()
+		authId := c.AuthUserUuid()
 		if authId == "" {
 			return errUnauthorizedOp
 		}
@@ -257,7 +294,7 @@ func (ctl *DatabaseController) ListOwnerOnly(c *echo.Context) error {
 }
 
 // todo delegate rather than recall
-func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
+func (ctl DatabaseController) Model() db.DaoInterface {
 	return ctl.model
 }
 
@@ -265,17 +302,17 @@ func (ctl DatabaseController) Model() mixed.DatabaseObjectInterface {
 func (ctl *DatabaseController) RegisterDatabaseMethods(router *echo.Group) {
 	listPostPath := ctl.pathPrepend + "/" + ctl.name
 	logger.Info("exposing GET ", listPostPath)
-	router.GET(listPostPath, ctl.ListOwnerOnly)
+	router.GET(listPostPath, wrap.Call(ctl.ListOwnerOnly))
 	logger.Info("exposing POST ", listPostPath)
-	router.POST(listPostPath, ctl.Create)
+	router.POST(listPostPath, wrap.Call(ctl.Create))
 
 	customItemPath := ctl.pathPrepend + "/" + ctl.name + "/:id"
 	logger.Info("exposing GET ", customItemPath)
-	router.GET(customItemPath, ctl.Read)
+	router.GET(customItemPath, wrap.Call(ctl.Read))
 	logger.Info("exposing PUT ", customItemPath)
-	router.PUT(customItemPath, ctl.Update)
+	router.PUT(customItemPath, wrap.Call(ctl.Update))
 	logger.Info("exposing DELETE ", customItemPath)
-	router.DELETE(customItemPath, ctl.Delete)
+	router.DELETE(customItemPath, wrap.Call(ctl.Delete))
 }
 
 // implemented method from interface RouterRegistrable
@@ -306,8 +343,8 @@ func (ctl *DatabaseController) buildCompositeId3(authId string, modelId string) 
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) protocol.ItemKey {
-	return protocol.ItemKey{
+func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) db.ItemKey {
+	return db.ItemKey{
 		Left:  []byte(authId),
 		Sep:   []byte("."),
 		Right: []byte(modelId),
@@ -315,8 +352,8 @@ func (ctl *DatabaseController) buildCompositeId4(authId string, modelId string) 
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) protocol.ItemKey {
-	return protocol.ItemKey{
+func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) db.ItemKey {
+	return db.ItemKey{
 		Left:  str.UnsafeBytes(authId),
 		Sep:   s,
 		Right: str.UnsafeBytes(modelId),
@@ -324,8 +361,8 @@ func (ctl *DatabaseController) buildCompositeId5(authId string, modelId string) 
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) *protocol.ItemKey {
-	return &protocol.ItemKey{
+func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) *db.ItemKey {
+	return &db.ItemKey{
 		Left:  str.UnsafeBytes(authId),
 		Sep:   str.UnsafeBytes("."),
 		Right: str.UnsafeBytes(modelId),
@@ -333,8 +370,8 @@ func (ctl *DatabaseController) buildCompositeId6(authId string, modelId string) 
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) *protocol.ItemKey {
-	return &protocol.ItemKey{
+func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) *db.ItemKey {
+	return &db.ItemKey{
 		Left:  authId,
 		Sep:   s,
 		Right: modelId,
@@ -342,10 +379,21 @@ func (ctl *DatabaseController) buildCompositeId7(authId []byte, modelId []byte) 
 }
 
 // build the composite id: authId + modelId
-func (ctl *DatabaseController) buildCompositeId8(authId []byte, modelId []byte) protocol.ItemKey {
-	return protocol.ItemKey{
+func (ctl *DatabaseController) buildCompositeId8(authId []byte, modelId []byte) db.ItemKey {
+	return db.ItemKey{
 		Left:  authId,
 		Sep:   s,
 		Right: modelId,
 	}
+}
+
+func (ctl *DatabaseController) toRequestItem(item db.DaoInterface) (db.ControllerDBPolicyInterface, stack.Error) {
+	if item == nil {
+		return nil, stack.New("no source data found in the request")
+	}
+	policy, ok := item.(db.ControllerDBPolicyInterface)
+	if ok && policy != nil {
+		return policy, stack.Nil()
+	}
+	return nil, stack.New("forbidden data provided")
 }

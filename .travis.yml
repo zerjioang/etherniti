@@ -12,7 +12,7 @@ language: go
 addons:
   apt:
     packages:
-    # for binary packing
+      # for binary packing
       - upx
 
 env:

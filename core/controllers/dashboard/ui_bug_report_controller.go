@@ -6,11 +6,12 @@ package dashboard
 import (
 	"errors"
 
-	"github.com/valyala/fasthttp"
+	"github.com/zerjioang/etherniti/core/controllers/wrap"
 
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 var (
@@ -19,24 +20,21 @@ var (
 
 // user interface helper controller
 type UIController struct {
-	// http client
-	client *fasthttp.Client
 }
 
 // constructor like function
-func NewUIController(client *fasthttp.Client) UIController {
+func NewUIController() UIController {
 	ctl := UIController{}
-	ctl.client = client
 	return ctl
 }
 
 // received information about specified buf from a client
-func (ctl UIController) bugReport(c *echo.Context) error {
+func (ctl UIController) bugReport(c *shared.EthernitiContext) error {
 	return api.Error(c, ErrFeatureNotAvailable)
 }
 
 // implemented method from interface RouterRegistrable
 func (ctl UIController) RegisterRouters(router *echo.Group) {
 	logger.Info("exposing external controller methods")
-	router.POST("/bug", ctl.bugReport)
+	router.POST("/bug", wrap.Call(ctl.bugReport))
 }

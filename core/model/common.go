@@ -1,6 +1,6 @@
 package model
 
-import "github.com/zerjioang/etherniti/core/modules/stack"
+import "github.com/zerjioang/go-hpc/lib/stack"
 
 var (
 	UnsupportedDataErr = stack.New("unsupported data")

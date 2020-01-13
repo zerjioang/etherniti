@@ -6,7 +6,7 @@ package data
 import (
 	"errors"
 
-	"github.com/zerjioang/etherniti/core/modules/stack"
+	"github.com/zerjioang/go-hpc/lib/stack"
 )
 
 const (
@@ -115,19 +115,21 @@ var (
 
 	UserLogin          = []byte("login")
 	UserRegistered     = []byte("user registered")
-	UserRegisterFailed = []byte("failed to register new user account")
+	UserRegisterFailed = []byte("failed to register new user account with provided data")
 
 	DatabaseError             = []byte("failed to process your login request at this moment. Please try it later")
 	AccountConfirmDbError     = []byte("failed to process your account confirmation request at this moment. Please try it later")
 	AccountConfirmUpdateError = []byte("failed to update your account confirmation at this moment. Please try it later")
 	AccountConfirmDeniedError = []byte("failed to confirm your account. The confirmation code has expired")
 
-	InvalidLoginData         = []byte("invalid username or password provided")
-	InvalidLoginAPIKeyData   = []byte("invalid API key or API secret provided")
-	MissingLoginFields       = []byte("invalid login data provided. please fill all required fields")
-	MissingAPIKeyLoginFields = []byte("an API Key or API secret is missing")
-	FailedLoginVerification  = []byte("failed to verify your login information at this time. Please try it few minutes later.")
-	RegistrationSuccess      = []byte("registration successfully finished. Please verify your account with the message sent to your inbox.")
+	LoginRequestAccountUnknownErr             = []byte("We sent you a confirmation email to you. Please check your inbox and confirm your account first.")
+	LoginRequestAccountConfirmationPendingErr = []byte("Please check your inbox and confirm your account first.")
+	InvalidLoginData                          = []byte("invalid username or password provided")
+	InvalidLoginAPIKeyData                    = []byte("invalid API key or API secret provided")
+	MissingLoginFields                        = []byte("invalid login data provided. please fill all required fields")
+	MissingAPIKeyLoginFields                  = []byte("an API Key or API secret is missing")
+	FailedLoginVerification                   = []byte("failed to verify your login information at this time. Please try it few minutes later.")
+	RegistrationSuccess                       = []byte("registration successfully finished. Please verify your account with the message sent to your inbox.")
 
 	MnemonicLanguageNotProvided = []byte("provided language is not supported")
 	MnemonicSizeNotSupported    = []byte("provided mnemonic size is not supported. allowed sizes are: 128,160,192,224,256")

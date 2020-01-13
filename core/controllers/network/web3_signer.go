@@ -5,21 +5,22 @@ import (
 	"encoding/hex"
 	"math/big"
 
+	"github.com/zerjioang/etherniti/shared/dto"
+
 	"github.com/pkg/errors"
 	"github.com/zerjioang/etherniti/core/api"
 	"github.com/zerjioang/etherniti/core/controllers/network/signer"
 	"github.com/zerjioang/etherniti/core/data"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/common"
-	"github.com/zerjioang/etherniti/core/eth/fixtures/crypto"
-	ethrpc "github.com/zerjioang/etherniti/core/eth/rpc"
 	"github.com/zerjioang/etherniti/core/logger"
-	"github.com/zerjioang/etherniti/shared/protocol"
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/etherniti/shared"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/common"
+	"github.com/zerjioang/go-hpc/lib/eth/fixtures/crypto"
+	ethrpc "github.com/zerjioang/go-hpc/lib/eth/rpc"
 )
 
-func (ctl *Web3Controller) signTransactionLocal(c *echo.Context) error {
+func (ctl *Web3Controller) signTransactionLocal(c *shared.EthernitiContext) error {
 	// 0 parse this http request body
-	var req *protocol.EthSignRequest
+	var req *dto.EthSignRequest
 	if err := c.Bind(&req); err != nil {
 		// return a binding error
 		logger.Error("failed to bind request data to req: ", err)
@@ -47,7 +48,7 @@ func (ctl *Web3Controller) signTransactionLocal(c *echo.Context) error {
 	}
 }
 
-func localSignTransaction(client *ethrpc.EthRPC, req *protocol.EthSignRequest) (string, error) {
+func localSignTransaction(client *ethrpc.EthRPC, req *dto.EthSignRequest) (string, error) {
 	// get our client context
 	if client == nil {
 		return "", errors.New("missing client for transaction signing")

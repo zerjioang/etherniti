@@ -7,12 +7,12 @@
 package middleware
 
 import (
-	"github.com/zerjioang/etherniti/thirdparty/echo"
+	"github.com/zerjioang/go-hpc/thirdparty/echo"
 )
 
 // this is open-source edition middleware
 func secure(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c *echo.Context) error {
+	return func(c echo.Context) error {
 		ApplyDefaultCommonHeaders(c)
 		ApplyDefaultSecurityHeaders(c)
 		return next(c)
