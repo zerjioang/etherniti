@@ -6,7 +6,7 @@
 etherniti
 eth-temp
 secrets
-testdata/swagger/swagger.json
+**/swagger.json
 volumes/**
 **/*.bench
 **/*.out

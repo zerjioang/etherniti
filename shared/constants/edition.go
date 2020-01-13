@@ -4,6 +4,6 @@ type Edition uint8
 
 const (
 	Unknown Edition = iota
-	OpenSource
-	Pro
+	OpenSource //oss
+	Pro //pro
 )

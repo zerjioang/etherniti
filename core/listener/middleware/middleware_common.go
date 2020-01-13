@@ -5,6 +5,7 @@ package middleware
 
 import (
 	"errors"
+	"github.com/zerjioang/etherniti/core/middleware/ratelimit"
 
 	"github.com/zerjioang/etherniti/core/controllers/providers"
 	"github.com/zerjioang/etherniti/shared"
@@ -17,8 +18,6 @@ import (
 
 	"github.com/zerjioang/etherniti/core/config/edition"
 	"github.com/zerjioang/etherniti/core/controllers/ws"
-	"github.com/zerjioang/etherniti/core/middleware/ratelimit"
-
 	middlewareLogger "github.com/zerjioang/go-hpc/thirdparty/middleware/logger"
 
 	"github.com/zerjioang/etherniti/shared/constants"
