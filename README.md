@@ -1,12 +1,6 @@
-<p align="center">
-  <img style="text-align:center;" width="200px" src="https://avatars3.githubusercontent.com/u/47393730?s=200&v=4" alt="etherniti" />
-  <h3 align="center"><b>Etherniti</b></h3>
-  <p align="center">High Performance Web3 REST Proxy</p>
-</p>
+# Welcome to **Etherniti**
 
-Welcome to **Etherniti** project.
-
-A High Performance Web3 REST Proxy for smart contract inter-communication.
+> Etherniti - Infura Like Open Source Services
 
 ## Usage
 
@@ -16,7 +10,6 @@ docker run \
     -d etherniti/proxy-oss:latest
 ```
 
-<<<<<<< HEAD
 ## Prerequisites
 
 ### Minimum hardware requirements
@@ -42,8 +35,8 @@ Docker’s fundamental platform and container design means that a single Docker 
 
 ### Unikernels
 
-Cooming Soon
-=======
+> cooming Soon
+
 ## Deployment
 
 You can configure your server to use a RT kernel via:
@@ -63,7 +56,6 @@ docker run \
 ```
 
 Not: add as many environment variables as needed in order to customize your deployment.
->>>>>>> 8d78c16d344c8ec2cfccfb9fb5c063421e243448
 
 ## Development
 
@@ -98,7 +90,7 @@ You can copy and paste them to workspace.xml file or add them manually one by on
 <env name="X_ETHERNITI_TOKEN_EXPIRATION" value="6000" />
 <env name="X_ETHERNITI_RATELIMIT" value="10" />
 <env name="X_ETHERNITI_RATE_LIMIT_UNITS" value="10" />
-<env name="X_ETHERNITI_INFURA_TOKEN" value="4f61378203ca4da4a6b6601bc16a22ad" />
+<env name="X_ETHERNITI_INFURA_TOKEN" value="$YOUR_INFURA_KEY" />
 <env name="X_ETHERNITI_LISTENING_MODE" value="http" />
 ```
 
